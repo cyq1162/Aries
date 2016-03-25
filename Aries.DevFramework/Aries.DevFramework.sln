@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Core", "Web.Core\Web.Core.csproj", "{33A07EA9-350F-4A9C-925C-3A773D942748}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Utility", "Web.Utility\Web.Utility.csproj", "{7953AA6B-660C-4448-84EA-E5E60A4DAF31}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Entity", "Web.Entity\Web.Entity.csproj", "{EBB062B3-2BBE-47DA-AB43-C2DD075CBA43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Logic", "Web.Logic\Web.Logic.csproj", "{947B169E-24DD-4C32-9E82-54FE446A853F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.UI", "Web.UI\Web.UI.csproj", "{9DB8A2FF-68C0-43A4-AC1B-E1C00A34EF15}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{33A07EA9-350F-4A9C-925C-3A773D942748}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33A07EA9-350F-4A9C-925C-3A773D942748}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33A07EA9-350F-4A9C-925C-3A773D942748}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33A07EA9-350F-4A9C-925C-3A773D942748}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7953AA6B-660C-4448-84EA-E5E60A4DAF31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7953AA6B-660C-4448-84EA-E5E60A4DAF31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7953AA6B-660C-4448-84EA-E5E60A4DAF31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7953AA6B-660C-4448-84EA-E5E60A4DAF31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBB062B3-2BBE-47DA-AB43-C2DD075CBA43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBB062B3-2BBE-47DA-AB43-C2DD075CBA43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBB062B3-2BBE-47DA-AB43-C2DD075CBA43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBB062B3-2BBE-47DA-AB43-C2DD075CBA43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{947B169E-24DD-4C32-9E82-54FE446A853F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{947B169E-24DD-4C32-9E82-54FE446A853F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{947B169E-24DD-4C32-9E82-54FE446A853F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{947B169E-24DD-4C32-9E82-54FE446A853F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DB8A2FF-68C0-43A4-AC1B-E1C00A34EF15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DB8A2FF-68C0-43A4-AC1B-E1C00A34EF15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DB8A2FF-68C0-43A4-AC1B-E1C00A34EF15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DB8A2FF-68C0-43A4-AC1B-E1C00A34EF15}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+EndGlobal

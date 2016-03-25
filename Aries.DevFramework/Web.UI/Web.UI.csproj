@@ -1,0 +1,894 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{9DB8A2FF-68C0-43A4-AC1B-E1C00A34EF15}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Web.UI</RootNamespace>
+    <AssemblyName>Web.UI</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CYQ.Data, Version=5.5.8.8, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\cyqdata.5.5.8.8\lib\net\CYQ.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\广东联通2.0\B_S_Version2.0\10.项目源码\TY.GDUnicom_Dev\DLL\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI, Version=2.1.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLL\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Data\SQLCode\Sql_Combobox.sql" />
+    <Content Include="App_Data\SQLCode\Sql.sql" />
+    <Content Include="App_Data\SQLCode\SysAdmin\S_SYS_Menu.sql" />
+    <Content Include="App_Data\SQLCode\SysAdmin\V_SYS_MenuActions.sql" />
+    <Content Include="App_Data\SQLCode\SysAdmin\V_SYS_RoleList.sql" />
+    <Content Include="App_Data\SQLCode\命名规范.txt" />
+    <Content Include="Demo\2.0\Combobox-V2.aspx" />
+    <Content Include="Demo\1.0\Combobox.aspx" />
+    <Content Include="Demo\Demo-leungs.aspx" />
+    <Content Include="Demo\2.0\demo-v2.aspx" />
+    <Content Include="Demo\2.0\demo-v2Edit.aspx" />
+    <Content Include="Demo\1.0\DemoEdit.aspx" />
+    <Content Include="Demo\DemoRowEdit.aspx" />
+    <Content Include="Demo\2.0\DemoTreeGrid.aspx" />
+    <Content Include="Demo\LS-Demo3.aspx" />
+    <Content Include="Demo\Test.aspx" />
+    <Content Include="Demo\TreeGrid.aspx" />
+    <Content Include="Demo\UploadFilesDemo.aspx" />
+    <Content Include="Demo\1.0\UserEdit.aspx" />
+    <Content Include="Style\CSS\login-style.css" />
+    <Content Include="Style\CSS\login.css" />
+    <Content Include="Style\CSS\Site.css" />
+    <Content Include="Style\CSS\ty-main.css" />
+    <Content Include="Style\Images\swf_btn.png" />
+    <Content Include="Style\Images\ios6-code.png" />
+    <Content Include="Style\Images\ios7-code.png" />
+    <Content Include="Style\Images\nodeBDMap.png" />
+    <Content Include="Style\Images\nodeBDMapEnd.png" />
+    <Content Include="Style\Images\nodeBDMapStart.png" />
+    <Content Include="Style\JS\EasyUI\plugins\datagrid-detailview.js" />
+    <Content Include="Style\JS\EasyUI\src\jquery.combo.extend.js" />
+    <Content Include="Style\JS\jquery-1.7.1.min.js" />
+    <Content Include="Style\JS\jquery-1.9.1.min.js" />
+    <Content Include="Style\JS\json2.js" />
+    <Content Include="Style\JS\plugin2.0\TY.Core.Common.js" />
+    <Content Include="Style\JS\plugin2.0\TY.Core.DataGrid.js" />
+    <Content Include="Style\JS\plugin2.0\TY.Core.Form.js" />
+    <Content Include="Style\JS\plugin2.0\TY.Core.TreeGrid.js" />
+    <Content Include="Style\JS\plugin2.0\TY.Core.EasyUIExtend.js" />
+    <Content Include="Style\JS\plugin2.0\TY.Core.Upload.js" />
+    <Content Include="Style\JS\plugin2.0\TY.Utility.js" />
+    <Content Include="Style\JS\TY.Common.js" />
+    <Content Include="Style\JS\ty.easyui.extend.js" />
+    <Content Include="Style\JS\UploadPlugin\Highcharts-2.3.5\adapters\mootools-adapter.js" />
+    <Content Include="Style\JS\UploadPlugin\Highcharts-2.3.5\adapters\mootools-adapter.src.js" />
+    <Content Include="Style\JS\UploadPlugin\Highcharts-2.3.5\adapters\prototype-adapter.js" />
+    <Content Include="Style\JS\UploadPlugin\Highcharts-2.3.5\adapters\prototype-adapter.src.js" />
+    <Content Include="Style\JS\UploadPlugin\Highcharts-2.3.5\highcharts-more.js" />
+    <Content Include="Style\JS\UploadPlugin\Highcharts-2.3.5\highcharts-more.src.js" />
+    <Content Include="Style\JS\UploadPlugin\Highcharts-2.3.5\highcharts.js" />
+    <Content Include="Style\JS\UploadPlugin\Highcharts-2.3.5\highcharts.src.js" />
+    <Content Include="Style\JS\UploadPlugin\Highcharts-2.3.5\modules\canvas-tools.js" />
+    <Content Include="Style\JS\UploadPlugin\Highcharts-2.3.5\modules\canvas-tools.src.js" />
+    <Content Include="Style\JS\UploadPlugin\Highcharts-2.3.5\modules\data.js" />
+    <Content Include="Style\JS\UploadPlugin\Highcharts-2.3.5\modules\data.src.js" />
+    <Content Include="Style\JS\UploadPlugin\Highcharts-2.3.5\modules\exporting.js" />
+    <Content Include="Style\JS\UploadPlugin\Highcharts-2.3.5\modules\exporting.src.js" />
+    <Content Include="Style\JS\UploadPlugin\Highcharts-2.3.5\themes\dark-blue.js" />
+    <Content Include="Style\JS\UploadPlugin\Highcharts-2.3.5\themes\dark-green.js" />
+    <Content Include="Style\JS\UploadPlugin\Highcharts-2.3.5\themes\gray.js" />
+    <Content Include="Style\JS\UploadPlugin\Highcharts-2.3.5\themes\grid.js" />
+    <Content Include="Style\JS\UploadPlugin\Highcharts-2.3.5\themes\skies.js" />
+    <Content Include="Style\JS\UploadPlugin\jquery.easyui.selectdialog1.0.0.1.js" />
+    <Content Include="Style\JS\UploadPlugin\jquery.form.js" />
+    <Content Include="Style\JS\UploadPlugin\json2.js" />
+    <Content Include="Style\JS\UploadPlugin\multiselect2side\css\jquery.multiselect2side.css" />
+    <Content Include="Style\JS\UploadPlugin\multiselect2side\img\close.gif" />
+    <Content Include="Style\JS\UploadPlugin\multiselect2side\img\loading.gif" />
+    <Content Include="Style\JS\UploadPlugin\multiselect2side\img\search.gif" />
+    <Content Include="Style\JS\UploadPlugin\multiselect2side\js\jquery.js" />
+    <Content Include="Style\JS\UploadPlugin\multiselect2side\js\jquery.multiselect2side.js" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\css\demo.css" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\css\elastislide.css" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\css\reset.css" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\css\style.css" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\1.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\10.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\11.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\12.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\13.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\14.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\15.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\16.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\17.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\18.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\19.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\2.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\20.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\21.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\22.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\23.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\24.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\3.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\4.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\5.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\6.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\7.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\8.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\9.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\ajax-loader.gif" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\black.png" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\downloadbg1.png" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\downloadbg2.png" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\ImageAttribution.txt" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\nav.png" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\nav_thumbs.png" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\pattern.png" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\thumbs\1.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\thumbs\10.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\thumbs\11.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\thumbs\12.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\thumbs\13.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\thumbs\14.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\thumbs\15.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\thumbs\16.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\thumbs\17.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\thumbs\18.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\thumbs\19.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\thumbs\2.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\thumbs\20.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\thumbs\21.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\thumbs\22.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\thumbs\23.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\thumbs\24.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\thumbs\3.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\thumbs\4.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\thumbs\5.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\thumbs\6.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\thumbs\7.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\thumbs\8.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\thumbs\9.jpg" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\views.png" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\index.html" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\js\gallery.js" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\js\jquery.easing.1.3.js" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\js\jquery.elastislide.js" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\js\jquery.tmpl.min.js" />
+    <Content Include="Style\JS\UploadPlugin\swfupload\fileprogress.js" />
+    <Content Include="Style\JS\UploadPlugin\swfupload\handlers.js" />
+    <Content Include="Style\JS\UploadPlugin\swfupload\images\cancelbutton.gif" />
+    <Content Include="Style\JS\UploadPlugin\swfupload\images\error.gif" />
+    <Content Include="Style\JS\UploadPlugin\swfupload\images\page_white_add.png" />
+    <Content Include="Style\JS\UploadPlugin\swfupload\images\toobig.gif" />
+    <Content Include="Style\JS\UploadPlugin\swfupload\images\uploadlimit.gif" />
+    <Content Include="Style\JS\UploadPlugin\swfupload\images\XPButtonNoText_160x22.png" />
+    <Content Include="Style\JS\UploadPlugin\swfupload\images\XPButtonUploadText_61x22.png" />
+    <Content Include="Style\JS\UploadPlugin\swfupload\images\zerobyte.gif" />
+    <Content Include="Style\JS\UploadPlugin\swfupload\swfupload.cookies.js" />
+    <Content Include="Style\JS\UploadPlugin\swfupload\swfUpload.css" />
+    <Content Include="Style\JS\UploadPlugin\swfupload\swfupload.js" />
+    <Content Include="Style\JS\UploadPlugin\swfupload\swfupload.proxy.js" />
+    <Content Include="Style\JS\UploadPlugin\swfupload\swfupload.queue.js" />
+    <Content Include="Style\JS\UploadPlugin\swfupload\swfupload.speed.js" />
+    <Content Include="Style\JS\UploadPlugin\swfupload\swfupload.swf" />
+    <Content Include="Style\JS\UploadPlugin\swfupload\swfupload_fp9.swf" />
+    <Content Include="Style\JS\UploadPlugin\swfupload\handlers_v2.0.js" />
+    <Content Include="Tools\CreateForm.aspx" />
+    <Content Include="Tools\CreateFormList.aspx" />
+    <Content Include="Tools\FromDemo.html" />
+    <Content Include="Tools\PBConfigScript.aspx" />
+    <Content Include="UserControl\UploadFile.ascx" />
+    <Content Include="UserControl\UploadFileV2.ascx" />
+    <Content Include="Web\SysAdmin\ActionEdit.aspx" />
+    <Content Include="Web\SysAdmin\ActionList.aspx" />
+    <Content Include="Web\SysAdmin\AreaList.aspx" />
+    <Content Include="Web\SysAdmin\ConfigEdit.aspx" />
+    <Content Include="Web\SysAdmin\ConfigList.aspx" />
+    <Content Include="Web\SysAdmin\DepartmentList.aspx" />
+    <Content Include="Web\SysAdmin\ExcelConfigList.aspx" />
+    <Content Include="Web\SysAdmin\ExcelInfoEdit.aspx" />
+    <Content Include="Web\SysAdmin\ExcelInfoList.aspx" />
+    <Content Include="Web\SysAdmin\GridConfigList.aspx" />
+    <Content Include="Logout.aspx" />
+    <Content Include="Style\Images\android-code.png" />
+    <Content Include="Style\Images\app-img.png" />
+    <Content Include="Style\Images\appbg.jpg" />
+    <Content Include="Style\Images\apptxt-bg.png" />
+    <Content Include="Style\Images\bj-icon.png" />
+    <Content Include="Style\Images\button-img.png" />
+    <Content Include="Style\Images\button.png" />
+    <Content Include="Style\Images\cktp-icon.png" />
+    <Content Include="Style\Images\ckxq-icon.png" />
+    <Content Include="Style\Images\ios-code.png" />
+    <Content Include="Style\Images\notFound.gif" />
+    <Content Include="Style\Images\file\asax.gif" />
+    <Content Include="Style\Images\file\ascx.gif" />
+    <Content Include="Style\Images\file\ashx.gif" />
+    <Content Include="Style\Images\file\asmx.gif" />
+    <Content Include="Style\Images\file\asp.gif" />
+    <Content Include="Style\Images\file\aspx.gif" />
+    <Content Include="Style\Images\file\bmp.gif" />
+    <Content Include="Style\Images\file\config.gif" />
+    <Content Include="Style\Images\file\CS.gif" />
+    <Content Include="Style\Images\file\css.gif" />
+    <Content Include="Style\Images\file\db.gif" />
+    <Content Include="Style\Images\file\dll.gif" />
+    <Content Include="Style\Images\file\doc.gif" />
+    <Content Include="Style\Images\file\docx.gif" />
+    <Content Include="Style\Images\file\exe.gif" />
+    <Content Include="Style\Images\file\folder.gif" />
+    <Content Include="Style\Images\file\gif.gif" />
+    <Content Include="Style\Images\file\htm.gif" />
+    <Content Include="Style\Images\file\html.gif" />
+    <Content Include="Style\Images\file\jpeg.gif" />
+    <Content Include="Style\Images\file\jpg.gif" />
+    <Content Include="Style\Images\file\js.gif" />
+    <Content Include="Style\Images\file\master.gif" />
+    <Content Include="Style\Images\file\mdb.gif" />
+    <Content Include="Style\Images\file\other.gif" />
+    <Content Include="Style\Images\file\pdf.gif" />
+    <Content Include="Style\Images\file\php.gif" />
+    <Content Include="Style\Images\file\pic.gif" />
+    <Content Include="Style\Images\file\png.gif" />
+    <Content Include="Style\Images\file\ppt.gif" />
+    <Content Include="Style\Images\file\psd.gif" />
+    <Content Include="Style\Images\file\rar.gif" />
+    <Content Include="Style\Images\file\resx.gif" />
+    <Content Include="Style\Images\file\sitemap.gif" />
+    <Content Include="Style\Images\file\sql.gif" />
+    <Content Include="Style\Images\file\swf.gif" />
+    <Content Include="Style\Images\file\txt.gif" />
+    <Content Include="Style\Images\file\xls.gif" />
+    <Content Include="Style\Images\file\xlsx.gif" />
+    <Content Include="Style\Images\file\xml.gif" />
+    <Content Include="Style\Images\file\xsl.gif" />
+    <Content Include="Style\Images\file\zip.gif" />
+    <Content Include="Style\Images\IconMenu\aqjc.png" />
+    <Content Include="Style\Images\IconMenu\csbgsc.png" />
+    <Content Include="Style\Images\IconMenu\csgl.png" />
+    <Content Include="Style\Images\IconMenu\cspsgl.png" />
+    <Content Include="Style\Images\IconMenu\cstj.png" />
+    <Content Include="Style\Images\IconMenu\dhjk.png" />
+    <Content Include="Style\Images\IconMenu\dsdw.png" />
+    <Content Include="Style\Images\IconMenu\dzwzgk.png" />
+    <Content Include="Style\Images\IconMenu\ewmyy.png" />
+    <Content Include="Style\Images\IconMenu\fabggl.png" />
+    <Content Include="Style\Images\IconMenu\fasc.png" />
+    <Content Include="Style\Images\IconMenu\faznps.png" />
+    <Content Include="Style\Images\IconMenu\folder.png" />
+    <Content Include="Style\Images\IconMenu\gcsgzlfx.png" />
+    <Content Include="Style\Images\IconMenu\ghtjfx.png" />
+    <Content Include="Style\Images\IconMenu\gxgfwh.png" />
+    <Content Include="Style\Images\IconMenu\gxjc.png" />
+    <Content Include="Style\Images\IconMenu\gysgl.png" />
+    <Content Include="Style\Images\IconMenu\hhpff.png" />
+    <Content Include="Style\Images\IconMenu\htgl.png" />
+    <Content Include="Style\Images\IconMenu\jhxxk.png" />
+    <Content Include="Style\Images\IconMenu\jlkhtb.png" />
+    <Content Include="Style\Images\IconMenu\jlrz.png" />
+    <Content Include="Style\Images\IconMenu\jlzb.png" />
+    <Content Include="Style\Images\IconMenu\jsxxk.png" />
+    <Content Include="Style\Images\IconMenu\jwgl.png" />
+    <Content Include="Style\Images\IconMenu\jzxxk.png" />
+    <Content Include="Style\Images\IconMenu\kcgl.png" />
+    <Content Include="Style\Images\IconMenu\kctj.png" />
+    <Content Include="Style\Images\IconMenu\khtj.png" />
+    <Content Include="Style\Images\IconMenu\kqgl.png" />
+    <Content Include="Style\Images\IconMenu\kygl.png" />
+    <Content Include="Style\Images\IconMenu\kygm.png" />
+    <Content Include="Style\Images\IconMenu\lxgl.png" />
+    <Content Include="Style\Images\IconMenu\rwfp.png" />
+    <Content Include="Style\Images\IconMenu\sbjczl.png" />
+    <Content Include="Style\Images\IconMenu\sbzbgl.png" />
+    <Content Include="Style\Images\IconMenu\shpg.png" />
+    <Content Include="Style\Images\IconMenu\ssjd.png" />
+    <Content Include="Style\Images\IconMenu\ssjh.png" />
+    <Content Include="Style\Images\IconMenu\tjfx.png" />
+    <Content Include="Style\Images\IconMenu\tzfx.png" />
+    <Content Include="Style\Images\IconMenu\tzgl.png" />
+    <Content Include="Style\Images\IconMenu\xmgl.png" />
+    <Content Include="Style\Images\IconMenu\xmtzxyfx.png" />
+    <Content Include="Style\Images\IconMenu\xmwdzlgl.png" />
+    <Content Include="Style\Images\IconMenu\xmwztj.png" />
+    <Content Include="Style\Images\IconMenu\xqxxk.png" />
+    <Content Include="Style\Images\IconMenu\xwsjwjfx.png" />
+    <Content Include="Style\Images\IconMenu\yspsgl.png" />
+    <Content Include="Style\Images\IconMenu\yswdgl.png" />
+    <Content Include="Style\Images\IconMenu\zdjdwh.png" />
+    <Content Include="Style\Images\IconMenu\zdwdzlgl.png" />
+    <Content Include="Style\Images\IconMenu\zdxxgl.png" />
+    <Content Include="Style\Images\IconMenu\zdxxk.png" />
+    <Content Include="Style\Images\IconMenu\zdysgl.png" />
+    <Content Include="Style\Images\IconMenu\zjfx.png" />
+    <Content Include="Style\Images\IconMenu\zltb.png" />
+    <Content Include="Style\Images\icon_tool_download.gif" />
+    <Content Include="Style\Images\kjicon-dbgz.png" />
+    <Content Include="Style\Images\kjicon-jlrz.png" />
+    <Content Include="Style\Images\kjicon-ybgz.png" />
+    <Content Include="Style\Images\layout_arrows.png" />
+    <Content Include="Style\Images\logo.png" />
+    <Content Include="Style\Images\mid-box-tit.png" />
+    <Content Include="Style\Images\mid-img-a.png" />
+    <Content Include="Style\Images\mid-img-b.png" />
+    <Content Include="Style\Images\mobile.png" />
+    <Content Include="Style\Images\operation-icon.png" />
+    <Content Include="Style\Images\panel-sub-nav-hover.png" />
+    <Content Include="Style\Images\panel-top-bg.png" />
+    <Content Include="Style\Images\panel-top-img.png" />
+    <Content Include="Style\Images\prompt-icon.png" />
+    <Content Include="Style\Images\sc-icon.png" />
+    <Content Include="Style\Images\shopnc.png" />
+    <Content Include="Style\Images\sidebar-nav-icon.png" />
+    <Content Include="Style\Images\sidebar-nav.png" />
+    <Content Include="Style\Images\tj-arrow.png" />
+    <Content Include="Style\Images\tjlist-icon.png" />
+    <Content Include="Style\Images\tjsc-icon.png" />
+    <Content Include="Style\Images\txtlist-icon.png" />
+    <Content Include="Style\Images\xz-icon.png" />
+    <Content Include="Style\Images\施工中.jpg" />
+    <Content Include="Style\Images\签出.png" />
+    <Content Include="Style\Images\签到.png" />
+    <Content Include="Style\JS\AjaxUpload.js" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\kjicon-dbgz.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\kjicon-jlrz.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\kjicon-ybgz.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\my97.css" />
+    <Content Include="Style\JS\EasyUI\themes\default\zb.css" />
+    <Content Include="Global.asax" />
+    <Content Include="Index.aspx" />
+    <Content Include="Login.aspx" />
+    <Content Include="Style\Images\login-ad.png" />
+    <Content Include="Style\Images\login-bg.jpg" />
+    <Content Include="Style\Images\login-box-a.png" />
+    <Content Include="Style\Images\login-box-b.jpg" />
+    <Content Include="Style\Images\login-box-c.png" />
+    <Content Include="Style\Images\login-btn.png" />
+    <Content Include="Style\Images\login-img.png" />
+    <Content Include="Style\Images\login-logo.png" />
+    <Content Include="Style\Images\login-password.png" />
+    <Content Include="Style\Images\login-top-bg.png" />
+    <Content Include="Style\Images\login-user.png" />
+    <Content Include="Style\JS\EasyUI\changeEasyuiTheme.js" />
+    <Content Include="Style\JS\EasyUI\easyloader.js" />
+    <Content Include="Style\JS\EasyUI\jquery.easyui.min.js" />
+    <Content Include="Style\JS\EasyUI\locale\easyui-lang-en.js" />
+    <Content Include="Style\JS\EasyUI\locale\easyui-lang-zh_CN.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.accordion.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.calendar.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.combo.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.combobox.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.combogrid.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.combotree.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.datagrid.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.datebox.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.datetimebox.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.dialog.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.draggable.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.droppable.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.form.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.layout.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.linkbutton.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.menu.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.menubutton.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.messager.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.numberbox.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.numberspinner.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.pagination.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.panel.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.parser.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.progressbar.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.propertygrid.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.resizable.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.searchbox.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.slider.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.spinner.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.splitbutton.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.tabs.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.timespinner.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.tooltip.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.tree.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.treegrid.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.validatebox.js" />
+    <Content Include="Style\JS\EasyUI\plugins\jquery.window.js" />
+    <Content Include="Style\JS\EasyUI\themes\default\accordion.css" />
+    <Content Include="Style\JS\EasyUI\themes\default\calendar.css" />
+    <Content Include="Style\JS\EasyUI\themes\default\combo.css" />
+    <Content Include="Style\JS\EasyUI\themes\default\combobox.css" />
+    <Content Include="Style\JS\EasyUI\themes\default\datagrid.css" />
+    <Content Include="Style\JS\EasyUI\themes\default\datebox.css" />
+    <Content Include="Style\JS\EasyUI\themes\default\dialog.css" />
+    <Content Include="Style\JS\EasyUI\themes\default\easyui.css" />
+    <Content Include="Style\JS\EasyUI\themes\default\editor-icon.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\accordion_arrows.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\bj-icon.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\blank.gif" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\button-img.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\button.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\calendar_arrows.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\cktp-icon.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\ckxq-icon.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\combo_arrow.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\datagrid_icons.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\datebox_arrow.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\editor-icon.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\layout_arrows.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\linkbutton_bg.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\loading.gif" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\menu_arrows.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\messager_icons.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\operation-icon.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\pagination_icons.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\panel-sub-nav-hover.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\panel-top-img.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\panel_tools.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\sc-icon.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\searchbox_button.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\sidebar-nav-icon.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\slider_handle.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\spinner_arrows.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\tabs-header-bg.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\tabs_icons.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\tel-icon.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\tree_icons.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\validatebox_warning.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\images\xz-icon.png" />
+    <Content Include="Style\JS\EasyUI\themes\default\layout.css" />
+    <Content Include="Style\JS\EasyUI\themes\default\linkbutton.css" />
+    <Content Include="Style\JS\EasyUI\themes\default\menu.css" />
+    <Content Include="Style\JS\EasyUI\themes\default\menubutton.css" />
+    <Content Include="Style\JS\EasyUI\themes\default\messager.css" />
+    <Content Include="Style\JS\EasyUI\themes\default\pagination.css" />
+    <Content Include="Style\JS\EasyUI\themes\default\panel.css" />
+    <Content Include="Style\JS\EasyUI\themes\default\progressbar.css" />
+    <Content Include="Style\JS\EasyUI\themes\default\propertygrid.css" />
+    <Content Include="Style\JS\EasyUI\themes\default\searchbox.css" />
+    <Content Include="Style\JS\EasyUI\themes\default\slider.css" />
+    <Content Include="Style\JS\EasyUI\themes\default\spinner.css" />
+    <Content Include="Style\JS\EasyUI\themes\default\splitbutton.css" />
+    <Content Include="Style\JS\EasyUI\themes\default\tabs.css" />
+    <Content Include="Style\JS\EasyUI\themes\default\tooltip.css" />
+    <Content Include="Style\JS\EasyUI\themes\default\tree.css" />
+    <Content Include="Style\JS\EasyUI\themes\default\validatebox.css" />
+    <Content Include="Style\JS\EasyUI\themes\default\window.css" />
+    <Content Include="Style\JS\EasyUI\themes\icon.css" />
+    <Content Include="Demo\1.0\UserList.aspx" />
+    <Content Include="Demo\1.0\Demo1.aspx" />
+    <Content Include="Web\SysAdmin\MenuEdit.aspx" />
+    <Content Include="Web\SysAdmin\RoleAction.aspx" />
+    <Content Include="Web\SysAdmin\RoleEdit.aspx" />
+    <Content Include="Web\SysAdmin\RoleList.aspx" />
+    <Content Include="Web\SysAdmin\UserEdit.aspx" />
+    <Content Include="Web\SysAdmin\UserList.aspx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Ajax\AjaxHandler.ashx.cs">
+      <DependentUpon>AjaxHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Ajax\ExcelHandler.ashx.cs">
+      <DependentUpon>ExcelHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Ajax\FileUpload.ashx.cs">
+      <DependentUpon>FileUpload.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Ajax\FormHandler.ashx.cs">
+      <DependentUpon>FormHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Ajax\SysHandler.ashx.cs">
+      <DependentUpon>SysHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Ajax\TreegridHandler.ashx.cs">
+      <DependentUpon>TreegridHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="Demo\2.0\Combobox-V2.aspx.cs">
+      <DependentUpon>Combobox-V2.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Demo\2.0\Combobox-V2.aspx.designer.cs">
+      <DependentUpon>Combobox-V2.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Demo\1.0\Combobox.aspx.cs">
+      <DependentUpon>Combobox.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Demo\1.0\Combobox.aspx.designer.cs">
+      <DependentUpon>Combobox.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Demo\Demo-leungs.aspx.cs">
+      <DependentUpon>Demo-leungs.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Demo\Demo-leungs.aspx.designer.cs">
+      <DependentUpon>Demo-leungs.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Demo\2.0\demo-v2.aspx.cs">
+      <DependentUpon>demo-v2.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Demo\2.0\demo-v2.aspx.designer.cs">
+      <DependentUpon>demo-v2.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Demo\2.0\demo-v2Edit.aspx.cs">
+      <DependentUpon>demo-v2Edit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Demo\2.0\demo-v2Edit.aspx.designer.cs">
+      <DependentUpon>demo-v2Edit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Demo\1.0\DemoEdit.aspx.cs">
+      <DependentUpon>DemoEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Demo\1.0\DemoEdit.aspx.designer.cs">
+      <DependentUpon>DemoEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Demo\DemoRowEdit.aspx.cs">
+      <DependentUpon>DemoRowEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Demo\DemoRowEdit.aspx.designer.cs">
+      <DependentUpon>DemoRowEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Demo\2.0\DemoTreeGrid.aspx.cs">
+      <DependentUpon>DemoTreeGrid.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Demo\2.0\DemoTreeGrid.aspx.designer.cs">
+      <DependentUpon>DemoTreeGrid.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Demo\LS-Demo3.aspx.cs">
+      <DependentUpon>LS-Demo3.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Demo\LS-Demo3.aspx.designer.cs">
+      <DependentUpon>LS-Demo3.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Demo\Test.aspx.cs">
+      <DependentUpon>Test.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Demo\Test.aspx.designer.cs">
+      <DependentUpon>Test.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Demo\TreeGrid.aspx.cs">
+      <DependentUpon>TreeGrid.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Demo\TreeGrid.aspx.designer.cs">
+      <DependentUpon>TreeGrid.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Demo\UploadFilesDemo.aspx.cs">
+      <DependentUpon>UploadFilesDemo.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Demo\UploadFilesDemo.aspx.designer.cs">
+      <DependentUpon>UploadFilesDemo.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Demo\1.0\UserEdit.aspx.cs">
+      <DependentUpon>UserEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Demo\1.0\UserEdit.aspx.designer.cs">
+      <DependentUpon>UserEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Tools\CreateForm.aspx.cs">
+      <DependentUpon>CreateForm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tools\CreateForm.aspx.designer.cs">
+      <DependentUpon>CreateForm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Tools\CreateFormList.aspx.cs">
+      <DependentUpon>CreateFormList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tools\CreateFormList.aspx.designer.cs">
+      <DependentUpon>CreateFormList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Tools\CreateFromConfig.cs" />
+    <Compile Include="Tools\PBConfigScript.aspx.cs">
+      <DependentUpon>PBConfigScript.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tools\PBConfigScript.aspx.designer.cs">
+      <DependentUpon>PBConfigScript.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControl\UploadFile.ascx.cs">
+      <DependentUpon>UploadFile.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControl\UploadFile.ascx.designer.cs">
+      <DependentUpon>UploadFile.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UserControl\UploadFileV2.ascx.cs">
+      <DependentUpon>UploadFileV2.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserControl\UploadFileV2.ascx.designer.cs">
+      <DependentUpon>UploadFileV2.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Web.Master.cs">
+      <DependentUpon>Web.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Web.Master.designer.cs">
+      <DependentUpon>Web.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Web\SysAdmin\ActionEdit.aspx.cs">
+      <DependentUpon>ActionEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Web\SysAdmin\ActionEdit.aspx.designer.cs">
+      <DependentUpon>ActionEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Web\SysAdmin\ActionList.aspx.cs">
+      <DependentUpon>ActionList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Web\SysAdmin\ActionList.aspx.designer.cs">
+      <DependentUpon>ActionList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Web\SysAdmin\AreaList.aspx.cs">
+      <DependentUpon>AreaList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Web\SysAdmin\AreaList.aspx.designer.cs">
+      <DependentUpon>AreaList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Web\SysAdmin\ConfigEdit.aspx.cs">
+      <DependentUpon>ConfigEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Web\SysAdmin\ConfigEdit.aspx.designer.cs">
+      <DependentUpon>ConfigEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Web\SysAdmin\ConfigList.aspx.cs">
+      <DependentUpon>ConfigList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Web\SysAdmin\ConfigList.aspx.designer.cs">
+      <DependentUpon>ConfigList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Web\SysAdmin\DepartmentList.aspx.cs">
+      <DependentUpon>DepartmentList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Web\SysAdmin\DepartmentList.aspx.designer.cs">
+      <DependentUpon>DepartmentList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Web\SysAdmin\ExcelConfigList.aspx.cs">
+      <DependentUpon>ExcelConfigList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Web\SysAdmin\ExcelConfigList.aspx.designer.cs">
+      <DependentUpon>ExcelConfigList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Web\SysAdmin\ExcelInfoEdit.aspx.cs">
+      <DependentUpon>ExcelInfoEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Web\SysAdmin\ExcelInfoEdit.aspx.designer.cs">
+      <DependentUpon>ExcelInfoEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Web\SysAdmin\ExcelInfoList.aspx.cs">
+      <DependentUpon>ExcelInfoList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Web\SysAdmin\ExcelInfoList.aspx.designer.cs">
+      <DependentUpon>ExcelInfoList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Web\SysAdmin\GridConfigList.aspx.cs">
+      <DependentUpon>GridConfigList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Web\SysAdmin\GridConfigList.aspx.designer.cs">
+      <DependentUpon>GridConfigList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Logout.aspx.cs">
+      <DependentUpon>Logout.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Logout.aspx.designer.cs">
+      <DependentUpon>Logout.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Index.aspx.cs">
+      <DependentUpon>Index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Index.aspx.designer.cs">
+      <DependentUpon>Index.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Login.aspx.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Login.aspx.designer.cs">
+      <DependentUpon>Login.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Demo\1.0\UserList.aspx.cs">
+      <DependentUpon>UserList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Demo\1.0\UserList.aspx.designer.cs">
+      <DependentUpon>UserList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Demo\1.0\Demo1.aspx.cs">
+      <DependentUpon>Demo1.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Demo\1.0\Demo1.aspx.designer.cs">
+      <DependentUpon>Demo1.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Web\SysAdmin\MenuEdit.aspx.cs">
+      <DependentUpon>MenuEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Web\SysAdmin\MenuEdit.aspx.designer.cs">
+      <DependentUpon>MenuEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Web\SysAdmin\RoleAction.aspx.cs">
+      <DependentUpon>RoleAction.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Web\SysAdmin\RoleAction.aspx.designer.cs">
+      <DependentUpon>RoleAction.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Web\SysAdmin\RoleEdit.aspx.cs">
+      <DependentUpon>RoleEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Web\SysAdmin\RoleEdit.aspx.designer.cs">
+      <DependentUpon>RoleEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Web\SysAdmin\RoleList.aspx.cs">
+      <DependentUpon>RoleList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Web\SysAdmin\RoleList.aspx.designer.cs">
+      <DependentUpon>RoleList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Web\SysAdmin\UserEdit.aspx.cs">
+      <DependentUpon>UserEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Web\SysAdmin\UserEdit.aspx.designer.cs">
+      <DependentUpon>UserEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Web\SysAdmin\UserList.aspx.cs">
+      <DependentUpon>UserList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Web\SysAdmin\UserList.aspx.designer.cs">
+      <DependentUpon>UserList.aspx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="FileUpload\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Ajax\AjaxHandler.ashx" />
+    <Content Include="App_Data\SQLCode\SysAdmin\V_SYS_UserList.sql" />
+    <Content Include="Ajax\SysHandler.ashx" />
+    <Content Include="Ajax\ExcelHandler.ashx" />
+    <Content Include="Ajax\FormHandler.ashx" />
+    <Content Include="Ajax\FileUpload.ashx" />
+    <Content Include="Ajax\TreegridHandler.ashx" />
+    <None Include="Properties\PublishProfiles\2.0新版.pubxml" />
+    <Content Include="Style\Images\file\Thumbs.db" />
+    <None Include="Properties\PublishProfiles\DevFramework_Publish.pubxml" />
+    <None Include="Resource\Excel\TestUser.xls" />
+    <Content Include="Resource\Excel\V_CS_OTNManageList.xls" />
+    <None Include="Style\JS\EasyUI\themes\default\images\Thumbs.db" />
+    <Content Include="Style\JS\plugin2.0\天越UI框架定义.ppt" />
+    <Content Include="Style\JS\UploadPlugin\ResponsiveImageGallery\images\Thumbs.db" />
+    <Content Include="Web.Master" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Web.Core\Web.Core.csproj">
+      <Project>{33a07ea9-350f-4a9c-925c-3a773d942748}</Project>
+      <Name>Web.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Web.Entity\Web.Entity.csproj">
+      <Project>{ebb062b3-2bbe-47da-ab43-c2dd075cba43}</Project>
+      <Name>Web.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Web.Logic\Web.Logic.csproj">
+      <Project>{947b169e-24dd-4c32-9e82-54fe446a853f}</Project>
+      <Name>Web.Logic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Web.Utility\Web.Utility.csproj">
+      <Project>{7953aa6b-660c-4448-84ea-e5e60a4daf31}</Project>
+      <Name>Web.Utility</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>33431</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:33430/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

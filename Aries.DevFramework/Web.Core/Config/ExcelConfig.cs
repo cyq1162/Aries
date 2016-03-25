@@ -1,0 +1,472 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using CYQ.Data;
+using CYQ.Data.SQL;
+using CYQ.Data.Table;
+
+namespace Web.Core
+{
+    /// <summary>
+    /// Excel配置组件核心类
+    /// </summary>
+    public partial class ExcelConfig
+    {
+        public static MDataRow GetInfoByID(string id)
+        {
+            using (MAction action = new MAction(TableNames.PB_ExcelInfo))
+            {
+                if (action.Fill(id))
+                {
+                    return action.Data;
+                }
+            }
+            return null;
+        }
+        /// <summary>
+        /// 获取表配置信息
+        /// </summary>
+        /// <param name="objName"></param>
+        /// <returns></returns>
+        public static MDataRow GetInfo(string objName)
+        {
+            using (MAction action = new MAction(TableNames.PB_ExcelInfo))
+            {
+                if (action.Fill(string.Format(PB_ExcelInfo.EnName + "='{0}'", objName)))
+                {
+                    return action.Data;
+                }
+            }
+            return null;
+        }
+        /// <summary>
+        /// 获取具体列配置信息。
+        /// </summary>
+        /// <param name="excelID"></param>
+        /// <returns></returns>
+        public static MDataTable GetConfig(string excelID)
+        {
+            using (MAction action = new MAction(TableNames.PB_ExcelConfig))
+            {
+                return action.Select("ExcelID='" + excelID + "'");
+            }
+        }
+
+        /// <summary>
+        /// 导入时，把中文列头翻译成英文列头。
+        /// </summary>
+        public static Dictionary<string, string> FormatterTitle(MDataTable dt, MDataRow info, string objName)
+        {
+
+            if (info == null)
+            {
+                return GridConfig.SetHeaderField(dt, objName);
+            }
+            else
+            {
+                Dictionary<string, string> formatDic = new Dictionary<string, string>();
+                MDataTable config = GetConfig(info.Get<string>(0));
+                if (config != null)
+                {
+                    //附加自定义列。
+                    foreach (var configRow in config.Rows)
+                    {
+                        string formatter = configRow.Get<string>(PB_ExcelConfig.Formatter);
+                        if (!string.IsNullOrEmpty(formatter) && formatter[0] != '#')//增加默认值的列。
+                        {
+                            string excelName = configRow.Get<string>(PB_ExcelConfig.ExcelName);
+                            if (!dt.Columns.Contains(excelName))
+                            {
+                                MCellStruct ms = new MCellStruct(excelName, System.Data.SqlDbType.NVarChar);
+                                ms.TableName = configRow.Get<string>("TableName");
+                                dt.Columns.Insert(dt.Columns.Count - 1, ms);
+                            }
+                        }
+                    }
+                    MDataRow row;
+                    foreach (MCellStruct item in dt.Columns)
+                    {
+                        row = config.FindRow("ExcelName='" + item.ColumnName + "'");
+                        if (row == null && item.ColumnName.IndexOf('_') > 0) // 兼容只找一级的映射列。
+                        {
+                            string columnName = item.ColumnName.Split('_')[0];
+                            row = config.FindRow("ExcelName='" + columnName + "'");
+                        }
+                        if (row != null)
+                        {
+                            string field = row.Get<string>("Field");
+                            if (string.IsNullOrEmpty(field))
+                            {
+                                continue;
+                            }
+                            if (string.Compare(item.ColumnName, field, StringComparison.OrdinalIgnoreCase) != 0)
+                            {
+                                item.Description = item.ColumnName;//把中文列名放到描述里。
+                                item.TableName = row.Get<string>("TableName");
+                                int index = dt.Columns.GetIndex(field);
+                                if (index < 0)
+                                {
+                                    item.ColumnName = field;//
+                                }
+                                else // 字段同名
+                                {
+                                    item.ColumnName = item.TableName + "." + field;
+                                    //修改上一个，也增加表名。
+                                    dt.Columns[index].ColumnName = dt.Columns[index].TableName + "." + dt.Columns[index].ColumnName;
+                                }
+                            }
+                            string formatter = row.Get<string>("Formatter");
+                            if (!string.IsNullOrEmpty(formatter)) // 需要格式化的项
+                            {
+                                if (formatter.Length > 2 && formatter[0] == '#')
+                                {
+                                    //item.SqlType = System.Data.SqlDbType.NVarChar;//重置数据类型(int数据将格式成文本）
+                                    formatDic.Add(item.ColumnName, formatter.Substring(1).Split(new string[] { "=>" }, StringSplitOptions.None)[0]);
+                                }
+                                else
+                                {
+                                    item.DefaultValue = SQLCode.FormatPara(formatter);//如果不是#开头的，设置为默认值。
+                                }
+                            }
+                        }
+                    }
+                }
+                return formatDic;
+            }
+        }
+        /// <summary>
+        /// 验证基础数据(数据类型、长度、是否为Null）
+        /// </summary>
+        /// <returns></returns>
+        public static bool ValidateData(MDataTable dt, MDataRow info)
+        {
+            bool result = true;
+            string[] tables = null;
+            List<string> requiredList = new List<string>();//必填项表。
+            if (info != null)
+            {
+                tables = info.Get<string>(PB_ExcelInfo.TableNames, string.Empty).Split(',');
+                MDataTable dtRequired = GetConfig(info.Get<string>(0));//必填项表。
+                if (dtRequired != null && dtRequired.Rows.Count > 0)
+                {
+                    dtRequired = dtRequired.Select("IsRequired=1");
+                    if (dtRequired != null && dtRequired.Rows.Count > 0)
+                    {
+                        foreach (var row in dtRequired.Rows)
+                        {
+                            requiredList.Add(row.Get<string>("TableName") + row.Get<string>("Field"));
+                        }
+                    }
+                }
+            }
+            else
+            {
+                tables = dt.TableName.Split(',');
+            }
+            bool isOK = false;
+            foreach (var table in tables)//重置列头。
+            {
+                MDataColumn mdc = CYQ.Data.Tool.DBTool.GetColumns(table);
+                foreach (var cs in dt.Columns)
+                {
+                    string[] items = cs.ColumnName.Split('.');
+                    if (cs.TableName == table)
+                    {
+                        int index = mdc.GetIndex(items[items.Length - 1]);
+                        if (index > -1)
+                        {
+                            isOK = true;//至少需要一个列对应上，若没有，则模板错误
+                            cs.SqlType = mdc[index].SqlType;
+                            cs.IsCanNull = mdc[index].IsCanNull;
+                            if (requiredList.Contains(table + mdc[index].ColumnName))//要求必填
+                            {
+                                cs.IsCanNull = false;
+                            }
+                            cs.MaxSize = mdc[index].MaxSize;
+                        }
+                    }
+                }
+            }
+            if (!isOK) { return false; }
+            foreach (var row in dt.Rows)
+            {
+                StringBuilder sb = new StringBuilder();
+                foreach (var cell in row)
+                {
+                    if (!string.IsNullOrEmpty(cell.Struct.TableName))
+                    {
+                        string columnName = string.IsNullOrEmpty(cell.Struct.Description) ? cell.Struct.ColumnName : cell.Struct.Description;
+                        if (!cell.Struct.IsCanNull && cell.IsNullOrEmpty)
+                        {
+                            sb.AppendFormat("[{0}]不允许为空。", columnName);
+                            cell.State = -1;
+                        }
+                        else if (cell.Struct.MaxSize != -1 && cell.ToString().Length > cell.Struct.MaxSize && cell.Struct.SqlType != System.Data.SqlDbType.Bit)
+                        {
+                            sb.AppendFormat("[{0}]长度超过{1}。", columnName, cell.Struct.MaxSize);
+                            cell.State = -1;
+                        }
+                        else if (!cell.FixValue())
+                        {
+                            sb.AppendFormat("[{0}]数据类型错误。", columnName);
+                            cell.State = -1;
+                        }
+                    }
+                }
+                if (sb.Length > 0)
+                {
+                    result = false;
+                    row.Set("错误信息", row.Get<string>("错误信息") + sb.ToString());
+                }
+
+            }
+            return result;
+        }
+        /// <summary>
+        /// 批量更新或插入。
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="excelInfo"></param>
+        /// <returns></returns>
+        public static bool AcceptChanges(MDataTable dt, MDataRow excelInfo, string objName = null)
+        {
+            if (excelInfo == null)
+            {
+                MDataTable dtImportUnique = GridConfig.GetList(objName, GridConfig.SelectType.ImportUnique);
+                string[] names = null;
+                if (dtImportUnique != null && dtImportUnique.Rows.Count > 0)
+                {
+                    names = new String[dtImportUnique.Rows.Count];
+                    for (int i = 0; i < dtImportUnique.Rows.Count; i++)
+                    {
+                        names[i] = dtImportUnique.Rows[i].Get<string>("Field");
+                    }
+                }
+                return dt.AcceptChanges(AcceptOp.Auto, null, names);
+            }
+            bool result = true;
+            //获取相关配置
+            string[] tables = excelInfo.Get<string>(PB_ExcelInfo.TableNames).Split(',');
+            MDataTable configTable = GetConfig(excelInfo.Get<string>(PB_ExcelInfo.ID));
+
+            Dictionary<string, string> rowPrimaryValue = new Dictionary<string, string>();//存档每个表每行的主键值。
+            Dictionary<string, string> wherePrimaryValue = new Dictionary<string, string>();//存档where条件对应的主键值。
+            using (MAction action = new MAction(tables[0]))
+            {
+                action.SetAopOff();
+                action.BeginTransation();
+                AppDebug.OpenDebugInfo = false;
+                IExcelConfig excelConfigExtend = ExcelConfigFactory.GetExcelConfigExtend();
+                foreach (var table in tables)
+                {
+                    GC.Collect();//后面的Fill查询代码循环上万次会增长太多内存，提前调用，能降低内存。
+                    action.ResetTable(table);
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        action.Data.Clear();
+                        var row = dt.Rows[i];
+                        foreach (var cell in row)//遍历所有数据行
+                        {
+                            if (cell.Struct.TableName == table)//过滤出属于本表的字段。
+                            {
+                                string[] items = cell.ColumnName.Split('.');
+                                string columnName = items[items.Length - 1];
+                                action.Set(columnName, cell.Value);
+                            }
+                        }
+
+
+                        #region 检测是否需要插入外键。
+                        MDataTable foreignTable = configTable.FindAll("TableName='" + table + "' and IsForeignkey=1");
+                        if (foreignTable != null)
+                        {
+                            foreach (var foreignRow in foreignTable.Rows)
+                            {
+                                string formatter = foreignRow.Get<string>("Formatter");
+                                string fTableName = foreignRow.Get<string>("ForeignTable");
+                                if (string.IsNullOrEmpty(formatter))
+                                {
+                                    //获取主键外值键
+                                    string key = fTableName + i;
+                                    if (rowPrimaryValue.ContainsKey(key))
+                                    {
+                                        string value = rowPrimaryValue[key];
+                                        action.Set(foreignRow.Get<string>("Field"), value);
+                                    }
+                                }
+                                else // 从其它自定义列取值。
+                                {
+                                    MDataCell cell = row[formatter];
+                                    cell = cell ?? row[fTableName + "." + formatter];
+                                    if (cell != null)
+                                    {
+                                        action.Set(foreignRow.Get<string>("Field"), cell.Value);
+                                    }
+                                }
+                            }
+                            foreignTable = null;
+                        }
+                        #endregion
+
+
+                        #region //获取唯一联合主键,检测是否重复
+
+                        string where = string.Empty;
+                        List<MDataRow> rowList = configTable.FindAll("TableName='" + table + "' and IsUnique=1");
+                        if (rowList != null && rowList.Count > 0)
+                        {
+                            bool IsUniqueOr = excelInfo.Get<bool>("IsUniqueOr");
+                            List<MDataCell> cells = new List<MDataCell>();
+                            string errText = string.Empty;
+                            int errorCount = 0;
+                            foreach (var item in rowList)
+                            {
+                                var cell = action.Data[item.Get<string>(PB_ExcelConfig.Field)];
+                                if (cell != null)
+                                {
+                                    if (cell.IsNullOrEmpty) // 唯一主键是必填写字段
+                                    {
+                                        errorCount++;
+                                        errText += "[第" + (i+1) + "行数据]：" + cell.Struct.ColumnName + "[" + cell.Struct.Description + "]不允许为空！\r\n";
+                                    }
+                                    else
+                                    {
+                                        cells.Add(cell);
+                                    }
+                                }
+                            }
+                            if (errorCount > 0)
+                            {
+                                if (!IsUniqueOr || errorCount == rowList.Count)
+                                {
+                                    result = false;
+                                    dt.DynamicData = new Exception(errText);
+                                    goto err;
+                                }
+                            }
+
+                            MDataCell[] item2s = cells.ToArray();
+                            where = action.GetWhere(!IsUniqueOr, item2s);
+                            item2s = null;
+                            rowList = null;
+                        }
+                        if (!string.IsNullOrEmpty(where))
+                        {
+                            action.SetSelectColumns(action.Data.PrimaryCell.ColumnName);
+                            if (action.Fill(where))//根据条件查出主键ID
+                            {
+                                string key = table + where;
+                                if (wherePrimaryValue.ContainsKey(key))
+                                {
+                                    rowPrimaryValue.Add(table + i, wherePrimaryValue[key]);//记录上一个主键值。
+                                }
+                                else
+                                {
+                                    rowPrimaryValue.Add(table + i, action.Get<string>(action.Data.PrimaryCell.ColumnName));//记录上一个主键值。
+                                }
+                                if (action.Data.GetState() == 2)
+                                {
+                                    ExcelResult eResult = excelConfigExtend.BeforeUpdate(action.Data, row);
+                                    if (eResult == ExcelResult.Ignore || (eResult == ExcelResult.Default && action.Update(where)))
+                                    {
+                                        continue;//已经存在了，更新，准备下一条。
+                                    }
+                                    else
+                                    {
+                                        result = false;
+                                        dt.DynamicData = new Exception("[第" + (i+1) + "行数据]：" + action.DebugInfo);
+                                        goto err;
+                                    }
+                                }
+                                else
+                                {
+                                    continue;//已经存在了，同时没有可更新字段
+                                }
+                            }
+                            else if (!string.IsNullOrEmpty(action.DebugInfo))//产生错误信息，发生异常
+                            {
+                                result = false;
+                                dt.DynamicData = new Exception("[第" + (i+1) + "行数据]：" + action.DebugInfo);
+                                goto err;
+                            }
+                        }
+                        #endregion
+
+                        if (action.Data.GetState() == 0)
+                        {
+                            continue;//没有可映射插入的列。
+                        }
+
+                        //插入前，调用函数（插入特殊主键等值）
+                        string errMsg;
+                        ExcelResult excelResult = excelConfigExtend.BeforeInsert(action.Data, row, out errMsg);
+                        if (excelResult == ExcelResult.Ignore)
+                        {
+                            continue;
+                        }
+
+                        if (excelResult == ExcelResult.Error || !action.Insert(InsertOp.ID))
+                        {
+                            result = false;
+                            action.RollBack();
+                            if (string.IsNullOrEmpty(errMsg))
+                            {
+                                errMsg = "[第" + (i+1) + "行数据]：" + action.DebugInfo;
+                            }
+                            dt.DynamicData = new Exception(errMsg);
+                            excelConfigExtend.OnInsertError(errMsg, dt);
+                            goto err;
+                        }
+                        //插入后事件（可以触发其它事件）
+                        excelConfigExtend.AfterInsert(action.Data, row, i == dt.Rows.Count - 1);
+                        string primaryKey = action.Get<string>(action.Data.PrimaryCell.ColumnName);
+                        rowPrimaryValue.Add(table + i, primaryKey);//记录上一个主键值。
+                        if (!wherePrimaryValue.ContainsKey(table + where))
+                        {
+                            wherePrimaryValue.Add(table + where, primaryKey);
+                        }
+
+                    }
+                }
+            err:
+                action.EndTransation();
+                excelConfigExtend.Dispose();
+            }
+            return result;
+
+        }
+
+        /// <summary>
+        /// 获取某对应项对应的数据库脚本。
+        /// </summary>
+        /// <param name="objName">对象名称</param>
+        /// <returns></returns>
+        internal static string GetScript(string id)
+        {
+            StringBuilder sb = new StringBuilder();
+            MDataRow row = GetInfoByID(id);
+            if (row != null)
+            {
+                row.TableName = TableNames.PB_ExcelInfo.ToString();
+
+                sb.AppendLine(SQLCode.GetSQLScript(row, "ID"));
+                sb.Append("\r\nGo\r\nDelete from [PB_ExcelConfig] where [ExcelID]='" + id + "'\r\nGo\r\n");
+                MDataTable dt = GetConfig(id);
+                if (dt != null)
+                {
+                    foreach (var item in dt.Rows)
+                    {
+                        row.TableName = dt.TableName;
+                        sb.AppendLine(SQLCode.GetSQLScript(item, "ID"));
+                    }
+                }
+            }
+            return sb.ToString();
+        }
+
+
+
+    }
+}

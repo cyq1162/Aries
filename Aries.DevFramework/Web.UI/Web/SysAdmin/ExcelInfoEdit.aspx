@@ -1,0 +1,81 @@
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Web.Master" AutoEventWireup="true" CodeBehind="ExcelInfoEdit.aspx.cs" Inherits="Web.UI.Web.SysAdmin.ExcelInfoEdit" %>
+
+<asp:Content ID="Content2" ContentPlaceHolderID="body" runat="server">
+    <div class="cont-box">
+        <%-- <div class="cont-box-tit">
+            <h3>配置信息-变更</h3>
+            <a href="" class="arrows hover"></a>
+        </div>--%>
+        <div class="cont-box-in">
+            <div class="cont-box-form">
+                <form>
+                    <div class="line">
+                        <div class="short">
+                            <label><em>*</em>中文名：</label>
+                            <input name="CnName" missingmessage="Excel名不能空" type="text" class="easyui-validatebox" data-options="required:true" />
+                        </div>
+                        <div class="short">
+                            <label><em>*</em>对象(英文)名：</label>
+                            <input name="EnName" missingmessage="对象名不能空" type="text" class="easyui-validatebox" data-options="required:true" />
+                        </div>
+                        <div class="short">
+                            <label title="对所有导入唯一字段使用or组合条件">唯一Or：</label>
+                            <input name="IsUniqueOr" type="checkbox" />
+                            <input name="txtIsUniqueOr" type="hidden" value="0" />
+                        </div>
+
+                    </div>
+                    <div class="line">
+                        <div class="short">
+                            <label title="索引都是从0开始算的"><em>*</em>列头索引：</label>
+                            <input name="StartIndex" value="0" missingmessage="起始索引不能空" type="text" class="easyui-validatebox" data-options="required:true" />
+                        </div>
+                        <div class="short">
+                            <label><em>*</em>列头跨几行：</label>
+                            <input name="HeadCrossRowNum" value="0" missingmessage="列头跨行数不能空" type="text" class="easyui-validatebox" data-options="required:true" />
+                        </div>
+
+
+                    </div>
+                    <div class="line">
+                        <div class="long">
+                            <label>表名选择器：</label>
+                            <input id="ConfigName" name="ConfigName" type="text" objname="C_SYS_AllTable" width="200" onchange="fn" />
+                            <script>
+                                function fn(record) {
+                                    var v = $('#TableNames').val();
+                                    if (v) {
+                                        v += "," + record.value
+                                    }
+                                    else {
+                                        v = record.value;
+                                    }
+                                    $('#TableNames').val(v);
+                                }
+                            </script>
+                        </div>
+                    </div>
+                    <div class="line">
+                        <div class="area">
+                            <label><em>*</em>关联表名：<br />
+                                逗号分隔</label>
+                            <textarea id="TableNames" name="TableNames" class="easyui-validatebox"></textarea>
+                        </div>
+                    </div>
+                    <input type="hidden" name="ID" id="ID" />
+                    <div class="btn">
+                        <a>
+                            <input class="submit" type="button" id="btn_save" name="保存" value="" /></a>
+                        <a>
+                            <input class="return" type="button" id="btn_cancel" name="取消" /></a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</asp:Content>
+<asp:Content ID="aa" ContentPlaceHolderID="script" runat="server">
+    <script>
+        TY.ajaxOption.url = TY.handler.sys;
+    </script>
+</asp:Content>

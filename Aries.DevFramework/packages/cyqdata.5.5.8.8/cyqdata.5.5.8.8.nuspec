@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>cyqdata</id>
+    <version>5.5.8.8</version>
+    <title>CYQ.Data 数据层(ORM)框架 V5 版本</title>
+    <authors>路过秋天</authors>
+    <owners>路过秋天</owners>
+    <projectUrl>http://www.cyqdata.com/download/article-detail-426</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>CYQ.Data is Microsoft's recommended data access technology for new applications.</description>
+    <summary>CYQ.Data is Microsoft's recommended data access technology for new applications.</summary>
+    <copyright>版权所有 (C) 秋式软件 2010-2020</copyright>
+    <tags>CYQ.Data ORM ADO.NET</tags>
+  </metadata>
+</package>

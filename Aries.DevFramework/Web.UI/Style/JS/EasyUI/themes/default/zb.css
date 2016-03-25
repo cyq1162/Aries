@@ -1,0 +1,181 @@
+﻿        body
+        {
+            font-size: 12px;
+            line-height: 22px;
+            color: #333;
+            font-family: arial;
+            text-align: left;
+        }
+
+        body, div, ul, ol, li, dl, dt, dd, span, p, h1, h2, h3, img, form, table, tr, td, th, label
+        {
+            margin: 0;
+            padding: 0;
+        }
+
+        img
+        {
+            border: 0 none;
+        }
+
+        ul, ol, li
+        {
+            list-style-type: none;
+        }
+
+        a
+        {
+            text-decoration: none;
+            color: #333;
+        }
+
+            a:hover
+            {
+                text-decoration: underline;
+            }
+
+        .form-zb
+        {
+            padding-left: 10px;
+            width: 780px;
+        }
+
+            .form-zb .tr
+            {
+                padding: 4px 0;
+                overflow: hidden;
+                zoom: 1;
+            }
+
+                .form-zb .tr input
+                {
+                    vertical-align: middle;
+                    margin: 0 5px 0 0;
+                }
+
+                .form-zb .tr .td
+                {
+                    float: left;
+                    width: 390px;
+                }
+
+                .form-zb .tr label
+                {
+                    float: left;
+                    width: 150px;
+                    text-align: right;
+                }
+				.form-zb .tr label em
+                {
+                    font-style:normal;
+					color:#f00;
+					padding-right:5px;
+                }
+                .form-zb .tr select
+                {
+                    float: left;
+                    border: solid 1px #95B8E7;
+                    height: 22px;
+                    line-height: 22px;
+                    padding: 0;
+                    width: 200px;
+                    color: #666;
+                }
+
+                    .form-zb .tr select.h200
+                    {
+                        height: 200px;
+                    }
+
+                .form-zb .tr .btn190
+                {
+                    padding: 50px 70px 0;
+                    width: 50px;
+                    height: 150px;
+                    float: left;
+                    text-align: center;
+                }
+
+                    .form-zb .tr .btn190 input
+                    {
+                        height: 24px;
+                        width: 50px;
+                        margin: 10px 0;
+                        cursor: pointer;
+                        vertical-align: middle;
+                    }
+
+                .form-zb .tr span.ck
+                {
+                    display: block;
+                    float: left;
+                    margin-left: 10px;
+                }
+                .form-zb .tr span.zbtext
+                {
+                    display: block;
+                    float: left;
+                    color:#f00;
+                    margin-right:10px;
+                }
+                .form-zb .tr .checkbox-in
+                {
+                    margin: 8px 0 0 150px;
+                    border: solid 1px #95B8E7;
+                    padding: 10px 14px;
+                    width: 560px;
+                    overflow: hidden;
+                    zoom: 1;
+                }
+
+                    .form-zb .tr .checkbox-in span
+                    {
+                        float: left;
+                        width: 70px;
+                        height: 26px;
+                        line-height: 26px;
+                    }
+
+                .form-zb .tr .zbbtn
+                {
+                    width: 184px;
+                    height: 26px;
+                    margin: 5px auto 0;
+                }
+
+                    .form-zb .tr .zbbtn a, .form-zb .tr .zbbtn a:hover
+                    {
+                        float: left;
+                        background: url(../../JS/EasyUI/themes/default/images/button-img.png) no-repeat;
+                        width: 72px;
+                        height: 26px;
+                        margin: 0 10px;
+                        cursor: pointer;
+                    }
+
+                        .form-zb .tr .zbbtn a input
+                        {
+                            border: 0 none;
+                            background: none;
+                            margin: 0;
+                        }
+
+                        .form-zb .tr .zbbtn a.bc
+                        {
+                            background-position: -105px -232px;
+                        }
+
+                        .form-zb .tr .zbbtn a.qx
+                        {
+                            background-position: -105px -261px;
+                        }
+
+                        .form-zb .tr .zbbtn a.bc:hover
+                        {
+                            background-position: -23px -232px;
+                        }
+
+                        .form-zb .tr .zbbtn a.qx:hover
+                        {
+                            background-position: -23px -261px;
+                        }

@@ -1,0 +1,31 @@
+.s-btn-downarrow{
+	display:inline-block;
+	width:16px;
+	line-height:14px;
+	*line-height:15px;
+	background:url('images/menu_downarrow.png') no-repeat 9px center;
+}
+
+a.s-btn-active{
+	background-position: bottom right;
+}
+a.s-btn-active span.l-btn-left{
+	background-position: bottom left;
+}
+a.s-btn-active .s-btn-downarrow{
+	background:url('images/menu_split_downarrow.png') no-repeat -12px center;
+}
+a:hover.l-btn .s-btn-downarrow{
+	background:url('images/menu_split_downarrow.png') no-repeat -12px center;
+}
+
+a.s-btn-plain-active{
+	background:#654b24 url('images/ui-bg_fine-grain_65_654b24_60x60.png') repeat-x 50% 50%;
+	border:1px solid #CBC7BD;
+	_padding:0px 5px 0px 0px;
+	border-radius:3px;
+	color:#fff;
+}
+a.s-btn-plain-active .s-btn-downarrow{
+	background:url('images/menu_split_downarrow.png') no-repeat -12px center;
+}

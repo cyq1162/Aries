@@ -1,0 +1,13 @@
+.combobox-item{
+	padding:2px;
+	font-size:12px;
+	padding:3px;
+	padding-right:0px;
+}
+.combobox-item-hover{
+	background:#d7ebf9 url('images/ui-bg_glass_80_d7ebf9_1x400.png') repeat-x 50% 50%;
+}
+.combobox-item-selected{
+	background:#3baae3 url('images/ui-bg_glass_50_3baae3_1x400.png') repeat-x 50% 50%;
+	color:#fff;
+}

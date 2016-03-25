@@ -1,0 +1,14 @@
+.combobox-item{
+	padding:2px;
+	font-size:12px;
+	padding:3px;
+	padding-right:0px;
+}
+.combobox-item-hover{
+	background:#654b24 url('images/ui-bg_fine-grain_65_654b24_60x60.png') repeat-x 50% 50%;
+	color:#fff;
+}
+.combobox-item-selected{
+	background:#b83400 url('images/ui-bg_fine-grain_68_b83400_60x60.png') repeat-x 50% 50%;
+	color:#fff;
+}

@@ -1,0 +1,14 @@
+.combobox-item {
+  padding: 2px;
+  font-size: 12px;
+  padding: 3px;
+  padding-right: 0px;
+}
+.combobox-item-hover {
+  background-color: #fff0e7;
+  color: #404040;
+}
+.combobox-item-selected {
+  background-color: #f09090;
+  color: #404040;
+}

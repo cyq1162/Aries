@@ -1,0 +1,31 @@
+.accordion{
+	background:#fff;
+	overflow:hidden;
+}
+.accordion .accordion-header{
+	background:#d7ebf9 url('images/ui-bg_glass_80_d7ebf9_1x400.png') repeat-x 50% 50%;
+	border-top-width:0;
+	color:#2779AA;
+	cursor:pointer;
+}
+.accordion .accordion-header .panel-title{
+	font-weight:normal;
+}
+.accordion .accordion-header-selected .panel-title{
+	font-weight:bold;
+}
+.accordion-noborder .accordion-header{
+	border-width:0 0 1px;
+}
+.accordion-noborder .accordion-body{
+	border-width:0px;
+}
+.accordion-collapse{
+	background:url('images/ui-icons_2694e8_256x240.png') no-repeat 0px -16px;
+}
+.accordion-expand{
+	background:url('images/ui-icons_2694e8_256x240.png') no-repeat -65px -16px;
+}
+.accordion .panel-tool a:hover{
+	background-color:#ffef8f;
+}

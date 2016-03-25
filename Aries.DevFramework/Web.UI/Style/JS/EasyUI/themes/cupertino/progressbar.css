@@ -1,0 +1,17 @@
+.progressbar{
+	border:1px solid #AED0EA;
+	border-radius:5px;
+	overflow:hidden;
+}
+.progressbar-text{
+	text-align:center;
+	color:#444;
+	position:absolute;
+}
+.progressbar-value{
+	background:#3baae3 url('images/ui-bg_glass_50_3baae3_1x400.png') repeat 50% 50%;
+	border-radius:5px;
+	border-top-right-radius:0px;
+	border-bottom-right-radius:0px;
+	width:0;
+}

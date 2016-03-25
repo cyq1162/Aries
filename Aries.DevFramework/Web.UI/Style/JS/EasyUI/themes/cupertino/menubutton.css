@@ -1,0 +1,20 @@
+.m-btn-downarrow{
+	display:inline-block;
+	width:12px;
+	line-height:14px;
+	*line-height:15px;
+	background:url('images/menu_downarrow.png') no-repeat 4px center;
+}
+
+a.m-btn-active{
+	background-position: bottom right;
+}
+a.m-btn-active span.l-btn-left{
+	background-position: bottom left;
+}
+a.m-btn-plain-active{
+	background:#e4f1fb url('images/ui-bg_glass_100_e4f1fb_1x400.png') repeat-x 50% 50%;
+	border:1px solid #AED0EA;
+	_padding:0px 5px 0px 0px;
+	border-radius:3px;
+}

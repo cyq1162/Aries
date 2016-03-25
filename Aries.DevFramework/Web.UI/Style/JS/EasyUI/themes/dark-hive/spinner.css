@@ -1,0 +1,38 @@
+.spinner{
+	display:inline-block;
+	white-space:nowrap;
+	font-size:12px;
+	margin:0;
+	padding:0;
+	border:1px solid #333;
+}
+.spinner-text{
+	font-size:12px;
+	border:0px;
+	line-height:20px;
+	height:20px;
+	padding:0px;
+	*height:18px;
+	*line-height:18px;
+	_height:18px;
+	_line-height:18px;
+}
+.spinner-arrow{
+	display:inline-block;
+	vertical-align:top;
+	margin:0;
+	padding:0;
+}
+.spinner-arrow-up,.spinner-arrow-down{
+	display:block;
+	background:#444 url('images/ui-icons_ffffff_256x240.png') no-repeat 2px -2px;
+	font-size:1px;
+	width:18px;
+	height:10px;
+}
+.spinner-arrow-down{
+	background:#444 url('images/ui-icons_ffffff_256x240.png') no-repeat -63px -3px;
+}
+.spinner-arrow-hover{
+	background-color:#0972a5;
+}

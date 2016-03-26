@@ -5,7 +5,7 @@
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="script" runat="server">
     <script>
-        TY.ajaxOption.url = TY.handler.sys;
+        TY.Utility.Ajax.Settings.url = TY.handler.sys;
         var dg = TY.DataGrid.create("PB_Config");
         dg.setButtons([
             { btn: 'edit', url: 'ConfigEdit.aspx', winTitle: "编辑信息" },

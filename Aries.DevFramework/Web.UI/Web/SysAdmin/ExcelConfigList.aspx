@@ -43,8 +43,8 @@
            
             myConfigDataGrid = $('#configTable');
             TY.registEvent("cancel");
-            TY.ajaxOption.url=TY.handler.excel;
-            TY.ajaxOption.objName = "PB_ExcelConfig";
+            TY.Utility.Ajax.Settings.url=TY.handler.excel;
+            TY.Utility.Ajax.Settings.objName = "PB_ExcelConfig";
             KeyUpDownFun();
             // GetTables();
             myConfigDataGrid.datagrid({
@@ -63,7 +63,7 @@
                 queryParams: {
                     searchList: JSON.stringify([{ paramName: 'ExcelID', paramValue: excelID, paramPatten: 'Equal' }])
                 },
-                url: TY.ajaxOption.url + '?method=GetList&objName=PB_ExcelConfig&ExcelID='+excelID +'&mid=' + mid,
+                url: TY.Utility.Ajax.Settings.url + '?method=GetList&objName=PB_ExcelConfig&ExcelID='+excelID +'&mid=' + mid,
                 collapsible: true,
                 pagination: false,//分页
                 rownumbers: true,
@@ -164,7 +164,7 @@
             }
             if (!isButtonClick && !editing && this.editIndex != rowIndex) //新点一行。
             {
-                TY.ajaxOption.method = "Update";
+                TY.Utility.Ajax.Settings.method = "Update";
                 beginEdit(rowIndex, rowData);
 
             }
@@ -210,11 +210,11 @@
         //结束编辑
         function endEditing() {
             if (myConfigDataGrid.datagrid('validateRow', editIndex)) {
-                var s = TY.ajaxOption.method == "Update" ? 'updated' : '';
+                var s = TY.Utility.Ajax.Settings.method == "Update" ? 'updated' : '';
                 var updated = myConfigDataGrid.datagrid('getChanges', s);//, 
                 myConfigDataGrid.datagrid('endEdit', editIndex);
                 if (updated.length > 0) {
-                    if (TY.ajaxOption.method == "Update") {
+                    if (TY.Utility.Ajax.Settings.method == "Update") {
                         var changeJson = getChangeJson(updated[0], editRow);
                         if (changeJson.ID != undefined) {
                             Exec(changeJson);
@@ -223,7 +223,7 @@
                             myConfigDataGrid.datagrid("rejectChanges");
                         }
                     }
-                    else if (TY.ajaxOption.method == "Add") {
+                    else if (TY.Utility.Ajax.Settings.method == "Add") {
                         updated[0].ID = "";
                         Exec(updated[0]);
                         if (updated[0].ID) {
@@ -274,8 +274,8 @@
         //    $.ajax({
         //        type: "POST",
         //        async: false,
-        //        url: TY.ajaxOption.url+'?method=GetTable&mid='+mid,
-        //        //data: TY.ajaxOption.data,
+        //        url: TY.Utility.Ajax.Settings.url+'?method=GetTable&mid='+mid,
+        //        //data: TY.Utility.Ajax.Settings.data,
         //        dataType: "json",
         //        success: function (data) { tables = data;}
         //    });
@@ -285,20 +285,20 @@
 
             var formData = [];
             JsonObj2Arr(json, formData);
-            formData.push({ name: "method", value: TY.ajaxOption.method });
-            formData.push({ name: "objName", value: TY.ajaxOption.objName });
+            formData.push({ name: "method", value: TY.Utility.Ajax.Settings.method });
+            formData.push({ name: "objName", value: TY.Utility.Ajax.Settings.objName });
             formData.push({ name: "mid", value: mid });
-            TY.ajaxOption.data = formData;
-            TY.ajaxOption.async = false;
+            TY.Utility.Ajax.Settings.data = formData;
+            TY.Utility.Ajax.Settings.async = false;
             $.ajax({
                 type: "POST",
-                async: TY.ajaxOption.async,
-                url: TY.ajaxOption.url,
-                data: TY.ajaxOption.data,
-                dataType: TY.ajaxOption.dataType,
+                async: TY.Utility.Ajax.Settings.async,
+                url: TY.Utility.Ajax.Settings.url,
+                data: TY.Utility.Ajax.Settings.data,
+                dataType: TY.Utility.Ajax.Settings.dataType,
                 success: function (data) {
                     var tip = "";
-                    switch (TY.ajaxOption.method) {
+                    switch (TY.Utility.Ajax.Settings.method) {
                         case "Add":
                             tip = "添加"; break;
                         case "Update":
@@ -308,7 +308,7 @@
                             tip = "删除"; break;
                     }
                     if (data.success) {
-                        if (TY.ajaxOption.method == "Add") {
+                        if (TY.Utility.Ajax.Settings.method == "Add") {
                             json.ID = data.msg;
                         }
                         TY.Window.refresh = true; //关闭刷新父窗体
@@ -326,7 +326,7 @@
             });
         }
         function saveAdd() {
-            TY.ajaxOption.method = "Add";
+            TY.Utility.Ajax.Settings.method = "Add";
         }
         //新增
         function onAdd() {
@@ -347,7 +347,7 @@
                 this.editRow = null;
                 endEditing();
             }
-            if (TY.ajaxOption.method == "Add" && editIndex != undefined) {
+            if (TY.Utility.Ajax.Settings.method == "Add" && editIndex != undefined) {
                 myConfigDataGrid.datagrid('deleteRow', editIndex);
                 editIndex = undefined
             }
@@ -359,7 +359,7 @@
                 return;
             }
             if (confirm('是否删除ID为' + editRow.ID + "的数据行?")) {
-                TY.ajaxOption.method = "Delete";
+                TY.Utility.Ajax.Settings.method = "Delete";
                 var json = {};
                 json.ID = editRow.ID;
                 Exec(json);

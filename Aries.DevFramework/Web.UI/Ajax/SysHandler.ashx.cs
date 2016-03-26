@@ -7,7 +7,7 @@ using CYQ.Data;
 using CYQ.Data.Table;
 using CYQ.Data.Tool;
 using Web.Utility;
-using CYQ.Logic.Sys;
+using Web.Logic.Sys;
 
 namespace Web.UI.Ajax
 {

@@ -269,7 +269,7 @@
                         url:TY.handler.fileupload
                     };
 
-                    //TY.ajaxOption.url = TY.handler.fileupload; //设定当前处理程序的路劲
+                    //TY.Utility.Ajax.Settings.url = TY.handler.fileupload; //设定当前处理程序的路劲
                     dg_upload = TY.DataGrid.create("PB_File", null, "dg_upload", true, false, ops);
 
                     if (displaymodel == 3 || displaymodel == 2) {

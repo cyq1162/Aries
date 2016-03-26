@@ -74,18 +74,15 @@
     <Content Include="App_Data\SQLCode\SysAdmin\V_SYS_RoleList.sql" />
     <Content Include="App_Data\SQLCode\命名规范.txt" />
     <Content Include="Demo\2.0\Combobox-V2.aspx" />
-    <Content Include="Demo\1.0\Combobox.aspx" />
     <Content Include="Demo\Demo-leungs.aspx" />
     <Content Include="Demo\2.0\demo-v2.aspx" />
     <Content Include="Demo\2.0\demo-v2Edit.aspx" />
-    <Content Include="Demo\1.0\DemoEdit.aspx" />
     <Content Include="Demo\DemoRowEdit.aspx" />
     <Content Include="Demo\2.0\DemoTreeGrid.aspx" />
     <Content Include="Demo\LS-Demo3.aspx" />
     <Content Include="Demo\Test.aspx" />
     <Content Include="Demo\TreeGrid.aspx" />
     <Content Include="Demo\UploadFilesDemo.aspx" />
-    <Content Include="Demo\1.0\UserEdit.aspx" />
     <Content Include="Style\CSS\login-style.css" />
     <Content Include="Style\CSS\login.css" />
     <Content Include="Style\CSS\Site.css" />
@@ -501,8 +498,6 @@
     <Content Include="Style\JS\EasyUI\themes\default\validatebox.css" />
     <Content Include="Style\JS\EasyUI\themes\default\window.css" />
     <Content Include="Style\JS\EasyUI\themes\icon.css" />
-    <Content Include="Demo\1.0\UserList.aspx" />
-    <Content Include="Demo\1.0\Demo1.aspx" />
     <Content Include="Web\SysAdmin\MenuEdit.aspx" />
     <Content Include="Web\SysAdmin\RoleAction.aspx" />
     <Content Include="Web\SysAdmin\RoleEdit.aspx" />
@@ -536,13 +531,6 @@
     <Compile Include="Demo\2.0\Combobox-V2.aspx.designer.cs">
       <DependentUpon>Combobox-V2.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Demo\1.0\Combobox.aspx.cs">
-      <DependentUpon>Combobox.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Demo\1.0\Combobox.aspx.designer.cs">
-      <DependentUpon>Combobox.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Demo\Demo-leungs.aspx.cs">
       <DependentUpon>Demo-leungs.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -563,13 +551,6 @@
     </Compile>
     <Compile Include="Demo\2.0\demo-v2Edit.aspx.designer.cs">
       <DependentUpon>demo-v2Edit.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Demo\1.0\DemoEdit.aspx.cs">
-      <DependentUpon>DemoEdit.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Demo\1.0\DemoEdit.aspx.designer.cs">
-      <DependentUpon>DemoEdit.aspx</DependentUpon>
     </Compile>
     <Compile Include="Demo\DemoRowEdit.aspx.cs">
       <DependentUpon>DemoRowEdit.aspx</DependentUpon>
@@ -612,13 +593,6 @@
     </Compile>
     <Compile Include="Demo\UploadFilesDemo.aspx.designer.cs">
       <DependentUpon>UploadFilesDemo.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Demo\1.0\UserEdit.aspx.cs">
-      <DependentUpon>UserEdit.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Demo\1.0\UserEdit.aspx.designer.cs">
-      <DependentUpon>UserEdit.aspx</DependentUpon>
     </Compile>
     <Compile Include="Tools\CreateForm.aspx.cs">
       <DependentUpon>CreateForm.aspx</DependentUpon>
@@ -758,20 +732,6 @@
       <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Demo\1.0\UserList.aspx.cs">
-      <DependentUpon>UserList.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Demo\1.0\UserList.aspx.designer.cs">
-      <DependentUpon>UserList.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Demo\1.0\Demo1.aspx.cs">
-      <DependentUpon>Demo1.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Demo\1.0\Demo1.aspx.designer.cs">
-      <DependentUpon>Demo1.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Web\SysAdmin\MenuEdit.aspx.cs">
       <DependentUpon>MenuEdit.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Web.Core;
 
-namespace CYQ.Logic
+namespace Web.Logic
 {
     //public class Test1:LogicBase
     //{

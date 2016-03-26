@@ -21,7 +21,7 @@ namespace Web.Core
             Assembly assembly = GetAssembly();
             if (assembly != null)
             {
-                object o = assembly.CreateInstance("TY.Logic.Sys.ExcelConfigExtend");
+                object o = assembly.CreateInstance("Web.Logic.Sys.ExcelConfigExtend");
                 if (o != null && o is IExcelConfig)
                 {
                     config = o as IExcelConfig;
@@ -42,7 +42,7 @@ namespace Web.Core
             {
                 try
                 {
-                    _Assembly = Assembly.Load("TY.Logic");
+                    _Assembly = Assembly.Load("Web.Logic");
                 }
                 catch (Exception err)
                 {

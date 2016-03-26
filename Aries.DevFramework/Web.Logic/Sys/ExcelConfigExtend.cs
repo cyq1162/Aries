@@ -7,7 +7,7 @@ using Web.Core;
 using CYQ.Data;
 using CYQ.Data.Table;
 
-namespace CYQ.Logic.Sys
+namespace Web.Logic.Sys
 {
     /// <summary>
     /// Excel 配置的扩展函数

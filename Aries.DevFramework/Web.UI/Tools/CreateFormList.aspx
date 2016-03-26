@@ -164,7 +164,7 @@
             }
             if (!isButtonClick && !editing && this.editIndex != rowIndex) //新点一行。
             {
-                TY.ajaxOption.method = "Update";
+                TY.Utility.Ajax.Settings.method = "Update";
                 beginEdit(rowIndex, rowData);
             }
             isButtonClick = false;
@@ -178,11 +178,11 @@
         //结束编辑
         function endEditing() {
             if (myConfigDataGrid.datagrid('validateRow', editIndex)) {
-                var s = TY.ajaxOption.method == "Update" ? 'updated' : '';
+                var s = TY.Utility.Ajax.Settings.method == "Update" ? 'updated' : '';
                 var updated = myConfigDataGrid.datagrid('getChanges', s);//, 
                 myConfigDataGrid.datagrid('endEdit', editIndex);
                 if (updated.length > 0) {
-                    if (TY.ajaxOption.method == "Update") {
+                    if (TY.Utility.Ajax.Settings.method == "Update") {
                         var changeJson = getChangeJson(updated[0], editRow);
                         if (changeJson.ID != undefined) {
                             Exec(changeJson);
@@ -191,7 +191,7 @@
                             myConfigDataGrid.datagrid("rejectChanges");
                         }
                     }
-                    else if (TY.ajaxOption.method == "Add") {
+                    else if (TY.Utility.Ajax.Settings.method == "Add") {
                         updated[0].ID = "";
                         Exec(updated[0]);
                         if (updated[0].ID) {
@@ -238,26 +238,26 @@
 
         //ajax操作
         function Exec(json) {
-            TY.ajaxOption.method = "UpdateFrom";
+            TY.Utility.Ajax.Settings.method = "UpdateFrom";
             var formData = [];
             JsonObj2Arr(json, formData);
-            formData.push({ name: "method", value: TY.ajaxOption.method });
-            formData.push({ name: "objName", value: TY.ajaxOption.objName });
+            formData.push({ name: "method", value: TY.Utility.Ajax.Settings.method });
+            formData.push({ name: "objName", value: TY.Utility.Ajax.Settings.objName });
             formData.push({ name: "mid", value: mid });
-            TY.ajaxOption.data = formData;
-            TY.ajaxOption.async = false;
+            TY.Utility.Ajax.Settings.data = formData;
+            TY.Utility.Ajax.Settings.async = false;
             TableName = Request.queryString('tbname');
             $.ajax({
                 type: "POST",
-                async: TY.ajaxOption.async,
+                async: TY.Utility.Ajax.Settings.async,
                 url: '/Ajax/FormHandler.ashx?mid=0&method=UpdateFrom&objName=' + TableName,
-                data: TY.ajaxOption.data,
-                dataType: TY.ajaxOption.dataType,
+                data: TY.Utility.Ajax.Settings.data,
+                dataType: TY.Utility.Ajax.Settings.dataType,
                 success: function (data) {
 
                     //var tip = "";
                     //if (data.success) {
-                    //    if (TY.ajaxOption.method == "Add") {
+                    //    if (TY.Utility.Ajax.Settings.method == "Add") {
                     //        json.ID = data.msg;
                     //    }
                     TY.Window.refresh = true; //关闭刷新父窗体
@@ -276,7 +276,7 @@
             });
         }
         function saveAdd() {
-            TY.ajaxOption.method = "Add";
+            TY.Utility.Ajax.Settings.method = "Add";
         }
         //新增
         function onAdd() {
@@ -305,7 +305,7 @@
                 this.editRow = null;
                 endEditing();
             }
-            if (TY.ajaxOption.method == "Add" && editIndex != undefined) {
+            if (TY.Utility.Ajax.Settings.method == "Add" && editIndex != undefined) {
                 myConfigDataGrid.datagrid('deleteRow', editIndex);
                 editIndex = undefined
             }
@@ -323,10 +323,10 @@
 
                 $.ajax({
                     type: "POST",
-                    async: TY.ajaxOption.async,
+                    async: TY.Utility.Ajax.Settings.async,
                     url: '/Ajax/FormHandler.ashx?method=DeleteFrom',
                     data: { method: "DeleteFrom", ID: json.ID },
-                    dataType: TY.ajaxOption.dataType,
+                    dataType: TY.Utility.Ajax.Settings.dataType,
                     success: function (data) {
                         if (data.success) {
                             TY.Window.refresh = true; //关闭刷新父窗体
@@ -464,8 +464,8 @@
                 tableName = Request.queryString('tbname');
                 $.ajax({
                     type: "POST",
-                    async: TY.ajaxOption.async,
-                    url: "/Ajax/FormHandler.ashx", //TY.ajaxOption.url,
+                    async: TY.Utility.Ajax.Settings.async,
+                    url: "/Ajax/FormHandler.ashx", //TY.Utility.Ajax.Settings.url,
                     data: { objName: tableName, method: "CreateFrom" },
                     dataType: "text",
                     success: function (data) {

@@ -133,6 +133,6 @@
 <asp:Content ID="Content3" ContentPlaceHolderID="script" runat="server">
     <script>
         parent.TY.Page.that.tableName = "V_SYS_UserList";
-        TY.ajaxOption.url = TY.handler.sys;
+        TY.Utility.Ajax.Settings.url = TY.handler.sys;
     </script>
 </asp:Content>

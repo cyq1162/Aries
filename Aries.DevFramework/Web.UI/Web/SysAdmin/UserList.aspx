@@ -14,8 +14,7 @@
         dg.PKColumn.add("edit", "编辑", null, "UserEdit.aspx", "编辑用户", "edit");
         dg.PKColumn.add("del", "删除", null, null, null, "del");
         dg.bind();
-
-        //TY.ajaxOption.url = TY.handler.sys;
+        //TY.Utility.Ajax.Settings.url = TY.handler.sys;
         //var ops = {
         //    sortName: "CreateTime", sortOrder: "desc"
         //}

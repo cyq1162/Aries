@@ -10,7 +10,7 @@ using CYQ.Data;
 using CYQ.Data.Table;
 using CYQ.Data.Tool;
 
-namespace CYQ.Logic.Sys
+namespace Web.Logic.Sys
 {
     /// <summary>
     /// 注：本类由框架组提供，其它人不得修改。

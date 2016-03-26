@@ -6,7 +6,7 @@
 </asp:Content>
 <asp:Content ID="Content3" ContentPlaceHolderID="script" runat="server">
       <script type="text/javascript">
-          TY.ajaxOption.url = TY.handler.sys;
+          TY.Utility.Ajax.Settings.url = TY.handler.sys;
           TY.TreeGrid.create('PB_Area', null, 'tg', 'ID', 'AreaName', 'ParentID');
     </script>
 </asp:Content>

@@ -6,7 +6,7 @@ using Web.Core;
 using CYQ.Data;
 using CYQ.Data.Aop;
 using CYQ.Data.Table;
-namespace CYQ.Logic.Sys
+namespace Web.Logic.Sys
 {
     /// <summary>
     /// AOP，日志使用（数据库自动用触发器生成日志）

@@ -65,7 +65,7 @@ namespace Web.Core
             {
                 try
                 {
-                    _Assembly = Assembly.Load("TY.Entity");
+                    _Assembly = Assembly.Load("WEb.Entity");
                 }
                 catch (Exception err)
                 {

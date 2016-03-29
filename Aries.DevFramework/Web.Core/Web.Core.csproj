@@ -57,6 +57,7 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthModule.cs" />
     <Compile Include="Base\AjaxBase.cs" />
     <Compile Include="Base\LogicBase.cs" />
     <Compile Include="Config\ExcelConfig.cs" />

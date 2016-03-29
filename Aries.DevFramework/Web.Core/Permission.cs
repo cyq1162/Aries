@@ -99,15 +99,27 @@ namespace Web.Core
         /// <param name="url"></param>
         private void CheckMenu(Uri uri)
         {
-            if (uri.LocalPath.EndsWith(".aspx") && string.Compare(uri.LocalPath, "/index.aspx", true) != 0)
+            if (IsEndWith(uri, "") && string.Compare(uri.LocalPath.Substring(0,7), "/index.", true) != 0)
             {
-                if (!HasMenu(uri) && uri.LocalPath.EndsWith("List.aspx") && HttpContext.Current.Request.UrlReferrer == null)
+                if (!HasMenu(uri) && IsEndWith(uri,"List") && HttpContext.Current.Request.UrlReferrer == null)
                 {
 #if !DEBUG
                     throw new Exception("您没有访问当前请求页面的权限！");
 #endif
                 }
             }
+        }
+        private bool IsEndWith(Uri uri, string key)
+        {
+            string[] items = new[] { ".aspx", ".html", ".shtml" };
+            foreach (string item in items)
+            {
+                if (uri.LocalPath.EndsWith(key + item))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
         /// <summary>
         /// 是否拥有菜单的权限

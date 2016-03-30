@@ -27,7 +27,7 @@
                     <div class="login-box-b">
                         <form method="post" id="formSubmit" runat="server" onsubmit="return loginFunc();">
                             <p>
-                                <label>用户名</label><input type="text" id="txtName" name="txtName" value="<%=loginID %>" class="user a" />
+                                <label>用户名</label><input type="text" id="txtName" name="txtName" value="" class="user a" />
                             </p>
                             <p>
                                 <label>密 码</label><input type="password" id="txtPwd" name="txtPwd" class="password a" />

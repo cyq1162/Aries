@@ -13,8 +13,6 @@ namespace Web.UI
 {
     public partial class Login : System.Web.UI.Page
     {
-        protected string loginID = null;
-        protected string Ischeck = "";
 
         protected void Page_Load(object sender, EventArgs e)
         {

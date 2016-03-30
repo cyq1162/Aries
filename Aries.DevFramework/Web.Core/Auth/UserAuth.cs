@@ -45,7 +45,7 @@ namespace Web.Core
                             action.SetExpression("LoginCount=ISNULL(LoginCount,0)+1");
                             action.Set(Sys_User.LastLoginTime, DateTime.Now);
                             action.Set(Sys_User.LastLoginIP, HttpContext.Current.Request.UserHostAddress);
-                            action.SetPara("UserName", userName, System.Data.DbType.String);
+                            //action.SetPara("UserName", userName, System.Data.DbType.String);
                             action.Update(where);//更新信息。
                         }
                         errMsg = "用户名或密码错误！";

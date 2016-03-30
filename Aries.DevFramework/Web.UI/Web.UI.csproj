@@ -512,9 +512,6 @@
     <Compile Include="Ajax\ExcelHandler.ashx.cs">
       <DependentUpon>ExcelHandler.ashx</DependentUpon>
     </Compile>
-    <Compile Include="Ajax\FileUpload.ashx.cs">
-      <DependentUpon>FileUpload.ashx</DependentUpon>
-    </Compile>
     <Compile Include="Ajax\FormHandler.ashx.cs">
       <DependentUpon>FormHandler.ashx</DependentUpon>
     </Compile>
@@ -789,7 +786,6 @@
     <Content Include="Ajax\SysHandler.ashx" />
     <Content Include="Ajax\ExcelHandler.ashx" />
     <Content Include="Ajax\FormHandler.ashx" />
-    <Content Include="Ajax\FileUpload.ashx" />
     <Content Include="Ajax\TreegridHandler.ashx" />
     <None Include="Properties\PublishProfiles\2.0新版.pubxml" />
     <Content Include="Style\Images\file\Thumbs.db" />

@@ -86,12 +86,6 @@ namespace Web.UI.Ajax
                 case "V_SYS_UserList":
                     jsonResult = sysLogic.DeleteUser();
                     break;
-                case "System_Department":
-                    jsonResult = sysLogic.DeleteDepartment();
-                    break;
-                case "PB_Area":
-                    jsonResult = sysLogic.DeleteArea();
-                    break;
                 default:
                     base.Delete();
                     break;
@@ -102,10 +96,10 @@ namespace Web.UI.Ajax
         {
             switch (t)
             {
-                case TableNames.PB_Config:
-                    KeyValueConfig.ConfigTable = null;
+                case TableNames.Config_KeyValue:
+                    KeyValueConfig.KeyValueTable = null;
                     break;
-                case TableNames.System_Menu:
+                case TableNames.Sys_Menu:
                     SysMenu.MenuTable = null;
                     break;
 

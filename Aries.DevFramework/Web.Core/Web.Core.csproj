@@ -57,7 +57,7 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AuthModule.cs" />
+    <Compile Include="Auth\AuthModule.cs" />
     <Compile Include="Base\AjaxBase.cs" />
     <Compile Include="Base\LogicBase.cs" />
     <Compile Include="Config\ExcelConfig.cs" />
@@ -73,18 +73,18 @@
     <Compile Include="Base\PageBase.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Permission.cs" />
+    <Compile Include="Auth\Permission.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SearchFormat.cs" />
     <Compile Include="SQLCode.cs" />
-    <Compile Include="SysMenu.cs" />
+    <Compile Include="Auth\SysMenu.cs" />
     <Compile Include="TableNames.cs" />
     <Compile Include="Tool\EncrpytHelper.cs" />
     <Compile Include="Tool\CommonHelper.cs" />
     <Compile Include="Tool\ExcelHelper.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="UserAuth.cs" />
+    <Compile Include="Auth\UserAuth.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="开发说明.txt" />

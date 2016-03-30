@@ -51,9 +51,9 @@
                 sortName: "OrderNum",
                 remoteSort: false,
                 queryParams: {
-                    searchList: JSON.stringify([{ paramName: 'TableName', paramValue: TableName, paramPatten: 'Equal' }])
+                    searchList: JSON.stringify([{ paramName: 'objName', paramValue: TableName, paramPatten: 'Equal' }])
                 },
-                url: TY.handler.ajax + '?method=GetList&objName=PB_GridConfig&sort=OrderNum&mid=' + mid,
+                url: TY.handler.ajax + '?_method=GetList&_objName=Config_Grid&sort=OrderNum&_mid=' + mid,
                 collapsible: true,
                 pagination: false,//分页
                 rownumbers: true,
@@ -287,9 +287,9 @@
 
             var formData = [];
             JsonObj2Arr(json, formData);
-            formData.push({ name: "method", value: TY.Utility.Ajax.Settings.method });
-            formData.push({ name: "objName", value: TY.Utility.Ajax.Settings.objName });
-            formData.push({ name: "mid", value: mid });
+            formData.push({ name: "_method", value: TY.Utility.Ajax.Settings.method });
+            formData.push({ name: "_objName", value: TY.Utility.Ajax.Settings.objName });
+            formData.push({ name: "_mid", value: mid });
             TY.Utility.Ajax.Settings.data = formData;
             TY.Utility.Ajax.Settings.async = false;
             $.ajax({

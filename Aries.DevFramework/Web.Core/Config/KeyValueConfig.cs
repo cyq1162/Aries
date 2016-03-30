@@ -9,31 +9,30 @@ using CYQ.Data.Tool;
 namespace Web.Core
 {
     /// <summary>
-    /// 键值对配置专用类（By CYQ）操作：PB_Config 表
+    /// 键值对配置专用类（By CYQ）操作：Config_KeyValue 表
     /// </summary>
     public static partial class KeyValueConfig
     {
-        private static MDataTable _ConfigTable;
+        private static MDataTable _KeyValueTable;
         /// <summary>
         /// 配置表（全局缓存）
         /// </summary>
-        public static MDataTable ConfigTable
+        public static MDataTable KeyValueTable
         {
             get
             {
-                if (_ConfigTable == null)
+                if (_KeyValueTable == null)
                 {
-                    using (MAction action = new MAction("PB_Config"))
+                    using (MAction action = new MAction(TableNames.Config_KeyValue))
                     {
-                        action.SetSelectColumns("LTRIM(RTRIM(ConfigKey)) AS ConfigKey", "ConfigName", "ConfigValue", "TopComID");//刘盼：ConfigKey是翻译索引字段，需去掉空格
-                        _ConfigTable = action.Select("order by ConfigKey ASC,OrderNo ASC,CFID ASC");
+                        _KeyValueTable = action.Select("order by ConfigKey ASC,OrderNo ASC,KeyValueID ASC");
                     }
                 }
-                return _ConfigTable;
+                return _KeyValueTable;
             }
             set
             {
-                _ConfigTable = value;
+                _KeyValueTable = value;
             }
         }
 
@@ -41,51 +40,29 @@ namespace Web.Core
         {
             if (!string.IsNullOrEmpty(description))
             {
-                using (MAction action = new MAction(TableNames.PB_Config))
+                using (MAction action = new MAction(TableNames.Config_KeyValue))
                 {
                     if (!action.Exists("ConfigKey='表名描述' and ConfigName='" + objName + "'"))
                     {
-                        action.Set(PB_Config.ConfigKey, "表名描述");
-                        action.Set(PB_Config.ConfigName, objName);
-                        action.Set(PB_Config.ConfigValue, description);
-                        action.Set(PB_Config.Flag, "sys");
+                        action.Set(Config_KeyValue.ConfigKey, "表名描述");
+                        action.Set(Config_KeyValue.ConfigName, objName);
+                        action.Set(Config_KeyValue.ConfigValue, description);
+                        action.Set(Config_KeyValue.Flag, "sys");
                         if (action.Insert())
                         {
-                            ConfigTable = null;//清缓存。
+                            KeyValueTable = null;//清缓存。
                         }
                     }
                 }
             }
         }
 
-        /*
-        /// <summary>
-        /// 保存成Js文件,输出到前端缓存
-        /// 格式 var config={"CloverColor":{"1":"0xFF0000",""},Gis:"","安全指标":""}
-        /// </summary>
-        public static void SaveJavaScript()
-        {
-            _ConfigTable = null;//清空缓存。
-            MDataTable dt = ConfigTable.FindAll("Flag<>'sys'");
-            string json = GetJson(dt);
-            try
-            {
-                string path = System.Web.HttpContext.Current.Server.MapPath("~/Style/JS/TY.KeyValueConfig.js");
-                File.WriteAllText(path, "var config=" + json, Encoding.UTF8);
-            }
-            catch (Exception err)
-            {
-                Log.WriteLogToTxt(err);
-            }
-
-        }
-         */
         /// <summary>
         /// 获取JavaScript Json
         /// </summary>
         public static string GetJson()
         {
-            MDataTable dt = ConfigTable.FindAll("Flag<>'sys'");
+            MDataTable dt = KeyValueTable.FindAll("Flag<>'sys'");
             return GetJson(dt);
         }
         private static string GetJson(MDataTable configTable)
@@ -106,11 +83,6 @@ namespace Web.Core
                 {
                     if (groupList.Count > 0)
                     {
-
-                        if (configKey == "文件服务器信息")
-                        {
-
-                        }
                         json.Add(configKey, GetInnerJson(groupList), true);
                         groupList.Clear();
                     }
@@ -134,11 +106,6 @@ namespace Web.Core
             {
                 json.Add("text", row.Get<string>("ConfigName"));
                 json.Add("value", row.Get<string>("ConfigValue"));
-                string parent = row.Get<string>("TopComID", "");
-                if (parent != "")
-                {
-                    json.Add("parent", parent);
-                }
                 json.AddBr();
             }
             return json.ToString(true);
@@ -156,10 +123,10 @@ namespace Web.Core
             string descriptoin = GetVallue("表名描述", objName);
             if (string.IsNullOrEmpty(descriptoin))
             {
-                MDataRow row = ExcelConfig.GetInfo(objName);
+                MDataRow row = ExcelConfig.GetExcelRow(objName);
                 if (row != null)
                 {
-                    descriptoin = row.Get<string>(PB_ExcelInfo.CnName);
+                    descriptoin = row.Get<string>(Config_Excel.CnName);
                 }
                 if (string.IsNullOrEmpty(descriptoin))
                 {
@@ -182,7 +149,7 @@ namespace Web.Core
         /// </summary>
         public static string GetName(string configKey, string configValue)
         {
-            MDataRow row = ConfigTable.FindRow("ConfigKey='" + configKey + "' and ConfigValue='" + configValue + "'");
+            MDataRow row = KeyValueTable.FindRow("ConfigKey='" + configKey + "' and ConfigValue='" + configValue + "'");
             if (row != null)
             {
                 return row.Get<string>("ConfigName");
@@ -194,7 +161,7 @@ namespace Web.Core
         /// </summary>
         public static string GetVallue(string configKey, string configName)
         {
-            MDataRow row = ConfigTable.FindRow("ConfigKey='" + configKey + "' and ConfigName='" + configName + "'");
+            MDataRow row = KeyValueTable.FindRow("ConfigKey='" + configKey + "' and ConfigName='" + configName + "'");
             if (row != null)
             {
                 return row.Get<string>("ConfigValue");
@@ -250,12 +217,12 @@ namespace Web.Core
                         }
                     }
 
-                    MDataTable configItems = null;//存档pb_config的项
+                    MDataTable configItems = null;//存档Config_KeyValue的项
                     Dictionary<string, MDataTable> objNameItems = new Dictionary<string, MDataTable>();//存档自定义对项集合的项 
                     if (configKeys.Length > 1)
                     {
                         configKeys = configKeys.TrimEnd(',') + ")";
-                        configItems = ConfigTable.FindAll("ConfigKey in " + configKeys);
+                        configItems = KeyValueTable.FindAll("ConfigKey in " + configKeys);
                     }
                     if (objNameSql.Length > 1)
                     {
@@ -297,7 +264,7 @@ namespace Web.Core
                             string value = cell.ToString();//广东省=>300
                             if (!kvItem.Value.StartsWith("C_"))
                             {
-                                #region #PB_Config的项翻译
+                                #region #Config_KeyValue的项翻译
                                 if (isValueToName && kvItem.Value == "是否")//处理1，0，true,false不同情况
                                 {
                                     value = (value == "1" || value.ToLower() == "true") ? "1" : "0";
@@ -427,7 +394,7 @@ namespace Web.Core
             Dictionary<string, string> SqlDic = new Dictionary<string, string>();
             foreach (MDataRow row in dt.Rows)
             {
-                string formatter = row.Get<string>(PB_GridConfig.Formatter);
+                string formatter = row.Get<string>(Config_Grid.Formatter);
                 if (formatter == "boolFormatter")
                 {
                     formatter = "#是否";//对bool型特殊处理。
@@ -444,7 +411,7 @@ namespace Web.Core
                     }
                     else
                     {
-                        MDataTable config = ConfigTable.FindAll(string.Format("ConfigKey='{0}'", formatter.TrimStart('#')));
+                        MDataTable config = KeyValueTable.FindAll(string.Format("ConfigKey='{0}'", formatter.TrimStart('#')));
                         if (config != null && config.Rows.Count > 0)
                         {
                             if (!dic.ContainsKey(formatter))
@@ -460,7 +427,6 @@ namespace Web.Core
         }
 
         /// <summary>
-        /// 刘盼
         /// 构造包含级联的数据字典
         /// </summary>
         /// <param name="formatParas"></param>

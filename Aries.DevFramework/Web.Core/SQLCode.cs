@@ -169,34 +169,16 @@ namespace Web.Core
             {
                 sql = sql.Replace("@UserID", UserAuth.UserID.ToString());
             }
-            if (sql.IndexOf("@LoginID") > -1)
-            {
-                sql = sql.Replace("@LoginID", UserAuth.LoginID.ToString());
-            }
             if (sql.IndexOf("@UserName") > -1)
             {
-                sql = sql.Replace("@UserName", UserAuth.UserName);
+                sql = sql.Replace("@UserName", UserAuth.UserName.ToString());
             }
-            if (sql.IndexOf("@AreaID") > -1)
+            if (sql.IndexOf("@FullName") > -1)
             {
-                sql = sql.Replace("@AreaID", UserAuth.AreaID);
+                sql = sql.Replace("@FullName", UserAuth.FullName);
             }
-            string key = "@CompanyID";
-            int index = sql.IndexOf(key);
-            if (index > -1)
-            {
-                if (UserAuth.IsProvince)
-                {
-                    int end = index + key.Length;
-                    string temp = sql.Substring(0, index - 5);
-                    int start = temp.LastIndexOf(' ');
-                    sql = sql.Replace(sql.Substring(start + 1, end - start - 1), "1=1");
-                }
-                else
-                {
-                    sql = sql.Replace("@CompanyID", UserAuth.CompanyID.ToString());
-                }
-            }
+
+            string key = null;
             //自动配置其它属性
             if (sql.IndexOf('@') > -1)
             {

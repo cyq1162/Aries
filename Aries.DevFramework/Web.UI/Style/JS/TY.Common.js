@@ -52,20 +52,3 @@ var buttons_temp = {
 function openDiary(value, row, el) {
     TY.Window.open(StringFormat.execute('{0}/Web/SysAdmin/SearchLogs.aspx?id={1}', ui, value), '操作日志明细', true);
 }
-
-function domainFormatter(v,r) {
-    switch (v) {
-        case -1:
-            return '基站接入';
-            break;
-        case -2:
-            return '室分接入';
-            break;
-        case 1:
-            return '主干光缆';
-            break;
-        case 2:
-            return '主干管道';
-            break;
-    }
-}

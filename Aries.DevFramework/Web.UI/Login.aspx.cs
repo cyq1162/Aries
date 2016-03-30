@@ -25,20 +25,15 @@ namespace Web.UI
                 string pwd = Request["pwd"];
                 if (!string.IsNullOrEmpty(lid) && !string.IsNullOrEmpty(pwd))
                 {
-                    UserAuth.Login(lid, pwd, true, out outMsg);
-                }
-                else if (UserAuth.IsRemember)
-                {
-                    loginID = UserAuth.LoginID;
-                    Ischeck = "checked='checked'";
+                    UserAuth.Login(lid, pwd, out outMsg);
                 }
             }
             else
             {
 
-                if (!UserAuth.Login(Request["txtName"], Request["txtPwd"], Request["memory"] == "Y", out outMsg))
+                if (!UserAuth.Login(Request["txtName"], Request["txtPwd"], out outMsg))
                 {
-                    ScriptHelper.Alert(this.Page, outMsg);
+                    lbTip.Text = outMsg;
                 }
             }
         }

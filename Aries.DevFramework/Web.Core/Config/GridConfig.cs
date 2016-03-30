@@ -9,7 +9,7 @@ using CYQ.Data.Tool;
 namespace Web.Core
 {
     /// <summary>
-    /// 表格头配置专用类（By CYQ）操作：PB_GridConfig 表
+    /// 表格头配置专用类（By CYQ）操作：Config_Grid 表
     /// </summary>
     public static class GridConfig
     {
@@ -115,9 +115,9 @@ namespace Web.Core
                     break;
             }
             // return KeyValueConfig.ConfigTable.FindAll(
-            using (MAction action = new MAction("PB_GridConfig"))
+            using (MAction action = new MAction(TableNames.Config_Grid))
             {
-                return action.Select(string.Format("TableName='{0}' {1} order by OrderNum", objName, where));
+                return action.Select(string.Format("ObjName='{0}' {1} order by OrderNum", objName, where));
             }
         }
         private static void FillTable(string objName, MDataTable dt)
@@ -130,7 +130,7 @@ namespace Web.Core
             {
                 cell = mdc[i];
                 MDataRow row = dt.NewRow();
-                row["TableName"].Value = formatObjName;
+                row["ObjName"].Value = formatObjName;
                 row["Field"].Value = cell.ColumnName;
                 row["Title"].Value = fieldTitleDic.ContainsKey(cell.ColumnName) ? fieldTitleDic[cell.ColumnName] : cell.ColumnName;
                 row["Hidden"].Value = false;
@@ -301,11 +301,11 @@ namespace Web.Core
             if (dt != null)
             {
                 dt.Columns.RemoveAt(0);//移除主键
-                sb.Append("Delete from [PB_GridConfig] where [TableName]='" + objName + "'\r\nGo\r\n");
+                sb.Append("Delete from [Config_Grid] where [TableName]='" + objName + "'\r\nGo\r\n");
                 //创建SQL脚本。
                 foreach (var row in dt.Rows)
                 {
-                    row.TableName = "PB_GridConfig";
+                    row.TableName = "Config_Grid";
                     sb.AppendLine(SQLCode.GetSQLScript(row, "TableName", "Field"));
 
                 }

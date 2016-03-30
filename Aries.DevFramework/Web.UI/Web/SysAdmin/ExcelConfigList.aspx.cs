@@ -20,7 +20,7 @@ namespace Web.UI.Web.Sys
         public string columnJson = string.Empty;
         protected void Page_Load(object sender, EventArgs e)
         {
-            MDataRow row=ExcelConfig.GetInfoByID(Query<string>("ID"));
+            MDataRow row=ExcelConfig.GetExcelRow(Query<string>("ID"));
             objName = row.Get<string>("EnName");
             string[] TableNames = row.Get<string>("TableNames").Split(',');
             Dictionary<string, string> dic = new Dictionary<string, string>();

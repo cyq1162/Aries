@@ -37,7 +37,7 @@ namespace Web.Core
 
             //KeyValueConfig.SaveJavaScript();
             UserAuth.IsExistsToken(true);//检测登陆状态。
-            p = new Permission(UserAuth.LoginID, !IsBreakCheckMenuUrl);//初始化权限检测。
+            p = new Permission(UserAuth.UserName, !IsBreakCheckMenuUrl);//初始化权限检测。
 
             base.OnPreInit(e);
             SetNoCache();

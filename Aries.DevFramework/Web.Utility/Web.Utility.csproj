@@ -63,19 +63,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ADHelper\Common\ADHelper.cs" />
-    <Compile Include="ADHelper\Common\FileIdentityFactory.cs" />
-    <Compile Include="ADHelper\Common\IdentityDomainImpersonation.cs" />
-    <Compile Include="ADHelper\Common\IFileIdentity.cs" />
-    <Compile Include="ADHelper\Common\ShareCommonIdentity.cs" />
-    <Compile Include="ADHelper\Common\ShareDomainIdentity.cs" />
-    <Compile Include="ADHelper\Common\ShareRemoteIdentity.cs" />
-    <Compile Include="ADHelper\Common\SharpZipLibHelper.cs" />
-    <Compile Include="ADHelper\FileManager.cs" />
-    <Compile Include="FileUpload\FileHelper.cs" />
     <Compile Include="ImageUtility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScriptHelper.cs" />
     <Compile Include="WebHelper.cs" />
   </ItemGroup>
   <ItemGroup>

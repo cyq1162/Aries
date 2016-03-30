@@ -4,4 +4,4 @@ AjaxBase：IHttpHandle 基类，处理所有的异步请求
 PageBase：Aspx 页面基类，处理页面的请求
 Permission：用户权限类，处理用户是否拥有页面或功能的权限
 UserAuth：用户登陆授权类，处理账号登陆（包括APP）的登陆及基本账号信息返回。
-GridConfig：操作PB_Config表，处理页面的表头(说明，宽度，格式化，排序)等信息配置
+GridConfig：操作Config_KeyValue表，处理页面的表头(说明，宽度，格式化，排序)等信息配置

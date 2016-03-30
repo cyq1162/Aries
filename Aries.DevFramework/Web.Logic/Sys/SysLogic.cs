@@ -28,26 +28,29 @@ namespace Web.Logic.Sys
         public string UpdateUser()
         {
             bool result = false;
-            using (MAction action = new MAction(TableNames.System_Users))
+            string pwd = Query<string>("Password");
+            string userID = Query<string>("UserID");
+            using (MAction action = new MAction(TableNames.Sys_User))
             {
                 action.BeginTransation();
-
-                action.Set("Password", EncrpytHelper.Encrypt(Query<string>("Password")));//加密
-                result = action.Update(true);
+                if (!string.IsNullOrEmpty(pwd))
+                {
+                    action.Set(Sys_User.Password, EncrpytHelper.Encrypt(pwd));//加密
+                }
+                result = action.Update(userID,true);
                 if (result)
                 {
-                    action.ResetTable(TableNames.System_UserInfo);
-                    string userID = Query<string>("UserID");
+                    action.ResetTable(TableNames.Sys_UserInfo);
                     if (action.Exists(userID))
                     {
                         if (action.Data.Count > 1)//有自定义列
                         {
-                            result = action.Update(true);
+                            result = action.Update(userID,true);
                         }
                     }
                     else
                     {
-                        action.Set(System_UserInfo.UserID, userID);
+                        action.Set(Sys_UserInfo.UserInfoID, userID);
                         action.AllowInsertID = true;
                         result = action.Insert(true);
                     }
@@ -70,19 +73,20 @@ namespace Web.Logic.Sys
         {
             string jsonResult = string.Empty;
             bool result = false;
-            using (MAction action = new MAction(TableNames.System_Users))
+            string userName = Query<string>("userName");
+            string pwd = Query<string>("Password");
+            using (MAction action = new MAction(TableNames.Sys_User))
             {
-                string loginID = Query<string>("LoginID");
                 action.BeginTransation();
-                if (!action.Exists("LoginID = '" + loginID + "'"))
+                if (!action.Exists("UserName = '" + userName + "'"))
                 {
-                    action.Set("Password", EncrpytHelper.Encrypt(Query<string>("Password")));//加密
+                    action.Set("Password", EncrpytHelper.Encrypt(pwd));//加密
                     if (action.Insert(true, InsertOp.ID))
                     {
-                        string userID = action.Get<string>(System_Users.UserID);
+                        string userID = action.Get<string>(Sys_User.UserID);
 
-                        action.ResetTable(TableNames.System_UserInfo);
-                        action.Set(System_UserInfo.UserID, userID);
+                        action.ResetTable(TableNames.Sys_UserInfo);
+                        action.Set(Sys_UserInfo.UserInfoID, userID);
                         action.AllowInsertID = true;
                         result = action.Insert(true);
                         if (!result)
@@ -108,13 +112,13 @@ namespace Web.Logic.Sys
         public string DeleteUser()
         {
             bool result = false;
-            using (MAction action = new MAction(TableNames.System_Users))
+            using (MAction action = new MAction(TableNames.Sys_User))
             {
                 action.BeginTransation();
                 result = action.Delete(GetID);
                 if (result)
                 {
-                    action.ResetTable(TableNames.System_UserInfo);
+                    action.ResetTable(TableNames.Sys_UserInfo);
                     if (action.Exists(GetID))
                     {
                         result = action.Delete(GetID);
@@ -140,7 +144,7 @@ namespace Web.Logic.Sys
         public string GetMenuJson()
         {
             string result = string.Empty;
-            using (MAction action = new MAction(TableNames.System_Menu))
+            using (MAction action = new MAction(TableNames.Sys_Menu))
             {
                 result = action.Select("ORDER BY menulevel ASC,sortorder asc").ToJson();
             }
@@ -153,7 +157,7 @@ namespace Web.Logic.Sys
         public string GetActions()
         {
             string result = string.Empty;
-            using (MAction action = new MAction(TableNames.System_Action))
+            using (MAction action = new MAction(TableNames.Sys_Action))
             {
                 result = action.Select().ToJson();
             }
@@ -169,7 +173,7 @@ namespace Web.Logic.Sys
         {
             string result = string.Empty;
             string id = Query<string>("id");
-            using (MAction action = new MAction(TableNames.System_Menu))
+            using (MAction action = new MAction(TableNames.Sys_Menu))
             {
                 if (action.Fill(id))
                 {
@@ -188,7 +192,7 @@ namespace Web.Logic.Sys
         {
             bool result = false;
             string id = Query<string>("id");
-            using (MAction action = new MAction(TableNames.System_Menu))
+            using (MAction action = new MAction(TableNames.Sys_Menu))
             {
                 action.SetSelectColumns("MenuID", "ParentMenuID");
                 MDataTable dt = action.Select();
@@ -199,7 +203,7 @@ namespace Web.Logic.Sys
                 result = action.Delete(where);
                 if (result)
                 {
-                    action.ResetTable(TableNames.System_RoleAction);//删除权限的设置
+                    action.ResetTable(TableNames.Sys_RoleAction);//删除权限的设置
                     action.Delete(where);
                 }
             }
@@ -214,7 +218,7 @@ namespace Web.Logic.Sys
         {
             bool result = false;
             string MenuID = Query<string>("MenuID");
-            using (MAction action = new MAction(TableNames.System_Menu))
+            using (MAction action = new MAction(TableNames.Sys_Menu))
             {
                 if (action.Fill("ParentMenuID='" + MenuID + "'"))
                 {
@@ -285,7 +289,7 @@ namespace Web.Logic.Sys
                 }
                 dt.TableName = "System_RoleAction";
                 //删除该角色下面所有权限
-                using (MAction action = new MAction(TableNames.System_RoleAction))
+                using (MAction action = new MAction(TableNames.Sys_RoleAction))
                 {
                     action.BeginTransation();
                     action.Delete("RoleID='" + roleID + "'");
@@ -304,44 +308,13 @@ namespace Web.Logic.Sys
         public string GetMenuAndAction()
         {
             return SysMenu.SysMenuAction.ToJson();
-            /*
-            MDataTable table = new MDataTable();
-            using (MAction action = new MAction(SQLCode.GetCode("V_SYS_MenuActions")))
-            {
-                table = action.Select();
-                MDataTable actionTable = table.FindAll("ActionIDs is not null");
-                //string RoleID = Query<String>("RoleID");
-                foreach (var item in actionTable.Rows)
-                {
-                    string[] actionIDs = item["ActionIDs"].ToString().Split(',');
-                    string[] actionNames = item["ActionNames"].ToString().Split(',');
-                    //MDataTable dt;
-                    for (int i = 0; i < actionIDs.Length; i++)
-                    {
-                        MDataRow dr = new MDataRow();
-                        dr.Add("MenuID", actionIDs[i]);
-                        dr.Add("ParentMenuID", item["MenuID"].Value);
-                        dr.Add("MenuName", actionNames.Length > i ? actionNames[i] : "");
-                        dr.Add("ActionIDs", "");
-                        dr.Add("menuIcon", "icon-save");
-                        //dr["MenuID"].Value = actionIDs[i];
-                        //dr["ParentMenuID"].Value = item["MenuID"].Value;
-                        //dr["MenuName"].Value = actionNames.Length > i ? actionNames[i] : "";
-                        //dr["ActionIDs"].Value = "";
-
-                        table.Rows.Add(dr);
-                    }
-                }
-            }
-            return table.ToJson();
-             */
         }
 
         public string GetMenuIDsandActionIds()
         {
             string RoleID = Query<String>("RoleID");
             MDataTable raDt = null;
-            using (MAction action = new MAction(TableNames.System_RoleAction))
+            using (MAction action = new MAction(TableNames.Sys_RoleAction))
             {
                 raDt = action.Select("RoleID ='" + RoleID + "'");
             }
@@ -377,50 +350,7 @@ namespace Web.Logic.Sys
         }
         #endregion
 
-        #region 部门区域管理相关操作
-        /// <summary>
-        /// 删除部门
-        /// By CYQCYQ
-        /// </summary>
-        /// <returns></returns>
-        public string DeleteDepartment()
-        {
-            bool result = false;
-            string id = Query<string>("id");
-            using (MAction action = new MAction(TableNames.System_Department))
-            {
-                action.SetSelectColumns("ID", "ParentID");
-                MDataTable dt = action.Select();
-                StringBuilder sb = new StringBuilder();
-                sb.Append("'" + id + "',");
-                GetChildrenID(dt, id, sb);
-                string where = "ID in (" + sb.ToString().TrimEnd(',') + ")";
-                result = action.Delete(where);
-            }
-            return JsonHelper.OutResult(result, result ? "删除成功" : "删除失败");
-        }
-        /// <summary>
-        /// 删除区域
-        /// By CYQ
-        /// </summary>
-        /// <returns></returns>
-        public string DeleteArea()
-        {
-            bool result = false;
-            string id = Query<string>("id");
-            using (MAction action = new MAction(TableNames.PB_Area))
-            {
-                action.SetSelectColumns("ID", "ParentID");
-                MDataTable dt = action.Select();
-                StringBuilder sb = new StringBuilder();
-                sb.Append("'" + id + "',");
-                GetChildrenID(dt, id, sb);
-                string where = "ID in (" + sb.ToString().TrimEnd(',') + ")";
-                result = action.Delete(where);
-            }
-            return JsonHelper.OutResult(result, result ? "删除成功" : "删除失败");
-        }
-        #endregion
+  
         private void GetChildrenID(MDataTable dt, string parentID, StringBuilder sb, string parentName = "ParentID")
         {
             if (!string.IsNullOrEmpty(parentID))

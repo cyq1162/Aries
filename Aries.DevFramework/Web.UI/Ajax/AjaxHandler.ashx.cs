@@ -13,8 +13,6 @@ namespace Web.UI.Ajax
     /// </summary>
     public class AjaxHandler : AjaxBase
     {
-
-        
         protected override void BeforeInvoke(TableNames t, MethodEnum m)
         {
             switch (m)
@@ -25,10 +23,10 @@ namespace Web.UI.Ajax
                     //清缓存
                     switch (t)
                     {
-                        case TableNames.System_Action:
+                        case TableNames.Sys_Action:
                            SysMenu.ActionTable = null;
                             break;
-                        case TableNames.System_Menu:
+                        case TableNames.Sys_Menu:
                             SysMenu.MenuTable = null;
                             break;
                     }

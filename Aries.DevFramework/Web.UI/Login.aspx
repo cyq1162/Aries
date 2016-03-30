@@ -33,7 +33,7 @@
                                 <label>密 码</label><input type="password" id="txtPwd" name="txtPwd" class="password a" />
                             </p>
                             <div class="memory">
-                                <input type="checkbox" id="memory" name="memory" <%=Ischeck %> value="Y" /><span>记住用户名</span>
+                                <asp:Label ID="lbTip" runat="server" Text=""></asp:Label>
                             </div>
                             <div class="btn">
                                 <input id="btnLogin" name="btnLogin" type="submit" value=""/>

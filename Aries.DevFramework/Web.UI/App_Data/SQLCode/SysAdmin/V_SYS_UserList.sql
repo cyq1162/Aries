@@ -8,4 +8,4 @@
 使用 URL：/Web/Module/Systems/Ty_UserList.aspx 
 where a.CompanyID=@CompanyID 
 */ 
-SELECT * FROM dbo.System_Users
+SELECT u.*,ui.* FROM Sys_User u left join Sys_UserInfo ui on u.UserID=ui.UserInfoID

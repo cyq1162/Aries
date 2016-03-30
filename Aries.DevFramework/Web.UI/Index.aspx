@@ -11,7 +11,7 @@
             <div class="panel-top">
                 <div class="panel-logo"><a href="#"></a></div>
                 <div class="panel-login">
-                    <span class="area"><%=Area %><%=UserName %>(<%=LoginID %>)</span>
+                    <span class="area"><%=FullName %>(<%=UserName %>)</span>
                     <a id="btn_selfInfo" class="ico1">个人信息</a>
                     <a href="/Logout.aspx" id="btn_exit" class="ico2">退出</a>
                 </div>

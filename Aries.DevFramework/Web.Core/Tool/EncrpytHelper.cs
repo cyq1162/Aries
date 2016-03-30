@@ -105,14 +105,13 @@ namespace Web.Core
                 result = ASCIIEncoding.UTF8.GetString(DESDecrypt.TransformFinalBlock
                     (Buffer, 0, Buffer.Length));
             }
-            catch (Exception e)
+            catch
             {
                 return text;
-               // throw (new Exception("Invalid Key or input string is not a valid base64 string", e));
             }
 
             return result;
-        }//end method
+        }
 
         #endregion
     }

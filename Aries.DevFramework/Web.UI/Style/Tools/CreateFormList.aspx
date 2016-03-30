@@ -1,12 +1,8 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Web.Master" AutoEventWireup="true" CodeBehind="ExcelConfigList.aspx.cs" Inherits="Web.UI.Web.Sys.ExcelConfigList" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Web.Master" AutoEventWireup="true" CodeBehind="CreateFormList.aspx.cs" Inherits="Web.UI.Tool.CreateFormList" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+
     <script type="text/javascript">
-        
-        var excelID = Request.queryString('id');
-        var objName='<%=objName%>';
-        var arrTables = <%=tableNamesJson%>;
-        var arrColumns=<%=columnJson%>;
         var editIndex;
         var editId;
         var returndata;
@@ -38,15 +34,11 @@
                 validType: 'length[0,50]'
             }
         }
-        var tables;
         $(function () {
-           
             myConfigDataGrid = $('#configTable');
             TY.registEvent("cancel");
-            TY.Utility.Ajax.Settings.url=TY.handler.excel;
-            TY.Utility.Ajax.Settings.objName = "Config_ExcelInfo";
+            TableName = Request.queryString('tbname');
             KeyUpDownFun();
-            // GetTables();
             myConfigDataGrid.datagrid({
                 toolbar: "#ToolBar",
                 striped: true,
@@ -57,97 +49,105 @@
                 fitColumns: false,
                 loadMsg: "正在使劲加载中...",
                 idField: 'ID',
-                sortName: "CreateTime",
+                sortName: "OrderNum",
                 remoteSort: false,
-                //onBeforeEdit:onBeforeEdit,
                 queryParams: {
-                    searchList: JSON.stringify([{ paramName: 'ExcelID', paramValue: excelID, paramPatten: 'Equal' }])
+                    searchList: JSON.stringify([{ paramName: 'TableName', paramValue: TableName, paramPatten: 'Equal' }])
                 },
-                url: TY.Utility.Ajax.Settings.url + '?method=GetList&objName=Config_ExcelInfo&ExcelID='+excelID +'&mid=' + mid,
+                url: '/Ajax/FormHandler.ashx?mid=0&method=GetFromList&objName=' + TableName,
                 collapsible: true,
                 pagination: false,//分页
                 rownumbers: true,
                 singleSelect: true,
                 onClickRow: onClickRow,
-                columns: [[
-                { field: 'ID', title: 'ID', sortable: true, align: 'center', width: "250" },//,formatter:formatLink, checkbox: true
-                //{ field: 'TableName', title: '数据表名', align: 'center', width: "180" },
+                frozenColumns: [[
+                { field: 'ID', title: 'ID', sortable: true, align: 'center', width: "60" },//, checkbox: true
+
                 {
-                    field: 'ExcelName', title: 'Excel列名', sortable: true, align: 'center', width: "250",
+                    field: 'Field', title: '列字段', sortable: true, align: 'center', width: "150",
                     editor: editorRequiredTextBox
                 },
                 {
-                    field: 'TableName', title: '表名', sortable: true, align: 'center', width: "200",
-                    editor: {
-                        type: 'combobox',
-                        options: {
-                            valueField: 'Value',
-                            textField: 'Key',
-                            data: arrTables,
-                            onSelect:setArrColumns
-                        }
-                    }
-                }, {
-                    field: 'Field', title: '字段名', sortable: true, align: 'center', width: "150", editor: {
-                        type: 'combobox',
-                        options: {
-                            valueField: 'Value',
-                            textField: 'Key'
-                            //, data: arrColumns
-                            // ,onSelect: setArrColumns
-                        }
-                    }
+                    field: 'Title', title: '列标题', sortable: true, align: 'center', width: "150",
+                    editor: editorRequiredTextBox
                 },
                 {
-                    field: 'IsRequired', title: '必填', sortable: true, align: 'center', width: "50", formatter: formatCheckbox,
-                    editor: editorCheckbox
-                }
-                ,
-                {
-                    field: 'IsUnique', title: '唯一', sortable: true, align: 'center', width: "50", formatter: formatCheckbox,
-                    editor: editorCheckbox
-                }
-                ,
-                {
-                    field: 'IsForeignkey', title: '外键', sortable: true, align: 'center', width: "50", formatter: formatCheckbox,
-                    editor: editorCheckbox
-                },
-                {
-                    field: 'ForeignTable', title: '外键表名', sortable: true, align: 'center', width: "200",
-                    editor: {
-                        type: 'combobox',
-                        options: {
-                            valueField: 'Value',
-                            textField: 'Key',
-                            data: arrTables,
-                        }
+                    field: 'OrderNum', title: '排序', sortable: true, align: 'center', width: "80", editor: {
+                        type: 'numberbox'
                     }
-                },
-                //{
-                //    field: 'DataType', title: '数据类型', sortable: true, align: 'center', width: "150", editor: editorRequiredTextBox
-                //},
-                //{
-                //    field: 'Scale', title: '小数位数', sortable: true, align: 'center', width: "150", editor: editorRequiredTextBox
-                //},
-                //{
-                //    field: 'Size', title: '长度', sortable: true, align: 'center', width: "150", editor: editorRequiredTextBox
-                    
-                //},
-                {
-                    field: 'Formatter', title: '格式化', sortable: true, align: 'center', width: "150", editor: editorTextBox
-
                 }
-                //,
-                //{
-                //    field: 'ValidateFunction', title: '校验方法', sortable: true, align: 'center', width: "150",editor: editorTextBox
-                    
-                //}//, 
-                //{
-                //    field: 'CreateTime', title: '创建时间', sortable: true, align: 'center', width: "150", editor: {
-                //        type: 'datebox'
-
-                //    }
-                //}
+                ]],
+                columns: [[
+                    {
+                        field: 'DescripType', title: '操作类型', sortable: true, align: 'center', width: "120",
+                        formatter: function (v, r, i) {
+                            switch (v) {
+                                case "text":
+                                    return "文本框";
+                                    break;
+                                case "combox":
+                                    return "下拉框";
+                                    break;
+                                case "radio":
+                                    return "单选按钮";
+                                    break;
+                                case "checkbox":
+                                    return "复选框";
+                                    break;
+                                case "textarea":
+                                    return "多行文本框";
+                                    break;
+                                default:
+                                    return "请选择";
+                                    break;
+                            }
+                        },
+                        editor: {
+                            type: 'combobox',
+                            options: {
+                                valueField: 'value',
+                                textField: 'name',
+                                required: true,
+                                panelHeight: 90,
+                                value: "center",
+                                data: [
+                                    { "name": "请选择", "value": '0' },
+                                    { "name": "文本框", "value": 'text' },
+                                    { "name": "下拉框", "value": 'combox' },
+                                    { "name": "单选按钮", "value": 'radio' },
+                                    { "name": "复选框", "value": 'checkbox' },
+                                    { "name": "多行文本框", "value": 'textarea' }
+                                ]
+                            }
+                        }
+                    },
+        {
+            field: 'IsCanNull', title: '是否允许为空', sortable: true, align: 'center', width: "80",//checkbox: true
+            formatter: formatCheckbox,
+            editor: editorCheckbox
+        },
+        {
+            field: 'Sortable', title: '是否隐藏', sortable: true, align: 'center', width: "80",
+            formatter: formatCheckbox,
+            editor: editorCheckbox
+        },
+         {
+             field: 'IsRead', title: '是否只读', sortable: true, align: 'center', width: "80",
+             formatter: formatCheckbox,
+             editor: editorCheckbox
+         },
+        {
+            field: 'ViewName', title: '下拉框对象名称', sortable: true, align: 'center', width: "120",
+            editor: editorTextBox
+        },
+        {
+            field: 'Style', title: '样式', sortable: true, align: 'center', width: "140",
+            editor: editorTextBox
+        },
+        {
+            field: 'Validtype', title: 'Validtype', sortable: true, align: 'center', width: "140",
+            editor: editorTextBox
+        }
                 ]]
 
             });
@@ -166,46 +166,14 @@
             {
                 TY.Utility.Ajax.Settings.method = "Update";
                 beginEdit(rowIndex, rowData);
-
             }
             isButtonClick = false;
-        }
-
-        function setColCombobox(tname,defaultValue)
-        {
-            var json=arrColumns[tname];
-            var comb = myConfigDataGrid.datagrid('getEditor', { index: editIndex, field: 'Field' });
-            $(comb.target).combobox({
-                data: json
-            });
-            if(defaultValue)
-            {
-                $(comb.target).combobox("select",defaultValue);
-            }
-           
-        }
-
-        function setArrColumns(record)
-        {
-            var tname = record.Key;
-            setColCombobox(tname);
-            
-
-        }
-        function formatLink(value, row, index)
-        {
-            if (isNaN(value))
-            {
-                return  '<input type="button" onclick="saveAdd();" value="保存" />';
-            }
-            return value;
         }
         function beginEdit(editIndex, rowData) {
             this.editIndex = editIndex;
             this.editing = true;
             this.editRow = $.extend(true, {}, rowData);
             myConfigDataGrid.datagrid('beginEdit', editIndex);
-            setColCombobox(rowData.TableName,rowData.Field);
         }
         //结束编辑
         function endEditing() {
@@ -257,7 +225,7 @@
             }
             if (count > 0) {
                 changeJson.ID = newJson["ID"];
-                //changeJson.LastEditTime = "now()";
+                changeJson.LastEditTime = "now()";
             }
             return changeJson;
         }
@@ -267,22 +235,10 @@
                 formData.push({ name: key, value: json[key] });
             }
         }
-        //function GetTables() {
 
-           
-          
-        //    $.ajax({
-        //        type: "POST",
-        //        async: false,
-        //        url: TY.Utility.Ajax.Settings.url+'?method=GetTable&mid='+mid,
-        //        //data: TY.Utility.Ajax.Settings.data,
-        //        dataType: "json",
-        //        success: function (data) { tables = data;}
-        //    });
-        //}
         //ajax操作
         function Exec(json) {
-
+            TY.Utility.Ajax.Settings.method = "UpdateFrom";
             var formData = [];
             JsonObj2Arr(json, formData);
             formData.push({ name: "method", value: TY.Utility.Ajax.Settings.method });
@@ -290,35 +246,29 @@
             formData.push({ name: "mid", value: mid });
             TY.Utility.Ajax.Settings.data = formData;
             TY.Utility.Ajax.Settings.async = false;
+            TableName = Request.queryString('tbname');
             $.ajax({
                 type: "POST",
                 async: TY.Utility.Ajax.Settings.async,
-                url: TY.Utility.Ajax.Settings.url,
+                url: '/Ajax/FormHandler.ashx?mid=0&method=UpdateFrom&objName=' + TableName,
                 data: TY.Utility.Ajax.Settings.data,
                 dataType: TY.Utility.Ajax.Settings.dataType,
                 success: function (data) {
-                    var tip = "";
-                    switch (TY.Utility.Ajax.Settings.method) {
-                        case "Add":
-                            tip = "添加"; break;
-                        case "Update":
-                            tip = "更新"; break;
-                        case "Delete":
-                            myConfigDataGrid.datagrid('deleteRow', editIndex);
-                            tip = "删除"; break;
-                    }
-                    if (data.success) {
-                        if (TY.Utility.Ajax.Settings.method == "Add") {
-                            json.ID = data.msg;
-                        }
-                        TY.Window.refresh = true; //关闭刷新父窗体
-                        myConfigDataGrid.datagrid("acceptChanges");
-                        TY.Window.showMsg(tip + "成功！");
-                    }
-                    else {
-                        myConfigDataGrid.datagrid("rejectChanges");
-                        TY.Window.showMsg(tip + "失败：" + data.msg);
-                    }
+
+                    //var tip = "";
+                    //if (data.success) {
+                    //    if (TY.Utility.Ajax.Settings.method == "Add") {
+                    //        json.ID = data.msg;
+                    //    }
+                    TY.Window.refresh = true; //关闭刷新父窗体
+                    myConfigDataGrid.datagrid("acceptChanges");
+                    TY.Window.showMsg(data.msg);
+                    //}
+                    //else {
+                    //    myConfigDataGrid.datagrid("rejectChanges");
+                    //    TY.Window.showMsg(tip + "失败：" + data.msg);
+                    //    TY.Window.refresh = true; //关闭刷新父窗体
+                    //}
                 },
                 error: function (d) {
                     console.log("服务器出错");
@@ -331,9 +281,17 @@
         //新增
         function onAdd() {
             onCancel();
+            tableName = Request.queryString('tbname');
             var row = {
                 'ID': '<input type="button" onclick="saveAdd();" value="保存" />',
-                "ExcelID": excelID
+                'TbName': tableName,
+                'DescripType': "text",
+                'IsCanNull': false,
+                'Sortable': false,
+                'ViewName': '',
+                'IsRead': false,
+                'Validtype': '',
+                'Style': 'easyui-validatebox'
             }
             myConfigDataGrid.datagrid('appendRow', row);
             var rows = myConfigDataGrid.datagrid('getRows');
@@ -359,10 +317,24 @@
                 return;
             }
             if (confirm('是否删除ID为' + editRow.ID + "的数据行?")) {
-                TY.Utility.Ajax.Settings.method = "Delete";
                 var json = {};
                 json.ID = editRow.ID;
-                Exec(json);
+                // Exec(json);
+
+                $.ajax({
+                    type: "POST",
+                    async: TY.Utility.Ajax.Settings.async,
+                    url: '/Ajax/FormHandler.ashx?method=DeleteFrom',
+                    data: { method: "DeleteFrom", ID: json.ID },
+                    dataType: TY.Utility.Ajax.Settings.dataType,
+                    success: function (data) {
+                        if (data.success) {
+                            TY.Window.refresh = true; //关闭刷新父窗体
+                            myConfigDataGrid.datagrid("acceptChanges");
+                            TY.Window.showMsg(data.msg);
+                        }
+                    }
+                });
             }
 
         }
@@ -427,34 +399,96 @@
                 <input class="btn-sm" type="button" name="" value="保存" /></a>--%>
             <a onclick="onCancel()">
                 <input class="btn-sm" type="button" name="" value="取消" /></a>
-            <a href="javascript:void(0)" onclick="DelRowsFun()">
-                <input class="delete" type="button" name="删除" value="" /></a>
+            <%--<a href="javascript:void(0)" onclick="DelRowsFun()">
+                <input class="delete" type="button" name="删除" value="" /></a>--%>
             <a>
-                <input class="btn-sm" type="button" id="btn_cancel" name="" value="关闭窗口" /></a>
-            <span><b><a onclick="showSQL();"><font color="red">下载同步脚本</font></a></b></span>
+                <input class="btn-sm" type="button" id="btnReturn" name="" value="返 回" /></a>
+            <a>
+                <input class="btn-sm" type="button" id="btnCreateFrom" name="" value="生成代码" /></a>
+            <span style="margin-left: 40px;">数据表名： <b><a onclick="showView(this.innerText);"><font color="red"><%=Request["tbName"] %></font></a></b></span>
+            <%--  <span>| <b><a onclick="showSQL('<%=Request["tbName"] %>');"><font color="red">查看同步脚本</font></a></b></span>--%>
         </div>
     </div>
-    <div style="display: none">
-        <%--  <div id="scriptDiv">
-        <textarea id="script" style="width: 99%; height: 96%"></textarea></div>
-         </div>--%>
-        <script>
-            function showSQL()
-            {
-                down("GetExcelConfigScript",null,objName,null,{"ID":excelID});
-                //var result = TY.Ajax("GetExcelConfigScript", null, {"ID":excelID}, false, "GET", TY.handler.ajax);
-                //if (result && result.success) {
-                //    $('#script').val(result.msg.replace(/<br\/>/g, "\r\n"));
-                //    $('#scriptDiv').dialog({
-                //        title: 'Excel 数据库同步脚本',
-                //        width: 800,
-                //        height: 450,
-                //        closed: false,
-                //        cache: false,
-                //        modal: true
-                //    });
-                //}
+    <div id="codeDiv">
+        <textarea id="code" style="width: 99%; height: 96%"></textarea>
+    </div>
+    <div id="divFromCode">
+        <textarea id="txtFromCode" style="width: 99%; height: 96%"></textarea>
+    </div>
+
+    <script>
+        function showSQL(tbName) {
+            var result = TY.Ajax("GetGridConfigScript", tbName, {}, false, "GET", TY.handler.ajax);
+            if (result && result.success) {
+                $('#script').val(result.msg.replace(/<br\/>/g, "\r\n"));
+                $('#scriptDiv').dialog({
+                    title: tbName + ' 数据库同步脚本',
+                    width: 800,
+                    height: 450,
+                    closed: false,
+                    cache: false,
+                    modal: true
+                });
             }
-        </script>
+        }
+        function showView(tbName) {
+            var result = TY.Ajax("GetSQL", tbName, {}, false, "GET", TY.handler.ajax);
+            if (result && result.success) {
+                $('#code').val(result.msg.replace(/<br\/>/g, "\r\n"));
+                $('#codeDiv').dialog({
+                    title: tbName + ' SQL',
+                    width: 800,
+                    height: 450,
+                    closed: false,
+                    cache: false,
+                    modal: true,
+                    toolbar: [{
+                        text: '保存',
+                        iconCls: 'icon-save',
+                        handler: function () {
+                            result = TY.Ajax("SaveSQL", tbName, { "code": $('#code').val() }, false);
+                            if (result && result.msg) {
+                                TY.Window.showMsg(result.msg, "消息提示");
+                            }
+                        }
+                    }]
+                });
+            }
+            // $('#view').dialog('refresh', 'new_content.php');
+        }
+
+        $(function () {
+
+
+            $("#btnCreateFrom").click(function () {
+                tableName = Request.queryString('tbname');
+                $.ajax({
+                    type: "POST",
+                    async: TY.Utility.Ajax.Settings.async,
+                    url: "/Ajax/FormHandler.ashx", //TY.Utility.Ajax.Settings.url,
+                    data: { objName: tableName, method: "CreateFrom" },
+                    dataType: "text",
+                    success: function (data) {
+                        $("#txtFromCode").text(data);
+
+                        $('#divFromCode').dialog({
+                            title: "表名：" + tableName + ' 生成代码窗口',
+                            width: 800,
+                            height: 450,
+                            closed: false,
+                            cache: false,
+                            modal: true
+                        });
+                    }
+                });
+
+
+            });
+
+            $("#btnReturn").click(function () {
+                window.location("CreateForm.aspx");
+            })
+        })
+    </script>
 </asp:Content>
 

@@ -17,19 +17,6 @@ namespace Web.Core
     /// </summary>
     internal static class CommonHelper
     {
-        public static void ResponceImage(FileStream fs)
-        {
-            using (System.Drawing.Image img = System.Drawing.Image.FromStream(fs))
-            {
-                using (System.IO.MemoryStream ms = new System.IO.MemoryStream())
-                {
-                    img.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
-                    HttpContext.Current.Response.ClearContent();
-                    HttpContext.Current.Response.BinaryWrite(ms.ToArray());
-                    HttpContext.Current.Response.ContentType = "image/jpeg";//指定输出格式为图形
-                }
-            }
-        }
         public static T Query<T>(string key)
         {
             return Query<T>(key, default(T), false);
@@ -81,19 +68,7 @@ namespace Web.Core
         }
 
         #region 下载文件
-        public static void SendImage(FileStream fs)
-        {
-            using (System.Drawing.Image img = System.Drawing.Image.FromStream(fs))
-            {
-                using (System.IO.MemoryStream ms = new System.IO.MemoryStream())
-                {
-                    img.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
-                    HttpContext.Current.Response.ClearContent();
-                    HttpContext.Current.Response.BinaryWrite(ms.ToArray());
-                    HttpContext.Current.Response.ContentType = "image/jpeg";//指定输出格式为图形
-                }
-            }
-        }
+
         public static void SendFile(string fileName, string saveText)
         {
             byte[] bs2 = System.Text.Encoding.GetEncoding("GB2312").GetBytes(saveText);

@@ -22,7 +22,7 @@ namespace Web.Core
             {
                 if (_MenuTable == null)
                 {
-                    using (MAction action = new MAction("System_Menu"))
+                    using (MAction action = new MAction(TableNames.Sys_Menu))
                     {
                         _MenuTable = action.Select("order by MenuLevel ASC,SortOrder ASC");
                     }
@@ -45,7 +45,7 @@ namespace Web.Core
             {
                 if (_ActionTable == null)
                 {
-                    using (MAction action = new MAction("System_Action"))
+                    using (MAction action = new MAction(TableNames.Sys_Action))
                     {
                         _ActionTable = action.Select();
                     }
@@ -113,7 +113,7 @@ namespace Web.Core
                 {
                     roleIDs = "RoleID in ('" + roleIDs.Replace(",", "','") + "')";
                     MDataTable dt;
-                    using (MAction action = new MAction("System_RoleAction"))
+                    using (MAction action = new MAction(TableNames.Sys_RoleAction))
                     {
                         action.SetSelectColumns("MenuID", "ActionID");
                         dt = action.Select(roleIDs);

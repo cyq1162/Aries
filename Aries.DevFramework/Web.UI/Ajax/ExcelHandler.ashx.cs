@@ -23,7 +23,7 @@ namespace Web.UI.Ajax
         protected override MDataTable Select(GridConfig.SelectType st)
         {
             MDataTable dt = base.Select(st);
-            if (ObjName == "PB_ExcelConfig")
+            if (ObjName == "Config_ExcelInfo")
             {
                 if (dt == null || dt.Rows.Count == 0)
                 {
@@ -38,10 +38,10 @@ namespace Web.UI.Ajax
         public void InitExcelColumn()
         {
             string excelID = Query<string>("ExcelID");
-            MDataRow row = ExcelConfig.GetInfoByID(excelID);
+            MDataRow row = ExcelConfig.GetExcelRow(excelID);
             if (row != null)
             {
-                string EnName = row.Get<string>(PB_ExcelInfo.EnName);
+                string EnName = row.Get<string>(Config_Excel.EnName);
                 string path = HttpContext.Current.Server.MapPath("~/Resource/Excel/" + EnName + ".xls");
                 if (File.Exists(path))
                 {
@@ -52,12 +52,12 @@ namespace Web.UI.Ajax
                     }
                     if (table != null && table.Columns.Count > 0)
                     {
-                        string tableNames = row.Get<string>(PB_ExcelInfo.TableNames, string.Empty);
+                        string tableNames = row.Get<string>(Config_Excel.TableNames, string.Empty);
                         Dictionary<MCellStruct, string> msList = new Dictionary<MCellStruct, string>();
                         foreach (string tableName in tableNames.Split(','))
                         {
                             MDataColumn mdc = DBTool.GetColumns(tableName);
-                            using (MAction action = new MAction(TableNames.PB_GridConfig))
+                            using (MAction action = new MAction(TableNames.Config_Grid))
                             {
                                 for (int i = 0; i < mdc.Count; i++)
                                 {
@@ -67,7 +67,7 @@ namespace Web.UI.Ajax
                                     {
                                         if (result)
                                         {
-                                            ms.Description = action.Get<string>(PB_GridConfig.Title);
+                                            ms.Description = action.Get<string>(Config_Grid.Title);
                                         }
                                         else if (GridConfig.FieldTitle.ContainsKey(ms.ColumnName))
                                         {
@@ -77,7 +77,7 @@ namespace Web.UI.Ajax
                                     }
                                     if (result)
                                     {
-                                        string formatter = action.Get<string>(PB_GridConfig.Formatter, string.Empty);
+                                        string formatter = action.Get<string>(Config_Grid.Formatter, string.Empty);
                                         if (formatter.StartsWith("#") && formatter.Length > 2)
                                         {
                                             ms.DefaultValue = formatter.Split('=')[0];
@@ -91,15 +91,15 @@ namespace Web.UI.Ajax
                                 }
                             }
                         }
-                        using (MAction action = new MAction(TableNames.PB_ExcelConfig))
+                        using (MAction action = new MAction(TableNames.Config_ExcelInfo))
                         {
                             action.AllowInsertID = true;
                             action.BeginTransation();
                             foreach (MCellStruct st in table.Columns)
                             {
-                                action.Set(PB_ExcelConfig.ID, Guid.NewGuid());
-                                action.Set(PB_ExcelConfig.ExcelID, excelID);
-                                action.Set(PB_ExcelConfig.ExcelName, st.ColumnName);
+                                action.Set(Config_ExcelInfo.ExceInfoID, Guid.NewGuid());
+                                action.Set(Config_ExcelInfo.ExcelID, excelID);
+                                action.Set(Config_ExcelInfo.ExcelName, st.ColumnName);
                                 string name = st.ColumnName.Split('_')[0];
                                 MCellStruct key = null;
                                 foreach (var ms in msList)
@@ -109,16 +109,16 @@ namespace Web.UI.Ajax
                                         if (ms.Key.Description.Trim().Equals(name.Trim(), StringComparison.OrdinalIgnoreCase))//刘盼：避免相似描述的字段列名弄错
                                         //if (ms.Key.Description.IndexOf(name, StringComparison.OrdinalIgnoreCase) > -1)
                                         {
-                                            action.Set(PB_ExcelConfig.TableName, msList[ms.Key]); key = ms.Key;
-                                            action.Set(PB_ExcelConfig.Field, ms.Key.ColumnName);
-                                            action.Set(PB_ExcelConfig.Formatter, ms.Key.DefaultValue);
+                                            action.Set(Config_ExcelInfo.TableName, msList[ms.Key]); key = ms.Key;
+                                            action.Set(Config_ExcelInfo.Field, ms.Key.ColumnName);
+                                            action.Set(Config_ExcelInfo.Formatter, ms.Key.DefaultValue);
                                             break;
                                         }
                                     }
                                 }
                                 if (key != null)
                                 {
-                                    msList.Remove(key);//刘盼：PB_GridConfig存在Title值相同的数据，添加完须立即删除
+                                    msList.Remove(key);//刘盼：Config_Grid存在Title值相同的数据，添加完须立即删除
                                 }
                                 if (!action.Insert(InsertOp.None))
                                 {
@@ -127,9 +127,9 @@ namespace Web.UI.Ajax
                                 }
                                 else
                                 {
-                                    action.Set(PB_ExcelConfig.TableName, DBNull.Value);
-                                    action.Set(PB_ExcelConfig.Field, DBNull.Value);
-                                    action.Set(PB_ExcelConfig.Formatter, DBNull.Value);
+                                    action.Set(Config_ExcelInfo.TableName, DBNull.Value);
+                                    action.Set(Config_ExcelInfo.Field, DBNull.Value);
+                                    action.Set(Config_ExcelInfo.Formatter, DBNull.Value);
                                 }
 
                             }

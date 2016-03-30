@@ -13,28 +13,15 @@ namespace Web.Core
     /// Excel配置组件核心类
     /// </summary>
     public partial class ExcelConfig
-    {
-        public static MDataRow GetInfoByID(string id)
-        {
-            using (MAction action = new MAction(TableNames.PB_ExcelInfo))
-            {
-                if (action.Fill(id))
-                {
-                    return action.Data;
-                }
-            }
-            return null;
-        }
+    { 
         /// <summary>
         /// 获取表配置信息
         /// </summary>
-        /// <param name="objName"></param>
-        /// <returns></returns>
-        public static MDataRow GetInfo(string objName)
+        public static MDataRow GetExcelRow(string idOrEnName)
         {
-            using (MAction action = new MAction(TableNames.PB_ExcelInfo))
+            using (MAction action = new MAction(TableNames.Config_Excel))
             {
-                if (action.Fill(string.Format(PB_ExcelInfo.EnName + "='{0}'", objName)))
+                if (action.Fill(string.Format("ExcelID='{0}' or EnName='{0}'", idOrEnName)))
                 {
                     return action.Data;
                 }
@@ -46,9 +33,9 @@ namespace Web.Core
         /// </summary>
         /// <param name="excelID"></param>
         /// <returns></returns>
-        public static MDataTable GetConfig(string excelID)
+        public static MDataTable GetExcelInfo(string excelID)
         {
-            using (MAction action = new MAction(TableNames.PB_ExcelConfig))
+            using (MAction action = new MAction(TableNames.Config_ExcelInfo))
             {
                 return action.Select("ExcelID='" + excelID + "'");
             }
@@ -67,16 +54,16 @@ namespace Web.Core
             else
             {
                 Dictionary<string, string> formatDic = new Dictionary<string, string>();
-                MDataTable config = GetConfig(info.Get<string>(0));
+                MDataTable config = GetExcelInfo(info.Get<string>(0));
                 if (config != null)
                 {
                     //附加自定义列。
                     foreach (var configRow in config.Rows)
                     {
-                        string formatter = configRow.Get<string>(PB_ExcelConfig.Formatter);
+                        string formatter = configRow.Get<string>(Config_ExcelInfo.Formatter);
                         if (!string.IsNullOrEmpty(formatter) && formatter[0] != '#')//增加默认值的列。
                         {
-                            string excelName = configRow.Get<string>(PB_ExcelConfig.ExcelName);
+                            string excelName = configRow.Get<string>(Config_ExcelInfo.ExcelName);
                             if (!dt.Columns.Contains(excelName))
                             {
                                 MCellStruct ms = new MCellStruct(excelName, System.Data.SqlDbType.NVarChar);
@@ -147,8 +134,8 @@ namespace Web.Core
             List<string> requiredList = new List<string>();//必填项表。
             if (info != null)
             {
-                tables = info.Get<string>(PB_ExcelInfo.TableNames, string.Empty).Split(',');
-                MDataTable dtRequired = GetConfig(info.Get<string>(0));//必填项表。
+                tables = info.Get<string>(Config_Excel.TableNames, string.Empty).Split(',');
+                MDataTable dtRequired = GetExcelInfo(info.Get<string>(0));//必填项表。
                 if (dtRequired != null && dtRequired.Rows.Count > 0)
                 {
                     dtRequired = dtRequired.Select("IsRequired=1");
@@ -228,11 +215,11 @@ namespace Web.Core
         /// 批量更新或插入。
         /// </summary>
         /// <param name="dt"></param>
-        /// <param name="excelInfo"></param>
+        /// <param name="excelRow"></param>
         /// <returns></returns>
-        public static bool AcceptChanges(MDataTable dt, MDataRow excelInfo, string objName = null)
+        public static bool AcceptChanges(MDataTable dt, MDataRow excelRow, string objName = null)
         {
-            if (excelInfo == null)
+            if (excelRow == null)
             {
                 MDataTable dtImportUnique = GridConfig.GetList(objName, GridConfig.SelectType.ImportUnique);
                 string[] names = null;
@@ -248,8 +235,8 @@ namespace Web.Core
             }
             bool result = true;
             //获取相关配置
-            string[] tables = excelInfo.Get<string>(PB_ExcelInfo.TableNames).Split(',');
-            MDataTable configTable = GetConfig(excelInfo.Get<string>(PB_ExcelInfo.ID));
+            string[] tables = excelRow.Get<string>(Config_Excel.TableNames).Split(',');
+            MDataTable configTable = GetExcelInfo(excelRow.Get<string>(Config_Excel.ExcelID));
 
             Dictionary<string, string> rowPrimaryValue = new Dictionary<string, string>();//存档每个表每行的主键值。
             Dictionary<string, string> wherePrimaryValue = new Dictionary<string, string>();//存档where条件对应的主键值。
@@ -317,13 +304,13 @@ namespace Web.Core
                         List<MDataRow> rowList = configTable.FindAll("TableName='" + table + "' and IsUnique=1");
                         if (rowList != null && rowList.Count > 0)
                         {
-                            bool IsUniqueOr = excelInfo.Get<bool>("IsUniqueOr");
+                            bool IsUniqueOr = excelRow.Get<bool>("IsUniqueOr");
                             List<MDataCell> cells = new List<MDataCell>();
                             string errText = string.Empty;
                             int errorCount = 0;
                             foreach (var item in rowList)
                             {
-                                var cell = action.Data[item.Get<string>(PB_ExcelConfig.Field)];
+                                var cell = action.Data[item.Get<string>(Config_ExcelInfo.Field)];
                                 if (cell != null)
                                 {
                                     if (cell.IsNullOrEmpty) // 唯一主键是必填写字段
@@ -446,20 +433,20 @@ namespace Web.Core
         internal static string GetScript(string id)
         {
             StringBuilder sb = new StringBuilder();
-            MDataRow row = GetInfoByID(id);
+            MDataRow row = GetExcelRow(id);
             if (row != null)
             {
-                row.TableName = TableNames.PB_ExcelInfo.ToString();
+                row.TableName = TableNames.Config_Excel.ToString();
 
-                sb.AppendLine(SQLCode.GetSQLScript(row, "ID"));
-                sb.Append("\r\nGo\r\nDelete from [PB_ExcelConfig] where [ExcelID]='" + id + "'\r\nGo\r\n");
-                MDataTable dt = GetConfig(id);
+                sb.AppendLine(SQLCode.GetSQLScript(row, "ExcelID"));
+                sb.Append("\r\nGo\r\nDelete from [Config_ExcelInfo] where [ExcelInfoID]='" + id + "'\r\nGo\r\n");
+                MDataTable dt = GetExcelInfo(id);
                 if (dt != null)
                 {
                     foreach (var item in dt.Rows)
                     {
                         row.TableName = dt.TableName;
-                        sb.AppendLine(SQLCode.GetSQLScript(item, "ID"));
+                        sb.AppendLine(SQLCode.GetSQLScript(item, "ExcelID"));
                     }
                 }
             }

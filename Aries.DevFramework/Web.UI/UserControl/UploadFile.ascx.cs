@@ -79,7 +79,7 @@ namespace Web.UI.UserControl
             MDataTable tb = null;
             if (isOk)
             {
-                using (MAction action = new MAction("PB_Config"))
+                using (MAction action = new MAction("Config_KeyValue"))
                 {
                     action.SetAopOff();
                     tb = action.Select(where);
@@ -96,7 +96,7 @@ namespace Web.UI.UserControl
             return sb.ToString();
         }
         /// <summary>
-        /// 上传文件类型组,根据PB_Config的configKey=‘文件类型’和Flag字段过滤，
+        /// 上传文件类型组,根据Config_KeyValue的configKey=‘文件类型’和Flag字段过滤，
         /// ConfigKey已写死，我们需要传入的是Flag标记分组
         /// </summary>
         public string GroupType
@@ -141,7 +141,7 @@ namespace Web.UI.UserControl
             set { _ViewMode = value; }
         }
         /// <summary>
-        /// 根据PB_Config的configKey=‘文件类型’和ConfigValue字段过滤，
+        /// 根据Config_KeyValue的configKey=‘文件类型’和ConfigValue字段过滤，
         /// ConfigKey已写死，我们需要传入的是ConfigValue标记分组
         /// </summary>
         public string ConfigVal

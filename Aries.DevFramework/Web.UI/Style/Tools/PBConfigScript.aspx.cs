@@ -39,14 +39,14 @@ namespace Web.UI.Tools
             {
                 if (chbWithDelete.Checked)
                 {
-                    sb.Append("\r\nGo\r\nDelete from [Config_KeyValue] where [ConfigKey]='" + key + "'\r\nGo\r\n");
+                    sb.Append("\r\nGo\r\nDelete from [PB_Config] where [ConfigKey]='" + key + "'\r\nGo\r\n");
                 }
-                MDataTable dt = KeyValueConfig.KeyValueTable.FindAll("ConfigKey='" + key + "'");
+                MDataTable dt = KeyValueConfig.ConfigTable.FindAll("ConfigKey='" + key + "'");
                 if (dt != null)
                 {
                     foreach (var row in dt.Rows)
                     {
-                        row.TableName = TableNames.Config_KeyValue.ToString();
+                        row.TableName = TableNames.PB_Config.ToString();
                         sb.AppendLine(SQLCode.GetSQLScript(row, "ConfigName", "ConfigValue"));
                     }
                 }

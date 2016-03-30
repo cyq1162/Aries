@@ -26,11 +26,23 @@ namespace Web.Core
         }
         public void AuthCheck(HttpContext context)
         {
-            if (context.Request.Url.LocalPath.Contains("/web/"))
+            if (IsContainUrl(context.Request.Url))
             {
                 UserAuth.IsExistsToken(true);//检测登陆状态。
-                new Permission(UserAuth.LoginID, true);//初始化权限检测。
+                new Permission(UserAuth.UserName, true);//初始化权限检测。
             }
+        }
+        private bool IsContainUrl(Uri uri)
+        {
+            string[] items = new[] { "/web/"};//可以扩展多个
+            foreach (string item in items)
+            {
+                if (uri.LocalPath.Contains(item))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

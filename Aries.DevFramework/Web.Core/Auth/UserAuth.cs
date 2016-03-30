@@ -13,40 +13,39 @@ namespace Web.Core
     public static partial class UserAuth
     {
         private static Dictionary<string, string> pcTokenList = new Dictionary<string, string>();//loginID,token
-        private static Dictionary<string, DateTime> appTokenList = new Dictionary<string, DateTime>();//token,最后请求日期
 
         /// <summary>
         /// 获取授权Token（手机APP登陆调用此方法获取Token为登陆凭证）
         /// </summary>
-        public static string GetAuthToken(string loginID, string password, out string errMsg)
+        public static string GetAuthToken(string userName, string password, out string errMsg)
         {
             string token = string.Empty;
             errMsg = string.Empty;
-            using (MAction action = new MAction(SQLCode.GetCode("V_SYS_UserList")))
+            using (MAction action = new MAction(TableNames.Sys_User))
             {
-                action.SetSelectColumns("UserID", "Password", "UserName", "FullName", "PwdExpiredTime", "AreaID", "CompanyID");//,"Status"
-                action.SetPara("LoginID", loginID, System.Data.DbType.String);
-                string where = string.Format("LoginID=@LoginID and Status=1", loginID);
+               // action.SetSelectColumns(Sys_User.UserID, Sys_User.Password, Sys_User.FullName, Sys_User.PwdExpiredTime);
+                action.SetPara("UserName", userName, System.Data.DbType.String);
+                string where = string.Format("Status=1 and (UserName=@UserName or Phone=@UserName or Email=@UserName) ", userName);
                 if (action.Fill(where))
                 {
-                    if (action.Get<DateTime>("PwdExpiredTime", DateTime.MaxValue) < DateTime.Now)
+                    if (action.Get<DateTime>(Sys_User.PwdExpiredTime, DateTime.MaxValue) < DateTime.Now)
                     {
                         errMsg = "账号密码已过期！";
                     }
                     else
                     {
-                        string userID = action.Get<string>("UserID");
-                        string pwd = action.Get<string>("Password");
-                        string fullName = action.Get<string>("FullName", action.Get<string>("UserName"));
-                        string areaID = action.Get<string>("AreaID");
-                        string companyID = action.Get<string>("CompanyID");
+                       
+                        string pwd = action.Get<string>(Sys_User.Password);
                         if (pwd == EncrpytHelper.Encrypt(password))
                         {
-                            action.ResetTable("System_Users");
-                            action.SetPara("LoginID", loginID, System.Data.DbType.String);
-                            token = EncrpytHelper.Encrypt(userID + "," + loginID + "," + fullName + "," + areaID + "," + companyID + "," + DateTime.Now.Day);
+                            string userID = action.Get<string>(Sys_User.UserID);
+                            userName = action.Get<string>(Sys_User.UserName);
+                            string fullName = action.Get<string>(Sys_User.FullName, userName);
+                            token = EncrpytHelper.Encrypt(DateTime.Now.Day + "," + userID + "," + userName + "," + fullName);
                             action.SetExpression("LoginCount=ISNULL(LoginCount,0)+1");
-                            action.Set("LastLoginTime", DateTime.Now);
+                            action.Set(Sys_User.LastLoginTime, DateTime.Now);
+                            action.Set(Sys_User.LastLoginIP, HttpContext.Current.Request.UserHostAddress);
+                            action.SetPara("UserName", userName, System.Data.DbType.String);
                             action.Update(where);//更新信息。
                         }
                         errMsg = "用户名或密码错误！";
@@ -64,15 +63,15 @@ namespace Web.Core
         /// <summary>
         /// 用户登陆（电脑PC端调用此方法，登陆成功会自动跳转到Index.aspx首页；手机端请调用GetAuthToken方法）
         /// </summary>
-        public static bool Login(string loginID, string password, bool isRemember, out string errMsg)
+        public static bool Login(string userName, string password, out string errMsg)
         {
-            string token = GetAuthToken(loginID, password, out errMsg);
+            string token = GetAuthToken(userName, password, out errMsg);
             if (string.IsNullOrEmpty(token))
             {
                 return false;
             }
-            SetToken(token, loginID);
-            WriteCookie(token, loginID, isRemember);
+            SetToken(token, userName);
+            WriteCookie(token, userName);
             HttpContext.Current.Response.Redirect("/Index.aspx");
             return true;
         }
@@ -92,7 +91,7 @@ namespace Web.Core
                 {
                     if (Day == DateTime.Now.Day)//同一天的Token
                     {
-                        SetToken(token, LoginID);//回写全局内存
+                        SetToken(token, UserName);//回写全局内存
                         result = true;
                     }
                 }
@@ -107,44 +106,20 @@ namespace Web.Core
             }
             return result;
         }
-        /// <summary>
-        /// 验证用户是否在线(For App手机端）
-        /// </summary>
-        /// <returns></returns>
-        public static bool IsExistsAppToken()
-        {
-            string token = Token;
-            if (!string.IsNullOrEmpty(token))
-            {
-                if (!appTokenList.ContainsKey(token))//Token不存在，可能内存回收。
-                {
-                    if (Day == DateTime.Now.Day)//同一天的Token
-                    {
-                        SetAppToken(token);//回写全局内存
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                return true;
-            }
-            return false;
-        }
+
         /// <summary>
         /// 退出
         /// </summary>
         public static void Logout()
         {
-            string loginID = LoginID;
-            if (!string.IsNullOrEmpty(loginID))
+            string userName = UserName;
+            if (!string.IsNullOrEmpty(userName))
             {
                 try
                 {
-                    if (pcTokenList.ContainsKey(loginID))
+                    if (pcTokenList.ContainsKey(userName))
                     {
-                        pcTokenList.Remove(loginID);
+                        pcTokenList.Remove(userName);
                     }
                 }
                 finally
@@ -157,17 +132,17 @@ namespace Web.Core
                 HttpContext.Current.Response.Redirect("/Login.aspx");
             }
         }
-        private static void SetToken(string token, string loginID)
+        private static void SetToken(string token, string userName)
         {
             try
             {
-                if (!pcTokenList.ContainsKey(loginID))
+                if (!pcTokenList.ContainsKey(userName))
                 {
-                    pcTokenList.Add(loginID, token);
+                    pcTokenList.Add(userName, token);
                 }
                 else
                 {
-                    pcTokenList[loginID] = token;
+                    pcTokenList[userName] = token;
                 }
             }
             catch (Exception err)
@@ -176,26 +151,23 @@ namespace Web.Core
             }
         }
 
-        private static void WriteCookie(string token, string loginID, bool isRemember)
+        private static void WriteCookie(string token, string userName)
         {
             bool local = HttpContext.Current.Request.Url.Host == "localhost";
 
             HttpCookie tokenCookie = new HttpCookie("token", token);// { HttpOnly = !local };
-            HttpCookie rememberCookie = new HttpCookie("remember", isRemember.ToString().ToLower());
-            HttpCookie loginIDCookie = new HttpCookie("loginID", loginID);
-            if (isRemember || local)
+            HttpCookie userNameCookie = new HttpCookie("userName", userName);
+            if (local)
             {
                 DateTime extTime = DateTime.Now.AddDays(7);
                 if (local)
                 {
                     tokenCookie.Expires = extTime;
                 }
-                rememberCookie.Expires = extTime;
-                loginIDCookie.Expires = extTime;
+                userNameCookie.Expires = extTime;
             }
             HttpContext.Current.Response.Cookies.Add(tokenCookie);
-            HttpContext.Current.Response.Cookies.Add(rememberCookie);
-            HttpContext.Current.Response.Cookies.Add(loginIDCookie);
+            HttpContext.Current.Response.Cookies.Add(userNameCookie);
         }
         private static string GetCookieValue(string name)
         {
@@ -224,53 +196,35 @@ namespace Web.Core
             return string.Empty;
         }
 
-        #region 手机在线人数相关处理
-        /// <summary>
-        /// 每次请求都更新App的最后活动时间。
-        /// </summary>
-        private static void SetAppToken(string token)
-        {
-            try
-            {
-                if (!string.IsNullOrEmpty(token))
-                {
-                    if (appTokenList.ContainsKey(token))
-                    {
-                        appTokenList[token] = DateTime.Now;
-                    }
-                    else
-                    {
-                        appTokenList.Add(token, DateTime.Now);
-                    }
-                }
-            }
-            catch (Exception err)
-            {
-                Log.WriteLogToTxt(err);
-            }
 
-        }
-        #endregion
         #region 对外属性
-
+        internal static int Day
+        {
+            get
+            {
+                int d;
+                int.TryParse(GetTokenValue(0), out d);
+                return d;
+            }
+        }
         public static string UserID
         {
             get
             {
-                return GetTokenValue(0);
+                return GetTokenValue(1);
             }
         }
         /// <summary>
         /// 获取当前登陆账号的登陆ID
         /// </summary>
-        public static string LoginID
+        public static string UserName
         {
             get
             {
-                string loginID = GetTokenValue(1);
+                string loginID = GetTokenValue(2);
                 if (string.IsNullOrEmpty(loginID))
                 {
-                    loginID = GetCookieValue("loginID");
+                    loginID = GetCookieValue("userName");
                 }
                 return loginID;
             }
@@ -278,53 +232,14 @@ namespace Web.Core
         /// <summary>
         /// 获取当前登陆账号的用户名称
         /// </summary>
-        public static string UserName
-        {
-            get
-            {
-                return GetTokenValue(2);
-            }
-        }
-        /// <summary>
-        /// 获取当前登陆账号的区域ID
-        /// </summary>
-        public static string AreaID
+        public static string FullName
         {
             get
             {
                 return GetTokenValue(3);
             }
         }
-        /// <summary>
-        /// 获取当前登陆账号的分公司ID
-        /// </summary>
-        public static string CompanyID
-        {
-            get
-            {
-                return GetTokenValue(4);
-            }
-        }
-        /// <summary>
-        /// 是否省公司账号
-        /// </summary>
-        public static bool IsProvince
-        {
-            get
-            {
-                return CompanyID == "300";
-            }
-        }
-        /// <summary>
-        /// 省公司名称。
-        /// </summary>
-        public static string CompanyName
-        {
-            get
-            {
-                return KeyValueConfig.GetName("分公司", CompanyID);
-            }
-        }
+
         /// <summary>
         /// 是否系统管理员账号
         /// </summary>
@@ -332,33 +247,10 @@ namespace Web.Core
         {
             get
             {
-                return LoginID.ToLower().EndsWith("admin");
+                return UserName.ToLower().EndsWith("admin");
             }
         }
-        internal static int Day
-        {
-            get
-            {
-                int d;
-                int.TryParse(GetTokenValue(5), out d);
-                return d;
-            }
-        }
-        /// <summary>
-        /// 是否记住登陆ID
-        /// </summary>
-        public static bool IsRemember
-        {
-            get
-            {
-                HttpCookie remember = HttpContext.Current.Request.Cookies["remember"];
-                if (remember != null)
-                {
-                    return remember.Value == "true";
-                }
-                return false;
-            }
-        }
+
 
         /// <summary>
         /// 当前电脑PC端在线人数
@@ -370,43 +262,7 @@ namespace Web.Core
                 return pcTokenList.Count;
             }
         }
-        /// <summary>
-        /// 当前App手机端在线人数
-        /// </summary>
-        public static int OnlineAppCount
-        {
-            get
-            {
-                return appTokenList.Count;
-            }
-        }
-        /// <summary>
-        /// 获取手机最近N分钟活跃的在线人数
-        /// </summary>
-        /// <param name="minitues"></param>
-        /// <returns></returns>
-        public static int GetOnlineAppCount(int minutes)
-        {
-            int count = 0;
-            try
-            {
-                if (appTokenList.Count > 0)
-                {
-                    foreach (DateTime time in appTokenList.Values)
-                    {
-                        if (time.AddMinutes(minutes) > DateTime.Now)
-                        {
-                            count++;
-                        }
-                    }
-                }
-            }
-            catch (Exception err)
-            {
-                Log.WriteLogToTxt(err);
-            }
-            return count;
-        }
+
         /// <summary>
         /// 获取当前用户信息行。
         /// </summary>

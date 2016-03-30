@@ -29,7 +29,7 @@ namespace Web.Core
         {
             if (UserAuth.IsExistsToken(false))
             {
-                p = new Permission(UserAuth.LoginID, false);
+                p = new Permission(UserAuth.UserName, false);
                 MethodInvoke();
             }
             else
@@ -46,6 +46,17 @@ namespace Web.Core
             }
         }
         #region 基础方法
+        /// <summary>
+        /// 框架的内部参数处理
+        /// </summary>
+        public T SQuery<T>(string key, T defaultValue)
+        {
+            if (!string.IsNullOrEmpty(key) && key[0] != '_' && HttpContext.Current.Request['_' + key] != null)
+            {
+                return Query<T>('_' + key);
+            }
+            return Query<T>(key, defaultValue);
+        }
         public T Query<T>(Enum key)
         {
             return Query<T>(key.ToString(), default(T));
@@ -160,10 +171,12 @@ namespace Web.Core
                 string id = Query<string>("id");
                 if (string.IsNullOrEmpty(id) && HttpContext.Current.Request.QueryString.Keys.Count > 0)
                 {
-                    string firstKey = HttpContext.Current.Request.QueryString.Keys[0];
-                    if (firstKey.ToLower().Contains("id"))
+                    for (int i = 0; i < HttpContext.Current.Request.QueryString.Keys.Count; i++)
                     {
-                        return Query<string>(firstKey, string.Empty);
+                        if (HttpContext.Current.Request.QueryString.Keys[i].ToLower().EndsWith("id"))
+                        {
+                            return Query<string>(HttpContext.Current.Request.QueryString.Keys[i], string.Empty);
+                        }
                     }
                 }
                 return id;
@@ -242,7 +255,7 @@ namespace Web.Core
             {
                 if (string.IsNullOrEmpty(_ObjName))
                 {
-                    return Query<string>("objName");
+                    return Query<string>("_objName") ?? Query<string>("objName");
                 }
                 return _ObjName;
             }
@@ -259,7 +272,7 @@ namespace Web.Core
         {
             get
             {
-                return Query<string>("tableName", ObjName);
+                return Query<string>("_tableName") ?? Query<string>("tableName") ?? ObjName;
             }
         }
 
@@ -293,7 +306,7 @@ namespace Web.Core
         public void MethodInvoke()
         {
 
-            string functionName = Query<string>("method");
+            string functionName = Query<string>("_method") ?? Query<string>("method");
             if (string.IsNullOrEmpty(functionName))
             {
                 jsonResult = JsonHelper.OutResult(false, "method can't be empty");
@@ -612,7 +625,7 @@ namespace Web.Core
             string sheetName = null;
             try
             {
-                excelInfo = ExcelConfig.GetInfo(ObjName);
+                excelInfo = ExcelConfig.GetExcelRow(ObjName);
                 if (excelInfo != null)
                 {
                     index = excelInfo.Get<int>("StartIndex", 0);
@@ -676,7 +689,7 @@ namespace Web.Core
             return FormatExcel(dt, null);
         }
         /// <summary>
-        /// 格式化Excel列头和PB_Config数据。
+        /// 格式化Excel列头和Config_KeyValue数据。
         /// </summary>
         protected bool FormatExcel(MDataTable dt, MDataRow excelInfo)
         {
@@ -861,14 +874,14 @@ namespace Web.Core
             jsonResult = JsonHelper.OutResult(result, result ? "保存成功！" : "保存失败!" + msg);
         }
         /// <summary>
-        /// 获取PB_Config的配置值。
+        /// 获取Config_KeyValue的配置值。
         /// </summary>
         public void GetKeyValueConfig()
         {
             jsonResult = KeyValueConfig.GetJson();
         }
         /// <summary>
-        /// 获取PB_GridConfig的某配置项的脚本
+        /// 获取Config_Grid的某配置项的脚本
         /// </summary>
         public void GetGridConfigScript()
         {
@@ -884,7 +897,7 @@ namespace Web.Core
             }
         }
         /// <summary>
-        /// 获取PB_ExcelConfig的某配置项的脚本
+        /// 获取Config_ExcelInfo的某配置项的脚本
         /// </summary>
         public void GetExcelConfigScript()
         {

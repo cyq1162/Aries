@@ -16,7 +16,7 @@ namespace Web.UI.Web.SysAdmin
         {
             if (!IsPostBack)
             {
-                using (MAction action = new MAction(TableNames.System_Role))
+                using (MAction action = new MAction(TableNames.Sys_Role))
                 {
                     if(action.Fill(Query<string>("id")))
                     {

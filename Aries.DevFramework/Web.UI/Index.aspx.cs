@@ -9,16 +9,13 @@ namespace Web.UI
         
         protected string UserName { get; set; }
 
-        protected string LoginID { get; set; }
-
-        protected string Area { get; set; }
+        protected string FullName { get; set; }
 
         protected void Page_Load(object sender, EventArgs e)
         {
             MenuData = p.UserMenu.ToJson();
-            LoginID = UserAuth.LoginID;
             UserName = UserAuth.UserName;
-            Area = UserAuth.CompanyName;
+            FullName = UserAuth.FullName;
         }
     }
 }

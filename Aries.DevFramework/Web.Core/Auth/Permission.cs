@@ -68,11 +68,7 @@ namespace Web.Core
             {
                 if (string.IsNullOrEmpty(_menuID) || _menuID == "0")
                 {
-                    _menuID = HttpContext.Current.Request["mid"];
-                    //if (!string.IsNullOrEmpty(mid))
-                    //{
-                    //    int.TryParse(mid, out _menuID);
-                    //}
+                    _menuID = HttpContext.Current.Request["_mid"] ?? HttpContext.Current.Request["mid"];
                 }
                 return _menuID;
             }
@@ -99,9 +95,9 @@ namespace Web.Core
         /// <param name="url"></param>
         private void CheckMenu(Uri uri)
         {
-            if (IsEndWith(uri, "") && string.Compare(uri.LocalPath.Substring(0,7), "/index.", true) != 0)
+            if (IsEndWith(uri, "") && string.Compare(uri.LocalPath.Substring(0, 7), "/index.", true) != 0)
             {
-                if (!HasMenu(uri) && IsEndWith(uri,"List") && HttpContext.Current.Request.UrlReferrer == null)
+                if (!HasMenu(uri) && IsEndWith(uri, "List") && HttpContext.Current.Request.UrlReferrer == null)
                 {
 #if !DEBUG
                     throw new Exception("您没有访问当前请求页面的权限！");
@@ -129,7 +125,7 @@ namespace Web.Core
         {
             string url = uri.LocalPath;
             string where = string.Empty;
-            string mid = HttpContext.Current.Request["mid"];
+            string mid = HttpContext.Current.Request["_mid"] ?? HttpContext.Current.Request["mid"];
             if (!string.IsNullOrEmpty(mid))
             {
                 where = "MenuID='" + mid + "' or ";
@@ -279,49 +275,9 @@ namespace Web.Core
             get
             {
                 return SysMenu.UserMenu;
-                //MDataTable dt = null;
-                //using (MProc proc = new MProc(SQLCode.GetCode("S_SYS_Menu")))
-                //{
-                //    dt = proc.ExeMDataTable();
-                //}
-                //MDataTable menuDt = null;
-                //using (MAction action = new MAction(TableNames.System_Menu))
-                //{
-                //    menuDt = action.Select("ActionIDs is null or ActionIDs=''");
-                //}
-                //for (int i = 0; i < dt.Rows.Count; i++)
-                //{
-                //    var row = dt.Rows[i];
-                //    AddParentMenu(row, dt, menuDt, i);
-                //}
-                //return dt.Select("order by menulevel ASC,sortorder asc");
             }
         }
-        /*
-        /// <summary>
-        /// 补上没有ActionIDs的目录级菜单
-        /// </summary>
-        private void AddParentMenu(MDataRow row, MDataTable dt, MDataTable menuDt, int index)
-        {
-            string parentMenuID = row.Get<string>("ParentMenuID", null);
-            if (parentMenuID != null)
-            {
-                //找一下是否存在父ID.
-                var parent = dt.FindRow("MenuID='" + parentMenuID + "'");
-                if (parent == null)//找不到，从菜单里找出来插进去
-                {
-                    var menuRow = menuDt.FindRow("MenuID='" + parentMenuID + "'");
-                    if (menuRow != null)
-                    {
-                        var newRow = dt.NewRow();
-                        newRow.LoadFrom(menuRow, RowOp.None, false, false);
-                        dt.Rows.Insert(index, newRow);
-                        AddParentMenu(newRow, dt, menuDt, index);//递归检测
-                    }
-                }
-            }
-        }
-        */
+
         /// <summary>
         /// 默认的权限检测
         /// </summary>

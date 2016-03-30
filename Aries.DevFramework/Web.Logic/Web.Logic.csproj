@@ -50,16 +50,12 @@
     <Compile Include="Sys\Aop.cs" />
     <Compile Include="Sys\ExcelConfigExtend.cs" />
     <Compile Include="Sys\SysLogic.cs" />
-    <Compile Include="Test1.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Web.Core\Web.Core.csproj">
       <Project>{33a07ea9-350f-4a9c-925c-3a773d942748}</Project>
       <Name>Web.Core</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="开发说明.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

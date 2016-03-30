@@ -87,9 +87,6 @@
     <Compile Include="Auth\UserAuth.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="开发说明.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

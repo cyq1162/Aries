@@ -1,1 +1,0 @@
-﻿SELECT dbo.fn_IndexToRefNames(ActionIDs) AS refNames,dbo.fn_IndexToActionNames(ActionIDs) AS ActionNames, *  FROM dbo.System_Menu

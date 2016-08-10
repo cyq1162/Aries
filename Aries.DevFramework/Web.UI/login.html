@@ -1,0 +1,56 @@
+﻿<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>
+        Aries.DevFramework
+    </title>
+    <link href="/Style/CSS/login.css" rel="stylesheet" type="text/css" />
+    <script src="/Style/JS/jquery-1.7.1.min.js"></script>
+    <script src="/Style/JS/AriesJS/Aries.Utility.js"></script>
+    <script>if (parent != null && parent != this) { parent.location = location.href; }</script>
+</head>
+<body>
+
+    <div class="all">
+        <div class="box_top"></div>
+        <div class="box">
+            <h2>Aries Develop Framework</h2>
+            <span class="login"></span>
+            <div class="login_r">
+                    <label>用户名</label><br>
+                <input  type="text" value="admin" id="username" class="user a" required="true" />
+
+                    <label>密码</label><br>
+                <input type="password" id="password" value="admin" required="true" />
+                    <br>
+
+                    <div class="btn">
+                        <input type="button" name="btnLogin" value="登录"  onclick="login()" />
+                        <span id="lbTip"></span>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <div class="login-foot">
+        <span>Copyright◎2016-2024 Aries Develop Framework All Rights Reserved.</span>
+    </div>
+    <script>                
+        function login() {
+            var uid = $("#username").val();
+            var pwd = $("#password").val();
+            var data = { "uid": uid, "pwd": pwd };
+            var result = AR.Utility.Ajax.post("Login", null, data, false);
+            if (result)
+            {
+                if (result.success) {
+                    location.href = "index.html";
+                }
+                else {
+                    alert(result.msg);
+                }
+            }
+        }
+    </script>
+</body>
+</html>

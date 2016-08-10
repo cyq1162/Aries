@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <script src="/Style/JS/Aries.Loader.js"></script>
+</head>
+<body>
+    <h3>单项</h3>
+    <label>性别</label><input type="text" configkey="性别" name="geder" />
+    <label>default</label><input type="text" objname="C_PB_Province" />
+    <label>unshowid </label><input type="text" objname="C_PB_District" onchange="unshowid" />
+    <label>defaultItem</label><input type="text" objname="C_PB_City" defaultitem="false" /><br />
+    <label>multiple </label><input type="text" objname="C_PB_Province" multiple="true" />
+    <label>onchange </label><input type="text" objname="C_PB_Province" onchange="onchange"/>
+    <label>multiple </label><input type="text" objname="C_PB_Province" multiple="true" />
+    <br />
+    <h3>级联</h3>
+    <label>省份</label><input type="text" id="sel" objname="C_PB_Province2" />
+    <label>城市</label><input type="text"  objname="C_PB_City2" parent="C_PB_Province2" />
+    <label>区域</label><input type="text" objname="C_PB_District2" parent="C_PB_City2" />
+    <br />
+    <h3>多选级联</h3>
+    <label>省份</label><input type="text" objname="C_PB_Province3" multiple="true" />
+    <label>城市</label><input type="text" objname="C_PB_City3" parent="C_PB_Province3" multiple="multiple" />
+    <label>区域</label><input type="text" objname="C_PB_District3" parent="C_PB_City3" multiple />
+    <br />
+
+
+    <pre class="brush:js;toolbar:false">代码：
+&lt;body&gt;
+    &lt;h3&gt;单项&lt;/h3&gt;
+    &lt;label&gt;性别&lt;/label&gt;&lt;input type=&quot;text&quot; configKey=&quot;性别&quot; /&gt;
+    &lt;label&gt;default&lt;/label&gt;&lt;input type=&quot;text&quot; objname=&quot;C_PB_Province&quot; /&gt;
+    &lt;label&gt;unshowid &lt;/label&gt;&lt;input type=&quot;text&quot; objname=&quot;C_PB_District&quot; onchange=&quot;unshowid&quot; unshowid=&quot;false&quot; /&gt;
+    &lt;label&gt;defaultItem&lt;/label&gt;&lt;input type=&quot;text&quot; objname=&quot;C_PB_City&quot; defaultitem=&quot;false&quot; /&gt;&lt;br /&gt;
+    &lt;label&gt;multiple &lt;/label&gt;&lt;input type=&quot;text&quot; objname=&quot;C_PB_Province&quot; multiple=&quot;true&quot; /&gt;
+    &lt;label&gt;onchange &lt;/label&gt;&lt;input type=&quot;text&quot; objname=&quot;C_PB_Province&quot; onchange=&quot;onchange&quot;/&gt;
+    &lt;label&gt;multiple &lt;/label&gt;&lt;input type=&quot;text&quot; objname=&quot;C_PB_Province&quot; multiple=&quot;true&quot; /&gt;
+    &lt;br /&gt;
+    &lt;h3&gt;级联&lt;/h3&gt;
+    &lt;label&gt;省份&lt;/label&gt;&lt;input type=&quot;text&quot; id=&quot;sel&quot; objname=&quot;C_PB_Province2&quot; /&gt;
+    &lt;label&gt;城市&lt;/label&gt;&lt;input type=&quot;text&quot; objname=&quot;C_PB_City2&quot; parent=&quot;C_PB_Province2&quot; /&gt;
+    &lt;label&gt;区域&lt;/label&gt;&lt;input type=&quot;text&quot; objname=&quot;C_PB_District2&quot; parent=&quot;C_PB_City2&quot; /&gt;
+    &lt;br /&gt;
+    &lt;h3&gt;多选级联&lt;/h3&gt;
+    &lt;label&gt;省份&lt;/label&gt;&lt;input type=&quot;text&quot; objname=&quot;C_PB_Province3&quot; multiple=&quot;true&quot; /&gt;
+    &lt;label&gt;城市&lt;/label&gt;&lt;input type=&quot;text&quot; objname=&quot;C_PB_City3&quot; parent=&quot;C_PB_Province3&quot; multiple=&quot;multiple&quot; /&gt;
+    &lt;label&gt;区域&lt;/label&gt;&lt;input type=&quot;text&quot; objname=&quot;C_PB_District3&quot; parent=&quot;C_PB_City3&quot; multiple /&gt;
+    &lt;br /&gt;
+&lt;/body&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+    function onchange(record) {
+        if (record.value) {
+            AR.Utility.Window.showMsg([record.value, record.text].join(&#39;,&#39;));
+        }
+        
+    }
+    function unshowid(record) {
+        if (record.value) {
+            AR.Utility.Window.showMsg([record.value, record.text].join(&#39;,&#39;));
+        }
+    }    
+&lt;/script&gt;</pre>
+    <p>
+        <br />
+    </p>
+</body>
+</html>
+<script type="text/javascript">
+    function onchange(record) {
+        if (record.value) {
+            AR.Utility.Window.showMsg([record.value, record.text].join(','));
+        }
+        
+    }
+    function unshowid(record) {
+        if (record.value) {
+            AR.Utility.Window.showMsg([record.value, record.text].join(','));
+        }
+
+    }
+    $(function () {
+        AR.Combobox.selectedCombobox({ geder: 1 });
+    })
+    
+
+</script>

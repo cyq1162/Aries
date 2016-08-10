@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <script src="/Style/JS/Aries.Loader.js"></script>
+
+</head>
+<body>
+   
+    <div style="height:300px;">
+        <div id="dg"></div>
+    </div>
+    <pre class="brush:js;toolbar:false">代码：
+&lt;script type=&quot;text/javascript&quot;&gt;
+        $(function () {
+            var dg = new AR.DataGrid('V_Test','Demo_TestA');
+            dg.addLink = 'edit.html';
+            dg.addTitle = '编辑Demo_TestA表';
+            dg.PKColumn.add('edit','编辑');
+            dg.PKColumn.add('del');
+            dg.bind();           
+        });    
+&lt;/script&gt;</pre>
+    <p>
+        <br />
+    </p>
+    <div id="dg_toolbar" style="display:none;">
+        <div class="line">
+            <div class="short">
+                <label>自定义F1：</label><input type="text" class="easyui-validatebox easyui-numberbox" validtype="length[1,11]" precision="2" name="F1">
+            </div>
+            <div class="short">
+                <label>自定义F2：</label><input type="text" configkey="是否" defaultItem="false" name="F2">
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    var customToolbar = AR.Utility.queryString('toolbar');
+    var dg = new AR.DataGrid('V_Test', 'Demo_TestA');
+    //自定义工具栏
+    if (customToolbar) {
+        dg.Search.$target = $('#dg_toolbar');
+    }
+    dg.ToolBar.add('自定义按钮', 'fn', 10,'btn-lg');
+    dg.PKColumn.add('edit', '编辑', null, 'edit.html', '编辑Demo_TestA表');
+    dg.PKColumn.add('del');
+    dg.bind();
+    function fn() {
+        AR.Utility.Window.showMsg('Demo_TestA');
+    }
+    function styleFormatter() {
+        return 'background-color:#ffee00;color:red;';
+    }
+</script>
+

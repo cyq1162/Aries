@@ -13,14 +13,22 @@
     </div>
     <pre class="brush:js;toolbar:false">代码：
 &lt;script type=&quot;text/javascript&quot;&gt;
-        $(function () {
-            var dg = new AR.DataGrid('V_Test','Demo_TestA');
-            dg.addLink = 'edit.html';
-            dg.addTitle = '编辑Demo_TestA表';
-            dg.PKColumn.add('edit','编辑');
-            dg.PKColumn.add('del');
-            dg.bind();           
-        });    
+        var customToolbar = AR.Utility.queryString('toolbar');
+        var dg = new AR.DataGrid('V_Test', 'TestA');
+        //自定义工具栏
+        if (customToolbar) {
+            dg.Search.$target = $('#dg_toolbar');
+        }        
+        dg.ToolBar.add('自定义按钮', 'fn', 10,'btn-lg');
+        dg.PKColumn.add('edit', '编辑', null, 'edit.html', '编辑Test表');
+        dg.PKColumn.add('del');
+        dg.bind();
+        function fn() {
+            AR.Utility.Window.showMsg('TEST');
+        }
+        function styleFormatter() {
+            return 'background-color:#ffee00;color:red;';
+        }    
 &lt;/script&gt;</pre>
     <p>
         <br />
@@ -35,21 +43,45 @@
             </div>
         </div>
     </div>
+   <!-- <input type="number" />
+    <input type="range" min="0" max="100" step="5" value="5" onchange="display.value=value" id="r" />
+    <output id="display" onload="value=111"></output>
+    <progress max="100" min="0" value="30" step="5" id="pr" onchange="pro.value='AAF'"></progress><output id="pro">AF</output>
+    <datalist id="lst">
+        <option value="a">A</option>
+        <option value="b">B</option>
+        <option value="c">C</option>
+    </datalist>
+    <input list="lst" /><br />
+    <textarea spellcheck="false"></textarea>-->
 </body>
 </html>
 <script type="text/javascript">
     var customToolbar = AR.Utility.queryString('toolbar');
-    var dg = new AR.DataGrid('V_Test', 'Demo_TestA');
+    var dg = new AR.DataGrid('V_Test', 'TestA','dg');
     //自定义工具栏
     if (customToolbar) {
         dg.Search.$target = $('#dg_toolbar');
     }
+    //dg.Search.$target.find('[name="F1"]').val('test');    
     dg.ToolBar.add('自定义按钮', 'fn', 10,'btn-lg');
-    dg.PKColumn.add('edit', '编辑', null, 'edit.html', '编辑Demo_TestA表');
+    dg.PKColumn.add('edit', '编辑', null, 'edit.html', '编辑Test表');
     dg.PKColumn.add('del');
+    dg.options.defaultWhere = [
+        { paramName: 'F1', paramPatten: 'like', paramValue: 'AA' }
+    ];
+    dg.Search.onAfterExcuted = function () {
+        if (!customToolbar) {
+            this.Inputs[0].val('AA');
+        }
+       // this.Inputs['F2'].val(1);
+        //this.Inputs['F3'][0].val('2016-07-08');
+       //this.Inputs['F4'].val('400000000');
+    }
     dg.bind();
+    
     function fn() {
-        AR.Utility.Window.showMsg('Demo_TestA');
+        AR.Utility.Window.showMsg('TEST');
     }
     function styleFormatter() {
         return 'background-color:#ffee00;color:red;';

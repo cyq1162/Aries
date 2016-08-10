@@ -46,8 +46,10 @@
                 _reset(dg);
             },
             Search: function () {
-                this.$target = null;
-                this.BtnQuery = function () {
+                var that = this;
+                $Core.BtnBase.call(that);
+                that.$target = null;
+                that.BtnQuery = function () {
                     function Obj() {
                         $Core.BtnBase.call(this);
                         /**
@@ -93,7 +95,7 @@
                     }
                     return new Obj();
                 }();
-                this.BtnReset = function () {
+                that.BtnReset = function () {
                     function Obj() {
                         $Core.BtnBase.call(this);
                         /**
@@ -161,6 +163,11 @@
                     }
                     return new Obj();
                 }();
+                that.onExcute = function (searchItem, dg) {
+                    that.onBeforeExcute();
+                    _createHtml(searchItem, dg);
+                    that.onAfterExcuted();
+                };
             },
             ToolBar: function () {
                 this.$target = null;
@@ -359,8 +366,8 @@
                                 searchItem.push(hdata[i]);
                             }
                         }
-                    }
-                    _createHtml(searchItem, dg);
+                    }                    
+                    dg.Search.onExcute(searchItem, dg);
                 }
             },
             //构建查询条件json格式,search事件调用
@@ -1013,6 +1020,7 @@
             divSearchArea.append(form);
             dg.ToolBar.$target.append(divSearchArea);
             //创建HTML结构
+            dg.Search.Inputs = new Object();
             (function () {
                 if (!isCustom) {
                     $Core.Utility.createHtml(dg.Search.$target, searchItem);

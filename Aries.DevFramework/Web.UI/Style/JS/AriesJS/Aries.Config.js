@@ -1,10 +1,8 @@
 ﻿(function ($, $Core) {
-    var ui = $Core.Global.Variable.ui;
     //模块路劲设置
     $.extend($Core.route, {
-        sys: ui + '/ajax.html',
-        menu: '/SysAdmin/ajax.html',
-        gridconfig: ui + '/Web/SysAdmin/Config.xxxl'
+        sys: 'ajax.html',
+        menu: 'ajax.html',
     });
 
     //格式主键模板

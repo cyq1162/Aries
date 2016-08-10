@@ -20,7 +20,7 @@ window.AR = (function ($Core) {
         Variable: {}
     };
     //默认路由地址
-    $Core.route = { root: '/ajax.html' };
+    $Core.route = { root: 'ajax.html' };
     return $Core;
 })(window.AR || {});
 
@@ -302,7 +302,8 @@ window.AR = (function ($Core) {
             return win;
         },
         createHtml: function ($container, dataArray) {
-            var objName, cssName;
+            var objName, cssName,
+                cutIndex = 0//删减的索引值;
             for (var i = 0, len = dataArray.length; i < len; i++) {
                 if (i % 3 == 0) {
                     line = $("<div class=\"line\">");
@@ -323,7 +324,6 @@ window.AR = (function ($Core) {
                 }
 
                 if (configKey || (objName && objName != '' && objName.indexOf('$') == -1)) {
-                    input = $("<select/>");
                     input.attr("name", dataArray[i].field);
                     if (configKey) {
                         input.attr("configKey", configKey)
@@ -390,6 +390,7 @@ window.AR = (function ($Core) {
                         if (dataArray[i].viewname && dataArray[i].viewname.indexOf('$1') != -1) {
                             input.width(95);
                             var startInput = input.clone(true);
+                            dg.Search.Inputs[dataArray[i].field] = [startInput];
                             div_item.append(startInput).append($("<span>").html("&nbsp;至&nbsp;"));
                             //div_item.width(456).removeClass("short").css({ "float": "left" });
                         }
@@ -410,6 +411,13 @@ window.AR = (function ($Core) {
                         input.attr("name", dataArray[i].field).addClass(cssName);
                     }
 
+                }
+                if (dataArray[i].viewname && dataArray[i].viewname.indexOf('$1') != -1) {
+                    dg.Search.Inputs[dataArray[i].field].push(input);
+                    dg.Search.Inputs[dataArray[i].field].push(input);
+                } else {
+                    dg.Search.Inputs[dataArray[i].field] = input;
+                    dg.Search.Inputs[i] = input
                 }
                 div_item.append(input);
                 line.append(div_item);

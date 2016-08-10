@@ -127,8 +127,7 @@
         var costomToolbar = false;
         if (opts && opts.toolbar) {
             costomToolbar = true;
-        }
-        
+        }        
         var cfg = {
             toolbar: "#" + dg.Internal.toolbarID,
             loadMsg: "数据正在加载中...",
@@ -204,13 +203,20 @@
             _setToolbar.call(dg,dg.ToolBar._btnArray);
         }
         opts = opts || {};
+        var searchJson = $Core.Common._Internal.buildSearchJson(dg.Search.$target.parents('form'));
         if (opts.defaultWhere) {
-            opts.queryParams = $.extend(opts.queryParams, { sys_search: encodeURI(JSON.stringify(opts.defaultWhere)) });
-        }        
+            searchJson = searchJson.concat(opts.defaultWhere);
+        }
+        if (searchJson.length > 0) {
+            cfg.queryParams['sys_search'] = JSON.stringify(searchJson);
+        }
+               
         var options = $.extend(cfg, opts);        
         //请求URL地址设置
         options.url = (opts.url || $Core.Utility.Ajax.Settings.url) + "?sys_method=GetList&sys_objName=" + dg.viewName + "&sys_tableName=" + dg.tableName;
+        
         dg.$target = $("#" + dg.Internal.id).datagrid(options);
+        
         if (options.pagination) {
             //初始化分页控件
             var pagination = dg.$target.datagrid('getPager');

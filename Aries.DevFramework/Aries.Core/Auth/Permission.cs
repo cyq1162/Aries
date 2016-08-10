@@ -5,8 +5,9 @@ using System.Web;
 using CYQ.Data;
 using CYQ.Data.Table;
 using System.Reflection;
+using Aries.Core.Helper;
 
-namespace Aries.Core
+namespace Aries.Core.Auth
 {
     /*
     /// <summary>
@@ -149,7 +150,14 @@ namespace Aries.Core
         private MDataRow GetMenu(Uri uri)
         {
             string url = uri.LocalPath;
-            string where = "MenuUrl='" + uri.PathAndQuery + "' or MenuUrl='" + uri.PathAndQuery.TrimStart('/') + "'"; 
+            string pathAndQuery = uri.PathAndQuery;
+            if (WebHelper.IsUseUISite)
+            {
+                int start = AppConfig.GetApp("UI").Trim('/').Length + 1;
+                url = url.Remove(0, start);
+                pathAndQuery = pathAndQuery.Remove(0, start);
+            }
+            string where = "MenuUrl='" + pathAndQuery + "' or MenuUrl='" + pathAndQuery.TrimStart('/') + "'";
             MDataRow menu = UserMenu.FindRow(where);
             if (menu == null)
             {
@@ -166,17 +174,17 @@ namespace Aries.Core
             {
                 return menu;
             }
-            else
-            {
-                string ui = AppConfig.GetApp("UI");
-                if (!string.IsNullOrEmpty(ui))
-                {
-                    if (!url.ToLower().StartsWith(ui.ToLower()))
-                    {
-                        return GetMenu(new Uri("http://" + uri.Host + ui + uri.PathAndQuery));
-                    }
-                }
-            }
+            //else
+            //{
+            //    string ui = AppConfig.GetApp("UI");
+            //    if (!string.IsNullOrEmpty(ui))
+            //    {
+            //        if (!url.ToLower().StartsWith(ui.ToLower()))
+            //        {
+            //            return GetMenu(new Uri("http://" + uri.Host + ui + uri.PathAndQuery));
+            //        }
+            //    }
+            //}
             return null;
         }
         /// <summary>

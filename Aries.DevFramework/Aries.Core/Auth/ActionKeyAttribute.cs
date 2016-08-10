@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Aries.Core
+namespace Aries.Core.Auth
 {
     [AttributeUsage(AttributeTargets.Method,AllowMultiple = false,Inherited=true)]
     public class ActionKeyAttribute:Attribute

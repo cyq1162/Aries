@@ -10,7 +10,7 @@ using System.Text;
 using CYQ.Data;
 using CYQ.Data.Table;
 
-namespace Aries.Core
+namespace Aries.Core.Helper
 {
     /// <summary>
     /// 新版本用的（Excel导入和导出功能）

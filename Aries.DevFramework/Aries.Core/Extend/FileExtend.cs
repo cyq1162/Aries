@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Aries.Core
+namespace Aries.Core.Extend
 {
     /// <summary>
     /// 文件类扩展方法

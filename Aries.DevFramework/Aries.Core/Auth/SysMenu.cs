@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using CYQ.Data;
 using CYQ.Data.Table;
+using Aries.Core.DB;
 
-namespace Aries.Core
+namespace Aries.Core.Auth
 {
     /// <summary>
     /// 系统菜单相关类

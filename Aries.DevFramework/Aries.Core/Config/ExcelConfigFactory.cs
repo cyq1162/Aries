@@ -5,7 +5,7 @@ using System.Text;
 using CYQ.Data;
 using CYQ.Data.Cache;
 
-namespace Aries.Core
+namespace Aries.Core.Config
 {
     internal static class ExcelConfigFactory
     {

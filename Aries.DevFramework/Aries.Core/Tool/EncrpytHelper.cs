@@ -5,7 +5,7 @@ using System.Web.Security;
 using System.Security.Cryptography;
 using CYQ.Data;
 
-namespace Aries.Core
+namespace Aries.Core.Helper
 {
     /// <summary>
     /// 密码加密助手类

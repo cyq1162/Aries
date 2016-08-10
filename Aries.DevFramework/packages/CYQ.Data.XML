@@ -66,6 +66,11 @@
             获取当前Dll的版本号
             </summary>
         </member>
+        <member name="P:CYQ.Data.AppConfig.RunPath">
+            <summary>
+            框架的运行路径（Bin目录）
+            </summary>
+        </member>
         <member name="T:CYQ.Data.AppConfig.XHtml">
             <summary>
             XHtml 相关的配置
@@ -89,11 +94,6 @@
         <member name="P:CYQ.Data.AppConfig.XHtml.Domain">
             <summary>
             Xml.MutilLanguage 语言切换设置时Cookie所需要的网站主域名[不带www]
-            </summary>
-        </member>
-        <member name="P:CYQ.Data.AppConfig.XHtml.UseFileLoadXml">
-            <summary>
-            Xml.XHtmlHelper 操作Html时，配置此项使用File加载Xml[便可在IIS7以上非信任主机机制下使用]
             </summary>
         </member>
         <member name="P:CYQ.Data.AppConfig.XHtml.SysLangKey">
@@ -180,11 +180,6 @@
             分布式缓存的服务器配置，多个用逗号（,）分隔
             </summary>
         </member>
-        <member name="P:CYQ.Data.AppConfig.Cache.GCCollectTime">
-            <summary>
-            Cache.CacheManage 调用GC.Collect()方法的间隔时间[(默认180)分钟]
-            </summary>
-        </member>
         <member name="P:CYQ.Data.AppConfig.Cache.DefaultCacheTime">
             <summary>
             Cache.CacheManage 默认缓存项的时间[分钟(默认60)]
@@ -217,7 +212,7 @@
         </member>
         <member name="P:CYQ.Data.AppConfig.Log.LogTableName">
             <summary>
-            异常日志表名（默认为ErrorLogs，可配置）
+            异常日志表名（默认为SysLogs，可配置）
             </summary>
         </member>
         <member name="T:CYQ.Data.AppConfig.Debug">
@@ -227,12 +222,12 @@
         </member>
         <member name="P:CYQ.Data.AppConfig.Debug.SqlFilter">
              <summary>
-            毫秒数（将所有长时间(ms)的SQL语句写入日志，对应配置项LogPath的路径）
+            毫秒数（这个是在对所有SQL语句的：将所有长时间(ms)的SQL语句写入日志，对应配置项LogPath的路径）
              </summary>
         </member>
         <member name="P:CYQ.Data.AppConfig.Debug.InfoFilter">
             <summary>
-            毫秒数（可通过此项设置条件过滤出时间(ms)较长的SQL语句）
+            毫秒数（这个是在AppDebug开启后的：可通过此项设置条件过滤出时间(ms)较长的SQL语句）
             </summary>
         </member>
         <member name="P:CYQ.Data.AppConfig.Debug.OpenDebugInfo">
@@ -541,6 +536,13 @@
             get示例：int id=action.Get&lt;int&gt;(Users.ID);
             </code></example>
         </member>
+        <member name="M:CYQ.Data.MAction.Set(System.Object,System.Object,System.Int32)">
+            <summary>
+            设置值
+            </summary>
+            <param name="state">手工设置状态[0:未更改；1:已赋值,值相同[可插入]；2:已赋值,值不同[可更新]]</param>
+            <returns></returns>
+        </member>
         <member name="M:CYQ.Data.MAction.SetExpression(System.String)">
             <summary>
             更新(Update)操作的自定义表达式设置。
@@ -659,6 +661,11 @@
         <member name="P:CYQ.Data.MAction.DalType">
             <summary>
             当前操作的数据库类型[Access/Mssql/Oracle/SQLite/MySql/Txt/Xml等]
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.MAction.DataBase">
+            <summary>
+            当前操作的数据库名称
             </summary>
         </member>
         <member name="P:CYQ.Data.MAction.DalVersion">
@@ -857,6 +864,11 @@
             当前操作的数据库类型[Access/Mssql/Oracle/SQLite/MySql等]
             </summary>
         </member>
+        <member name="P:CYQ.Data.MProc.DataBase">
+            <summary>
+            当前操作的数据库名称
+            </summary>
+        </member>
         <member name="P:CYQ.Data.MProc.DalVersion">
             <summary>
             当前操作的数据库的版本号
@@ -891,15 +903,15 @@
         </member>
         <member name="M:CYQ.Data.NoSqlAction.ResetStaticVar">
             <summary>
-            重置静态变量（每次批量更新后调用）
+            重置静态变量（方便回收内存，避免大量导数据后内存不回收）
             </summary>
         </member>
         <member name="F:CYQ.Data.NoSqlAction._needToSaveState">
             <summary>
-             是否需要更新：0未更新；1仅插入[往后面插数据]；2更新删除或插入[重新保存]
+             是否需要更新：0未更新；1仅插入[往后面插数据]；2更新删除或插入[重新保存],//需要更新[全局的可以有效处理并发]
             </summary>
         </member>
-        <member name="F:CYQ.Data.NoSqlAction._lastWriteTimeUtc">
+        <member name="F:CYQ.Data.NoSqlAction._Table">
             <summary>
             最后的写入时间
             </summary>
@@ -1087,11 +1099,6 @@
         <member name="F:CYQ.Data.Cache.AutoCache.cacheKeys">
             <summary>
             单机存档： 表的baseKey:key1,key2,key3...
-            </summary>
-        </member>
-        <member name="P:CYQ.Data.Cache.AutoCache.Instance">
-            <summary>
-            单例
             </summary>
         </member>
         <member name="T:CYQ.Data.Cache.CacheDependencyInfo">
@@ -2173,7 +2180,7 @@
             <param name="where">条件</param>
             <returns></returns>
         </member>
-        <member name="M:CYQ.Data.Orm.DBFast.Insert``1(``0,CYQ.Data.InsertOp)">
+        <member name="M:CYQ.Data.Orm.DBFast.Insert``1(``0,CYQ.Data.InsertOp,System.Boolean)">
             <summary>
             添加一条记录
             </summary>
@@ -2189,6 +2196,11 @@
             <param name="t">实体对象</param>
             <param name="where">条件</param>
             <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.Orm.DBFast.Exists``1(System.Object)">
+            <summary>
+            是否存在指定的条件
+            </summary>
         </member>
         <member name="T:CYQ.Data.Orm.OrmBase">
             <summary>
@@ -2284,6 +2296,12 @@
              删除数据
             </summary>
             <param name="where">where条件,可直接传id的值如:[88],或传完整where条件如:[id=88 and name='路过秋天']</param>
+        </member>
+        <member name="M:CYQ.Data.Orm.OrmBase.Fill">
+            <summary>
+            查询1条数据（自动取值）
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:CYQ.Data.Orm.OrmBase.Fill(System.Object)">
             <summary>
@@ -2473,18 +2491,19 @@
             </summary>
             <param name="option">插入选项</param>
         </member>
-        <member name="M:CYQ.Data.Orm.SimpleOrmBase.Insert(System.Boolean)">
+        <member name="M:CYQ.Data.Orm.SimpleOrmBase.Insert(CYQ.Data.InsertOp,System.Boolean)">
             <summary>
              插入数据
             </summary>
-            <param name="autoSetValue">自动从控制获取值</param>
+            <param name="insertID">插入主键</param>
         </member>
-        <member name="M:CYQ.Data.Orm.SimpleOrmBase.Insert(System.Boolean,CYQ.Data.InsertOp)">
+        <member name="M:CYQ.Data.Orm.SimpleOrmBase.Insert(System.Boolean,CYQ.Data.InsertOp,System.Boolean)">
             <summary>
              插入数据
             </summary>
             <param name="autoSetValue">自动从控制获取值</param>
             <param name="option">插入选项</param>
+            <param name="insertID">插入主键</param>
         </member>
         <member name="M:CYQ.Data.Orm.SimpleOrmBase.Update">
             <summary>
@@ -2514,6 +2533,11 @@
              删除数据
             </summary>
             <param name="where">where条件,可直接传id的值如:[88],或传完整where条件如:[id=88 and name='路过秋天']</param>
+        </member>
+        <member name="M:CYQ.Data.Orm.SimpleOrmBase.Fill">
+            <summary>
+            查询1条数据
+            </summary>
         </member>
         <member name="M:CYQ.Data.Orm.SimpleOrmBase.Fill(System.Object)">
             <summary>
@@ -2572,6 +2596,42 @@
         <member name="P:CYQ.Data.Orm.SimpleOrmBase.FieldSource">
             <summary>
              字段来源（当字段变更时，可以设置此属性来切换更新）
+            </summary>
+        </member>
+        <member name="T:CYQ.Data.Properties.Resources">
+            <summary>
+              一个强类型的资源类，用于查找本地化的字符串等。
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Properties.Resources.ResourceManager">
+            <summary>
+              返回此类使用的缓存的 ResourceManager 实例。
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Properties.Resources.Culture">
+            <summary>
+              使用此强类型资源类，为所有资源查找
+              重写当前线程的 CurrentUICulture 属性。
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Properties.Resources.xhtml_lat1">
+            <summary>
+              查找 System.Byte[] 类型的本地化资源。
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Properties.Resources.xhtml_special">
+            <summary>
+              查找 System.Byte[] 类型的本地化资源。
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Properties.Resources.xhtml_symbol">
+            <summary>
+              查找 System.Byte[] 类型的本地化资源。
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Properties.Resources.xhtml1_transitional">
+            <summary>
+              查找 System.Byte[] 类型的本地化资源。
             </summary>
         </member>
         <member name="T:CYQ.Data.SQL.SqlCreateForSchema">
@@ -2636,6 +2696,12 @@
             从行集合隐式转换成MDataTable
             </summary>
             <param name="rows"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataTable.op_Implicit(CYQ.Data.Table.MDataRow)~CYQ.Data.Table.MDataTable">
+            <summary>
+            将一行数据装载成一个表。
+            </summary>
             <returns></returns>
         </member>
         <member name="M:CYQ.Data.Table.MDataTable.NewRow">
@@ -2736,6 +2802,13 @@
             将数据表绑定到列表控件
             </summary>
             <param name="control">列表控件[包括Repeater/DataList/GridView/DataGrid等]</param>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataTable.Bind(System.Object,System.String)">
+            <summary>
+            将数据表绑定到列表控件
+            </summary>
+            <param name="control">列表控件[包括Repeater/DataList/GridView/DataGrid等]</param>
+            <param name="paraID">当Control为XHtmlAction对象时，需要指定绑定的节点ID</param>
         </member>
         <member name="M:CYQ.Data.Table.MDataTable.Merge(CYQ.Data.Table.MDataTable)">
             <summary>
@@ -3298,6 +3371,14 @@
             静态的对IField接口处理
             </summary>
         </member>
+        <member name="M:CYQ.Data.SQL.SqlFormat.FormatDefaultValue(CYQ.Data.DalType,System.Object,System.Int32,System.Data.SqlDbType)">
+            <summary>
+            将各数据库默认值格式化成标准值，将标准值还原成各数据库默认值
+            </summary>
+            <param name="flag">[0:转成标准值],[1:转成各数据库值],[2:转成各数据库值并补充字符串前后缀]</param>
+            <param name="sqlDbType">该列的值</param>
+            <returns></returns>
+        </member>
         <member name="T:CYQ.Data.SQL.SqlValue">
             <summary>
             用于多数据库兼容的替换关键字/函数
@@ -3534,7 +3615,6 @@
             <summary>
             将异常写入文件
             </summary>
-            <param name="attachInfo">附加信息</param>
         </member>
         <member name="M:CYQ.Data.Log.GetExceptionMessage(System.Exception)">
             <summary>
@@ -3671,13 +3751,15 @@
             表结构类
             </summary>
         </member>
-        <member name="M:CYQ.Data.SQL.TableSchema.FormatDefaultValue(CYQ.Data.DalType,System.Object,System.Int32,System.Data.SqlDbType)">
+        <member name="M:CYQ.Data.SQL.TableSchema.FixTableSchemaType(System.Data.Common.DbDataReader,System.Data.DataTable)">
             <summary>
-            将各数据库默认值格式化成标准值，将标准值还原成各数据库默认值
+            DbDataReader的GetSchema拿到的DataType、Size、Scale很不靠谱
             </summary>
-            <param name="flag">[0:转成标准值],[1:转成各数据库值],[2:转成各数据库值并补充字符串前后缀]</param>
-            <param name="sqlDbType">该列的值</param>
-            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.SQL.TableSchema.GetTables(CYQ.Data.DbBase@)">
+            <summary>
+            获取表（带缓存）
+            </summary>
         </member>
         <member name="M:CYQ.Data.SQL.TableSchema.GetSchemaKey(System.String,System.String,CYQ.Data.DalType)">
             <summary>
@@ -4002,6 +4084,12 @@
             该结构是否由视图拥有
             </summary>
         </member>
+        <member name="M:CYQ.Data.Table.MDataColumn.ToTable">
+            <summary>
+            将表结构的数据转成Table显示
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:CYQ.Data.Table.MDataColumn.Add(System.String)">
             <summary>
             添加列
@@ -4031,6 +4119,11 @@
             <param name="jsonOrFileName">Json或文件（完整路径）名称</param>
             <param name="readTxtOrXml">是否从.txt或.xml文件中读取架构（默认为true）</param>
             <returns></returns>
+        </member>
+        <member name="P:CYQ.Data.Table.MDataColumn.Table">
+            <summary>
+            架构所引用的表
+            </summary>
         </member>
         <member name="P:CYQ.Data.Table.MDataColumn.JointPrimary">
             <summary>
@@ -4075,7 +4168,7 @@
         </member>
         <member name="M:CYQ.Data.Table.MDataRow.ToTable">
             <summary>
-            转成MDataTable
+            将行的数据转成两列（ColumnName、Value）的表
             </summary>
         </member>
         <member name="M:CYQ.Data.Table.MDataRow.Clear">
@@ -4098,8 +4191,14 @@
             <summary>
             为行设置值
             </summary>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.Set(System.Object,System.Object,System.Int32)">
+            <summary>
+            为行设置值
+            </summary>
             <param name="key">字段名</param>
             <param name="value">值</param>
+            <param name="state">手工设置状态[0:未更改；1:已赋值,值相同[可插入]；2:已赋值,值不同[可更新]]</param>
         </member>
         <member name="M:CYQ.Data.Table.MDataRow.SetState(System.Int32)">
             <summary>
@@ -4120,9 +4219,15 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:CYQ.Data.Table.MDataRow.CreateFrom(System.Object)">
+            <summary>
+            从实体、Json、Xml、IEnumerable接口实现的类、MDataRow
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:CYQ.Data.Table.MDataRow.CreateFrom(System.Object,System.Type)">
             <summary>
-            从一个字典集合创建数据行。
+            从实体、Json、Xml、IEnumerable接口实现的类、MDataRow
             </summary>
         </member>
         <member name="M:CYQ.Data.Table.MDataRow.ToJson">
@@ -4286,6 +4391,9 @@
             <summary>
             行集合
             </summary>
+            <summary>
+            实现Winform DataGridView 的添加编辑和删除操作功能。
+            </summary>
         </member>
         <member name="M:CYQ.Data.Table.MDataRowCollection.Add(System.Object[])">
             <summary>
@@ -4322,7 +4430,7 @@
         </member>
         <member name="M:CYQ.Data.Table.MDataTableBatchAction.FixTable(CYQ.Data.Table.MDataColumn)">
             <summary>
-            进行列修正
+            进行列修正（只有移除 和 修正类型，若无主键列，则新增主键列）
             </summary>
         </member>
         <member name="M:CYQ.Data.Table.MDataTableBatchAction.SetJoinPrimaryKeys(System.Object[])">
@@ -4675,6 +4783,52 @@
             数据库工具类[都是静态方法]
             </summary>
         </member>
+        <member name="M:CYQ.Data.Tool.DBTool.GetDalType(System.String)">
+            <summary>
+            获取数据库链接的数据库类型
+            </summary>
+            <param name="conn">链接配置Key或数据库链接语句</param>
+            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.Tool.DBTool.GetDataType(CYQ.Data.Table.MCellStruct,CYQ.Data.DalType,System.String)">
+            <summary>
+            获取指定数据库的数据类型
+            </summary>
+            <param name="ms">单元格结构</param>
+            <param name="dalType">数据库类型</param>
+            <param name="version">数据库版本号</param>
+            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.Tool.DBTool.TestConn(System.String)">
+            <summary>
+            测试数据库链接语句
+            </summary>
+            <param name="conn">链接配置Key或数据库链接语句</param>
+            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.Tool.DBTool.GetTables(System.String)">
+            <summary>
+            获取数据库表
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Tool.DBTool.GetTables(System.String,System.String@)">
+            <summary>
+            获取数据库表
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Tool.DBTool.GetTables(System.String,System.String@,System.String@)">
+            <summary>
+            获取所有表（表名+表说明）【链接错误时，抛异常】
+            </summary>
+            <param name="conn">数据库链接</param>
+            <param name="dbName">返回指定链接的数据库名称</param>
+            <param name="errInfo">链接错误时的信息信息</param>
+        </member>
+        <member name="M:CYQ.Data.Tool.DBTool.ExistsTable(System.String)">
+            <summary>
+            是否存在表
+            </summary>
+        </member>
         <member name="M:CYQ.Data.Tool.DBTool.ExistsTable(System.String,System.String)">
             <summary>
             是否存在指定的表
@@ -4697,104 +4851,6 @@
             <param name="tableName">表名</param>
             <param name="conn">数据库链接</param>
             <param name="dalType">数据库类型</param>
-        </member>
-        <member name="M:CYQ.Data.Tool.DBTool.GetDalType(System.String)">
-            <summary>
-            获取数据库链接的数据库类型
-            </summary>
-            <param name="conn">链接配置Key或数据库链接语句</param>
-            <returns></returns>
-        </member>
-        <member name="M:CYQ.Data.Tool.DBTool.TestConn(System.String)">
-            <summary>
-            测试数据库链接语句
-            </summary>
-            <param name="conn">链接配置Key或数据库链接语句</param>
-            <returns></returns>
-        </member>
-        <member name="M:CYQ.Data.Tool.DBTool.GetSchema(System.String,System.String,System.String[])">
-            <summary>
-            获取表架构
-            </summary>
-            <param name="conn">数据库链接</param>
-            <param name="connectionName">指定要返回架构的名称</param>
-            <param name="restrictionValues">为指定的架构返回一组限制值</param>
-        </member>
-        <member name="M:CYQ.Data.Tool.DBTool.GetColumns(System.Type)">
-            <summary>
-            获取表列架构
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Tool.DBTool.GetColumns(System.Object)">
-            <summary>
-            获取表列架构
-            </summary>
-            <param name="tableName">表名</param>
-        </member>
-        <member name="M:CYQ.Data.Tool.DBTool.GetColumns(System.String,System.String,System.String@)">
-            <summary>
-            获取表列架构（链接错误时，抛异常）
-            </summary>
-            <param name="tableName">表名</param>
-            <param name="conn">数据库链接</param>
-            <param name="errInfo">出错时的错误信息</param>
-            <returns></returns>
-        </member>
-        <member name="M:CYQ.Data.Tool.DBTool.GetColumns(System.String,System.String)">
-            <summary>
-            获取表列架构
-            </summary>
-            <param name="tableName">表名</param>
-            <param name="conn">数据库链接</param>
-            <returns></returns>
-        </member>
-        <member name="M:CYQ.Data.Tool.DBTool.GetTables(System.String)">
-            <summary>
-            获取数据库表
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Tool.DBTool.GetTables(System.String,System.String@)">
-            <summary>
-            获取数据库表
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Tool.DBTool.GetTables(System.String,System.String@,System.String@)">
-            <summary>
-            获取所有表（表名+表说明）【链接错误时，抛异常】
-            </summary>
-            <param name="conn">数据库链接</param>
-            <param name="dbName">返回指定链接的数据库名称</param>
-            <param name="errInfo">链接错误时的信息信息</param>
-        </member>
-        <member name="M:CYQ.Data.Tool.DBTool.Keyword(System.String,CYQ.Data.DalType)">
-            <summary>
-            为字段或表名添加关键字标签：如[],''等符号
-            </summary>
-            <param name="name">表名或字段名</param>
-            <param name="dalType">数据类型</param>
-            <returns></returns>
-        </member>
-        <member name="M:CYQ.Data.Tool.DBTool.NotKeyword(System.String)">
-            <summary>
-            取消字段或表名添加关键字标签：如[],''等符号
-            </summary>
-            <param name="name">表名或字段名</param>
-        </member>
-        <member name="M:CYQ.Data.Tool.DBTool.FormatDefaultValue(CYQ.Data.DalType,System.Object,System.Int32,System.Data.SqlDbType)">
-            <summary>
-            将各数据库默认值格式化成标准值，将标准值还原成各数据库默认值
-            </summary>
-            <param name="flag">[0:转成标准值],[1:转成各数据库值]</param>
-            <returns></returns>
-        </member>
-        <member name="M:CYQ.Data.Tool.DBTool.GetDataType(CYQ.Data.Table.MCellStruct,CYQ.Data.DalType,System.String)">
-            <summary>
-            获取指定数据库的数据类型
-            </summary>
-            <param name="ms">单元格结构</param>
-            <param name="dalType">数据库类型</param>
-            <param name="version">数据库版本号</param>
-            <returns></returns>
         </member>
         <member name="M:CYQ.Data.Tool.DBTool.CreateTable(System.String,CYQ.Data.Table.MDataColumn)">
             <summary>
@@ -4838,6 +4894,75 @@
             <param name="tableName">表名</param>
             <param name="columns">列结构</param>
             <param name="conn">数据库链接</param>
+            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.Tool.DBTool.DropTable(System.String)">
+            <summary>
+            移除一张表
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.Tool.DBTool.DropTable(System.String,System.String)">
+            <summary>
+            移除一张表
+            <param name="conn">数据库链接</param>
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Tool.DBTool.GetSchema(System.String,System.String,System.String[])">
+            <summary>
+            获取表架构
+            </summary>
+            <param name="conn">数据库链接</param>
+            <param name="connectionName">指定要返回架构的名称</param>
+            <param name="restrictionValues">为指定的架构返回一组限制值</param>
+        </member>
+        <member name="M:CYQ.Data.Tool.DBTool.GetColumns(System.Type)">
+            <summary>
+            获取表列架构
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Tool.DBTool.GetColumns(System.Object)">
+            <summary>
+            获取表列架构
+            </summary>
+            <param name="tableName">表名</param>
+        </member>
+        <member name="M:CYQ.Data.Tool.DBTool.GetColumns(System.String,System.String,System.String@)">
+            <summary>
+            获取表列架构（链接错误时，抛异常）
+            </summary>
+            <param name="tableName">表名</param>
+            <param name="conn">数据库链接</param>
+            <param name="errInfo">出错时的错误信息</param>
+            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.Tool.DBTool.GetColumns(System.String,System.String)">
+            <summary>
+            获取表列架构
+            </summary>
+            <param name="tableName">表名</param>
+            <param name="conn">数据库链接</param>
+            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.Tool.DBTool.Keyword(System.String,CYQ.Data.DalType)">
+            <summary>
+            为字段或表名添加关键字标签：如[],''等符号
+            </summary>
+            <param name="name">表名或字段名</param>
+            <param name="dalType">数据类型</param>
+            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.Tool.DBTool.NotKeyword(System.String)">
+            <summary>
+            取消字段或表名添加关键字标签：如[],''等符号
+            </summary>
+            <param name="name">表名或字段名</param>
+        </member>
+        <member name="M:CYQ.Data.Tool.DBTool.FormatDefaultValue(CYQ.Data.DalType,System.Object,System.Int32,System.Data.SqlDbType)">
+            <summary>
+            将各数据库默认值格式化成标准值，将标准值还原成各数据库默认值
+            </summary>
+            <param name="flag">[0:转成标准值],[1:转成各数据库值]</param>
             <returns></returns>
         </member>
         <member name="M:CYQ.Data.Tool.DBTool.GetMapTableName(System.String,System.String)">
@@ -5088,15 +5213,15 @@
             实例化
             </summary>
             <param name="filePath">xml文件路径</param>
-            <param name="forHtml">是否Html文件</param>
-            <param name="getValueByCookie">是获从Cookie初始化默认语言</param>
+            <param name="isForHtml">是否Html文件</param>
+            <param name="isInitValueFromCookie">是获从Cookie初始化默认语言</param>
         </member>
         <member name="M:CYQ.Data.Xml.MutilLanguage.#ctor(System.String,System.Boolean)">
             <summary>
             实例化
             </summary>
             <param name="filePath">xml文件路径</param>
-            <param name="forHtml">是否Html文件</param>
+            <param name="isForHtml">是否Html文件</param>
         </member>
         <member name="M:CYQ.Data.Xml.MutilLanguage.#ctor(System.String)">
             <summary>
@@ -5468,7 +5593,7 @@
             Html名称空间
             </summary>
         </member>
-        <member name="F:CYQ.Data.Xml.XHtmlBase.xmlCacheKey">
+        <member name="F:CYQ.Data.Xml.XHtmlBase.XmlCacheKey">
             <summary>
             xml缓存的key
             </summary>
@@ -5476,6 +5601,11 @@
         <member name="M:CYQ.Data.Xml.XHtmlBase.GenerateKey(System.String)">
             <summary>
             从绝对路径中获得文件名做为Key值
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Xml.XHtmlBase.docTypeHtml">
+            <summary>
+            docTypeHtml是一样的。
             </summary>
         </member>
         <member name="M:CYQ.Data.Xml.XHtmlBase.LoadXml(System.String)">
@@ -5518,7 +5648,7 @@
         </member>
         <member name="M:CYQ.Data.Xml.XHtmlBase.LoadFromFile(System.String,System.Boolean)">
             <summary>
-            从文件加载XML
+            从文件加载XML （最终调用的方法）
             </summary>
         </member>
         <member name="M:CYQ.Data.Xml.XHtmlBase.SaveToCache(System.String,System.Boolean)">
@@ -5567,7 +5697,7 @@
         </member>
         <member name="M:CYQ.Data.Xml.XHtmlBase.Filter(System.String)">
             <summary>
-            过滤XML(十六进制值 0x1D)无效的字符
+            过滤XML(十六进制值 0x1D)无效的字符（同时替换&gt;符号）
             </summary>
         </member>
         <member name="M:CYQ.Data.Xml.XHtmlBase.Dispose">
@@ -5590,22 +5720,22 @@
             加载的Xml文件的完整（路径）名称
             </summary>
         </member>
-        <member name="P:CYQ.Data.Xml.XHtmlBase.NoClone">
+        <member name="P:CYQ.Data.Xml.XHtmlBase.IsNoClone">
             <summary>
-            是否只读，只读时缓存[存取]不再Clone
+            存取档不克隆（此时XHtml应是只读模式)
             </summary>
         </member>
-        <member name="P:CYQ.Data.Xml.XHtmlBase.DocIsCache">
+        <member name="P:CYQ.Data.Xml.XHtmlBase.IsLoadFromCache">
             <summary>
             文档是否取自缓存
             </summary>
         </member>
-        <member name="P:CYQ.Data.Xml.XHtmlBase.CacheIsChanged">
+        <member name="P:CYQ.Data.Xml.XHtmlBase.IsCacheChanged">
             <summary>
             Cache发生变化[用户更改缓存并设置更改标识]
             </summary>
         </member>
-        <member name="P:CYQ.Data.Xml.XHtmlBase.XHtmlIsChanged">
+        <member name="P:CYQ.Data.Xml.XHtmlBase.IsXHtmlChanged">
             <summary>
             目标XHtml文件是否被修改
             </summary>
@@ -5629,20 +5759,27 @@
             <summary>
             构造函数
             </summary>
-            <param name="forHtml">true时，将自动载入html的名称空间(http://www.w3.org/1999/xhtml)</param>
+            <param name="isForHtml">true时，将自动载入html的名称空间(http://www.w3.org/1999/xhtml)</param>
         </member>
         <member name="M:CYQ.Data.Xml.XHtmlAction.#ctor(System.Boolean,System.Boolean)">
             <summary>
             构造函数
             </summary>
-            <param name="forHtml">true时，将自动载入html的名称空间(http://www.w3.org/1999/xhtml)</param>
-            <param name="noClone">true时文档应为只读，所获取是同一份文档引用；false时文档可写，每次获取会克隆一份文档返回。</param>
+            <param name="isForHtml">true时，将自动载入html的名称空间(http://www.w3.org/1999/xhtml)</param>
+            <param name="isNoClone">true时文档应为只读，所获取是同一份文档引用；false时文档可写，每次获取会克隆一份文档返回。</param>
         </member>
         <member name="M:CYQ.Data.Xml.XHtmlAction.#ctor(System.String)">
             <summary>
             构造函数
             </summary>
             <param name="nameSpaceUrl">当Xml的名称空间[若有]</param>
+        </member>
+        <member name="M:CYQ.Data.Xml.XHtmlAction.Get(System.String)">
+            <summary>
+            GetByID or GetByName
+            </summary>
+            <param name="idOrName">id or name</param>
+            <returns></returns>
         </member>
         <member name="M:CYQ.Data.Xml.XHtmlAction.AppendNode(System.Xml.XmlNode,System.Xml.XmlNode,System.Int32)">
             <summary>
@@ -5722,7 +5859,7 @@
             <param name="NewNode">要被插入的新节点</param>
             <param name="RefNode">在此节点前插入NewNode节点</param>
         </member>
-        <member name="F:CYQ.Data.Xml.XHtmlAction.IsOpenUserLang">
+        <member name="F:CYQ.Data.Xml.XHtmlAction.IsUseLangSplit">
             <summary>
             是否开始自定义语言分隔(分隔符号为：[#langsplit])
             </summary>
@@ -5731,6 +5868,13 @@
             <summary>
             为节点赋值[通常值是在values中赋值]
             </summary>
+        </member>
+        <member name="M:CYQ.Data.Xml.XHtmlAction.Set(System.String,System.String)">
+            <summary>
+            对节点赋值（此方法会忽略hidden隐藏域，隐藏节点赋值请用其它重载方法）
+            </summary>
+            <param name="idOrName"></param>
+            <param name="value"></param>
         </member>
         <member name="M:CYQ.Data.Xml.XHtmlAction.LoadData(CYQ.Data.Table.MDataTable)">
             <summary>
@@ -5780,9 +5924,14 @@
             <param name="isWithAttr">是否将属性值也输出</param>
             </summary>
         </member>
-        <member name="P:CYQ.Data.Xml.XHtmlAction.IsUserLang">
+        <member name="P:CYQ.Data.Xml.XHtmlAction.IsCurrentLang">
             <summary>
-            当前请求是否用户的语言
+            当前请求是否用户当前设置的语言
+            </summary>
+        </member>
+        <member name="E:CYQ.Data.Xml.XHtmlAction.OnForeach">
+            <summary>
+            对于SetForeach函数调用的格式化事件
             </summary>
         </member>
         <member name="M:CYQ.Data.Xml.XHtmlUrlResolver.ResolveUri(System.Uri,System.String)">
@@ -5880,7 +6029,7 @@
         </member>
         <member name="F:CYQ.Data.Xml.XmlCacheLevel.Default">
             <summary>
-            默认30分钟:或web.config系统配置项CacheTime取时间,
+            默认取自配置项CacheTime时间,
             </summary>
         </member>
         <member name="F:CYQ.Data.Xml.XmlCacheLevel.Minute">

@@ -5,8 +5,10 @@ using System.Text;
 using CYQ.Data;
 using CYQ.Data.SQL;
 using CYQ.Data.Table;
+using Aries.Core.DB;
+using Aries.Core.Sql;
 
-namespace Aries.Core
+namespace Aries.Core.Config
 {
     /// <summary>
     /// Excel配置组件核心类
@@ -115,7 +117,7 @@ namespace Aries.Core
                                 }
                                 else
                                 {
-                                    item.DefaultValue = SQLCode.FormatPara(formatter);//如果不是#开头的，设置为默认值。
+                                    item.DefaultValue = SqlCode.FormatPara(formatter);//如果不是#开头的，设置为默认值。
                                 }
                             }
                         }

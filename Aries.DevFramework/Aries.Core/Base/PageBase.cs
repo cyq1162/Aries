@@ -8,6 +8,8 @@ using CYQ.Data;
 using System.Text;
 using CYQ.Data.Tool;
 using Aries.Core;
+using Aries.Core.Auth;
+using Aries.Core.Helper;
 
 
 namespace Aries.Core
@@ -49,7 +51,7 @@ namespace Aries.Core
         }
         public static T Query<T>(string key, T defaultValue)
         {
-          return  CommonHelper.Query<T>(key, defaultValue, false);
+          return  WebHelper.Query<T>(key, defaultValue, false);
         }
         protected void Write(string result)
         {

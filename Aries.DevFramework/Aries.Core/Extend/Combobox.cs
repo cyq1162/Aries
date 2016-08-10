@@ -4,7 +4,7 @@ using System.Text;
 using CYQ.Data;
 using CYQ.Data.Table;
 using CYQ.Data.Tool;
-namespace Aries.Core
+namespace Aries.Core.Extend
 {
     /// <summary>
     /// 下拉框集合

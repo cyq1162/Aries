@@ -1,4 +1,7 @@
-﻿using CYQ.Data;
+﻿using Aries.Core.Auth;
+using Aries.Core.Extend;
+using Aries.Core.Helper;
+using CYQ.Data;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -25,8 +28,7 @@ namespace Aries.Core
 
         void context_Error(object sender, EventArgs e)
         {
-            string url = HttpContext.Current.Request.Url.LocalPath;
-            if (url.EndsWith(".aspx") || url.EndsWith(".html") || url.EndsWith(".ashx"))
+            if (IsEndWithPage(HttpContext.Current.Request.Url))
             {
                 Log.WriteLogToTxt(HttpContext.Current.Error);
             }
@@ -38,34 +40,46 @@ namespace Aries.Core
             HttpApplication app = (HttpApplication)sender;
             context = app.Context;
             AuthCheck();
-            FilterOutput();
+            ReplaceOutput();
             InvokeClass();
         }
 
         #region 授权检测
-
+        /// <summary>
+        /// 默认仅对Web目录和首页index.html进行登陆权限检测。
+        /// </summary>
         private void AuthCheck()
         {
-            Uri uri=context.Request.Url;
-            if(uri.LocalPath.EndsWith("/logout.html"))
+            Uri uri = context.Request.Url;
+            if (uri.LocalPath.EndsWith("/logout.html"))
             {
                 UserAuth.Logout();
             }
-            else 
+            else if (uri.LocalPath.EndsWith("/login.html") && WebHelper.IsUseUISite)
+            {
+                HttpCookie cookie = context.Request.Cookies["sys_ui"];
+                if (cookie == null)
+                {
+                    cookie = new HttpCookie("sys_ui", "/" + AppConfig.GetApp("UI").Trim('/'));
+                    //cookie.Expires = DateTime.Now.AddSeconds(20);
+                    context.Response.Cookies.Add(cookie);
+                }
+            }
+            else
             {
                 SetNoCache();
-                if (IsContainUrl(uri))
+                if (IsCheckToken(uri))
                 {
                     UserAuth.IsExistsToken(true);//检测登陆状态。
                     new Permission(UserAuth.UserName, true);//初始化权限检测。
                 }
-                
+
             }
         }
-        private bool IsContainUrl(Uri uri)
+        private bool IsCheckToken(Uri uri)
         {
-            string[] items = new[] { "/web/","/index.html" };//可以扩展多个
-            string localPath=uri.LocalPath.ToLower();
+            string[] items = AppConfig.GetApp("CheckTokenPath", "/web/,/index.html").Split(',');//可以扩展多个
+            string localPath = uri.LocalPath.ToLower();
             foreach (string item in items)
             {
                 if (localPath.Contains(item))
@@ -77,7 +91,7 @@ namespace Aries.Core
         }
         private void SetNoCache()
         {
-            if (context.Request.Url.LocalPath.EndsWith(".html") && !context.Request.Url.LocalPath.EndsWith("/ajax.html"))
+            if (!context.Request.Url.LocalPath.EndsWith("/ajax.html") && IsEndWithPage(context.Request.Url))
             {
                 context.Response.Expires = 0;
                 context.Response.Buffer = true;
@@ -87,58 +101,77 @@ namespace Aries.Core
         }
         #endregion
 
-        #region 过滤输出
-        void FilterOutput()
+        #region 替换输出，仅对子目录部署时有效
+        void ReplaceOutput()
         {
-            string ui = AppConfig.GetApp("UI", "").ToLower();
-            string url = context.Request.Url.LocalPath.ToLower();
-            if (ui!="" && url.StartsWith(ui) && (url.EndsWith(".aspx") || url.EndsWith(".html")))
+            if (WebHelper.IsUseUISite)
             {
-                //如果项目需要部署成子应用程序，则开启，否则不需要开启（可注释掉下面一行代码）
-                context.Response.Filter = new HttpResponseFilter(context.Response.Filter);
+                if (context.Request.Url.LocalPath.IndexOf('.') == -1 || IsEndWithPage(context.Request.Url, false))
+                {
+                    //如果项目需要部署成子应用程序，则开启，否则不需要开启（可注释掉下面一行代码）
+                    context.Response.Filter = new HttpResponseFilter(context.Response.Filter);
+                }
             }
         }
         #endregion
 
-        #region 逻辑反射
+        #region 逻辑反射调用Controlls的方法
         private void InvokeClass()
         {
-            if (context.Request.Url.LocalPath.EndsWith("/ajax.html")) // 反射Url启动
+            string localPath = context.Request.Url.LocalPath;
+            Type t = null;
+            bool needInvoke = false;
+            if (localPath.EndsWith("/ajax.html")) // 反射Url启动
             {
-                string className = CommonHelper.Query<string>("sys_classname");
-                if (string.IsNullOrEmpty(className))//看是否存在
+                #region 处理Ajax请求
+                //从Url来源页找
+                if (context.Request.UrlReferrer == null)
                 {
-                    //从Url来源页找
-                    if (context.Request.UrlReferrer == null)
-                    {
-                        WriteError("非法请求!");
-                    }
-                    Type t = null;
-                    string[] items = context.Request.UrlReferrer.LocalPath.Split('/');
-                    className = Path.GetFileNameWithoutExtension(items[items.Length - 1].ToLower());
-                    //从来源页获取className 可能是/aaa/bbb.shtml 先找aaa.bbb看看有木有，如果没有再找bbb
-                    if (items.Length > 1)
-                    {
-                        t = InvokeLogic.GetType(items[items.Length - 2].ToLower() + "." + className);
-                    }
-                    if (t == null)
-                    {
-                        WriteError("找不到对应的请求逻辑!");
-                    }
-                    try
-                    {
-                        object o = Activator.CreateInstance(t);//实例化
-                        t.GetMethod("ProcessRequest").Invoke(o, new object[] { context });
-                    }
-                    catch (ThreadAbortException e)
-                    { 
-                    }
-                    catch (Exception err)
-                    {
-                        WriteError(err.Message);
-                    }
-
-
+                    WriteError("Illegal request!");
+                }
+                //AjaxController是由页面的后两个路径决定了。
+                string[] items = context.Request.UrlReferrer.LocalPath.Split('/');
+                string className = Path.GetFileNameWithoutExtension(items[items.Length - 1].ToLower());
+                //从来源页获取className 可能是/aaa/bbb.shtml 先找aaa.bbb看看有木有，如果没有再找bbb
+                if (items.Length > 1)
+                {
+                    t = InvokeLogic.GetType(items[items.Length - 2].ToLower() + "." + className, 0);
+                }
+                else
+                {
+                    t = InvokeLogic.GetDefaultType(0);
+                }
+                needInvoke = true;
+                #endregion
+            }
+            else if (localPath.IndexOf(".") == -1) // 处理Mvc请求
+            {
+                needInvoke = true;
+                string[] items = localPath.Trim('/').Split('/');
+                string className = items[0];
+                if (RouteConfig.RouteMode == 2)
+                {
+                    className = items.Length > 1 ? items[1] : "";
+                }
+                t = InvokeLogic.GetType(className, 1);
+            }
+            if (needInvoke)
+            {
+                if (t == null)
+                {
+                    WriteError("Can't find the controller!");
+                }
+                try
+                {
+                    object o = Activator.CreateInstance(t);//实例化
+                    t.GetMethod("ProcessRequest").Invoke(o, new object[] { context });
+                }
+                catch (ThreadAbortException e)
+                {
+                }
+                catch (Exception err)
+                {
+                    WriteError(err.Message);
                 }
             }
         }
@@ -146,6 +179,14 @@ namespace Aries.Core
         {
             context.Response.Write(tip);
             context.Response.End();
+        }
+        #endregion
+
+        #region 共用类
+        private bool IsEndWithPage(Uri uri, bool ashx = true)
+        {
+            string localPath = uri.LocalPath.ToLower();
+            return localPath.EndsWith(".html") || localPath.EndsWith(".aspx") || (ashx && localPath.EndsWith(".ashx"));
         }
         #endregion
 

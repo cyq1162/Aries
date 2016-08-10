@@ -5,8 +5,11 @@ using System.Text;
 using CYQ.Data;
 using CYQ.Data.Table;
 using CYQ.Data.Tool;
+using Aries.Core.DB;
+using Aries.Core.Sql;
+using Aries.Core.Extend;
 
-namespace Aries.Core
+namespace Aries.Core.Config
 {
     /// <summary>
     /// 键值对配置专用类（By CYQ）操作：Config_KeyValue 表
@@ -209,7 +212,7 @@ namespace Aries.Core
                     {
                         if (item.StartsWith("C_"))
                         {
-                            objNameSql.Append(SQLCode.GetCode(item.Split('=')[0].Trim()) + ";");
+                            objNameSql.Append(SqlCode.GetCode(item.Split('=')[0].Trim()) + ";");
                         }
                         else
                         {
@@ -406,7 +409,7 @@ namespace Aries.Core
                     {
                         if (!SqlDic.ContainsKey(formatter))
                         {
-                            SqlDic.Add(formatter, SQLCode.GetCode(formatter.Substring(1).Split('=')[0].Trim()) + ";");
+                            SqlDic.Add(formatter, SqlCode.GetCode(formatter.Substring(1).Split('=')[0].Trim()) + ";");
                         }
                     }
                     else

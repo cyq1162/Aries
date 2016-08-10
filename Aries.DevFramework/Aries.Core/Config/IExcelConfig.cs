@@ -1,7 +1,7 @@
 ﻿using System;
 using CYQ.Data.Table;
 
-namespace Aries.Core
+namespace Aries.Core.Config
 {
 
     public interface IExcelConfig : IDisposable

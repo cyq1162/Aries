@@ -1,13 +1,16 @@
-﻿using CYQ.Data;
+﻿using Aries.Core.Config;
+using Aries.Core.DB;
+using Aries.Core.Extend;
+using CYQ.Data;
 using CYQ.Data.Table;
 using CYQ.Data.Tool;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Aries.Core
+namespace Aries.Core.Sql
 {
-    public static class SQLScript
+    public static class SqlScript
     {
         /// <summary>
         /// 获取某对应项对应的数据库脚本。

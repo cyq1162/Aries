@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using Aries.Core;
+using System.Web;
+using CYQ.Data.Xml;
+using CYQ.Data;
 
 namespace Aries.Core
 {
@@ -16,24 +19,16 @@ namespace Aries.Core
         {
 
         }
-        public string GetID
-        {
-            get { return _IBase.GetID; }
-        }
 
-        public string ObjCode
-        {
-            get
-            {
-                return _IBase.ObjCode;
-            }
-        }
-
+        #region _ICommon
         public string Order
         {
             get { return _IBase.Order; }
         }
-
+        public string Sort
+        {
+            get { return _IBase.Sort; }
+        }
         public int PageIndex
         {
             get { return _IBase.PageIndex; }
@@ -56,6 +51,39 @@ namespace Aries.Core
         {
             return _IBase.Query<T>(key, defaultValue);
         }
+        public HttpContext Context
+        {
+            get
+            {
+                return _IBase.Context;
+            }
+        }
+
+        public bool IsHttpGet
+        {
+            get { return _IBase.IsHttpGet; }
+        }
+
+        public bool IsHttpPost
+        {
+            get { return _IBase.IsHttpPost; }
+        }
+       
+        #endregion
+
+        public string GetID
+        {
+            get { return _IBase.GetID; }
+        }
+
+        public string ObjCode
+        {
+            get
+            {
+                return _IBase.ObjCode;
+            }
+        }
+
         public void SetKeyValue(Enum key, string value)
         {
             _IBase.SetKeyValue(key, value);
@@ -67,10 +95,6 @@ namespace Aries.Core
         public string GetWhereIn(string primaryKey, string requestKey = null)
         {
             return _IBase.GetWhereIn(primaryKey, requestKey);
-        }
-        public string Sort
-        {
-            get { return _IBase.Sort; }
         }
 
         public string TableName
@@ -89,5 +113,12 @@ namespace Aries.Core
             get { return _IBase.ObjName; }
         }
 
+        public bool IsUseUISite
+        {
+            get
+            {
+                return _IBase.IsUseUISite;
+            }
+        }
     }
 }

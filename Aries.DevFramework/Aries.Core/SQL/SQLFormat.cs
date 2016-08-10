@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 using CYQ.Data.Tool;
 
-namespace Aries.Core
+namespace Aries.Core.Sql
 {
     /// <summary>
     /// 搜索条件格式化。(从Json格式化成sql语句）
     /// </summary>
-    internal static class SQLFormat
+    internal static class SqlFormat
     {
         #region Build SQL Contents
         private static Dictionary<string, string> sqlDic = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)

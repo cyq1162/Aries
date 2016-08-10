@@ -5,8 +5,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
 using CYQ.Data;
+using Aries.Core.Helper;
 
-namespace Aries.Core
+namespace Aries.Core.Extend
 {
     /// <summary>
     /// 处理本项目部署成子应用程序时，多了一个目录的问题。
@@ -101,14 +102,11 @@ namespace Aries.Core
     {
         internal static string Replace(string html)
         {
-            string ui = AppConfig.GetApp("UI", string.Empty).ToLower();
-            if (ui != string.Empty)
+            if (WebHelper.IsUseUISite)
             {
-                if (System.Web.HttpContext.Current.Request.Url.LocalPath.ToLower().StartsWith(ui))
-                {
-					html = html.Replace(" src=\"/", " src=\"" + ui + "/").Replace(" src = \"/", " src = \"" + ui + "/").Replace(" src = '/", " src = '/" + ui + "/").Replace(" src='/", " src ='/" + ui + "/"); ;
-					html = html.Replace(" href=\"/", " href=\"" + ui + "/").Replace(" href = \"/", " href = \"" + ui + "/").Replace(" href='/", " href='" + ui + "/").Replace(" href = '/", " href = '" + ui + "/");
-                }
+                string ui = AppConfig.GetApp("UI", string.Empty).ToLower();
+                html = html.Replace(" src=\"/", " src=\"" + ui + "/").Replace(" src = \"/", " src = \"" + ui + "/").Replace(" src = '/", " src = '/" + ui + "/").Replace(" src='/", " src ='/" + ui + "/"); ;
+                html = html.Replace(" href=\"/", " href=\"" + ui + "/").Replace(" href = \"/", " href = \"" + ui + "/").Replace(" href='/", " href='" + ui + "/").Replace(" href = '/", " href = '" + ui + "/");
             }
             return html;
         }

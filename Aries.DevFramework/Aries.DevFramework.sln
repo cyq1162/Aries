@@ -1,17 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Utility", "Web.Utility\Web.Utility.csproj", "{7953AA6B-660C-4448-84EA-E5E60A4DAF31}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.Entity", "Web.Entity\Web.Entity.csproj", "{EBB062B3-2BBE-47DA-AB43-C2DD075CBA43}"
-EndProject
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web.UI", "Web.UI\Web.UI.csproj", "{9DB8A2FF-68C0-43A4-AC1B-E1C00A34EF15}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aries.Core", "Aries.Core\Aries.Core.csproj", "{33A07EA9-350F-4A9C-925C-3A773D942748}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aries.Logic", "Aries.Logic\Aries.Logic.csproj", "{947B169E-24DD-4C32-9E82-54FE446A853F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CYQ.Data", "..\..\MySpace\CYQ.Data\CYQ.Data.csproj", "{BD5CCC87-278F-4FEB-AD23-157FCBA9FFA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aries.Controllers", "Aries.Controllers\Aries.Controllers.csproj", "{B9A50B28-C8E1-421C-83D8-050A489F24BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,14 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7953AA6B-660C-4448-84EA-E5E60A4DAF31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7953AA6B-660C-4448-84EA-E5E60A4DAF31}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7953AA6B-660C-4448-84EA-E5E60A4DAF31}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7953AA6B-660C-4448-84EA-E5E60A4DAF31}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EBB062B3-2BBE-47DA-AB43-C2DD075CBA43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EBB062B3-2BBE-47DA-AB43-C2DD075CBA43}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EBB062B3-2BBE-47DA-AB43-C2DD075CBA43}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EBB062B3-2BBE-47DA-AB43-C2DD075CBA43}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9DB8A2FF-68C0-43A4-AC1B-E1C00A34EF15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9DB8A2FF-68C0-43A4-AC1B-E1C00A34EF15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DB8A2FF-68C0-43A4-AC1B-E1C00A34EF15}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,6 +29,14 @@ Global
 		{947B169E-24DD-4C32-9E82-54FE446A853F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{947B169E-24DD-4C32-9E82-54FE446A853F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{947B169E-24DD-4C32-9E82-54FE446A853F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD5CCC87-278F-4FEB-AD23-157FCBA9FFA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD5CCC87-278F-4FEB-AD23-157FCBA9FFA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD5CCC87-278F-4FEB-AD23-157FCBA9FFA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD5CCC87-278F-4FEB-AD23-157FCBA9FFA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9A50B28-C8E1-421C-83D8-050A489F24BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9A50B28-C8E1-421C-83D8-050A489F24BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9A50B28-C8E1-421C-83D8-050A489F24BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9A50B28-C8E1-421C-83D8-050A489F24BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

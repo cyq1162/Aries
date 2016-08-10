@@ -8,7 +8,7 @@ using CYQ.Data.Tool;
 using System.Text.RegularExpressions;
 //using CYQ.Entity.GDGIS;
 
-namespace Aries.Core
+namespace Aries.Core.Extend
 {
     /// <summary>
     /// 跨库处理

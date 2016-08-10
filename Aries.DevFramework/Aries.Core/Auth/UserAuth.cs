@@ -4,8 +4,11 @@ using System.Text;
 using System.Web;
 using CYQ.Data;
 using CYQ.Data.Table;
+using Aries.Core.Helper;
+using Aries.Core.DB;
+using Aries.Core.Sql;
 
-namespace Aries.Core
+namespace Aries.Core.Auth
 {
     /// <summary>
     /// 用户登陆相关操作类
@@ -111,7 +114,7 @@ namespace Aries.Core
             }
             if (!result && isRedirect)
             {
-                HttpContext.Current.Response.Redirect("/login.html");
+                HttpContext.Current.Response.Redirect(AppConfig.GetApp("UI") + "/login.html");
             }
             return result;
         }
@@ -139,7 +142,7 @@ namespace Aries.Core
             }
             string[] items = HttpContext.Current.Request.Url.LocalPath.Split('.');
 
-            HttpContext.Current.Response.Redirect("/login." + items[items.Length - 1]);
+            HttpContext.Current.Response.Redirect(AppConfig.GetApp("UI") + "/login." + items[items.Length - 1]);
 
         }
         private static void SetToken(string token, string userName)
@@ -279,7 +282,7 @@ namespace Aries.Core
         {
             get
             {
-                using (MAction action = new MAction(SQLCode.GetCode("V_SYS_UserList")))
+                using (MAction action = new MAction(SqlCode.GetCode("V_SYS_UserList")))
                 {
                     if (action.Fill(UserID))
                     {

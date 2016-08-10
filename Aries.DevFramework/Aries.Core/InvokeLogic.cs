@@ -11,6 +11,15 @@ namespace Aries.Core
     /// </summary>
     static class InvokeLogic
     {
+        internal const string Controller = "Controller";
+        internal const string Default = "Default";
+        internal const string DefaultController = "DefaultController";
+        internal const string AriesController = "Aries.Core.Controller";
+        internal const string TaurusController = "Taurus.Core.Controller";
+        //internal const string DefaultAjaxController = "DefaultAjaxController";
+        //internal const string DefaultViewController = "DefaultViewController";
+
+        #region GetAssembly
         private static string _DllName;
         public static string DllName
         {
@@ -18,7 +27,7 @@ namespace Aries.Core
             {
                 if (string.IsNullOrEmpty(_DllName))
                 {
-                    _DllName = AppConfig.GetApp("Aries.Logic", "Aries.Logic");
+                    _DllName = AppConfig.GetApp("Aries.Controllers", "Aries.Controllers");
                 }
                 return _DllName;
             }
@@ -43,86 +52,173 @@ namespace Aries.Core
         {
             return DllName + "." + className;
         }
+        #endregion
 
-        private static Dictionary<string, Type> _ClassNameDic = new Dictionary<string, Type>(StringComparer.OrdinalIgnoreCase);
-        private static Dictionary<string, Type> ClassNameDic
+        #region GetControllers
+
+        private static Dictionary<string, Type> _TaurusControllers = new Dictionary<string, Type>(StringComparer.OrdinalIgnoreCase);
+        private static Dictionary<string, Type> _AriesControllers = new Dictionary<string, Type>(StringComparer.OrdinalIgnoreCase);
+        private static readonly object objLock = new object();
+        /// <summary>
+        /// 获取控制器
+        /// </summary>
+        /// <param name="typeFlag">0：Ajax控制器；1：View控制器</param>
+        /// <returns></returns>
+        private static Dictionary<string, Type> GetControllers(int typeFlag)
         {
-            get
+            if (_AriesControllers.Count == 0 && _TaurusControllers.Count == 0)
             {
-                if (_ClassNameDic.Count == 0)
+                lock (objLock)
                 {
-                    Assembly ass = GetAssembly();
-                    Type[] typeList = ass.GetExportedTypes();
-                    foreach (Type type in typeList)
+                    if (_AriesControllers.Count == 0 && _TaurusControllers.Count == 0)
                     {
-                        if (type.BaseType != null && type.BaseType.Name == "AjaxBase")
+                        Assembly ass = GetAssembly();
+                        Type[] typeList = ass.GetExportedTypes();
+                        foreach (Type type in typeList)
                         {
-                            if (type.Name == "DefaultHandler")
+                            if (type.BaseType != null)
                             {
-                                _ClassNameDic.Add("DefaultHandler", type);
-                            }
-                            else
-                            {
-                                string[] names = type.FullName.ToLower().Split('.');
-                                if (names.Length > 1)
+                                if (type.BaseType.FullName == AriesController)
                                 {
-                                    string className = names[names.Length - 1];
-                                    if (className.EndsWith("handler"))
+                                    #region Aries
+                                    if (type.Name == DefaultController)
                                     {
-                                        className = className.Substring(0, className.Length - 7);//不存Handler
+                                        _AriesControllers.Add(DefaultController, type);
                                     }
-                                    _ClassNameDic.Add(names[names.Length - 2] + "." + className, type);
+                                    else
+                                    {
+                                        string[] names = type.FullName.ToLower().Split('.'); //Aa.SystemController
+                                        if (names.Length > 1)
+                                        {
+                                            string className = names[names.Length - 1];
+                                            className = className.Replace(Controller.ToLower(), "");
+                                            
+                                            //string key = Controller.ToLower();
+                                            //if (className.EndsWith(key))
+                                            //{
+                                            //    int subLen = key.Length;
+                                            //    className = className.Substring(0, className.Length - subLen);//不存Controller
+                                            //}
+                                            _AriesControllers.Add(names[names.Length - 2] + "." + className, type);
+                                        }
+                                    }
+                                    #endregion
+
+                                }
+                                else if (type.BaseType.FullName == TaurusController)
+                                {
+                                    _TaurusControllers.Add(type.Name.Replace(Controller, ""), type);
                                 }
                             }
                         }
                     }
                 }
-                return _ClassNameDic;
             }
+            return typeFlag == 0 ? _AriesControllers : _TaurusControllers;
         }
         /// <summary>
-        /// 通过XXX.className类名获得对应的逻辑类
+        /// 通过XXX.className类名获得对应的Controller类
         /// </summary>
         /// <param name="className"></param>
+        /// <param name="typeFlag">0：Ajax控制器；1：View控制器</param>
         /// <returns></returns>
-        public static Type GetType(string className)
+        public static Type GetType(string className, int typeFlag)
         {
-            if (ClassNameDic.ContainsKey(className)) //1：完整匹配Ajax.ajaxdefaultlogic
+            Dictionary<string, Type> controllers = GetControllers(typeFlag);
+            if (controllers.ContainsKey(className)) //1：完整匹配【名称空间.类名】
             {
-                return ClassNameDic[className];
+                return controllers[className];
             }
             else
             {
                 string[] items = className.Split('.');
-                className = items[items.Length - 1];
-                //if (ClassNameDic.ContainsKey(className)) //2：完整匹配ajaxdefaultlogic
-                //{
-                //    return ClassNameDic[className];
-                //}
-                string OkKey = string.Empty;
-                className = "." + className;
-                string path = "." + items[0];
-                foreach (string key in ClassNameDic.Keys) //2：完整匹配ajaxdefaultlogic
+                if (typeFlag == 0)
                 {
-                    if (key.EndsWith(className))
+                    #region Ajax映射处理
+                    className = items[items.Length - 1];
+                    string okKey = string.Empty;
+                    className = "." + className;
+                    string path = "." + items[0];
+                    foreach (string key in controllers.Keys) //2：部分匹配【.类名】
                     {
-                        return ClassNameDic[key];
+                        if (key.EndsWith(className))
+                        {
+                            return controllers[key];
+                        }
+                        else if (key.EndsWith(path))//匹配 目录
+                        {
+                            okKey = key;
+                        }
                     }
-                    else if (key.EndsWith(path))//匹配 目录
+                    if (!string.IsNullOrEmpty(okKey))//3：匹配 目录
                     {
-                        OkKey = key;
+                        return controllers[okKey];
                     }
+                    #endregion
                 }
-                if (!string.IsNullOrEmpty(OkKey))//3：匹配 目录
+                else if (typeFlag == 1)
                 {
-                    return ClassNameDic[OkKey];
+                    if (!string.IsNullOrEmpty(className) && controllers.ContainsKey(className)) //1：完整匹配【类名】
+                    {
+                        return controllers[className];
+                    }
                 }
             }
-            if (ClassNameDic.ContainsKey("DefaultHandler"))
+            if (controllers.ContainsKey(DefaultController))
             {
-                return ClassNameDic["DefaultHandler"];
+                return controllers[DefaultController];
             }
             return null;
         }
+        public static Type GetDefaultType(int typeFlag)
+        {
+            Dictionary<string, Type> controllers = GetControllers(typeFlag);
+            if (controllers.ContainsKey(DefaultController))
+            {
+                return controllers[DefaultController];
+            }
+            return null;
+        }
+
+        #endregion
+
+        #region GetMethods
+        static Dictionary<string, Dictionary<string, MethodInfo>> typeMethods = new Dictionary<string, Dictionary<string, MethodInfo>>();
+        static readonly object objlockMethod = new object();
+        internal static MethodInfo GetMethod(Type t, string methodName)
+        {
+            string key = t.FullName;
+            Dictionary<string, MethodInfo> dic = null;
+            if (!typeMethods.ContainsKey(key))
+            {
+                lock (objlockMethod)
+                {
+                    if (!typeMethods.ContainsKey(key))
+                    {
+                        MethodInfo[] items = t.GetMethods();
+                        dic = new Dictionary<string, MethodInfo>(StringComparer.OrdinalIgnoreCase);
+                        foreach (var item in items)
+                        {
+                            if (!dic.ContainsKey(item.Name))//对于重载的同名方法，只取第一个空方法。
+                            {
+                                dic.Add(item.Name, item);
+                            }
+                        }
+                        typeMethods.Add(key, dic);
+                    }
+                }
+            }
+            dic = typeMethods[key];
+            if (dic.ContainsKey(methodName))
+            {
+                return dic[methodName];
+            }
+            if (dic.ContainsKey(Default))
+            {
+                return dic[Default];
+            }
+            return null;
+        }
+        #endregion
     }
 }

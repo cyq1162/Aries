@@ -6,13 +6,15 @@ using System.Text.RegularExpressions;
 using System.Web;
 using CYQ.Data;
 using CYQ.Data.Table;
+using Aries.Core.Auth;
+using Aries.Core.Extend;
 
-namespace Aries.Core
+namespace Aries.Core.Sql
 {
     /// <summary>
     /// 操作SQL外置文件类
     /// </summary>
-    public partial class SQLCode
+    public partial class SqlCode
     {
         private static string path = AppDomain.CurrentDomain.BaseDirectory + "\\App_Data\\SQLCode\\";
 

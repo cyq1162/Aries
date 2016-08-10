@@ -1,6 +1,6 @@
 using System;
 
-namespace Aries.Core
+namespace Aries.Core.DB
 {
     public enum TableNames { Sys_Action , Sys_Menu , Sys_Role , Sys_RoleAction , Sys_UserInfo , Sys_User , Config_KeyValue , Config_Grid , Config_ExcelInfo , Config_Excel }
 

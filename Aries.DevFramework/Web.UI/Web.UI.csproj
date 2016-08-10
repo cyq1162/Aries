@@ -24,7 +24,6 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
-    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -48,9 +47,8 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CYQ.Data, Version=5.5.8.8, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\CYQ.Data.dll</HintPath>
+    <Reference Include="MySql.Data">
+      <HintPath>..\DLL\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="NPOI, Version=2.1.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -69,10 +67,14 @@
     <Content Include="App_Data\SQLCode\Sql.sql" />
     <Content Include="App_Data\SQLCode\V_Test.sql" />
     <Content Include="App_Data\SQLCode\命名规范.txt" />
+    <Content Include="App_Data\Users.ts" />
+    <Content Include="App_Data\Users.txt" />
+    <Content Include="App_Data\UserType.ts" />
+    <Content Include="App_Data\UserType.xml" />
     <Content Include="Demo\combobox.html" />
     <Content Include="Demo\edit.html" />
-    <Content Include="Demo\rowedit.html" />
     <Content Include="Demo\list.html" />
+    <Content Include="Demo\rowedit.html" />
     <Content Include="Demo\treegrid.html" />
     <Content Include="index.html" />
     <Content Include="login.html" />
@@ -133,6 +135,7 @@
     <Content Include="Style\Images\page02.png" />
     <Content Include="Style\Images\page03.png" />
     <Content Include="Style\Images\page04.png" />
+    <Content Include="Style\Images\sidebar-icon.png" />
     <Content Include="Style\Images\sidebar-icon01.png" />
     <Content Include="Style\Images\tabs_icons.png" />
     <Content Include="Style\Images\tj-arrow.png" />
@@ -461,12 +464,12 @@
     <Content Include="Style\JS\EasyUI-1.3.4\themes\metro\window.css" />
     <Content Include="Style\JS\jquery-1.7.1.min.js" />
     <Content Include="Style\JS\json2.js" />
+    <Content Include="update.txt" />
     <Content Include="Web\SysAdmin\ActionList.html" />
     <Content Include="Web\SysAdmin\Config.html" />
     <Content Include="Web\SysAdmin\ConfigList.html" />
     <Content Include="Web\SysAdmin\CustomView.html" />
     <Content Include="Web\SysAdmin\ExcelConfig.html" />
-    <Content Include="Web\SysAdmin\ExcelConfigList.html" />
     <Content Include="Web\SysAdmin\ExcelInfoEdit.html" />
     <Content Include="Web\SysAdmin\ExcelInfoList.html" />
     <Content Include="Web\SysAdmin\MenuEdit.html" />
@@ -479,6 +482,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Aries.Controllers\Aries.Controllers.csproj">
+      <Project>{b9a50b28-c8e1-421c-83d8-050a489f24bf}</Project>
+      <Name>Aries.Controllers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Aries.Core\Aries.Core.csproj">
       <Project>{33a07ea9-350f-4a9c-925c-3a773d942748}</Project>
       <Name>Aries.Core</Name>
@@ -495,8 +502,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\SQLCode\SysAdmin\V_SYS_UserList.sql" />
-    <Content Include="Resource\Excel\V_Test.xls" />
+    <Content Include="Style\JS\EasyUI-1.3.4\themes\black\images\Thumbs.db" />
+    <Content Include="Style\JS\EasyUI-1.3.4\themes\bootstrap\images\Thumbs.db" />
+    <Content Include="Style\JS\EasyUI-1.3.4\themes\default\images\Thumbs.db" />
+    <Content Include="Style\JS\EasyUI-1.3.4\themes\gray\images\Thumbs.db" />
+    <Content Include="Style\JS\EasyUI-1.3.4\themes\metro\images\Thumbs.db" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -510,10 +522,9 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>1493</DevelopmentServerPort>
+          <DevelopmentServerPort>4432</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>
-          </IISUrl>
+          <IISUrl>http://localhost:8011/AR</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

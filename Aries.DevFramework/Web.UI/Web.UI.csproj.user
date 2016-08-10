@@ -3,7 +3,6 @@
   <PropertyGroup>
     <ProjectView>ShowAllFiles</ProjectView>
     <NameOfLastUsedPublishProfile>Publish</NameOfLastUsedPublishProfile>
-    <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>

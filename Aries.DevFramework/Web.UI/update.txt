@@ -1,0 +1,10 @@
+﻿从2016-07-31后开始记录，主要更新
+1：改造框架为MVC模式。（2016-07-31）
+A：将Handler从Logic分离，写在Aries.Controllers项目中。
+B：框架改造成兼容（有扩展性）Taurus.MVC，但默认未集成（为了项目简洁方便）。
+要使用Taurus.MVC，有3步：
+a：Controllers添加Taurus.Core.dll引用。
+b：Controllers添加的名称空间必须是Taurus.Core开头。
+c：Web.UI项目添加Views目录（按Taurus流程走）
+
+菜单ID为空时

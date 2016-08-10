@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <script src="../../Style/JS/Aries.Loader.js"></script>
+    <style>
+        span > b {
+            cursor: pointer;
+            margin-left: 50px;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <table id="dg"></table>
+</body>
+</html>
+<script type="text/javascript">
+    var excelID = AR.Utility.queryString('id');
+    var mid = function () {
+        var topWin = window, mid = parent.AR.Global.Variable.mid;
+        if (!mid) {
+            mid = (function (win) {
+                var ar = win.AR;
+                if (ar.Global.Variable.mid || win == win.top) {
+                    return ar.Global.Variable.mid;
+                }
+                return arguments.callee(win.parent.window);
+            })(topWin);
+        }
+        return mid;
+    }();
+    var dg = new AR.DataGrid('Config_ExcelInfo');
+    dg.options = {
+        onBeforeLoad:function(param){
+            param.ExcelID = excelID;
+            param.sys_mid = mid;
+        },
+        defaultWhere: [{ paramName: 'ExcelID', paramPatten: 'equal', paramValue: excelID }]
+    }
+    dg.isEditor = true;
+    dg.ToolBar.add('关闭窗口', 'AR.Utility.Window.close', 4);
+    dg.ToolBar.addHtml("<span onclick = 'showSQL()'><b>下载同步脚本</b></span>", 6);
+    dg.bind();
+    function showSQL() {
+        AR.Utility.download('GetExcelConfigScript', { "ID": excelID, sys_objName: parent.enName });
+    }
+</script>

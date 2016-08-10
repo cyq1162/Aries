@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <script src="/Style/JS/Aries.Loader.js"></script>
+</head>
+<body>
+    <table id="grid" class="cont-box-tab"></table>
+
+</body>
+</html>
+
+<script type="text/javascript">
+    var dg = new AR.DataGrid("V_SYS_UserList", "Sys_User", "grid");
+    dg.isShowToolbar = true;
+    // dg.options = { sortName: "CreateTime", sortOrder: "desc" };
+    dg.Search.$target = '';
+    dg.PKColumn.add("edit", "编辑", null, "userEidt.html", "编辑用户", "edit");
+    dg.PKColumn.add("del", "删除", null, null, null, "del");
+    dg.bind();
+</script>

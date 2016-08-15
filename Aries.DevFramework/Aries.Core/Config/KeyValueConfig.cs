@@ -16,7 +16,7 @@ namespace Aries.Core.Config
     /// </summary>
     public static partial class KeyValueConfig
     {
-        private static MDataTable _KeyValueTable;
+        // private static MDataTable _KeyValueTable;
         /// <summary>
         /// 配置表（全局缓存）
         /// </summary>
@@ -24,19 +24,19 @@ namespace Aries.Core.Config
         {
             get
             {
-                if (_KeyValueTable == null)
+                //if (_KeyValueTable == null)
+                //{
+                using (MAction action = new MAction(TableNames.Config_KeyValue))
                 {
-                    using (MAction action = new MAction(TableNames.Config_KeyValue))
-                    {
-                        _KeyValueTable = action.Select("order by ConfigKey ASC,OrderNo ASC,KeyValueID ASC");
-                    }
+                    return action.Select("order by ConfigKey ASC,OrderNo ASC,KeyValueID ASC");
                 }
-                return _KeyValueTable;
+                //}
+                //return _KeyValueTable;
             }
-            set
-            {
-                _KeyValueTable = value;
-            }
+            //set
+            //{
+            //    _KeyValueTable = value;
+            //}
         }
 
         internal static void SetTableDescription(string objName, string description)
@@ -53,7 +53,7 @@ namespace Aries.Core.Config
                         action.Set(Config_KeyValue.Flag, "sys");
                         if (action.Insert())
                         {
-                            KeyValueTable = null;//清缓存。
+                           // KeyValueTable = null;//清缓存。
                         }
                     }
                 }

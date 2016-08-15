@@ -17,23 +17,24 @@ namespace Aries.Controllers
     {
         protected override void BeforeInvoke()
         {
-            switch (functionName.ToLower())
-            {
-                case "add":
-                case "delete":
-                case "update":
-                    //清缓存
-                    switch (ObjName)
-                    {
-                        case "Sys_Action":
-                            SysMenu.ActionTable = null;
-                            break;
-                        case "Sys_Menu":
-                            SysMenu.MenuTable = null;
-                            break;
-                    }
-                    break;
-            }
+            //CYQ.Data 已具备自动缓存功能，所以可以简化掉一些手工的缓存机制。
+            //switch (functionName.ToLower())
+            //{
+            //    case "add":
+            //    case "delete":
+            //    case "update":
+            //        //清缓存
+            //        switch (ObjName)
+            //        {
+            //            case "Sys_Action":
+            //                SysMenu.ActionTable = null;
+            //                break;
+            //            case "Sys_Menu":
+            //                SysMenu.MenuTable = null;
+            //                break;
+            //        }
+            //        break;
+            //}
         }
         public void Login()
         {

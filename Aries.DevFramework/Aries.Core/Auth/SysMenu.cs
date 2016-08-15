@@ -12,7 +12,7 @@ namespace Aries.Core.Auth
     /// </summary>
     public static partial class SysMenu
     {
-        private static MDataTable _MenuTable;
+        //private static MDataTable _MenuTable;
         /// <summary>
         /// 菜单表（全局缓存）
         /// </summary>
@@ -20,22 +20,22 @@ namespace Aries.Core.Auth
         {
             get
             {
-                if (_MenuTable == null)
-                {
+                //if (_MenuTable == null)
+                //{
                     using (MAction action = new MAction(TableNames.Sys_Menu))
                     {
-                        _MenuTable = action.Select("order by MenuLevel ASC,SortOrder ASC");
+                        return action.Select("order by MenuLevel ASC,SortOrder ASC");
                     }
-                }
-                return _MenuTable;
+                //}
+                //return _MenuTable;
             }
-            set
-            {
-                _MenuTable = value;
-            }
+            //set
+            //{
+            //    _MenuTable = value;
+            //}
         }
 
-        private static MDataTable _ActionTable;
+        //private static MDataTable _ActionTable;
         /// <summary>
         /// 菜单功能表（全局缓存）
         /// </summary>
@@ -43,19 +43,19 @@ namespace Aries.Core.Auth
         {
             get
             {
-                if (_ActionTable == null)
-                {
+                //if (_ActionTable == null)
+                //{
                     using (MAction action = new MAction(TableNames.Sys_Action))
                     {
-                        _ActionTable = action.Select();
+                        return action.Select();
                     }
-                }
-                return _ActionTable;
+                //}
+                //return _ActionTable;
             }
-            set
-            {
-                _ActionTable = value;
-            }
+            //set
+            //{
+            //    _ActionTable = value;
+            //}
         }
 
 

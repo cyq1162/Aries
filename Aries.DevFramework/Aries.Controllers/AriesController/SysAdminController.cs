@@ -94,16 +94,17 @@ namespace Aries.Controllers
 
         protected override void EndInvoke()
         {
-            switch (ObjName)
-            {
-                case "Config_KeyValue":
-                    KeyValueConfig.KeyValueTable = null;
-                    break;
-                case "Sys_Menu":
-                    SysMenu.MenuTable = null;
-                    break;
+            //CYQ.Data 已具备自动缓存功能，所以可以简化掉一些手工的缓存机制。
+            //switch (ObjName)
+            //{
+            //    case "Config_KeyValue":
+            //       KeyValueConfig.KeyValueTable = null;
+            //        break;
+            //    case "Sys_Menu":
+            //        SysMenu.MenuTable = null;
+            //        break;
 
-            }
+            //}
         }
     }
     /// <summary>

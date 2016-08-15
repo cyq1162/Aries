@@ -159,7 +159,7 @@ namespace Aries.Core
             {
                 if (t == null)
                 {
-                    WriteError("Can't find the controller!");
+                    WriteError("You need a controller for coding if you want to use Taurus.MVC! else go to <a href='/login.html'>login.html</a>");
                 }
                 try
                 {
@@ -168,6 +168,7 @@ namespace Aries.Core
                 }
                 catch (ThreadAbortException e)
                 {
+                    //ASP.NET 的机制就是通过异常退出线程（不要觉的奇怪）
                 }
                 catch (Exception err)
                 {

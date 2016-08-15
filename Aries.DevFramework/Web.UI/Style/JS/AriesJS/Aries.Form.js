@@ -20,7 +20,9 @@
             */
             this.onBeforeLoadFormat = function (data) { };
             //此方法可改变请求的地址、方法、对象名
-            this.onBeforeExcute = function () {};
+            this.onBeforeExcute = function () { };
+            //在Form加载完后触发的事件。
+            this.onAfterExcuted = function () { };
             this.onExcute = function () {
                 if (this.onBeforeExcute.call(this) === false) {
                     return;
@@ -57,6 +59,7 @@
             this.BtnCommit = function () {
                 function Fn() {
                     $Core.BtnBase.call(this);
+                    this.onBeforeExcute = function () { };
                     this.onExcute = function () {
                         var flag = true;
                         if (this.onBeforeExcute() === false) {
@@ -102,7 +105,7 @@
                             delete formData[i];
                         }
                     }
-                    var obj = $Core.Utility.Ajax.post(mthodName || ((this.method.toLowerCase == 'get') && this.method) || $PCore.Global.operator, tableName || this.objname || $PCore.Global.DG.operating.tableName, formData, false, url || $Core.Form.url);
+                    var obj = $Core.Utility.Ajax.post(mthodName || ((this.method.toLowerCase() != 'get') && this.method) || $PCore.Global.operator, tableName || this.objname || $PCore.Global.DG.operating.tableName, formData, false, url || $Core.Form.url);
                     if (callBack && typeof(callBack) == "function") {
                         callBack.call(this,obj);
                     }

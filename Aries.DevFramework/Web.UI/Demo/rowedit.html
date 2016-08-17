@@ -8,6 +8,29 @@
         $(function () {
             var dg = new AR.DataGrid('Demo_TestA');
             dg.isEditor = true;
+            dg.options = {
+                //onClickRow: function (index, row)
+                //{
+                //    alert(index);
+                //},
+                onBeforeEdit: function (rowIndex, rowData)
+                {
+                    //行内编辑时，修改某单元格的值，引发另一个单元格的值的变化。
+                    setTimeout(function () {
+                        var jqCellF3 = dg.$target.datagrid("getEditor", { index: rowIndex, field: 'F3' }).target;
+                        jqCellF3.keyup(function () {
+                            var jqCellF1 = dg.$target.datagrid("getEditor", { index: rowIndex, field: 'F1' }).target;
+                            jqCellF1.val(jqCellF3.val());
+                        });
+                    }, 10)
+                    
+                }
+                //onAfterEdit:function(rowIndex, rowData, changes)
+                //{
+                //    rowData.F1 = "33333";
+                //    alert(changes);
+                //}
+            }
             dg.bind();
         });
         function fnEditor(r) {

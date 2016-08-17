@@ -453,18 +453,31 @@
             var splitIndex = location.href.indexOf('List') == -1 ? location.href.indexOf('.') : location.href.indexOf('List');
             var url = $aTarget.attr("url") || dg.addLink || location.href.substring(location.href.lastIndexOf('/') + 1, splitIndex) + 'Edit.aspx';
             var winTitle = $aTarget.attr("winTitle");
-            var fn = $aTarget.attr("click");
+            var _fn = $aTarget.attr("click");
             try {
-                fn = eval(fn);
+                _fn = eval(_fn);
             } catch (e) {
-                fn = undefined;
+                _fn = undefined;
             }
-            if (fn && typeof (fn) == "function") {
+            if (_fn && typeof (_fn) == "function") {
                 dg.$target.datagrid('selectRecord', value);
                 var row = dg.getSelected();
                 fn(value, row, index, el);
             } else {
                 url = url.indexOf("?") == -1 ? url + "?id=" + value : url + "&id=" + value;
+                var _match = url.match(/\{([\S\s]*?)\}/g);//匹配自定义标签
+                if (_match) // add by cyq 2016-08-17
+                {
+                    var _row = dg.getSelected();//获取行数据
+                    for (var i = 0; i < _match.length; i++) {
+                        var _matchValue=_match[i];
+                        var _key = _matchValue.substring(1, _matchValue.length - 1);
+                        var _value = _row[_key];
+                        if (_value) {
+                            url = url.replace(_matchValue, _value);
+                        }
+                    }
+                }
                 $Core.Utility.Window.open(url, (winTitle || " "), op == 1);
             }
 

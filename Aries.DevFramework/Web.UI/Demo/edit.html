@@ -145,7 +145,19 @@
             </div>
         </div>
 
+         <script>
+             //AR.Form.onBeforeExcute = function () {
+             //    this.method = "aaa";
+             //}
+             AR.Form.onAfterExcuted = function () {
+                 //this.method = "bbb";
+                
+             }
 
+             AR.Form.BtnCommit.onBeforeExcute = function () {
+                // AR.Form.method = "ccc";
+             }
+    </script>
     </form>
 </body>
 </html>

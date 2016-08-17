@@ -57,6 +57,7 @@
 </body>
 </html>
 <script type="text/javascript">
+
     var customToolbar = AR.Utility.queryString('toolbar');
     var dg = new AR.DataGrid('V_Test', 'TestA','dg');
     //自定义工具栏
@@ -67,6 +68,7 @@
     dg.ToolBar.add('自定义按钮', 'fn', 10,'btn-lg');
     dg.PKColumn.add('edit', '编辑', null, 'edit.html', '编辑Test表');
     dg.PKColumn.add('del');
+    dg.PKColumn.add('abc',"hello",null,"aaa.html?uid={ID}","hello world!");//{XXX}的值会被对应的字段值替换（注意大小写）。
     dg.options.defaultWhere = [
         { paramName: 'F1', paramPatten: 'like', paramValue: 'AA' }
     ];
@@ -81,6 +83,8 @@
     dg.bind();
     
     function fn() {
+        alert('fn');
+        return false;//return false 才能阻碍后续的窗口打开事件。
         AR.Utility.Window.showMsg('TEST');
     }
     function styleFormatter() {

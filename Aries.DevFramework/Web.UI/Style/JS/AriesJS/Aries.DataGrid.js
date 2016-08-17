@@ -462,7 +462,7 @@
             if (_fn && typeof (_fn) == "function") {
                 dg.$target.datagrid('selectRecord', value);
                 var row = dg.getSelected();
-                fn(value, row, index, el);
+                _fn(value, row, index, el);
             } else {
                 url = url.indexOf("?") == -1 ? url + "?id=" + value : url + "&id=" + value;
                 var _match = url.match(/\{([\S\s]*?)\}/g);//匹配自定义标签

@@ -35,7 +35,7 @@ namespace Aries.Core.Sql
                 if (string.IsNullOrEmpty(obj.ParamOrAnd))
                 {
 
-                    switch (obj.ParamPatten.ToLower())
+                    switch (obj.ParamPattern.ToLower())
                     {
                         case "in":
                         case "between":
@@ -53,29 +53,29 @@ namespace Aries.Core.Sql
                             obj.ParamValue = "'" + obj.ParamValue + "'";
                             break;
                     }
-                    if (obj.ParamPatten.ToLower() == "likeor")
+                    if (obj.ParamPattern.ToLower() == "likeor")
                     {
                         sql.AppendFormat(" AND ({0}) ", obj.ParamValue);
                     }
                     else
                     {
-                        sql.AppendFormat(" AND {0} {1} {2}", obj.ParamName, GetOperate(obj.ParamPatten), obj.ParamValue);
+                        sql.AppendFormat(" AND {0} {1} {2}", obj.ParamName, GetOperate(obj.ParamPattern), obj.ParamValue);
                     }
 
                 }
                 else
                 {
-                    if (obj.ParamPatten.ToLower() == "like")
+                    if (obj.ParamPattern.ToLower() == "like")
                     {
-                        sql.AppendFormat(" {3} {0} {1} '%{2}%' ", obj.ParamName, GetOperate(obj.ParamPatten), obj.ParamValue, obj.ParamOrAnd);
+                        sql.AppendFormat(" {3} {0} {1} '%{2}%' ", obj.ParamName, GetOperate(obj.ParamPattern), obj.ParamValue, obj.ParamOrAnd);
                     }
-                    else if (obj.ParamPatten.ToLower() == "isnull")
+                    else if (obj.ParamPattern.ToLower() == "isnull")
                     {
-                        sql.AppendFormat(" {3} {0} {1} {2} ", obj.ParamName, GetOperate(obj.ParamPatten), obj.ParamValue, obj.ParamOrAnd);
+                        sql.AppendFormat(" {3} {0} {1} {2} ", obj.ParamName, GetOperate(obj.ParamPattern), obj.ParamValue, obj.ParamOrAnd);
                     }
                     else
                     {
-                        sql.AppendFormat(" {3} {0} {1} '{2}'", obj.ParamName, GetOperate(obj.ParamPatten), obj.ParamValue, obj.ParamOrAnd);
+                        sql.AppendFormat(" {3} {0} {1} '{2}'", obj.ParamName, GetOperate(obj.ParamPattern), obj.ParamValue, obj.ParamOrAnd);
                     }
                 }
             }
@@ -109,7 +109,7 @@ namespace Aries.Core.Sql
             set;
         }
 
-        public string ParamPatten
+        public string ParamPattern
         {
             get;
             set;

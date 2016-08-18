@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title></title>
-    <script src="../../Style/JS/Aries.Loader.js"></script>
+    <script src="/Style/JS/Aries.Loader.js"></script>
     <style>
         span > b {
             cursor: pointer;
@@ -37,7 +37,7 @@
             param.ExcelID = excelID;
             param.sys_mid = mid;
         },
-        defaultWhere: [{ paramName: 'ExcelID', paramPatten: 'equal', paramValue: excelID }]
+        defaultWhere: [{ paramName: 'ExcelID', paramPattern: 'equal', paramValue: excelID }]
     }
     dg.isEditor = true;
     dg.ToolBar.add('关闭窗口', 'AR.Utility.Window.close', 4);

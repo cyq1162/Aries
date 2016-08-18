@@ -156,7 +156,7 @@ function getNewId() {
                 var opts = Obj.DataGrid.$target.datagrid("options");
                 var condition = [];
                 if ($(this).val() != "") {
-                    condition = condition.concat({ paramName: 'FileTypeID', paramPatten: 'Equal', paramValue: $(this).val() });
+                    condition = condition.concat({ paramName: 'FileTypeID', paramPattern: 'Equal', paramValue: $(this).val() });
                 }
                 if (opts.defaultWhere) {
                     jsonString = JSON.stringify(condition.concat(opts.defaultWhere));
@@ -268,7 +268,7 @@ function getNewId() {
                     //onHeaderContextMenu: function () { },
                     pageSize: 5,
                     pageList: [5, 10, 15, 30, 50],
-                    defaultWhere: [{ paramName: 'BusinessKey', paramPatten: op, paramValue: Obj.businesskey }]
+                    defaultWhere: [{ paramName: 'BusinessKey', paramPattern: op, paramValue: Obj.businesskey }]
                     , url: AR.route.fileupload
                 };               
                 Obj.DataGrid = new AR.DataGrid("PB_File", "PB_File", Obj.id);
@@ -284,7 +284,7 @@ function getNewId() {
                 Obj.DataGrid.bind();                
                 ////此方法提供刷新页面，根据改变businesskey的值刷新查询
                 //Obj.DataGrid.reload = function (bk) {
-                //    this.DataGrid.self.datagrid("load", { searchList: JSON.stringify([{ paramName: 'BusinessKey', paramPatten: 'Equal', paramValue: bk }]) });
+                //    this.DataGrid.self.datagrid("load", { searchList: JSON.stringify([{ paramName: 'BusinessKey', paramPattern: 'Equal', paramValue: bk }]) });
                 //}
                 var hideFiles = ['FileName', 'FileTypeID', 'FileSize', 'FilePath', 'Creator', 'CreatTime'];
                 var hideColumns = [];

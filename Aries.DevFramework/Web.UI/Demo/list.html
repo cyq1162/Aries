@@ -70,7 +70,8 @@
     dg.PKColumn.add('del');
     dg.PKColumn.add('abc',"hello",null,"aaa.html?uid={ID}","hello world!");//{XXX}的值会被对应的字段值替换（注意大小写）。
     dg.options.defaultWhere = [
-        { paramName: 'F1', paramPatten: 'like', paramValue: 'AA' }
+        { paramName: 'F1', paramPattern: 'like', paramValue: 'AA' },
+        { paramName: '列名2', paramPattern: 'like', paramValue: '323' }
     ];
     dg.Search.onAfterExcuted = function () {
         if (!customToolbar) {
@@ -89,6 +90,10 @@
     }
     function styleFormatter() {
         return 'background-color:#ffee00;color:red;';
+    }
+    function imgFormatter(value,row,index)
+    {
+        return "<img src='"+value+"\' />";
     }
 </script>
 

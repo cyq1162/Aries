@@ -16,7 +16,7 @@
     }
     var enName = AR.Utility.queryString('EnName');
     if (enName && enName.length > 1) {
-        ops.defaultWhere = [{ paramName: 'EnName', paramPatten: 'equal', paramValue: enName }]//默认查询条件
+        ops.defaultWhere = [{ paramName: 'EnName', paramPattern: 'equal', paramValue: enName }]//默认查询条件
     }
     dg = new AR.DataGrid('Config_Excel', 'Config_Excel');
     dg.isEditor = true;

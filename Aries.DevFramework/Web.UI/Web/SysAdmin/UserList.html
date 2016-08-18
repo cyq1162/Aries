@@ -6,7 +6,7 @@
     <script src="/Style/JS/Aries.Loader.js"></script>
 </head>
 <body>
-    <table id="grid" class="cont-box-tab"></table>
+    <table id="grid"></table>
 
 </body>
 </html>
@@ -15,7 +15,7 @@
     var dg = new AR.DataGrid("V_SYS_UserList", "Sys_User", "grid");
     dg.isShowToolbar = true;
     // dg.options = { sortName: "CreateTime", sortOrder: "desc" };
-    dg.Search.$target = '';
+    //dg.Search.$target = '';
     dg.PKColumn.add("edit", "编辑", null, "userEidt.html", "编辑用户", "edit");
     dg.PKColumn.add("del", "删除", null, null, null, "del");
     dg.bind();

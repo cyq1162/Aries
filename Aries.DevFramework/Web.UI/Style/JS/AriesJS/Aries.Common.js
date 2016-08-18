@@ -280,7 +280,7 @@
                             var checked_ids = dg.getChecked();
                             var jsonString = JSON.stringify($Core.Common._Internal.buildSearchJson(targetForm));
                             if (checked_ids.length > 0) {
-                                var condition = [{ paramName: dg.Internal.primarykey, paramPatten: 'In', paramValue: "(" + checked_ids.join(',') + ")" }];
+                                var condition = [{ paramName: dg.Internal.primarykey, paramPattern: 'In', paramValue: "(" + checked_ids.join(',') + ")" }];
                                 jsonString = JSON.stringify(condition);
                             }
                             //window.open(ajaxOptions.href + '?objName=' + objName + '&sys_search='+jsonString, '_self');      
@@ -399,12 +399,12 @@
                             if ($("[comboname=" + name + "]").attr('date')) {
                                 //json[i].paramValue = "'" + json[i].paramValue + " 00:00:00' AND '" + value + " 23:59:59'";
                                 json[i].paramValue = json[i].paramValue.replace(reg_date, " <= '" + value + " 23:59:59'");
-                                json[i].paramPatten = 'LikeOr';
+                                json[i].paramPattern = 'LikeOr';
                             } else {
                                 //json[i].paramValue = "('" + json[i].paramValue + "'" + ',' + "'" + value + "')";
-                                //json[i].paramPatten = 'In';
+                                //json[i].paramPattern = 'In';
                                 json[i].paramValue = json[i].paramValue + "," + value;
-                                json[i].paramPatten = op === 'LikeOr' ? 'LikeOr' : 'In';
+                                json[i].paramPattern = op === 'LikeOr' ? 'LikeOr' : 'In';
                             }
                             exist = true;
                             break earch;
@@ -416,7 +416,7 @@
                             op = "LikeOr";
                             value = name + ' >= \'' + value + ' 00:00:00\' AND ' + name + ' <= \'' + value + ' 23:59:59\''
                         }
-                        item = { paramName: name, paramValue: value, paramPatten: op };
+                        item = { paramName: name, paramValue: value, paramPattern: op };
                     }
                     if (item) {
                         json.push(item);
@@ -426,7 +426,7 @@
                     for (var i = 0; i < json.length; i++) {
                         if (!json[i].paramValue) { return; }
                         var array = json[i].paramValue.toString().split(',');
-                        if (json[i].paramPatten === 'LikeOr') {
+                        if (json[i].paramPattern === 'LikeOr') {
                             if (array.length > 1) {
                                 var tempArray = new Array();
                                 for (var j = 0; j < array.length; j++) {
@@ -435,11 +435,11 @@
                                 json[i].paramValue = tempArray.join(" OR ");
                                 tempArray = [];
                             } else if (!reg_date.test(json[i].paramValue)) {
-                                json[i].paramPatten = "Equal";
-                                //json[i].paramPatten = "Like";
+                                json[i].paramPattern = "Equal";
+                                //json[i].paramPattern = "Like";
                             }
-                        } else if (json[i].paramPatten !== 'LikeOr' && array.length > 1 && (json[i].paramPatten === 'Between' || json[i].paramPatten === 'In')) {
-                            json[i].paramPatten = 'Between';
+                        } else if (json[i].paramPattern !== 'LikeOr' && array.length > 1 && (json[i].paramPattern === 'Between' || json[i].paramPattern === 'In')) {
+                            json[i].paramPattern = 'Between';
                             json[i].paramValue = array[0] + ' AND ' + array[1];
                         }
                     }

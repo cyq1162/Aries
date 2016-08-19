@@ -412,12 +412,14 @@ window.AR = (function ($Core) {
                     }
 
                 }
-                if (dataArray[i].viewname && dataArray[i].viewname.indexOf('$1') != -1) {
-                    dg.Search.Inputs[dataArray[i].field].push(input);
-                    dg.Search.Inputs[dataArray[i].field].push(input);
-                } else {
-                    dg.Search.Inputs[dataArray[i].field] = input;
-                    dg.Search.Inputs[i] = input
+                if (dg.Search.Inputs) {
+                    if (dataArray[i].viewname && dataArray[i].viewname.indexOf('$1') != -1) {
+                        dg.Search.Inputs[dataArray[i].field].push(input);
+                        dg.Search.Inputs[dataArray[i].field].push(input);
+                    } else {
+                        dg.Search.Inputs[dataArray[i].field] = input;
+                        dg.Search.Inputs[i] = input
+                    }
                 }
                 div_item.append(input);
                 line.append(div_item);

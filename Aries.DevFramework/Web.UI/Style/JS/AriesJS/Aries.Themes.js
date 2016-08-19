@@ -5,7 +5,7 @@
 });
 
 function setThemeName(themeName) {
-    var ui = AR.Utility.Cookie.get('sys_ui')
+    var ui = AR.Utility.Cookie.get('sys_ui') || '';
     $('#lk_theme').attr('href', ui+'/Style/JS/EasyUI-1.3.4/themes/' + themeName + '/easyui.css');
     $.each($("#tabs").tabs('tabs'), function () {
         var iframe = this.find('iframe')[0];

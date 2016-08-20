@@ -8,9 +8,12 @@
         this.onAfterExcuted = function () { }
     }
     $Core.BtnBase = BtnBase;
-    function BtnBase() {
+    function BtnBase(flag) {
         ExcuteEvent.call(this)
-        this.$target = null;
+        if (flag) {
+            this.$target = $("#" + flag) || $('[flag = ' + flag + ']');
+        }
+        else { this.$target = null; }
     }
     /**
     *该文件依赖与AR.Core.Utility.js文件
@@ -216,10 +219,10 @@
                             if (dg.isEditor) {
                                 if (endEditing(dg)) {
                                     dg.PKColumn.Editor.operator = dg.PKColumn.Editor.add || "Add";
-                                    var _row = {}, _data = dg.PKColumn.Editor.fillData;
+                                    var _row = {}, _data = dg.PKColumn.Editor.insertRowData;
                                     var _rows = dg.$target.datagrid('getRows');
                                     var _len = _rows.length;
-                                    if (dg.PKColumn.Editor.isFill) {
+                                    if (dg.PKColumn.Editor.isInsertRow) {
                                         var pkField = dg.Internal.primarykey;
                                         _row = $.extend(_row, _rows[_len - 1] || {});
                                         delete _row[dg.Internal.primarykey];
@@ -229,13 +232,15 @@
                                     }
                                     dg.$target.datagrid("appendRow", _row);
                                     dg.PKColumn.Editor.editIndex = _len;
+                                    dg.$target.datagrid("refreshRow", dg.PKColumn.Editor.editIndex);
                                     dg.$target.datagrid('selectRow', dg.PKColumn.Editor.editIndex)
                                         .datagrid('beginEdit', dg.PKColumn.Editor.editIndex);
+                                    
                                 }
                             } else {
                                 $Core.Global.DG.operating = dg;
                                 var splitIndex = location.href.indexOf('List') == -1 ? location.href.lastIndexOf('.') : location.href.lastIndexOf('List');
-                                var viewLink = dg.addLink || location.href.substring(location.href.lastIndexOf('/') + 1, splitIndex) + 'Edit.aspx';
+                                var viewLink = dg.addLink || location.href.substring(location.href.lastIndexOf('/') + 1, splitIndex) + 'Edit.html';
                                 $Core.Utility.Window.open(viewLink, dg.addTitle, false);
                                 dg.ToolBar.BtnAdd.onAfterExcuted.call(this);
                             }
@@ -339,14 +344,24 @@
                 }();
                 function endEditing(dg) {
                     if (dg.PKColumn.Editor.editIndex == null) { return true }
-                    if (dg.$target.datagrid('validateRow', dg.PKColumn.Editor.editIndex)) {
-                        dg.$target.datagrid('endEdit', dg.PKColumn.Editor.editIndex);
-                        dg.$target.datagrid("rejectChanges");
+                    var rowIndex = dg.PKColumn.Editor.editIndex;
+                    if (dg.$target.datagrid('validateRow', rowIndex)) {
                         dg.PKColumn.Editor.editIndex = null;
+                        dg.$target.datagrid('endEdit', rowIndex);
+                        dg.$target.datagrid('refreshRow', rowIndex);
                         return true;
                     } else {
                         return false;
                     }
+
+                    //if (dg.$target.datagrid('validateRow', dg.PKColumn.Editor.editIndex)) {
+                    //    dg.$target.datagrid('endEdit', dg.PKColumn.Editor.editIndex);
+                    //    dg.$target.datagrid("rejectChanges");
+                    //    dg.PKColumn.Editor.editIndex = null;
+                    //    return true;
+                    //} else {
+                    //    return false;
+                    //}
                 }
             },
             createSearchForm: function (dg) {
@@ -531,21 +546,25 @@
                         var len = 0;
                         var strHtml = '<div class="operation w$len">';
                         var strTemplate = '<a class="{0}" title="{1}" dgid="' + dg.Internal.id + '" onClick="AR.Common._Internal.Editor.{2}(this,\'' + dg.Internal.id + '\',\'' + value + '\',' + index + ')"  v="{3}" i="{4}"></a>';
-                        if (dg.PKColumn.Editor.BtnEdit.hidden != true) {
-                            len += 1;
-                            strHtml += $Core.Utility.stringFormat(strTemplate, "bj", "编辑", "onEdit", value, index);
+                        if (dg.PKColumn.Editor.editIndex == null) {
+                            if (dg.PKColumn.Editor.BtnEdit.hidden != true) {
+                                len += 1;
+                                strHtml += $Core.Utility.stringFormat(strTemplate, "bj", "编辑", "onEdit", value, index);
+                            }
+                            if (dg.PKColumn.Editor.BtnDel.hidden != true) {
+                                len += 1;
+                                strHtml += $Core.Utility.stringFormat(strTemplate, "sc", "删除", "onDel", value, index);
+                            }
                         }
-                        if (dg.PKColumn.Editor.BtnDel.hidden != true) {
-                            len += 1;
-                            strHtml += $Core.Utility.stringFormat(strTemplate, "sc", "删除", "onDel", value, index);
-                        }
-                        if (dg.PKColumn.Editor.BtnCancel.hidden != true) {
-                            len += 1;
-                            strHtml += $Core.Utility.stringFormat(strTemplate, "cx", "撤销", "onCancel", value, index);
-                        }
-                        if (dg.PKColumn.Editor.BtnSave.hidden != true) {
-                            len += 1;
-                            strHtml += $Core.Utility.stringFormat(strTemplate, "bc", "保存", "onSave", value, index);
+                        else {
+                            if (dg.PKColumn.Editor.BtnCancel.hidden != true) {
+                                len += 1;
+                                strHtml += $Core.Utility.stringFormat(strTemplate, "cx", "撤销", "onCancel", value, index);
+                            }
+                            if (dg.PKColumn.Editor.BtnSave.hidden != true) {
+                                len += 1;
+                                strHtml += $Core.Utility.stringFormat(strTemplate, "bc", "保存", "onSave", value, index);
+                            }
                         }
                         strHtml = strHtml.replace('$len', len + buttons.length);
                         for (var i = 0; i < buttons.length; i++) {
@@ -757,8 +776,8 @@
                             pkColumn.formatter = this.pkFormat(dg);
                             if (dg.isEditor) {
                                 var len = dg.PKColumn._btnArray.length;
-                                pkColumn.width = len == 0 ? 4 * 24 : (4 + len) * 24;
-                            } else { pkColumn.width = dg.PKColumn._btnArray.length * 24; }
+                                pkColumn.width = len == 0 ? 2 * 26 : (2 + len) * 26;
+                            } else { pkColumn.width = dg.PKColumn._btnArray.length * 26; }
                             delete pkColumn.rowspan;
                             delete pkColumn.colspna;
                             dg.Internal.primarykey = pkColumn.field;

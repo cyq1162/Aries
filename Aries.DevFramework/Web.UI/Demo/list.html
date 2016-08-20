@@ -59,7 +59,7 @@
 <script type="text/javascript">
 
     var customToolbar = AR.Utility.queryString('toolbar');
-    var dg = new AR.DataGrid('V_Test', 'TestA','dg');
+    var dg = new AR.DataGrid('V_Test', 'Demo_TestA');
     //自定义工具栏
     if (customToolbar) {
         dg.Search.$target = $('#dg_toolbar');
@@ -69,10 +69,10 @@
     dg.PKColumn.add('edit', '编辑', null, 'edit.html', '编辑Test表');
     dg.PKColumn.add('del');
     dg.PKColumn.add('abc',"hello",null,"aaa.html?uid={ID}","hello world!");//{XXX}的值会被对应的字段值替换（注意大小写）。
-    dg.options.defaultWhere = [
-        { paramName: 'F1', paramPattern: 'like', paramValue: 'AA' },
-        { paramName: '列名2', paramPattern: 'like', paramValue: '323' }
-    ];
+    //dg.options.defaultWhere = [
+    //    { paramName: 'F3', paramPattern: 'like', paramValue: 'AA' }
+    //];
+    
     dg.Search.onAfterExcuted = function () {
         if (!customToolbar) {
             this.Inputs[0].val('AA');
@@ -81,8 +81,13 @@
         //this.Inputs['F3'][0].val('2016-07-08');
        //this.Inputs['F4'].val('400000000');
     }
+    //dg.addLink = "http://aries.cyqdata.com";
+    //dg.addTitle = "官网示例";
     dg.bind();
     
+       //dg.ToolBar.BtnAdd.$target.hide();
+       //dg.ToolBar.BtnAdd.$target.show();
+
     function fn() {
         alert('fn');
         return false;//return false 才能阻碍后续的窗口打开事件。

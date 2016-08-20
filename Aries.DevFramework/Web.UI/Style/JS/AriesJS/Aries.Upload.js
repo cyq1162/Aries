@@ -57,7 +57,7 @@ function thumbnailsContainer(value, rec) {
     var isImg = _checkImgFile(rec.FileName);
     if (isImg) {
         return '<div class="operation w1">' +
-              // '<a class="cktp centerA" title="查看缩略图"  onclick="AR.Window.open(\'/UI/Web/Common/Pages/DisplayImage.aspx?method=showImg&imgpath=' + encodeURI(rec.FilePath) + '\',\'' + rec.FileName + '\',false,{width:800,height:500,fit:false,maximizable:true})"></a>' +
+              // '<a class="cktp centerA" title="查看缩略图"  onclick="AR.Window.open(\'/UI/Web/Common/Pages/DisplayImage.html?method=showImg&imgpath=' + encodeURI(rec.FilePath) + '\',\'' + rec.FileName + '\',false,{width:800,height:500,fit:false,maximizable:true})"></a>' +
               '<a class="cktp centerA" title="查看缩略图"  onclick="AR.Utility.Window.open(\'/Ajax/FileUpload.ashx?method=GetImage&mid=' + AR.Global.Variable.mid + '&fileId=' + rec.FileID + '\',\'' + rec.FileName + '\',false,{width:800,height:500,fit:false,maximizable:true})"></a>' +
                 '</div>';
     }

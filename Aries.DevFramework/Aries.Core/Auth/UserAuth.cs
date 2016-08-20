@@ -64,7 +64,7 @@ namespace Aries.Core.Auth
 
 
         /// <summary>
-        /// 用户登陆（电脑PC端调用此方法，登陆成功会自动跳转到Index.aspx首页；手机端请调用GetAuthToken方法）
+        /// 用户登陆（电脑PC端调用此方法，登陆成功会自动跳转到Index.html首页；手机端请调用GetAuthToken方法）
         /// </summary>
         public static bool Login(string userName, string password, out string errMsg)
         {
@@ -75,7 +75,7 @@ namespace Aries.Core.Auth
             }
             SetToken(token, userName);
             WriteCookie(token, userName);
-            //HttpContext.Current.Response.Redirect("/Index.aspx");
+            //HttpContext.Current.Response.Redirect("/Index.html");
             return true;
         }
 

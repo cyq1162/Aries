@@ -343,25 +343,12 @@
                     return new Obj();
                 }();
                 function endEditing(dg) {
-                    if (dg.PKColumn.Editor.editIndex == null) { return true }
-                    var rowIndex = dg.PKColumn.Editor.editIndex;
-                    if (dg.$target.datagrid('validateRow', rowIndex)) {
+                    if (dg.PKColumn.Editor.editIndex != null) {
+                        var index = dg.PKColumn.Editor.editIndex;
                         dg.PKColumn.Editor.editIndex = null;
-                        dg.$target.datagrid('endEdit', rowIndex);
-                        dg.$target.datagrid('refreshRow', rowIndex);
-                        return true;
-                    } else {
-                        return false;
+                        dg.$target.datagrid('cancelEdit', index);
                     }
-
-                    //if (dg.$target.datagrid('validateRow', dg.PKColumn.Editor.editIndex)) {
-                    //    dg.$target.datagrid('endEdit', dg.PKColumn.Editor.editIndex);
-                    //    dg.$target.datagrid("rejectChanges");
-                    //    dg.PKColumn.Editor.editIndex = null;
-                    //    return true;
-                    //} else {
-                    //    return false;
-                    //}
+                    return true;
                 }
             },
             createSearchForm: function (dg) {

@@ -26,8 +26,8 @@
         this.viewName = objName;
         //是否显示复选框
         this.isShowCheckBox = true;
-        //是否显示工具栏
-        this.isShowToolbar = true;
+        //是否显示工具区（包括查询区和按钮区）
+        this.isShowToolArea = true;
         //是否启用行内编辑
         this.isEditor = false;
         this.options = {};
@@ -90,8 +90,14 @@
             }
         }
         init.call(this);
-        $Core.Common._Internal.registerEvent(this);
-        bindToolbar.call(this);
+        if (this.isShowToolArea) {
+            if (!this.Search.isHidden) {
+                $Core.Common._Internal.registerEvent(this);
+            }
+            if (!this.ToolBar.isHidden) {
+                bindToolbar.call(this);
+            }
+        }
         $Core.Global.DG.Items[this.Internal.id] = this;
 
         ////重写easyui的渲染完成之后事件，
@@ -184,12 +190,17 @@
                 name: "配置"
             });
         }
-        if (costomToolbar == false && dg.isShowToolbar != false) {
-            $Core.Common._Internal.createSearchForm(dg); //创建SearchForm表单
-            _setToolbar.call(dg, dg.ToolBar._btnArray);
+        if (costomToolbar == false && dg.isShowToolArea != false) {
+            $Core.Common._Internal.createSearchForm(dg); //内部有判断，创建SearchForm表单
+            if (!dg.ToolBar.isHidden) {
+                _setToolbar.call(dg, dg.ToolBar._btnArray);//自定义的按钮。
+            }
         }
         opts = opts || {};
-        var searchJson = $Core.Common._Internal.buildSearchJson(dg.Search.$target.parents('form'));
+        var searchJson = [];
+        if (dg.Search && dg.Search.$target) {
+            $Core.Common._Internal.buildSearchJson(dg.Search.$target.parents('form'));
+        }
         if (opts.defaultWhere) {
             searchJson = searchJson.concat(opts.defaultWhere);
         }
@@ -681,7 +692,7 @@
             return false;
         }
         var editIndex = dg.PKColumn.Editor.editIndex;
-        if (dg.$target.datagrid('validateRow',editIndex)) {
+        if (dg.$target.datagrid('validateRow', editIndex)) {
             var result = _editSave(dg, editIndex, true);
             if (result) {
                 dg.PKColumn.Editor.editIndex = null;
@@ -736,7 +747,7 @@
                 var _change_data = dg.$target.datagrid("getChanges", _type)[0]; //获取行数据
                 if (_change_data) {
                     if (dg.PKColumn.Editor.isSaveToBehind == false) {
-                       // dg.PKColumn.Editor.editIndex = null;
+                        // dg.PKColumn.Editor.editIndex = null;
                         dg.$target.datagrid("acceptChanges");
                     } else {
                         var post_data = {};

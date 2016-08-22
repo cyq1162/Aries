@@ -16,13 +16,13 @@
         this.treeField = treeField;
         this.parentField = parentField;
         this.rootID = rootID;
-        this.isShowToolBar = true;
+        this.isShowToolArea = true;
         this.options = {};
         this.ToolBar = new $Core.Common._Internal.ToolBar();
         this.Search = new $Core.Common._Internal.Search();
         this.isExpand = isExpand || false;
-        //if (options.isShowToolBar) {
-        //    this.toolbar = opts.isShowToolBar;
+        //if (options.isShowToolArea) {
+        //    this.toolbar = opts.isShowToolArea;
         //}
         //else { this.toolbar = true;}        
         if (typeof (opts) == "object") {

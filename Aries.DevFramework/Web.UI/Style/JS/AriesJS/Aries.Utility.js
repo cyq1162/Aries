@@ -134,7 +134,7 @@ window.AR = (function ($Core) {
             *@param {string} str 需要格式的字符串
             *@param {params} arguments
             */
-        stringFormat: function (str,args) {
+        stringFormat: function (str, args) {
             var len = arguments.length;
             var ostr = arguments[0].toString();
             for (var i = 0; i + 1 < len; i++) {
@@ -232,7 +232,7 @@ window.AR = (function ($Core) {
                 callback.call(link);
             }
         },
-        Cookie:{
+        Cookie: {
             get: function (name) {
                 var c = document.cookie;
                 var start = c.indexOf(name);
@@ -246,7 +246,7 @@ window.AR = (function ($Core) {
                 }
 
             },
-            set: function(key, value, expiredays) {
+            set: function (key, value, expiredays) {
                 var exdate = new Date();
                 exdate.setDate(exdate.getDate() + expiredays);
                 document.cookie = key + "=" + escape(value) + ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString());
@@ -259,8 +259,8 @@ window.AR = (function ($Core) {
             }
         },
         download: function (method, data, url) {
-            var url = url || $Core.route.root,frame_id = "f_id",frame_name = "f_name";
-            data || (data = {}),$form = $("<form>");
+            var url = url || $Core.route.root, frame_id = "f_id", frame_name = "f_name";
+            data || (data = {}), $form = $("<form>");
             $("#" + frame_id).remove();
 
             var topWin = window, mid = $Core.Global.Variable.mid;
@@ -273,9 +273,9 @@ window.AR = (function ($Core) {
                     }
                     return arguments.callee(win.parent.window);
                 })(topWin);
-            }           
+            }
 
-            $ifrme = $("<iframe>").attr("id", frame_id).attr("name", frame_name).css({ display: 'none' });            
+            $ifrme = $("<iframe>").attr("id", frame_id).attr("name", frame_name).css({ display: 'none' });
             $form.attr("action", url).attr("target", frame_name)
                 .append($("<input>").attr("name", "sys_method").val(method));
             if (mid && mid != '' && topWin != window) {
@@ -289,7 +289,7 @@ window.AR = (function ($Core) {
                 var result = JSON.parse(doc.body.innerHTML);
                 $Core.Utility.Window.showMsg(result.msg);
                 $form.remove();
-            });            
+            });
         },
         getPageWindow: function () {
             var win = (function (win) {
@@ -301,7 +301,8 @@ window.AR = (function ($Core) {
             })(window);
             return win;
         },
-        createHtml: function ($container, dataArray) {
+        //生成搜索下拉框。
+        createHtml: function ($container, dataArray, dg) {
             var objName, cssName,
                 cutIndex = 0//删减的索引值;
             for (var i = 0, len = dataArray.length; i < len; i++) {
@@ -412,7 +413,7 @@ window.AR = (function ($Core) {
                     }
 
                 }
-                if (dg.Search.Inputs) {
+                if (dg && dg.Search.Inputs) {
                     if (dataArray[i].viewname && dataArray[i].viewname.indexOf('$1') != -1) {
                         dg.Search.Inputs[dataArray[i].field].push(input);
                         dg.Search.Inputs[dataArray[i].field].push(input);
@@ -535,13 +536,13 @@ window.AR = (function ($Core) {
         function dialog(title, html, options) {
             var _container = $("#_div_dialog");
             _container[0] || (_container = $('<div>').attr('id', '_div_dialog'));
-                opts = $.extend({
-                    title:title,
-                    width: 800,
-                    height: 450,
-                    modal: true,
-                    content:html
-                },options);
+            opts = $.extend({
+                title: title,
+                width: 800,
+                height: 450,
+                modal: true,
+                content: html
+            }, options);
             _container.dialog(opts)
         }
 
@@ -572,7 +573,7 @@ window.AR = (function ($Core) {
         function ajax(method, objName, data, async, type, url, callback, isShowProgress) {
             var that = this, json = {}, opts = new Object(), mid = $Core.Global.Variable.mid;
             var str = '{0}?sys_method={1}';
-            if(objName){
+            if (objName) {
                 str = '{0}?sys_method={1}&sys_objName={2}';
             }
             url = $Core.Utility.stringFormat(str, url || that.Settings.url, method, objName);
@@ -805,7 +806,7 @@ window.AR = (function ($Core) {
             if (index > -1) {
                 this.splice(index, 1);  //利用splice()函数删除指定元素，splice() 方法用于插入、删除或替换数组的元素
             }
-        }        
+        }
     };
     Array.prototype.contains = function (v) {
         if (this instanceof Array) {

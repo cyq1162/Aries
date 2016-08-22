@@ -52,6 +52,7 @@
                 var that = this;
                 $Core.BtnBase.call(that);
                 that.$target = null;
+                that.isHidden = false;
                 that.BtnQuery = function () {
                     function Obj() {
                         $Core.BtnBase.call(this);
@@ -174,6 +175,7 @@
             },
             ToolBar: function () {
                 this.$target = null;
+                this.isHidden = false;
                 this._btnArray = new Array();
                 /**
                 *向工具条添加按钮
@@ -235,7 +237,7 @@
                                     dg.$target.datagrid("refreshRow", dg.PKColumn.Editor.editIndex);
                                     dg.$target.datagrid('selectRow', dg.PKColumn.Editor.editIndex)
                                         .datagrid('beginEdit', dg.PKColumn.Editor.editIndex);
-                                    
+
                                 }
                             } else {
                                 $Core.Global.DG.operating = dg;
@@ -368,7 +370,7 @@
                                 searchItem.push(hdata[i]);
                             }
                         }
-                    }                    
+                    }
                     dg.Search.onExcute(searchItem, dg);
                 }
             },
@@ -1005,72 +1007,76 @@
         var parentTarget, line, isCustom;
         //创建查询区域HTML
         dg.ToolBar.$target = $('<div>').attr("id", dg.Internal.toolbarID); //创建并设置工具栏的ID  
-        if (dg.Search.$target) {
-            isCustom = true;
-            dg.Search.$target.show();
-        } else {
-            dg.Search.$target = $('<div id="div_search">');
-        }
-        if (searchItem.length > 0 || isCustom) {
-            var divSearchArea = $('<div class="cont-list-form cont-box-form">').attr('sign', 'div_searchArea'),
-             form = $("<form>");
-            dg.Search.$target.addClass('box w684');
-            var divButtons = $('<div class="btn w72">');
-            dg.Search.BtnQuery.$target = $('<input class="query" value="" type="button" />').attr("id", dg.Internal.btn_query_id);
-            dg.Search.BtnReset.$target = $('<input class="reset" type="reset" value="" />').attr("id", dg.Internal.btn_reset_id);
-            //需要指定按钮对象，如果样式不对将不触发事件
-            divButtons.append($("<a>").append(dg.Search.BtnQuery.$target));
-            divButtons.append($("<a>").append(dg.Search.BtnReset.$target));
-            form.append(dg.Search.$target);
-            form.append(divButtons);
-            divSearchArea.append(form);
-            dg.ToolBar.$target.append(divSearchArea);
-            //创建HTML结构
-            dg.Search.Inputs = new Object();
-            (function () {
-                if (!isCustom) {
-                    $Core.Utility.createHtml(dg.Search.$target, searchItem);
-                }
-            })();
+        if (!dg.Search.isHidden) {
+            if (dg.Search.$target) {
+                isCustom = true;
+                dg.Search.$target.show();
+            } else {
+                dg.Search.$target = $('<div id="div_search">');
+            }
+            if (searchItem.length > 0 || isCustom) {
+                var divSearchArea = $('<div class="cont-list-form cont-box-form">').attr('sign', 'div_searchArea'),
+                 form = $("<form>");
+                dg.Search.$target.addClass('box w684');
+                var divButtons = $('<div class="btn w72">');
+                dg.Search.BtnQuery.$target = $('<input class="query" value="" type="button" />').attr("id", dg.Internal.btn_query_id);
+                dg.Search.BtnReset.$target = $('<input class="reset" type="reset" value="" />').attr("id", dg.Internal.btn_reset_id);
+                //需要指定按钮对象，如果样式不对将不触发事件
+                divButtons.append($("<a>").append(dg.Search.BtnQuery.$target));
+                divButtons.append($("<a>").append(dg.Search.BtnReset.$target));
+                form.append(dg.Search.$target);
+                form.append(divButtons);
+                divSearchArea.append(form);
+                dg.ToolBar.$target.append(divSearchArea);
+                //创建HTML结构
+                dg.Search.Inputs = new Object();
+                (function () {
+                    if (!isCustom) {
+                        $Core.Utility.createHtml(dg.Search.$target, searchItem, dg);
+                    }
+                })();
+            }
         }
         //添加工具栏按钮
         (function () {
-            if (dg.Internal.type == "datagrid") {
-                var div_fn = $('<div class="function-box" id="div_fun">');
-                var item; actionKeys = $Core.Global.Variable.actionKeys || "";
-                if (actionKeys.indexOf(',add') > -1) {
-                    dg.ToolBar.BtnAdd.$target = $('<input class=\"add\" flag=\"btn_add\" type=\"button\" name=\"添加\" value=\"\"/>');
-                    item = $("<a>").append(dg.ToolBar.BtnAdd.$target);
-                    div_fn.append(item);
-                }
-                if (actionKeys.indexOf(',del') > -1) {
-                    dg.ToolBar.BtnDelBatch.$target = $('<input  class=\"batch_del\" flag=\"btn_del\" type=\"button\" name=\"批量删除\" value=\"\"/>').attr("dgID", dg.Internal.id);
-                    item = $("<a>").append(dg.ToolBar.BtnDelBatch.$target);
-                    div_fn.append(item);
-                }
-                if (actionKeys.indexOf(',export') > -1) {
-                    dg.ToolBar.BtnExport.$target = $('<input class=\"export\" flag=\"btn_export\" type=\"button\"  value=\"\"/>');
-                    item = $("<a>").append(dg.ToolBar.BtnExport.$target);
-                    div_fn.append(item);
-                }
-                if (actionKeys.indexOf(',import') > -1) {
-                    dg.ToolBar.BtnImport.$target = $('<input class=\"import\" flag=\"btn_import\" type=\"button\"  value=\"\"/>');
-                    item = $("<a>").append(dg.ToolBar.BtnImport.$target);
-                    div_fn.append(item);
-                    dg.ToolBar.BtnExportTemplate.$target = $('<input class=\"btn-sm\" flag=\"btn_export_template\" type=\"button\"  value=\"导出模板\"/>');
-                    item = $("<a>").append(dg.ToolBar.BtnExportTemplate.$target);
-                    div_fn.append(item);
-                }
+            if (!dg.ToolBar.isHidden) {
+                if (dg.Internal.type == "datagrid") {
+                    var div_fn = $('<div class="function-box" id="div_fun">');
+                    var item; actionKeys = $Core.Global.Variable.actionKeys || "";
+                    if (actionKeys.indexOf(',add') > -1) {
+                        dg.ToolBar.BtnAdd.$target = $('<input class=\"add\" flag=\"btn_add\" type=\"button\" name=\"添加\" value=\"\"/>');
+                        item = $("<a>").append(dg.ToolBar.BtnAdd.$target);
+                        div_fn.append(item);
+                    }
+                    if (actionKeys.indexOf(',del') > -1) {
+                        dg.ToolBar.BtnDelBatch.$target = $('<input  class=\"batch_del\" flag=\"btn_del\" type=\"button\" name=\"批量删除\" value=\"\"/>').attr("dgID", dg.Internal.id);
+                        item = $("<a>").append(dg.ToolBar.BtnDelBatch.$target);
+                        div_fn.append(item);
+                    }
+                    if (actionKeys.indexOf(',export') > -1) {
+                        dg.ToolBar.BtnExport.$target = $('<input class=\"export\" flag=\"btn_export\" type=\"button\"  value=\"\"/>');
+                        item = $("<a>").append(dg.ToolBar.BtnExport.$target);
+                        div_fn.append(item);
+                    }
+                    if (actionKeys.indexOf(',import') > -1) {
+                        dg.ToolBar.BtnImport.$target = $('<input class=\"import\" flag=\"btn_import\" type=\"button\"  value=\"\"/>');
+                        item = $("<a>").append(dg.ToolBar.BtnImport.$target);
+                        div_fn.append(item);
+                        dg.ToolBar.BtnExportTemplate.$target = $('<input class=\"btn-sm\" flag=\"btn_export_template\" type=\"button\"  value=\"导出模板\"/>');
+                        item = $("<a>").append(dg.ToolBar.BtnExportTemplate.$target);
+                        div_fn.append(item);
+                    }
 
-                dg.ToolBar.$target.append(div_fn);
-            }
-            if (dg.Internal.type == "treegrid") {
-                var div_fn = $('<div class="function-box" id="' + dg.Internal.toolbarID + '">');
-                if (dg.Internal.toolbar != false) {
-                    var item = $("<a>").append($('<input class=\"btn-lg\" flag=\"btn_add\" type=\"button\" value=\"添加根节点\"/>'));
-                    div_fn.append(item);
+                    dg.ToolBar.$target.append(div_fn);
                 }
-                dg.ToolBar.$target.append(div_fn);
+                if (dg.Internal.type == "treegrid") {
+                    var div_fn = $('<div class="function-box" id="' + dg.Internal.toolbarID + '">');
+                    if (dg.Internal.toolbar != false) {
+                        var item = $("<a>").append($('<input class=\"btn-lg\" flag=\"btn_add\" type=\"button\" value=\"添加根节点\"/>'));
+                        div_fn.append(item);
+                    }
+                    dg.ToolBar.$target.append(div_fn);
+                }
             }
             $("body").append(dg.ToolBar.$target); //加到页面中       
         }());
@@ -1142,7 +1148,7 @@
     function getConfigValue(configKey, text) {
         var items = $Core.Global.config[configKey];
         var itemValue = [];
-        if (items!=undefined && text != undefined && text != null && text.toString() != '') {
+        if (items != undefined && text != undefined && text != null && text.toString() != '') {
             var valueArray = text.toString().split(',');
             for (var i = 0; i < items.length; i++) {
                 if ($Core.Utility.isInArray(valueArray, items[i].text)) {

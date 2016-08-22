@@ -78,7 +78,7 @@
                  data: data,
                  onLoadSuccess: function (data) {
                      getActionIds();
-                     BindIcons(this);
+                    // BindIcons(this);
                  }
 
              });
@@ -117,19 +117,19 @@
 
     }
 
-    function BindIcons(tree) {
-        var root = $("#tree").tree("getRoot");
-        var nodes = $("#tree").tree("getChildren", root.target);
-        var style = "background:url('" + "/Style/Images/IconMenu/aqjc.png" + "') no-repeat center center;";
-        for (var i = 0; i <= nodes.length - 1; i++) {
-            if ($("#tree").tree("isLeaf", nodes[i].target)) {
-                var t = nodes[i].target;
-                var $t = $(t);
-                $t.find(".tree-icon").first().attr("style", style);
-            }
-        }
+    //function BindIcons(tree) {
+    //    var root = $("#tree").tree("getRoot");
+    //    var nodes = $("#tree").tree("getChildren", root.target);
+    //    var style = "background:url('" + "/Style/Images/IconMenu/aqjc.png" + "') no-repeat center center;";
+    //    for (var i = 0; i <= nodes.length - 1; i++) {
+    //        if ($("#tree").tree("isLeaf", nodes[i].target)) {
+    //            var t = nodes[i].target;
+    //            var $t = $(t);
+    //            $t.find(".tree-icon").first().attr("style", style);
+    //        }
+    //    }
 
-    }
+    //}
 
 
 </script>

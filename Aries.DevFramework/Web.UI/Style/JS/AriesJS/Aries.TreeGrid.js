@@ -119,7 +119,7 @@
                                 data.push(item);
                             }
                             var jsonString = JSON.stringify(data);
-                            $Core.Utility.Ajax.post(that.operator, that.tableName, data, null, '/Ajax/Treegridroute.ashx', function (d) {
+                            $Core.Utility.Ajax.post(that.operator, that.tableName, data, null, $Core.route.root, function (d) {
                                 var msg = '操作成功！';
                                 if (d.success) {
                                     tg.treegrid("endEdit", that.editRow[idField]);

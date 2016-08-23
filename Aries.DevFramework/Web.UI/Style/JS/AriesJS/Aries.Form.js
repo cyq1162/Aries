@@ -1,13 +1,14 @@
 ﻿
 
-(function ($, $Core,$PCore) {
+(function ($, $Core, $PCore) {
     $(document).on("click", ".arrows", function () {
         $(this).toggleClass("hover");
         $(this).parent().next().toggle();
     });
     $Core.Form = function () {
         function Obj() {
-            $Core.ExcuteEvent.call(this);
+            $Core.ExecuteEvent.call(this);
+            //编辑页根据主键请求回来的数据。
             this.data = [];
             //用于获取数据的函数指向，默认值Get
             this.method = "Get";
@@ -15,31 +16,30 @@
             this.objname = null;
             this.url = $Core.route.root;
             /**
-            *格式化表单的数据,可格式化日期时间，字符显示的处理
+            * 获取了数据，准备回填表单前（参数：data）
+            * 可格式化表单的数据,可格式化日期时间，字符显示的处理。
             *@param{object} data 表单数据对象
             */
-            this.onBeforeLoadFormat = function (data) { };
+            this.onBeforeFillForm = function (data) { };
             //此方法可改变请求的地址、方法、对象名
-            this.onBeforeExcute = function () { };
+            this.onBeforeExecute = function () { };
             //在Form加载完后触发的事件。
-            this.onAfterExcuted = function () { };
-            this.onExcute = function () {
-                if (this.onBeforeExcute.call(this) === false) {
+            this.onAfterExecuted = function () { };
+            this.onExecute = function () {
+                if (this.onBeforeExecute() === false) {
                     return;
                 }
                 if ($PCore && $PCore.Global.operator == "Update") {
                     if ($PCore.Global.DG.operating) {
                         var id = $Core.Utility.queryString("id");
                         var objname = this.objname || $PCore.Global.DG.operating.tableName;
-                        this.data = $Core.Utility.Ajax.post(this.method, objname, { "id": id }, false, this.url);                        
-                        this.onBeforeLoadFormat(this.data);
+                        this.data = $Core.Utility.Ajax.post(this.method, objname, { "id": id }, false, this.url);
+                        if (this.onBeforeFillForm(this.data) == false) { return; }
                         this.$target.form("load", this.data);
                         $Core.Combobox.selectedCombobox(this.data);
                     }
                 }
-                if (this.onAfterExcuted.call(this) === false) {
-                    return;
-                }
+                this.onAfterExecuted();
             };
             this.onInit = function () {
                 this.$target = $("form:eq(0)");
@@ -47,41 +47,38 @@
                 this.BtnCancel.$target = $("#btn_cancel").length == 0 ? $(".return") : $("#btn_cancel");
                 var that = this;
                 this.BtnCommit.$target.click(function () {
-                    that.BtnCommit.onExcute();
+                    that.BtnCommit.onExecute();
                 });
                 //注册保存跟取消按钮事件
                 this.BtnCancel.$target.click(function () {
-                    that.BtnCancel.onExcute();
+                    that.BtnCancel.onExecute();
                 });
-                
+
             }
-            
+
             this.BtnCommit = function () {
                 function Fn() {
                     $Core.BtnBase.call(this);
-                    this.onBeforeExcute = function () { };
-                    this.onExcute = function () {
-                        var flag = true;
-                        if (this.onBeforeExcute() === false) {
-                            return false;
-                        }
+                    this.onExecute = function () {
                         return $Core.Form.commit(this.$target);
                     }
-                    this.onAfterExcuted = function (data) { };                   
+                    //执行前事件（参数为表单数组：Array data）
+                    this.onBeforeExecute = function () { };
                 };
                 return new Fn();
             }();
             this.BtnCancel = function () {
                 function Fn() {
-                    var that = this;
-                    $Core.BtnBase.call(that);
-                    that.onExcute = function () {
-                        if (this.onBeforeExcute() === false) {
-                            return false;
+                    $Core.BtnBase.call(this);
+                    this.onExecute = function () {
+                        if (this.onBeforeExecute() === false) {
+                            return;
                         }
                         $Core.Utility.Window.close();
                     };
-                };                
+                    //执行前事件（无参数）
+                    this.onBeforeExecute = function () { };
+                };
                 return new Fn();
             }();
             /**
@@ -93,21 +90,22 @@
             *@param{function} callBack(result) 回调函数，result返回的json数据结果
             *@param{string} url 提交的处理程序路径
             */
-            this.commit = function ($target,mthodName, tableName, $validator, clearEmptyValue, callBack, url) {
+            this.commit = function ($target, mthodName, tableName, $validator, clearEmptyValue, callBack, url) {
                 var $targetForm = $validator || $target.parents("form");
                 if ($validator && $validator != "true") {
                     $targetForm = $validator;
                 }
-                if ($targetForm.form("validate")) {
-                    var formData = $targetForm.find("[name]:input").serializeArray();
-                    for (var i in formData) {
-                        if (formData[i].value == '请选择' || (clearEmptyValue && formData[i].value == '')) {
-                            delete formData[i];
-                        }
+                var formData = $targetForm.find("[name]:input").serializeArray();
+                for (var i in formData) {
+                    if (formData[i].value == '请选择' || (clearEmptyValue && formData[i].value == '')) {
+                        delete formData[i];
                     }
+                }
+                if (this.BtnCommit.onBeforeExecute(formData) == false) { return; }
+                if ($targetForm.form("validate")) {
                     var obj = $Core.Utility.Ajax.post(mthodName || ((this.method.toLowerCase() != 'get') && this.method) || $PCore.Global.operator, tableName || this.objname || $PCore.Global.DG.operating.tableName, formData, false, url || $Core.Form.url);
-                    if (callBack && typeof(callBack) == "function") {
-                        callBack.call(this,obj);
+                    if (callBack && typeof (callBack) == "function") {
+                        callBack.call(this, obj);
                     }
                     else {
                         var msg = obj.msg;
@@ -129,7 +127,7 @@
                         if (obj.success) {
                             $Core.Utility.Window.close();
                         }
-                        this.onAfterExcuted(obj);
+                        this.onAfterExecuted(obj);
                     }
                 }
                 else {
@@ -140,7 +138,7 @@
         }
         return new Obj();
     }();
-})(jQuery, AR,parent.AR);
+})(jQuery, AR, parent.AR);
 
 
 (function ($, $Core, $PCore) {
@@ -152,23 +150,6 @@
         btn_submit[0] && registKeydown(btn_submit);
     }
 
-    //关闭按钮事件
-    function event_cancel() {
-        $Core.Form.BtnCancel.$target.click(function () {
-            $Core.Utility.Window.close();
-        });
-    }
-
-    //表单提交事件
-    function event_submit() {
-        $Core.Form.BtnCommit.$target.click(function () {
-            var flag = $Core.Form.onBeforeExcute();
-            if (flag === false) {
-                return false;
-            }
-            return $Core.Form.commit($(this));            
-        });
-    }
     //需要注册新事件流，把事件写在此方法前面
     /**
     *方法接收多个参数,以字符串为标准如，调用方式如：registEvent("reset", "keydown");
@@ -195,15 +176,13 @@
             }
         }
     }
-
-
     $(function () {
-        $.parser.parse($("#div_search"));
+        //$.parser.parse($("#div_search"));
         $Core.Combobox.onInit();
         $Core.Form.onInit();
         registEvent("keydown");
         if ($PCore.Global.DG.operating) {
-            $Core.Form.onExcute();
+            $Core.Form.onExecute();
         }
     });
 })(jQuery, AR, parent.AR);

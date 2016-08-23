@@ -146,15 +146,16 @@
         </div>
 
          <script>
-             //AR.Form.onBeforeExcute = function () {
+             //AR.Form.onBeforeExecute = function () {
              //    this.method = "aaa";
              //}
-             AR.Form.onAfterExcuted = function () {
-                 //this.method = "bbb";
+             AR.Form.onAfterExecuted = function () {
+                 //this.method = "后台方法名";
+                 //this.objname = "自己的参数名称";
                 
              }
 
-             AR.Form.BtnCommit.onBeforeExcute = function () {
+             AR.Form.BtnCommit.onBeforeExecute = function () {
                 // AR.Form.method = "ccc";
              }
     </script>

@@ -1,9 +1,29 @@
 ﻿
 window.AR = (function ($Core) {
+    //自定义的健值对数组
+    $Core.Dictionary = function () {
+        this.length = 0;
+        this.set = function (key, value) {
+            if (key!=undefined) {
+                if (this[key] == undefined) {
+                    this.length++;
+                }
+                this[key] = value;
+            }
+        };
+        this.remove = function (key) {
+            if (key) {
+                if (this[key] != undefined) {
+                    this.length--;
+                }
+                delete this[key];
+            }
+        }
+    };
     $Core.Global = {
         DG: {
-            //datagrid集合，根据ID取出DataGrid对象
-            Items: {},
+            //datagrid集合，根据ID取出DataGrid对象，将Json当数组用。
+            Items: new $Core.Dictionary(),
             //当前操作的datagrid对象
             operating: null
         },
@@ -314,6 +334,7 @@ window.AR = (function ($Core) {
                 var label = $("<label>").html(dataArray[i].title + "：");
                 div_item.append(label);
                 var input = $("<input type=\"text\"/>");
+                var input2;//日期时的第二个框
                 //如果是下拉框模式执行以下代码
                 var configKey;
                 if ((typeof (dataArray[i].formatter) == "string" && dataArray[i].formatter.indexOf('#') != -1)) {
@@ -390,10 +411,8 @@ window.AR = (function ($Core) {
                         input.attr("name", dataArray[i].field).addClass(cssName).attr("date", true).width(150).attr("validType", "datebox");
                         if (dataArray[i].viewname && dataArray[i].viewname.indexOf('$1') != -1) {
                             input.width(95);
-                            var startInput = input.clone(true);
-                            dg.Search.Inputs[dataArray[i].field] = [startInput];
-                            div_item.append(startInput).append($("<span>").html("&nbsp;至&nbsp;"));
-                            //div_item.width(456).removeClass("short").css({ "float": "left" });
+                            input2 = input.clone(true);
+                            div_item.append(input2).append($("<span>").html("&nbsp;至&nbsp;"));
                         }
                     } else if (dtype[0] == "int32" || dtype[0] == "double" || dtype[0] == "decimal") {
                         if (dtype[0] == "double" || dtype[0] == "decimal") {
@@ -404,22 +423,20 @@ window.AR = (function ($Core) {
                         input.attr("name", dataArray[i].field).addClass(cssName);
                         if (dataArray[i].viewname && dataArray[i].viewname.indexOf('$1') != -1) {
                             input.width(68);
-                            var startInput = input.clone(true);
-                            div_item.append(startInput).append($("<span>").html("&nbsp;-&nbsp;").css({ "display": "block", "float": "left" }));
-                            //div_item.width(456).removeClass("short").css({"float":"left"});
+                            input2 = input.clone(true);
+                            div_item.append(input2).append($("<span>").html("&nbsp;-&nbsp;").css({ "display": "block", "float": "left" }));
                         }
                     } else {
                         input.attr("name", dataArray[i].field).addClass(cssName);
                     }
 
                 }
-                if (dg && dg.Search.Inputs) {
-                    if (dataArray[i].viewname && dataArray[i].viewname.indexOf('$1') != -1) {
-                        dg.Search.Inputs[dataArray[i].field].push(input);
-                        dg.Search.Inputs[dataArray[i].field].push(input);
-                    } else {
-                        dg.Search.Inputs[dataArray[i].field] = input;
-                        dg.Search.Inputs[i] = input
+                if (dg && dg.Search) {
+                    if (input2) {
+                        dg.Search.Items.set(dataArray[i].field, [input, input2]);
+                    }
+                    else {
+                        dg.Search.Items.set(dataArray[i].field, input);
                     }
                 }
                 div_item.append(input);
@@ -847,4 +864,5 @@ window.AR = (function ($Core) {
                 fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
         return fmt;
     };
+
 })();

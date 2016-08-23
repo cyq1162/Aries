@@ -9,10 +9,10 @@
             var dg = new AR.DataGrid('Demo_TestA');
             dg.isEditor = true;
             dg.options = {
-                //onClickRow: function (index, row)
-                //{
-                //    alert(index);
-                //},
+                onClickRow: function (index, row)
+                {
+                    //alert(index);
+                },
                 onBeforeEdit: function (rowIndex, rowData)
                 {
                     //行内编辑时，修改某单元格的值，引发另一个单元格的值的变化。
@@ -24,6 +24,9 @@
                         });
                     }, 10)
                     
+                },
+                onLoadSuccess: function () {
+                   // alert(dg.PKColumn.Items.length + ":33");
                 }
                 //onAfterEdit:function(rowIndex, rowData, changes)
                 //{
@@ -31,8 +34,17 @@
                 //    alert(changes);
                 //}
             }
-            dg.PKColumn.Editor.BtnSave.onBeforeExcute
             dg.bind();
+            
+            dg.PKColumn.Editor.BtnDel.onBeforeExecute = function (v)
+            {
+                alert(v);
+               // return false;
+            }
+            dg.ToolBar.BtnDelBatch.onBeforeExecute = function (v)
+            {
+                alert(v);
+            }
         });
         function fnEditor(r) {
             return {

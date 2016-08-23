@@ -36,7 +36,7 @@
     dg.ToolBar.addHtml("<span onclick = 'downloadSQL()'><b>脚本下载</b></span>", 7);
     dg.ToolBar.addHtml("<span onclick = 'openConfigExcel()'><b>Excel导入配置</b></span>", 8);
     dg.ToolBar.addHtml("<span onclick = 'showFormHtml()'><b>生成表单Html</b></span>", 9);
-    dg.PKColumn.Editor.BtnSave.onAfterExcute = function () {
+    dg.PKColumn.Editor.BtnSave.onAfterExecuted = function () {
         AR.Utility.Window.refresh = true;
     }
     dg.bind();

@@ -101,7 +101,7 @@
                         delete formData[i];
                     }
                 }
-                if (this.BtnCommit.onBeforeExecute(formData) == false) { return; }
+                if (this.BtnCommit && this.BtnCommit.onBeforeExecute(formData) == false) { return; }
                 if ($targetForm.form("validate")) {
                     var obj = $Core.Utility.Ajax.post(mthodName || ((this.method.toLowerCase() != 'get') && this.method) || $PCore.Global.operator, tableName || this.objname || $PCore.Global.DG.operating.tableName, formData, false, url || $Core.Form.url);
                     if (callBack && typeof (callBack) == "function") {
@@ -127,7 +127,7 @@
                         if (obj.success) {
                             $Core.Utility.Window.close();
                         }
-                        this.onAfterExecuted(obj);
+                        this.BtnCommit && this.BtnCommit.onAfterExecuted(obj);
                     }
                 }
                 else {

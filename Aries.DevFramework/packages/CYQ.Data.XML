@@ -190,6 +190,17 @@
             是否智能缓存数据（默认开启）
             </summary>
         </member>
+        <member name="P:CYQ.Data.AppConfig.Cache.NoCacheTables">
+            <summary>
+            AutoCache开启时，可以设置不缓存的Table，多个用逗号分隔
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.AppConfig.Cache.IngoreCacheColumns">
+            <summary>
+            AutoCache开启时，可以设置不受更新影响的列名，用Json格式。
+            {talbeName1:'column1,column2',talbeName2:'column1,column2'}
+            </summary>
+        </member>
         <member name="T:CYQ.Data.AppConfig.Log">
             <summary>
             日志类Log 相关的配置
@@ -805,6 +816,12 @@
             <param name="paraName">参数名称</param>
             <param name="paraType">参数类型</param>
             <param name="value">参数值</param>
+        </member>
+        <member name="M:CYQ.Data.MProc.SetCustom(System.Object,CYQ.Data.ParaType,System.Object,System.String)">
+            <summary>
+            设置特殊自定义参数
+            </summary>
+            <param name="typeName">MSSQL的用户定义表类型的名称</param>
         </member>
         <member name="M:CYQ.Data.MProc.Clear">
             <summary>
@@ -2000,6 +2017,11 @@
         <member name="F:CYQ.Data.ParaType.NCLOB">
             <summary>
              Oracle NCLOB类型
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.ParaType.Structured">
+            <summary>
+             MSSQL 用户定义表类型
             </summary>
         </member>
         <member name="T:CYQ.Data.DbResetResult">
@@ -4997,17 +5019,17 @@
         </member>
         <member name="F:CYQ.Data.Tool.JsonSplit.CharState.state">
             <summary>
-            【0 取名称中】；【1 取值中】
+            【-1 未初始化】【0 取名称中】；【1 取值中】
             </summary>
         </member>
         <member name="F:CYQ.Data.Tool.JsonSplit.CharState.keyStart">
             <summary>
-            【-1 未初始化】【0 未开始】【1 无引号开始】【2 单引号开始】【3 双引号开始】
+            【-2 已结束】【-1 未初始化】【0 未开始】【1 无引号开始】【2 单引号开始】【3 双引号开始】
             </summary>
         </member>
         <member name="F:CYQ.Data.Tool.JsonSplit.CharState.valueStart">
             <summary>
-            【-1 未初始化】【0 未开始】【1 无引号开始】【2 单引号开始】【3 双引号开始】
+            【-2 已结束】【-1 未初始化】【0 未开始】【1 无引号开始】【2 单引号开始】【3 双引号开始】
             </summary>
         </member>
         <member name="T:CYQ.Data.Tool.MDictionary`2">

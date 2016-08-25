@@ -78,7 +78,7 @@ namespace Aries.Core
         }
         private bool IsCheckToken(Uri uri)
         {
-            string[] items = AppConfig.GetApp("CheckTokenPath", "/web/,/index.html").Split(',');//可以扩展多个
+            string[] items = AppConfig.GetApp("CheckTokenPath", "/web/,/index.html").ToLower().Split(',');//可以扩展多个
             string localPath = uri.LocalPath.ToLower();
             foreach (string item in items)
             {

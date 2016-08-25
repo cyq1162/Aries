@@ -51,7 +51,10 @@ namespace Aries.Core.Auth
                             //action.SetPara("UserName", userName, System.Data.DbType.String);
                             action.Update(where);//更新信息。
                         }
-                        errMsg = "用户名或密码错误！";
+                        else
+                        {
+                            errMsg = "用户名或密码错误！";
+                        }
                     }
                 }
                 else

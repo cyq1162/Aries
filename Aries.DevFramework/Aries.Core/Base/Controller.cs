@@ -313,7 +313,12 @@ namespace Aries.Core
             {
                 if (string.IsNullOrEmpty(_ObjName))
                 {
-                    return Query<string>("sys_objName");
+                    _ObjName = Query<string>("sys_objName");
+                    if (string.IsNullOrEmpty(_ObjName) || _ObjName.Contains(" "))
+                    {
+                        WriteError("ObjName can't be empty or contain blank!");
+                    }
+                    return _ObjName;
                 }
                 return _ObjName;
             }
@@ -322,7 +327,7 @@ namespace Aries.Core
                 _ObjName = value;
             }
         }
-
+        private string _TableName;
         /// <summary>
         /// 对象视图名称的主表名
         /// </summary>
@@ -330,7 +335,21 @@ namespace Aries.Core
         {
             get
             {
-                return Query<string>("sys_tableName") ?? ObjName;
+                if (string.IsNullOrEmpty(_TableName))
+                {
+                    _TableName = Query<string>("sys_tableName");
+                    if (string.IsNullOrEmpty(_TableName))
+                    {
+                        _TableName = ObjName;
+                    }
+                    else if (_TableName.Contains(" "))
+                    {
+                        WriteError("TableName can't contain blank!");
+                    }
+
+                    return _TableName;
+                }
+                return _TableName;
             }
         }
 

@@ -32,29 +32,35 @@ namespace Aries.Core.Helper
         }
         public static T Query<T>(string key, T defaultValue, bool filter)
         {
-            if (HttpContext.Current.Request[key] == null) { return defaultValue; }
-            object result;
-            if (typeof(T).Name == "Int32")
-            {
-                int _result = 0;
-                if (!int.TryParse(HttpContext.Current.Request[key], out _result))
-                {
-                    return defaultValue;
-                }
-                result = _result;
-            }
-            else
+            string value = HttpContext.Current.Request[key];
+            if (value == null) { return defaultValue; }
+            value = value.Trim();
+            object result = null;
+            Type t = typeof(T);
+            if (t.Name == "String")
             {
                 if (filter)
                 {
-                    result = FilterValue(HttpContext.Current.Request[key]);
+                    result = FilterValue(value);
                 }
                 else
                 {
                     string reKey = "[#{@!}#]";
-                    string text = HttpContext.Current.Request[key].Trim().Replace("+", reKey);//
+                    string text = value.Replace("+", reKey);//
                     result = HttpContext.Current.Server.UrlDecode(text).Replace(reKey, "+");
                 }
+            }
+            else
+            {
+                try
+                {
+                    result = Convert.ChangeType(value, t);
+                }
+                catch
+                {
+                    return defaultValue;
+                }
+
             }
             return (T)result;
         }

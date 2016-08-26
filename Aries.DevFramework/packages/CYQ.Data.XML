@@ -148,6 +148,7 @@
         <member name="P:CYQ.Data.AppConfig.DB.DeleteField">
             <summary>
             删除字段名称（若表存在此设置的字段名称时，MActon的删除操作将变更变为更新操作）
+            默认：IsDeleted
             </summary>
         </member>
         <member name="P:CYQ.Data.AppConfig.DB.EditTimeFields">
@@ -633,15 +634,12 @@
             释放资源
             </summary>
         </member>
-        <member name="M:CYQ.Data.MAction.SetAopOff">
+        <member name="M:CYQ.Data.MAction.SetAopState(CYQ.Data.Aop.AopOp)">
             <summary>
-            取消Aop，在Aop独立模块使用MAction时必须调用
+            设置Aop状态
             </summary>
-        </member>
-        <member name="M:CYQ.Data.MAction.SetAopOn">
-            <summary>
-            恢复默认配置的Aop。
-            </summary>
+            <param name="op">Aop状态选项</param>
+            <returns></returns>
         </member>
         <member name="M:CYQ.Data.MAction.SetAopPara(System.Object)">
             <summary>
@@ -828,15 +826,12 @@
             清除存储过程参数
             </summary>
         </member>
-        <member name="M:CYQ.Data.MProc.SetAopOff">
+        <member name="M:CYQ.Data.MProc.SetAopState(CYQ.Data.Aop.AopOp)">
             <summary>
-            取消AOP
+            设置Aop状态
             </summary>
-        </member>
-        <member name="M:CYQ.Data.MProc.SetAopOn">
-            <summary>
-            恢复默认配置的Aop。
-            </summary>
+            <param name="op">Aop状态选项</param>
+            <returns></returns>
         </member>
         <member name="M:CYQ.Data.MProc.SetAopPara(System.Object)">
             <summary>
@@ -1366,6 +1361,31 @@
         <member name="F:CYQ.Data.Aop.AopResult.Return">
             <summary>
             本结果将直接跳出原有函数的执行
+            </summary>
+        </member>
+        <member name="T:CYQ.Data.Aop.AopOp">
+            <summary>
+            Aop开关选项
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Aop.AopOp.OpenAll">
+            <summary>
+            正常打开
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Aop.AopOp.OnlyInner">
+            <summary>
+            仅打开内部Aop（即自动缓存，关闭外部Aop）
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Aop.AopOp.OnlyOuter">
+            <summary>
+            仅打开外部Aop（关闭自动缓存）
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Aop.AopOp.CloseAll">
+            <summary>
+            内外都关（自动缓存和外部Aop）
             </summary>
         </member>
         <member name="T:CYQ.Data.Aop.IAop">

@@ -7,6 +7,7 @@ using CYQ.Data.SQL;
 using CYQ.Data.Table;
 using Aries.Core.DB;
 using Aries.Core.Sql;
+using CYQ.Data.Aop;
 
 namespace Aries.Core.Config
 {
@@ -245,7 +246,7 @@ namespace Aries.Core.Config
             Dictionary<string, string> wherePrimaryValue = new Dictionary<string, string>();//存档where条件对应的主键值。
             using (MAction action = new MAction(tables[0]))
             {
-                action.SetAopOff();
+                action.SetAopState(AopOp.CloseAll);
                 action.BeginTransation();
                 AppConfig.Debug.OpenDebugInfo = false;
                 IExcelConfig excelConfigExtend = ExcelConfigFactory.GetExcelConfigExtend();

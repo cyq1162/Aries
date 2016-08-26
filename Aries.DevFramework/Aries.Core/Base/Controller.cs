@@ -208,7 +208,12 @@ namespace Aries.Core
         /// </summary>
         protected virtual string GetWhere()
         {
-            return SqlFormat.Format(HttpContext.Current.Server.HtmlDecode(Query<string>("sys_search")), string.Empty);
+            string search = Query<string>("sys_search");
+            if (string.IsNullOrEmpty(search))
+            {
+                return search;
+            }
+            return SqlFormat.Format(HttpContext.Current.Server.HtmlDecode(search));
         }
         protected string GetOrderBy(string defaultSort)
         {

@@ -6,6 +6,7 @@ using Aries.Core;
 using CYQ.Data;
 using CYQ.Data.Table;
 using Aries.Core.Config;
+using CYQ.Data.Aop;
 
 namespace Aries.Logic
 {
@@ -25,7 +26,7 @@ namespace Aries.Logic
             if (_MAction == null)
             {
                 _MAction = new MAction(tableName);
-                _MAction.SetAopOff();
+                _MAction.SetAopState(AopOp.CloseAll);
                 _MAction.BeginTransation();
                 _MAction.SetTransLevel(IsolationLevel.ReadUncommitted);
             }

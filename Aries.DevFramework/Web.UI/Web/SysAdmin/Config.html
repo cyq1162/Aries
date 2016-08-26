@@ -50,7 +50,7 @@
                         text: '保存',
                         iconCls: 'icon-save',
                         handler: function () {
-                            result = AR.Utility.Ajax.post("SaveSQL", viewName, { "sys_code": $arae.html() }, false);
+                            result = AR.Utility.Ajax.post("SaveSQL", viewName, { "sys_code": $arae.val() }, false);
                             if (result && result.msg) {
                                 AR.Utility.Window.showMsg(result.msg, "消息提示");
                             }

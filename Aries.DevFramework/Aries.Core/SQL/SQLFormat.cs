@@ -20,13 +20,17 @@ namespace Aries.Core.Sql
             {"isnull","is Null"},
             {"and","AND"},{"or","OR"}
         };
-        public static string Format(string searchList, string appendWhere)
+        public static string Format(string searchList)
         {
+            string sql = string.Empty;
             List<SearchItem> sos = JsonHelper.ToList<SearchItem>(searchList);
-            var sql = BuildSQL(sos, appendWhere);
+            if (sos != null && sos.Count > 0)
+            {
+                sql = BuildSQL(sos);
+            }
             return sql;
         }
-        private static string BuildSQL(List<SearchItem> sos, string appendWhere)
+        private static string BuildSQL(List<SearchItem> sos)
         {
             StringBuilder sql = new StringBuilder(" 1=1 ");
             foreach (SearchItem obj in sos)
@@ -79,7 +83,6 @@ namespace Aries.Core.Sql
                     }
                 }
             }
-            sql.Append(appendWhere);
             return sql.ToString();
         }
 

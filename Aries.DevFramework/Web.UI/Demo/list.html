@@ -72,7 +72,7 @@
     //    }
     //}
     // dg.isShowToolArea = false;
-    // dg.ToolBar.isHidden = true;
+     dg.ToolBar.isHidden = true;
     //dg.Search.isHidden = true;
     //dg.Search.$target.find('[name="F1"]').val('test');    
 
@@ -84,7 +84,7 @@
         //btns[0].isHidden = true;
         //return v + "bd";
     };
-    dg.PKColumn.onAfterExecuted = function (v, r, i, s) {
+    dg.PKColumn.onAfterExecute = function (v, r, i, s) {
         //this.Items[i].edit.hide();
         //return s.prop("outHTML");
     };
@@ -93,7 +93,7 @@
     //    { paramName: 'F3', paramPattern: 'like', paramValue: '3' }
     //];
     //dg.options.addWhere("f3", "3");
-    dg.Search.onAfterExecuted = function () {
+    dg.Search.onAfterExecute = function () {
         if (!customToolbar && this.Items.length > 0) {
             this.Items["F1"] && this.Items["F1"].val('1');
         }

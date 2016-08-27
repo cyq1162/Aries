@@ -3,9 +3,9 @@
     $Core.ExecuteEvent = ExecuteEvent;
     function ExecuteEvent() {
         this.onExecute = function () { }
-        //此方法只有返回false时，才会停止执行onExecute跟onAfterExecuted事件
+        //此方法只有返回false时，才会停止执行onExecute跟onAfterExecute事件
         this.onBeforeExecute = function () { }
-        this.onAfterExecuted = function () { }
+        this.onAfterExecute = function () { }
     }
     $Core.BtnBase = BtnBase;
     function BtnBase(flag) {
@@ -109,10 +109,10 @@
                                     dg.$target.datagrid("load", data);
 
                                 }
-                                this.onAfterExecuted();
+                                this.onAfterExecute();
                             }
                         }
-                        this.onAfterExecuted = function () { };
+                        this.onAfterExecute = function () { };
                     }
                     return new Obj();
                 }();
@@ -179,7 +179,7 @@
                                 var data = { sys_search: jsonString };
                                 target.datagrid('load', jsonString ? data : []);
                             }
-                            this.onAfterExecuted();
+                            this.onAfterExecute();
                         }
                     }
                     return new Obj();
@@ -187,7 +187,7 @@
                 that.onExecute = function (searchItem, dg) {
                     that.onBeforeExecute(searchItem);
                     _createHtml(searchItem, dg);
-                    that.onAfterExecuted();
+                    that.onAfterExecute();
                 };
             },
             ToolBar: function () {
@@ -266,9 +266,9 @@
                                 var splitIndex = location.href.indexOf('List') == -1 ? location.href.lastIndexOf('.') : location.href.lastIndexOf('List');
                                 var viewLink = this.winUrl || location.href.substring(location.href.lastIndexOf('/') + 1, splitIndex) + 'Edit.html';
                                 $Core.Utility.Window.open(viewLink,this.winTitle, false);
-                                dg.ToolBar.BtnAdd.onAfterExecuted.call(this);
+                                dg.ToolBar.BtnAdd.onAfterExecute.call(this);
                             }
-                            this.onAfterExecuted();
+                            this.onAfterExecute();
                         };
                     }
                     return new Obj();
@@ -288,7 +288,7 @@
                         //导入之前执行事件，设置参数如：param.p1 = abc;param.p2 = 123
                         this.onBeforeExecute = function (param) { },
                         //导入完成之后执行事件，data参数是后台返回的json对象
-                        this.onAfterExecuted = function (data) { }
+                        this.onAfterExecute = function (data) { }
                     }
                     return new Obj();
                 }();
@@ -330,7 +330,7 @@
                             $("body").append(form_export);
                             form_export[0].submit();
                             form_export.remove();
-                            this.onAfterExecuted();
+                            this.onAfterExecute();
                         }
                     }
                     return new Obj();
@@ -365,7 +365,7 @@
                             $("body").append(form_export);
                             form_export[0].submit();
                             form_export.remove();
-                            this.onAfterExecuted();
+                            this.onAfterExecute();
                         }
                     }
                     return new Obj();
@@ -615,7 +615,7 @@
                         }
                     }
                     dg.PKColumn.Items.set(index, obj);
-                    var r2 = dg.PKColumn.onAfterExecuted(value, row, index, $div);
+                    var r2 = dg.PKColumn.onAfterExecute(value, row, index, $div);
                     if (r2 == undefined) { return $div.prop("outerHTML").replace('$len', len); }
                     return r2;
                 }

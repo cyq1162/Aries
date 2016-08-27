@@ -165,7 +165,7 @@
         var loadSuccess = opts.onLoadSuccess;
         var cfg = {
             toolbar: "#" + dg.Internal.toolbarID,
-            loadMsg: "数据正在加载中...",
+            loadMsg: "Loading...",
             idField: dg.Internal.primarykey,
             striped: true,
             nowwrap: false,
@@ -443,7 +443,7 @@
                         }
 
                     }
-                    dg.ToolBar.BtnImport.onAfterExecuted(data);
+                    dg.ToolBar.BtnImport.onAfterExecute(data);
                 });
             } catch (e) {
                 throw new Error("导入控件注册失败,请引入$Core.Utility.js文件");
@@ -551,7 +551,7 @@
 
             $Core.Utility.Window.confirm('确认删除操作吗？', null, function () {
                 $Core.Utility.Ajax.post("Delete", dg.tableName, { "id": ids.join(',') }, false, null, function (responseData) {
-                    if (el && el.onAfterExecuted(responseData, ids, index) == false) {
+                    if (el && el.onAfterExecute(responseData, ids, index) == false) {
                         return;
                     }
                     if (responseData.success != undefined && responseData.success) {
@@ -592,14 +592,15 @@
                             return;
                         }
                         if (endEditing(dg)) {
-                            dg.PKColumn.Editor.editIndex = index;
-                            dg.$target.datagrid('refreshRow', index);
-                            dg.$target.datagrid('selectRow', index).datagrid('beginEdit', index);
-                            dg.PKColumn.Editor.operator = "Update";
+                            _beginEditing(index, row, dg);
+                            //dg.PKColumn.Editor.editIndex = index;
+                            //dg.$target.datagrid('refreshRow', index);
+                            //dg.$target.datagrid('selectRow', index).datagrid('beginEdit', index);
+                            //dg.PKColumn.Editor.operator = "Update";
                             dg.$target.datagrid("getEditor", { index: index, field: dg.Internal.primarykey }).target.attr('disabled', 'disabled');
                         }
                     };
-                    this.onAfterExecuted = function () { };
+                    this.onAfterExecute = function () { };
                 }
                 return new Obj();
             })();
@@ -626,7 +627,7 @@
                                         dg.$target.datagrid('acceptChanges');
                                     }
                                     $Core.Utility.Window.showMsg(result.msg);
-                                    dg.PKColumn.Editor.BtnDel.onAfterExecuted(dg, value, index);
+                                    dg.PKColumn.Editor.BtnDel.onAfterExecute(dg, value, index);
                                 });
                             } else {
                                 dg.$target.datagrid('deleteRow', index);
@@ -636,7 +637,7 @@
                             }
                         }
                     };
-                    this.onAfterExecuted = function (value, index) { };
+                    this.onAfterExecute = function (value, index) { };
                 }
                 return new Obj();
             })();
@@ -666,7 +667,7 @@
                         dg.$target.datagrid('refreshRow', index);
 
                     };
-                    this.onAfterExecuted = function () { };
+                    this.onAfterExecute = function () { };
                 }
                 return new Obj();
             })();
@@ -693,7 +694,7 @@
                         }
                         else { dg.$target.datagrid('refreshRow', index); }
                     };
-                    this.onAfterExecuted = function () { };
+                    this.onAfterExecute = function () { };
                 }
                 return new Obj();
             }();
@@ -749,13 +750,12 @@
             return false;
         }
     }
-    function _beginEditing(rowIndex, rowData, dg) {
-        dg.PKColumn.Editor.editIndex = rowIndex;
-        dg.$target.datagrid('refreshRow', rowIndex);
+    function _beginEditing(index, row, dg) {
+        dg.PKColumn.Editor.editIndex = index;
+        dg.$target.datagrid('refreshRow', index);
         dg.PKColumn.Editor.operator = 'Update';
-        dg.$target.datagrid('selectRow', rowIndex).datagrid('beginEdit', rowIndex);
-
-        // setBtnState(dg,true);
+        dg.$target.datagrid('selectRow', index).datagrid('beginEdit', index);
+        dg.options.onEditing && dg.options.onEditing(index, row);
     }
     function getRowParams(dg, value) {
         dg.$target.datagrid("selectRecord", value);
@@ -786,7 +786,7 @@
                         } else {
                             post_data = getChangeJson(_change_data, row, dg);
                         }
-                        if ($.isEmptyObject(post_data)) { dg.PKColumn.Editor.editIndex = null; dg.$target.datagrid('cancelEdit', currentIndex); return false; };
+                        if ($.isEmptyObject(post_data)) { dg.$target.datagrid('cancelEdit', currentIndex); return false; };
                         row[dg.Internal.primarykey] && (post_data[dg.Internal.primarykey] = row[dg.Internal.primarykey]);//附加主键的ID值传入后台                                
                         if (dg.PKColumn.Editor.BtnSave.onBeforePost && $.isFunction(dg.PKColumn.Editor.BtnSave.onBeforePost)) {
                             dg.PKColumn.Editor.BtnSave.onBeforePost(post_data);
@@ -799,10 +799,10 @@
                             }
                             //dg.PKColumn.Editor.editIndex = null;
                             dg.$target.datagrid("acceptChanges");
-                            dg.PKColumn.Editor.BtnSave.onAfterExecuted();
+                            dg.PKColumn.Editor.BtnSave.onAfterExecute();
                             editResult = true;
                         } else {
-                            dg.PKColumn.Editor.editIndex = null;
+                            //dg.PKColumn.Editor.editIndex = null;
                             dg.$target.datagrid('cancelEdit', currentIndex);
                         }
                         dg.PKColumn.Editor.operator = undefined;

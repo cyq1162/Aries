@@ -24,7 +24,7 @@
             //此方法可改变请求的地址、方法、对象名
             this.onBeforeExecute = function () { };
             //在Form加载完后触发的事件。
-            this.onAfterExecuted = function () { };
+            this.onAfterExecute = function () { };
             this.onExecute = function () {
                 if (this.onBeforeExecute() === false) {
                     return;
@@ -39,7 +39,7 @@
                         $Core.Combobox.selectedCombobox(this.data);
                     }
                 }
-                this.onAfterExecuted();
+                this.onAfterExecute();
             };
             this.onInit = function () {
                 this.$target = $("form:eq(0)");
@@ -127,7 +127,7 @@
                         if (obj.success) {
                             $Core.Utility.Window.close();
                         }
-                        this.BtnCommit && this.BtnCommit.onAfterExecuted(obj);
+                        this.BtnCommit && this.BtnCommit.onAfterExecute(obj);
                     }
                 }
                 else {

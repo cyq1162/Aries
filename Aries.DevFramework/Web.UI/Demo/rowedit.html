@@ -9,40 +9,38 @@
             var dg = new AR.DataGrid('Demo_TestA');
             dg.isEditor = true;
             dg.options = {
-                onClickRow: function (index, row)
-                {
+                onClickRow: function (index, row) {
                     //alert(index);
                 },
-                onBeforeEdit: function (rowIndex, rowData)
-                {
+                onBeforeEdit: function (index, row) {
+
+                },
+                onEditing: function (index, row) {
+                    //alert(rowIndex);
                     //行内编辑时，修改某单元格的值，引发另一个单元格的值的变化。
-                    setTimeout(function () {
-                        var jqCellF3 = dg.$target.datagrid("getEditor", { index: rowIndex, field: 'F3' }).target;
-                        jqCellF3.keyup(function () {
-                            var jqCellF1 = dg.$target.datagrid("getEditor", { index: rowIndex, field: 'F1' }).target;
-                            jqCellF1.val(jqCellF3.val());
-                        });
-                    }, 10)
-                    
+                    var jqCellF3 = dg.$target.datagrid("getEditor", { index: index, field: 'F3' }).target;
+                    jqCellF3.keyup(function () {
+                        var jqCellF1 = dg.$target.datagrid("getEditor", { index: index, field: 'F1' }).target;
+                        jqCellF1.val(jqCellF3.val());
+                    });
+
                 },
                 onLoadSuccess: function () {
-                   // alert(dg.PKColumn.Items.length + ":33");
+                    // alert(dg.PKColumn.Items.length + ":33");
                 }
-                //onAfterEdit:function(rowIndex, rowData, changes)
+                //onAfterEdit:function(index, row, changes)
                 //{
-                //    rowData.F1 = "33333";
+                //    row.F1 = "33333";
                 //    alert(changes);
                 //}
             }
             dg.bind();
-            
-            dg.PKColumn.Editor.BtnDel.onBeforeExecute = function (v)
-            {
+
+            dg.PKColumn.Editor.BtnDel.onBeforeExecute = function (v) {
                 alert(v);
-               // return false;
+                // return false;
             }
-            dg.ToolBar.BtnDelBatch.onBeforeExecute = function (v)
-            {
+            dg.ToolBar.BtnDelBatch.onBeforeExecute = function (v) {
                 alert(v);
             }
         });
@@ -52,7 +50,7 @@
                 options: {
                     valueField: 'v',
                     textField: 't',
-                    data: [{ v: 1, t: 'A' }, {v:2,t:'B'}]
+                    data: [{ v: 1, t: 'A' }, { v: 2, t: 'B' }]
                 }
             };
         }
@@ -60,7 +58,7 @@
 </head>
 <body>
 
-    <div style="height:300px;">
+    <div style="height: 300px;">
         <div id="dg"></div>
     </div>
     <pre class="brush:js;toolbar:false">代码：

@@ -37,18 +37,42 @@ namespace Aries.Core
         protected string functionName;
         public void ProcessRequest(HttpContext context)
         {
+            this.context = context;
             try
             {
-                functionName = Query<string>("sys_method", "");
-                this.context = context;
-                if (functionName.ToLower() == "login" || UserAuth.IsExistsToken(false))
+                functionName = Query<string>("sys_method", "").Trim(' ', ',');
+                string[] items = functionName.Split(',');
+                JsonHelper js = null;
+                if (items.Length > 1)
                 {
-                    p = new Permission(UserAuth.UserName, false);
-                    MethodInvoke();
+                    js = new JsonHelper(false, false);
                 }
-                else
+                foreach (string item in items)
                 {
-                    WriteError("You haven't log on yet！");
+                    if (item.ToLower() == "login" || UserAuth.IsExistsToken(false))
+                    {
+                        if (p == null)
+                        {
+                            p = new Permission(UserAuth.UserName, false);
+                        }
+                        MethodInvoke(item);
+                        if (items.Length > 1)
+                        {
+                            js.Add(item, jsonResult);
+                        }
+                        else
+                        {
+                            Write(jsonResult);
+                        }
+                    }
+                    else
+                    {
+                        WriteError("You haven't log on yet！");
+                    }
+                }
+                if (items.Length > 1)
+                {
+                    Write(js.ToString());
                 }
             }
             catch (Exception err)
@@ -61,7 +85,7 @@ namespace Aries.Core
         /// <summary>
         /// 执行其他业务
         /// </summary>
-        public void MethodInvoke()
+        public void MethodInvoke(string functionName)
         {
             if (string.IsNullOrEmpty(functionName))
             {
@@ -116,7 +140,7 @@ namespace Aries.Core
                 streamList.Add(g, excelStream);
                 jsonResult = "{\"sys_down\":\"" + g + "\"," + jsonResult.Substring(1);//对应的上传收到downcode会发起下载请求
             }
-            Write(jsonResult);
+
         }
         protected virtual void BeforeInvoke()
         {
@@ -731,7 +755,6 @@ namespace Aries.Core
             js.Add("mid", menuID);
             jsonResult = js.ToString();
         }
-        [ActionKey("View")]
         /// <summary>
         /// 获取Config_KeyValue的配置值。
         /// </summary>

@@ -19,8 +19,15 @@
     /**
     *该文件依赖与AR.Core.Utility.js文件
     */
-    $Core.Global.Variable = $Core.Utility.Ajax.post("GetInitConfig", null, null, false, $Core.route.root);
-    $Core.Global.config = $Core.Utility.Ajax.post("GetKeyValueConfig", null, null, false, $Core.route.root);
+    $Core.Global.Variable = {};
+    $Core.Global.Config = {};
+    $Core.Utility.Ajax.post("GetInitConfig,GetKeyValueConfig", null, null, null, null, function (result) {
+        $Core.Global.Variable = result.GetInitConfig;
+        $Core.Global.Variable.isLoadCompleted = true;
+        $Core.Global.Config = result.GetKeyValueConfig;
+    });
+    //var result = $Core.Utility.Ajax.post("GetInitConfig,GetKeyValueConfig", null, null, false);
+    
 })(AR);
 
 (function ($, $Core) {
@@ -82,8 +89,7 @@
                                     }
                                 }
                             }
-                            if (this.onBeforeExecute(searchJson) == false)
-                            {
+                            if (this.onBeforeExecute(searchJson) == false) {
                                 return;
                             }
                             if (targetForm.form("validate")) {
@@ -265,7 +271,7 @@
                                 $Core.Global.DG.operating = dg;
                                 var splitIndex = location.href.indexOf('List') == -1 ? location.href.lastIndexOf('.') : location.href.lastIndexOf('List');
                                 var viewLink = this.winUrl || location.href.substring(location.href.lastIndexOf('/') + 1, splitIndex) + 'Edit.html';
-                                $Core.Utility.Window.open(viewLink,this.winTitle, false);
+                                $Core.Utility.Window.open(viewLink, this.winTitle, false);
                                 dg.ToolBar.BtnAdd.onAfterExecute.call(this);
                             }
                             this.onAfterExecute();
@@ -525,7 +531,7 @@
                 return function configFormatter(value, row, index) {
                     var result = value;
                     if (value != undefined && value.toString() != "") {
-                        if (configKey && $Core.Global.config[configKey]) {
+                        if (configKey && $Core.Global.Config[configKey]) {
                             result = getConfigName(configKey, value);
                         }
                     }
@@ -662,7 +668,7 @@
                             }
                         }
                         if (configKey) {
-                            data = $Core.Global.config[configKey] || [];
+                            data = $Core.Global.Config[configKey] || [];
                         }
                         if (objName) {
                             each: for (var i = 0; i < $Core.Global.m_combobox_json.length; i++) {
@@ -789,7 +795,11 @@
                     if ($Core.combobox_params && $.type($Core.combobox_params) == "object") {
                         _post_data = $.extend({}, _post_data, $Core.combobox_params);
                     }
-                    $Core.Global.m_combobox_json = $Core.Global.m_combobox_json.concat($Core.Utility.Ajax.post("GetCombobox", "objName", _post_data, false));
+                    $Core.Utility.Ajax.post("GetCombobox", "objName", _post_data, null, null, function (result) {
+                        $Core.Global.m_combobox_json = $Core.Global.m_combobox_json.concat(result);
+                    });
+
+                    //$Core.Global.m_combobox_json = $Core.Global.m_combobox_json.concat($Core.Utility.Ajax.post("GetCombobox", "objName", _post_data, false));
                 }
 
                 each: for (var i = 0; i < json_data.length; i++) {
@@ -942,8 +952,10 @@
                         $Core.Global.m_combobox_json = $Core.Global.m_combobox_json || [];
                         if ($Core.combobox_params && $.type($Core.combobox_params) == "object") {
                             _post_data = $.extend({}, _post_data, $Core.combobox_params);
-                        }
-                        $Core.Global.m_combobox_json = $Core.Global.m_combobox_json.concat($Core.Utility.Ajax.post("GetCombobox", "objName", _post_data, false));
+                        } $Core.Utility.Ajax.post("GetCombobox", "objName", _post_data, null, null, function (result) {
+                            $Core.Global.m_combobox_json = $Core.Global.m_combobox_json.concat(result);
+                        });
+                        //$Core.Global.m_combobox_json = $Core.Global.m_combobox_json.concat($Core.Utility.Ajax.post("GetCombobox", "objName", _post_data, false));
                     }
 
                     for (var i = 0; i < header_json.length; i++) {
@@ -1164,7 +1176,7 @@
         return value;
     };
     function getConfigName(configKey, value) {
-        var items = $Core.Global.config[configKey];
+        var items = $Core.Global.Config[configKey];
         var itemValue = [];
         if (items != undefined && value != undefined && value != null && value.toString() != '') {
             var valueArray = value.toString().split(',');
@@ -1192,7 +1204,7 @@
     };
 
     function getConfigValue(configKey, text) {
-        var items = $Core.Global.config[configKey];
+        var items = $Core.Global.Config[configKey];
         var itemValue = [];
         if (items != undefined && text != undefined && text != null && text.toString() != '') {
             var valueArray = text.toString().split(',');
@@ -1261,8 +1273,8 @@
         function bindCombobox(that) {
             var configKey = that.attr("configKey");
             var multiple = that.attr("multiple") == "multiple";
-            if (configKey && $Core.Global.config[configKey]) {
-                var items = $Core.Global.config[configKey];
+            if (configKey && $Core.Global.Config[configKey]) {
+                var items = $Core.Global.Config[configKey];
                 if (!jQuery.isArray(items)) {
                     items = [items];
                 }
@@ -1335,10 +1347,13 @@
                         }
                     }
                 }
-                else {
+                else
+                {
                     that.combobox("select", that.combobox("options").data[1] ? that.combobox("options").data[1].value : that.combobox("options").data[0].value);
                 }
-            } else {
+            }
+            else
+            {
                 that.combobox("select", "");
             }
         }
@@ -1393,35 +1408,35 @@
                 if (condition) {
                     _post_data = $.extend({}, _post_data, condition);
                 }
-                result = $Core.Utility.Ajax.post("GetCombobox", null, _post_data, false);
-                if (!(result instanceof Array)) {
-                    result = [result];
-                }
-                ////m_combobox_json始终是一个数组
-                //for (var i = 0, len = m_combobox_json.length; i < len; i++) {
+                //此处变更为异步。
+                $Core.Utility.Ajax.post("GetCombobox", null, _post_data, null, null, function (result) {
+                    if (!(result instanceof Array)) {
+                        result = [result];
+                    }
 
-                //}
-                for (var i = 0, len = result.length; i < len; i++) {
-                    for (var k in result[i]) {
-                        var flag = true;
-                        for (var ii = 0; ii < m_combobox_json.length; ii++) {
-                            for (var kk in m_combobox_json[ii]) {
-                                if (kk == k) {
-                                    m_combobox_json[ii][kk] = result[i][k];
-                                    flag = false;
+                    for (var i = 0, len = result.length; i < len; i++) {
+                        for (var k in result[i]) {
+                            var flag = true;
+                            for (var ii = 0; ii < m_combobox_json.length; ii++) {
+                                for (var kk in m_combobox_json[ii]) {
+                                    if (kk == k) {
+                                        m_combobox_json[ii][kk] = result[i][k];
+                                        flag = false;
+                                    }
                                 }
                             }
-                        }
-                        if (flag == true) {
-                            $Core.Global.m_combobox_json = $Core.Global.m_combobox_json.concat(result[i]);
+                            if (flag == true) {
+                                $Core.Global.m_combobox_json = $Core.Global.m_combobox_json.concat(result[i]);
+                            }
                         }
                     }
-                }
-                //m_combobox_json = m_combobox_json.concat();
 
-                if (m_combobox_json && !(m_combobox_json instanceof Array)) {
-                    $Core.Global.m_combobox_json = [m_combobox_json];
-                }
+                    if (m_combobox_json && !(m_combobox_json instanceof Array)) {
+                        $Core.Global.m_combobox_json = [m_combobox_json];
+                    }
+
+                });
+
             }
         }
         //绑定

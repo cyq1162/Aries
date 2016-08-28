@@ -1,8 +1,6 @@
 ﻿//________________________________________________________基础扩展部分begin_____________________________________________________________________________
 
 /**
-* @author 孙宇
-* 
 * @requires jQuery,EasyUI
 * 
 * panel关闭时回收内存，主要用于layout使用iframe嵌入网页时的内存泄漏问题
@@ -25,7 +23,6 @@ $.fn.panel.defaults.onBeforeDestroy = function () {
 };
 
 /**
-* @author 孙宇
 * 
 * @requires jQuery,EasyUI
 * 
@@ -44,56 +41,6 @@ $.fn.tree.defaults.onLoadError = easyuiErrorFunction;
 $.fn.combogrid.defaults.onLoadError = easyuiErrorFunction;
 $.fn.combobox.defaults.onLoadError = easyuiErrorFunction;
 $.fn.form.defaults.onLoadError = easyuiErrorFunction;
-
-
-/**
-* @author 孙宇
-* 
-* @requires jQuery,EasyUI
-* 
-* 为datagrid、treegrid增加表头菜单，用于显示或隐藏列，注意：冻结列不在此菜单中
-*/
-//var createGridHeaderContextMenu = function (e, field) {
-//    e.preventDefault();
-//    var grid = $(this); /* grid本身 */
-//    var headerContextMenu = this.headerContextMenu; /* grid上的列头菜单对象 */
-//    if (!headerContextMenu) {
-//        var tmenu = $('<div style="width:100px;"></div>').appendTo('body');
-//        var fields = grid.datagrid('getColumnFields');
-//        for (var i = 0; i < fields.length; i++) {
-//            var fildOption = grid.datagrid('getColumnOption', fields[i]);
-//            if (!fildOption.hidden) {
-//                $('<div iconCls="icon-ok" field="' + fields[i] + '"/>').html(fildOption.title).appendTo(tmenu);
-//            } else {
-//                $('<div iconCls="icon-empty" field="' + fields[i] + '"/>').html(fildOption.title).appendTo(tmenu);
-//            }
-//        }
-//        headerContextMenu = this.headerContextMenu = tmenu.menu({
-//            onClick: function (item) {
-//                var field = $(item.target).attr('field');
-//                if (item.iconCls == 'icon-ok') {
-//                    grid.datagrid('hideColumn', field);
-//                    $(this).menu('setIcon', {
-//                        target: item.target,
-//                        iconCls: 'icon-empty'
-//                    });
-//                } else {
-//                    grid.datagrid('showColumn', field);
-//                    $(this).menu('setIcon', {
-//                        target: item.target,
-//                        iconCls: 'icon-ok'
-//                    });
-//                }
-//            }
-//        });
-//    }
-//    headerContextMenu.menu('show', {
-//        left: e.pageX,
-//        top: e.pageY
-//    });
-//};
-//$.fn.datagrid.defaults.onHeaderContextMenu = createGridHeaderContextMenu;
-//$.fn.treegrid.defaults.onHeaderContextMenu = createGridHeaderContextMenu;
 
 /**
 * @author 梁水
@@ -156,38 +103,6 @@ _openFirstNode = function (data) {
     }
 }
 
-/**
-* @author 孙宇
-* 
-* @requires jQuery,EasyUI
-* 
-* 扩展treegrid，使其支持平滑数据格式
-*/
-//$.fn.treegrid.defaults.loadFilter = function (data) { 
-//    var dg = $(this); 
-//    var opts = dg.treegrid('options'); 
-//    var parentField = opts.parentField || '_parentId'; 
-//     
-//    if ($.isArray(data)) {    // is array  
-//        data = {
-//            total: data.length,
-//            rows: data
-//        }
-//    }
-
-//    if (!data.topRows) {
-//        data.topRows = [];
-//        data.childRows = [];
-//        for (var i = 0; i < data.rows.length; i++) {
-//            var row = data.rows[i];
-//            parentField ? data.childRows.push(row) : data.topRows.push(row);
-//        } 
-//    }
-//    var start = (opts.pageNumber - 1) * parseInt(opts.pageSize);
-//    var end = start + parseInt(opts.pageSize);
-//    data.rows = $.extend(true, [], data.topRows.slice(start, end).concat(data.childRows));
-//    return data;
-//};
 
 $.fn.treegrid.defaults.loadFilter = function (data, parentId) {
     var opt = $(this).data().treegrid.options, bindData = {};
@@ -263,109 +178,6 @@ $.fn.form.methods.load = function (jq, param) {
     });
 }
 
-
-
-$.extend($.fn.datagrid.methods, {
-    addToolbarItem: function (jq, items) {
-        return jq.each(function () {
-            var dpanel = $(this).datagrid('getPanel');
-            var toolbar = dpanel.children("div.datagrid-toolbar");
-            if (!toolbar.length) {
-                toolbar = $("<div class=\"datagrid-toolbar\"><table cellspacing=\"0\" cellpadding=\"0\"><tr></tr></table></div>").prependTo(dpanel);
-                $(this).datagrid('resize');
-            }
-            var tr = toolbar.find("tr");
-            for (var i = 0; i < items.length; i++) {
-                var btn = items[i];
-                if (btn == "-") {
-                    $("<td><div class=\"datagrid-btn-separator\"></div></td>").appendTo(tr);
-                } else {
-                    var td = $("<td></td>").appendTo(tr);
-                    var b = $("<a href=\"javascript:void(0)\"></a>").appendTo(td);
-                    b[0].onclick = eval(btn.handler || function () { });
-                    b.linkbutton($.extend({}, btn, {
-                        plain: true
-                    }));
-                }
-            }
-        });
-    },
-    removeToolbarItem: function (jq, param) {
-        return jq.each(function () {
-            var dpanel = $(this).datagrid('getPanel');
-            var toolbar = dpanel.children("div.datagrid-toolbar");
-            var cbtn = null;
-            if (typeof param == "number") {
-                cbtn = toolbar.find("td").eq(param).find('span.l-btn-text');
-            } else if (typeof param == "string") {
-                cbtn = toolbar.find("span.l-btn-text:contains('" + param + "')");
-            }
-            if (cbtn && cbtn.length > 0) {
-                cbtn.closest('td').remove();
-                cbtn = null;
-            }
-        });
-    }
-});
-
-/**
-    * @author 林少平
-    * date : 2014/09/26
-    * datagrid动态添加移除编辑功能
-    */
-$.extend($.fn.datagrid.methods, {
-    addEditor: function (jq, param) {
-        if (param instanceof Array) {
-            $.each(param, function (index, item) {
-                var e = $(jq).datagrid('getColumnOption', item.field);
-                e.editor = item.editor;
-            });
-        } else {
-            var e = $(jq).datagrid('getColumnOption', param.field);
-            e.editor = param.editor;
-        }
-    },
-    removeEditor: function (jq, param) {
-        if (param instanceof Array) {
-            $.each(param, function (index, item) {
-                var e = $(jq).datagrid('getColumnOption', item);
-                e.editor = {};
-            });
-        } else {
-            var e = $(jq).datagrid('getColumnOption', param);
-            e.editor = {};
-        }
-    }
-});
-
-$.extend($.fn.datagrid.defaults.editors, {
-    auditradio: {
-        init: function (container, options) {
-            var input = $('<div id = "auditdiv"><input type="radio" value="1" name="auditFlag">通过<input type="radio" value="0" name="auditFlag">不通过</div>').appendTo(container);
-            return input;
-        },
-        getValue: function (target) {
-            return $("input[name='auditFlag']:checked").val();
-        },
-        setValue: function (target, value) {
-            $("input[name='auditFlag']").val([value]);
-        },
-        resize: function (target, width) {
-            var input = $("#auditdiv");
-            if ($.boxModel == true) {
-                input.width(width - (input.outerWidth() - input.width()));
-            } else {
-                input.width(width);
-            }
-        }
-    }
-});
-
-//________________________________________________________基础扩展部分end_______________________________________________________________________________
-
-//________________________________________________________输入框扩展部分end_______________________________________________________________________________
-
-
 //扩展datagrid的编辑器类型：datetimebox
 $.extend($.fn.datagrid.defaults.editors, {
     datetimebox: {
@@ -423,12 +235,7 @@ $.extend($.fn.validatebox.defaults.rules, {
         },
         message: '登录名称只允许汉字、英文字母、数字及下划线。'
     },
-    ZIP: {
-        validator: function (value, param) {
-            return /^[1-9]\d{5}$/.test(value);
-        },
-        message: '邮政编码不存在'
-    },
+
     QQ: {
         validator: function (value, param) {
             return /^[1-9]\d{4,10}$/.test(value);

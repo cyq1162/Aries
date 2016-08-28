@@ -16,8 +16,11 @@ namespace Aries.Core.Sql
     /// </summary>
     public partial class SqlCode
     {
-        private static string path = AppDomain.CurrentDomain.BaseDirectory + "\\App_Data\\SQLCode\\";
-
+        /// <summary>
+        /// SQL文件存档路径
+        /// </summary>
+        public static string path = AppDomain.CurrentDomain.BaseDirectory + "\\App_Data\\SQLCode\\";
+        private static Dictionary<string, string> _FileList = null;
         /// <summary>
         /// 获取所有的SQL文件字典
         /// </summary>
@@ -25,31 +28,44 @@ namespace Aries.Core.Sql
         {
             get
             {
-                Dictionary<string, string> _FileList = new Dictionary<string, string>();
-                string[] files = Directory.GetFiles(path, "*.sql", SearchOption.AllDirectories);
-                if (files != null && files.Length > 0)
+                if (_FileList == null)
                 {
-                    string key = string.Empty;
-                    foreach (string item in files)
+                    _FileList = new Dictionary<string, string>();
+                    string[] files = Directory.GetFiles(path, "*.sql", SearchOption.AllDirectories);
+                    if (files != null && files.Length > 0)
                     {
-                        key = Path.GetFileNameWithoutExtension(item);
-                        if (key.StartsWith("Sql"))
+                        string key = string.Empty;
+                        foreach (string item in files)
                         {
-                            DealSql(item, _FileList);
-                        }
-                        else
-                        {
-                            if (_FileList.ContainsKey(key))
+                            key = Path.GetFileNameWithoutExtension(item);
+                            if (key.StartsWith("Sql"))
                             {
-                                throw new Exception(key + " 已存在！:" + item);
+                                DealSql(item, _FileList);
                             }
-                            _FileList.Add(key, item);
+                            else
+                            {
+                                if (_FileList.ContainsKey(key))
+                                {
+                                    throw new Exception(key + " 已存在！:" + item);
+                                }
+                                _FileList.Add(key, item);
+                            }
                         }
                     }
                 }
                 return _FileList;
             }
+            set
+            {
+                _FileList.Clear();
+                _FileList = null;
+            }
         }
+        /// <summary>
+        /// 处理单个Sql.sql里面的单行SQL语句
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="fileList"></param>
         private static void DealSql(string path, Dictionary<string, string> fileList)
         {
             string[] sqlItems = File.ReadAllLines(path);
@@ -88,10 +104,10 @@ namespace Aries.Core.Sql
         {
             if (!string.IsNullOrEmpty(key))
             {
-                string[] files = Directory.GetFiles(path, key+".sql", SearchOption.AllDirectories);
-                if (files != null && files.Length > 0)
+                if (FileList != null && FileList.ContainsKey(key))
                 {
-                    return FileExtend.ReadAllText(files[0]);
+                    string path = FileList[key];
+                    return FileExtend.ReadAllText(path);
                 }
             }
             return string.Empty;
@@ -106,12 +122,12 @@ namespace Aries.Core.Sql
             msg = string.Empty;
             if (!string.IsNullOrEmpty(key) && !string.IsNullOrEmpty(code))
             {
-                string[] files = Directory.GetFiles(path, key + ".sql", SearchOption.AllDirectories);
-                if (files != null && files.Length > 0)
+                if (FileList != null && FileList.ContainsKey(key))
                 {
+                    string path = FileList[key];
                     try
                     {
-                        File.WriteAllText(files[0], code, Encoding.Default);
+                        File.WriteAllText(path, code, Encoding.Default);
                         return true;
                     }
                     catch (Exception err)
@@ -119,7 +135,7 @@ namespace Aries.Core.Sql
                         msg = err.Message;
                         Log.WriteLogToTxt(err);
                     }
-                  
+
                 }
             }
             return false;
@@ -138,7 +154,7 @@ namespace Aries.Core.Sql
                 if (fileList.ContainsKey(key))
                 {
                     string text = fileList[key];
-                   
+
                     if (text.Contains(":\\"))
                     {
                         text = FileExtend.ReadAllText(text);

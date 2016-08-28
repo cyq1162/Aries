@@ -2,6 +2,7 @@
 using Aries.Core.Extend;
 using Aries.Core.Helper;
 using CYQ.Data;
+using CYQ.Data.Cache;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,8 +21,15 @@ namespace Aries.Core
         {
 
         }
+        static bool isFirstLoad = false;
         public void Init(HttpApplication context)
         {
+            if (!isFirstLoad)
+            {
+                isFirstLoad = true;
+                CrossDb.PreLoadAllDBSchemeToCache();
+            }
+
             context.BeginRequest += new EventHandler(context_BeginRequest);
             context.Error += context_Error;
         }
@@ -65,17 +73,22 @@ namespace Aries.Core
                     context.Response.Cookies.Add(cookie);
                 }
             }
-            else
+            else if (!context.Request.Url.LocalPath.EndsWith("/ajax.html"))
             {
-                SetNoCache();
+                SetNoCache();//.html不缓存，才能实时检测权限问题。（否则客户端缓存了，后台修改权限，客户端很为难）
                 if (IsCheckToken(uri))
                 {
                     UserAuth.IsExistsToken(true);//检测登陆状态。
-                    new Permission(UserAuth.UserName, true);//初始化权限检测。
+                    new Permission(UserAuth.UserName, true);//初始化权限检测。（100-500ms）【第一次500ms左右】，【第二次数据已缓存，100ms左右】（再优化就是缓存用户与菜单，可以减少到接近0，但无法保证实时性）
                 }
 
             }
         }
+        /// <summary>
+        /// 以下包含的路径必须登陆后才能访问
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <returns></returns>
         private bool IsCheckToken(Uri uri)
         {
             string[] items = AppConfig.GetApp("CheckTokenPath", "/web/,/index.html").ToLower().Split(',');//可以扩展多个
@@ -91,7 +104,7 @@ namespace Aries.Core
         }
         private void SetNoCache()
         {
-            if (!context.Request.Url.LocalPath.EndsWith("/ajax.html") && IsEndWithPage(context.Request.Url))
+            if (IsEndWithPage(context.Request.Url))
             {
                 context.Response.Expires = 0;
                 context.Response.Buffer = true;

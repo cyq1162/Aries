@@ -6,7 +6,10 @@ using CYQ.Data;
 using System.Configuration;
 using CYQ.Data.Tool;
 using System.Text.RegularExpressions;
-//using CYQ.Entity.GDGIS;
+using CYQ.Data.Cache;
+using System.IO;
+using Aries.Core.Sql;
+using System.Threading;
 
 namespace Aries.Core.Extend
 {
@@ -15,6 +18,67 @@ namespace Aries.Core.Extend
     /// </summary>
     public static class CrossDb
     {
+        #region 预处理所有表结构缓存
+        private static bool isFirstLoad = false;
+        private static readonly object obj = new object();
+        private static FileSystemWatcher fyw = new FileSystemWatcher(SqlCode.path, "*.sql");
+        internal static void PreLoadAllDBSchemeToCache()
+        {
+            if (!isFirstLoad)
+            {
+                isFirstLoad = true;
+                lock (obj)
+                {
+                    if (isFirstLoad)
+                    {
+                        //处理单表
+                        foreach (ConnectionStringSettings item in ConfigurationManager.ConnectionStrings)
+                        {
+                            string name = item.Name.ToLower();
+                            if (!string.IsNullOrEmpty(name) && name.EndsWith("conn"))
+                            {
+                                CacheManage.PreLoadDBSchemaToCache(name, true);
+                            }
+                        }
+                        ThreadBreak.AddGlobalThread(new ParameterizedThreadStart(LoadViewSchema));
+                        //处理视图文件
+                        fyw.EnableRaisingEvents = true;
+                        fyw.Changed += fyw_Changed;
+                    }
+                }
+            }
+        }
+
+        static void fyw_Changed(object sender, FileSystemEventArgs e)
+        {
+            SqlCode.FileList = null;
+        }
+        static void LoadViewSchema(object para)
+        {
+            Dictionary<string, string> fileList = SqlCode.FileList;
+            if (fileList != null && fileList.Count > 0)
+            {
+                foreach (KeyValuePair<string, string> item in fileList)
+                {
+                    if (item.Key.StartsWith("V_") && item.Value.IndexOf('@') == -1)//视图文件,仅处理无参数的。
+                    {
+                        string sql = "";
+                        if (item.Value.Contains(":\\"))//存档的是文件路径
+                        {
+                            sql = SqlCode.GetCode(item.Key);
+                        }
+                        else
+                        {
+                            sql = item.Value;
+                        }
+                        DBTool.GetColumns(sql, GetConn(sql));
+                    }
+                }
+
+            }
+        }
+        #endregion
+
         public static object GetEnum(string objName)
         {
             if (objName == null || DbTables.Count < 2)

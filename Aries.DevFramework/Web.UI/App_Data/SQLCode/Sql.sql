@@ -1,12 +1,12 @@
-ï»¿--è¯´æ˜:æœ¬SQLæ–‡æœ¬ä»…ä¸ºç®€åŒ–SQLè¯­å¥å­˜æ”¾ä½¿ç”¨ï¼Œä¸€è¡Œåªèƒ½å®šä¹‰ä¸€æ¡ç®€å•è¯­å¥ï¼Œå¤æ‚çš„è¯·å•ç‹¬åˆ›å»ºæ–‡ä»¶å­˜æ”¾ã€‚
---è§†å›¾è¯­å¥ï¼ˆMActionè°ƒç”¨ï¼‰å’ŒSQLè¯­å¥ï¼ˆMProcè°ƒç”¨)å‚è€ƒå‘½åè§„èŒƒ
---ç¤ºä¾‹ï¼š
---è§†å›¾è¯­å¥ï¼š	V_SYS_Users= select * from Users 
---SQLè¯­å¥ï¼š		S_SYS_Users= select * from Users 
+--ËµÃ÷:±¾SQLÎÄ±¾½öÎª¼ò»¯SQLÓï¾ä´æ·ÅÊ¹ÓÃ£¬Ò»ĞĞÖ»ÄÜ¶¨ÒåÒ»Ìõ¼òµ¥Óï¾ä£¬¸´ÔÓµÄÇëµ¥¶À´´½¨ÎÄ¼ş´æ·Å¡£
+--ÊÓÍ¼Óï¾ä£¨MActionµ÷ÓÃ£©ºÍSQLÓï¾ä£¨MProcµ÷ÓÃ)²Î¿¼ÃüÃû¹æ·¶
+--Ê¾Àı£º
+--ÊÓÍ¼Óï¾ä£º	V_SYS_Users= select * from Users 
+--SQLÓï¾ä£º	S_SYS_Users= select * from Users  
 
-V_SYS_UserInfoTest = SELECT u.*,r.RenZhengZhuanYe FROM System_Users u LEFT JOIN dbo.HZ_RenYuanXinXi r ON r.LoginID=u.LoginID
+--V_SYS_UserInfoTest = SELECT u.*,r.RenZhengZhuanYe FROM System_Users u LEFT JOIN dbo.HZ_RenYuanXinXi r ON r.LoginID=u.LoginID
 --V_PB_WorkOrder = SELECT * FROM dbo.PB_WorkOrder WHERE SendUser =:?UserID
-V_PB_WorkOrder = SELECT * FROM dbo.PB_WorkOrder WHERE SendUser = 3830
+--V_PB_WorkOrder = SELECT * FROM dbo.PB_WorkOrder WHERE SendUser = 3830
 
 
 

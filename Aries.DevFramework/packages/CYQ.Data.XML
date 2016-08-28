@@ -775,7 +775,7 @@
         </member>
         <member name="M:CYQ.Data.MProc.ExeMDataTableList">
             <summary>
-            执行的语句有多个结果集返回（库此方法不支持文本数据和AOP）
+            执行的语句有多个结果集返回
             </summary>
             <returns></returns>
         </member>
@@ -1221,6 +1221,18 @@
             <summary>
             获取系统内部缓存Key
             </summary>
+        </member>
+        <member name="M:CYQ.Data.Cache.CacheManage.PreLoadDBSchemaToCache">
+            <summary>
+            通过该方法可以预先加载整个数据库的表结构缓存
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Cache.CacheManage.PreLoadDBSchemaToCache(System.String,System.Boolean)">
+            <summary>
+            通过该方法可以预先加载整个数据库的表结构缓存
+            </summary>
+            <param name="conn">指定数据链接</param>
+            <param name="isUseThread">是否开启线程</param>
         </member>
         <member name="P:CYQ.Data.Cache.CacheManage.Instance">
             <summary>
@@ -2850,7 +2862,7 @@
             将数据表绑定到列表控件
             </summary>
             <param name="control">列表控件[包括Repeater/DataList/GridView/DataGrid等]</param>
-            <param name="paraID">当Control为XHtmlAction对象时，需要指定绑定的节点ID</param>
+            <param name="nodeID">当Control为XHtmlAction对象时，需要指定绑定的节点ID</param>
         </member>
         <member name="M:CYQ.Data.Table.MDataTable.Merge(CYQ.Data.Table.MDataTable)">
             <summary>
@@ -3791,6 +3803,16 @@
         <member name="T:CYQ.Data.SQL.TableSchema">
             <summary>
             表结构类
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.SQL.TableSchema.tableCache">
+            <summary>
+            全局表名缓存（只缓存表名和表名的描述）
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.SQL.TableSchema.columnCache">
+            <summary>
+            全局缓存实体类的表结构（仅会对Type读取的结构）
             </summary>
         </member>
         <member name="M:CYQ.Data.SQL.TableSchema.FixTableSchemaType(System.Data.Common.DbDataReader,System.Data.DataTable)">
@@ -5136,7 +5158,6 @@
             <summary>
             添加全局线程[通常该线程是个死循环，定时处理事情]
             </summary>
-            <param name="start"></param>
         </member>
         <member name="T:CYQ.Data.UI.MActionUI">
             <summary>

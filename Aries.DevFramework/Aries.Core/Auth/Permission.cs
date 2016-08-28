@@ -127,11 +127,9 @@ namespace Aries.Core.Auth
         {
             if (IsEndWith(uri, "") && string.Compare(uri.LocalPath.Substring(0, 7), "/index.", true) != 0) //不是首页
             {
-                if (!HasMenu(uri) && IsEndWith(uri, "List") && HttpContext.Current.Request.UrlReferrer == null)
+                if (HttpContext.Current.Request.UrlReferrer == null && IsEndWith(uri, "List") && !HasMenu(uri))
                 {
-#if !DEBUG
                     throw new Exception("您没有访问当前请求页面的权限！");
-#endif
                 }
             }
         }
@@ -174,17 +172,6 @@ namespace Aries.Core.Auth
             {
                 return menu;
             }
-            //else
-            //{
-            //    string ui = AppConfig.GetApp("UI");
-            //    if (!string.IsNullOrEmpty(ui))
-            //    {
-            //        if (!url.ToLower().StartsWith(ui.ToLower()))
-            //        {
-            //            return GetMenu(new Uri("http://" + uri.Host + ui + uri.PathAndQuery));
-            //        }
-            //    }
-            //}
             return null;
         }
         /// <summary>
@@ -315,6 +302,14 @@ namespace Aries.Core.Auth
 
         internal bool IsCanInvokeMethod(MethodInfo mi)
         {
+            switch (mi.Name)//只需要登陆权限的方法。
+            {
+                case "GetInitConfig":
+                case "GetKeyValueConfig":
+                case "GetHeader":
+                case "GetCombobox":
+                    return true;
+            }
             string key = string.Empty;
             foreach (object item in mi.GetCustomAttributes(typeof(ActionKeyAttribute), true))
             {

@@ -17,9 +17,10 @@
 </body>
 </html>
 <script type="text/javascript">
-    AR.Global.Variable.actionKeys = ',add,config,del';
-    var dg = new AR.DataGrid("Config_Grid", "Config_Grid"),
-        viewName = AR.Utility.queryString('viewName');
+    var viewName = AR.Utility.queryString('viewName');
+    var dg = new AR.DataGrid("Config_Grid");
+    dg.ToolBar.BtnImport.isHidden = true;
+    dg.ToolBar.BtnExportTemplate.isHidden = true;
     dg.options = {
         pagination: false,
         sortName: 'OrderNum',

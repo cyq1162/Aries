@@ -7,7 +7,6 @@
         *tbName:指定的操作主表名称
         *id 默认值 dg       
         */
-    var actionKeys = $Core.Global.Variable.actionKeys;
     function DataGrid(objName, tbName, id) {
         //内部变量
         this.Internal = {
@@ -31,6 +30,8 @@
         //是否启用行内编辑
         this.isEditor = false;
         this.options = {
+            //需要追求的请求数据(GetHeader也会追加）。
+            queryParams: {},
             defaultWhere: [],
             //对defaultWhere的操作
             addWhere: function (key, value, pattern) {
@@ -130,28 +131,32 @@
                 _edit_click(rowIndex, rowData, that);
             }
         }
-        init.call(this);
-        if (this.isShowToolArea) {
-            if (!this.Search.isHidden) {
-                $Core.Common._Internal.registerEvent(this);
-            }
-            if (!this.ToolBar.isHidden) {
-                bindToolbar.call(this);
-            }
-        }
-        $Core.Global.DG.Items.set(this.Internal.id, this);
-
-        ////重写easyui的渲染完成之后事件，
-        //var _afterRender = $.fn.datagrid.defaults.view.onAfterRender;
-        //$.fn.datagrid.defaults.view.onAfterRender = function () {
-        //    bindPKEvent();
-        //    return _afterRender;
-        //}        
-    }
-
-    function init() {
         var dg = this;
-        dg.Internal.headerData = $Core.Utility.Ajax.post("GetHeader", dg.viewName, null, false);
+        var interval;
+        $Core.Utility.Ajax.post("GetHeader", dg.viewName, dg.options.queryParams, null, null,
+            function (result) {
+                dg.Internal.headerData = result;
+                interval = setInterval(function () { _bindGrid(dg, interval); }, 5);
+            }
+        );
+    }
+    function _bindGrid(dg, interval) {
+        if ($Core.Global.Variable.isLoadCompleted) {
+            clearInterval(interval);
+            _init.call(dg);
+            if (dg.isShowToolArea) {
+                if (!dg.Search.isHidden) {
+                    $Core.Common._Internal.registerEvent(dg);
+                }
+                if (!dg.ToolBar.isHidden) {
+                    bindToolbar.call(dg);
+                }
+            }
+            $Core.Global.DG.Items.set(dg.Internal.id, dg);
+        }
+    }
+    function _init() {
+        var dg = this;
         var objColumns = $Core.Common.Formatter.formatHeader(dg);
         if (!objColumns) {
             return false;
@@ -182,6 +187,7 @@
             pagination: true,
             rownumbers: true,
             autoRowHeight: false,
+            queryParams: {},
             onBeforeLoad: function (param) {
                 var mid = function () {
                     var topWin = window;
@@ -199,17 +205,15 @@
                 if (mid) { param.sys_mid = mid; };
                 beforeLoad && beforeLoad(param);
             },
-            queryParams: {
-
-            },
             onLoadSuccess: function () {
                 beforeLoad && onLoadSuccess(param);
-            }
-            , onHeaderContextMenu: function (e, field) {
+            },
+            onHeaderContextMenu: function (e, field) {
+                var actionKeys = $Core.Global.Variable.actionKeys;
                 if (actionKeys && actionKeys.indexOf('config') != -1) {
                     e.preventDefault();
                     if (!dg.cmenu) {
-                        createColumnMenu();
+                        _createColumnMenu(dg);
                     }
                     dg.cmenu.menu('show', {
                         left: e.pageX,
@@ -219,21 +223,12 @@
 
             }
         };
-        function createColumnMenu() {
-            dg.cmenu = $('<div/>').appendTo('body');
-            dg.cmenu.menu({
-                onClick: function (item) {
-                    var url = $Core.Utility.stringFormat("{0}?viewName={1}", $Core.Global.Variable.ui + '/Web/SysAdmin/config.html', dg.viewName);
-                    $Core.Utility.Window.open(url, "", false);
-                }
-            });
-            dg.cmenu.menu('appendItem', {
-                text: "配置",
-                name: "配置"
-            });
-        }
+        
         if (costomToolbar == false && dg.isShowToolArea != false) {
             $Core.Common._Internal.createSearchForm(dg); //内部有判断，创建SearchForm表单
+            if (!dg.ToolBar.isHidden) {
+                $Core.Combobox.onInit();
+            }
             if (!dg.ToolBar.isHidden) {
                 _setToolbar.call(dg, dg.ToolBar._btnArray);//自定义的按钮。
             }
@@ -268,6 +263,19 @@
         }
         $(".datagrid-cell-group").css({ fontWeight: 'bold' }); //设置合并列的加粗样式
     }
+    function _createColumnMenu(dg) {
+        dg.cmenu = $('<div/>').appendTo('body');
+        dg.cmenu.menu({
+            onClick: function (item) {
+                var url = $Core.Utility.stringFormat("{0}?viewName={1}", $Core.Global.Variable.ui + '/Web/SysAdmin/config.html', dg.viewName);
+                $Core.Utility.Window.open(url, "", false);
+            }
+        });
+        dg.cmenu.menu('appendItem', {
+            text: "配置",
+            name: "配置"
+        });
+    }
     function _getBtnTemp(key) {
         var btn = $Core.PKTemplate[key];
         if (btn == undefined) {
@@ -297,7 +305,7 @@
         if (!(btnItems instanceof Array)) {
             throw TypeError("参数不是数组对象");
         };
-        // var actionNames = getCookie("func");
+        var actionKeys = $Core.Global.Variable.actionKeys;
         each1: for (var i = 0; i < btnItems.length; i++) {
             var key = btnItems[i]['btn']
             , url = btnItems[i]['url']
@@ -326,6 +334,7 @@
             throw TypeError('参数必须是一个数组');
         }
         var hiddenCount = 0;
+        var actionKeys = $Core.Global.Variable.actionKeys;
         for (var i = 0, len = btnArray.length; i < len; i++) {
             if (btnArray[i] == undefined) { continue; }
             var lv2action = btnArray[i].lv2action && btnArray[i].lv2action.toLowerCase();
@@ -406,7 +415,7 @@
                 var id = "btn_import" + Math.floor(Math.random() * 10000);
                 toolbar.find("[flag = 'btn_import']").attr("id", id);
                 var exts = ["xls", "xlsx"];
-                var url = $Core.Utility.stringFormat($Core.route.root + '?sys_objName={0}&sys_tableName={1}&sys_method=Import&sys_mid={2}', dg.viewName, dg.tableName, $Core.Global.Variable.mid);
+                var url = $Core.Utility.stringFormat($Core.route.root + '?sys_method=Import&sys_objName={0}&sys_tableName={1}&sys_mid={2}', dg.viewName, dg.tableName, $Core.Global.Variable.mid);
                 $Core.Utility.initUploadButton(url, id, "excelImport", exts,
                 function (file, ext) {
                     if ($Core.Utility.isInArray(exts, ext)) {
@@ -478,6 +487,7 @@
             clickname && btn.setAttribute("click", clickname);
             btn.key = key;
             btn.lv2action = lv2action;
+            var actionKeys = $Core.Global.Variable.actionKeys;
             if ((actionKeys && actionKeys.indexOf(lv2action) != -1) || !lv2action) {
                 this._btnArray.push(btn);
             }

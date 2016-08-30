@@ -745,7 +745,7 @@ namespace Aries.Core
             actionKeys = p.GetFuncKeys();
             if (!string.IsNullOrEmpty(actionKeys))
             {
-                actionKeys = "," + actionKeys.ToLower();
+                actionKeys = "," + actionKeys.ToLower() + ",";
             }
 
             menuID = p.UrlMenuID;

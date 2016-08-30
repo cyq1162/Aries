@@ -9,7 +9,7 @@
     <h3>单项</h3>
     <label>性别</label><input type="text" configkey="性别" name="geder" />
     <label>default</label><input type="text" objname="C_PB_Province" />
-    <label>unshowid </label><input type="text" objname="C_PB_District" onchange="unshowid" />
+    <label>unshowid </label><input type="text" objname="C_PB_District" unshowid="true" onchange="unshowid" name="unshowid" />
     <label>defaultItem</label><input type="text" objname="C_PB_City" defaultitem="false" /><br />
     <label>multiple </label><input type="text" objname="C_PB_Province" multiple="true" />
     <label>onchange </label><input type="text" objname="C_PB_Province" onchange="onchange"/>
@@ -80,9 +80,15 @@
         }
 
     }
-    $(function () {
-        AR.Combobox.selectedCombobox({ geder: 1 });
-    })
+    AR.Combobox.onAfterExecute = function (type) {
+        if (type == "configkey") {
+            AR.Combobox.setValues({ geder: 1 });
+        }
+        else {
+            AR.Combobox.setValues({ unshowid: "河东区" });
+        }
+        alert(type);
+    }
     
 
 </script>

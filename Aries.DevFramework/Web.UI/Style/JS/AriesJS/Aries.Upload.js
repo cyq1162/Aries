@@ -153,7 +153,7 @@ function getNewId() {
         function registEvents() {
             //下拉框
             $selFileType.change(function () {
-                var opts = Obj.DataGrid.$target.datagrid("options");
+                var opts = Obj.DataGrid.datagrid("options");
                 var condition = [];
                 if ($(this).val() != "") {
                     condition = condition.concat({ paramName: 'FileTypeID', paramPattern: 'Equal', paramValue: $(this).val() });
@@ -162,10 +162,10 @@ function getNewId() {
                     jsonString = JSON.stringify(condition.concat(opts.defaultWhere));
                 }
                 var data = { searchList: jsonString };
-                if (Obj.DataGrid.$target.datagrid('getRows')) {
-                    Obj.DataGrid.$target.datagrid('clearSelections');
+                if (Obj.DataGrid.datagrid('getRows')) {
+                    Obj.DataGrid.datagrid('clearSelections');
                 }
-                Obj.DataGrid.$target.datagrid('load', data);
+                Obj.DataGrid.datagrid('load', data);
             });
             //上传按钮
             Obj.btnUpload.click(function () {
@@ -299,7 +299,7 @@ function getNewId() {
                         break;
                 }
                 for (var j = 0, len = hideColumns.length; j < len; j++) {
-                    Obj.DataGrid.$target.datagrid("hideColumn", hideColumns[j]);
+                    Obj.DataGrid.datagrid("hideColumn", hideColumns[j]);
                 }
             } else {
                 AR.Utility.Window.showMsg('由于业务主键未设置导致文件上传控件加载失败...');

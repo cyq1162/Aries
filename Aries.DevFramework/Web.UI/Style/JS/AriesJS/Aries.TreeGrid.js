@@ -1,14 +1,15 @@
-﻿(function ($,$Core) {
+﻿(function ($, $Core) {
 
     $Core.TreeGrid = function (ID, objName, tableName, idField, treeField, parentField, rootID, isExpand) {
         this.Internal = {
-            type:'treegrid',
-            id: ID || 'tg',
+
             toolbarID: "div_toolbar_" + Math.floor(Math.random() * 10000),
             btn_query_id: "btn_query_" + Math.floor(Math.random() * 10000),
             btn_reset_id: "btn_reset_" + Math.floor(Math.random() * 10000),
             headerData: new Array()
         };
+        this.type = 'treegrid',
+        this.id = ID || 'tg',
         this.$target = null;
         this.objName = objName;
         this.tableName = tableName || objName;
@@ -159,7 +160,7 @@
             }
             var merge_options = $.extend(_options, (this.options || {}));
             $Core.Common._Internal.createSearchForm(that);
-            that.$target = $("#" + that.Internal.id).treegrid(merge_options);
+            that.$target = $("#" + that.id).treegrid(merge_options);
             _registerToolbar(that);
             $Core.Common._Internal.registerEvent(that);
         }
@@ -228,7 +229,7 @@
                     data.childRows = [];
                     for (var i = 0; i < data.rows.length; i++) {
                         var row = data.rows[i];
-                        if (row._parentId && row._parentId != opts.rootID) {                            
+                        if (row._parentId && row._parentId != opts.rootID) {
                             data.childRows.push(row)
                         } else {
                             data.topRows.push(row);
@@ -245,8 +246,8 @@
             }
         }
 
-    }    
-    
+    }
+
     function _getTreeData(nodes, idField, textField, parentField, rootID, IsExpand) {
         return function (parentid) {
             var cn = new Array();
@@ -266,7 +267,7 @@
                 }
             }
             return cn;
-        } (rootID);
+        }(rootID);
     }
     //递归打开第一层所有节点
     function _openFirstNode(data) {
@@ -285,7 +286,7 @@
                 //var node = $('#tg').treegrid('getSelected');
             }
         });
-        var node = undefined, tg = $("#" + tg_obj.Internal.id), tgOptions = tg.treegrid("options");
+        var node = undefined, tg = $("#" + tg_obj.id), tgOptions = tg.treegrid("options");
         tg_obj.cmenu.menu('appendItem', {
             text: "添加", name: 'add', onclick: function () {
                 node = tg.treegrid('getSelected');
@@ -307,7 +308,7 @@
                         _item[tgOptions.fullpathField] = node[tgOptions.fullpathField] ? (node[tgOptions.fullpathField] + '|' + node[tgOptions.idField]) : node[tgOptions.idField];
                     }
                     return _item;
-                } ();
+                }();
                 tg.treegrid('append', {
                     parent: node[tgOptions.idField],
                     data: [objRow]
@@ -411,7 +412,7 @@
     //注册工具条按钮事件,此功能尚未完成 
     function _registerToolbar(that) {
         var toolbar = $("#" + that.Internal.toolbarID);
-        var tg = $("#" + that.Internal.id);
+        var tg = $("#" + that.id);
         toolbar.delegate("[flag = 'btn_add']", "click", function () {
             var div_form = $('<div class="cont-box-form">');
             var div_container = $("<div>").append(

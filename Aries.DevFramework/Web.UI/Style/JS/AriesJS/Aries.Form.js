@@ -36,7 +36,7 @@
                         this.data = $Core.Utility.Ajax.post(this.method, objname, { "id": id }, false, this.url);
                         if (this.onBeforeFillForm(this.data) == false) { return; }
                         this.$target.form("load", this.data);
-                        $Core.Combobox.selectedCombobox(this.data);
+                        $Core.Combobox.setValues(this.data);
                     }
                 }
                 this.onAfterExecute();
@@ -113,8 +113,8 @@
                             msg = "操作成功！";
                             if ($PCore.Global.DG.operating) {
                                 try {
-                                    if ($PCore.Global.DG.operating.Internal.type == 'datagrid') {
-                                        $PCore.Global.DG.operating.$target.datagrid('reload');
+                                    if ($PCore.Global.DG.operating.type == 'datagrid') {
+                                        $PCore.Global.DG.operating.datagrid('reload');
                                     } else {
                                         $PCore.Global.DG.operating.$target.treegrid('reload');
                                     }

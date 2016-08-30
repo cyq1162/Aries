@@ -5,13 +5,12 @@
     /**
         *objName：视图名，表名，或者sql文件指定的路径
         *tbName:指定的操作主表名称
-        *id 默认值 dg       
+        *id 默认值 dg      
+        *type 默认值datagrid，可设值为treegrid
         */
-    function DataGrid(objName, tbName, id) {
+    function DataGrid(objName, tbName, id, type) {
         //内部变量
         this.Internal = {
-            type: "datagrid",
-            id: id || 'dg',
             toolbarID: "div_toolbar_" + $Core.Global.DG.Items.length,
             btn_query_id: "btn_query_" + $Core.Global.DG.Items.length,
             btn_reset_id: "btn_reset_" + $Core.Global.DG.Items.length,
@@ -19,6 +18,8 @@
             primarykey: null,
             headerData: new Array()
         }
+        this.id = id || 'dg';
+        this.type = type || "datagrid";
         //主表名
         this.tableName = tbName || objName;
         //视图名称
@@ -33,57 +34,81 @@
             //需要追求的请求数据(GetHeader也会追加）。
             queryParams: {},
             defaultWhere: [],
-            //对defaultWhere的操作
-            addWhere: function (key, value, pattern) {
-                if (key && value) {
-                    switch (pattern) {
-                        case "":
-                        case undefined:
-                        case "=":
-                            pattern = "equal";
-                            break;
-                        case ">":
-                            pattern = "greater";
-                            break;
-                        case ">=":
-                            pattern = "greaterequal";
-                            break;
-                        case "<":
-                            pattern = "less";
-                            break;
-                        case "<=":
-                            pattern = "lessEqual";
-                            break;
-                        case "<>":
-                            pattern = "notequal";
-                            break;
-                    }
-                    this.defaultWhere.push({ "paramName": key, "paramValue": value, "paramPattern": pattern });
-                }
-            }
         };
+        //对defaultWhere的操作
+        this.addWhere = function (key, value, pattern) {
+            if (key && value) {
+                switch (pattern) {
+                    case "":
+                    case undefined:
+                    case "=":
+                        pattern = "equal";
+                        break;
+                    case ">":
+                        pattern = "greater";
+                        break;
+                    case ">=":
+                        pattern = "greaterequal";
+                        break;
+                    case "<":
+                        pattern = "less";
+                        break;
+                    case "<=":
+                        pattern = "lessEqual";
+                        break;
+                    case "<>":
+                        pattern = "notequal";
+                        break;
+                }
+                if (!this.options.defaultWhere) {
+                    this.options.defaultWhere = [];
+                }
+                this.options.defaultWhere.push({ "paramName": key, "paramValue": value, "paramPattern": pattern });
+            }
+        }
         this.$target = null;
-        //设置添加按钮打开的链接
-        //this.addLink = null;
-        //设置添加按钮打开窗口标题
-        //this.addTitle = null;
+        this.datagrid = function (v1, v2) {
+            switch (this.type) {
+                case "datagrid":
+                    switch (v1) {
+                        case "deleteRow":
+                            this.$target.datagrid(v1, v2);
+                            return this.$target.treegrid("acceptChanges");
+                    }
+                    return this.$target.datagrid(v1, v2);
+                    break;
+                case "treegrid":
+                    switch (v1) {
+                        case "getRowIndex":
+                            return v2[this.options.idField];
+                        case "deleteRow":
+                            //if (!this.$target.treegrid("find", v2))//getcheckeds有数据缓存。
+                            //{
+                            //    return;
+                            //}
+                            return this.$target.treegrid("remove", v2);//先删
+                    }
+                    return this.$target.treegrid(v1, v2);
+                    break;
+            }
+        }
         //获取列表的选中项，返回ID数组
         this.getChecked = function () {
             if (this.$target == null) {
                 return [];
             }
-            var selRows = this.$target.datagrid("getChecked");
-            return selRows;
+            return this.datagrid("getChecked");
         };
-        this.getCheckedId = function () {
+        this.getCheckedId = function (key) {
             if (this.$target == null) {
                 return [];
             }
-            var selRows = this.$target.datagrid("getChecked");
+            var selRows = this.datagrid("getChecked");
             var ids = new Array();
             for (var i = 0; i < selRows.length; i++) {
-                var id = selRows[i][this.Internal.primarykey];
-                ids.push("'" + id + "'");
+                var id = selRows[i][key || this.Internal.primarykey];
+                if (key) { ids.push(id); } //不加引号，是内部使用。
+                else { ids.push("'" + id + "'") };//加引号，主要是为了传后台组合成in
             }
             return ids;
         };
@@ -91,19 +116,19 @@
             if (this.$target == null) {
                 return [];
             }
-            return this.$target.datagrid("getSelected");
+            return this.datagrid("getSelected");
         }
         this.getData = function () {
             if (this.$target == null) {
                 return [];
             }
-            return this.$target.datagrid("getData");
+            return this.datagrid("getData");
         }
         this.reload = function () {
             if (this.$target == null) {
                 return;
             }
-            this.$target.datagrid("reload");
+            this.datagrid("reload");
         }
         /**
         *主键列对象，可对按钮进行操作
@@ -111,24 +136,40 @@
         this.PKColumn = new PKColumn(this);
         this.Search = new $Core.Common._Internal.Search();
         this.ToolBar = new $Core.Common._Internal.ToolBar();
+        this.Formatter = $Core.Common.Formatter;
+        this.HeaderMenu = new $Core.Common._Internal.HeaderMenu();
+        this.ContextMenu = new $Core.Common._Internal.ContextMenu();
+
     };
     DataGrid.prototype.bind = function () {
         //如果是编辑模式
-        if (this.isEditor) {
+        if (this.isEditor || this.type=="treegrid") {
             var that = this;
             var dbClick = this.options.onDblClickRow;
-            this.options.onDblClickRow = function (rowIndex, rowData) {
-                if (dbClick && dbClick(rowIndex, rowData) == false) {
+            this.options.onDblClickRow = function (index, row) {
+                if (dbClick && dbClick(index, row) == false) {//对于外界的调用，保持参数不变。
                     return;
                 }
-                _edit_dbClick(rowIndex, rowData, that);
+                if (row == undefined) // TreeGrid，内部调用，修正参数
+                {
+                    row = index;//默认第1个是row
+                    index = row[that.options.idField];
+                }
+                if ($Core.Global.Variable.actionKeys.indexOf(",edit,") > -1) {
+                    _onDbClickRow(index, row, that);//双击事件需要编辑权限。
+                }
             }
             var click = this.options.onClickRow;
-            this.options.onClickRow = function (rowIndex, rowData) {
-                if (click && click(rowIndex, rowData) == false) {
+            this.options.onClickRow = function (index, row) {
+                if (click && click(index, row) == false) {
                     return;
                 }
-                _edit_click(rowIndex, rowData, that);
+                if (row == undefined) // TreeGrid
+                {
+                    row = index;//默认第1个是row
+                    index = row[that.options.idField];
+                }
+                _onClickRow(index, row, that);
             }
         }
         var dg = this;
@@ -152,7 +193,7 @@
                     bindToolbar.call(dg);
                 }
             }
-            $Core.Global.DG.Items.set(dg.Internal.id, dg);
+            $Core.Global.DG.Items.set(dg.id, dg);
         }
     }
     function _init() {
@@ -209,21 +250,34 @@
                 beforeLoad && onLoadSuccess(param);
             },
             onHeaderContextMenu: function (e, field) {
-                var actionKeys = $Core.Global.Variable.actionKeys;
-                if (actionKeys && actionKeys.indexOf('config') != -1) {
-                    e.preventDefault();
-                    if (!dg.cmenu) {
-                        _createColumnMenu(dg);
-                    }
-                    dg.cmenu.menu('show', {
-                        left: e.pageX,
-                        top: e.pageY
-                    });
+                e.preventDefault();
+                if (!dg.headMenu) {
+                    dg.headMenu = $('<div/>').appendTo('body');
+                    _createMenu(dg.HeaderMenu.Items, dg, dg.headMenu);
                 }
-
+                dg.headMenu.menu('show', {
+                    left: e.pageX,
+                    top: e.pageY
+                });
+            },
+            onContextMenu: function (e, index, row) {
+                if (row == undefined) {
+                    row = index;//treegrid的参数在第二个。
+                }
+                e.preventDefault();
+                var idField = dg.options.idField;
+                dg.datagrid('select', row[idField]);
+                if (!dg.rowMenu) {
+                    dg.rowMenu = $('<div/>').appendTo('body');
+                    _createMenu(dg.ContextMenu.Items, dg, dg.rowMenu, row);
+                }
+                dg.rowMenu.menu('show', {
+                    left: e.pageX,
+                    top: e.pageY
+                });
             }
         };
-        
+
         if (costomToolbar == false && dg.isShowToolArea != false) {
             $Core.Common._Internal.createSearchForm(dg); //内部有判断，创建SearchForm表单
             if (!dg.ToolBar.isHidden) {
@@ -249,12 +303,16 @@
         var options = $.extend(cfg, opts);
         //请求URL地址设置
         options.url = (opts.url || $Core.Utility.Ajax.Settings.url) + "?sys_method=GetList&sys_objName=" + dg.viewName + "&sys_tableName=" + dg.tableName;
-
-        dg.$target = $("#" + dg.Internal.id).datagrid(options);
+        if (dg.type == "datagrid") {
+            dg.$target = $("#" + dg.id).datagrid(options);
+        }
+        else {
+            dg.$target = $("#" + dg.id).treegrid(options);
+        }
 
         if (options.pagination) {
             //初始化分页控件
-            var pagination = dg.$target.datagrid('getPager');
+            var pagination = dg.datagrid('getPager');
             $(pagination).pagination({
                 beforePageText: '第', //页数文本框前显示的汉字  
                 afterPageText: '页    共 {pages} 页',
@@ -263,18 +321,345 @@
         }
         $(".datagrid-cell-group").css({ fontWeight: 'bold' }); //设置合并列的加粗样式
     }
-    function _createColumnMenu(dg) {
-        dg.cmenu = $('<div/>').appendTo('body');
-        dg.cmenu.menu({
-            onClick: function (item) {
-                var url = $Core.Utility.stringFormat("{0}?viewName={1}", $Core.Global.Variable.ui + '/Web/SysAdmin/config.html', dg.viewName);
-                $Core.Utility.Window.open(url, "", false);
+    function _createMenu(items, dg, $menu, row) {
+        var actionKeys = $Core.Global.Variable.actionKeys;
+        if (!actionKeys) { return; }
+        $menu.menu({});
+
+        for (var i = 0; i < items.length; i++) {
+            var menu = items[i];
+            if (actionKeys.indexOf(',' + menu.lv2action + ',') != -1) {
+                if (typeof (menu.onclick) == "string") {
+
+                    menu.onclick = function (row, that, dgid) {
+                        try {
+                            var _fntt = eval(menu.onclick);
+                        } catch (e) {
+
+                        }
+
+                        return function () {
+                            if (row) {
+                                _fntt(that, dg.id, row[dg.Internal.primarykey], row[dg.options.idField]);
+                            } else {
+                                _fntt(that, dg.id);
+                            }
+                        };
+                    }(row, this, dg.id);
+                }
             }
-        });
-        dg.cmenu.menu('appendItem', {
-            text: "配置",
-            name: "配置"
-        });
+            $menu.menu('appendItem', menu);
+
+        }
+    }
+
+    //创建行内右键菜单
+    function _createRowMenu(dg, actionKeys) {
+
+        //var node = undefined;
+        //tg = $("#" + dg.id);
+        //tgOptions = tg.treegrid("options");
+
+        //if (actionKeys && actionKeys.indexOf(',config,') != -1)
+        //    dg.rowMenu.menu('appendItem', {
+        //        text: "添加", name: 'add', onclick: function () {
+        //            //node = tg.treegrid('getSelected');
+        //            //var _rowId = 0;
+        //            //var objRow = function () {
+        //            //    var cols = tg.treegrid("options").columns[0]; //因为获取列返回的是跟二维数组
+        //            //    var _item = {};
+        //            //    for (var i = 0; i < cols.length; i++) {
+        //            //        _item[cols[i].field] = '';
+        //            //    }
+        //            //    if (node.children && node.children.length > 0) {
+        //            //        _rowId = node.children[node.children.length - 1][tgOptions.idField] + 1;
+        //            //    } else {
+        //            //        _rowId = node[tgOptions.idField] + '01';
+        //            //    }
+        //            //    _item[tgOptions.idField] = _rowId;
+        //            //    _item[tgOptions.parentField] = node[tgOptions.idField];
+        //            //    if (tgOptions.fullpathField) {
+        //            //        _item[tgOptions.fullpathField] = node[tgOptions.fullpathField] ? (node[tgOptions.fullpathField] + '|' + node[tgOptions.idField]) : node[tgOptions.idField];
+        //            //    }
+        //            //    return _item;
+        //            //}();
+        //            //tg.treegrid('append', {
+        //            //    parent: node[tgOptions.idField],
+        //            //    data: [objRow]
+        //            //});
+        //            //tg.treegrid('beginEdit', _rowId);
+        //            //tg.treegrid('select', _rowId);
+        //            //dg.editRow = tg.treegrid('getSelected');
+        //            //dg.operator = 'Add';
+        //        }
+        //    });
+        //dg.rowMenu.menu('appendItem', {
+        //    text: "编辑", name: 'edit', onclick: function () {
+        //        var row = dg.datagrid("getSelected");
+        //        _onDbClickRow(row[dg.options.idField], row, dg);
+        //    }
+        //});
+        //dg.rowMenu.menu('appendItem', {
+        //    text: "移除", name: 'remove', onclick: function () {
+        //        node = tg.treegrid('getSelected');
+        //        var id = node[tgOptions.idField];
+        //        $Core.Utility.Window.confirm('确认删除吗？', null, function () {
+        //            var obj = $Core.ajax('Delete', dg.tableName, { id: StringFormat.execute("{0}", id) }, false);
+        //            if (obj.success) {
+        //                tg.treegrid('remove', id);
+        //                //tg.treegrid("reload");
+        //            }
+        //            $Core.Utility.Window.showMsg(obj.msg);
+        //        });
+
+        //    }
+        //});
+    }
+    function PKColumn(dg) {
+        $Core.BtnBase.call(this);
+        //存档每行的主键列信息，只能在数据呈现之后获取,如onLoadSuccess事件
+        this.Items = new $Core.Dictionary();
+        this._btnArray = new Array();
+        /**
+        *如果设置clickname url&winTitle则无效
+        *@param{string} key 指向$Core.Common.js文件buttons_temp对象中的key值
+        *@param{string} title 鼠标划过显示的文字
+        *@param{string} clickname 事件名
+        *@param{string} url 打开页面的URL
+        *@param{string} winTitle 打开窗口的标题
+        *@param{string} lv2action 二级权限名称
+        */
+        this.add = function (key, title, clickname, url, winTitle, lv2action) {
+            var btn = $(_getBtnTemp(key))[0];
+            //设置添加按钮的连接
+            if (key == 'edit') {
+                dg.ToolBar.BtnAdd.winUrl = url;
+                dg.ToolBar.BtnAdd.winTitle = (winTitle || "").replace('编辑', '新增');
+            }
+            url && btn.setAttribute("url", url);
+            winTitle && btn.setAttribute("winTitle", winTitle);
+            title && btn.setAttribute("title", title);
+            clickname && btn.setAttribute("click", clickname);
+            btn.key = key;
+            btn.lv2action = lv2action;
+            //var actionKeys = $Core.Global.Variable.actionKeys;//改异步后，这里不能进行权限过滤,内部做权限过滤
+            //if ((actionKeys && actionKeys.indexOf(lv2action) != -1) || !lv2action) {
+            this._btnArray.push(btn);
+            // }
+        };
+
+        //打开业务页面
+        this._onOpen = function (el, value, thatID, index) {
+            var dg = $Core.Global.DG.operating = $Core.Global.DG.Items[thatID]; //赋值当前对象到page属性方便调用
+            var $aTarget = $(el);
+            var op = $aTarget.attr("op");
+            var splitIndex = location.href.indexOf('List') == -1 ? location.href.indexOf('.') : location.href.indexOf('List');
+            var url = $aTarget.attr("url") || dg.ToolBar.BtnAdd.winUrl || location.href.substring(location.href.lastIndexOf('/') + 1, splitIndex) + 'Edit.html';
+            var winTitle = $aTarget.attr("winTitle");
+            var _fn = $aTarget.attr("click");
+            try {
+                _fn = eval(_fn);
+            } catch (e) {
+                _fn = undefined;
+            }
+            if (_fn && typeof (_fn) == "function") {
+                dg.datagrid('selectRecord', value);
+                var row = dg.getSelected();
+                _fn(value, row, index, el);
+            } else {
+                url = url.indexOf("?") == -1 ? url + "?id=" + value : url + "&id=" + value;
+                var _match = url.match(/\{([\S\s]*?)\}/g);//匹配自定义标签
+                if (_match) // add by cyq 2016-08-17
+                {
+                    var _row = dg.getSelected();//获取行数据
+                    for (var i = 0; i < _match.length; i++) {
+                        var _matchValue = _match[i];
+                        var _key = _matchValue.substring(1, _matchValue.length - 1);
+                        var _value = _row[_key];
+                        if (_value) {
+                            url = url.replace(_matchValue, _value);
+                        }
+                    }
+                }
+                $Core.Utility.Window.open(url, (winTitle || " "), op == 1);
+            }
+
+        };
+        this._onDel = function (el, value, dgID, index) {
+            var dg = $Core.Global.DG.Items[dgID];
+            var ids = new Array();
+            if (value) {
+                ids.push(value);//"'" + id + "'"
+            }
+            else {
+                var selRows = dg.getCheckedId();
+                if (selRows.length == 0) {
+                    $Core.Utility.Window.showMsg("请选择要删除的数据!");
+                    return false;
+                }
+                ids = selRows;
+            }
+            if (el && el.onBeforeExecute && el.onBeforeExecute(ids, index) == false) {
+                return false;
+            }
+
+            $Core.Utility.Window.confirm('确认删除操作吗？', null, function () {
+                $Core.Utility.Ajax.post("Delete", dg.tableName, { "id": ids.join(',') }, false, null, function (responseData) {
+                    if (el && el.onAfterExecute && el.onAfterExecute(responseData, ids, index) == false) {
+                        return;
+                    }
+                    if (responseData.success != undefined && responseData.success) {
+                        $Core.Utility.Window.showMsg("删除成功");
+                        if (dg.options.pagination || dg.type == "datagrid") {
+                            dg.reload();
+                        }
+                        else {//不分页，时，只移除当前节点，避免树型节点太大。
+                            var rows = dg.getCheckedId(dg.options.idField);
+                            for (var i = rows.length - 1; i >= 0; i--) {
+                                dg.datagrid("deleteRow", rows[i]);
+                            }
+                            rows = null;
+                        }
+                        dg.datagrid("clearChecked");//清掉缓存的数据。
+                    } else {
+                        $Core.Utility.Window.showMsg("删除失败！错误消息：" + responseData.msg);
+                    }
+                });
+            });
+
+        };
+
+        this.Editor = function () {
+            var Obj = new Object();
+            Obj.editIndex = null;
+            this.operator = null;
+            /*属性标识保存数据是否实时更新*/
+            Obj.isSaveToBehind = true;
+            /*是否插入行数据*/
+            Obj.isInsertRow = false;
+            Obj.insertRowData = {};
+            Obj.BtnEdit = (function () {
+                function Obj() {
+                    $Core.BtnBase.call(this);
+                    this.hidden = false;
+                    this.onBeforeExecute = function (dg, value, index) { };
+                    this.onExecute = function (dg, value, index) {
+                        //var row = dg.datagrid("getSelected");
+                        //if (row && index < 0) {
+                        //    index = dg.datagrid("getRowIndex", row);
+                        //}
+                        //把行设置为编辑状态,操作符设置为更新状态,设置为新增状态在添加按钮事件时触发
+                        if (dg.PKColumn.Editor.operator == "Add" && dg.datagrid("getEditors", index).length > 0) {
+                            return;
+                        }
+                        if (this.onBeforeExecute(dg, value, index) == false) {
+                            return;
+                        }
+                        if (_endEditing(dg)) {
+                            _beginEditing(index, value, dg);
+                            var primary = dg.datagrid("getEditor", { index: index, field: dg.Internal.primarykey });
+                            primary && primary.target.attr('disabled', 'disabled');
+                        }
+                    };
+                    this.onAfterExecute = function () { };
+                }
+                return new Obj();
+            })();
+            Obj.BtnDel = (function () {
+                function Obj() {
+                    $Core.BtnBase.call(this);
+                    this.hidden = false;
+                    this.onBeforeExecute = function (value, index) { };
+                    this.onExecute = function (dg, value, index) {
+                        if (_endEditing(dg)) {
+                            dg.datagrid("selectRecord", value);
+                            var row = dg.datagrid("getSelected");
+                            var index = dg.datagrid("getRowIndex", row);
+                            if (index == -1) { return; };
+                            if (dg.PKColumn.Editor.BtnDel.onBeforeExecute(value, index) == false) {
+                                return;
+                            }
+                            dg.datagrid("selectRow", index);
+                            if (dg.datagrid("getSelected")[dg.Internal.primarykey]) {
+                                $Core.Utility.Window.confirm("确定删除此条信息吗？", null, function () {
+                                    var result = $Core.Utility.Ajax.post("Delete", dg.tableName, { id: value }, false, dg.options.url || $Core.route.root);
+                                    if (result.success) {
+                                        dg.datagrid('deleteRow', index);
+                                    }
+                                    $Core.Utility.Window.showMsg(result.msg);
+                                    dg.PKColumn.Editor.BtnDel.onAfterExecute(dg, value, index);
+                                });
+                            } else {
+                                dg.datagrid('deleteRow', index);
+                                dg.PKColumn.Editor.editIndex = null;
+                                dg.PKColumn.Editor.operator = null;
+                            }
+                        }
+                    };
+                    this.onAfterExecute = function (value, index) { };
+                }
+                return new Obj();
+            })();
+            Obj.BtnSave = (function () {
+                function Obj() {
+                    $Core.BtnBase.call(this);
+                    this.hidden = false;
+                    /**
+                    *保存数据前的处理拦截
+                    *@param{post_data} 传入后台的数据，包含行内所有数据，可操作post_data对象附加数据
+                    */
+                    this.onBeforePost = function (post_data) { };
+                    this.onBeforeExecute = function (dg, value, index) { };
+                    this.onExecute = function (dg, value, index) {
+                        dg.datagrid("selectRecord", value);
+                        var row = dg.datagrid("getSelected");
+                        var index = dg.datagrid("getRowIndex", row);
+                        //如果编辑状态则保存数据操作，如果新增状态，则插入数据的操作
+                        if (index != dg.PKColumn.Editor.editIndex) {
+                            return false;
+                        }
+                        if (this.onBeforeExecute(dg, value, index) == false) {
+                            return;
+                        }
+                        _editSave(dg, index);
+                        dg.PKColumn.Editor.editIndex = null;
+                        dg.datagrid('refreshRow', index);
+
+                    };
+                    this.onAfterExecute = function () { };
+                }
+                return new Obj();
+            })();
+            Obj.BtnCancel = function () {
+                function Obj() {
+                    $Core.BtnBase.call(this);
+                    this.hidden = false;
+                    this.onBeforeExecute = function () { };
+                    this.onExecute = function (dg, value, index) {
+                        dg.datagrid("selectRecord", value);
+                        var row = dg.datagrid("getSelected");
+                        var index = dg.datagrid("getRowIndex", row);
+                        if (this.onBeforeExecute(dg, value, index) == false) {
+                            return;
+                        }
+                        dg.PKColumn.Editor.editIndex = null;//下面的会变更状态。
+                        if (dg.datagrid("getEditors", index).length > 0) {
+                            //如果编辑状态则取消操作，删除状态则删除行
+                            if (dg.PKColumn.Editor.operator == "Add" || dg.operator == "Add") {
+                                dg.datagrid('deleteRow', index);
+                            } else {
+                                dg.datagrid('cancelEdit', index);
+                            }
+                        }
+                        else { dg.datagrid('refreshRow', index); }
+                    };
+                    this.onAfterExecute = function () { };
+                }
+                return new Obj();
+            }();
+            return Obj;
+
+        }();
     }
     function _getBtnTemp(key) {
         var btn = $Core.PKTemplate[key];
@@ -441,7 +826,7 @@
                     data = JSON.parse(data);
                     if (data.success) {
                         $Core.Utility.Window.showMsg(data.msg);
-                        dg.$target.datagrid("reload");
+                        dg.datagrid("reload");
                     }
                     else {
                         data.msg = data.msg.replace(/&/g, '&amp').replace(/\"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace("\"", "'");
@@ -460,335 +845,93 @@
         }())
 
     }
-    function PKColumn(dg) {
-        $Core.BtnBase.call(this);
-        //存档每行的主键列信息，只能在数据呈现之后获取,如onLoadSuccess事件
-        this.Items = new $Core.Dictionary();
-        this._btnArray = new Array();
-        /**
-        *如果设置clickname url&winTitle则无效
-        *@param{string} key 指向$Core.Common.js文件buttons_temp对象中的key值
-        *@param{string} title 鼠标划过显示的文字
-        *@param{string} clickname 事件名
-        *@param{string} url 打开页面的URL
-        *@param{string} winTitle 打开窗口的标题
-        *@param{string} lv2action 二级权限名称
-        */
-        this.add = function (key, title, clickname, url, winTitle, lv2action) {
-            var btn = $(_getBtnTemp(key))[0];
-            //设置添加按钮的连接
-            if (key == 'edit') {
-                dg.ToolBar.BtnAdd.winUrl = url;
-                dg.ToolBar.BtnAdd.winTitle = (winTitle || "").replace('编辑', '新增');
-            }
-            url && btn.setAttribute("url", url);
-            winTitle && btn.setAttribute("winTitle", winTitle);
-            title && btn.setAttribute("title", title);
-            clickname && btn.setAttribute("click", clickname);
-            btn.key = key;
-            btn.lv2action = lv2action;
-            var actionKeys = $Core.Global.Variable.actionKeys;
-            if ((actionKeys && actionKeys.indexOf(lv2action) != -1) || !lv2action) {
-                this._btnArray.push(btn);
-            }
-        };
-        /**
-        *可以条件过滤按钮的显示,此方法不能直接调用，需要重写过滤。
-        *该方法在onBeforeExecute之前被调用。
-        *@param{value,row,index} 这些参数是代表：{值、行数据、当前行索引}
-        *@param{Array} 可遍历数组，对集合对象的条件进行过滤。,数组保存是按钮的DOM对象既HTML全文本
-        *@return{Array}
-        */
-        this.onFilter = function (value, row, index, btnArray) {
-            return btnArray;
-        };
-        //打开业务页面
-        this._onOpen = function (el, value, thatID, index) {
-            var dg = $Core.Global.DG.operating = $Core.Global.DG.Items[thatID]; //赋值当前对象到page属性方便调用
-            var $aTarget = $(el);
-            var op = $aTarget.attr("op");
-            var splitIndex = location.href.indexOf('List') == -1 ? location.href.indexOf('.') : location.href.indexOf('List');
-            var url = $aTarget.attr("url") || dg.ToolBar.BtnAdd.winUrl || location.href.substring(location.href.lastIndexOf('/') + 1, splitIndex) + 'Edit.html';
-            var winTitle = $aTarget.attr("winTitle");
-            var _fn = $aTarget.attr("click");
-            try {
-                _fn = eval(_fn);
-            } catch (e) {
-                _fn = undefined;
-            }
-            if (_fn && typeof (_fn) == "function") {
-                dg.$target.datagrid('selectRecord', value);
-                var row = dg.getSelected();
-                _fn(value, row, index, el);
-            } else {
-                url = url.indexOf("?") == -1 ? url + "?id=" + value : url + "&id=" + value;
-                var _match = url.match(/\{([\S\s]*?)\}/g);//匹配自定义标签
-                if (_match) // add by cyq 2016-08-17
-                {
-                    var _row = dg.getSelected();//获取行数据
-                    for (var i = 0; i < _match.length; i++) {
-                        var _matchValue = _match[i];
-                        var _key = _matchValue.substring(1, _matchValue.length - 1);
-                        var _value = _row[_key];
-                        if (_value) {
-                            url = url.replace(_matchValue, _value);
-                        }
-                    }
-                }
-                $Core.Utility.Window.open(url, (winTitle || " "), op == 1);
-            }
 
-        };
-        this._onDel = function (el, value, dgID, index) {
-            var dg = $Core.Global.DG.Items[dgID];
-            var ids = new Array();
-            if (value) {
-                dg.$target.datagrid("selectRecord", value);
-                var row = dg.$target.datagrid("getSelected");
-                ids.push(value);//"'" + id + "'"
-            }
-            else {
-                var selRows = dg.getCheckedId();
-                if (selRows.length == 0) {
-                    $Core.Utility.Window.showMsg("请选择要删除的数据!");
-                    return false;
-                }
-                ids = selRows;
-            }
-            if (el && el.onBeforeExecute(ids, index) == false) {
-                return false;
-            }
-
-            $Core.Utility.Window.confirm('确认删除操作吗？', null, function () {
-                $Core.Utility.Ajax.post("Delete", dg.tableName, { "id": ids.join(',') }, false, null, function (responseData) {
-                    if (el && el.onAfterExecute(responseData, ids, index) == false) {
-                        return;
-                    }
-                    if (responseData.success != undefined && responseData.success) {
-                        $Core.Utility.Window.showMsg("删除成功");
-                        dg.reload();
-                    } else {
-                        $Core.Utility.Window.showMsg("删除失败！错误消息：" + responseData.msg);
-                        dg.reload();
-                    }
-                });
-            });
-
-        };
-
-        this.Editor = function () {
-            var Obj = new Object();
-            Obj.editIndex = null;
-            this.operator = null;
-            /*属性标识保存数据是否实时更新*/
-            Obj.isSaveToBehind = true;
-            /*是否插入行数据*/
-            Obj.isInsertRow = false;
-            Obj.insertRowData = {};
-            Obj.BtnEdit = (function () {
-                function Obj() {
-                    $Core.BtnBase.call(this);
-                    this.hidden = false;
-                    this.onBeforeExecute = function (dg, value, index) { };
-                    this.onExecute = function (dg, value, index) {
-                        dg.$target.datagrid("selectRecord", value);
-                        var row = dg.$target.datagrid("getSelected");
-                        var index = dg.$target.datagrid("getRowIndex", row);
-                        //把行设置为编辑状态,操作符设置为更新状态,设置为新增状态在添加按钮事件时触发
-                        if (dg.PKColumn.Editor.operator == "Add" && dg.$target.datagrid("getEditors", index).length > 0) {
-                            return;
-                        }
-                        if (this.onBeforeExecute(dg, value, index) == false) {
-                            return;
-                        }
-                        if (endEditing(dg)) {
-                            _beginEditing(index, row, dg);
-                            //dg.PKColumn.Editor.editIndex = index;
-                            //dg.$target.datagrid('refreshRow', index);
-                            //dg.$target.datagrid('selectRow', index).datagrid('beginEdit', index);
-                            //dg.PKColumn.Editor.operator = "Update";
-                            dg.$target.datagrid("getEditor", { index: index, field: dg.Internal.primarykey }).target.attr('disabled', 'disabled');
-                        }
-                    };
-                    this.onAfterExecute = function () { };
-                }
-                return new Obj();
-            })();
-            Obj.BtnDel = (function () {
-                function Obj() {
-                    $Core.BtnBase.call(this);
-                    this.hidden = false;
-                    this.onBeforeExecute = function (value, index) { };
-                    this.onExecute = function (dg, value, index) {
-                        if (endEditing(dg)) {
-                            dg.$target.datagrid("selectRecord", value);
-                            var row = dg.$target.datagrid("getSelected");
-                            var index = dg.$target.datagrid("getRowIndex", row);
-                            if (index == -1) { return; };
-                            if (dg.PKColumn.Editor.BtnDel.onBeforeExecute(value, index) == false) {
-                                return;
-                            }
-                            dg.$target.datagrid("selectRow", index);
-                            if (dg.isEditor && dg.$target.datagrid("getSelected")[dg.Internal.primarykey]) {
-                                $Core.Utility.Window.confirm("确定删除此条信息吗？", null, function () {
-                                    var result = $Core.Utility.Ajax.post("Delete", dg.tableName, { id: value }, false, dg.options.url || $Core.route.root);
-                                    if (result.success) {
-                                        dg.$target.datagrid('deleteRow', index);
-                                        dg.$target.datagrid('acceptChanges');
-                                    }
-                                    $Core.Utility.Window.showMsg(result.msg);
-                                    dg.PKColumn.Editor.BtnDel.onAfterExecute(dg, value, index);
-                                });
-                            } else {
-                                dg.$target.datagrid('deleteRow', index);
-                                dg.$target.datagrid('acceptChanges');
-                                dg.PKColumn.Editor.editIndex = null;
-                                dg.PKColumn.Editor.operator = null;
-                            }
-                        }
-                    };
-                    this.onAfterExecute = function (value, index) { };
-                }
-                return new Obj();
-            })();
-            Obj.BtnSave = (function () {
-                function Obj() {
-                    $Core.BtnBase.call(this);
-                    this.hidden = false;
-                    /**
-                    *保存数据前的处理拦截
-                    *@param{post_data} 传入后台的数据，包含行内所有数据，可操作post_data对象附加数据
-                    */
-                    this.onBeforePost = function (post_data) { };
-                    this.onBeforeExecute = function (dg, value, index) { };
-                    this.onExecute = function (dg, value, index) {
-                        dg.$target.datagrid("selectRecord", value);
-                        var row = dg.$target.datagrid("getSelected");
-                        var index = dg.$target.datagrid("getRowIndex", row);
-                        //如果编辑状态则保存数据操作，如果新增状态，则插入数据的操作
-                        if (index != dg.PKColumn.Editor.editIndex) {
-                            return false;
-                        }
-                        if (this.onBeforeExecute(dg, value, index) == false) {
-                            return;
-                        }
-                        _editSave(dg, index);
-                        dg.PKColumn.Editor.editIndex = null;
-                        dg.$target.datagrid('refreshRow', index);
-
-                    };
-                    this.onAfterExecute = function () { };
-                }
-                return new Obj();
-            })();
-            Obj.BtnCancel = function () {
-                function Obj() {
-                    $Core.BtnBase.call(this);
-                    this.hidden = false;
-                    this.onBeforeExecute = function () { };
-                    this.onExecute = function (dg, value, index) {
-                        dg.$target.datagrid("selectRecord", value);
-                        var row = dg.$target.datagrid("getSelected");
-                        var index = dg.$target.datagrid("getRowIndex", row);
-                        if (this.onBeforeExecute(dg, value, index) == false) {
-                            return;
-                        }
-                        dg.PKColumn.Editor.editIndex = null;//下面的会变更状态。
-                        if (dg.$target.datagrid("getEditors", index).length > 0) {
-                            //如果编辑状态则取消操作，删除状态则删除行
-                            if (dg.PKColumn.Editor.operator == "Add" || dg.operator == "Add") {
-                                dg.$target.datagrid('deleteRow', index);
-                            } else {
-                                dg.$target.datagrid('cancelEdit', index);
-                            }
-                        }
-                        else { dg.$target.datagrid('refreshRow', index); }
-                    };
-                    this.onAfterExecute = function () { };
-                }
-                return new Obj();
-            }();
-            return Obj;
-
-        }();
-    }
-    function _edit_click(rowIndex, rowData, dg) {
-        if (dg.PKColumn.Editor.editIndex == null || dg.PKColumn.Editor.editIndex == rowIndex) {
+    function _onClickRow(index, row, dg) {
+        if (dg.PKColumn.Editor.editIndex == null || dg.PKColumn.Editor.editIndex == index) {
             return false;
         }
         var editIndex = dg.PKColumn.Editor.editIndex;
-        if (dg.$target.datagrid('validateRow', editIndex)) {
+        if (dg.datagrid('validateRow', editIndex)) {
             var result = _editSave(dg, editIndex, true);
             if (result) {
                 dg.PKColumn.Editor.editIndex = null;
-                dg.$target.datagrid('refreshRow', editIndex);
-                _beginEditing(rowIndex, rowData, dg);
+                dg.datagrid('refreshRow', editIndex);
+                _beginEditing(index, row, dg);
             }
         }
-        endEditing(dg);
+        _endEditing(dg);
     }
-    function _edit_dbClick(rowIndex, rowData, dg) {
-        if (dg.PKColumn.Editor.editIndex == null || dg.PKColumn.Editor.editIndex == rowIndex) {
-            _beginEditing(rowIndex, rowData, dg);
+    function _onDbClickRow(index, row, dg) {
+        if (dg.PKColumn.Editor.editIndex == null || dg.PKColumn.Editor.editIndex == index) {
+            _beginEditing(index, row, dg);
             return false;
         }
         var editIndex = dg.PKColumn.Editor.editIndex;
-        if (dg.$target.datagrid('validateRow', editIndex)) {
+        if (dg.datagrid('validateRow', editIndex)) {
             var result = _editSave(dg, editIndex, true);
             if (result) {
                 dg.PKColumn.Editor.editIndex = null;
-                dg.$target.datagrid('refreshRow', editIndex);
-                _beginEditing(rowIndex, rowData, dg);
+                dg.datagrid('refreshRow', editIndex);
+                _beginEditing(index, row, dg);
             }
         }
-        if (endEditing(dg)) {
-            _beginEditing(rowIndex, rowData, dg);
+        if (_endEditing(dg)) {
+            _beginEditing(index, row, dg);
         }
     }
     //作用就是把已经打开的编辑状态给关闭。
-    function endEditing(dg) {
+    function _endEditing(dg) {
         if (dg.PKColumn.Editor.editIndex == null) { return true; }
-        var rowIndex = dg.PKColumn.Editor.editIndex;
-        if (dg.$target.datagrid('validateRow', rowIndex)) {
+        var index = dg.PKColumn.Editor.editIndex;
+        if (dg.datagrid('validateRow', index)) {
             dg.PKColumn.Editor.editIndex = null;
-            dg.$target.datagrid('endEdit', rowIndex);
-            dg.$target.datagrid('refreshRow', rowIndex);
-            //dg.$target.datagrid("rejectChanges");
+            dg.datagrid('endEdit', index);
+            dg.datagrid('refreshRow', index);
+            //dg.datagrid("rejectChanges");
             return true;
         } else {
-            //dg.$target.datagrid('cancelEdit', index);
+            //dg.datagrid('cancelEdit', index);
             return false;
         }
     }
     function _beginEditing(index, row, dg) {
         dg.PKColumn.Editor.editIndex = index;
-        dg.$target.datagrid('refreshRow', index);
+        dg.datagrid('refreshRow', index);
         dg.PKColumn.Editor.operator = 'Update';
-        dg.$target.datagrid('selectRow', index).datagrid('beginEdit', index);
+        dg.datagrid('selectRow', index);
+        dg.datagrid('beginEdit', index);
         dg.options.onEditing && dg.options.onEditing(index, row);
     }
     function getRowParams(dg, value) {
-        dg.$target.datagrid("selectRecord", value);
-        var row = dg.$target.datagrid("getSelected");
-        var index = dg.$target.datagrid("getRowIndex", row);
+        dg.datagrid("selectRecord", value);
+        var row = dg.datagrid("getSelected");
+        var index = dg.datagrid("getRowIndex", row);
         return [index, row];
     }
     function _editSave(dg, currentIndex, dbclick) {
         var editResult = false;
-        var editor = dg.$target.datagrid("getEditors", currentIndex);
-        if (editor.length > 0 && dg.$target.datagrid('validateRow', currentIndex)) {
+        var editor = dg.datagrid("getEditors", currentIndex);
+        if (editor.length > 0 && dg.datagrid('validateRow', currentIndex)) {
             var row = null;
             if (dbclick) {
-                row = $.extend(true, {}, $.data(dg.$target[0], "datagrid").data.rows[dg.PKColumn.Editor.editIndex]);
-            } else { row = $.extend(true, {}, dg.getSelected()); }
+                if (dg.type == "treegrid") {
+                    row = $.extend(true, {}, dg.datagrid("find", dg.PKColumn.Editor.editIndex));
+                }
+                else {
+                    //data只存档1级的数据，不适合treegrid
+                    row = $.extend(true, {}, $.data(dg.$target[0], dg.type).data.rows[dg.PKColumn.Editor.editIndex]);
+                }
+            }
+            else { row = $.extend(true, {}, dg.getSelected()); }
             if (row) {
                 var _type = (dg.PKColumn.Editor.operator == "Update") ? 'updated' : 'inserted';
-                dg.$target.datagrid("endEdit", currentIndex); //结束编辑行
-                var _change_data = dg.$target.datagrid("getChanges", _type)[0]; //获取行数据
+                dg.datagrid("endEdit", currentIndex); //结束编辑行
+                var changes = dg.datagrid("getChanges", _type);
+                var _change_data = changes[changes.length - 1]; //获取行数据
                 if (_change_data) {
                     if (dg.PKColumn.Editor.isSaveToBehind == false) {
                         // dg.PKColumn.Editor.editIndex = null;
-                        dg.$target.datagrid("acceptChanges");
+                        dg.datagrid("acceptChanges");
                     } else {
                         var post_data = {};
                         if (_type == 'inserted' && dg.PKColumn.Editor.insertRowData) {
@@ -796,7 +939,7 @@
                         } else {
                             post_data = getChangeJson(_change_data, row, dg);
                         }
-                        if ($.isEmptyObject(post_data)) { dg.$target.datagrid('cancelEdit', currentIndex); return false; };
+                        if ($.isEmptyObject(post_data)) { dg.datagrid('cancelEdit', currentIndex); return false; };
                         row[dg.Internal.primarykey] && (post_data[dg.Internal.primarykey] = row[dg.Internal.primarykey]);//附加主键的ID值传入后台                                
                         if (dg.PKColumn.Editor.BtnSave.onBeforePost && $.isFunction(dg.PKColumn.Editor.BtnSave.onBeforePost)) {
                             dg.PKColumn.Editor.BtnSave.onBeforePost(post_data);
@@ -808,12 +951,12 @@
                                 result.msg = "添加成功";
                             }
                             //dg.PKColumn.Editor.editIndex = null;
-                            dg.$target.datagrid("acceptChanges");
+                            dg.datagrid("acceptChanges");
                             dg.PKColumn.Editor.BtnSave.onAfterExecute();
                             editResult = true;
                         } else {
                             //dg.PKColumn.Editor.editIndex = null;
-                            dg.$target.datagrid('cancelEdit', currentIndex);
+                            dg.datagrid('cancelEdit', currentIndex);
                         }
                         dg.PKColumn.Editor.operator = undefined;
                         $Core.Utility.Window.showMsg(result.msg);
@@ -830,6 +973,7 @@
         var count = 0;
         if (oldJson && oldJson[dg.Internal.primarykey] == newJson[dg.Internal.primarykey]) {
             for (var item in newJson) {
+                if (newJson[item] == undefined) { continue; }
                 if ((oldJson[item] == undefined && newJson[item].toString() != "") ||
                     oldJson[item] != undefined && oldJson[item].toString() != newJson[item].toString()) {
                     changeJson[item] = newJson[item];

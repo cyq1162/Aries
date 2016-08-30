@@ -27,7 +27,7 @@
         $Core.Global.Config = result.GetKeyValueConfig;
     });
     //var result = $Core.Utility.Ajax.post("GetInitConfig,GetKeyValueConfig", null, null, false);
-    
+
 })(AR);
 
 (function ($, $Core) {
@@ -52,10 +52,7 @@
                     dg.PKColumn.Editor.BtnCancel.onExecute(dg, value, index);
                 }
             },
-            registerEvent: function (dg) {
-                _query(dg);
-                _reset(dg);
-            },
+
             Search: function () {
                 var that = this;
                 $Core.BtnBase.call(that);
@@ -96,7 +93,7 @@
                                 var jsonString = JSON.stringify(searchJson);
                                 var target = dg.$target;
                                 dg.isSearch = true;
-                                if (dg.Internal.type == 'treegrid') {
+                                if (dg.type == 'treegrid') {
                                     target.treegrid("options").onBeforeLoad = function (row, param) {
                                         param.rows = null;
                                         param.page = null;
@@ -105,14 +102,14 @@
                                     }
                                     target.treegrid('reload');
                                 }
-                                if (dg.Internal.type == 'datagrid') {
+                                if (dg.type == 'datagrid') {
                                     var str = jsonString.replace(/\'/g, "!#");
                                     eval("sys_search = '" + str + "'");
                                     var data = { sys_search: sys_search.replace(/!#/g, "'") };
                                     if (target.datagrid('getRows')) {
                                         target.datagrid('clearSelections');
                                     }
-                                    dg.$target.datagrid("load", data);
+                                    dg.datagrid("load", data);
 
                                 }
                                 this.onAfterExecute();
@@ -139,7 +136,7 @@
                             $(".easyui-validatebox").removeClass("validatebox-text").removeClass("validatebox-invalid");
                             //在做一次标签的清楚，进行测底的清楚残留数据
                             $("[name]").val("");
-                            var target = $("#" + dg.Internal.id);
+                            var target = $("#" + dg.id);
                             setTimeout(function () {
                                 $(".combo-value").val("");
                                 $("[comboname]").each(function () {
@@ -160,9 +157,9 @@
 
                             }, 100);
 
-                            if (dg.Internal.type == 'treegrid') {
+                            if (dg.type == 'treegrid') {
                                 target.treegrid("options").onBeforeLoad = function (row, param) {
-                                    var opts = $("#" + dg.Internal.id).datagrid("options");
+                                    var opts = $("#" + dg.id).datagrid("options");
                                     var jsonString;
                                     if (opts.defaultWhere && opts.defaultWhere.length > 0) {
                                         jsonString = JSON.stringify(opts.defaultWhere);
@@ -173,11 +170,11 @@
                                 }
                                 target.treegrid('reload');
                             }
-                            if (dg.Internal.type == 'datagrid') {
+                            if (dg.type == 'datagrid') {
                                 if (target.datagrid('getRows')) {
                                     target.datagrid('clearSelections');
                                 }
-                                var opts = $("#" + dg.Internal.id).datagrid("options");
+                                var opts = $("#" + dg.id).datagrid("options");
                                 var jsonString;
                                 if (opts.defaultWhere && opts.defaultWhere.length > 0) {
                                     jsonString = JSON.stringify(opts.defaultWhere);
@@ -246,11 +243,11 @@
                         //dg 是当前datagrid对象
                         this.onExecute = function (dg) {
                             if (this.onBeforeExecute() == false) { return; };
-                            if (dg.isEditor) {
+                            if (dg.isEditor || (dg.type == "treegrid" && !this.winUrl)) {
                                 if (endEditing(dg)) {
                                     dg.PKColumn.Editor.operator = "Add";
                                     var _row = {}, _data = dg.PKColumn.Editor.insertRowData;
-                                    var _rows = dg.$target.datagrid('getRows');
+                                    var _rows = dg.datagrid('getRows');
                                     var _len = _rows.length;
                                     if (dg.PKColumn.Editor.isInsertRow) {
                                         var pkField = dg.Internal.primarykey;
@@ -260,10 +257,10 @@
                                     if (_data && typeof (_data) === 'object') {
                                         _row = $.extend(_row, _data);
                                     }
-                                    dg.$target.datagrid("appendRow", _row);
+                                    dg.datagrid("appendRow", _row);
                                     dg.PKColumn.Editor.editIndex = _len;
-                                    dg.$target.datagrid("refreshRow", dg.PKColumn.Editor.editIndex);
-                                    dg.$target.datagrid('selectRow', dg.PKColumn.Editor.editIndex)
+                                    dg.datagrid("refreshRow", dg.PKColumn.Editor.editIndex);
+                                    dg.datagrid('selectRow', dg.PKColumn.Editor.editIndex)
                                         .datagrid('beginEdit', dg.PKColumn.Editor.editIndex);
 
                                 }
@@ -283,7 +280,7 @@
                     function Obj() {
                         $Core.BtnBase.call(this);
                         this.onExecute = function (dg) {
-                            $Core.Common.onDel(this, null, dg.Internal.id);//内部有前中后事件
+                            $Core.Common.onDel(this, null, dg.id);//内部有前中后事件
                         }
                     }
                     return new Obj();
@@ -381,11 +378,41 @@
                         var index = dg.PKColumn.Editor.editIndex;
                         dg.PKColumn.Editor.editIndex = null;
                         if (dg.PKColumn.Editor.operator == "Add") {
-                            dg.$target.datagrid('deleteRow', index);
+                            dg.datagrid('deleteRow', index);
                         }
-                        else { dg.$target.datagrid('cancelEdit', index); }
+                        else { dg.datagrid('cancelEdit', index); }
                     }
                     return true;
+                }
+            },
+            HeaderMenu: function () {
+                this.isHidden = false;
+                this.Items = [{ "text": "配置", "onclick": "$Core.Common._Internal.onConfigClick", "lv2action": "config" }];
+                /**
+                *向工具条添加按钮
+                *@param{string} text 按钮显示的文本
+                *@param{string} fname 按钮注册的事件函数名称
+                *@param{string} lv2action 二级权限控制，默认值0
+                */
+                this.add = function (text, fname, lv2action) {
+                    this.Items.push({ "text": text, "onclick": fname, "lv2action": lv2action });
+                }
+            },
+            ContextMenu: function () {
+                this.isHidden = false;
+                this.Items = [{ "text": "添加同级", "onclick": "$Core.Common._Internal.onAdd", "lv2action": "add" },
+                    { "text": "添加子级", "onclick": "$Core.Common._Internal.Editor.onAdd", "lv2action": "add" },
+                    { "text": "编辑", "onclick": "$Core.Common._Internal.Editor.onEdit", "lv2action": "edit" },
+                    { "text": "删除", "onclick": "$Core.Common._Internal.Editor.onDel", "lv2action": "del" }
+                ];
+                /**
+                *向工具条添加按钮
+                *@param{string} text 按钮显示的文本
+                *@param{string} fname 按钮注册的事件函数名称
+                *@param{string} lv2action 二级权限控制，默认值0
+                */
+                this.add = function (text, fname, lv2action) {
+                    this.Items.push({ "text": text, "onclick": fname, "lv2action": lv2action });
                 }
             },
             createSearchForm: function (dg) {
@@ -486,6 +513,10 @@
                 })()
                 return json;
             },
+            registerEvent: function (dg) {
+                _query(dg);
+                _reset(dg);
+            },
             //查询区域的下拉触发事件
             onQuery: function () {
                 if ($(this).attr('isQuery') == "false") {
@@ -493,6 +524,14 @@
                 }
                 if (document.readyState == 'complete') {
                     $(this).parents("form").find(".query").click();
+                }
+            },
+            onAdd: function (el, dgid, value, index) { alert(value); },
+            onConfigClick: function (el, dgid, value, index) {
+                var dg = getDgByKey(dgid);
+                if (dg) {
+                    var url = $Core.Utility.stringFormat("{0}?viewName={1}", $Core.Global.Variable.ui + '/Web/SysAdmin/config.html', dg.viewName);
+                    $Core.Utility.Window.open(url, "", false);
                 }
             }
         },
@@ -535,7 +574,7 @@
                             result = getConfigName(configKey, value);
                         }
                     }
-                    result = $Core.Common.Formatter.afterConfigFormatter(configKey, result, row, index);
+                    result = $Core.Common.Formatter.onAfterConfigFormatter(configKey, result, row, index);
                     if (result && result.toString().indexOf('<') == -1) {
                         result = $Core.Common.Formatter.stringFormatter(result);
                     }
@@ -543,7 +582,7 @@
                 }
             },
             //本方法仅供重写，可以实现值变更后加链接等效果。
-            afterConfigFormatter: function (configKey, value, row, index) {
+            onAfterConfigFormatter: function (configKey, value, row, index) {
                 return value;
             },
             objFormatter: function (objName) {
@@ -562,43 +601,43 @@
                     return result;
                 }
             },
-            pkFormat: function (dg) {
+            pkFormatter: function (dg) {
                 return function (value, row, index) {
 
                     var btnArray = dg.PKColumn._btnArray;
                     value = row[dg.Internal.primarykey];
-                    var buttons = dg.PKColumn.onFilter(value, row, index, $.extend(true, [], btnArray));
-                    var result = dg.PKColumn.onBeforeExecute(value, row, index, buttons);
+                    var result = dg.PKColumn.onBeforeExecute(value, row, index, btnArray);
                     if (result) {
                         return result;
                     }
                     var obj = new $Core.Dictionary();
                     var $div = $('<div class="operation w$len"></div>');
                     var len = 0;
+                    var actionKeys = $Core.Global.Variable.actionKeys;
                     if (dg.isEditor == true) {
-                        var strTemplate = '<a class="{0}" title="{1}" dgid="' + dg.Internal.id + '" onClick="AR.Common._Internal.Editor.{2}(this,\'' + dg.Internal.id + '\',\'' + value + '\',' + index + ')"  v="{3}" i="{4}"></a>';
+                        var strTemplate = '<a class="{0}" title="{1}" dgid="' + dg.id + '" onClick="AR.Common._Internal.Editor.{2}(this,\'' + dg.id + '\',\'' + value + '\',' + index + ')"  v="{3}" i="{4}"></a>';
                         if (dg.PKColumn.Editor.editIndex == null) {
-                            if (dg.PKColumn.Editor.BtnEdit.hidden != true) {
+                            if (dg.PKColumn.Editor.BtnEdit.hidden != true && actionKeys.indexOf(",edit,") > -1) {
                                 len++;
                                 var $btn = $($Core.Utility.stringFormat(strTemplate, "bj", "编辑", "onEdit", value, index));
                                 $div.append($btn);
 
                             }
-                            if (dg.PKColumn.Editor.BtnDel.hidden != true) {
+                            if (dg.PKColumn.Editor.BtnDel.hidden != true && actionKeys.indexOf(",del,") > -1) {
                                 len++;
                                 var $btn = $($Core.Utility.stringFormat(strTemplate, "sc", "删除", "onDel", value, index));
-                                obj.set("edit", $btn);
+                                obj.set("del", $btn);
                                 $div.append($btn);
                             }
                         }
                         else {
-                            if (dg.PKColumn.Editor.BtnCancel.hidden != true) {
+                            if (dg.PKColumn.Editor.BtnCancel.hidden != true && actionKeys.indexOf(",edit,") > -1) {
                                 len++;
                                 var $btn = $($Core.Utility.stringFormat(strTemplate, "cx", "撤销", "onCancel", value, index));
                                 obj.set("edit", $btn);
                                 $div.append($btn);
                             }
-                            if (dg.PKColumn.Editor.BtnSave.hidden != true) {
+                            if (dg.PKColumn.Editor.BtnSave.hidden != true && actionKeys.indexOf(",edit,") > -1) {
                                 len++;
                                 var $btn = $($Core.Utility.stringFormat(strTemplate, "bc", "保存", "onSave", value, index));
                                 obj.set("edit", $btn);
@@ -606,13 +645,13 @@
                             }
                         }
                     }
-                    for (var i = 0; i < buttons.length; i++) {
-                        var btn = buttons[i];
-                        if (!btn.isHidden) {
+                    for (var i = 0; i < btnArray.length; i++) {
+                        var btn = btnArray[i];
+                        if (!btn.isHidden && actionKeys.indexOf("," + btn.lv2action + ",") > -1) {
                             if (btn.className != 'sc') {
-                                btn.setAttribute("onClick", "AR.Common.onOpen(this,'" + value + "','" + dg.Internal.id + "'," + index + ")");
+                                btn.setAttribute("onClick", "AR.Common.onOpen(this,'" + value + "','" + dg.id + "'," + index + ")");
                             } else {
-                                btn.setAttribute("onClick", "AR.Common.onDel(this,'" + value + "','" + dg.Internal.id + "'," + index + ")");
+                                btn.setAttribute("onClick", "AR.Common.onDel(this,'" + value + "','" + dg.id + "'," + index + ")");
                             }
                             len++;
                             var $btn = $(btn.outerHTML);
@@ -691,8 +730,8 @@
                             OriginalData: data,
                             data: data,
                             onSelect: function (record) {
-                                var currentEditor = dg.$target.datagrid("getEditor", { index: dg.PKColumn.Editor.editIndex, field: row.field });
-                                var rowEditors = dg.$target.datagrid("getEditors", dg.PKColumn.Editor.editIndex);
+                                var currentEditor = dg.datagrid("getEditor", { index: dg.PKColumn.Editor.editIndex, field: row.field });
+                                var rowEditors = dg.datagrid("getEditors", dg.PKColumn.Editor.editIndex);
                                 for (var i = 0, len = rowEditors.length; i < len; i++) {
                                     if (rowEditors[i].type == 'combobox') {
                                         var _parentObjName = rowEditors[i].target.combobox("options").parentObjName;
@@ -807,25 +846,41 @@
                     //格式化第一列为主键
                     if (i == 0 && (json_data[i].formatter == undefined || json_data[i].formatter == "#" || json_data[i].formatter == "")) {
                         frozen.push({ align: 'center', checkbox: dg.isShowCheckBox, hidden: !dg.isShowCheckBox, field: 'ckb' });
+
+                        dg.Internal.primarykey = json_data[i].field;
+                        dg.Internal.idField = json_data[i].field;
                         if (dg.PKColumn._btnArray.length > 0 || dg.isEditor) {
-                            var pkColumn = $Core.Utility.cloneObjcet(json_data[i]);
-                            pkColumn.formatter = this.pkFormat(dg);
-                            if (dg.isEditor) {
-                                var len = dg.PKColumn._btnArray.length;
-                                pkColumn.width = len == 0 ? 2 * 26 : (2 + len) * 26;
-                            } else { pkColumn.width = dg.PKColumn._btnArray.length * 26; }
-                            delete pkColumn.rowspan;
-                            delete pkColumn.colspna;
-                            dg.Internal.primarykey = pkColumn.field;
-                            dg.Internal.idField = pkColumn.field;
-                            pkColumn.hidden = false;
-                            var title = getConfigValue("SysConfig", "OperatorTitle");
-                            if (!title) {
-                                title = '操作';
+                            //检测操作列，权限过滤后还有没有可呈现的控件。
+                            var actionKeys = $Core.Global.Variable.actionKeys;
+                            var len = 0;
+                            for (var i = 0; i < dg.PKColumn._btnArray.length; i++) {
+                                if (actionKeys.indexOf("," + dg.PKColumn._btnArray[i].lv2action + ",") > -1) {
+                                    len++;
+                                }
                             }
-                            pkColumn.title = title == "空" ? '' : title;
-                            pkColumn.field = 'auto_pk';
-                            frozen.push(pkColumn);
+                            if (dg.isEditor) {
+                                actionKeys.indexOf(",edit,") > -1 && len++;
+                                actionKeys.indexOf(",del,") > -1 && len++;
+                            }
+                            if (len > 0) {
+                                var pkColumn = $Core.Utility.cloneObjcet(json_data[i]);
+                                pkColumn.formatter = this.pkFormatter(dg);
+                                //if (dg.isEditor) {
+                                //    var len = dg.PKColumn._btnArray.length;
+                                //    pkColumn.width = len == 0 ? 2 * 26 : (2 + len) * 26;
+                                //} else { pkColumn.width = dg.PKColumn._btnArray.length * 26; }
+                                pkColumn.width = len * 32;
+                                delete pkColumn.rowspan;
+                                delete pkColumn.colspna;
+                                pkColumn.hidden = false;
+                                var title = getConfigValue("SysConfig", "OperatorTitle");
+                                if (!title) {
+                                    title = '操作';
+                                }
+                                pkColumn.title = title == "空" ? '' : title;
+                                pkColumn.field = 'auto_pk';
+                                frozen.push(pkColumn);
+                            }
                         }
                     }
 
@@ -833,7 +888,7 @@
                         continue each;
                     }
                     //是否编辑模式
-                    if (dg.isEditor && json_data[i].edit) {
+                    if ((dg.isEditor && json_data[i].edit) || dg.type == "treegrid") {
                         this.formatEditor(json_data[i], dg);
                         var row = json_data[i];
                         if (row && row.editor && row.editor.options && row.editor.type == "combobox") {
@@ -1089,52 +1144,52 @@
         //添加工具栏按钮
         (function () {
             if (!dg.ToolBar.isHidden) {
-                if (dg.Internal.type == "datagrid") {
-                    var div_fn = $('<div class="function-box" id="div_fun">');
-                    var item; actionKeys = $Core.Global.Variable.actionKeys || "";
-                    if (actionKeys.indexOf(',add,') > -1 && !dg.ToolBar.BtnAdd.isHidden) {
-                        dg.ToolBar.BtnAdd.$target = $('<input class=\"add\" flag=\"btn_add\" type=\"button\" name=\"添加\" value=\"\"/>');
-                        item = $("<a>").append(dg.ToolBar.BtnAdd.$target);
+                //if (dg.type == "datagrid") {
+                var div_fn = $('<div class="function-box" id="div_fun">');
+                var item; actionKeys = $Core.Global.Variable.actionKeys || "";
+                if (actionKeys.indexOf(',add,') > -1 && !dg.ToolBar.BtnAdd.isHidden) {
+                    dg.ToolBar.BtnAdd.$target = $('<input class=\"add\" flag=\"btn_add\" type=\"button\" name=\"添加\" value=\"\"/>');
+                    item = $("<a>").append(dg.ToolBar.BtnAdd.$target);
+                    div_fn.append(item);
+                    dg.ToolBar.Items.set("add", dg.ToolBar.BtnAdd);
+                }
+                if (actionKeys.indexOf(',del,') > -1 && !dg.ToolBar.BtnDelBatch.isHidden) {
+                    dg.ToolBar.BtnDelBatch.$target = $('<input  class=\"batch_del\" flag=\"btn_del\" type=\"button\" name=\"批量删除\" value=\"\"/>').attr("dgID", dg.id);
+                    item = $("<a>").append(dg.ToolBar.BtnDelBatch.$target);
+                    div_fn.append(item);
+                    dg.ToolBar.Items.set("del", dg.ToolBar.BtnDelBatch);
+                }
+                if (actionKeys.indexOf(',export,') > -1 && !dg.ToolBar.BtnExport.isHidden) {
+                    dg.ToolBar.BtnExport.$target = $('<input class=\"export\" flag=\"btn_export\" type=\"button\"  value=\"\"/>');
+                    item = $("<a>").append(dg.ToolBar.BtnExport.$target);
+                    div_fn.append(item);
+                    dg.ToolBar.Items.set("export", dg.ToolBar.BtnExport);
+                }
+                if (actionKeys.indexOf(',import,') > -1) {
+                    if (!dg.ToolBar.BtnImport.isHidden) {
+                        dg.ToolBar.BtnImport.$target = $('<input class=\"import\" flag=\"btn_import\" type=\"button\"  value=\"\"/>');
+                        item = $("<a>").append(dg.ToolBar.BtnImport.$target);
                         div_fn.append(item);
-                        dg.ToolBar.Items.set("add", dg.ToolBar.BtnAdd);
+                        dg.ToolBar.Items.set("import", dg.ToolBar.BtnImport);
                     }
-                    if (actionKeys.indexOf(',del,') > -1 && !dg.ToolBar.BtnDelBatch.isHidden) {
-                        dg.ToolBar.BtnDelBatch.$target = $('<input  class=\"batch_del\" flag=\"btn_del\" type=\"button\" name=\"批量删除\" value=\"\"/>').attr("dgID", dg.Internal.id);
-                        item = $("<a>").append(dg.ToolBar.BtnDelBatch.$target);
+                    if (!dg.ToolBar.BtnExportTemplate.isHidden) {
+                        dg.ToolBar.BtnExportTemplate.$target = $('<input class=\"btn-sm\" flag=\"btn_export_template\" type=\"button\"  value=\"导出模板\"/>');
+                        item = $("<a>").append(dg.ToolBar.BtnExportTemplate.$target);
                         div_fn.append(item);
-                        dg.ToolBar.Items.set("del", dg.ToolBar.BtnDelBatch);
+                        dg.ToolBar.Items.set("exportTemplate", dg.ToolBar.BtnExportTemplate);
                     }
-                    if (actionKeys.indexOf(',export,') > -1 && !dg.ToolBar.BtnExport.isHidden) {
-                        dg.ToolBar.BtnExport.$target = $('<input class=\"export\" flag=\"btn_export\" type=\"button\"  value=\"\"/>');
-                        item = $("<a>").append(dg.ToolBar.BtnExport.$target);
-                        div_fn.append(item);
-                        dg.ToolBar.Items.set("export", dg.ToolBar.BtnExport);
-                    }
-                    if (actionKeys.indexOf(',import,') > -1) {
-                        if (!dg.ToolBar.BtnImport.isHidden) {
-                            dg.ToolBar.BtnImport.$target = $('<input class=\"import\" flag=\"btn_import\" type=\"button\"  value=\"\"/>');
-                            item = $("<a>").append(dg.ToolBar.BtnImport.$target);
-                            div_fn.append(item);
-                            dg.ToolBar.Items.set("import", dg.ToolBar.BtnImport);
-                        }
-                        if (!dg.ToolBar.BtnExportTemplate.isHidden) {
-                            dg.ToolBar.BtnExportTemplate.$target = $('<input class=\"btn-sm\" flag=\"btn_export_template\" type=\"button\"  value=\"导出模板\"/>');
-                            item = $("<a>").append(dg.ToolBar.BtnExportTemplate.$target);
-                            div_fn.append(item);
-                            dg.ToolBar.Items.set("exportTemplate", dg.ToolBar.BtnExportTemplate);
-                        }
-                    }
+                }
 
-                    dg.ToolBar.$target.append(div_fn);
-                }
-                if (dg.Internal.type == "treegrid") {
-                    var div_fn = $('<div class="function-box" id="' + dg.Internal.toolbarID + '">');
-                    if (dg.Internal.toolbar != false) {
-                        var item = $("<a>").append($('<input class=\"btn-lg\" flag=\"btn_add\" type=\"button\" value=\"添加根节点\"/>'));
-                        div_fn.append(item);
-                    }
-                    dg.ToolBar.$target.append(div_fn);
-                }
+                dg.ToolBar.$target.append(div_fn);
+                //}
+                //if (dg.type == "treegrid") {
+                //    var div_fn = $('<div class="function-box" id="' + dg.Internal.toolbarID + '">');
+                //    if (dg.Internal.toolbar != false) {
+                //        var item = $("<a>").append($('<input class=\"btn-lg\" flag=\"btn_add\" type=\"button\" value=\"添加根节点\"/>'));
+                //        div_fn.append(item);
+                //    }
+                //    dg.ToolBar.$target.append(div_fn);
+                //}
             }
             $("body").append(dg.ToolBar.$target); //加到页面中       
         }());
@@ -1241,12 +1296,12 @@
                 bindComboboxByName(arrayName, condition);
             }
         }
-
+        //绑定一个下拉框
         function bindComboboxByName(targetName, condition) {
             var _config = $("[configKey='" + targetName + "']");
             var _obj = $("[objname='" + targetName + "']");
             if (_config[0]) {
-                bindCombobox(_config);
+                bindConfigKey(_config);
             }
             if (_obj[0]) {
                 var item_data = [];
@@ -1258,189 +1313,15 @@
                         item_data.push(item);
                     }
                 }
-                loadComboboxData(item_data, condition);
-                bindObjNameCombobox(_obj);
-            }
-        }
-
-        //初始化配置Key的下拉框数据。
-        initConfigKeyCombobox = function () {
-            $("[configKey]").each(function () {
-                bindCombobox($(this));
-            });
-        }
-
-        function bindCombobox(that) {
-            var configKey = that.attr("configKey");
-            var multiple = that.attr("multiple") == "multiple";
-            if (configKey && $Core.Global.Config[configKey]) {
-                var items = $Core.Global.Config[configKey];
-                if (!jQuery.isArray(items)) {
-                    items = [items];
-                }
-                var newItems = $Core.Utility.gettree(items);
-                var showTree = false;//是否树形下拉显示
-                earch: for (var i = 0; i < newItems.length; i++) {
-                    if (newItems[i].children.length > 0) {
-                        showTree = true;
-                        break earch;
-                    }
-                }
-                comboboxOption.multiple = multiple;
-                comboboxOption.width = that.attr("width") || 150;
-                comboboxOption.data = newItems;
-                comboboxOption.editable = that.attr("editable") == "false" ? false : true;
-                if (!multiple && that.attr("defaultItem") != 'false') {
-                    comboboxOption.data.unshift({ text: "请选择", value: "" });
-                }
-                if (showTree) {
-                    comboboxTree(that, $.extend(true, {}, comboboxOption));
-                }
-                else {
-                    var selFun = eval(that.attr("onchange"));
-                    var opts = $.extend(true, {}, comboboxOption);
-                    if (typeof (eval(selFun)) == "function") {
-                        opts.onSelect = eval(selFun);
-                    }
-                    combobox(that, opts);
-                }
-            }
-        }
-
-        function comboboxTree(that, comboboxOption) {
-            if (comboboxOption.multiple) {
-                comboboxOption.onSelect = function (node) {
-                    that.combotree("setValue", "请选择");
-                }
-                comboboxOption.onCheck = function (node, checked) {
-                    var arrayValues = that.combotree("getValues");
-                    if (arrayValues.length == 0) {
-                        that.combotree("setValue", "请选择");
-                    }
-                }
-            }
-
-            that.combotree(comboboxOption);
-            that.combotree("setValue", "请选择");
-        }
-        function combobox(that, comboboxOption) {
-            that.combobox(comboboxOption);
-            if (that.combobox("options").data.length > 0 && !comboboxOption.multiple) {
-                if (that.combobox("options").data.length > 2 || that.attr('selectedIndex')) {
-                    var selectedIndex = parseInt(that.attr('selectedIndex'));
-                    var unshowid = that.attr('unshowid') == 'true';
-                    var field = unshowid ? 'text' : 'value';
-                    try {
-                        var value = that.attr("defaultItem") == 'false' ?
-                            (selectedIndex ? that.combobox("options").data[selectedIndex - 1][field] : (that.val() || '请选择'))
-                            : (selectedIndex ? that.combobox("options").data[selectedIndex][field] : (that.val() || ''));
-
-                        if (unshowid && value == '') {
-                            that.combobox("select", '请选择')
-                        } else {
-                            that.combobox("select", value);
-                        }
-                    }
-                    catch (er) {
-                        if (window.console) {
-
-                        }
-                    }
-                }
-                else
-                {
-                    that.combobox("select", that.combobox("options").data[1] ? that.combobox("options").data[1].value : that.combobox("options").data[0].value);
-                }
-            }
-            else
-            {
-                that.combobox("select", "");
-            }
-        }
-
-
-        initObjNameCombobox = function () {
-            //提交请求获取数据
-            var item_data = [];
-            $("[ObjName]").each(function () {
-                var objName = $(this).attr("ObjName");
-                var parent = $(this).attr("Parent");
-                if (objName && objName.length != 0) {
-                    if (!detectArray(item_data, 'ObjName', objName)) {
-                        var item = { ObjName: objName, Parent: parent };
-                        item_data.push(item);
-                    }
-                }
-            });
-            loadComboboxData(item_data);
-            $("[ObjName]").each(function () {
-                bindObjNameCombobox($(this));
-            });
-        }
-
-        function loadComboboxData(item_data, condition) {
-            var m_combobox_json = $Core.Global.m_combobox_json;
-            //此判断是因为List跟Edit的请求方式不一样
-            if (condition == undefined && m_combobox_json.length > 0) {
-                var _removeIndex = new Array();//需要移除的项
-                for (var i = 0; i < m_combobox_json.length; i++) {
-                    for (var k in m_combobox_json[i]) {
-                        if (k == undefined) continue;
-                        for (var j = 0; j < item_data.length; j++) {
-                            for (var kk in item_data[j]) {
-                                if (kk && k == item_data[j][kk]) {
-                                    _removeIndex.push(j);
-                                }
-                            }
-                        }
-                    }
-                }
-                if (_removeIndex.length > 0) {
-                    for (var i = _removeIndex.length; i > 0 ; i--) {
-                        item_data.splice(_removeIndex[i], 1);
-                    }
-                }
-            }
-            //结束请求，开始渲染
-            if (item_data.length > 0) {
-                var _post_data = { sys_json: JSON.stringify(item_data) };
-                var result = Array();
-                if (condition) {
-                    _post_data = $.extend({}, _post_data, condition);
-                }
-                //此处变更为异步。
-                $Core.Utility.Ajax.post("GetCombobox", null, _post_data, null, null, function (result) {
-                    if (!(result instanceof Array)) {
-                        result = [result];
-                    }
-
-                    for (var i = 0, len = result.length; i < len; i++) {
-                        for (var k in result[i]) {
-                            var flag = true;
-                            for (var ii = 0; ii < m_combobox_json.length; ii++) {
-                                for (var kk in m_combobox_json[ii]) {
-                                    if (kk == k) {
-                                        m_combobox_json[ii][kk] = result[i][k];
-                                        flag = false;
-                                    }
-                                }
-                            }
-                            if (flag == true) {
-                                $Core.Global.m_combobox_json = $Core.Global.m_combobox_json.concat(result[i]);
-                            }
-                        }
-                    }
-
-                    if (m_combobox_json && !(m_combobox_json instanceof Array)) {
-                        $Core.Global.m_combobox_json = [m_combobox_json];
-                    }
-
+                loadComboboxData(item_data, condition, function () {
+                    bindObjName(_obj);
                 });
-
             }
         }
+
+
         //绑定
-        function bindObjNameCombobox(that) {
+        function bindObjName(that) {
             var m_combobox_json = $Core.Global.m_combobox_json;
             if (m_combobox_json && m_combobox_json.length > 0) {
                 var $target = that.addClass(".easyui-combobox"), data;
@@ -1556,6 +1437,158 @@
                 data = null;
             }
         }
+        function bindConfigKey(that) {
+            if (!$Core.Global.Variable.isLoadCompleted) {
+                setTimeout(function () { bindConfigKey(that) }, 5);
+                return;
+            }
+            var configKey = that.attr("configKey");
+            var multiple = that.attr("multiple") == "multiple";
+            if (configKey && $Core.Global.Config[configKey]) {
+                var items = $Core.Global.Config[configKey];
+                if (!jQuery.isArray(items)) {
+                    items = [items];
+                }
+                var newItems = $Core.Utility.gettree(items);
+                var showTree = false;//是否树形下拉显示
+                earch: for (var i = 0; i < newItems.length; i++) {
+                    if (newItems[i].children.length > 0) {
+                        showTree = true;
+                        break earch;
+                    }
+                }
+                comboboxOption.multiple = multiple;
+                comboboxOption.width = that.attr("width") || 150;
+                comboboxOption.data = newItems;
+                comboboxOption.editable = that.attr("editable") == "false" ? false : true;
+                if (!multiple && that.attr("defaultItem") != 'false') {
+                    comboboxOption.data.unshift({ text: "请选择", value: "" });
+                }
+                if (showTree) {
+                    comboboxTree(that, $.extend(true, {}, comboboxOption));
+                }
+                else {
+                    var selFun = eval(that.attr("onchange"));
+                    var opts = $.extend(true, {}, comboboxOption);
+                    if (typeof (eval(selFun)) == "function") {
+                        opts.onSelect = eval(selFun);
+                    }
+                    combobox(that, opts);
+                }
+            }
+        }
+        //绑定一个下拉树形控件
+        function comboboxTree(that, comboboxOption) {
+            if (comboboxOption.multiple) {
+                comboboxOption.onSelect = function (node) {
+                    that.combotree("setValue", "请选择");
+                }
+                comboboxOption.onCheck = function (node, checked) {
+                    var arrayValues = that.combotree("getValues");
+                    if (arrayValues.length == 0) {
+                        that.combotree("setValue", "请选择");
+                    }
+                }
+            }
+
+            that.combotree(comboboxOption);
+            that.combotree("setValue", "请选择");
+        }
+        //绑定一个下拉控件
+        function combobox(that, comboboxOption) {
+            that.combobox(comboboxOption);
+            if (that.combobox("options").data.length > 0 && !comboboxOption.multiple) {
+                if (that.combobox("options").data.length > 2 || that.attr('selectedIndex')) {
+                    var selectedIndex = parseInt(that.attr('selectedIndex'));
+                    var unshowid = that.attr('unshowid') == 'true';
+                    var field = unshowid ? 'text' : 'value';
+                    try {
+                        var value = that.attr("defaultItem") == 'false' ?
+                            (selectedIndex ? that.combobox("options").data[selectedIndex - 1][field] : (that.val() || (comboboxOption.data[0].value)))
+                            : (selectedIndex ? that.combobox("options").data[selectedIndex][field] : (that.val() || ''));
+
+                        if (unshowid && value == '') {
+                            that.combobox("select", '请选择')
+                        } else {
+                            that.combobox("select", value);
+                        }
+                    }
+                    catch (er) {
+
+                    }
+                }
+                else {
+                    that.combobox("select", that.combobox("options").data[1] ? that.combobox("options").data[1].value : that.combobox("options").data[0].value);
+                }
+            }
+            else {
+                that.combobox("select", "");
+            }
+        }
+
+
+        function loadComboboxData(item_data, condition, onLoadedEvent) {
+            var m_combobox_json = $Core.Global.m_combobox_json;
+            //此判断是因为List跟Edit的请求方式不一样
+            if (condition == undefined && m_combobox_json.length > 0) {
+                var _removeIndex = new Array();//需要移除的项
+                for (var i = 0; i < m_combobox_json.length; i++) {
+                    for (var k in m_combobox_json[i]) {
+                        if (k == undefined) continue;
+                        for (var j = 0; j < item_data.length; j++) {
+                            for (var kk in item_data[j]) {
+                                if (kk && k == item_data[j][kk]) {
+                                    _removeIndex.push(j);
+                                }
+                            }
+                        }
+                    }
+                }
+                if (_removeIndex.length > 0) {
+                    for (var i = _removeIndex.length; i > 0 ; i--) {
+                        item_data.splice(_removeIndex[i], 1);
+                    }
+                }
+            }
+            //结束请求，开始渲染
+            if (item_data.length > 0) {
+                var _post_data = { sys_json: JSON.stringify(item_data) };
+                var result = Array();
+                if (condition) {
+                    _post_data = $.extend({}, _post_data, condition);
+                }
+                //此处变更为异步。
+                $Core.Utility.Ajax.post("GetCombobox", null, _post_data, null, null, function (result) {
+                    if (!(result instanceof Array)) {
+                        result = [result];
+                    }
+
+                    for (var i = 0, len = result.length; i < len; i++) {
+                        for (var k in result[i]) {
+                            var flag = true;
+                            for (var ii = 0; ii < m_combobox_json.length; ii++) {
+                                for (var kk in m_combobox_json[ii]) {
+                                    if (kk == k) {
+                                        m_combobox_json[ii][kk] = result[i][k];
+                                        flag = false;
+                                    }
+                                }
+                            }
+                            if (flag == true) {
+                                $Core.Global.m_combobox_json = $Core.Global.m_combobox_json.concat(result[i]);
+                            }
+                        }
+                    }
+
+                    if (m_combobox_json && !(m_combobox_json instanceof Array)) {
+                        $Core.Global.m_combobox_json = [m_combobox_json];
+                    }
+                    onLoadedEvent && onLoadedEvent();
+                });
+
+            }
+        }
+
         //多级联下拉处理---------------------------------
         function reBind(parent_id, $element, opts, parent) {
             var ds = $Core.Global.m_combobox_json;
@@ -1770,12 +1803,19 @@
             }
             return array;
         }
+
         //初始化配置Key的下拉框数据。
-        function initConfigKeyCombobox() {
+        initConfigKeyCombobox = function () {
+            if (!$Core.Global.Variable.isLoadCompleted) {
+                setTimeout(function () { initConfigKeyCombobox() }, 5);
+                return;
+            }
             $("[configKey]").each(function () {
-                bindCombobox($(this));
+                bindConfigKey($(this));
             });
+            $Core.Combobox.onAfterExecute("configkey");
         }
+        onAfterBind = function (type) { };//定义绑定的事件。
         initObjNameCombobox = function () {
             //提交请求获取数据
             var item_data = [];
@@ -1789,13 +1829,16 @@
                     }
                 }
             });
-            loadComboboxData(item_data);
-            $("[ObjName]").each(function () {
-                bindObjNameCombobox($(this));
+            loadComboboxData(item_data, null, function () {
+                $("[ObjName]").each(function () {
+                    bindObjName($(this));
+                });
+                $Core.Combobox.onAfterExecute("objName");
             });
+
         };
         //设置Easyui下拉框的值
-        function selectedCombobox(data) {
+        function setValueToCombobox(data) {
             if ($.type(data) == 'object') {
                 var reg_date = /^\d{4}(-|\/)\d{2}(-|\/)\d{2}\s?.*$/;
                 $("[comboname]").each(function () {
@@ -1822,8 +1865,9 @@
                 initConfigKeyCombobox();//初始化configKey配置的项
                 initObjNameCombobox();//初始化objName配置的项
             },
-            bindComboboxies: bindComboboxies,
-            selectedCombobox: selectedCombobox
+            bind: bindComboboxies,
+            setValues: setValueToCombobox,
+            onAfterExecute: onAfterBind
         };
     })();
 })(jQuery, AR);

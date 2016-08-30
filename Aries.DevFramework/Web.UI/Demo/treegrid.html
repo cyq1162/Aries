@@ -1,16 +1,36 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <script src="/Style/JS/Aries.Loader.js"></script>
-    <script src="/Style/JS/AriesJS/Aries.TreeGrid.js"></script>
+   <!-- <script src="/Style/JS/AriesJS/Aries.TreeGrid.js"></script>-->
     <title></title>
 </head>
 <body>
-    <table id="tg"></table>
+    <table id="dg"></table>
+     <table id="tg"></table>
+
+    <script type="text/javascript">
+        var dg = new AR.DataGrid('Demo_Area');
+        //dg.isEditor = true;
+        dg.type = "treegrid";
+        dg.options = {
+            idField: "Code",
+            treeField: "Name",
+            parentField: "PCode",
+            pagination: false
+        }
+       // dg.addWhere("lvl", "(3)", "in");
+        dg.addWhere("id", "3000", ">");
+        dg.HeaderMenu.add("配置2", 'ttt', 'config');
+        dg.bind();
+       
+        function ttt(a, b, c) {
+            alert('onttt');
+            alert([a, b, c,'ttt']);
+        }
+        //var tg = new AR.TreeGrid('tg', 'Demo_Area', 'Demo_Area', 'Code', 'Name', 'PCode', undefined);
+        //tg.bind();    
+    </script>
 </body>
 </html>
-<script type="text/javascript">
-    var tg = new AR.TreeGrid('tg', 'Demo_Area', 'Demo_Area', 'Code', 'Name', 'PCode', undefined);
-    tg.bind();    
-</script>

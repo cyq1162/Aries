@@ -33,7 +33,7 @@ $.fn.panel.defaults.onBeforeDestroy = function () {
 var easyuiErrorFunction = function (XMLHttpRequest) {
     $.messager.progress('close');
     //$.messager.alert('错误', XMLHttpRequest.responseText);
-    alert(XMLHttpRequest.responseText);
+    alert("error:"+XMLHttpRequest.responseText);
 };
 $.fn.datagrid.defaults.onLoadError = easyuiErrorFunction;
 $.fn.treegrid.defaults.onLoadError = easyuiErrorFunction;

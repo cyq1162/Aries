@@ -4,7 +4,7 @@ window.AR = (function ($Core) {
     $Core.Dictionary = function () {
         this.length = 0;
         this.set = function (key, value) {
-            if (key!=undefined) {
+            if (key != undefined) {
                 if (this[key] == undefined) {
                     this.length++;
                 }
@@ -345,7 +345,8 @@ window.AR = (function ($Core) {
                     }
                 }
 
-                if (configKey || (objName && objName != '' && objName.indexOf('$') == -1)) {
+                if (configKey || (objName && objName != '' && objName.indexOf('$') == -1))//绑定下拉
+                {
                     input.attr("name", dataArray[i].field);
                     if (configKey) {
                         input.attr("configKey", configKey)
@@ -386,48 +387,57 @@ window.AR = (function ($Core) {
                     }
                     input.attr("onchange", "$Core.Common._Internal.onQuery");
                 }
-                else if (dataArray[i].datatype) {
+                else if (dataArray[i].datatype)//非绑定下拉
+                {
                     var dtype = dataArray[i].datatype.split(',');
-
-                    if (dtype[0] == "string") {
-                        cssName = "";
-                    }
-                    else if (dtype[0] == "datetime") {
-                        cssName = "easyui-datebox";
-                    }
-                    else if (dtype[0] == "int32" || dtype[0] == "double" || dtype[0] == "decimal") {
-                        cssName = "easyui-numberbox";
-                    }
-                    else if (dtype[0] == "boolean") {
-                        //cssText = "";
+                    switch (dtype[0]) {
+                        case "datetime":
+                            cssName = "easyui-datebox";
+                            input.attr("name", dataArray[i].field).addClass(cssName).attr("date", true).width(150).attr("validType", "datebox");
+                            if (dataArray[i].viewname && dataArray[i].viewname.indexOf('$1') != -1) {
+                                input.width(95);
+                                input2 = input.clone(true);
+                                div_item.append(input2).append($("<span>").html("&nbsp;至&nbsp;"));
+                            }
+                            break;
+                        case "int32":
+                        case "int64":
+                        case "int16":
+                        case "byte":
+                        case "double":
+                        case "single":
+                        case "decimal":
+                            cssName = "easyui-numberbox";
+                            if (dtype[2]) {
+                                switch (dtype[0]) {
+                                    case "single": case "double": case "decimal":
+                                        input.attr("precision", dtype[2]); break;
+                                }
+                            }
+                            input.attr("name", dataArray[i].field).addClass(cssName);
+                            if (dataArray[i].viewname && dataArray[i].viewname.indexOf('$1') != -1) {
+                                input.width(68);
+                                input2 = input.clone(true);
+                                div_item.append(input2).append($("<span>").html("&nbsp;-&nbsp;").css({ "display": "block", "float": "left" }));
+                            }
+                            break;
+                        default:
+                            if (dtype[0] == "string") { cssName = ""; }
+                            input.attr("name", dataArray[i].field).addClass(cssName);
+                            break;
                     }
                     if (dtype[1]) {
-                        if (dtype[2]) {
-                            dtype[1] = parseInt(dtype[1]) + parseInt(dtype[2]) + 1; //重置长度,+1是加上.的占位符
+                        var size = parseInt(dtype[1]);
+                        var scale = dtype[2];
+                        if (scale && scale != 0) //带符点数
+                        {
+                            size = size + parseInt(scale) + 1; //重置长度,+1是加上.的占位符
                         }
-                        input.addClass("easyui-validatebox").attr("validType", "length[1," + dtype[1] + "]");
-                    }
-                    if (dtype[0] == "datetime") {
-                        input.attr("name", dataArray[i].field).addClass(cssName).attr("date", true).width(150).attr("validType", "datebox");
-                        if (dataArray[i].viewname && dataArray[i].viewname.indexOf('$1') != -1) {
-                            input.width(95);
-                            input2 = input.clone(true);
-                            div_item.append(input2).append($("<span>").html("&nbsp;至&nbsp;"));
+                        input.addClass("easyui-validatebox").attr("validType", "length[1," + size + "]");
+                        if (input2)
+                        {
+                            input2.addClass("easyui-validatebox").attr("validType", "length[1," + size + "]");
                         }
-                    } else if (dtype[0] == "int32" || dtype[0] == "double" || dtype[0] == "decimal") {
-                        if (dtype[0] == "double" || dtype[0] == "decimal") {
-                            if (dtype[2]) {
-                                input.attr("precision", dtype[2]);
-                            }
-                        }
-                        input.attr("name", dataArray[i].field).addClass(cssName);
-                        if (dataArray[i].viewname && dataArray[i].viewname.indexOf('$1') != -1) {
-                            input.width(68);
-                            input2 = input.clone(true);
-                            div_item.append(input2).append($("<span>").html("&nbsp;-&nbsp;").css({ "display": "block", "float": "left" }));
-                        }
-                    } else {
-                        input.attr("name", dataArray[i].field).addClass(cssName);
                     }
 
                 }
@@ -441,7 +451,7 @@ window.AR = (function ($Core) {
                 }
                 div_item.append(input);
                 line.append(div_item);
-                objName = undefined; cssName = undefined; input = undefined;
+                objName = undefined; cssName = undefined; input = undefined; input2 = undefined;
             }
         }
     };

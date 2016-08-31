@@ -1143,9 +1143,11 @@
         }
         //添加工具栏按钮
         (function () {
+            var div_fn = $('<div class="function-box" id="div_fun">');
             if (!dg.ToolBar.isHidden) {
+                //div_fn.attr("class", "function-box");
                 //if (dg.type == "datagrid") {
-                var div_fn = $('<div class="function-box" id="div_fun">');
+
                 var item; actionKeys = $Core.Global.Variable.actionKeys || "";
                 if (actionKeys.indexOf(',add,') > -1 && !dg.ToolBar.BtnAdd.isHidden) {
                     dg.ToolBar.BtnAdd.$target = $('<input class=\"add\" flag=\"btn_add\" type=\"button\" name=\"添加\" value=\"\"/>');
@@ -1180,7 +1182,7 @@
                     }
                 }
 
-                dg.ToolBar.$target.append(div_fn);
+
                 //}
                 //if (dg.type == "treegrid") {
                 //    var div_fn = $('<div class="function-box" id="' + dg.Internal.toolbarID + '">');
@@ -1191,6 +1193,10 @@
                 //    dg.ToolBar.$target.append(div_fn);
                 //}
             }
+            else {//处理样式问题（如果去掉或隐藏div_fn，或不设置clas为function-box，都显示不出分页控件，只有后期改变其属性）
+                div_fn.attr("style", "height:0px;padding:0 0;border-bottom:0px");
+            }
+            dg.ToolBar.$target.append(div_fn);
             $("body").append(dg.ToolBar.$target); //加到页面中       
         }());
     };
@@ -1833,7 +1839,7 @@
                 $("[ObjName]").each(function () {
                     bindObjName($(this));
                 });
-                $Core.Combobox.onAfterExecute("objName");
+                $Core.Combobox.onAfterExecute("objname");
             });
 
         };

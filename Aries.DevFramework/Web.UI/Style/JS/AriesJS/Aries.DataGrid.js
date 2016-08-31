@@ -280,7 +280,7 @@
 
         if (costomToolbar == false && dg.isShowToolArea != false) {
             $Core.Common._Internal.createSearchForm(dg); //内部有判断，创建SearchForm表单
-            if (!dg.ToolBar.isHidden) {
+            if (!dg.Search.isHidden) {
                 $Core.Combobox.onInit();
             }
             if (!dg.ToolBar.isHidden) {

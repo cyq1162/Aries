@@ -94,6 +94,15 @@ namespace Aries.Core.Sql
             }
             else
             {
+                switch (key)
+                {
+                    case ">":
+                    case ">=":
+                    case "<":
+                    case "<=":
+                    case "<>":
+                        return key;
+                }
                 return "=";
             }
         }

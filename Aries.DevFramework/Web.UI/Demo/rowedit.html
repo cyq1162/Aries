@@ -37,11 +37,11 @@
             dg.bind();
 
             dg.PKColumn.Editor.BtnDel.onBeforeExecute = function (v) {
-                alert(v);
+                alert("onBeforeExecute:"+v);
                 // return false;
             }
             dg.ToolBar.BtnDelBatch.onBeforeExecute = function (v) {
-                alert(v);
+                alert("onBeforeExecute:" + v);
             }
         });
         function fnEditor(r) {

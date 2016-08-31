@@ -3,14 +3,24 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <script src="/Style/JS/Aries.Loader.js"></script>
-   <!-- <script src="/Style/JS/AriesJS/Aries.TreeGrid.js"></script>-->
     <title></title>
 </head>
 <body>
-    <table id="dg"></table>
-     <table id="tg"></table>
-
+ <!--   <div style="height: 440px;">
+        <table id="tg"></table>
+    </div>
+    <hr />-->
+    <div style="height: 440px;">
+        <table id="dg"></table>
+    </div>
     <script type="text/javascript">
+        //var tg = new AR.DataGrid('Demo_Tree', null, "tg", "treegrid");
+        //tg.options = {
+        //    idField: "ID",
+        //    treeField: "Name",
+        //    parentField: "ParentID",
+        //}
+        //tg.bind();
         var dg = new AR.DataGrid('Demo_Area');
         //dg.isEditor = true;
         dg.type = "treegrid";
@@ -18,16 +28,22 @@
             idField: "Code",
             treeField: "Name",
             parentField: "PCode",
-            pagination: false
+            pagination: false,
+            onEditing: function (index, row) {
+                alert(index + "," + row);
+            }
         }
-       // dg.addWhere("lvl", "(3)", "in");
+        // dg.addWhere("lvl", "(3)", "in");
         dg.addWhere("id", "3000", ">");
         dg.HeaderMenu.add("配置2", 'ttt', 'config');
+        dg.ToolBar.BtnAdd.onBeforeExecute = function (index, isSameLevel) {
+            dg.PKColumn.Editor.insertRowData[dg.options.idField] = "ag";//自定义主键
+        }
         dg.bind();
-       
+
         function ttt(a, b, c) {
             alert('onttt');
-            alert([a, b, c,'ttt']);
+            alert([a, b, c, 'ttt']);
         }
         //var tg = new AR.TreeGrid('tg', 'Demo_Area', 'Demo_Area', 'Code', 'Name', 'PCode', undefined);
         //tg.bind();    

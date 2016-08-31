@@ -66,7 +66,8 @@
                         *查询条件的json，可在查询之前修改执行
                         *@param{Array} search
                         */
-                        this.onBeforeExecute = function (search) { };
+                        this.onBeforeExecute = function (searchJsonArray) { };
+                        this.onAfterExecute = function (searchJsonArray) { };
                         this.onExecute = function (dg, btn_query) {
                             var targetForm = btn_query.parents("form");
                             var searchJson = $Core.Common._Internal.buildSearchJson(targetForm);
@@ -112,10 +113,10 @@
                                     dg.datagrid("load", data);
 
                                 }
-                                this.onAfterExecute();
+                                this.onAfterExecute(searchJson);
                             }
                         }
-                        this.onAfterExecute = function () { };
+
                     }
                     return new Obj();
                 }();
@@ -190,7 +191,7 @@
                 that.onExecute = function (searchItem, dg) {
                     that.onBeforeExecute(searchItem);
                     _createHtml(searchItem, dg);
-                    that.onAfterExecute();
+                    that.onAfterExecute(searchItem);
                 };
             },
             ToolBar: function () {
@@ -241,37 +242,66 @@
                         //重新设定打开窗体的链接
                         this.winUrl = null;
                         //dg 是当前datagrid对象
-                        this.onExecute = function (dg) {
-                            if (this.onBeforeExecute() == false) { return; };
-                            if (dg.isEditor || (dg.type == "treegrid" && !this.winUrl)) {
+                        this.onBeforeExecute = function (index, isSameLevel) { };
+                        this.onExecute = function (dg, index, isSameLevel) {
+                            if (this.onBeforeExecute(index, isSameLevel) == false) { return; };
+                            var isTreeGrid = dg.type == "treegrid";
+                            if (!this.winUrl && (dg.isEditor || isTreeGrid)) {
                                 if (endEditing(dg)) {
                                     dg.PKColumn.Editor.operator = "Add";
-                                    var _row = {}, _data = dg.PKColumn.Editor.insertRowData;
-                                    var _rows = dg.datagrid('getRows');
-                                    var _len = _rows.length;
-                                    if (dg.PKColumn.Editor.isInsertRow) {
-                                        var pkField = dg.Internal.primarykey;
-                                        _row = $.extend(_row, _rows[_len - 1] || {});
-                                        delete _row[dg.Internal.primarykey];
-                                    }
+                                    var _row = {};
+                                    var _data = dg.PKColumn.Editor.insertRowData;
                                     if (_data && typeof (_data) === 'object') {
                                         _row = $.extend(_row, _data);
                                     }
+                                    var addIndex;
+                                    if (isTreeGrid) {
+                                        if (_row[dg.options.idField])//外部设置了值
+                                        {
+                                            addIndex = _row[dg.options.idField];
+                                        }
+                                        else {
+                                            addIndex = $Core.Utility.guid();
+                                            _row[dg.options.idField] = addIndex;
+                                        }
+                                    }
+                                    else {
+                                        addIndex = dg.datagrid('getRows').length;
+                                    }
+                                    //if (dg.PKColumn.Editor.isInsertRow)
+                                    //{
+                                    //    var pkField = dg.Internal.primarykey;
+                                    //    _row = $.extend(_row, _rows[_len - 1] || {});
+                                    //    delete _row[dg.Internal.primarykey];
+                                    //}
+                                    if (isTreeGrid) {
+                                        // _row = {};
+                                        _row = {
+                                            parent: undefined,
+                                            data: [_row]
+                                        }
+                                        var node = dg.datagrid("find", index);
+                                        if (node) {
+                                            _row.parent = isSameLevel ? node[dg.options.parentField] : node[dg.options.idField];
+                                            _row.data[0][dg.options.parentField] = _row.parent;
+                                        }
+                                    }
                                     dg.datagrid("appendRow", _row);
-                                    dg.PKColumn.Editor.editIndex = _len;
-                                    dg.datagrid("refreshRow", dg.PKColumn.Editor.editIndex);
-                                    dg.datagrid('selectRow', dg.PKColumn.Editor.editIndex)
-                                        .datagrid('beginEdit', dg.PKColumn.Editor.editIndex);
-
+                                    dg.PKColumn.Editor.editIndex = addIndex;//指定操作的索引
+                                    dg.datagrid("refreshRow", addIndex);//变更按钮状态
+                                    dg.datagrid('selectRow', addIndex);//光标定位到行
+                                    dg.datagrid('beginEdit', addIndex);//开启编辑
                                 }
-                            } else {
-                                $Core.Global.DG.operating = dg;
-                                var splitIndex = location.href.indexOf('List') == -1 ? location.href.lastIndexOf('.') : location.href.lastIndexOf('List');
-                                var viewLink = this.winUrl || location.href.substring(location.href.lastIndexOf('/') + 1, splitIndex) + 'Edit.html';
-                                $Core.Utility.Window.open(viewLink, this.winTitle, false);
-                                dg.ToolBar.BtnAdd.onAfterExecute.call(this);
                             }
-                            this.onAfterExecute();
+                            else {
+                                $Core.Global.DG.operating = dg;
+                                var href = location.href;
+                                var splitIndex = href.indexOf('List') == -1 ? href.lastIndexOf('.') : href.lastIndexOf('List');
+                                var viewLink = this.winUrl || href.substring(href.lastIndexOf('/') + 1, splitIndex) + 'Edit.html';
+                                $Core.Utility.Window.open(viewLink, this.winTitle, false);
+                               
+                            }
+                            this.onAfterExecute(index, isSameLevel);
                         };
                     }
                     return new Obj();
@@ -279,6 +309,8 @@
                 this.BtnDelBatch = function () {
                     function Obj() {
                         $Core.BtnBase.call(this);
+                        this.onBeforeExecute = function (ids, index) { };
+                        this.onBeforeExecute = function (ids, index,responseText) { };
                         this.onExecute = function (dg) {
                             $Core.Common.onDel(this, null, dg.id);//内部有前中后事件
                         }
@@ -400,8 +432,8 @@
             },
             ContextMenu: function () {
                 this.isHidden = false;
-                this.Items = [{ "text": "添加同级", "onclick": "$Core.Common._Internal.onAdd", "lv2action": "add" },
-                    { "text": "添加子级", "onclick": "$Core.Common._Internal.Editor.onAdd", "lv2action": "add" },
+                this.Items = [{ "text": "添加同级", "onclick": "$Core.Common._Internal.onAdd,true", "lv2action": "add" },
+                    { "text": "添加子级", "onclick": "$Core.Common._Internal.onAdd", "lv2action": "add" },
                     { "text": "编辑", "onclick": "$Core.Common._Internal.Editor.onEdit", "lv2action": "edit" },
                     { "text": "删除", "onclick": "$Core.Common._Internal.Editor.onDel", "lv2action": "del" }
                 ];
@@ -526,7 +558,13 @@
                     $(this).parents("form").find(".query").click();
                 }
             },
-            onAdd: function (el, dgid, value, index) { alert(value); },
+            onAdd: function (el, dgid, value, index, isSameLevel) {
+                var dg = getDgByKey(dgid);
+                if (dg) {
+                    dg.ToolBar.BtnAdd.onExecute(dg, index, isSameLevel);
+                }
+
+            },
             onConfigClick: function (el, dgid, value, index) {
                 var dg = getDgByKey(dgid);
                 if (dg) {
@@ -666,6 +704,7 @@
                 }
             },
             formatEditor: function (row, dg) {
+                if (!row.edit) { return; }
                 var editor = function () {
                     try {
                         return eval(row.editor);
@@ -1143,7 +1182,7 @@
         }
         //添加工具栏按钮
         (function () {
-            var div_fn = $('<div class="function-box" id="div_fun">');
+            var div_fn = $('<div class="function-box" id="div_toolbarArea">');
             if (!dg.ToolBar.isHidden) {
                 //div_fn.attr("class", "function-box");
                 //if (dg.type == "datagrid") {
@@ -1193,7 +1232,7 @@
                 //    dg.ToolBar.$target.append(div_fn);
                 //}
             }
-            else {//处理样式问题（如果去掉或隐藏div_fn，或不设置clas为function-box，都显示不出分页控件，只有后期改变其属性）
+            else {//处理样式问题（如果去掉或隐藏div_fn，或不设置class为function-box，都显示不出分页控件，只有后期改变其属性）
                 div_fn.attr("style", "height:0px;padding:0 0;border-bottom:0px");
             }
             dg.ToolBar.$target.append(div_fn);

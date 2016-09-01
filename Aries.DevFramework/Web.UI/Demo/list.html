@@ -59,41 +59,41 @@
 <script type="text/javascript">
 
     var customToolbar = AR.Utility.queryString('toolbar');
-    var dg = new AR.DataGrid('V_Test', 'Demo_TestA');
+    var grid = new AR.DataGrid('V_Test', 'Demo_TestA');
 
     //自定义工具栏
     if (customToolbar) {
-        dg.Search.$target = $('#dg_toolbar');
+        grid.Search.$target = $('#dg_toolbar');
     }
-    dg.options = {
+    grid.options = {
         queryParams: { "a": 1 },
         onLoadSuccess: function () {
-
+            //alert('ok123');
         }
     }
-    // dg.isShowToolArea = false;
-  // dg.ToolBar.isHidden = true;
-    //dg.Search.isHidden = true;
-    //dg.Search.$target.find('[name="F1"]').val('test');    
+    // grid.isShowToolArea = false;
+  // grid.ToolBar.isHidden = true;
+    //grid.Search.isHidden = true;
+    //grid.Search.$target.find('[name="F1"]').val('test');    
 
-    dg.ToolBar.add('自定义按钮', 'fn', 10, 'btn-lg');
-    dg.PKColumn.add('edit', '编辑', null, 'edit.html', '编辑Test表');
-    dg.PKColumn.add('del');
-    dg.PKColumn.add('abc', "hello", null, "aaa.html?uid={ID}", "hello world!");//{XXX}的值会被对应的字段值替换（注意大小写）。
-    dg.PKColumn.onBeforeExecute = function (v, r, i, btns) {
+    grid.ToolBar.add('自定义按钮', 'fn', 10, 'btn-lg');
+    grid.PKColumn.add('edit', '编辑', null, 'edit.html', '编辑Test表');
+    grid.PKColumn.add('del');
+    grid.PKColumn.add('abc', "hello", null, "aaa.html?uid={ID}", "hello world!");//{XXX}的值会被对应的字段值替换（注意大小写）。
+    grid.PKColumn.onBeforeExecute = function (v, r, i, btns) {
         //btns[0].isHidden = true;
         //return v + "bd";
     };
-    dg.PKColumn.onAfterExecute = function (v, r, i, s) {
+    grid.PKColumn.onAfterExecute = function (v, r, i, s) {
         //this.Items[i].edit.hide();
         //return s.prop("outHTML");
     };
-    //dg.options.defaultWhere = [
+    //grid.options.defaultWhere = [
     //    { paramName: 'F1', paramPattern: 'like', paramValue: '1' },
     //    { paramName: 'F3', paramPattern: 'like', paramValue: '3' }
     //];
-    //dg.addWhere("f3", "3");
-    dg.Search.onAfterExecute = function () {
+    //grid.addWhere("f3", "3");
+    grid.Search.onAfterExecute = function () {
         if (!customToolbar && this.Items.length > 0) {
             this.Items["F1"] && this.Items["F1"].val('1');
         }
@@ -101,13 +101,13 @@
         //this.Items['F3'][0].val('2016-07-08');
         //this.Items['F4'].val('400000000');
     }
-    //dg.Search.BtnQuery.onBeforeExecute = function (data)
+    //grid.Search.BtnQuery.onBeforeExecute = function (data)
     //{
     //    data.push({ paramName: 'F2', paramPattern: 'like', paramValue: '2' });
     //}
-    //dg.ToolBar.BtnAdd.winUrl = "http://aries.cyqdata.com"; 
-    //dg.ToolBar.BtnAdd.winTitle = "官网示例";
-    dg.bind();
+    //grid.ToolBar.BtnAdd.winUrl = "http://aries.cyqdata.com"; 
+    //grid.ToolBar.BtnAdd.winTitle = "官网示例";
+    grid.bind();
     function F7(v, r, i) {
         return "f7:" + v;
     }

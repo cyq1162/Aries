@@ -11,7 +11,7 @@
     </div>
     <hr />-->
     <div style="height: 440px;">
-        <table id="dg"></table>
+        <table id="grid"></table>
     </div>
     <script type="text/javascript">
         //var tg = new AR.DataGrid('Demo_Tree', null, "tg", "treegrid");
@@ -21,10 +21,10 @@
         //    parentField: "ParentID",
         //}
         //tg.bind();
-        var dg = new AR.DataGrid('Demo_Area');
+        var tg = new AR.DataGrid('Demo_Area', null, "grid", "treegrid");
         //dg.isEditor = true;
-        dg.type = "treegrid";
-        dg.options = {
+        //dg.type = "treegrid";
+        tg.options = {
             idField: "Code",
             treeField: "Name",
             parentField: "PCode",
@@ -34,12 +34,12 @@
             }
         }
         // dg.addWhere("lvl", "(3)", "in");
-        dg.addWhere("id", "3000", ">");
-        dg.HeaderMenu.add("配置2", 'ttt', 'config');
-        dg.ToolBar.BtnAdd.onBeforeExecute = function (index, isSameLevel) {
-            dg.PKColumn.Editor.insertRowData[dg.options.idField] = "ag";//自定义主键
+        tg.addWhere("id", "3000", ">");
+        tg.HeaderMenu.add("配置2", 'ttt', 'config');
+        tg.ToolBar.BtnAdd.onBeforeExecute = function (index, isSameLevel) {
+            tg.PKColumn.Editor.insertRowData[tg.options.idField] = "ag";//自定义主键
         }
-        dg.bind();
+        tg.bind();
 
         function ttt(a, b, c) {
             alert('onttt');

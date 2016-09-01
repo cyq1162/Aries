@@ -179,11 +179,52 @@
         var dg = this;
         var interval;
         $Core.Utility.Ajax.post("GetHeader", dg.viewName, dg.options.queryParams, null, null,
-            function (result) {
-                dg.Internal.headerData = result;
-                interval = setInterval(function () { _bindGrid(dg, interval); }, 5);
-            }
+            function (dg) {
+                return function (result) {
+                    dg.Internal.headerData = result;
+                    _LoadComboxData(dg, result);
+                }
+            }(dg)
         );
+    }
+    function _LoadComboxData(dg, headerData) {
+        var json_data = headerData;// $Core.Utility.cloneArray(dg.Internal.headerData, true);
+        if (json_data == null || json_data.length == 0) {
+            return null;
+        }
+        //combobox的查询条件
+        var _post_combox_data = new Array();
+        each: for (var i = 0, len = json_data.length; i < len; i++) {
+            if (json_data[i].formatter == undefined || json_data[i].formatter == "" || json_data[i].formatter.indexOf('#') == -1 || !/^#C_+/.test(json_data[i].formatter)) {
+                continue each;
+            }
+            objName = json_data[i].formatter.split('#')[1];
+            var obj_item = {};
+            if (objName.indexOf('=>') != -1) {
+                objName = objName.split('=>')[0];
+                obj_item['Parent'] = objName.split('=>')[1];
+            }
+            obj_item['objName'] = objName;
+            _post_combox_data.push(obj_item);
+        }
+        //请求下拉框数据,子页面的下拉列表数据绑定
+        if (_post_combox_data.length > 0) {
+            var _post_data = { sys_json: JSON.stringify(_post_combox_data) };
+            if ($Core.combobox_params && $.type($Core.combobox_params) == "object") {
+                _post_data = $.extend({}, _post_data, $Core.combobox_params);
+            }
+            $Core.Utility.Ajax.post("GetCombobox", "objName", _post_data, null, null,
+                function (dg) {
+                    return function (result) {
+                        $Core.Global.m_combobox_json = $Core.Global.m_combobox_json.concat(result);
+                        interval = setInterval(function () { _bindGrid(dg, interval); }, 5);
+                    }
+                }(dg));
+
+        }
+        else {
+            interval = setInterval(function () { _bindGrid(dg, interval); }, 5);
+        }
     }
     function _bindGrid(dg, interval) {
         if ($Core.Global.Variable.isLoadCompleted) {
@@ -192,6 +233,7 @@
             if (dg.isShowToolArea) {
                 if (!dg.Search.isHidden) {
                     $Core.Common._Internal.registerEvent(dg);
+                    $.parser.parse('#' + dg.Internal.toolbarID); //解析成easyui
                 }
                 if (!dg.ToolBar.isHidden) {
                     bindToolbar.call(dg);
@@ -202,7 +244,7 @@
     }
     function _init() {
         var dg = this;
-        var objColumns = $Core.Common.Formatter.formatHeader(dg);
+        var objColumns = $Core.Common.Formatter.formatHeader(dg);//处理主键列和Formatter列设置
         if (!objColumns) {
             return false;
         }
@@ -251,10 +293,12 @@
                 beforeLoad && beforeLoad(param);
             },
             onLoadSuccess: function () {
+
+
                 if (dg.type == "treegrid") {
                     regKeyDown(dg);
                 }
-                beforeLoad && onLoadSuccess(param);
+                loadSuccess && onLoadSuccess(param);
             },
             onHeaderContextMenu: function (e, field) {
                 e.preventDefault();
@@ -289,6 +333,7 @@
             $Core.Common._Internal.createSearchForm(dg); //内部有判断，创建SearchForm表单
             if (!dg.Search.isHidden) {
                 $Core.Combobox.onInit();
+
             }
             if (!dg.ToolBar.isHidden) {
                 _setToolbar.call(dg, dg.ToolBar._btnArray);//自定义的按钮。
@@ -306,7 +351,7 @@
         if (searchJson.length > 0) {
             cfg.queryParams['sys_search'] = JSON.stringify(searchJson);
         }
-
+        //_createEditor(dg);
         var options = $.extend(cfg, opts);
         //请求URL地址设置
         options.url = (opts.url || $Core.Utility.Ajax.Settings.url) + "?sys_method=GetList&sys_objName=" + dg.viewName + "&sys_tableName=" + dg.tableName;
@@ -327,7 +372,9 @@
             });
         }
         $(".datagrid-cell-group").css({ fontWeight: 'bold' }); //设置合并列的加粗样式
+
     }
+
     function _createMenu(items, dg, $menu, row) {
         var actionKeys = $Core.Global.Variable.actionKeys;
         if (!actionKeys) { return; }
@@ -346,9 +393,9 @@
                         var para = items.length > 1 ? items[1] : undefined;
                         return function () {
                             if (row) {
-                                _fntt(that, dg.id, row[dg.Internal.primarykey], row[dg.options.idField], para);
+                                _fntt(that, dgid, row[dg.Internal.primarykey], row[dg.options.idField], para);
                             } else {
-                                _fntt(that, dg.id, para);
+                                _fntt(that, dgid, para);
                             }
                         };
                     }(row, this, dg.id, menu.onclick.split(','));
@@ -358,7 +405,6 @@
 
         }
     }
-
     //创建行内右键菜单
     function _createRowMenu(dg, actionKeys) {
 
@@ -571,7 +617,7 @@
                         }
                         this.onBeforeExecute(value, index);
                     };
-                    
+
                 }
                 return new Obj();
             })();
@@ -763,7 +809,8 @@
                         toolbarContainer.children().eq(index - 1).before(item);
                     }
                 }
-                dg.ToolBar.Items.set(lv2action || title || btnClick, { "isCustom": true, $target: item });
+                //外部是_setToolbar.call(dg, dg.ToolBar._btnArray);调用方式，所以上下文被换成了datagrid
+                this.ToolBar.Items.set(lv2action || title || btnClick, { "isCustom": true, $target: item });
             }
         }
     }

@@ -177,7 +177,6 @@
         }
     }
     $(function () {
-        //$.parser.parse($("#div_search"));
         $Core.Combobox.onInit();
         $Core.Form.onInit();
         registEvent("keydown");

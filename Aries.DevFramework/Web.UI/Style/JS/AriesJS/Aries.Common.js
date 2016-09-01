@@ -299,7 +299,7 @@
                                 var splitIndex = href.indexOf('List') == -1 ? href.lastIndexOf('.') : href.lastIndexOf('List');
                                 var viewLink = this.winUrl || href.substring(href.lastIndexOf('/') + 1, splitIndex) + 'Edit.html';
                                 $Core.Utility.Window.open(viewLink, this.winTitle, false);
-                               
+
                             }
                             this.onAfterExecute(index, isSameLevel);
                         };
@@ -310,7 +310,7 @@
                     function Obj() {
                         $Core.BtnBase.call(this);
                         this.onBeforeExecute = function (ids, index) { };
-                        this.onBeforeExecute = function (ids, index,responseText) { };
+                        this.onBeforeExecute = function (ids, index, responseText) { };
                         this.onExecute = function (dg) {
                             $Core.Common.onDel(this, null, dg.id);//内部有前中后事件
                         }
@@ -848,38 +848,7 @@
             //对默认表头进行处理分组。
             formatHeader: function (dg) {
                 var json_data = $Core.Utility.cloneArray(dg.Internal.headerData, true);
-                if (json_data == null || json_data.length == 0) {
-                    return null;
-                }
                 var frozen = Array(), cols = Array(), merge = Array(), isMerge = false, megerLen = 0, startIndex = 0;
-                //combobox的查询条件
-                var _post_combox_data = new Array();
-                each: for (var i = 0, len = json_data.length; i < len; i++) {
-                    if (json_data[i].formatter == undefined || json_data[i].formatter == "" || json_data[i].formatter.indexOf('#') == -1 || !/^#C_+/.test(json_data[i].formatter)) {
-                        continue each;
-                    }
-                    objName = json_data[i].formatter.split('#')[1];
-                    var obj_item = {};
-                    if (objName.indexOf('=>') != -1) {
-                        objName = objName.split('=>')[0];
-                        obj_item['Parent'] = objName.split('=>')[1];
-                    }
-                    obj_item['objName'] = objName;
-                    _post_combox_data.push(obj_item);
-                }
-                //请求下拉框数据,子页面的下拉列表数据绑定
-                if (_post_combox_data.length > 0) {
-                    var _post_data = { sys_json: JSON.stringify(_post_combox_data) };
-                    if ($Core.combobox_params && $.type($Core.combobox_params) == "object") {
-                        _post_data = $.extend({}, _post_data, $Core.combobox_params);
-                    }
-                    $Core.Utility.Ajax.post("GetCombobox", "objName", _post_data, null, null, function (result) {
-                        $Core.Global.m_combobox_json = $Core.Global.m_combobox_json.concat(result);
-                    });
-
-                    //$Core.Global.m_combobox_json = $Core.Global.m_combobox_json.concat($Core.Utility.Ajax.post("GetCombobox", "objName", _post_data, false));
-                }
-
                 each: for (var i = 0; i < json_data.length; i++) {
                     var format, style, configKey, objName;
                     //格式化第一列为主键
@@ -929,17 +898,16 @@
                     //是否编辑模式
                     if ((dg.isEditor && json_data[i].edit) || dg.type == "treegrid") {
                         this.formatEditor(json_data[i], dg);
-                        var row = json_data[i];
-                        if (row && row.editor && row.editor.options && row.editor.type == "combobox") {
-                            var isrelaciton = false;
-                            if ((typeof (row.formatter) == "string" &&
-                                row.formatter.indexOf('#') != -1) && /#C_/.test(row.formatter)) {
-                                objName = row.formatter.split('#')[1];
-                                if (objName.indexOf('=>') != -1) {
-                                    isrelaciton = true;
-                                }
-                            }
-                        }
+                        //var row = json_data[i];
+                        //if (row && row.editor && row.editor.options && row.editor.type == "combobox") {
+                        //    var isrelaciton = false;
+                        //    if ((typeof (row.formatter) == "string" && row.formatter.indexOf('#') != -1) && /#C_/.test(row.formatter)) {
+                        //        objName = row.formatter.split('#')[1];
+                        //        if (objName.indexOf('=>') != -1) {
+                        //            isrelaciton = true;
+                        //        }
+                        //    }
+                        //}
                     }
                     if (json_data[i].formatter && typeof (json_data[i].formatter) != 'function') {
                         //格式化config表的数据结构
@@ -1019,102 +987,6 @@
                     }
                 }
                 return { frozen: frozen, cols: cols };
-            },
-            formatTGheader: function (header_json) {
-                var cols = Array();
-                if (header_json) {
-                    //combobox的查询条件
-                    var _post_combox_data = new Array();
-
-                    each: for (var i = 0, len = header_json.length; i < len; i++) {
-                        if (header_json[i].formatter == undefined || header_json[i].formatter == "" || header_json[i].formatter.indexOf('#') == -1 || !/^#C_+/.test(header_json[i].formatter)) {
-                            continue each;
-                        }
-                        objName = header_json[i].formatter.split('#')[1];
-                        var obj_item = {};
-                        if (objName.indexOf('=>') != -1) {
-                            objName = objName.split('=>')[0];
-                            obj_item['Parent'] = objName.split('=>')[1];
-                        }
-                        obj_item['objName'] = objName;
-                        _post_combox_data.push(obj_item);
-                    }
-
-                    //请求下拉框数据
-                    if (_post_combox_data.length > 0) {
-                        var _post_data = { sys_json: JSON.stringify(_post_combox_data) };
-                        $Core.Global.m_combobox_json = $Core.Global.m_combobox_json || [];
-                        if ($Core.combobox_params && $.type($Core.combobox_params) == "object") {
-                            _post_data = $.extend({}, _post_data, $Core.combobox_params);
-                        } $Core.Utility.Ajax.post("GetCombobox", "objName", _post_data, null, null, function (result) {
-                            $Core.Global.m_combobox_json = $Core.Global.m_combobox_json.concat(result);
-                        });
-                        //$Core.Global.m_combobox_json = $Core.Global.m_combobox_json.concat($Core.Utility.Ajax.post("GetCombobox", "objName", _post_data, false));
-                    }
-
-                    for (var i = 0; i < header_json.length; i++) {
-                        if (header_json[i].hidden != true) {
-
-                            var format, style, configKey, objName;
-                            //格式化config表的数据结构
-                            if (header_json[i].formatter && header_json[i].formatter.length > 2 && header_json[i].formatter.indexOf('#') != -1 && !/C_+/.test(header_json[i].formatter)) {
-                                configKey = header_json[i].formatter.split('#')[1];
-                                header_json[i].formatter = "configFormatter";
-                            }
-
-                            if (header_json[i].formatter && header_json[i].formatter.length > 2 && header_json[i].formatter.indexOf('#') != -1 && /C_+/.test(header_json[i].formatter)) {
-                                objName = header_json[i].formatter.split('#')[1];
-                                if (objName.indexOf('=>') != -1) {
-                                    objName = objName.split('=>')[0];
-                                }
-                                header_json[i].formatter = "objFormatter";
-                            }
-                            try {
-                                format = eval(header_json[i].formatter);
-                                style = eval(header_json[i].styler);
-                                if (typeof (format) == "function") {
-                                    if (header_json[i].formatter == "configFormatter") {
-                                        header_json[i].formatter = format(configKey);
-                                    } else if (header_json[i].formatter == "objFormatter") {
-                                        header_json[i].formatter = format(objName);
-                                    } else {
-                                        if (i == 0) {
-                                            that._primarykey = header_json[i].field;
-                                            that.idField = header_json[i].field;
-                                            header_json[i].formatter = format(that);
-                                        } else {
-                                            header_json[i].formatter = format;
-                                        }
-                                    }
-                                }
-
-                                if (typeof (style) == "function") {
-                                    header_json[i].styler = style;
-                                }
-                            } catch (e) {
-                                delete header_json[i].formatter;
-                                delete header_json[i].styler;
-                            }
-                            header_json[i].sortable = eval(header_json[i].sortable);
-                            header_json[i].hidden = eval(header_json[i].hidden);
-
-                            header_json[i].editor = (function (dt) {
-                                var editor = 'text';
-                                switch (dt) {
-                                    case 'int32':
-                                        editor = 'numberbox';
-                                        break;
-                                    case 'datetime':
-                                        editor = 'datebox';
-                                        break;
-                                }
-                                return editor;
-                            })(header_json[i].datatype);
-                            cols.push(header_json[i]);
-                        }
-                    }
-                }
-                return cols;
             }
         },
 

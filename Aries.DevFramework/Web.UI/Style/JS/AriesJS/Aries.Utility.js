@@ -391,13 +391,14 @@ window.AR = (function ($Core) {
                 {
                     var dtype = dataArray[i].datatype.split(',');
                     switch (dtype[0]) {
+                        case "date":
                         case "datetime":
                             cssName = "easyui-datebox";
                             input.attr("name", dataArray[i].field).addClass(cssName).attr("date", true).width(150).attr("validType", "datebox");
                             if (dataArray[i].viewname && dataArray[i].viewname.indexOf('$1') != -1) {
                                 input.width(95);
                                 input2 = input.clone(true);
-                                div_item.append(input2).append($("<span>").html("&nbsp;至&nbsp;").css({ "display": "block", "float": "left" }));
+                                div_item.append(input2).append($("<span>").html("&nbsp;至&nbsp;"));
                             }
                             break;
                         case "int32":

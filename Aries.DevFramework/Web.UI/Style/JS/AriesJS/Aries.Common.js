@@ -861,8 +861,8 @@
                             //检测操作列，权限过滤后还有没有可呈现的控件。
                             var actionKeys = $Core.Global.Variable.actionKeys;
                             var len = 0;
-                            for (var i = 0; i < dg.PKColumn._btnArray.length; i++) {
-                                if (actionKeys.indexOf("," + dg.PKColumn._btnArray[i].lv2action + ",") > -1) {
+                            for (var k = 0; k < dg.PKColumn._btnArray.length; k++) {
+                                if (actionKeys.indexOf("," + dg.PKColumn._btnArray[k].lv2action + ",") > -1) {
                                     len++;
                                 }
                             }

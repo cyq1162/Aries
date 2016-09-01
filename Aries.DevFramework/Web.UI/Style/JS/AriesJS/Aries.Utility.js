@@ -397,7 +397,7 @@ window.AR = (function ($Core) {
                             if (dataArray[i].viewname && dataArray[i].viewname.indexOf('$1') != -1) {
                                 input.width(95);
                                 input2 = input.clone(true);
-                                div_item.append(input2).append($("<span>").html("&nbsp;至&nbsp;"));
+                                div_item.append(input2).append($("<span>").html("&nbsp;至&nbsp;").css({ "display": "block", "float": "left" }));
                             }
                             break;
                         case "int32":

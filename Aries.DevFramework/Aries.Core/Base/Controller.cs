@@ -306,6 +306,10 @@ namespace Aries.Core
                         }
                     }
                 }
+                if (id.IndexOf(',') == -1)
+                {
+                    id = id.Trim('\'');//单个值，去掉批量时带来的引号
+                }
                 return id;
             }
         }

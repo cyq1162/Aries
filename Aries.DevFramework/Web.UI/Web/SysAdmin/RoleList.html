@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title></title>
     <script src="/Style/JS/Aries.Loader.js"></script>
 </head>
@@ -12,10 +12,10 @@
 <script type="text/javascript">
     var dg = new AR.DataGrid("Sys_Role");
     dg.isEditor = true;
-    dg.PKColumn.add("detail", "权限分配", 'roleAction');
+    dg.PKColumn.add("detail", "权限分配", 'roleAction', null, "权限分配", "edit");
     dg.bind();
     function roleAction(v, r, i) {
         var rname = r.RoleName;
-        AR.Utility.Window.open('RoleAction.html?id='+v, '当前角色（' + rname + '）');
+        AR.Utility.Window.open('RoleAction.html?id=' + v, '当前角色（' + rname + '）');
     }
 </script>

@@ -37,7 +37,7 @@
         tg.addWhere("id", "3000", ">");
         tg.HeaderMenu.add("配置2", 'ttt', 'config');
         tg.ToolBar.BtnAdd.onBeforeExecute = function (index, isSameLevel) {
-            tg.PKColumn.Editor.insertRowData[tg.options.idField] = "ag";//自定义主键
+            tg.defaultInsertData[tg.options.idField] = "ag";//自定义主键
         }
         tg.bind();
 

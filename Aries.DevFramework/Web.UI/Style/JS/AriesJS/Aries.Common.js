@@ -19,14 +19,11 @@
     /**
     *该文件依赖与AR.Core.Utility.js文件
     */
-    $Core.Global.Variable = {};
-    $Core.Global.Config = {};
     $Core.Utility.Ajax.post("GetInitConfig,GetKeyValueConfig", null, null, null, null, function (result) {
         $Core.Global.Variable = result.GetInitConfig;
         $Core.Global.Variable.isLoadCompleted = true;
         $Core.Global.Config = result.GetKeyValueConfig;
     });
-    //var result = $Core.Utility.Ajax.post("GetInitConfig,GetKeyValueConfig", null, null, false);
 
 })(AR);
 
@@ -269,7 +266,7 @@
                                 if (endEditing(dg)) {
                                     dg.PKColumn.Editor.operator = "Add";
                                     var _row = {};
-                                    var _data = dg.PKColumn.Editor.insertRowData;
+                                    var _data = dg.defaultInsertData;
                                     if (_data && typeof (_data) === 'object') {
                                         _row = $.extend(_row, _data);
                                     }
@@ -371,7 +368,7 @@
                             var param = {
                                 sys_tableName: objName,
                                 sys_method: "Export",
-                                sys_objName: dg.viewName,
+                                sys_objName: dg.objName,
                                 sys_search: jsonString,
                                 sys_mid: $Core.Global.Variable.mid
                             };
@@ -405,7 +402,7 @@
                             ifrme = $("<iframe>").attr("id", "div_ifrme_template").attr("name", iframeName).css({ display: 'none' });
                             form_export = $("<form>").attr("action", $Core.route.root).attr("target", iframeName).attr("id", "form_template");
                             var param = {
-                                sys_objName: dg.viewName,
+                                sys_objName: dg.objName,
                                 sys_tableName: objName,
                                 sys_method: "ExcelTemplate",
                                 sys_mid: $Core.Global.Variable.mid
@@ -569,7 +566,8 @@
             onConfigClick: function (el, dgid, value, index) {
                 var dg = getDgByKey(dgid);
                 if (dg) {
-                    var url = $Core.Utility.stringFormat("{0}?viewName={1}", $Core.Global.Variable.ui + '/Web/SysAdmin/config.html', dg.viewName);
+                    var url = $Core.Utility.stringFormat("{0}?objName={1}", $Core.Global.Variable.ui + '/Web/SysAdmin/config.html', dg.objName);
+                    $Core.Global.DG.operating = dg;
                     $Core.Utility.Window.open(url, "", false);
                 }
             }
@@ -630,7 +628,7 @@
                     var result = value;
                     if (value != undefined && value.toString() != "") {
                         var _obj = getObj(objName);
-                        if ($Core.Global.m_combobox_json && _obj) {
+                        if ($Core.Global.comboxData && _obj) {
                             result = getNameByValue(_obj, value);
                         }
                     }
@@ -750,9 +748,9 @@
                             data = $Core.Global.Config[configKey] || [];
                         }
                         if (objName) {
-                            each: for (var i = 0; i < $Core.Global.m_combobox_json.length; i++) {
-                                if ($Core.Global.m_combobox_json[i][objName]) {
-                                    data = $Core.Global.m_combobox_json[i][objName];
+                            each: for (var i = 0; i < $Core.Global.comboxData.length; i++) {
+                                if ($Core.Global.comboxData[i][objName]) {
+                                    data = $Core.Global.comboxData[i][objName];
                                     break each;
                                 }
                             }
@@ -783,9 +781,9 @@
                                             var subArray = new Array();
                                             (function (key, parent_id) {
                                                 var all_array_children;
-                                                f1: for (var j = 0; j < $Core.Global.m_combobox_json.length; j++) {
-                                                    if ($Core.Global.m_combobox_json[j][key]) {
-                                                        all_array_children = $Core.Global.m_combobox_json[j][key];
+                                                f1: for (var j = 0; j < $Core.Global.comboxData.length; j++) {
+                                                    if ($Core.Global.comboxData[j][key]) {
+                                                        all_array_children = $Core.Global.comboxData[j][key];
                                                         break f1;
                                                     }
                                                 }
@@ -857,7 +855,7 @@
                         frozen.push({ align: 'center', checkbox: dg.isShowCheckBox, hidden: !dg.isShowCheckBox, field: 'ckb' });
 
                         dg.Internal.primarykey = json_data[i].field;
-                        dg.Internal.idField = json_data[i].field;
+                       // dg.Internal.idField = json_data[i].field;
                         if (dg.PKColumn._btnArray.length > 0 || dg.isEditor) {
                             //检测操作列，权限过滤后还有没有可呈现的控件。
                             var actionKeys = $Core.Global.Variable.actionKeys;
@@ -940,7 +938,7 @@
                             } else {
                                 if (i == 0) {
                                     dg.Internal.primarykey = json_data[i].field;
-                                    dg.Internal.idField = json_data[i].field;
+                                    //dg.Internal.idField = json_data[i].field;
                                     json_data[i].formatter = format(dg);
                                 } else {
                                     json_data[i].formatter = format;
@@ -1023,8 +1021,8 @@
             form.append($input);
 
             var divButtons = $('<div class="btn w72">');
-            dg.Search.BtnQuery.$target = $('<input class="query" value="" type="button" />').attr("id", dg.Internal.btn_query_id);
-            dg.Search.BtnReset.$target = $('<input class="reset" type="reset" value="" />').attr("id", dg.Internal.btn_reset_id);
+            dg.Search.BtnQuery.$target = $('<input class="query" value="" type="button" />');
+            dg.Search.BtnReset.$target = $('<input class="reset" type="reset" value="" />');
             //需要指定按钮对象，如果样式不对将不触发事件
             divButtons.append($("<a>").append(dg.Search.BtnQuery.$target));
             divButtons.append($("<a>").append(dg.Search.BtnReset.$target));
@@ -1124,10 +1122,10 @@
     }
     function getObj(objName) {
         var obj = new Object();
-        var m_combobox_json = $Core.Global.m_combobox_json;
-        for (var i = 0; i < m_combobox_json.length; i++) {
-            if (m_combobox_json[i][objName]) {
-                obj = m_combobox_json[i][objName];
+        var comboxData = $Core.Global.comboxData;
+        for (var i = 0; i < comboxData.length; i++) {
+            if (comboxData[i][objName]) {
+                obj = comboxData[i][objName];
                 break;
             }
         }
@@ -1226,15 +1224,15 @@
         }
         //绑定一个下拉框
         function bindComboboxByName(targetName, condition) {
-            var _config = $("[configKey='" + targetName + "']");
+            var _config = $("[configkey='" + targetName + "']");
             var _obj = $("[objname='" + targetName + "']");
             if (_config[0]) {
                 bindConfigKey(_config);
             }
             if (_obj[0]) {
                 var item_data = [];
-                var objName = _obj.attr("ObjName");
-                var parent = _obj.attr("Parent");
+                var objName = _obj.attr("objname");
+                var parent = _obj.attr("parent");
                 if (objName && objName.length != 0) {
                     if (!detectArray(item_data, 'ObjName', objName)) {
                         var item = { ObjName: objName, Parent: parent };
@@ -1250,16 +1248,16 @@
 
         //绑定
         function bindObjName(that) {
-            var m_combobox_json = $Core.Global.m_combobox_json;
-            if (m_combobox_json && m_combobox_json.length > 0) {
+            var comboxData = $Core.Global.comboxData;
+            if (comboxData && comboxData.length > 0) {
                 var $target = that.addClass(".easyui-combobox"), data;
                 //这里不处理子集下拉框，在后面递归一次性处理
                 if ($target.attr("Parent")) {
                     return;
                 }
-                current: for (var i = 0; i < m_combobox_json.length; i++) {
-                    if (m_combobox_json[i][$target.attr("ObjName")]) {
-                        data = m_combobox_json[i][$target.attr("ObjName")];
+                current: for (var i = 0; i < comboxData.length; i++) {
+                    if (comboxData[i][$target.attr("ObjName")]) {
+                        data = comboxData[i][$target.attr("ObjName")];
                         break current;
                     }
                 }
@@ -1456,12 +1454,12 @@
 
 
         function loadComboboxData(item_data, condition, onLoadedEvent) {
-            var m_combobox_json = $Core.Global.m_combobox_json;
+            var comboxData = $Core.Global.comboxData;
             //此判断是因为List跟Edit的请求方式不一样
-            if (condition == undefined && m_combobox_json.length > 0) {
+            if (condition == undefined && comboxData.length > 0) {
                 var _removeIndex = new Array();//需要移除的项
-                for (var i = 0; i < m_combobox_json.length; i++) {
-                    for (var k in m_combobox_json[i]) {
+                for (var i = 0; i < comboxData.length; i++) {
+                    for (var k in comboxData[i]) {
                         if (k == undefined) continue;
                         for (var j = 0; j < item_data.length; j++) {
                             for (var kk in item_data[j]) {
@@ -1494,22 +1492,22 @@
                     for (var i = 0, len = result.length; i < len; i++) {
                         for (var k in result[i]) {
                             var flag = true;
-                            for (var ii = 0; ii < m_combobox_json.length; ii++) {
-                                for (var kk in m_combobox_json[ii]) {
+                            for (var ii = 0; ii < comboxData.length; ii++) {
+                                for (var kk in comboxData[ii]) {
                                     if (kk == k) {
-                                        m_combobox_json[ii][kk] = result[i][k];
+                                        comboxData[ii][kk] = result[i][k];
                                         flag = false;
                                     }
                                 }
                             }
                             if (flag == true) {
-                                $Core.Global.m_combobox_json = $Core.Global.m_combobox_json.concat(result[i]);
+                                $Core.Global.comboxData = $Core.Global.comboxData.concat(result[i]);
                             }
                         }
                     }
 
-                    if (m_combobox_json && !(m_combobox_json instanceof Array)) {
-                        $Core.Global.m_combobox_json = [m_combobox_json];
+                    if (comboxData && !(comboxData instanceof Array)) {
+                        $Core.Global.comboxData = [comboxData];
                     }
                     onLoadedEvent && onLoadedEvent();
                 });
@@ -1519,7 +1517,7 @@
 
         //多级联下拉处理---------------------------------
         function reBind(parent_id, $element, opts, parent) {
-            var ds = $Core.Global.m_combobox_json;
+            var ds = $Core.Global.comboxData;
             var item_data; var new_data = [],
                 unshowid = $element.attr("unshowid") == 'true',
                 multiple = $element.attr("multiple") == "multiple";

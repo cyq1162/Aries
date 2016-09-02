@@ -13,7 +13,7 @@
             //用于获取数据的函数指向，默认值Get
             this.method = "Get";
             //用于拦截form表单的请求数据对象名，可以表名，视图名
-            this.objname = null;
+            this.objName = null;
             this.url = $Core.route.root;
             /**
             * 获取了数据，准备回填表单前（参数：data）
@@ -29,11 +29,11 @@
                 if (this.onBeforeExecute() === false) {
                     return;
                 }
-                if ($PCore && $PCore.Global.operator == "Update") {
+                if ($PCore && $PCore.Global.DG.action == "Update") {
                     if ($PCore.Global.DG.operating) {
                         var id = $Core.Utility.queryString("id");
-                        var objname = this.objname || $PCore.Global.DG.operating.tableName;
-                        this.data = $Core.Utility.Ajax.post(this.method, objname, { "id": id }, false, this.url);
+                        var objName = this.objName || $PCore.Global.DG.operating.tableName;
+                        this.data = $Core.Utility.Ajax.post(this.method, objName, { "id": id }, false, this.url);
                         if (this.onBeforeFillForm(this.data) == false) { return; }
                         this.$target.form("load", this.data);
                         $Core.Combobox.setValues(this.data);
@@ -63,7 +63,7 @@
                         return $Core.Form.commit(this.$target);
                     }
                     //执行前事件（参数为表单数组：Array data）
-                    this.onBeforeExecute = function () { };
+                    this.onBeforeExecute = function (arrayData) { };
                 };
                 return new Fn();
             }();
@@ -103,7 +103,7 @@
                 }
                 if (this.BtnCommit && this.BtnCommit.onBeforeExecute(formData) == false) { return; }
                 if ($targetForm.form("validate")) {
-                    var obj = $Core.Utility.Ajax.post(mthodName || ((this.method.toLowerCase() != 'get') && this.method) || $PCore.Global.operator, tableName || this.objname || $PCore.Global.DG.operating.tableName, formData, false, url || $Core.Form.url);
+                    var obj = $Core.Utility.Ajax.post(mthodName || ((this.method.toLowerCase() != 'get') && this.method) || $PCore.Global.DG.action, tableName || this.objName || $PCore.Global.DG.operating.tableName, formData, false, url || $Core.Form.url);
                     if (callBack && typeof (callBack) == "function") {
                         callBack.call(this, obj);
                     }

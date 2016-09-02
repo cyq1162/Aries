@@ -11,10 +11,6 @@
     function DataGrid(objName, tbName, id, type) {
         //内部变量
         this.Internal = {
-            toolAreaID: "div_toolArea_" + $Core.Global.DG.Items.length,
-            btn_query_id: "btn_query_" + $Core.Global.DG.Items.length,
-            btn_reset_id: "btn_reset_" + $Core.Global.DG.Items.length,
-            buttons: new Array(),
             primarykey: null,
             headerData: new Array()
         }
@@ -22,8 +18,8 @@
         this.type = type || "datagrid";
         //主表名
         this.tableName = tbName || objName;
-        //视图名称
-        this.viewName = objName;
+        //对象（视图）名称
+        this.objName = objName;
         //是否显示复选框
         this.isShowCheckBox = true;
         //是否显示工具区（包括查询区和按钮区）
@@ -35,6 +31,8 @@
             queryParams: {},
             defaultWhere: [],
         };
+        /*可以事先构建，产生插时行时的默认值*/
+        this.defaultInsertData = {};
         //对defaultWhere的操作
         this.addWhere = function (key, value, pattern) {
             if (key && value) {
@@ -122,7 +120,7 @@
         this.ContextMenu = new $Core.Common._Internal.ContextMenu();
         //工具区（包含搜索区和按钮区）
         this.ToolArea = {
-            id: this.Internal.toolAreaID,
+            id: "div_toolArea_" + $Core.Global.DG.Items.length,
             $target: null,
             Search: this.Search,
             ToolBar: this.ToolBar,
@@ -163,7 +161,7 @@
         }
         var dg = this;
         var interval;
-        $Core.Utility.Ajax.post("GetHeader", dg.viewName, dg.options.queryParams, null, null,
+        $Core.Utility.Ajax.post("GetHeader", dg.objName, dg.options.queryParams, null, null,
             function (dg) {
                 return function (result) {
                     //拿到了Header，但GetKeyValuet Init，Combobox事件还没。
@@ -186,35 +184,34 @@
         );
     }
     function _LoadComboxData(dg, headerData) {
-        var json_data = headerData;// $Core.Utility.cloneArray(dg.Internal.headerData, true);
-        if (json_data == null || json_data.length == 0) {
+        if (headerData == null || headerData.length == 0) {
             return null;
         }
         //combobox的查询条件
-        var _post_combox_data = new Array();
-        each: for (var i = 0, len = json_data.length; i < len; i++) {
-            if (json_data[i].formatter == undefined || json_data[i].formatter == "" || json_data[i].formatter.indexOf('#') == -1 || !/^#C_+/.test(json_data[i].formatter)) {
+        var _postArray = new Array();
+        each: for (var i = 0, len = headerData.length; i < len; i++) {
+            if (headerData[i].formatter == undefined || headerData[i].formatter == "" || headerData[i].formatter.indexOf('#') == -1 || !/^#C_+/.test(headerData[i].formatter)) {
                 continue each;
             }
-            objName = json_data[i].formatter.split('#')[1];
+            objName = headerData[i].formatter.split('#')[1];
             var obj_item = {};
             if (objName.indexOf('=>') != -1) {
                 objName = objName.split('=>')[0];
                 obj_item['Parent'] = objName.split('=>')[1];
             }
             obj_item['objName'] = objName;
-            _post_combox_data.push(obj_item);
+            _postArray.push(obj_item);
         }
         //请求下拉框数据,子页面的下拉列表数据绑定
-        if (_post_combox_data.length > 0) {
-            var _post_data = { sys_json: JSON.stringify(_post_combox_data) };
+        if (_postArray.length > 0) {
+            var _postdata = { sys_json: JSON.stringify(_postArray) };
             if ($Core.combobox_params && $.type($Core.combobox_params) == "object") {
-                _post_data = $.extend({}, _post_data, $Core.combobox_params);
+                _postdata = $.extend({}, _postdata, $Core.combobox_params);
             }
-            $Core.Utility.Ajax.post("GetCombobox", "objName", _post_data, null, null,
+            $Core.Utility.Ajax.post("GetCombobox", "objName", _postdata, null, null,
                 function (dg) {
                     return function (result) {
-                        $Core.Global.m_combobox_json = $Core.Global.m_combobox_json.concat(result);
+                        $Core.Global.comboxData = $Core.Global.comboxData.concat(result);
                         interval = setInterval(function () { bindGrid(dg, interval); }, 5);
                     }
                 }(dg));
@@ -241,7 +238,7 @@
             return false;
         }
         var cfg = {
-            toolbar: "#" + dg.Internal.toolAreaID,
+            toolbar: "#" + dg.ToolArea.id,
             loadMsg: "Loading...",
             idField: dg.Internal.primarykey,
             striped: true,
@@ -332,7 +329,7 @@
         //_createEditor(dg);
         var options = $.extend(cfg, opts);
         //请求URL地址设置
-        options.url = (opts.url || $Core.Utility.Ajax.Settings.url) + "?sys_method=GetList&sys_objName=" + dg.viewName + "&sys_tableName=" + dg.tableName;
+        options.url = (opts.url || $Core.Utility.Ajax.Settings.url) + "?sys_method=GetList&sys_objName=" + dg.objName + "&sys_tableName=" + dg.tableName;
         if (dg.type == "datagrid") {
             dg.$target = $("#" + dg.id).datagrid(options);
         }
@@ -566,10 +563,6 @@
             this.operator = null;
             /*属性标识保存数据是否实时更新*/
             Obj.isSaveToBehind = true;
-            ///*是否插入行数据*/
-            //Obj.isInsertRow = false;
-            /*可以事先构建，产生插时行时的默认值*/
-            Obj.insertRowData = {};
             Obj.BtnEdit = (function () {
                 function Obj() {
                     $Core.BtnBase.call(this);
@@ -808,7 +801,7 @@
             var id = "btn_import" + Math.floor(Math.random() * 10000);
             toolbar.find("[flag = 'btn_import']").attr("id", id);
             var exts = ["xls", "xlsx"];
-            var url = $Core.Utility.stringFormat($Core.route.root + '?sys_method=Import&sys_objName={0}&sys_tableName={1}&sys_mid={2}', dg.viewName, dg.tableName, $Core.Global.Variable.mid);
+            var url = $Core.Utility.stringFormat($Core.route.root + '?sys_method=Import&sys_objName={0}&sys_tableName={1}&sys_mid={2}', dg.objName, dg.tableName, $Core.Global.Variable.mid);
             $Core.Utility.initUploadButton(url, id, "excelImport", exts,
             function (file, ext) {
                 if ($Core.Utility.isInArray(exts, ext)) {
@@ -945,7 +938,7 @@
                     }
                     else {
                         var post_data = {};
-                        if (_type == 'inserted' && dg.PKColumn.Editor.insertRowData) {
+                        if (_type == 'inserted' && dg.defaultInsertData) {
                             post_data = _change_data;
                         } else {
                             post_data = getChangeJson(_change_data, row, dg);

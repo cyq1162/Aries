@@ -25,17 +25,17 @@ window.AR = (function ($Core) {
             //datagrid集合，根据ID取出DataGrid对象，将Json当数组用。
             Items: new $Core.Dictionary(),
             //当前操作的datagrid对象
-            operating: null
+            operating: null,
+            //当前页面DataGrid操作，值为Update，Add
+            action: null
         },
-        config: {},
-        m_combobox_json: [],
-        /*
-        *标识对当前页面DataGrid操作，值为Update，Add
-        */
-        operator: null,
+
+        comboxData: [],
+        //存档Config_KeyValue的数据。
+        Config: {},
         /*
         *页面全局变量
-        *ui(虚拟应用程序的路径)，configkeys（页面对应的权限集）,mid（当前菜单ID）
+        *ui(虚拟应用程序的路径)，actionkeys（页面对应的权限集）,mid（当前菜单ID）
         */
         Variable: {}
     };
@@ -327,8 +327,7 @@ window.AR = (function ($Core) {
             var objName, cssName,
                 cutIndex = 0//删减的索引值;
             for (var i = 0, len = dataArray.length; i < len; i++) {
-                if (i % 3 == 0)
-                {
+                if (i % 3 == 0) {
                     line = $("<div class=\"line\">");
                     $container.append(line);
                 }
@@ -437,8 +436,7 @@ window.AR = (function ($Core) {
                             size = size + parseInt(scale) + 1; //重置长度,+1是加上.的占位符
                         }
                         input.addClass("easyui-validatebox").attr("validType", "length[1," + size + "]");
-                        if (input2)
-                        {
+                        if (input2) {
                             input2.addClass("easyui-validatebox").attr("validType", "length[1," + size + "]");
                         }
                     }
@@ -463,7 +461,7 @@ window.AR = (function ($Core) {
         $Core.Utility.Window = {
             refresh: false,
             /*打开一个窗口,
-            * update 默认false既添加，如更新传递true,调用此函数会触发更新AR.Global.operator的值
+            * update 默认false既添加，如更新传递true,调用此函数会触发更新AR.Global.DG.action的值
             *，opts重写窗口属性，具体用法查看easyui window API
             */
             open: open,
@@ -517,9 +515,9 @@ window.AR = (function ($Core) {
                 throw new TypeError("第三个参数传入的类型必须是布尔类型！");
             }
             if (update) {
-                AR.Global.operator = "Update";
+                AR.Global.DG.action = "Update";
             } else {
-                AR.Global.operator = "Add";
+                AR.Global.DG.action = "Add";
             }
             var iframe;
             iframe = $('<iframe src="' + url + '" frameborder="0" style="border:0;width:100%;height:98%;"></iframe>');

@@ -629,7 +629,7 @@
             事务回滚
             </summary>
         </member>
-        <member name="M:CYQ.Data.MAction.Dispose">
+        <member name="M:CYQ.Data.MAction.Dispose(System.Boolean)">
             <summary>
             释放资源
             </summary>
@@ -2266,6 +2266,12 @@
             构造函数
             </summary>
         </member>
+        <member name="M:CYQ.Data.Orm.OrmBase.SetAopState(CYQ.Data.Aop.AopOp)">
+            <summary>
+            设置Aop状态
+            </summary>
+            <param name="op"></param>
+        </member>
         <member name="M:CYQ.Data.Orm.OrmBase.SetInit(System.Object)">
             <summary>
             初始化状态[继承此基类的实体在构造函数中需调用此方法]
@@ -2512,6 +2518,12 @@
             <summary>
             构造函数
             </summary>
+        </member>
+        <member name="M:CYQ.Data.Orm.SimpleOrmBase.SetAopState(CYQ.Data.Aop.AopOp)">
+            <summary>
+            设置Aop状态
+            </summary>
+            <param name="op"></param>
         </member>
         <member name="M:CYQ.Data.Orm.SimpleOrmBase.SetInit(System.Object)">
             <summary>
@@ -4362,7 +4374,7 @@
             </summary>
             <param name="row">要加载数据的行</param>
             <param name="rowOp">行选项[从其它行加载的条件]</param>
-            <param name="isAllowAppendColumn">如果row带有新列，是否加列[默认值为：true]</param>
+            <param name="isAllowAppendColumn">如果row带有新列，是否加列</param>
             <param name="isWithValueState">是否同时加载值的状态[默认值为：true]</param>
         </member>
         <member name="M:CYQ.Data.Table.MDataRow.LoadFrom(System.Object[])">

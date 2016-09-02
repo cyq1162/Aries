@@ -1,5 +1,6 @@
 ﻿using Aries.Core;
 using Aries.Core.Auth;
+using Aries.Core.Config;
 using Aries.Core.DB;
 using CYQ.Data;
 using CYQ.Data.Table;
@@ -13,8 +14,42 @@ namespace Aries.Controllers
     /// <summary>
     /// 默认请求地址
     /// </summary>
-    public class DefaultController : Controller
+    public partial class DefaultController : Controller
     {
+        protected override MDataRow GetOne()
+        {
+            switch (ObjName)
+            {
+                case "V_Test"://处理Demo中文本数据库
+                    if (AppConfig.DB.DefaultDalType == DalType.Txt)
+                    {
+                        return Select(GridConfig.SelectType.Show).Rows[0];
+                    }
+                    break;
+            }
+            return base.GetOne();
+        }
+        protected override MDataTable Select(GridConfig.SelectType st)
+        {
+            switch (ObjName)
+            {
+                case "V_Test"://处理Demo中文本数据库
+                    if (AppConfig.DB.DefaultDalType == DalType.Txt)
+                    {
+                        MDataTable dt = null;
+                        using (MAction action = new MAction("Demo_TestA"))
+                        {
+                            dt = action.Select();
+                        }
+                        dt.JoinOnName = "ID";
+                        dt.Join("Demo_TestA", "ID");
+                        return dt.Select(PageIndex, PageSize, GetWhere() + GetOrderBy("ID"), GridConfig.GetSelectColumns(ObjName, st));
+                    }
+                    break;
+
+            }
+            return base.Select(st);
+        }
         protected override void BeforeInvoke()
         {
             //CYQ.Data 已具备自动缓存功能，所以可以简化掉一些手工的缓存机制。

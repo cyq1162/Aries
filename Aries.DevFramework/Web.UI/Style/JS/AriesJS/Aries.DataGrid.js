@@ -11,7 +11,7 @@
     function DataGrid(objName, tbName, id, type) {
         //内部变量
         this.Internal = {
-            toolbarID: "div_toolArea_" + $Core.Global.DG.Items.length,
+            toolAreaID: "div_toolArea_" + $Core.Global.DG.Items.length,
             btn_query_id: "btn_query_" + $Core.Global.DG.Items.length,
             btn_reset_id: "btn_reset_" + $Core.Global.DG.Items.length,
             buttons: new Array(),
@@ -38,28 +38,6 @@
         //对defaultWhere的操作
         this.addWhere = function (key, value, pattern) {
             if (key && value) {
-                switch (pattern) {
-                    case "":
-                    case undefined:
-                    case "=":
-                        pattern = "equal";
-                        break;
-                    case ">":
-                        pattern = "greater";
-                        break;
-                    case ">=":
-                        pattern = "greaterequal";
-                        break;
-                    case "<":
-                        pattern = "less";
-                        break;
-                    case "<=":
-                        pattern = "lessEqual";
-                        break;
-                    case "<>":
-                        pattern = "notequal";
-                        break;
-                }
                 if (!this.options.defaultWhere) {
                     this.options.defaultWhere = [];
                 }
@@ -142,11 +120,18 @@
         this.Formatter = $Core.Common.Formatter;
         this.HeaderMenu = new $Core.Common._Internal.HeaderMenu();
         this.ContextMenu = new $Core.Common._Internal.ContextMenu();
-
+        //工具区（包含搜索区和按钮区）
+        this.ToolArea = {
+            id: this.Internal.toolAreaID,
+            $target: null,
+            Search: this.Search,
+            ToolBar: this.ToolBar,
+            isHidden: !this.isShowToolArea
+        }
     };
     DataGrid.prototype.bind = function () {
         $Core.Global.DG.Items.set(this.id, this);
-        //如果是编辑模式
+        //如果是编辑模式 绑定行点击事件
         if (this.isEditor || this.type == "treegrid") {
             var that = this;
             var dbClick = this.options.onDblClickRow;
@@ -181,8 +166,21 @@
         $Core.Utility.Ajax.post("GetHeader", dg.viewName, dg.options.queryParams, null, null,
             function (dg) {
                 return function (result) {
+                    //拿到了Header，但GetKeyValuet Init，Combobox事件还没。
                     dg.Internal.headerData = result;
+                    //加载Combobox数据。
                     _LoadComboxData(dg, result);
+                    //创建表单，需要Header
+                    if (!dg.ToolArea.isHidden) {
+                        dg.ToolArea.$target = $('<div>').attr("id", dg.ToolArea.id); //创建并设置工具栏的ID  
+                        $("body").append(dg.ToolArea.$target); //加到页面中  
+                        if (!dg.Search.isHidden) {
+                            dg.Search.onExecute(dg);
+                            regSearchButtonEvents(dg);
+                            $Core.Combobox.onInit();//绑定下拉。
+                            $.parser.parse('#' + dg.ToolArea.id); //解析成easyui
+                        }
+                    }
                 }
             }(dg)
         );
@@ -217,46 +215,33 @@
                 function (dg) {
                     return function (result) {
                         $Core.Global.m_combobox_json = $Core.Global.m_combobox_json.concat(result);
-                        interval = setInterval(function () { _bindGrid(dg, interval); }, 5);
+                        interval = setInterval(function () { bindGrid(dg, interval); }, 5);
                     }
                 }(dg));
 
         }
         else {
-            interval = setInterval(function () { _bindGrid(dg, interval); }, 5);
+            interval = setInterval(function () { bindGrid(dg, interval); }, 5);
         }
     }
-    function _bindGrid(dg, interval) {
-        if ($Core.Global.Variable.isLoadCompleted) {
-            clearInterval(interval);
-            _init.call(dg);
-            if (dg.isShowToolArea) {
-                if (!dg.Search.isHidden) {
-                    $Core.Common._Internal.registerEvent(dg);
-                    $.parser.parse('#' + dg.Internal.toolbarID); //解析成easyui
-                }
-                if (!dg.ToolBar.isHidden) {
-                    bindToolbar.call(dg);
-                }
-            }
 
+    function bindGrid(dg, interval) {
+        if (!$Core.Global.Variable.isLoadCompleted) {
+            return;
         }
-    }
-    function _init() {
-        var dg = this;
+        clearInterval(interval);
+        if (dg.isShowToolArea && !dg.ToolBar.isHidden) {
+            //创建工具按钮，需要GetInit完成，有权限验证。
+            dg.ToolBar.onExecute(dg);
+            regToolbarEvents(dg);
+        }
+        //格式化列头（有Editor时，需要先有Combobox数据。）
         var objColumns = $Core.Common.Formatter.formatHeader(dg);//处理主键列和Formatter列设置
         if (!objColumns) {
             return false;
         }
-        var opts = dg.options;
-        var costomToolbar = false;
-        if (opts && opts.toolbar) {
-            costomToolbar = true;
-        }
-        var beforeLoad = opts.onBeforeLoad;
-        var loadSuccess = opts.onLoadSuccess;
         var cfg = {
-            toolbar: "#" + dg.Internal.toolbarID,
+            toolbar: "#" + dg.Internal.toolAreaID,
             loadMsg: "Loading...",
             idField: dg.Internal.primarykey,
             striped: true,
@@ -275,31 +260,6 @@
             rownumbers: true,
             autoRowHeight: false,
             queryParams: {},
-            onBeforeLoad: function (param) {
-                var mid = function () {
-                    var topWin = window;
-                    return function (win) {
-                        var ar = win.AR;
-                        if (ar.Global.Variable.mid && win != topWin) {
-                            return ar.Global.Variable.mid;
-                        }
-                        if (win == win.top) {
-                            return null;
-                        }
-                        return arguments.callee(win.parent.window);
-                    }(topWin);
-                }();
-                if (mid) { param.sys_mid = mid; };
-                beforeLoad && beforeLoad(param);
-            },
-            onLoadSuccess: function () {
-
-
-                if (dg.type == "treegrid") {
-                    regKeyDown(dg);
-                }
-                loadSuccess && onLoadSuccess(param);
-            },
             onHeaderContextMenu: function (e, field) {
                 e.preventDefault();
                 if (!dg.headMenu) {
@@ -328,17 +288,35 @@
                 });
             }
         };
-
-        if (costomToolbar == false && dg.isShowToolArea != false) {
-            $Core.Common._Internal.createSearchForm(dg); //内部有判断，创建SearchForm表单
-            if (!dg.Search.isHidden) {
-                $Core.Combobox.onInit();
-
+        var opts = dg.options;
+        var beforeLoad = opts.onBeforeLoad;
+        opts.onBeforeLoad = function (param) {
+            var mid = function () {
+                var topWin = window;
+                return function (win) {
+                    var ar = win.AR;
+                    if (ar.Global.Variable.mid && win != topWin) {
+                        return ar.Global.Variable.mid;
+                    }
+                    if (win == win.top) {
+                        return null;
+                    }
+                    return arguments.callee(win.parent.window);
+                }(topWin);
+            }();
+            if (mid) { param.sys_mid = mid; };
+            if (beforeLoad) { return beforeLoad(param) };
+        };
+        var loadSuccess = opts.onLoadSuccess;
+        opts.onLoadSuccess = function (dg) {
+            return function (data) {
+                if (dg.type == "treegrid") {
+                    regKeyDown(dg);
+                }
+                loadSuccess && loadSuccess(data);
             }
-            if (!dg.ToolBar.isHidden) {
-                _setToolbar.call(dg, dg.ToolBar._btnArray);//自定义的按钮。
-            }
-        }
+        }(dg);
+
         opts = opts || {};
         var searchJson = [];
         if (dg.Search && dg.Search.$target) {
@@ -774,49 +752,25 @@
             }
         };
     }
-    //该函数有问题，如果权限没有某个按钮，顺序错位导致find不到控件，导致无法插入，请修正。
-    function _setToolbar(btnArray) {
-        if (!(btnArray instanceof Array)) {
-            throw TypeError('参数必须是一个数组');
-        }
-        var hiddenCount = 0;
-        var actionKeys = $Core.Global.Variable.actionKeys;
-        for (var i = 0, len = btnArray.length; i < len; i++) {
-            if (btnArray[i] == undefined) { continue; }
-            var lv2action = btnArray[i].lv2action && btnArray[i].lv2action.toLowerCase();
-            if (!lv2action || actionKeys.indexOf(',' + lv2action + ",") > -1) {
-                var index = btnArray[i].index;
-                var btn = btnArray[i].btn,
-                    item = '';
-                if (btn.html) {
-                    item = btn.html;
-                } else {
-                    var btnClass = btn.css || "btn-sm";
-                    var btnClick = btn.click;
-                    var title = btn.title;
-                    item = $Core.Utility.stringFormat('<a><input class=\"{0}\" type=\"button\" onClick=\"{1}(event)\"  value=\"{2}\"/></a>', btnClass, btnClick, title);
-                }
-                item = $(item);
-                var toolbarContainer = $("#" + this.Internal.toolbarID).find(".function-box"),
-                    count = toolbarContainer.children().length;
-                if (count == 0) {
-                    toolbarContainer.append(item);
-                } else {
-                    if (count < index) {
-                        index = count;
-                        toolbarContainer.children().eq(index - 1).after(item);
-                    } else {
-                        toolbarContainer.children().eq(index - 1).before(item);
-                    }
-                }
-                //外部是_setToolbar.call(dg, dg.ToolBar._btnArray);调用方式，所以上下文被换成了datagrid
-                this.ToolBar.Items.set(lv2action || title || btnClick, { "isCustom": true, $target: item });
-            }
-        }
+
+    function regSearchButtonEvents(dg) {
+        //注册查询事件
+        var btn_query = dg.Search.BtnQuery.$target;
+        btn_query && btn_query.click(function () {
+            dg.Search.BtnQuery.onExecute(dg, btn_query);
+        });
+
+        //重置按钮事件
+
+        var btn_reset = dg.Search.BtnReset.$target;
+        btn_reset && btn_reset.click(function () {
+            dg.Search.BtnReset.onExecute(dg, btn_reset);
+        });
+
     }
-    function bindToolbar() {
-        var dg = this;
-        var toolbar = $("#" + dg.Internal.toolbarID);
+
+    function regToolbarEvents(dg) {
+        var toolbar = dg.ToolBar.$target;
         if (!toolbar[0]) {
             //throw new ReferenceError("工具条的ID无效,页面未找到该ID值的HTML标签");
             return;
@@ -841,70 +795,61 @@
         });
 
         //查询按钮
-        toolbar.delegate("[flag = 'btn_query']", "click", function () {
-            $(this).parent().parent().siblings("[sign='div_searchArea']").toggle();
-        });
-        //配置表头按钮事件
-        //toolbar.delegate("[flag = 'btn_config']", "click", function () {
-        //    var viewName = dg.viewName;
-        //    alert(1);
-        //    $Core.Utility.Window.open($Core.route.gridconfig + "?viewName=" + viewName, "", false);
+        //toolbar.delegate("[flag = 'btn_query']", "click", function () {
+        //    $(this).parent().parent().siblings("[sign='div_searchArea']").toggle();
         //});
 
-
         //导入按钮事件
-        (function () {
-            try {
-                //如果找不到控件ID不加载下面代码
-                if (!toolbar.find("[flag = 'btn_import']")[0]) {
-                    return;
-                }
-                var id = "btn_import" + Math.floor(Math.random() * 10000);
-                toolbar.find("[flag = 'btn_import']").attr("id", id);
-                var exts = ["xls", "xlsx"];
-                var url = $Core.Utility.stringFormat($Core.route.root + '?sys_method=Import&sys_objName={0}&sys_tableName={1}&sys_mid={2}', dg.viewName, dg.tableName, $Core.Global.Variable.mid);
-                $Core.Utility.initUploadButton(url, id, "excelImport", exts,
-                function (file, ext) {
-                    if ($Core.Utility.isInArray(exts, ext)) {
-                        $.messager.progress({
-                            title: "消息提示",
-                            msg: "正在导入数据，请稍候..."
-                        });
-                    }
-                    else {
-                        $Core.Utility.Window.showMsg('上传文件扩展名必须是已下格式<br/>' + exts);
-                        return false;
-                    }
-                    var param = {};
-                    var result = dg.ToolBar.BtnImport.onBeforeExecute(param);
-                    if (result == false) {
-                        return false;
-                    }
-                    this.setData(param);
-                },
-                function (original_filename, data) {
-                    //file 是文件名,data 是返回的东西
-                    $.messager.progress('close');
-                    data = JSON.parse(data);
-                    if (data.success) {
-                        $Core.Utility.Window.showMsg(data.msg);
-                        dg.datagrid("reload");
-                    }
-                    else {
-                        data.msg = data.msg.replace(/&/g, '&amp').replace(/\"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace("\"", "'");
-                        var tip = "<div>数据异常，导入失败！<a title=\"" + data.msg + "\" onclick=\"javascript:alert(this.title)\"><font color='red'>查看错误详情</font></a></div>";
-                        $Core.Utility.Window.showMsg(tip, null, null, 8000);//"导入失败！"
-                        if (data.sys_down != undefined) {
-                            $Core.Utility.download('Down', { 'sys_down': data.sys_down });
-                        }
-
-                    }
-                    dg.ToolBar.BtnImport.onAfterExecute(data);
-                });
-            } catch (e) {
-                throw new Error("导入控件注册失败,请引入$Core.Utility.js文件");
+        try {
+            //如果找不到控件ID不加载下面代码
+            if (!toolbar.find("[flag = 'btn_import']")[0]) {
+                return;
             }
-        }())
+            var id = "btn_import" + Math.floor(Math.random() * 10000);
+            toolbar.find("[flag = 'btn_import']").attr("id", id);
+            var exts = ["xls", "xlsx"];
+            var url = $Core.Utility.stringFormat($Core.route.root + '?sys_method=Import&sys_objName={0}&sys_tableName={1}&sys_mid={2}', dg.viewName, dg.tableName, $Core.Global.Variable.mid);
+            $Core.Utility.initUploadButton(url, id, "excelImport", exts,
+            function (file, ext) {
+                if ($Core.Utility.isInArray(exts, ext)) {
+                    $.messager.progress({
+                        title: "消息提示",
+                        msg: "正在导入数据，请稍候..."
+                    });
+                }
+                else {
+                    $Core.Utility.Window.showMsg('上传文件扩展名必须是已下格式<br/>' + exts);
+                    return false;
+                }
+                var param = {};
+                var result = dg.ToolBar.BtnImport.onBeforeExecute(param);
+                if (result == false) {
+                    return false;
+                }
+                this.setData(param);
+            },
+            function (original_filename, data) {
+                //file 是文件名,data 是返回的东西
+                $.messager.progress('close');
+                data = JSON.parse(data);
+                if (data.success) {
+                    $Core.Utility.Window.showMsg(data.msg);
+                    dg.datagrid("reload");
+                }
+                else {
+                    data.msg = data.msg.replace(/&/g, '&amp').replace(/\"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace("\"", "'");
+                    var tip = "<div>数据异常，导入失败！<a title=\"" + data.msg + "\" onclick=\"javascript:alert(this.title)\"><font color='red'>查看错误详情</font></a></div>";
+                    $Core.Utility.Window.showMsg(tip, null, null, 8000);//"导入失败！"
+                    if (data.sys_down != undefined) {
+                        $Core.Utility.download('Down', { 'sys_down': data.sys_down });
+                    }
+
+                }
+                dg.ToolBar.BtnImport.onAfterExecute(data);
+            });
+        } catch (e) {
+            throw new Error("导入控件注册失败,请引入$Core.Utility.js文件");
+        }
 
     }
 

@@ -58,7 +58,7 @@
                 $Core.BtnBase.call(that);
                 that.$target = null;
                 //存档所有Input的对象数组，在调用bind()方法后才能获取。
-                this.Items = new $Core.Dictionary();
+                that.Items = new $Core.Dictionary();
                 that.BtnQuery = function () {
                     function Obj() {
                         $Core.BtnBase.call(this);
@@ -188,18 +188,37 @@
                     }
                     return new Obj();
                 }();
-                that.onExecute = function (searchItem, dg) {
-                    that.onBeforeExecute(searchItem);
-                    _createHtml(searchItem, dg);
-                    that.onAfterExecute(searchItem);
+                that.onExecute = function (dg) {
+                    if (that.onBeforeExecute() != false) {
+                        var searchItem = Array();
+                        var hdata = dg.Internal.headerData;
+                        for (var i = 0, len = hdata.length; i < len; i++) {
+                            if (hdata[i].search) {
+                                //判断类型，构建相应的easyui控件
+                                if (hdata[i].viewname && hdata[i].viewname.indexOf('$2') != -1) {
+                                    searchItem.push(hdata[i]);
+                                    var cloneItem = $.extend({}, hdata[i]);
+                                    var title = hdata[i].viewname.split(',')[1];
+                                    cloneItem.title = title || "&nbsp;-&nbsp;"
+                                    searchItem.push(cloneItem);
+                                } else {
+                                    searchItem.push(hdata[i]);
+                                }
+                            }
+                        }
+                        _createSearchAreaHtml(searchItem, dg);
+                        that.onAfterExecute();
+                    }
                 };
             },
             ToolBar: function () {
-                this.$target = null;
-                this.isHidden = false;
+                var that = this;
+                $Core.BtnBase.call(that);
+                that.$target = null;
+                that.isHidden = false;
                 //存档所有按钮的对象数组，在调用bind()方法后才能获取。
-                this.Items = new $Core.Dictionary();
-                this._btnArray = new Array();
+                that.Items = new $Core.Dictionary();
+                that._btnArray = new Array();
                 /**
                 *向工具条添加按钮
                 *@param{string} text 按钮显示的文本
@@ -208,7 +227,7 @@
                 *@param{string} css 样式名称，默认值'btn-sm'
                 *@param{string} lv2action 二级权限控制，默认值0
                 */
-                this.add = function (text, fname, index, css, lv2action) {
+                that.add = function (text, fname, index, css, lv2action) {
                     var obj = new Object();
                     obj.index = index || this._btnArray.length + 1;
                     obj.lv2action = lv2action;
@@ -225,7 +244,7 @@
                 *@param{string} index 按钮的索引排序值从1开始,默认值最后
                 *@param{int} lv2action 二级权限控制，默认值0
                 */
-                this.addHtml = function (HTMLString, index, lv2action) {
+                that.addHtml = function (HTMLString, index, lv2action) {
                     var obj = new Object();
                     obj.index = index || this._btnArray.length + 1;
                     obj.btn = {
@@ -234,7 +253,7 @@
                     }
                     this._btnArray.push(obj);
                 }
-                this.BtnAdd = function () {
+                that.BtnAdd = function () {
                     function Obj() {
                         $Core.BtnBase.call(this);
                         //重新设定打开窗体的标题
@@ -306,7 +325,7 @@
                     }
                     return new Obj();
                 }();
-                this.BtnDelBatch = function () {
+                that.BtnDelBatch = function () {
                     function Obj() {
                         $Core.BtnBase.call(this);
                         this.onBeforeExecute = function (ids, index) { };
@@ -317,7 +336,7 @@
                     }
                     return new Obj();
                 }();
-                this.BtnImport = function () {
+                that.BtnImport = function () {
                     function Obj() {
                         $Core.BtnBase.call(this);
                         //导入之前执行事件，设置参数如：param.p1 = abc;param.p2 = 123
@@ -327,7 +346,7 @@
                     }
                     return new Obj();
                 }();
-                this.BtnExport = function () {
+                that.BtnExport = function () {
                     function Obj() {
                         $Core.BtnBase.call(this);
                         /**
@@ -370,7 +389,7 @@
                     }
                     return new Obj();
                 }();
-                this.BtnExportTemplate = function () {
+                that.BtnExportTemplate = function () {
                     function Obj() {
                         $Core.BtnBase.call(this);
                         /**
@@ -416,6 +435,12 @@
                     }
                     return true;
                 }
+                that.onExecute = function (dg) {
+                    if (that.onBeforeExecute() != false) {
+                        _createToolBarHtml(dg);
+                        that.onAfterExecute();
+                    }
+                }
             },
             HeaderMenu: function () {
                 this.isHidden = false;
@@ -447,28 +472,8 @@
                     this.Items.push({ "text": text, "onclick": fname, "lv2action": lv2action });
                 }
             },
-            createSearchForm: function (dg) {
-                var searchItem = Array();
-                var hdata = dg.Internal.headerData;
-                if (hdata) {
-                    for (var i = 0, len = hdata.length; i < len; i++) {
-                        if (hdata[i].search) {
-                            //判断类型，构建相应的easyui控件
-                            if (hdata[i].viewname && hdata[i].viewname.indexOf('$2') != -1) {
-                                searchItem.push(hdata[i]);
-                                var cloneItem = $.extend({}, hdata[i]);
-                                var title = hdata[i].viewname.split(',')[1];
-                                cloneItem.title = title || "&nbsp;-&nbsp;"
-                                searchItem.push(cloneItem);
-                            } else {
-                                searchItem.push(hdata[i]);
-                            }
-                        }
-                    }
-                    dg.Search.onExecute(searchItem, dg);
-                }
-            },
-            //构建查询条件json格式,search事件调用
+
+            //构建查询条件json格式,search事件调用，返回的Json数组
             buildSearchJson: function (targetForm) {
                 var json = [], reg_date = /<=\s('[^']+')/;
                 $inputs = targetForm.find("[name]:input[type!=button][type!='reset']");
@@ -544,10 +549,6 @@
                     }
                 })()
                 return json;
-            },
-            registerEvent: function (dg) {
-                _query(dg);
-                _reset(dg);
             },
             //查询区域的下拉触发事件
             onQuery: function () {
@@ -1005,112 +1006,122 @@
         },
 
     }
-    function _query(dg) {
-        var btn_query = dg.Search.BtnQuery.$target;
-        btn_query && btn_query.click(function () {
-            dg.Search.BtnQuery.onExecute(dg, btn_query);
-        });
-    }
-    //重置按钮事件
-    function _reset(dg) {
-        var btn_reset = dg.Search.BtnReset.$target;
-        btn_reset && btn_reset.click(function () {
-            dg.Search.BtnReset.onExecute(dg, btn_reset);
-        });
-    }
-    function _createHtml(searchItem, dg) {
-        var parentTarget, line, isCustom;
-        //创建查询区域HTML
-        dg.ToolBar.$target = $('<div>').attr("id", dg.Internal.toolbarID); //创建并设置工具栏的ID  
-        if (!dg.Search.isHidden) {
-            if (dg.Search.$target) {
-                isCustom = true;
-                dg.Search.$target.show();
-            } else {
-                dg.Search.$target = $('<div id="div_search">');
+
+    //创建搜索区
+    function _createSearchAreaHtml(searchItem, dg) {
+        if (searchItem.length > 0 || dg.Search.$target) {
+            var $input=$('<div id="div_search">').addClass('box w684');
+            if (!dg.Search.$target) {
+                $Core.Utility.createInputHtml($input, searchItem, dg);
             }
-            if (searchItem.length > 0 || isCustom) {
-                var divSearchArea = $('<div class="cont-list-form cont-box-form">').attr('sign', 'div_searchArea'),
-                 form = $("<form>");
-                dg.Search.$target.addClass('box w684');
-                var divButtons = $('<div class="btn w72">');
-                dg.Search.BtnQuery.$target = $('<input class="query" value="" type="button" />').attr("id", dg.Internal.btn_query_id);
-                dg.Search.BtnReset.$target = $('<input class="reset" type="reset" value="" />').attr("id", dg.Internal.btn_reset_id);
-                //需要指定按钮对象，如果样式不对将不触发事件
-                divButtons.append($("<a>").append(dg.Search.BtnQuery.$target));
-                divButtons.append($("<a>").append(dg.Search.BtnReset.$target));
-                form.append(dg.Search.$target);
-                form.append(divButtons);
-                divSearchArea.append(form);
-                dg.ToolBar.$target.append(divSearchArea);
-                //创建HTML结构
-                //dg.Search.Inputs = new Object();
-                (function () {
-                    if (!isCustom) {
-                        $Core.Utility.createHtml(dg.Search.$target, searchItem, dg);
-                    }
-                })();
+            else {
+                $input = dg.Search.$target;
+            }
+            dg.Search.$target = $('<div class="cont-list-form cont-box-form">').attr('sign', 'div_searchArea');
+            var form = $("<form>");
+            dg.Search.$target.append(form);
+            form.append($input);
+
+            var divButtons = $('<div class="btn w72">');
+            dg.Search.BtnQuery.$target = $('<input class="query" value="" type="button" />').attr("id", dg.Internal.btn_query_id);
+            dg.Search.BtnReset.$target = $('<input class="reset" type="reset" value="" />').attr("id", dg.Internal.btn_reset_id);
+            //需要指定按钮对象，如果样式不对将不触发事件
+            divButtons.append($("<a>").append(dg.Search.BtnQuery.$target));
+            divButtons.append($("<a>").append(dg.Search.BtnReset.$target));
+            form.append(divButtons);
+        }
+        dg.ToolArea.$target.append(dg.Search.$target);
+
+    };
+    //创建工具栏区
+    function _createToolBarHtml(dg) {
+        var div_fn = $('<div class="function-box" id="div_toolbarArea">');
+        if (!dg.ToolBar.isHidden) {
+            //div_fn.attr("class", "function-box");
+            //if (dg.type == "datagrid") {
+
+            var item; actionKeys = $Core.Global.Variable.actionKeys || "";
+            if (actionKeys.indexOf(',add,') > -1 && !dg.ToolBar.BtnAdd.isHidden) {
+                dg.ToolBar.BtnAdd.$target = $('<input class=\"add\" flag=\"btn_add\" type=\"button\" name=\"添加\" value=\"\"/>');
+                item = $("<a>").append(dg.ToolBar.BtnAdd.$target);
+                div_fn.append(item);
+                dg.ToolBar.Items.set("add", dg.ToolBar.BtnAdd);
+            }
+            if (actionKeys.indexOf(',del,') > -1 && !dg.ToolBar.BtnDelBatch.isHidden) {
+                dg.ToolBar.BtnDelBatch.$target = $('<input  class=\"batch_del\" flag=\"btn_del\" type=\"button\" name=\"批量删除\" value=\"\"/>').attr("dgID", dg.id);
+                item = $("<a>").append(dg.ToolBar.BtnDelBatch.$target);
+                div_fn.append(item);
+                dg.ToolBar.Items.set("del", dg.ToolBar.BtnDelBatch);
+            }
+            if (actionKeys.indexOf(',export,') > -1 && !dg.ToolBar.BtnExport.isHidden) {
+                dg.ToolBar.BtnExport.$target = $('<input class=\"export\" flag=\"btn_export\" type=\"button\"  value=\"\"/>');
+                item = $("<a>").append(dg.ToolBar.BtnExport.$target);
+                div_fn.append(item);
+                dg.ToolBar.Items.set("export", dg.ToolBar.BtnExport);
+            }
+            if (actionKeys.indexOf(',import,') > -1) {
+                if (!dg.ToolBar.BtnImport.isHidden) {
+                    dg.ToolBar.BtnImport.$target = $('<input class=\"import\" flag=\"btn_import\" type=\"button\"  value=\"\"/>');
+                    item = $("<a>").append(dg.ToolBar.BtnImport.$target);
+                    div_fn.append(item);
+                    dg.ToolBar.Items.set("import", dg.ToolBar.BtnImport);
+                }
+                if (!dg.ToolBar.BtnExportTemplate.isHidden) {
+                    dg.ToolBar.BtnExportTemplate.$target = $('<input class=\"btn-sm\" flag=\"btn_export_template\" type=\"button\"  value=\"导出模板\"/>');
+                    item = $("<a>").append(dg.ToolBar.BtnExportTemplate.$target);
+                    div_fn.append(item);
+                    dg.ToolBar.Items.set("exportTemplate", dg.ToolBar.BtnExportTemplate);
+                }
             }
         }
-        //添加工具栏按钮
-        (function () {
-            var div_fn = $('<div class="function-box" id="div_toolbarArea">');
-            if (!dg.ToolBar.isHidden) {
-                //div_fn.attr("class", "function-box");
-                //if (dg.type == "datagrid") {
-
-                var item; actionKeys = $Core.Global.Variable.actionKeys || "";
-                if (actionKeys.indexOf(',add,') > -1 && !dg.ToolBar.BtnAdd.isHidden) {
-                    dg.ToolBar.BtnAdd.$target = $('<input class=\"add\" flag=\"btn_add\" type=\"button\" name=\"添加\" value=\"\"/>');
-                    item = $("<a>").append(dg.ToolBar.BtnAdd.$target);
-                    div_fn.append(item);
-                    dg.ToolBar.Items.set("add", dg.ToolBar.BtnAdd);
+        else {//处理样式问题（如果去掉或隐藏div_fn，或不设置class为function-box，都显示不出分页控件，只有后期改变其属性）
+            div_fn.attr("style", "height:0px;padding:0 0;border-bottom:0px");
+        }
+        dg.ToolBar.$target = div_fn;
+        dg.ToolArea.$target.append(dg.ToolBar.$target);
+        _createCustomButton(dg);
+    }
+    //创建自定义工具条。
+    function _createCustomButton(dg) {
+        var btnArray = dg.ToolBar._btnArray;
+        if (!(btnArray instanceof Array)) {
+            throw TypeError('参数必须是一个数组');
+        }
+        var hiddenCount = 0;
+        var actionKeys = $Core.Global.Variable.actionKeys;
+        for (var i = 0, len = btnArray.length; i < len; i++) {
+            if (btnArray[i] == undefined) { continue; }
+            var lv2action = btnArray[i].lv2action && btnArray[i].lv2action.toLowerCase();
+            if (!lv2action || actionKeys.indexOf(',' + lv2action + ",") > -1) {
+                var index = btnArray[i].index;
+                var btn = btnArray[i].btn,
+                    item = '';
+                if (btn.html) {
+                    item = btn.html;
+                } else {
+                    var btnClass = btn.css || "btn-sm";
+                    var btnClick = btn.click;
+                    var title = btn.title;
+                    item = $Core.Utility.stringFormat('<a><input class=\"{0}\" type=\"button\" onClick=\"{1}(event)\"  value=\"{2}\"/></a>', btnClass, btnClick, title);
                 }
-                if (actionKeys.indexOf(',del,') > -1 && !dg.ToolBar.BtnDelBatch.isHidden) {
-                    dg.ToolBar.BtnDelBatch.$target = $('<input  class=\"batch_del\" flag=\"btn_del\" type=\"button\" name=\"批量删除\" value=\"\"/>').attr("dgID", dg.id);
-                    item = $("<a>").append(dg.ToolBar.BtnDelBatch.$target);
-                    div_fn.append(item);
-                    dg.ToolBar.Items.set("del", dg.ToolBar.BtnDelBatch);
-                }
-                if (actionKeys.indexOf(',export,') > -1 && !dg.ToolBar.BtnExport.isHidden) {
-                    dg.ToolBar.BtnExport.$target = $('<input class=\"export\" flag=\"btn_export\" type=\"button\"  value=\"\"/>');
-                    item = $("<a>").append(dg.ToolBar.BtnExport.$target);
-                    div_fn.append(item);
-                    dg.ToolBar.Items.set("export", dg.ToolBar.BtnExport);
-                }
-                if (actionKeys.indexOf(',import,') > -1) {
-                    if (!dg.ToolBar.BtnImport.isHidden) {
-                        dg.ToolBar.BtnImport.$target = $('<input class=\"import\" flag=\"btn_import\" type=\"button\"  value=\"\"/>');
-                        item = $("<a>").append(dg.ToolBar.BtnImport.$target);
-                        div_fn.append(item);
-                        dg.ToolBar.Items.set("import", dg.ToolBar.BtnImport);
+                item = $(item);
+                var toolbarContainer = $("#" + dg.ToolArea.id).find(".function-box"),
+                    count = toolbarContainer.children().length;
+                if (count == 0) {
+                    toolbarContainer.append(item);
+                } else {
+                    if (count < index) {
+                        index = count;
+                        toolbarContainer.children().eq(index - 1).after(item);
+                    } else {
+                        toolbarContainer.children().eq(index - 1).before(item);
                     }
-                    if (!dg.ToolBar.BtnExportTemplate.isHidden) {
-                        dg.ToolBar.BtnExportTemplate.$target = $('<input class=\"btn-sm\" flag=\"btn_export_template\" type=\"button\"  value=\"导出模板\"/>');
-                        item = $("<a>").append(dg.ToolBar.BtnExportTemplate.$target);
-                        div_fn.append(item);
-                        dg.ToolBar.Items.set("exportTemplate", dg.ToolBar.BtnExportTemplate);
-                    }
                 }
-
-
-                //}
-                //if (dg.type == "treegrid") {
-                //    var div_fn = $('<div class="function-box" id="' + dg.Internal.toolbarID + '">');
-                //    if (dg.Internal.toolbar != false) {
-                //        var item = $("<a>").append($('<input class=\"btn-lg\" flag=\"btn_add\" type=\"button\" value=\"添加根节点\"/>'));
-                //        div_fn.append(item);
-                //    }
-                //    dg.ToolBar.$target.append(div_fn);
-                //}
+                //外部是_createToolbar.call(dg, dg.ToolBar._btnArray);调用方式，所以上下文被换成了datagrid
+                dg.ToolBar.Items.set(lv2action || title || btnClick, { "isCustom": true, $target: item });
             }
-            else {//处理样式问题（如果去掉或隐藏div_fn，或不设置class为function-box，都显示不出分页控件，只有后期改变其属性）
-                div_fn.attr("style", "height:0px;padding:0 0;border-bottom:0px");
-            }
-            dg.ToolBar.$target.append(div_fn);
-            $("body").append(dg.ToolBar.$target); //加到页面中       
-        }());
-    };
+        }
+    }
     function getObj(objName) {
         var obj = new Object();
         var m_combobox_json = $Core.Global.m_combobox_json;

@@ -29,10 +29,10 @@ namespace Aries.Logic
 
                 if (!string.IsNullOrWhiteSpace(sb.ToString()))
                 {
-                    using (EditLog log=new EditLog())
+                    using (EditLog log = new EditLog())
                     {
                         log.TableName = aopInfo.TableName;
-                        log.KeyID =Convert.ToString(aopInfo.Row.PrimaryCell.Value);
+                        log.KeyID = Convert.ToString(aopInfo.Row.PrimaryCell.Value);
                         log.Content = sb.ToString();
                         log.UserID = UserAuth.UserID;
                         log.EditTime = DateTime.Now;
@@ -71,7 +71,7 @@ namespace Aries.Logic
     {
         public EditLog()
         {
-            base.SetInit(this);
+            base.SetInit(this, "Editlog", AppConfig.DB.DefaultConn, AopOp.CloseAll);
         }
         public int ID { get; set; }
         public string TableName { get; set; }

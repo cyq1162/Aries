@@ -11,6 +11,8 @@ namespace Aries.Core
         void SetKeyValue(Enum key, string value);
         void SetKeyValue(string key, string value);
         string TableName { get; }
+        string GetWhere();
+        string GetOrderBy(string defaultSort);
         string GetWhereIn(string primaryKey, string requestKey = null);
     }
 }

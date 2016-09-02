@@ -42,7 +42,7 @@
                     </div>
                 </div>
             </div>
-           
+
             <div class="cont-box-tit">
                 <h3>Demo_TestB</h3>
                 <a class="arrows hover"></a>
@@ -142,8 +142,7 @@
 
         <script>
             AR.Form.onBeforeExecute = function () {
-                if(parent && parent.AR.Global.operator=="Update")
-                {
+                if (parent && parent.AR.Global.operator == "Update") {
                     this.objname = parent.AR.Global.DG.operating.viewName;
                 }
             }
@@ -154,7 +153,8 @@
             }
 
             AR.Form.BtnCommit.onBeforeExecute = function () {
-                AR.Form.objname = Math.random() % 2 == 0 ? "Demo_TestA" : "Demo_TestB";
+
+                AR.Form.objname = "Demo_TestA";
                 alert("操作的是:" + AR.Form.objname);
             }
         </script>

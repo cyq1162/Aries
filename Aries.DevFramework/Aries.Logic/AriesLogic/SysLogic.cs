@@ -136,6 +136,18 @@ namespace Aries.Logic
             return JsonHelper.OutResult(result, result ? "删除成功!" : "删除失败!");
         }
 
+        public MDataTable GetUserList(GridConfig.SelectType st)
+        {
+            MDataTable dt = null;
+            using (MAction action = new MAction(TableNames.Sys_User))
+            {
+                dt = action.Select();
+            }
+            dt.JoinOnName = Sys_User.UserID.ToString();
+            dt.Join(TableNames.Sys_UserInfo, Sys_UserInfo.UserInfoID.ToString());
+            return dt.Select(PageIndex, PageSize, GetWhere() + GetOrderBy(Sys_User.UserID.ToString()), GridConfig.GetSelectColumns(ObjName, st));
+        }
+
         #endregion
 
 
@@ -152,7 +164,7 @@ namespace Aries.Logic
             {
                 dt = action.Select("ORDER BY menulevel ASC,sortorder asc");
             }
-            
+
             return dt.ToJson();
         }
         /// <summary>

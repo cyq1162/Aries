@@ -68,7 +68,7 @@ namespace Aries.Core
         {
             get { return _IBase.IsHttpPost; }
         }
-       
+
         #endregion
 
         public string GetID
@@ -119,6 +119,17 @@ namespace Aries.Core
             {
                 return _IBase.IsUseUISite;
             }
+        }
+
+
+        public string GetWhere()
+        {
+            return _IBase.GetWhere();
+        }
+
+        public string GetOrderBy(string defaultSort)
+        {
+            return _IBase.GetOrderBy(defaultSort);
         }
     }
 }

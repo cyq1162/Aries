@@ -77,17 +77,46 @@ namespace Aries.Controllers
             }
         }
 
+        protected override MDataRow GetOne()
+        {
+            switch (ObjName)
+            {
+                case "V_SYS_UserList"://重写是为了支持文本数据库
+                    if (AppConfig.DB.DefaultDalType == DalType.Txt)
+                    {
+                        return Select(GridConfig.SelectType.Show).Rows[0];
+                    }
+                    break;
+            }
+            return base.GetOne();
+        }
         protected override MDataTable Select(GridConfig.SelectType st)
         {
-            MDataTable dt = base.Select(st);
-            if (ObjName == "Config_ExcelInfo")
+            MDataTable dt = null;
+            switch (ObjName)
             {
-                if (dt == null || dt.Rows.Count == 0)
-                {
-                    sysLogic.InitExcelColumn();
-                    //从Excel读取列写入
+                case "Config_ExcelInfo":
                     dt = base.Select(st);
-                }
+                    if (dt == null || dt.Rows.Count == 0)
+                    {
+                        sysLogic.InitExcelColumn();
+                        //从Excel读取列写入
+                        dt = base.Select(st);
+                    }
+                    break;
+                case "V_SYS_UserList"://重写是为了支持文本数据库
+                    if (AppConfig.DB.DefaultDalType == DalType.Txt)
+                    {
+                        dt = sysLogic.GetUserList(st);
+                    }
+                    else
+                    {
+                        dt = base.Select(st);
+                    }
+                    break;
+                default:
+                    dt = base.Select(st);
+                    break;
             }
             return dt;
         }
@@ -124,7 +153,7 @@ namespace Aries.Controllers
         public void GetMenu()
         {
             jsonResult = sysLogic.GetMenuJson();
-            jsonResult=jsonResult.Replace(",\"ParentMenuID\":\"\"","");//兼容为空的情况。
+            jsonResult = jsonResult.Replace(",\"ParentMenuID\":\"\"", "");//兼容为空的情况。
         }
 
         /// <summary>
@@ -183,10 +212,5 @@ namespace Aries.Controllers
         {
             jsonResult = sysLogic.GetExcelMapping();
         }
-
-
-
-       
-
     }
 }

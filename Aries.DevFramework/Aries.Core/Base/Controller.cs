@@ -230,7 +230,7 @@ namespace Aries.Core
         /// <summary>
         /// 构造Where条件
         /// </summary>
-        protected virtual string GetWhere()
+        public virtual string GetWhere()
         {
             string search = Query<string>("sys_search");
             if (string.IsNullOrEmpty(search))
@@ -239,7 +239,7 @@ namespace Aries.Core
             }
             return SqlFormat.Format(HttpContext.Current.Server.HtmlDecode(search));
         }
-        protected string GetOrderBy(string defaultSort)
+        public string GetOrderBy(string defaultSort)
         {
             string sort = Sort;
             if (string.IsNullOrEmpty(sort))
@@ -859,10 +859,11 @@ namespace Aries.Core
                     if (sb.Length > 0)
                     {
                         string sql = sb.ToString().TrimEnd(';');
-                        using (MProc proc = new MProc(sql, CrossDb.GetConn(sql)))
+                        using (MProc proc = new MProc(null, CrossDb.GetConn(sql)))
                         {
                             if (proc.DalType == DalType.MsSql)
                             {
+                                proc.ResetProc(sql);
                                 dtList.AddRange(proc.ExeMDataTableList());
                             }
                             else

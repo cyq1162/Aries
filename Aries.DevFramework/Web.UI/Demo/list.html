@@ -68,8 +68,15 @@
     grid.options = {
         queryParams: { "a": 1 },
         onLoadSuccess: function () {
-            //alert('ok123');
+           // alert('options.onLoadSuccess');
+        },
+        onBeforeLoad: function () {
+           // alert('onBeforeLoad');
         }
+    }
+    grid.Search.BtnQuery.onBeforeExecute = function (data)
+    {
+       // alert('BtnQuery.onBeforeExecute');
     }
     // grid.isShowToolArea = false;
   // grid.ToolBar.isHidden = true;

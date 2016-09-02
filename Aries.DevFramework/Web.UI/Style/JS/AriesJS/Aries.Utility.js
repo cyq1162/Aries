@@ -321,12 +321,14 @@ window.AR = (function ($Core) {
             })(window);
             return win;
         },
-        //生成搜索下拉框。
-        createHtml: function ($container, dataArray, dg) {
+        //生成表单下拉框。
+        createInputHtml: function ($container, dataArray, dg) {
+            var line;
             var objName, cssName,
                 cutIndex = 0//删减的索引值;
             for (var i = 0, len = dataArray.length; i < len; i++) {
-                if (i % 3 == 0) {
+                if (i % 3 == 0)
+                {
                     line = $("<div class=\"line\">");
                     $container.append(line);
                 }

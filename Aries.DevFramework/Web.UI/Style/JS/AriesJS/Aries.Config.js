@@ -1,10 +1,4 @@
 ﻿(function ($, $Core) {
-    //模块路劲设置
-    $.extend($Core.route, {
-        sys: 'ajax.html',
-        menu: 'ajax.html',
-    });
-
     //格式主键模板
     $Core.PKTemplate = {
         edit: '<a  class="bj"  title="编辑" op="1"></a>',

@@ -50,6 +50,10 @@
                         case "deleteRow":
                             this.$target.datagrid(v1, v2);
                             return this.$target.treegrid("acceptChanges");
+                        case "reload":
+                            this.$target.datagrid("unselectAll");
+                            this.$target.datagrid("uncheckAll");
+                            break;
                     }
                     return this.$target.datagrid(v1, v2);
                     break;
@@ -65,6 +69,10 @@
                             return this.$target.treegrid("remove", v2);//先删
                         case "appendRow":
                             v1 = "append";
+                            break;
+                        case "reload":
+                            this.$target.treegrid("unselectAll");
+                            this.$target.treegrid("uncheckAll");
                             break;
                     }
                     return this.$target.treegrid(v1, v2);
@@ -801,7 +809,7 @@
             var id = "btn_import" + Math.floor(Math.random() * 10000);
             toolbar.find("[flag = 'btn_import']").attr("id", id);
             var exts = ["xls", "xlsx"];
-            var url = $Core.Utility.stringFormat($Core.route.root + '?sys_method=Import&sys_objName={0}&sys_tableName={1}&sys_mid={2}', dg.objName, dg.tableName, $Core.Global.Variable.mid);
+            var url = $Core.Utility.stringFormat($Core.Global.route.root + '?sys_method=Import&sys_objName={0}&sys_tableName={1}&sys_mid={2}', dg.objName, dg.tableName, $Core.Global.Variable.mid);
             $Core.Utility.initUploadButton(url, id, "excelImport", exts,
             function (file, ext) {
                 if ($Core.Utility.isInArray(exts, ext)) {

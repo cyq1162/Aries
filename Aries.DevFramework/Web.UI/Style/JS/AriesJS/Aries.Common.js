@@ -400,7 +400,7 @@
                             //window.open(ajaxOptions.href + '?objName=' + objName + '&sys_search='+jsonString, '_self');
                             var iframeName = "framePost";
                             ifrme = $("<iframe>").attr("id", "div_ifrme_template").attr("name", iframeName).css({ display: 'none' });
-                            form_export = $("<form>").attr("action", $Core.route.root).attr("target", iframeName).attr("id", "form_template");
+                            form_export = $("<form>").attr("action", $Core.Global.route.root).attr("target", iframeName).attr("id", "form_template");
                             var param = {
                                 sys_objName: dg.objName,
                                 sys_tableName: objName,

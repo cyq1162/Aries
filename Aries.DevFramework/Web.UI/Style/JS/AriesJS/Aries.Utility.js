@@ -29,7 +29,7 @@ window.AR = (function ($Core) {
             //当前页面DataGrid操作，值为Update，Add
             action: null
         },
-
+        route :{ root: 'ajax.html' },
         comboxData: [],
         //存档Config_KeyValue的数据。
         Config: {},
@@ -39,8 +39,6 @@ window.AR = (function ($Core) {
         */
         Variable: {}
     };
-    //默认路由地址
-    $Core.route = { root: 'ajax.html' };
     return $Core;
 })(window.AR || {});
 
@@ -279,7 +277,7 @@ window.AR = (function ($Core) {
             }
         },
         download: function (method, data, url) {
-            var url = url || $Core.route.root, frame_id = "f_id", frame_name = "f_name";
+            var url = url || $Core.Global.route, frame_id = "f_id", frame_name = "f_name";
             data || (data = {}), $form = $("<form>");
             $("#" + frame_id).remove();
 
@@ -584,7 +582,7 @@ window.AR = (function ($Core) {
         /***/
         $Core.Utility.Ajax = {
             Settings: {
-                url: $Core.route.root,
+                url: $Core.Global.route.root,
                 method: 'GetList',
                 data: {},
                 dataType: 'json',

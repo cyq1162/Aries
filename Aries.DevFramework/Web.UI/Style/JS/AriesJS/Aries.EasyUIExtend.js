@@ -106,7 +106,7 @@ _openFirstNode = function (data) {
 
 $.fn.treegrid.defaults.loadFilter = function (data, parentId) {
     var opt = $(this).data().treegrid.options, bindData = {};
-    var pagination = $(this).datagrid('getPager');
+    var pagination = $(this).treegrid('getPager');
     $(pagination).pagination({
         total: data.total,
         beforePageText: '第', //页数文本框前显示的汉字  
@@ -146,17 +146,6 @@ $.fn.treegrid.defaults.loadFilter = function (data, parentId) {
     return data;
 };
 
-
-/**
-* @author 梁水 
-* 重写 Jquery-Easyui reload，reload之前取消选中所有行
-*/
-var _reload = $.fn.datagrid.methods.reload;
-$.fn.datagrid.methods.reload = function (jq, param) {
-    jq.datagrid("unselectAll");
-    jq.datagrid("uncheckAll");
-    _reload(jq, param);
-}
 /**
 * @author 梁水 
 * 重写 Jquery-Easyui form的load事件
@@ -293,7 +282,7 @@ $.extend($.fn.validatebox.defaults.rules, {
         validator: function (value, param) {
             var that = this;
             var bl = false;
-            var url = param[1] || AR.route.root;
+            var url = param[1] || AR.Global.route.root;
             var op = param[2] || parent.AR.Page.operator;
             var param = param[0] || {};
             var post_data = { text: value, op: op,method:'ValidFieldRepeat',id:Request.queryString('id') };

@@ -14,7 +14,7 @@
             this.method = "Get";
             //用于拦截form表单的请求数据对象名，可以表名，视图名
             this.objName = null;
-            this.url = $Core.route.root;
+            this.url = $Core.Global.route.root;
             /**
             * 获取了数据，准备回填表单前（参数：data）
             * 可格式化表单的数据,可格式化日期时间，字符显示的处理。

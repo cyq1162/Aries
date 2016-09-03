@@ -269,7 +269,7 @@ function getNewId() {
                     pageSize: 5,
                     pageList: [5, 10, 15, 30, 50],
                     defaultWhere: [{ paramName: 'BusinessKey', paramPattern: op, paramValue: Obj.businesskey }]
-                    , url: AR.route.fileupload
+                    , url: AR.Global.route.root
                 };               
                 Obj.DataGrid = new AR.DataGrid("PB_File", "PB_File", Obj.id);
                 Obj.DataGrid.isShowToolbar = Obj.option.isShowToolbar || false;

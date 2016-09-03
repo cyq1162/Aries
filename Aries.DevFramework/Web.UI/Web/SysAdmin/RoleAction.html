@@ -56,7 +56,7 @@
                 postData.data = JSON.stringify(arr);
             }            
 
-            AR.Utility.Ajax.post("AddPromission", "Sys_Menu", postData, true, AR.route.sys,
+            AR.Utility.Ajax.post("AddPromission", "Sys_Menu", postData, true, null,
                     function (data) {
                         $.messager.progress('close');
                         AR.Utility.Window.showMsg(data.msg);
@@ -65,7 +65,7 @@
         })
 
         var RoleID = AR.Utility.queryString("id");
-        AR.Utility.Ajax.post("GetMenuAndAction", "Sys_Menu", { RoleID: RoleID }, false, AR.route.sys,
+        AR.Utility.Ajax.post("GetMenuAndAction", "Sys_Menu", { RoleID: RoleID }, false, null,
          function (data) {
              $("#tree").tree({
                  idField: "MenuID",
@@ -89,7 +89,7 @@
 
     function getActionIds() {
         var RoleID = AR.Utility.queryString("id");
-        AR.Utility.Ajax.post("GetMenuIDsandActionIds", "", { RoleID: RoleID }, false, AR.route.sys,
+        AR.Utility.Ajax.post("GetMenuIDsandActionIds", "", { RoleID: RoleID }, false, null,
          function (data) {
              for (var i in data) {
                  var node = $("#tree").tree("find", i);

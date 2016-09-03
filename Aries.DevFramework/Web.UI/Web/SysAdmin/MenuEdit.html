@@ -80,7 +80,7 @@
     var checkboxData;
     //加载权限
     function CreatePromisson() {
-        AR.Utility.Ajax.post("GetActions", "Sys_Action", {}, false, AR.route.root, function (data) {
+        AR.Utility.Ajax.post("GetActions", "Sys_Action", {}, false, null, function (data) {
             checkboxData = data;
             CreateCheck();
         });
@@ -107,7 +107,7 @@
             $("#ParentMenuID").val(node.id);
             //给ActionIDs赋值
             SetActionIDs();
-            AR.Global.operator = "Add";
+            AR.Global.DG.action = "Add";
         }
         currNode = node;
     }
@@ -133,7 +133,7 @@
                 msg = "该节点下包含子节点，确认删除？";
             }
             AR.Utility.Window.confirm(msg, "提示", function () {
-                AR.Utility.Ajax.post("DeleteMenu", "Sys_Menu", { id: node.id }, false, AR.route.root,
+                AR.Utility.Ajax.post("DeleteMenu", "Sys_Menu", { id: node.id }, false, null,
                 function (data) {
                     if (data.success) {
                         $("#ul_menus").tree("remove", node.target);
@@ -148,7 +148,7 @@
     }
     function CheckHasChlid(id) {
         var result = false;
-        AR.Utility.Ajax.post("ValidMenuHasChild", "Sys_Menu", { MenuID: id }, false, AR.route.root,
+        AR.Utility.Ajax.post("ValidMenuHasChild", "Sys_Menu", { MenuID: id }, false, null,
       function (data) {
           result = data.success
       });
@@ -156,7 +156,7 @@
     }
     //初始化菜单
     function initMenu() {
-        AR.Utility.Ajax.post("GetMenu", "Sys_Menu", {}, false, AR.route.root,
+        AR.Utility.Ajax.post("GetMenu", "Sys_Menu", {}, false, null,
           function (data) {
               $("#ul_menus").tree({
                   idField: "MenuID",
@@ -185,7 +185,7 @@
 
         SetMenuID();
         currNode = node;
-        AR.Global.operator = "Update";
+        AR.Global.DG.action = "Update";
     }
 
     //获取选中菜单ID
@@ -214,7 +214,7 @@
     //加载编辑框
     function initEdit(menuid) {
         $("#form1").form("clear");
-        AR.Utility.Ajax.post("GetMenuDetails", "Sys_Menu", { id: menuid }, false, AR.route.root,
+        AR.Utility.Ajax.post("GetMenuDetails", "Sys_Menu", { id: menuid }, false, null,
          function (data) {
              //data.check = data.ActionIDs;
              $("#form1").form('load', data);
@@ -246,7 +246,7 @@
         var node = $("#ul_menus").tree("getSelected");
 
 
-        if (AR.Global.operator == "Add") {
+        if (AR.Global.DG.action == "Add") {
             var menuLevel = 0;
             if (currNode.attributes == null) {
                 $("#MenuLevel").val(1);
@@ -263,8 +263,8 @@
             }
         }
 
-        _commit(jq, AR.Global.operator, "Sys_Menu", null, false, function (data) {
-            if (AR.Global.operator.toLocaleLowerCase() == "add") {
+        _commit(jq, AR.Global.DG.action, "Sys_Menu", null, false, function (data) {
+            if (AR.Global.DG.action.toLocaleLowerCase() == "add") {
                 if (data.success) {
                     AR.Utility.Window.showMsg("添加成功！");
                 } else {
@@ -274,7 +274,7 @@
             } else {
                 AR.Utility.Window.showMsg(data.msg);
             }
-            if (AR.Global.operator == "Update") {
+            if (AR.Global.DG.action == "Update") {
                 $("#ul_menus").tree("update", {
                     target: currNode.target,
                     text: $("[name='MenuName']").val()

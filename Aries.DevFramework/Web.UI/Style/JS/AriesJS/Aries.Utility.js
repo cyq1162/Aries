@@ -29,7 +29,7 @@ window.AR = (function ($Core) {
             //当前页面DataGrid操作，值为Update，Add
             action: null
         },
-        route :{ root: 'ajax.html' },
+        route: { root: 'ajax.html' },
         comboxData: [],
         //存档Config_KeyValue的数据。
         Config: {},
@@ -123,22 +123,7 @@ window.AR = (function ($Core) {
                 return cn;
             }(undefined);
         },
-        /**
-        *初始化上传按钮
-        *@param {string} path 上传至的服务地址,
-        *@param {string} target 可以是ID、JQ对象、JS对象，
-        *@param {string} fieldName 保存的文件名，此名字发送到后台，
-        *@param {Array} exts 后缀约束 如：['xls','js','txt']
-        */
-        initUploadButton: function (path, target, fieldName, exts, onSubmit, onComplete, data) {
-            var exts = exts.join(",");
-            var _upload = new AjaxUpload(target, {
-                action: path,
-                name: fieldName,
-                onSubmit: onSubmit,
-                onComplete: onComplete
-            });
-        },
+
         /**
             *模拟.NET的Request对象
             *@param {string} key

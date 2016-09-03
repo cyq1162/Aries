@@ -1045,7 +1045,7 @@
                 div_fn.append(item);
                 dg.ToolBar.Items.set("add", dg.ToolBar.BtnAdd);
             }
-            if (actionKeys.indexOf(',del,') > -1 && !dg.ToolBar.BtnDelBatch.isHidden) {
+            if (actionKeys.indexOf(',del,') > -1 && !dg.ToolBar.BtnDelBatch.isHidden && dg.isShowCheckBox) {
                 dg.ToolBar.BtnDelBatch.$target = $('<input  class=\"batch_del\" flag=\"btn_del\" type=\"button\" name=\"批量删除\" value=\"\"/>').attr("dgID", dg.id);
                 item = $("<a>").append(dg.ToolBar.BtnDelBatch.$target);
                 div_fn.append(item);

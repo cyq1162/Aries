@@ -23,17 +23,17 @@
                         </div>
                         <div class="short">
                             <label><em>*</em>性别：</label>
-                            <input name="Sex" configkey="性别" editable="false" />
+                            <input name="Sex" configkey="性别" editable="false" defaultitem="false" />
                         </div>
                         <div class="short">
                             <label><em>*</em>角色：</label>
-                            <input name="RoleIDs" id="RoleIDs" objname="C_SYS_Role" validtype="combobox" class="easyui-combobox" multiple="true" editable="true" />
+                            <input name="RoleIDs" id="RoleIDs" objname="C_SYS_Role" validtype="combobox" class="easyui-combobox" multiple="true" editable="true" defaultitem="false"  />
                         </div>
                     </div>
                     <div class="line">
                         <div class="short">
                             <label><em>*</em>登录账号：</label>
-                            <input name="UserName" id="UserName" missingmessage="" class='easyui-validatebox' data-options="required:true" />
+                            <input name="UserName" id="UserName" missingmessage="" class='easyui-validatebox' data-options="required:true,validType:'exists[UserName]'"  />
                         </div>
                         <div class="short">
                             <label><em>*</em>登录密码：</label>
@@ -78,7 +78,7 @@
                         </div>
                         <div class="short">
                             <label><em>*</em>账号状态：</label>
-                            <input name="Status" configkey="账号状态" />
+                            <input name="Status" configkey="账号状态" defaultitem="false"  />
                         </div>
                         <div class="short">
                             <label>备注：</label>
@@ -98,6 +98,5 @@
             </div>
         </div>
     </div>
-   
 </body>
 </html>

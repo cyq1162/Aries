@@ -275,37 +275,35 @@ $.extend($.fn.validatebox.defaults.rules, {
         },
         message: '输入的日期格式不正确'
     },
-    //Author:梁水 date：2014-1-7
-    //modify:2014-9-23更新（1.新增参数两个，操作和其它参数传递）
-    //begin
-    remoteValid: {
-        validator: function (value, param) {
-            var that = this;
-            var bl = false;
-            var url = param[1] || AR.Global.route.root;
-            var op = param[2] || parent.AR.Page.operator;
-            var param = param[0] || {};
-            var post_data = { text: value, op: op,method:'ValidFieldRepeat',id:Request.queryString('id') };
-            for (var k in param) {
-                post_data[k] = param[k];
+    exists:{
+        validator: function(value,param)
+        {
+            if (!param[0])
+            {
+                this.message = "验证规则错误！";
+                return false;
             }
-            $.ajax({
-                type: 'POST',
-                async: false,
-                dateType: 'json',
-                url: url,
-                data: post_data,
-                success: function (result) {
-                    var r = eval('(' + result + ')');
-                    if (!r.success) {
-                        that.message = param.errorMsg || "服务验证失败,数据重复.";
-                    }
-                    bl = r.success;
+            var data={};
+            data.v=value;
+            data.n = param[0].name || param[0];
+            var id=param[1] || AR.Utility.queryString('id');
+            if(id) data.id=id;
+            //method, objName, data, async, url, callback, isShowProgress
+            var result = AR.Utility.Ajax.get("Exists", AR.Form.tableName, data, false);
+            if (result) {
+                if (result.success) {
+                    this.message = "该数据已存在！";
+                    return false;
                 }
-            });
-            return bl;
+                return true;
+            }
+            else {
+                this.messgage = "远程请求失败！";
+                return false;
+            }
         }
     },
+ 
     multiple: {
         validator: function (value, vtypes) {
             var returnFlag = true;
@@ -353,11 +351,5 @@ $.extend($.fn.validatebox.defaults.rules, {
     }
     //end extends
 });
-
-/* 密码由字母和数字组成，至少6位 */
-var safePassword = function (value) {
-    return !(/^(([A-Z]*|[a-z]*|\d*|[-_\~!@#\$%\^&\*\.\(\)\[\]\{\}<>\?\\\/\'\"]*)|.{0,5})$|\s/.test(value));
-}
-
 
 //________________________________________________________输入框扩展部分end_______________________________________________________________________________

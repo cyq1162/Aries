@@ -13,7 +13,8 @@
             //用于获取数据的函数指向，默认值Get
             this.method = "Get";
             //用于拦截form表单的请求数据对象名，可以表名，视图名
-            this.objName = null;
+            this.objName = $PCore.Global.DG.operating && $PCore.Global.DG.operating.objName;
+            this.tableName = $PCore.Global.DG.operating && $PCore.Global.DG.operating.tableName;
             this.url = $Core.Global.route.root;
             /**
             * 获取了数据，准备回填表单前（参数：data）
@@ -32,8 +33,7 @@
                 if ($PCore && $PCore.Global.DG.action == "Update") {
                     if ($PCore.Global.DG.operating) {
                         var id = $Core.Utility.queryString("id");
-                        var objName = this.objName || $PCore.Global.DG.operating.tableName;
-                        this.data = $Core.Utility.Ajax.post(this.method, objName, { "id": id }, false, this.url);
+                        this.data = $Core.Utility.Ajax.post(this.method, this.objName, { "id": id }, false, this.url);
                         if (this.onBeforeFillForm(this.data) == false) { return; }
                         this.$target.form("load", this.data);
                         $Core.Combobox.setValues(this.data);

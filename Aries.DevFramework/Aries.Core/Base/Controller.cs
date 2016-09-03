@@ -951,26 +951,24 @@ namespace Aries.Core
                 jsonResult = JsonHelper.OutResult(result, script);
             }
         }
+        [ActionKey("View,Get")]
         /// <summary>
-        /// 验证字段重复
+        /// 是否存在某数据。
         /// </summary>
-        public void ValidFieldRepeat()
+        public void Exists()
         {
             string value = Query<string>("v", "");
             string name = Query<string>("n", "");
-            string op = Query<string>("op", "");
             bool result = false;
             using (MAction action = new MAction(CrossObjName))
             {
-                if (op.ToLower() == "add")
+                string id = GetID;
+                string where = string.Format("{0}='{1}'", name, value);
+                if (!string.IsNullOrEmpty(id))
                 {
-                    result = action.GetCount(string.Format("{1}='{0}'", value, name)) == 0;
+                    where += string.Format(" and {0}<>'{1}'", action.Data.PrimaryCell.ColumnName, id);
                 }
-                else if (op.ToLower() == "update")
-                {
-                    var primarykey = action.Data.PrimaryCell.ColumnName;
-                    result = action.GetCount(string.Format("{1}='{0}' AND {2} <> '{3}'", value, name, primarykey, GetID)) == 0;
-                }
+                result = action.Exists(where);
             }
             jsonResult = JsonHelper.OutResult(result, string.Empty);
         }

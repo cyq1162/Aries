@@ -137,6 +137,7 @@
     };
     DataGrid.prototype.bind = function () {
         $Core.Global.DG.Items.set(this.id, this);
+        $Core.Global.DG.operating = this;
         //如果是编辑模式 绑定行点击事件
         if (this.isEditor || this.type == "treegrid") {
             var that = this;
@@ -776,12 +777,11 @@
             //throw new ReferenceError("工具条的ID无效,页面未找到该ID值的HTML标签");
             return;
         }
+
         toolbar.delegate("[flag = 'btn_add']", "click", function () {
             dg.ToolBar.BtnAdd.onExecute(dg);
         });
-        if (!dg.isShowCheckBox) {
-            toolbar.find(".batch_del").hide();
-        }
+
         toolbar.delegate("[flag = 'btn_del']", "click", function () {
             dg.ToolBar.BtnDelBatch.onExecute(dg);
         });
@@ -795,63 +795,56 @@
             dg.ToolBar.BtnExportTemplate.onExecute(dg);
         });
 
-        //查询按钮
-        //toolbar.delegate("[flag = 'btn_query']", "click", function () {
-        //    $(this).parent().parent().siblings("[sign='div_searchArea']").toggle();
-        //});
-
         //导入按钮事件
-        try {
-            //如果找不到控件ID不加载下面代码
-            if (!toolbar.find("[flag = 'btn_import']")[0]) {
-                return;
-            }
-            var id = "btn_import" + Math.floor(Math.random() * 10000);
-            toolbar.find("[flag = 'btn_import']").attr("id", id);
-            var exts = ["xls", "xlsx"];
+
+        var $btnImport = toolbar.find("[flag = 'btn_import']");
+        if ($btnImport) {
+            var opts = {};
             var url = $Core.Utility.stringFormat($Core.Global.route.root + '?sys_method=Import&sys_objName={0}&sys_tableName={1}&sys_mid={2}', dg.objName, dg.tableName, $Core.Global.Variable.mid);
-            $Core.Utility.initUploadButton(url, id, "excelImport", exts,
-            function (file, ext) {
-                if ($Core.Utility.isInArray(exts, ext)) {
-                    $.messager.progress({
-                        title: "消息提示",
-                        msg: "正在导入数据，请稍候..."
-                    });
-                }
-                else {
-                    $Core.Utility.Window.showMsg('上传文件扩展名必须是已下格式<br/>' + exts);
-                    return false;
-                }
-                var param = {};
-                var result = dg.ToolBar.BtnImport.onBeforeExecute(param);
-                if (result == false) {
-                    return false;
-                }
-                this.setData(param);
-            },
-            function (original_filename, data) {
-                //file 是文件名,data 是返回的东西
-                $.messager.progress('close');
-                data = JSON.parse(data);
-                if (data.success) {
-                    $Core.Utility.Window.showMsg(data.msg);
-                    dg.datagrid("reload");
-                }
-                else {
-                    data.msg = data.msg.replace(/&/g, '&amp').replace(/\"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace("\"", "'");
-                    var tip = "<div>数据异常，导入失败！<a title=\"" + data.msg + "\" onclick=\"javascript:alert(this.title)\"><font color='red'>查看错误详情</font></a></div>";
-                    $Core.Utility.Window.showMsg(tip, null, null, 8000);//"导入失败！"
-                    if (data.sys_down != undefined) {
-                        $Core.Utility.download('Down', { 'sys_down': data.sys_down });
+            opts.action = url;
+            opts.onSubmit = function (dg) {
+                return function (file, ext) {
+                    if (ext == "xls" || ext == "xlsx") {
+                        $.messager.progress({
+                            title: "消息提示",
+                            msg: "正在导入数据，请稍候..."
+                        });
                     }
-
+                    else {
+                        $Core.Utility.Window.showMsg('文件扩展名必须是：' + exts);
+                        return false;
+                    }
+                    var param = {};
+                    if (dg.ToolBar.BtnImport.onBeforeExecute(param) == false) {
+                        return false;
+                    }
+                    this.setData(param);
                 }
-                dg.ToolBar.BtnImport.onAfterExecute(data);
-            });
-        } catch (e) {
-            throw new Error("导入控件注册失败,请引入$Core.Utility.js文件");
-        }
+            }(dg);
+            opts.onComplete = function (dg) {
+                return function (file, data) {
+                    //file 是文件名,data 是返回的东西
+                    $.messager.progress('close');
+                    data = JSON.parse(data);
+                    if (data.success) {
+                        $Core.Utility.Window.showMsg(data.msg);
+                        dg.reload();
+                    }
+                    else {
+                        data.msg = data.msg.replace(/&/g, '&amp').replace(/\"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace("\"", "'");
+                        var tip = "<div>数据异常，导入失败！<a title=\"" + data.msg + "\" onclick=\"javascript:alert(this.title)\"><font color='red'>查看错误详情</font></a></div>";
+                        $Core.Utility.Window.showMsg(tip, null, null, 8000);//"导入失败！"
+                        if (data.sys_down != undefined) {
+                            $Core.Utility.download('Down', { 'sys_down': data.sys_down });
+                        }
 
+                    }
+                    dg.ToolBar.BtnImport.onAfterExecute(data);
+                }
+            }(dg);
+
+            new $Core.Upload($btnImport, opts);
+        }
     }
 
     function _onClickRow(index, row, dg) {

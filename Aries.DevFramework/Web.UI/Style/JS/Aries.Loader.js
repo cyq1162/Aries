@@ -1,11 +1,10 @@
 ﻿/// <reference path="/Style/JS/AriesJS/Aries.Utility.js" />
 /// <reference path="/Style/JS/AriesJS/Aries.Upload.js" />
-/// <reference path="/Style/JS/AriesJS/Aries.TreeGrid.js" />
+/// <reference path="/Style/JS/AriesJS/Aries.DataGrid.js" />
 /// <reference path="/Style/JS/AriesJS/Aries.Form.js" />
 /// <reference path="/Style/JS/AriesJS/Aries.EasyUIExtend.js" />
 /// <reference path="/Style/JS/AriesJS/Aries.DataGrid.js" />
 /// <reference path="/Style/JS/AriesJS/Aries.Common.js" />
-/// <reference path="AjaxUpload.js" />
 /// <reference path="json2.js" />
 /// <reference path="/Style/JS/AriesJS/Aries.Config.js" />
 /// <reference path="jquery-1.7.1.min.js" />
@@ -31,9 +30,9 @@ document.write('<script src="' + ui + '/Style/JS/jquery-1.7.1.min.js"></script>'
 document.write('<script src="' + ui + '/Style/JS/json2.js" ></script>');
 document.write('<script src="' + ui + '/Style/JS/EasyUI-1.3.4/jquery.easyui.min.js"></script>');
 document.write('<script src="' + ui + '/Style/JS/EasyUI-1.3.4/locale/easyui-lang-zh_CN.js"></script>');
-document.write('<script src="' + ui + '/Style/JS/AjaxUpload.js"></script> ');
 document.write('<script src="' + ui + '/Style/JS/AriesJS/Aries.EasyUIExtend.js"></script>');
 document.write('<script src="' + ui + '/Style/JS/AriesJS/Aries.Utility.js"></script>');
+document.write('<script src="' + ui + '/Style/JS/AriesJS/Aries.Upload.js"></script> ');
 document.write('<script src="' + ui + '/Style/JS/AriesJS/Aries.Common.js"></script>');
 document.write('<script src="' + ui + '/Style/JS/AriesJS/Aries.DataGrid.js"></script>');
 document.write('<script src="' + ui + '/Style/JS/AriesJS/Aries.Form.js?r=1"></script>');

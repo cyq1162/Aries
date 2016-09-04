@@ -1,0 +1,2 @@
+{"RoleID":"System.Guid","RoleName":"System.String","Notes":"System.String"},
+{"RoleID":"d8e1ae3b-8451-436a-a59b-c7516e711b9c","RoleName":"超级管理员","Notes":"55555"}

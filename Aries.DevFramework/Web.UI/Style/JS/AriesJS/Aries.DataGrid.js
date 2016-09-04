@@ -798,7 +798,7 @@
         //导入按钮事件
 
         var $btnImport = toolbar.find("[flag = 'btn_import']");
-        if ($btnImport) {
+        if ($btnImport[0]) {
             var opts = {};
             var url = $Core.Utility.stringFormat($Core.Global.route.root + '?sys_method=Import&sys_objName={0}&sys_tableName={1}&sys_mid={2}', dg.objName, dg.tableName, $Core.Global.Variable.mid);
             opts.action = url;

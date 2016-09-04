@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title></title>
     <script src="/Style/JS/Aries.Loader.js"></script>
     <style>
@@ -30,7 +30,7 @@
     dg.isEditor = true;
     dg.defaultInsertData = {
         ObjName: objName, Align: 'center', Rowspan: 1, Colspan: 1, MergeIndexed: 1, DataType: 'string,50,0,0'
-        };
+    };
     dg.ToolBar.add('关闭窗口', 'AR.Utility.Window.close', 4);
     dg.ToolBar.addHtml("<span style='margin-left: 50px; color:gray;'><strong>" + objName + "</strong></span>", 5);
     dg.ToolBar.addHtml("<span onclick = 'showView()'><b>查看脚本</b></span>", 6);
@@ -61,14 +61,13 @@
             }
         });
     }
-    function downloadSQL() {        
+    function downloadSQL() {
         AR.Utility.download('GetGridConfigScript', { sys_objName: objName });
     }
     function openConfigExcel() {
         AR.Utility.Window.open('ExcelInfoList.html?EnName=' + objName, 'Excel导入配置');
     }
-    function showFormHtml()
-    {
+    function showFormHtml() {
         var dg = parent.AR.Global.DG.operating;
         var headData = dg.Internal.headerData;
         var $form = $('<form>');
@@ -81,7 +80,7 @@
             );
         var $div_content = $('<div class="cont-box-in">');
         var $div = $('<div class="cont-box-form">');
-        AR.Utility.createInputHtml($div, headData.slice(1));
+        AR.Utility.createInputHtml($div, headData.slice(1), dg, false);
         var $btn = $('<div class="btn">');
         $btn.append($('<a>').append($('<input>').addClass('submit')));
         $btn.append($('<a>').append($('<input>').addClass('return')));

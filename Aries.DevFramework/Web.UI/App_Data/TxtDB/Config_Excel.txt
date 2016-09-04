@@ -1,0 +1,2 @@
+{"ExcelID":"System.Guid","CnName":"System.String","EnName":"System.String","TableNames":"System.String","StartIndex":"System.Int32","HeadCrossRowNum":"System.Int32","CreateTime":"System.DateTime"},
+{"ExcelID":"a3410cbc-144d-e90e-53ed-897eee8df4e6","CnName":"V_Test","EnName":"V_Test","TableNames":"Test,Test2","StartIndex":0,"HeadCrossRowNum":0,"CreateTime":"2016-05-09 09:18:26"}

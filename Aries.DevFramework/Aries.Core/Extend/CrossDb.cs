@@ -10,6 +10,8 @@ using CYQ.Data.Cache;
 using System.IO;
 using Aries.Core.Sql;
 using System.Threading;
+using Aries.Core.DB;
+using CYQ.Data.Table;
 
 namespace Aries.Core.Extend
 {
@@ -31,12 +33,14 @@ namespace Aries.Core.Extend
                 {
                     if (isFirstLoad)
                     {
+                        //DealUpdateSql();
                         //处理单表
                         foreach (ConnectionStringSettings item in ConfigurationManager.ConnectionStrings)
                         {
                             string name = item.Name.ToLower();
                             if (!string.IsNullOrEmpty(name) && name.EndsWith("conn"))
                             {
+
                                 CacheManage.PreLoadDBSchemaToCache(name, true);
                             }
                         }
@@ -48,7 +52,24 @@ namespace Aries.Core.Extend
                 }
             }
         }
-
+        /// <summary>
+        /// 处理脚本升级。
+        /// </summary>
+        //static void DealUpdateSql()
+        //{
+        //    MDataColumn mdc = DBTool.GetColumns(TableNames.Config_Grid);
+        //    if (mdc != null)
+        //    {
+        //        MCellStruct ms = mdc["ViewName"];
+        //        if (ms != null)
+        //        {
+        //            ms.ColumnName = Config_Grid.Rules.ToString();
+        //            ms.MaxSize = 150;
+        //            ms.AlterOp = AlterOp.Rename;
+        //            DBTool.AlterTable(TableNames.Config_Grid.ToString(), mdc);
+        //        }
+        //    }
+        //}
         static void fyw_Changed(object sender, FileSystemEventArgs e)
         {
             SqlCode.FileList = null;

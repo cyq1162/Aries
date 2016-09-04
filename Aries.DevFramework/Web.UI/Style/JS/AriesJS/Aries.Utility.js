@@ -109,7 +109,7 @@ window.AR = (function ($Core) {
          *@return {array} 树形数组
         */
         //获取树形递归,nodes参数是一个对象数组，根据对象的id跟parent属性过滤
-        gettree: function (nodes) {
+        getTree: function (nodes) {
             return function (parentid) {
                 var cn = new Array();
                 for (var i = 0; i < nodes.length; i++) {
@@ -305,10 +305,9 @@ window.AR = (function ($Core) {
             return win;
         },
         //生成表单下拉框。
-        createInputHtml: function ($container, dataArray, dg) {
+        createInputHtml: function ($container,dataArray,dg, fromSearch) {
             var line;
-            var objName, cssName,
-                cutIndex = 0//删减的索引值;
+            var objName, cssName;
             for (var i = 0, len = dataArray.length; i < len; i++) {
                 if (i % 3 == 0) {
                     line = $("<div class=\"line\">");
@@ -333,7 +332,7 @@ window.AR = (function ($Core) {
                 {
                     input.attr("name", dataArray[i].field);
                     if (configKey) {
-                        input.attr("configKey", configKey)
+                        input.attr("configkey", configKey)
                         configKey = undefined;
                     }
                     else {
@@ -344,30 +343,17 @@ window.AR = (function ($Core) {
                         if (objName.indexOf('=>')) {
                             arrayObjname = objName.split('=>');
                             objName = arrayObjname[0];
-                            input.attr("Parent", arrayObjname[1]);
+                            input.attr("parent", arrayObjname[1]);
                         }
-                        input.attr("objName", objName);
+                        input.attr("objname", objName);
                     }
-                    if (dataArray[i].viewname && dataArray[i].viewname.indexOf('#') != -1) {
+                    if (dataArray[i].rules && dataArray[i].rules.indexOf('#') != -1) {
                         //unshowid 标记只显示text 不显示 value 针对查询区域使用
-                        input.attr('multiple', 'true').attr('patten', 'IN');
+                        input.attr('multiple', 'true').attr('pattern', 'IN');
                         //input.attr("unshowid", true);
                     }
-                    if (dataArray[i].viewname && dataArray[i].viewname.indexOf('*') != -1) {
-                        var _vn = dataArray[i].viewname.split('*')[1];
-                        if (_vn && _vn != '') {
-                            var _vn_array = _vn.split(',');
-                            input.attr('selectedIndex', _vn_array[0]);
-                            if (_vn_array[1] && _vn_array[1] == 0) {
-                                input.attr('defaultItem', 'false');
-                            }
-                            if (_vn_array[2] && _vn_array[2] == 1) {
-                                input.attr("unshowid", true);
-                            }
-                            if (_vn_array[3] && _vn_array[3] == 0) {
-                                input.attr("isQuery", false);
-                            }
-                        }
+                    if (dataArray[i].rules && dataArray[i].rules.indexOf("$2") != -1) {
+                        this._setInputAttr(input, dataArray[i].rules, "$2:");
                     }
                     input.attr("onchange", "$Core.Common._Internal.onQuery");
                 }
@@ -379,10 +365,13 @@ window.AR = (function ($Core) {
                         case "datetime":
                             cssName = "easyui-datebox";
                             input.attr("name", dataArray[i].field).addClass(cssName).attr("date", true).width(150).attr("validType", "datebox");
-                            if (dataArray[i].viewname && dataArray[i].viewname.indexOf('$1') != -1) {
+                            if (fromSearch && dataArray[i].rules && dataArray[i].rules.indexOf('$1') != -1) {
                                 input.width(95);
-                                input2 = input.clone(true);
-                                div_item.append(input2).append($("<span>").html("&nbsp;至&nbsp;"));
+                                this._setInputAttr(input, dataArray[i].rules, "$1:");
+                                if (input.attr("clone") != "false") {
+                                    input2 = input.clone(true);
+                                    div_item.append(input2).append($("<span>").html("&nbsp;至&nbsp;"));
+                                }
                             }
                             break;
                         case "int32":
@@ -400,15 +389,21 @@ window.AR = (function ($Core) {
                                 }
                             }
                             input.attr("name", dataArray[i].field).addClass(cssName);
-                            if (dataArray[i].viewname && dataArray[i].viewname.indexOf('$1') != -1) {
+                            if (fromSearch && dataArray[i].rules && dataArray[i].rules.indexOf('$1') != -1) {
                                 input.width(68);
-                                input2 = input.clone(true);
-                                div_item.append(input2).append($("<span>").html("&nbsp;-&nbsp;").css({ "display": "block", "float": "left" }));
+                                this._setInputAttr(input, dataArray[i].rules, "$1:");
+                                if (input.attr("clone") != "false") {
+                                    input2 = input.clone(true);
+                                    div_item.append(input2).append($("<span>").html("&nbsp;-&nbsp;").css({ "display": "block", "float": "left" }));
+                                }
                             }
                             break;
                         default:
                             if (dtype[0] == "string") { cssName = ""; }
                             input.attr("name", dataArray[i].field).addClass(cssName);
+                            if (fromSearch && dataArray[i].rules && dataArray[i].rules.indexOf('$1') != -1) {
+                                this._setInputAttr(input, dataArray[i].rules, "$1:");
+                            }
                             break;
                     }
                     if (dtype[1]) {
@@ -418,13 +413,20 @@ window.AR = (function ($Core) {
                         {
                             size = size + parseInt(scale) + 1; //重置长度,+1是加上.的占位符
                         }
-                        input.addClass("easyui-validatebox").attr("validType", "length[1," + size + "]");
+                        input.addClass("easyui-validatebox");
+                        if (!input.attr("validType")) {
+                            input.attr("validType", "length[1," + size + "]");
+                        }
                         if (input2) {
-                            input2.addClass("easyui-validatebox").attr("validType", "length[1," + size + "]");
+                            input2.addClass("easyui-validatebox");
+                            if (!input2.attr("validType")) {
+                                input2.attr("validType", "length[1," + size + "]");
+                            }
                         }
                     }
 
                 }
+
                 if (dg && dg.Search) {
                     if (input2) {
                         dg.Search.Items.set(dataArray[i].field, [input, input2]);
@@ -437,7 +439,29 @@ window.AR = (function ($Core) {
                 line.append(div_item);
                 objName = undefined; cssName = undefined; input = undefined; input2 = undefined;
             }
+        },
+        _setInputAttr: function ($input, rules,splitFlag)
+        {
+            var _rules = rules.split(splitFlag)[1];
+            if (_rules) {
+                _rules = eval("(" + _rules + ")");
+                for (var name in _rules) {
+                    switch(name)
+                    {
+                        case "width":
+                            $input.width(_rules[name]);
+                            break;
+                        case "heigth":
+                            $input.heigth(_rules[name]);
+                            break;
+                        default:
+                            $input.attr(name, _rules[name]);
+                            break;
+                    }
+                }
+            }
         }
+    
     };
     //Window对象域
     (function () {

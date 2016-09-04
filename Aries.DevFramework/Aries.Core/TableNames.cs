@@ -12,7 +12,7 @@ namespace Aries.Core.DB
     public enum Sys_UserInfo { UserInfoID , CompanyID , Memo , IsOk , AreaID }
     public enum Sys_User { UserID , UserName , FullName , Password , PwdExpiredTime , Sex , Phone , Email , Status , LoginCount , LastLoginTime , LastLoginIP , RoleIDs , CreateTime }
     public enum Config_KeyValue { KeyValueID , ConfigKey , ConfigName , ConfigValue , Flag , Notes , OrderNo , CreateTime }
-    public enum Config_Grid { GridID , ObjName , ViewName , Field , Title , Hidden , OrderNum , Width , Align , Sortable , Formatter , Styler , Editor , Rowspan , Colspan , Search , DataType , Import , Export , Frozen , Edit , MergeIndexed , ImportUnique , LastEditTime }
+    public enum Config_Grid { GridID , ObjName , Rules , Field , Title , Hidden , OrderNum , Width , Align , Sortable , Formatter , Styler , Editor , Rowspan , Colspan , Search , DataType , Import , Export , Frozen , Edit , MergeIndexed , ImportUnique , LastEditTime }
     public enum Config_ExcelInfo { ExceInfoID , ExcelID , ExcelName , TableName , Field , Formatter , IsUnique , IsForeignkey , ForeignTable , IsRequired , CreateTime }
     public enum Config_Excel { ExcelID , CnName , EnName , TableNames , StartIndex , HeadCrossRowNum , CreateTime }
     #endregion

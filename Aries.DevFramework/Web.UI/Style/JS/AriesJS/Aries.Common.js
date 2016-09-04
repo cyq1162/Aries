@@ -187,23 +187,7 @@
                 }();
                 that.onExecute = function (dg) {
                     if (that.onBeforeExecute() != false) {
-                        var searchItem = Array();
-                        var hdata = dg.Internal.headerData;
-                        for (var i = 0, len = hdata.length; i < len; i++) {
-                            if (hdata[i].search) {
-                                //判断类型，构建相应的easyui控件
-                                if (hdata[i].viewname && hdata[i].viewname.indexOf('$2') != -1) {
-                                    searchItem.push(hdata[i]);
-                                    var cloneItem = $.extend({}, hdata[i]);
-                                    var title = hdata[i].viewname.split(',')[1];
-                                    cloneItem.title = title || "&nbsp;-&nbsp;"
-                                    searchItem.push(cloneItem);
-                                } else {
-                                    searchItem.push(hdata[i]);
-                                }
-                            }
-                        }
-                        _createSearchAreaHtml(searchItem, dg);
+                        _createSearchAreaHtml(dg);
                         that.onAfterExecute();
                     }
                 };
@@ -483,9 +467,9 @@
                     if ($(this).attr("type") == 'hidden' && !$("[comboname=" + $(this).attr("name") + "]").attr("multiple")) {
                         op = 'Equal';
                     }
-                    var patten = $("[comboname=" + $(this).attr("name") + "]").attr("patten");
-                    if (patten) {
-                        op = patten;
+                    var pattern = $("[comboname=" + $(this).attr("name") + "]").attr("pattern");
+                    if (pattern) {
+                        op = pattern;
                     }
                     //处理多选下拉框的查询语句标记
                     if ($("[comboname=" + $(this).attr("name") + "]").attr("multiple") === 'multiple') {
@@ -549,7 +533,7 @@
             },
             //查询区域的下拉触发事件
             onQuery: function () {
-                if ($(this).attr('isQuery') == "false") {
+                if ($(this).attr('isquery') == "false") {
                     return false;
                 }
                 if (document.readyState == 'complete') {
@@ -756,7 +740,7 @@
                             }
                         }
                         var isMultiple = false;
-                        if (row.viewname && row.viewname.indexOf('#') != -1) {
+                        if (row.rules && row.rules.indexOf('#') != -1) {
                             isMultiple = true;
                         }
                         settings.options = {
@@ -855,8 +839,8 @@
                         frozen.push({ align: 'center', checkbox: dg.isShowCheckBox, hidden: !dg.isShowCheckBox, field: 'ckb' });
 
                         dg.Internal.primarykey = json_data[i].field;
-                       // dg.Internal.idField = json_data[i].field;
-                        if (dg.PKColumn._btnArray.length > 0 || dg.isEditor) {
+                        // dg.Internal.idField = json_data[i].field;
+                        if (!dg.PKColumn.isHidden && (dg.PKColumn._btnArray.length > 0 || dg.isEditor)) {
                             //检测操作列，权限过滤后还有没有可呈现的控件。
                             var actionKeys = $Core.Global.Variable.actionKeys;
                             var len = 0;
@@ -970,7 +954,7 @@
                         if (json_data[i].field.indexOf('mg_') != -1) {
                             delete json_data[i].field;
                         }
-                        var _index = (json_data[i].mergeindexed || 1) - 1;
+                        var _index = (json_data[i].mergeindex || 1) - 1;
                         var _array = cols[_index] || new Array();
                         _array.push(json_data[i]);
                         cols[_index] = _array;
@@ -1006,16 +990,23 @@
     }
 
     //创建搜索区
-    function _createSearchAreaHtml(searchItem, dg) {
-        if (searchItem.length > 0 || dg.Search.$target) {
-            var $input=$('<div id="div_search">').addClass('box w684');
+    function _createSearchAreaHtml(dg) {
+        var dataArray = [];
+        var hdata = dg.Internal.headerData;
+        for (var i = 0, len = hdata.length; i < len; i++) {
+            if (hdata[i].search) {
+                dataArray.push(hdata[i]);
+            }
+        }
+        if (dataArray.length > 0 || dg.Search.$target) {
+            var $input = $('<div id="div_search">').addClass('box w684');
             if (!dg.Search.$target) {
-                $Core.Utility.createInputHtml($input, searchItem, dg);
+                $Core.Utility.createInputHtml($input, dataArray, dg, true);
             }
             else {
                 $input = dg.Search.$target;
             }
-            dg.Search.$target = $('<div class="cont-list-form cont-box-form">').attr('sign', 'div_searchArea');
+            dg.Search.$target = $('<div id="div_searchArea" class="cont-list-form cont-box-form">');
             var form = $("<form>");
             dg.Search.$target.append(form);
             form.append($input);
@@ -1267,7 +1258,7 @@
                 var valueField = $target.attr("valueField") || 'value';
                 var textField = $target.attr("textField") || 'text';
                 var multiple = $target.attr("multiple") == "multiple";
-                if (data.length == 0 || (data[0][textField] != "请选择" && $target.attr("defaultItem") != 'false')) {
+                if (data.length == 0 || (data[0][textField] != "请选择" && $target.attr("defaultitem") != 'false')) {
                     var defaultItem = {}; defaultItem[valueField] = ""; defaultItem[textField] = "请选择";
                     data.unshift(defaultItem);
                 }
@@ -1296,7 +1287,7 @@
                 }
                 option.data = data;
                 //判断是否级联模式
-                if ($("[parent='" + $target.attr('ObjName') + "']") && $("[parent='" + $target.attr('ObjName') + "']").length > 0) {
+                if ($("[parent='" + $target.attr('objname') + "']") && $("[parent='" + $target.attr('objname') + "']").length > 0) {
                     var option_extend = {
                         onSelect: function (record) {
                             var parent_id = record[valueField];
@@ -1308,10 +1299,10 @@
                             if (multiple) {
                                 selectedFilter($(this));
                             }
-                            $("[parent='" + $target.attr("ObjName") + "']").each(function () {
+                            $("[parent='" + $target.attr("objname") + "']").each(function () {
                                 reBind(parent_id, $(this), option);
                             });
-                            if ($("[parent='" + $target.attr('ObjName') + "']") && $("[parent='" + $target.attr('ObjName') + "']").length > 0) {
+                            if ($("[parent='" + $target.attr('objname') + "']") && $("[parent='" + $target.attr('objname') + "']").length > 0) {
                                 triggerSelect($target);
                             }
                         }
@@ -1323,7 +1314,7 @@
                                 eval(unSelFun).call(this, record);
                             }
                             var parent_id = record[valueField];
-                            $("[parent='" + $target.attr("ObjName") + "']").each(function () {
+                            $("[parent='" + $target.attr("objname") + "']").each(function () {
                                 var orignalData = $.data(this, "combobox").data;
                                 var selectedValues = $(this).combobox("getValues");
                                 var sign = false;//标记开始删除
@@ -1368,14 +1359,14 @@
                 setTimeout(function () { bindConfigKey(that) }, 5);
                 return;
             }
-            var configKey = that.attr("configKey");
+            var configKey = that.attr("configkey");
             var multiple = that.attr("multiple") == "multiple";
             if (configKey && $Core.Global.Config[configKey]) {
                 var items = $Core.Global.Config[configKey];
                 if (!jQuery.isArray(items)) {
                     items = [items];
                 }
-                var newItems = $Core.Utility.gettree(items);
+                var newItems = $Core.Utility.getTree(items);
                 var showTree = false;//是否树形下拉显示
                 earch: for (var i = 0; i < newItems.length; i++) {
                     if (newItems[i].children.length > 0) {
@@ -1387,7 +1378,7 @@
                 comboboxOption.width = that.attr("width") || 150;
                 comboboxOption.data = newItems;
                 comboboxOption.editable = that.attr("editable") == "false" ? false : true;
-                if (!multiple && that.attr("defaultItem") != 'false') {
+                if (!multiple && that.attr("defaultitem") != 'false') {
                     comboboxOption.data.unshift({ text: "请选择", value: "" });
                 }
                 if (showTree) {
@@ -1399,6 +1390,12 @@
                     if (typeof (eval(selFun)) == "function") {
                         opts.onSelect = eval(selFun);
                     }
+                    //else {
+                    //    opts.onSelect = function (rec) {
+                    //        alert(rec);
+                    //        $(this).combobox("unselect", "请选择");
+                    //    }
+                    //}
                     combobox(that, opts);
                 }
             }
@@ -1423,16 +1420,16 @@
         //绑定一个下拉控件
         function combobox(that, comboboxOption) {
             that.combobox(comboboxOption);
-            if (that.combobox("options").data.length > 0 && !comboboxOption.multiple) {
-                if (that.combobox("options").data.length > 2 || that.attr('selectedIndex')) {
-                    var selectedIndex = parseInt(that.attr('selectedIndex'));
+            if (that.combobox("options").data.length > 0 && !comboboxOption.multiple)
+            {
+                if (that.combobox("options").data.length > 2 || that.attr('defaultindex')) {
+                    var selectedIndex = parseInt(that.attr('defaultindex'));
                     var unshowid = that.attr('unshowid') == 'true';
                     var field = unshowid ? 'text' : 'value';
                     try {
-                        var value = that.attr("defaultItem") == 'false' ?
+                        var value = that.attr("defaultitem") == 'false' ?
                             (selectedIndex ? that.combobox("options").data[selectedIndex - 1][field] : (that.val() || (comboboxOption.data[0].value)))
                             : (selectedIndex ? that.combobox("options").data[selectedIndex][field] : (that.val() || ''));
-
                         if (unshowid && value == '') {
                             that.combobox("select", '请选择')
                         } else {
@@ -1447,9 +1444,12 @@
                     that.combobox("select", that.combobox("options").data[1] ? that.combobox("options").data[1].value : that.combobox("options").data[0].value);
                 }
             }
-            else {
-                that.combobox("select", "");
-            }
+            //else {
+            //    if (that.attr("defaultitem") == 'false') {
+            //        that.combobox("select", "");
+            //    }
+            //    else { that.combobox("select", "请选择"); }
+            //}
         }
 
 
@@ -1595,7 +1595,7 @@
             }
             option.editable = $element.attr("editable") == "false" ? false : true;
             //判断是否级联模式
-            if ($("[parent='" + $element.attr('ObjName') + "']") && $("[parent='" + $element.attr('ObjName') + "']").length > 0) {
+            if ($("[parent='" + $element.attr('objname') + "']") && $("[parent='" + $element.attr('objname') + "']").length > 0) {
                 var option_extend = {
                     onSelect: function (record) {
                         //var $child = $("[parent='" + $(this).attr("ObjName") + "']");
@@ -1608,10 +1608,10 @@
                             selectedFilter($(this));
                         }
                         //重新绑定子集下拉框
-                        $("[parent='" + $element.attr("ObjName") + "']").each(function () {
+                        $("[parent='" + $element.attr("objname") + "']").each(function () {
                             reBind(parent_id, $(this), option);
                         });
-                        if ($("[parent='" + $element.attr('ObjName') + "']") && $("[parent='" + $element.attr('ObjName') + "']").length > 0) {
+                        if ($("[parent='" + $element.attr('objname') + "']") && $("[parent='" + $element.attr('objname') + "']").length > 0) {
                             triggerSelect($element);
                         }
                     }
@@ -1623,7 +1623,7 @@
                             eval(unSelFun).call(this, record);
                         }
                         var parent_id = record[valueField];
-                        $("[parent='" + $element.attr("ObjName") + "']").each(function () {
+                        $("[parent='" + $element.attr("objname") + "']").each(function () {
                             var orignalData = $(this).combobox("getData");
                             var selectedValues = $(this).combobox("getValues");
                             for (var i = (orignalData.length - 1) ; i > 0; i--) {
@@ -1660,7 +1660,7 @@
         }
         //递归触发事件
         function triggerSelect($element) {
-            $("[parent='" + $element.attr('ObjName') + "']").each(function () {
+            $("[parent='" + $element.attr('objname') + "']").each(function () {
                 var $child = $(this);
                 if ($child.attr('unshowid') == 'true') {
                     $child.combobox("select", "请选择");
@@ -1745,18 +1745,18 @@
         initObjNameCombobox = function () {
             //提交请求获取数据
             var item_data = [];
-            $("[ObjName]").each(function () {
-                var objName = $(this).attr("ObjName");
-                var parent = $(this).attr("Parent");
+            $("[objname]").each(function () {
+                var objName = $(this).attr("objname");
+                var parent = $(this).attr("parent");
                 if (objName && objName.length != 0) {
-                    if (!detectArray(item_data, 'ObjName', objName)) {
+                    if (!detectArray(item_data, 'objname', objName)) {
                         var item = { ObjName: objName, Parent: parent };
                         item_data.push(item);
                     }
                 }
             });
             loadComboboxData(item_data, null, function () {
-                $("[ObjName]").each(function () {
+                $("[objname]").each(function () {
                     bindObjName($(this));
                 });
                 $Core.Combobox.onAfterExecute("objname");

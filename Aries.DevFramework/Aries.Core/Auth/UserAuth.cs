@@ -26,9 +26,16 @@ namespace Aries.Core.Auth
             errMsg = string.Empty;
             using (MAction action = new MAction(TableNames.Sys_User))
             {
-                // action.SetSelectColumns(Sys_User.UserID, Sys_User.Password, Sys_User.FullName, Sys_User.PwdExpiredTime);
-                action.SetPara("UserName", userName, System.Data.DbType.String);
-                string where = "Status=1 and (UserName=:?UserName or Phone=:?UserName or Email=:?UserName)";
+                string where = string.Empty;
+                if (action.DalType == DalType.Txt || action.DalType == DalType.Xml)
+                {
+                    where = string.Format("Status=1 and UserName='{0}'", userName);
+                }
+                else
+                {
+                    action.SetPara("UserName", userName, System.Data.DbType.String);
+                    where = "Status=1 and (UserName=:?UserName or Phone=:?UserName or Email=:?UserName)";
+                }
                 if (action.Fill(where))
                 {
                     if (action.Get<DateTime>(Sys_User.PwdExpiredTime, DateTime.MaxValue) < DateTime.Now)
@@ -45,7 +52,14 @@ namespace Aries.Core.Auth
                             userName = action.Get<string>(Sys_User.UserName);
                             string fullName = action.Get<string>(Sys_User.FullName, userName);
                             token = EncrpytHelper.Encrypt(DateTime.Now.Day + "," + userID + "," + userName + "," + fullName);
-                            action.SetExpression("LoginCount=[#ISNULL](LoginCount,0)+1");
+                            if (action.DalType == DalType.Txt || action.DalType == DalType.Xml)
+                            {
+                                action.Set(Sys_User.LoginCount, action.Get<int>(Sys_User.LoginCount, 0) + 1);
+                            }
+                            else
+                            {
+                                action.SetExpression("LoginCount=[#ISNULL](LoginCount,0)+1");
+                            }
                             action.Set(Sys_User.LastLoginTime, DateTime.Now);
                             action.Set(Sys_User.LastLoginIP, HttpContext.Current.Request.UserHostAddress);
                             //action.SetPara("UserName", userName, System.Data.DbType.String);
@@ -90,7 +104,18 @@ namespace Aries.Core.Auth
                 return action.Update(UserID);
             }
         }
-
+        /// <summary>
+        /// 刷新Token的时间
+        /// </summary>
+        public static void RefleshToken()
+        {
+            HttpCookie tokenCookie = HttpContext.Current.Request.Cookies["token"];
+            if (tokenCookie != null)
+            {
+                tokenCookie.Expires = DateTime.Now.AddHours(1);//续延1小时
+                HttpContext.Current.Response.Cookies.Add(tokenCookie);
+            }
+        }
         /// <summary>
         /// 验证用户是否在线(For PC电脑端）
         /// </summary>
@@ -179,7 +204,7 @@ namespace Aries.Core.Auth
         {
             HttpCookie tokenCookie = new HttpCookie("token", token);// { HttpOnly = !local };
             HttpCookie userNameCookie = new HttpCookie("userName", userName);
-            tokenCookie.Expires = DateTime.Now.AddDays(1);
+            tokenCookie.Expires = DateTime.Now.AddHours(1);
             userNameCookie.Expires = DateTime.Now.AddDays(1);
             HttpContext.Current.Response.Cookies.Add(tokenCookie);
             HttpContext.Current.Response.Cookies.Add(userNameCookie);
@@ -285,13 +310,26 @@ namespace Aries.Core.Auth
         {
             get
             {
-                using (MAction action = new MAction(SqlCode.GetCode("V_SYS_UserList")))
+                using (MAction action = new MAction(TableNames.Sys_User)) //转单表处理，兼容文本数据库演示
                 {
                     if (action.Fill(UserID))
                     {
-                        return action.Data;
+                        MDataRow row = action.Data;
+                        action.ResetTable(TableNames.Sys_UserInfo);
+                        if (action.Fill(UserID))
+                        {
+                            row.LoadFrom(action.Data, RowOp.None, true);//追加列
+                        }
+                        return row;
                     }
                 }
+                //using (MAction action = new MAction(SqlCode.GetCode("V_SYS_UserList")))
+                //{
+                //    if (action.Fill(UserID))
+                //    {
+                //        return action.Data;
+                //    }
+                //}
                 HttpContext.Current.Response.Redirect("/login.html");
                 return null;
             }
@@ -311,6 +349,8 @@ namespace Aries.Core.Auth
                     if (tokenCookie != null)
                     {
                         token = tokenCookie.Value;
+                        //tokenCookie.Expires = DateTime.Now.AddHours(1);//续延1小时
+                        //HttpContext.Current.Response.Cookies.Add(tokenCookie);
                     }
                 }
                 return token;

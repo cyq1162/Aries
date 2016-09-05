@@ -12,4 +12,8 @@
 {"KeyValueID":"596a4a36-ff60-453b-83df-e8e6e34e013f","ConfigKey":"表名描述","ConfigName":"V_Test","ConfigValue":"普通列表","Flag":"sys","OrderNo":999,"CreateTime":"2016-05-10 14:35:49"},
 {"KeyValueID":"c9000a82-2e52-40e6-ba4d-ebef95cf4e46","ConfigKey":"账号状态","ConfigName":"锁定","ConfigValue":"3","OrderNo":999,"CreateTime":"2014-11-11 11:37:47"},
 {"KeyValueID":"a58f89d2-4f23-471b-b05c-f9b9ff7337a6","ConfigKey":"是否","ConfigName":"是","ConfigValue":"1","Notes":"32323","OrderNo":999,"CreateTime":"2014-11-11 11:37:47"},
-{"KeyValueID":"9bae6656-0bb0-438b-9e9d-fc06fcbfab56","ConfigKey":"性别","ConfigName":"男","ConfigValue":"1","Notes":"32323","OrderNo":999,"CreateTime":"2014-11-11 11:37:47"}
+{"KeyValueID":"9bae6656-0bb0-438b-9e9d-fc06fcbfab56","ConfigKey":"性别","ConfigName":"男","ConfigValue":"1","Notes":"32323","OrderNo":999,"CreateTime":"2014-11-11 11:37:47"},
+{"KeyValueID":"caa16e37-a4a8-42a3-abdb-61273930ecb7","ConfigKey":"表名描述","ConfigName":"Demo_TestA","ConfigValue":"行内编辑列表","Flag":"sys","CreateTime":"2016-09-05 17:09:17"},
+{"KeyValueID":"a662070b-ab2a-4f0a-a6da-df03640c0a91","ConfigKey":"表名描述","ConfigName":"Demo_Area","ConfigValue":"树形表格","Flag":"sys","CreateTime":"2016-09-05 17:21:20"},
+{"KeyValueID":"0ba7ee95-b749-457d-8281-5bcf4ca684bc","ConfigKey":"表名描述","ConfigName":"_Demo_TestA","ConfigValue":"Input对话框","Flag":"sys","CreateTime":"2016-09-05 19:08:12"},
+{"KeyValueID":"8fa0eab5-e033-4f51-82db-ce179baa124f","ConfigKey":"表名描述","ConfigName":"Config_Grid","ConfigValue":"Input对话框","Flag":"sys","CreateTime":"2016-09-06 03:12:26"}

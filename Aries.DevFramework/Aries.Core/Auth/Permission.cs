@@ -6,6 +6,7 @@ using CYQ.Data;
 using CYQ.Data.Table;
 using System.Reflection;
 using Aries.Core.Helper;
+using CYQ.Data.Tool;
 
 namespace Aries.Core.Auth
 {
@@ -64,6 +65,50 @@ namespace Aries.Core.Auth
     /// </summary>
     public class Permission
     {
+        #region 系统安全
+        /// <summary>
+        /// 记录页面对应可操作的对应：（降低安全问题）（mid：TableName）
+        /// </summary>
+        private static MDictionary<string, string> midTableNameList = new MDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        public void Set(string objName, string tableName)
+        {
+            if (midTableNameList.ContainsKey(MenuID))
+            {
+                string value = midTableNameList[MenuID];
+                if (value.IndexOf(objName) == -1)
+                {
+                    value += "," + objName;
+                }
+                if (value.IndexOf(tableName) == -1)
+                {
+                    value += "," + tableName;
+                }
+                midTableNameList[MenuID] = value;
+            }
+            else
+            {
+                string value = objName;
+                if (tableName != objName)
+                {
+                    value += "," + tableName;
+                }
+                midTableNameList.Add(MenuID, value);
+            }
+        }
+        public bool Exists(string objName)
+        {
+            if (midTableNameList.ContainsKey(MenuID))
+            {
+                return midTableNameList[MenuID].IndexOf(objName) > -1;
+            }
+            return false;
+        }
+        #endregion
+
+        /// <summary>
+        /// 记录内面的上级ID（降低安全问题）（Url,mid）
+        /// </summary>
+        private static Dictionary<string, string> parentIDList = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         private string loginID;
         private string _menuID;
         /// <summary>
@@ -174,10 +219,7 @@ namespace Aries.Core.Auth
             }
             return null;
         }
-        /// <summary>
-        /// 记录内面的上级ID（降低安全问题）
-        /// </summary>
-        private static Dictionary<string, string> parentIDList = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
         /// <summary>
         /// 是否拥有菜单的权限
         /// </summary>
@@ -308,7 +350,17 @@ namespace Aries.Core.Auth
                 case "GetKeyValueConfig":
                 case "GetHeader":
                 case "GetCombobox":
+                    if (!CheckSafeKey())
+                    {
+                        return false;
+                    }
                     return true;
+                case "GetList":
+                    if (!CheckSafeKey())
+                    {
+                        return false;
+                    }
+                    break;
             }
             string key = string.Empty;
             foreach (object item in mi.GetCustomAttributes(typeof(ActionKeyAttribute), true))
@@ -320,6 +372,28 @@ namespace Aries.Core.Auth
                 return true;
             }
             return HasFunc(key);
+        }
+        private bool CheckSafeKey()
+        {
+            HttpCookie cookie = HttpContext.Current.Request.Cookies["sys_safekey"];
+            if (cookie != null)
+            {
+                string value = EncrpytHelper.Decrypt(cookie.Value);
+                if (value.StartsWith("aries:"))
+                {
+                    int time;
+                    if (int.TryParse(value.Split(':')[1], out time))
+                    {
+                        int result = int.Parse(DateTime.Now.ToString("HHmmss")) - time;
+#if DEBUG
+                        return result > -1 && result < 120;//2分钟的调试时间
+#else
+                        return result > -1 && result < 10;
+#endif
+                    }
+                }
+            }
+            return false;
         }
         /*
         /// <summary>

@@ -63,22 +63,26 @@ namespace Aries.Core
             {
                 UserAuth.Logout();
             }
-            else if (uri.LocalPath.EndsWith("/login.html") && WebHelper.IsUseUISite)
+            else if (uri.LocalPath.EndsWith("/login.html"))
             {
-                HttpCookie cookie = context.Request.Cookies["sys_ui"];
-                if (cookie == null)
+                if (WebHelper.IsUseUISite)
                 {
-                    cookie = new HttpCookie("sys_ui", "/" + AppConfig.GetApp("UI").Trim('/'));
-                    //cookie.Expires = DateTime.Now.AddSeconds(20);
-                    context.Response.Cookies.Add(cookie);
+                    HttpCookie cookie = context.Request.Cookies["sys_ui"];
+                    if (cookie == null)
+                    {
+                        cookie = new HttpCookie("sys_ui", "/" + AppConfig.GetApp("UI").Trim('/'));
+                        context.Response.Cookies.Add(cookie);
+                    }
                 }
+                SetSafeKey();
             }
             else if (!context.Request.Url.LocalPath.EndsWith("/ajax.html"))
             {
-                SetNoCache();//.html不缓存，才能实时检测权限问题。（否则客户端缓存了，后台修改权限，客户端很为难）
+                SetNoCacheAndSafeKey();//.html不缓存，才能实时检测权限问题。（否则客户端缓存了，后台修改权限，客户端很为难）
                 if (IsCheckToken(uri))
                 {
                     UserAuth.IsExistsToken(true);//检测登陆状态。
+                    UserAuth.RefleshToken(); //刷新时间
                     new Permission(UserAuth.UserName, true);//初始化权限检测。（100-500ms）【第一次500ms左右】，【第二次数据已缓存，100ms左右】（再优化就是缓存用户与菜单，可以减少到接近0，但无法保证实时性）
                 }
 
@@ -102,7 +106,7 @@ namespace Aries.Core
             }
             return false;
         }
-        private void SetNoCache()
+        private void SetNoCacheAndSafeKey()
         {
             if (IsEndWithPage(context.Request.Url))
             {
@@ -110,7 +114,35 @@ namespace Aries.Core
                 context.Response.Buffer = true;
                 context.Response.ExpiresAbsolute = DateTime.Now.AddYears(-1);
                 context.Response.CacheControl = "no-cache";
+                SetSafeKey();
+
             }
+        }
+        private void SetSafeKey()
+        {
+            HttpCookie cookie = context.Request.Cookies["sys_safekey"];
+            if (cookie == null)
+            {
+                cookie = new HttpCookie("sys_safekey");
+                cookie.HttpOnly = true;
+            }
+
+            cookie.Value = EncrpytHelper.Encrypt("aries:" + DateTime.Now.ToString("HHmmss"));
+            cookie.Expires = DateTime.Now.AddMinutes(30);
+            context.Response.Cookies.Add(cookie);
+        }
+        private bool IsExistsSafeKey()
+        {
+            HttpCookie cookie = context.Request.Cookies["sys_safekey"];
+            if (cookie != null)
+            {
+                string value = EncrpytHelper.Decrypt(cookie.Value);
+                if (value.StartsWith("aries:"))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
         #endregion
 
@@ -138,7 +170,7 @@ namespace Aries.Core
             {
                 #region 处理Ajax请求
                 //从Url来源页找
-                if (context.Request.UrlReferrer == null)
+                if (context.Request.UrlReferrer == null || !IsExistsSafeKey())
                 {
                     WriteError("Illegal request!");
                 }

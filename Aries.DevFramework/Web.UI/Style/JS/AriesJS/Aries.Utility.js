@@ -305,7 +305,7 @@ window.AR = (function ($Core) {
             return win;
         },
         //生成表单下拉框。
-        createInputHtml: function ($container,dataArray,dg, fromSearch) {
+        createInputHtml: function ($container, dataArray, dg, fromSearch) {
             var line;
             var objName, cssName;
             for (var i = 0, len = dataArray.length; i < len; i++) {
@@ -367,7 +367,7 @@ window.AR = (function ($Core) {
                             input.attr("name", dataArray[i].field).addClass(cssName).attr("date", true).width(150).attr("validType", "datebox");
                             if (fromSearch && dataArray[i].rules && dataArray[i].rules.indexOf('$1') != -1) {
                                 input.width(95);
-                                this._setInputAttr(input, dataArray[i].rules, "$1:");
+                                this._setInputAttr(input, dataArray[i].rules, "$1:", label);
                                 if (input.attr("clone") != "false") {
                                     input2 = input.clone(true);
                                     div_item.append(input2).append($("<span>").html("&nbsp;至&nbsp;"));
@@ -391,7 +391,7 @@ window.AR = (function ($Core) {
                             input.attr("name", dataArray[i].field).addClass(cssName);
                             if (fromSearch && dataArray[i].rules && dataArray[i].rules.indexOf('$1') != -1) {
                                 input.width(68);
-                                this._setInputAttr(input, dataArray[i].rules, "$1:");
+                                this._setInputAttr(input, dataArray[i].rules, "$1:", label);
                                 if (input.attr("clone") != "false") {
                                     input2 = input.clone(true);
                                     div_item.append(input2).append($("<span>").html("&nbsp;-&nbsp;").css({ "display": "block", "float": "left" }));
@@ -402,7 +402,7 @@ window.AR = (function ($Core) {
                             if (dtype[0] == "string") { cssName = ""; }
                             input.attr("name", dataArray[i].field).addClass(cssName);
                             if (fromSearch && dataArray[i].rules && dataArray[i].rules.indexOf('$1') != -1) {
-                                this._setInputAttr(input, dataArray[i].rules, "$1:");
+                                this._setInputAttr(input, dataArray[i].rules, "$1:", label);
                             }
                             break;
                     }
@@ -440,28 +440,30 @@ window.AR = (function ($Core) {
                 objName = undefined; cssName = undefined; input = undefined; input2 = undefined;
             }
         },
-        _setInputAttr: function ($input, rules,splitFlag)
-        {
+        _setInputAttr: function ($input, rules, splitFlag, $label) {
             var _rules = rules.split(splitFlag)[1];
             if (_rules) {
                 _rules = eval("(" + _rules + ")");
                 for (var name in _rules) {
-                    switch(name)
-                    {
+                    var value = _rules[name];
+                    switch (name) {
                         case "width":
-                            $input.width(_rules[name]);
+                            $input.width(value);
                             break;
                         case "heigth":
-                            $input.heigth(_rules[name]);
+                            $input.heigth(value);
+                            break;
+                        case "title":
+                            if ($label) { $label.html(value + "："); }
                             break;
                         default:
-                            $input.attr(name, _rules[name]);
+                            $input.attr(name, value);
                             break;
                     }
                 }
             }
         }
-    
+
     };
     //Window对象域
     (function () {
@@ -479,6 +481,7 @@ window.AR = (function ($Core) {
             openLoading: showLoading,
             closeLoading: closeLoading,
             dialog: dialog,
+            inputDialog: inputDialog,
             closeDialog: closeDialog
         }
         function showLoading(message) {
@@ -579,8 +582,65 @@ window.AR = (function ($Core) {
                 content: html
             }, options);
             _container.dialog(opts)
-        }
+        };
+        function inputDialog($input) {
+            if (!$input || !$input.attr("dialog")) { alert("dialog参数配置错误!"); return; }
+            var href = "/Web/SysAdmin/DialogView.html?objName=" + $input.attr("dialog");
+            if ($input.attr("multiple")) {
+                href += "&multiple=" + $input.attr("multiple");
+            }
+            if ($input.attr("unshowid")) {
+                href += "&unshowid=" + $input.attr("unshowid");
+            }
+            if ($input.attr("editable")) {
+                href += "&editable=" + $input.attr("editable");
+            }
+            var html = '<iframe scrolling="yes" frameborder="0"  src="' + ($Core.Global.Variable.ui || '') + href + '" style="width:100%;height:98%;"></iframe>'
+            var opts = {
+                toolbar: [{
+                    text: '保存',
+                    iconCls: 'icon-ok',
+                    handler: function () {
+                        var options = document.all.returnValue;
+                        if (!options || options.option.data.length == 0) {
+                            alert('请先选中数据');
+                            return;
+                        }
+                        if ($input.attr("multiple")) {
+                            options.option.onUnselect = function (record) {
+                                if ($(this).combobox("getValues").length == 0) {
+                                    inputDialog($(this));//对多选生效
+                                }
+                            };
+                        }
+                        else {
+                            options.option.onSelect = function (record) {
+                                inputDialog($(this));//对单选生效
+                            };
+                        }
+                        $input.combobox(options.option);
+                        if ($input.attr("multiple")) {
+                            $input.combobox("setValues", options.values);
+                        }
+                        else {
+                            $input.combobox("select", options.values);
+                        }
+                        $("#_div_dialog").dialog("close");
+                    }
+                }, {
+                    text: '取消',
+                    iconCls: 'icon-no',
+                    handler: function () { $("#_div_dialog").dialog("close"); }
+                }],
+                closable: false
+            };
+            if ($input.attr("options")) {
+                opts = $.extend(opts, eval('(' + $input.attr("options") + ')'));
+            }
+            document.all.returnValue = undefined;//清空值。
+            dialog("选择数据", html, opts);
 
+        };
         function closeDialog() {
             var _container = $("#_div_dialog");
             _container.dialog('destroy');
@@ -609,9 +669,15 @@ window.AR = (function ($Core) {
             var that = this, json = {}, opts = new Object(), mid = $Core.Global.Variable.mid;
             var str = '{0}?sys_method={1}';
             if (objName) {
-                str = '{0}?sys_method={1}&sys_objName={2}';
+                var items = objName.split(',');
+                if (objName.indexOf(',') == -1 || !items[1]) {
+                    str = '{0}?sys_method={1}&sys_objName=' + objName;
+                }
+                else {
+                    str = '{0}?sys_method={1}&sys_objName=' + items[0] + '&sys_tableName=' + items[1];
+                }
             }
-            url = $Core.Utility.stringFormat(str, url || that.Settings.url, method, objName);
+            url = $Core.Utility.stringFormat(str, url || that.Settings.url, method);
             var topWin = window;
             if (!mid) {
                 mid = (function (win) {

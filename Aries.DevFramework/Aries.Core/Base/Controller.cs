@@ -100,18 +100,17 @@ namespace Aries.Core
             else
             {
                 //权限检测
-                if (p.IsCanInvokeMethod(method))
+                if (p.IsCanInvokeMethod(method) && PreBeforeInvoke(method.Name))//同时检测菜单对应的操作方式。
                 {
                     try
                     {
-
-                        BeforeInvoke();
+                        BeforeInvoke(method.Name);
                         if (!CancelInvoke)
                         {
                             object result = method.Invoke(this, null);
                             if (!CancelInvoke)
                             {
-                                EndInvoke();
+                                EndInvoke(method.Name);
                             }
                             if (result != null)
                             {
@@ -142,11 +141,37 @@ namespace Aries.Core
             }
 
         }
-        protected virtual void BeforeInvoke()
+        /// <summary>
+        /// 增加这一步做进一步的权限验证
+        /// </summary>
+        protected bool PreBeforeInvoke(string methodName)
+        {
+            switch (methodName)
+            {
+                case "GetHeader":
+                    p.Set(ObjName, TableName);
+                    break;
+                case "Add":
+                case "Delete":
+                case "Update":
+                case "Export":
+                case "Import":
+                case "GetList":
+                case "Get":
+                    if (!p.Exists(ObjName))
+                    {
+                        return false;
+                    }
+                    break;
+
+            }
+            return true;
+        }
+        protected virtual void BeforeInvoke(string methodName)
         {
 
         }
-        protected virtual void EndInvoke()
+        protected virtual void EndInvoke(string methodName)
         {
 
         }

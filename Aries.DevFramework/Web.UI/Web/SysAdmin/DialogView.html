@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <script src="/Style/JS/Aries.Loader.js"></script>
+</head>
+<body style="margin-top: -4px; padding:0">
+    <div style="height:330px">
+    <table id="dg"></table>
+        </div>
+    <script>
+        var comboboxOption = {
+            valueField: 'value',
+            textField: 'text',
+            data: [],
+            width: 150,
+            multiple: false,
+            editable: false
+        }
+        var returnValue = { option: comboboxOption };
+
+        var oName = AR.Utility.queryString("objName");
+        if (oName) {
+            var dg = new AR.DataGrid("_" + oName);
+            dg.ToolBar.isHidden = true;
+            dg.Search.BtnReset.isHidden = true;
+            var multiple = AR.Utility.queryString("multiple");//这个字段是JQ字段，特殊，赋值后会被变更为相同的文本
+            var unshowid = AR.Utility.queryString("unshowid") == "true";
+            comboboxOption.editable = AR.Utility.queryString("editable") == "true";
+            dg.isShowCheckBox = multiple == "true" || multiple == "multiple";
+            comboboxOption.multiple = dg.isShowCheckBox;
+            var id, title;
+            dg.options = {
+                pageSize: 10,
+                fit: false,
+                onLoadSuccess: function () {
+                    title = dg.Internal.headerData[1].title;
+                    id = unshowid == "true" ? title : dg.Internal.primarykey;
+                },
+                onSelect: function (rowIndex, rowData) {
+                    if (!dg.isShowCheckBox) {
+                        var d = {};
+                        d.text = rowData[title];
+                        d.value = rowData[id];
+                        comboboxOption.data.push(d);
+                        returnValue.values = d.value;
+                        parent.document.all.returnValue = returnValue;
+                    }
+                },
+                onCheck: function (rowIndex, rowData) {
+                    onCheck();
+                },
+                onCheckAll: function (rows) {
+                    onCheck();
+                },
+                onUncheckAll: function (rows) {
+                    onCheck();
+                }
+            }
+            dg.bind();
+        }
+        else { alert('对象名不对为空'); }
+        function onCheck() {
+            var rows = dg.getChecked();
+            if (rows && rows.length > 0) {
+                comboboxOption.data = [];
+                for (var i = 0; i < rows.length; i++) {
+                    var d = {};
+                    d.text = rows[i][title];
+                    d.value = rows[i][id];
+                    comboboxOption.data.push(d);
+                }
+                returnValue.values = dg.getCheckedId(id);
+                parent.document.all.returnValue = returnValue;
+            }
+            else {
+                parent.document.all.returnValue = undefined;
+                alert(parent.document.all.returnValue);
+            }
+        }
+    </script>
+</body>
+</html>

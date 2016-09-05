@@ -1,1 +1,1554 @@
-﻿<html><head><title>数据库设计文档 -- AriesDevFramework_Init</title><style type='text/css'>body,td {font-family:verdana; font-size:12px; line-height:150%;}table {width:100%; background-color:#ccc; margin:5px 0;}td {background-color:#fff;padding:3px; padding-left:10px;}thead td {text-align:center; font-weight:bold; background-color:#eee;}a:link, a:visited, a:active { color: #015FB6;text-decoration: none; }a:hover { color: #E33E06; }</style><head><body style='text-align:center;'><div style='width:800px; margin:20px auto; text-align:left;'><a name='index' /><H2 style='text-align:center; line-height:50px;'>数据库设计文档</H2><div><b>数据库名：AriesDevFramework_Init</b></div><table cellspacing='1' cellpadding='0'><thead><tr><td style='width:40px; '>序号</td><td>表名</td><td>说明</td></tr></thead><tr><td style='text-align:center;'>1</td><td><a href='#Sys_RoleAction'>Sys_RoleAction</a></td><td></td></tr><tr><td style='text-align:center;'>2</td><td><a href='#Sys_Role'>Sys_Role</a></td><td></td></tr><tr><td style='text-align:center;'>3</td><td><a href='#Sys_Menu'>Sys_Menu</a></td><td></td></tr><tr><td style='text-align:center;'>4</td><td><a href='#Sys_Action'>Sys_Action</a></td><td></td></tr><tr><td style='text-align:center;'>5</td><td><a href='#Config_KeyValue'>Config_KeyValue</a></td><td></td></tr><tr><td style='text-align:center;'>6</td><td><a href='#Config_Grid'>Config_Grid</a></td><td></td></tr><tr><td style='text-align:center;'>7</td><td><a href='#Config_ExcelInfo'>Config_ExcelInfo</a></td><td></td></tr><tr><td style='text-align:center;'>8</td><td><a href='#Config_Excel'>Config_Excel</a></td><td></td></tr><tr><td style='text-align:center;'>9</td><td><a href='#Sys_Area'>Sys_Area</a></td><td></td></tr><tr><td style='text-align:center;'>10</td><td><a href='#TestA'>TestA</a></td><td></td></tr><tr><td style='text-align:center;'>11</td><td><a href='#TestB'>TestB</a></td><td></td></tr><tr><td style='text-align:center;'>12</td><td><a href='#Sys_UserInfo'>Sys_UserInfo</a></td><td></td></tr><tr><td style='text-align:center;'>13</td><td><a href='#Sys_User'>Sys_User</a></td><td></td></tr></table><a name='Sys_RoleAction' /><div style='margin-top:30px;'><a href='#index' style='float:right; margin-top:6px;'>返回目录</a><b>表名：Sys_RoleAction</b></div><div>说明：</div><div>数据列：</div><table cellspacing='1' cellpadding='0'><thead><tr><td style='width:40px; '>序号</td><td>名称</td><td>数据类型</td><td>长度</td><td>小数位</td><td>允许空值</td><td>主键</td><td>默认值</td><td>说明</td></tr></thead><tr><td style='text-align:center;'>1</td><td>RoleActionID</td><td  align='center'>char(36)</td><td align='center'>36</td><td align='center'>0</td><td align='center'>N</td><td align='center'>Y</td><td></td><td></td></tr><tr><td style='text-align:center;'>2</td><td>RoleID</td><td  align='center'>char(36)</td><td align='center'>36</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td></td></tr><tr><td style='text-align:center;'>3</td><td>MenuID</td><td  align='center'>char(36)</td><td align='center'>36</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td></td></tr><tr><td style='text-align:center;'>4</td><td>ActionID</td><td  align='center'>varchar(36)</td><td align='center'>36</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td></td></tr></table><a name='Sys_Role' /><div style='margin-top:30px;'><a href='#index' style='float:right; margin-top:6px;'>返回目录</a><b>表名：Sys_Role</b></div><div>说明：</div><div>数据列：</div><table cellspacing='1' cellpadding='0'><thead><tr><td style='width:40px; '>序号</td><td>名称</td><td>数据类型</td><td>长度</td><td>小数位</td><td>允许空值</td><td>主键</td><td>默认值</td><td>说明</td></tr></thead><tr><td style='text-align:center;'>1</td><td>RoleID</td><td  align='center'>char(36)</td><td align='center'>36</td><td align='center'>0</td><td align='center'>N</td><td align='center'>Y</td><td></td><td></td></tr><tr><td style='text-align:center;'>2</td><td>RoleName</td><td  align='center'>varchar(100)</td><td align='center'>100</td><td align='center'>0</td><td align='center'>N</td><td align='center'></td><td></td><td></td></tr><tr><td style='text-align:center;'>3</td><td>Notes</td><td  align='center'>varchar(150)</td><td align='center'>150</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td>描述</td></tr></table><a name='Sys_Menu' /><div style='margin-top:30px;'><a href='#index' style='float:right; margin-top:6px;'>返回目录</a><b>表名：Sys_Menu</b></div><div>说明：</div><div>数据列：</div><table cellspacing='1' cellpadding='0'><thead><tr><td style='width:40px; '>序号</td><td>名称</td><td>数据类型</td><td>长度</td><td>小数位</td><td>允许空值</td><td>主键</td><td>默认值</td><td>说明</td></tr></thead><tr><td style='text-align:center;'>1</td><td>MenuID</td><td  align='center'>char(36)</td><td align='center'>36</td><td align='center'>0</td><td align='center'>N</td><td align='center'>Y</td><td></td><td>菜单标识</td></tr><tr><td style='text-align:center;'>2</td><td>ParentMenuID</td><td  align='center'>char(36)</td><td align='center'>36</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td>上级ID</td></tr><tr><td style='text-align:center;'>3</td><td>MenuName</td><td  align='center'>varchar(100)</td><td align='center'>100</td><td align='center'>0</td><td align='center'>N</td><td align='center'></td><td></td><td></td></tr><tr><td style='text-align:center;'>4</td><td>MenuUrl</td><td  align='center'>varchar(200)</td><td align='center'>200</td><td align='center'>0</td><td align='center'>N</td><td align='center'></td><td></td><td></td></tr><tr><td style='text-align:center;'>5</td><td>MenuLevel</td><td  align='center'>int</td><td align='center'>10</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td>1,2,3分别对于 一级模块 二级模块，三级菜单</td></tr><tr><td style='text-align:center;'>6</td><td>SortOrder</td><td  align='center'>int</td><td align='center'>10</td><td align='center'>0</td><td align='center'>N</td><td align='center'></td><td></td><td></td></tr><tr><td style='text-align:center;'>7</td><td>MenuIcon</td><td  align='center'>varchar(500)</td><td align='center'>500</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td>菜单图标路径</td></tr><tr><td style='text-align:center;'>8</td><td>BigMenuIcon</td><td  align='center'>varchar(500)</td><td align='center'>500</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td>常用菜单图标</td></tr><tr><td style='text-align:center;'>9</td><td>IsShortcut</td><td  align='center'>bit</td><td align='center'>1</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td>快捷键</td></tr><tr><td style='text-align:center;'>10</td><td>IsShow</td><td  align='center'>int</td><td align='center'>10</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td>(1)</td><td></td></tr><tr><td style='text-align:center;'>11</td><td>ActionIDs</td><td  align='center'>varchar(500)</td><td align='center'>500</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td>功能ID（以逗号分隔）</td></tr></table><a name='Sys_Action' /><div style='margin-top:30px;'><a href='#index' style='float:right; margin-top:6px;'>返回目录</a><b>表名：Sys_Action</b></div><div>说明：</div><div>数据列：</div><table cellspacing='1' cellpadding='0'><thead><tr><td style='width:40px; '>序号</td><td>名称</td><td>数据类型</td><td>长度</td><td>小数位</td><td>允许空值</td><td>主键</td><td>默认值</td><td>说明</td></tr></thead><tr><td style='text-align:center;'>1</td><td>ActionID</td><td  align='center'>char(36)</td><td align='center'>36</td><td align='center'>0</td><td align='center'>N</td><td align='center'>Y</td><td></td><td>功能标识</td></tr><tr><td style='text-align:center;'>2</td><td>ActionName</td><td  align='center'>varchar(100)</td><td align='center'>100</td><td align='center'>0</td><td align='center'>N</td><td align='center'></td><td></td><td></td></tr><tr><td style='text-align:center;'>3</td><td>ActionRefName</td><td  align='center'>varchar(100)</td><td align='center'>100</td><td align='center'>0</td><td align='center'>N</td><td align='center'></td><td></td><td></td></tr></table><a name='Config_KeyValue' /><div style='margin-top:30px;'><a href='#index' style='float:right; margin-top:6px;'>返回目录</a><b>表名：Config_KeyValue</b></div><div>说明：</div><div>数据列：</div><table cellspacing='1' cellpadding='0'><thead><tr><td style='width:40px; '>序号</td><td>名称</td><td>数据类型</td><td>长度</td><td>小数位</td><td>允许空值</td><td>主键</td><td>默认值</td><td>说明</td></tr></thead><tr><td style='text-align:center;'>1</td><td>KeyValueID</td><td  align='center'>char(36)</td><td align='center'>36</td><td align='center'>0</td><td align='center'>N</td><td align='center'>Y</td><td></td><td>配置表标识</td></tr><tr><td style='text-align:center;'>2</td><td>ConfigKey</td><td  align='center'>varchar(100)</td><td align='center'>100</td><td align='center'>0</td><td align='center'>N</td><td align='center'></td><td></td><td>配置键</td></tr><tr><td style='text-align:center;'>3</td><td>ConfigName</td><td  align='center'>varchar(100)</td><td align='center'>100</td><td align='center'>0</td><td align='center'>N</td><td align='center'></td><td></td><td>配置名称</td></tr><tr><td style='text-align:center;'>4</td><td>ConfigValue</td><td  align='center'>varchar(300)</td><td align='center'>300</td><td align='center'>0</td><td align='center'>N</td><td align='center'></td><td></td><td>配置值</td></tr><tr><td style='text-align:center;'>5</td><td>Flag</td><td  align='center'>varchar(100)</td><td align='center'>100</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td>分类标记</td></tr><tr><td style='text-align:center;'>6</td><td>Notes</td><td  align='center'>varchar(1000)</td><td align='center'>1000</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td>备注</td></tr><tr><td style='text-align:center;'>7</td><td>OrderNo</td><td  align='center'>int</td><td align='center'>10</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td>(999)</td><td>排序号</td></tr><tr><td style='text-align:center;'>8</td><td>CreateTime</td><td  align='center'>datetime</td><td align='center'>23</td><td align='center'>3</td><td align='center'>Y</td><td align='center'></td><td>CURRENT_TIMESTAMP</td><td>创建日期</td></tr></table><a name='Config_Grid' /><div style='margin-top:30px;'><a href='#index' style='float:right; margin-top:6px;'>返回目录</a><b>表名：Config_Grid</b></div><div>说明：</div><div>数据列：</div><table cellspacing='1' cellpadding='0'><thead><tr><td style='width:40px; '>序号</td><td>名称</td><td>数据类型</td><td>长度</td><td>小数位</td><td>允许空值</td><td>主键</td><td>默认值</td><td>说明</td></tr></thead><tr><td style='text-align:center;'>1</td><td>GridID</td><td  align='center'>char(36)</td><td align='center'>36</td><td align='center'>0</td><td align='center'>N</td><td align='center'>Y</td><td></td><td></td></tr><tr><td style='text-align:center;'>2</td><td>ObjName</td><td  align='center'>varchar(50)</td><td align='center'>50</td><td align='center'>0</td><td align='center'>N</td><td align='center'></td><td></td><td></td></tr><tr><td style='text-align:center;'>3</td><td>ViewName</td><td  align='center'>varchar(50)</td><td align='center'>50</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td>下拉框对象名称</td></tr><tr><td style='text-align:center;'>4</td><td>Field</td><td  align='center'>varchar(40)</td><td align='center'>40</td><td align='center'>0</td><td align='center'>N</td><td align='center'></td><td></td><td></td></tr><tr><td style='text-align:center;'>5</td><td>Title</td><td  align='center'>varchar(50)</td><td align='center'>50</td><td align='center'>0</td><td align='center'>N</td><td align='center'></td><td></td><td></td></tr><tr><td style='text-align:center;'>6</td><td>Hidden</td><td  align='center'>bit</td><td align='center'>1</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td>(0)</td><td></td></tr><tr><td style='text-align:center;'>7</td><td>OrderNum</td><td  align='center'>int</td><td align='center'>10</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td>(0)</td><td></td></tr><tr><td style='text-align:center;'>8</td><td>Width</td><td  align='center'>int</td><td align='center'>10</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td>(100)</td><td></td></tr><tr><td style='text-align:center;'>9</td><td>Align</td><td  align='center'>varchar(10)</td><td align='center'>10</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td>"center"</td><td></td></tr><tr><td style='text-align:center;'>10</td><td>Sortable</td><td  align='center'>bit</td><td align='center'>1</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td></td></tr><tr><td style='text-align:center;'>11</td><td>Formatter</td><td  align='center'>varchar(50)</td><td align='center'>50</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td></td></tr><tr><td style='text-align:center;'>12</td><td>Styler</td><td  align='center'>varchar(50)</td><td align='center'>50</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td></td></tr><tr><td style='text-align:center;'>13</td><td>Editor</td><td  align='center'>varchar(50)</td><td align='center'>50</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td></td></tr><tr><td style='text-align:center;'>14</td><td>Rowspan</td><td  align='center'>int</td><td align='center'>10</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td>(1)</td><td></td></tr><tr><td style='text-align:center;'>15</td><td>Colspan</td><td  align='center'>int</td><td align='center'>10</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td>(1)</td><td></td></tr><tr><td style='text-align:center;'>16</td><td>Search</td><td  align='center'>bit</td><td align='center'>1</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td>(0)</td><td>是否搜索</td></tr><tr><td style='text-align:center;'>17</td><td>DataType</td><td  align='center'>varchar(50)</td><td align='center'>50</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td>数据类型</td></tr><tr><td style='text-align:center;'>18</td><td>Import</td><td  align='center'>bit</td><td align='center'>1</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td>是否导入</td></tr><tr><td style='text-align:center;'>19</td><td>Export</td><td  align='center'>bit</td><td align='center'>1</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td>是否导出</td></tr><tr><td style='text-align:center;'>20</td><td>Frozen</td><td  align='center'>bit</td><td align='center'>1</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td>是否冻结列</td></tr><tr><td style='text-align:center;'>21</td><td>Edit</td><td  align='center'>bit</td><td align='center'>1</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td></td></tr><tr><td style='text-align:center;'>22</td><td>MergeIndexed</td><td  align='center'>int</td><td align='center'>10</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td>(1)</td><td>合并列索引</td></tr><tr><td style='text-align:center;'>23</td><td>ImportUnique</td><td  align='center'>bit</td><td align='center'>1</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td>(0)</td><td></td></tr><tr><td style='text-align:center;'>24</td><td>LastEditTime</td><td  align='center'>datetime</td><td align='center'>23</td><td align='center'>3</td><td align='center'>Y</td><td align='center'></td><td>CURRENT_TIMESTAMP</td><td></td></tr></table><a name='Config_ExcelInfo' /><div style='margin-top:30px;'><a href='#index' style='float:right; margin-top:6px;'>返回目录</a><b>表名：Config_ExcelInfo</b></div><div>说明：</div><div>数据列：</div><table cellspacing='1' cellpadding='0'><thead><tr><td style='width:40px; '>序号</td><td>名称</td><td>数据类型</td><td>长度</td><td>小数位</td><td>允许空值</td><td>主键</td><td>默认值</td><td>说明</td></tr></thead><tr><td style='text-align:center;'>1</td><td>ExceInfoID</td><td  align='center'>char(36)</td><td align='center'>36</td><td align='center'>0</td><td align='center'>N</td><td align='center'>Y</td><td></td><td></td></tr><tr><td style='text-align:center;'>2</td><td>ExcelID</td><td  align='center'>char(36)</td><td align='center'>36</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td></td></tr><tr><td style='text-align:center;'>3</td><td>ExcelName</td><td  align='center'>varchar(400)</td><td align='center'>400</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td>Excel列中文名</td></tr><tr><td style='text-align:center;'>4</td><td>TableName</td><td  align='center'>varchar(100)</td><td align='center'>100</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td>表名</td></tr><tr><td style='text-align:center;'>5</td><td>Field</td><td  align='center'>varchar(100)</td><td align='center'>100</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td>表字段名</td></tr><tr><td style='text-align:center;'>6</td><td>Formatter</td><td  align='center'>varchar(100)</td><td align='center'>100</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td>格式化</td></tr><tr><td style='text-align:center;'>7</td><td>IsUnique</td><td  align='center'>bit</td><td align='center'>1</td><td align='center'>0</td><td align='center'>N</td><td align='center'></td><td>(0)</td><td>是否唯一</td></tr><tr><td style='text-align:center;'>8</td><td>IsForeignkey</td><td  align='center'>bit</td><td align='center'>1</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td>是否外键</td></tr><tr><td style='text-align:center;'>9</td><td>ForeignTable</td><td  align='center'>varchar(100)</td><td align='center'>100</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td>外键对应的表名</td></tr><tr><td style='text-align:center;'>10</td><td>IsRequired</td><td  align='center'>bit</td><td align='center'>1</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td>(0)</td><td></td></tr><tr><td style='text-align:center;'>11</td><td>CreateTime</td><td  align='center'>datetime</td><td align='center'>23</td><td align='center'>3</td><td align='center'>Y</td><td align='center'></td><td>CURRENT_TIMESTAMP</td><td>创建日期</td></tr></table><a name='Config_Excel' /><div style='margin-top:30px;'><a href='#index' style='float:right; margin-top:6px;'>返回目录</a><b>表名：Config_Excel</b></div><div>说明：</div><div>数据列：</div><table cellspacing='1' cellpadding='0'><thead><tr><td style='width:40px; '>序号</td><td>名称</td><td>数据类型</td><td>长度</td><td>小数位</td><td>允许空值</td><td>主键</td><td>默认值</td><td>说明</td></tr></thead><tr><td style='text-align:center;'>1</td><td>ExcelID</td><td  align='center'>char(36)</td><td align='center'>36</td><td align='center'>0</td><td align='center'>N</td><td align='center'>Y</td><td></td><td></td></tr><tr><td style='text-align:center;'>2</td><td>CnName</td><td  align='center'>varchar(50)</td><td align='center'>50</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td>模板中文名称</td></tr><tr><td style='text-align:center;'>3</td><td>EnName</td><td  align='center'>varchar(50)</td><td align='center'>50</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td>模板英文名称</td></tr><tr><td style='text-align:center;'>4</td><td>TableNames</td><td  align='center'>varchar(400)</td><td align='center'>400</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td>关联的多个表名，以逗号分隔</td></tr><tr><td style='text-align:center;'>5</td><td>StartIndex</td><td  align='center'>int</td><td align='center'>10</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td>(0)</td><td></td></tr><tr><td style='text-align:center;'>6</td><td>HeadCrossRowNum</td><td  align='center'>int</td><td align='center'>10</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td>(0)</td><td></td></tr><tr><td style='text-align:center;'>7</td><td>CreateTime</td><td  align='center'>datetime</td><td align='center'>23</td><td align='center'>3</td><td align='center'>Y</td><td align='center'></td><td>CURRENT_TIMESTAMP</td><td>创建时间</td></tr></table><a name='Sys_Area' /><div style='margin-top:30px;'><a href='#index' style='float:right; margin-top:6px;'>返回目录</a><b>表名：Sys_Area</b></div><div>说明：</div><div>数据列：</div><table cellspacing='1' cellpadding='0'><thead><tr><td style='width:40px; '>序号</td><td>名称</td><td>数据类型</td><td>长度</td><td>小数位</td><td>允许空值</td><td>主键</td><td>默认值</td><td>说明</td></tr></thead><tr><td style='text-align:center;'>1</td><td>ID</td><td  align='center'>int</td><td align='center'>10</td><td align='center'>0</td><td align='center'>N</td><td align='center'>Y</td><td></td><td></td></tr><tr><td style='text-align:center;'>2</td><td>Code</td><td  align='center'>varchar(50)</td><td align='center'>50</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td></td></tr><tr><td style='text-align:center;'>3</td><td>Name</td><td  align='center'>varchar(100)</td><td align='center'>100</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td></td></tr><tr><td style='text-align:center;'>4</td><td>PCode</td><td  align='center'>varchar(50)</td><td align='center'>50</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td></td></tr><tr><td style='text-align:center;'>5</td><td>Sort</td><td  align='center'>int</td><td align='center'>10</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td></td></tr><tr><td style='text-align:center;'>6</td><td>Lvl</td><td  align='center'>int</td><td align='center'>10</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td></td></tr><tr><td style='text-align:center;'>7</td><td>Desc</td><td  align='center'>varchar(100)</td><td align='center'>100</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td></td></tr></table><a name='TestA' /><div style='margin-top:30px;'><a href='#index' style='float:right; margin-top:6px;'>返回目录</a><b>表名：TestA</b></div><div>说明：</div><div>数据列：</div><table cellspacing='1' cellpadding='0'><thead><tr><td style='width:40px; '>序号</td><td>名称</td><td>数据类型</td><td>长度</td><td>小数位</td><td>允许空值</td><td>主键</td><td>默认值</td><td>说明</td></tr></thead><tr><td style='text-align:center;'>1</td><td>ID</td><td  align='center'>varchar(50)</td><td align='center'>50</td><td align='center'>0</td><td align='center'>N</td><td align='center'>Y</td><td></td><td></td></tr><tr><td style='text-align:center;'>2</td><td>F1</td><td  align='center'>varchar(50)</td><td align='center'>50</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td></td></tr><tr><td style='text-align:center;'>3</td><td>F2</td><td  align='center'>bit</td><td align='center'>1</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td></td></tr><tr><td style='text-align:center;'>4</td><td>F3</td><td  align='center'>decimal(8,2)</td><td align='center'>8</td><td align='center'>2</td><td align='center'>Y</td><td align='center'></td><td></td><td></td></tr><tr><td style='text-align:center;'>5</td><td>F4</td><td  align='center'>int</td><td align='center'>10</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td></td></tr></table><a name='TestB' /><div style='margin-top:30px;'><a href='#index' style='float:right; margin-top:6px;'>返回目录</a><b>表名：TestB</b></div><div>说明：</div><div>数据列：</div><table cellspacing='1' cellpadding='0'><thead><tr><td style='width:40px; '>序号</td><td>名称</td><td>数据类型</td><td>长度</td><td>小数位</td><td>允许空值</td><td>主键</td><td>默认值</td><td>说明</td></tr></thead><tr><td style='text-align:center;'>1</td><td>ID</td><td  align='center'>varchar(50)</td><td align='center'>50</td><td align='center'>0</td><td align='center'>N</td><td align='center'>Y</td><td></td><td></td></tr><tr><td style='text-align:center;'>2</td><td>F5</td><td  align='center'>int</td><td align='center'>10</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td></td></tr><tr><td style='text-align:center;'>3</td><td>F6</td><td  align='center'>varchar(100)</td><td align='center'>100</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td></td></tr><tr><td style='text-align:center;'>4</td><td>F7</td><td  align='center'>varchar(100)</td><td align='center'>100</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td></td></tr><tr><td style='text-align:center;'>5</td><td>F8</td><td  align='center'>varchar(100)</td><td align='center'>100</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td></td></tr><tr><td style='text-align:center;'>6</td><td>FK</td><td  align='center'>varchar(100)</td><td align='center'>100</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td></td></tr></table><a name='Sys_UserInfo' /><div style='margin-top:30px;'><a href='#index' style='float:right; margin-top:6px;'>返回目录</a><b>表名：Sys_UserInfo</b></div><div>说明：</div><div>数据列：</div><table cellspacing='1' cellpadding='0'><thead><tr><td style='width:40px; '>序号</td><td>名称</td><td>数据类型</td><td>长度</td><td>小数位</td><td>允许空值</td><td>主键</td><td>默认值</td><td>说明</td></tr></thead><tr><td style='text-align:center;'>1</td><td>UserInfoID</td><td  align='center'>char(36)</td><td align='center'>36</td><td align='center'>0</td><td align='center'>N</td><td align='center'>Y</td><td></td><td></td></tr><tr><td style='text-align:center;'>2</td><td>CompanyID</td><td  align='center'>varchar(50)</td><td align='center'>50</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td></td></tr><tr><td style='text-align:center;'>3</td><td>Memo</td><td  align='center'>varchar(150)</td><td align='center'>150</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td></td></tr><tr><td style='text-align:center;'>4</td><td>IsOk</td><td  align='center'>bit</td><td align='center'>1</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td></td></tr><tr><td style='text-align:center;'>5</td><td>AreaID</td><td  align='center'>char(36)</td><td align='center'>36</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td></td></tr></table><a name='Sys_User' /><div style='margin-top:30px;'><a href='#index' style='float:right; margin-top:6px;'>返回目录</a><b>表名：Sys_User</b></div><div>说明：</div><div>数据列：</div><table cellspacing='1' cellpadding='0'><thead><tr><td style='width:40px; '>序号</td><td>名称</td><td>数据类型</td><td>长度</td><td>小数位</td><td>允许空值</td><td>主键</td><td>默认值</td><td>说明</td></tr></thead><tr><td style='text-align:center;'>1</td><td>UserID</td><td  align='center'>char(36)</td><td align='center'>36</td><td align='center'>0</td><td align='center'>N</td><td align='center'>Y</td><td></td><td></td></tr><tr><td style='text-align:center;'>2</td><td>UserName</td><td  align='center'>varchar(100)</td><td align='center'>100</td><td align='center'>0</td><td align='center'>N</td><td align='center'></td><td></td><td>登录ID</td></tr><tr><td style='text-align:center;'>3</td><td>FullName</td><td  align='center'>varchar(100)</td><td align='center'>100</td><td align='center'>0</td><td align='center'>N</td><td align='center'></td><td></td><td>用户真实姓名</td></tr><tr><td style='text-align:center;'>4</td><td>Password</td><td  align='center'>varchar(300)</td><td align='center'>300</td><td align='center'>0</td><td align='center'>N</td><td align='center'></td><td></td><td>登陆密码</td></tr><tr><td style='text-align:center;'>5</td><td>PwdExpiredTime</td><td  align='center'>datetime</td><td align='center'>23</td><td align='center'>3</td><td align='center'>Y</td><td align='center'></td><td></td><td>密码过期时间</td></tr><tr><td style='text-align:center;'>6</td><td>Sex</td><td  align='center'>bit</td><td align='center'>1</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td>(1)</td><td>性别 1男0女</td></tr><tr><td style='text-align:center;'>7</td><td>Phone</td><td  align='center'>varchar(100)</td><td align='center'>100</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td>工作电话</td></tr><tr><td style='text-align:center;'>8</td><td>Email</td><td  align='center'>varchar(100)</td><td align='center'>100</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td>电子邮箱</td></tr><tr><td style='text-align:center;'>9</td><td>Status</td><td  align='center'>int</td><td align='center'>10</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td>状态 1 启用 2禁用 3已删</td></tr><tr><td style='text-align:center;'>10</td><td>LoginCount</td><td  align='center'>int</td><td align='center'>10</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td>(0)</td><td>登录次数</td></tr><tr><td style='text-align:center;'>11</td><td>LastLoginTime</td><td  align='center'>datetime</td><td align='center'>23</td><td align='center'>3</td><td align='center'>Y</td><td align='center'></td><td></td><td>最后登录时间</td></tr><tr><td style='text-align:center;'>12</td><td>LastLoginIP</td><td  align='center'>varchar(50)</td><td align='center'>50</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td>公司ID</td></tr><tr><td style='text-align:center;'>13</td><td>RoleIDs</td><td  align='center'>varchar(500)</td><td align='center'>500</td><td align='center'>0</td><td align='center'>Y</td><td align='center'></td><td></td><td></td></tr><tr><td style='text-align:center;'>14</td><td>CreateTime</td><td  align='center'>datetime</td><td align='center'>23</td><td align='center'>3</td><td align='center'>Y</td><td align='center'></td><td>CURRENT_TIMESTAMP</td><td>创建日期</td></tr></table></div></body></html>
+﻿<html>
+<head>
+    <title>数据库设计文档 -- AriesDevFramework_Init</title>
+    <style type='text/css'>
+        body, td {
+            font-family: verdana;
+            font-size: 12px;
+            line-height: 150%;
+        }
+
+        table {
+            width: 100%;
+            background-color: #ccc;
+            margin: 5px 0;
+        }
+
+        td {
+            background-color: #fff;
+            padding: 3px;
+            padding-left: 10px;
+        }
+
+        thead td {
+            text-align: center;
+            font-weight: bold;
+            background-color: #eee;
+        }
+
+        a:link, a:visited, a:active {
+            color: #015FB6;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #E33E06;
+        }
+    </style>
+    <head>
+        <body style='text-align: center;'>
+            <div style='width: 800px; margin: 20px auto; text-align: left;'><a name='index' />
+                <h2 style='text-align: center; line-height: 50px;'>数据库设计文档</h2>
+                <div><b>数据库名：AriesDevFramework_Init</b></div>
+                <table cellspacing='1' cellpadding='0'>
+                    <thead>
+                        <tr>
+                            <td style='width: 40px;'>序号</td>
+                            <td>表名</td>
+                            <td>说明</td>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td style='text-align: center;'>1</td>
+                        <td><a href='#Sys_RoleAction'>Sys_RoleAction</a></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>2</td>
+                        <td><a href='#Sys_Role'>Sys_Role</a></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>3</td>
+                        <td><a href='#Sys_Menu'>Sys_Menu</a></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>4</td>
+                        <td><a href='#Sys_Action'>Sys_Action</a></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>5</td>
+                        <td><a href='#Config_KeyValue'>Config_KeyValue</a></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>6</td>
+                        <td><a href='#Config_Grid'>Config_Grid</a></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>7</td>
+                        <td><a href='#Config_ExcelInfo'>Config_ExcelInfo</a></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>8</td>
+                        <td><a href='#Config_Excel'>Config_Excel</a></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>9</td>
+                        <td><a href='#Sys_Area'>Sys_Area</a></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>10</td>
+                        <td><a href='#TestA'>TestA</a></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>11</td>
+                        <td><a href='#TestB'>TestB</a></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>12</td>
+                        <td><a href='#Sys_UserInfo'>Sys_UserInfo</a></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>13</td>
+                        <td><a href='#Sys_User'>Sys_User</a></td>
+                        <td></td>
+                    </tr>
+                </table>
+                <a name='Sys_RoleAction' />
+                <div style='margin-top: 30px;'><a href='#index' style='float: right; margin-top: 6px;'>返回目录</a><b>表名：Sys_RoleAction</b></div>
+                <div>说明：</div>
+                <div>数据列：</div>
+                <table cellspacing='1' cellpadding='0'>
+                    <thead>
+                        <tr>
+                            <td style='width: 40px;'>序号</td>
+                            <td>名称</td>
+                            <td>数据类型</td>
+                            <td>长度</td>
+                            <td>小数位</td>
+                            <td>允许空值</td>
+                            <td>主键</td>
+                            <td>默认值</td>
+                            <td>说明</td>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td style='text-align: center;'>1</td>
+                        <td>RoleActionID</td>
+                        <td align='center'>char(36)</td>
+                        <td align='center'>36</td>
+                        <td align='center'>0</td>
+                        <td align='center'>N</td>
+                        <td align='center'>Y</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>2</td>
+                        <td>RoleID</td>
+                        <td align='center'>char(36)</td>
+                        <td align='center'>36</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>3</td>
+                        <td>MenuID</td>
+                        <td align='center'>char(36)</td>
+                        <td align='center'>36</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>4</td>
+                        <td>ActionID</td>
+                        <td align='center'>varchar(36)</td>
+                        <td align='center'>36</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+                <a name='Sys_Role' />
+                <div style='margin-top: 30px;'><a href='#index' style='float: right; margin-top: 6px;'>返回目录</a><b>表名：Sys_Role</b></div>
+                <div>说明：</div>
+                <div>数据列：</div>
+                <table cellspacing='1' cellpadding='0'>
+                    <thead>
+                        <tr>
+                            <td style='width: 40px;'>序号</td>
+                            <td>名称</td>
+                            <td>数据类型</td>
+                            <td>长度</td>
+                            <td>小数位</td>
+                            <td>允许空值</td>
+                            <td>主键</td>
+                            <td>默认值</td>
+                            <td>说明</td>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td style='text-align: center;'>1</td>
+                        <td>RoleID</td>
+                        <td align='center'>char(36)</td>
+                        <td align='center'>36</td>
+                        <td align='center'>0</td>
+                        <td align='center'>N</td>
+                        <td align='center'>Y</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>2</td>
+                        <td>RoleName</td>
+                        <td align='center'>varchar(100)</td>
+                        <td align='center'>100</td>
+                        <td align='center'>0</td>
+                        <td align='center'>N</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>3</td>
+                        <td>Notes</td>
+                        <td align='center'>varchar(150)</td>
+                        <td align='center'>150</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>描述</td>
+                    </tr>
+                </table>
+                <a name='Sys_Menu' />
+                <div style='margin-top: 30px;'><a href='#index' style='float: right; margin-top: 6px;'>返回目录</a><b>表名：Sys_Menu</b></div>
+                <div>说明：</div>
+                <div>数据列：</div>
+                <table cellspacing='1' cellpadding='0'>
+                    <thead>
+                        <tr>
+                            <td style='width: 40px;'>序号</td>
+                            <td>名称</td>
+                            <td>数据类型</td>
+                            <td>长度</td>
+                            <td>小数位</td>
+                            <td>允许空值</td>
+                            <td>主键</td>
+                            <td>默认值</td>
+                            <td>说明</td>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td style='text-align: center;'>1</td>
+                        <td>MenuID</td>
+                        <td align='center'>char(36)</td>
+                        <td align='center'>36</td>
+                        <td align='center'>0</td>
+                        <td align='center'>N</td>
+                        <td align='center'>Y</td>
+                        <td></td>
+                        <td>菜单标识</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>2</td>
+                        <td>ParentMenuID</td>
+                        <td align='center'>char(36)</td>
+                        <td align='center'>36</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>上级ID</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>3</td>
+                        <td>MenuName</td>
+                        <td align='center'>varchar(100)</td>
+                        <td align='center'>100</td>
+                        <td align='center'>0</td>
+                        <td align='center'>N</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>4</td>
+                        <td>MenuUrl</td>
+                        <td align='center'>varchar(200)</td>
+                        <td align='center'>200</td>
+                        <td align='center'>0</td>
+                        <td align='center'>N</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>5</td>
+                        <td>MenuLevel</td>
+                        <td align='center'>int</td>
+                        <td align='center'>10</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>1,2,3分别对于 一级模块 二级模块，三级菜单</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>6</td>
+                        <td>SortOrder</td>
+                        <td align='center'>int</td>
+                        <td align='center'>10</td>
+                        <td align='center'>0</td>
+                        <td align='center'>N</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>7</td>
+                        <td>MenuIcon</td>
+                        <td align='center'>varchar(500)</td>
+                        <td align='center'>500</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>菜单图标路径</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>8</td>
+                        <td>BigMenuIcon</td>
+                        <td align='center'>varchar(500)</td>
+                        <td align='center'>500</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>常用菜单图标</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>9</td>
+                        <td>IsShortcut</td>
+                        <td align='center'>bit</td>
+                        <td align='center'>1</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>快捷键</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>10</td>
+                        <td>IsShow</td>
+                        <td align='center'>int</td>
+                        <td align='center'>10</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td>(1)</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>11</td>
+                        <td>ActionIDs</td>
+                        <td align='center'>varchar(500)</td>
+                        <td align='center'>500</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>功能ID（以逗号分隔）</td>
+                    </tr>
+                </table>
+                <a name='Sys_Action' />
+                <div style='margin-top: 30px;'><a href='#index' style='float: right; margin-top: 6px;'>返回目录</a><b>表名：Sys_Action</b></div>
+                <div>说明：</div>
+                <div>数据列：</div>
+                <table cellspacing='1' cellpadding='0'>
+                    <thead>
+                        <tr>
+                            <td style='width: 40px;'>序号</td>
+                            <td>名称</td>
+                            <td>数据类型</td>
+                            <td>长度</td>
+                            <td>小数位</td>
+                            <td>允许空值</td>
+                            <td>主键</td>
+                            <td>默认值</td>
+                            <td>说明</td>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td style='text-align: center;'>1</td>
+                        <td>ActionID</td>
+                        <td align='center'>char(36)</td>
+                        <td align='center'>36</td>
+                        <td align='center'>0</td>
+                        <td align='center'>N</td>
+                        <td align='center'>Y</td>
+                        <td></td>
+                        <td>功能标识</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>2</td>
+                        <td>ActionName</td>
+                        <td align='center'>varchar(100)</td>
+                        <td align='center'>100</td>
+                        <td align='center'>0</td>
+                        <td align='center'>N</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>3</td>
+                        <td>ActionRefName</td>
+                        <td align='center'>varchar(100)</td>
+                        <td align='center'>100</td>
+                        <td align='center'>0</td>
+                        <td align='center'>N</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+                <a name='Config_KeyValue' />
+                <div style='margin-top: 30px;'><a href='#index' style='float: right; margin-top: 6px;'>返回目录</a><b>表名：Config_KeyValue</b></div>
+                <div>说明：</div>
+                <div>数据列：</div>
+                <table cellspacing='1' cellpadding='0'>
+                    <thead>
+                        <tr>
+                            <td style='width: 40px;'>序号</td>
+                            <td>名称</td>
+                            <td>数据类型</td>
+                            <td>长度</td>
+                            <td>小数位</td>
+                            <td>允许空值</td>
+                            <td>主键</td>
+                            <td>默认值</td>
+                            <td>说明</td>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td style='text-align: center;'>1</td>
+                        <td>KeyValueID</td>
+                        <td align='center'>char(36)</td>
+                        <td align='center'>36</td>
+                        <td align='center'>0</td>
+                        <td align='center'>N</td>
+                        <td align='center'>Y</td>
+                        <td></td>
+                        <td>配置表标识</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>2</td>
+                        <td>ConfigKey</td>
+                        <td align='center'>varchar(100)</td>
+                        <td align='center'>100</td>
+                        <td align='center'>0</td>
+                        <td align='center'>N</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>配置键</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>3</td>
+                        <td>ConfigName</td>
+                        <td align='center'>varchar(100)</td>
+                        <td align='center'>100</td>
+                        <td align='center'>0</td>
+                        <td align='center'>N</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>配置名称</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>4</td>
+                        <td>ConfigValue</td>
+                        <td align='center'>varchar(300)</td>
+                        <td align='center'>300</td>
+                        <td align='center'>0</td>
+                        <td align='center'>N</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>配置值</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>5</td>
+                        <td>Flag</td>
+                        <td align='center'>varchar(100)</td>
+                        <td align='center'>100</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>分类标记</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>6</td>
+                        <td>Notes</td>
+                        <td align='center'>varchar(1000)</td>
+                        <td align='center'>1000</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>备注</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>7</td>
+                        <td>OrderNo</td>
+                        <td align='center'>int</td>
+                        <td align='center'>10</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td>(999)</td>
+                        <td>排序号</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>8</td>
+                        <td>CreateTime</td>
+                        <td align='center'>datetime</td>
+                        <td align='center'>23</td>
+                        <td align='center'>3</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td>CURRENT_TIMESTAMP</td>
+                        <td>创建日期</td>
+                    </tr>
+                </table>
+                <a name='Config_Grid' />
+                <div style='margin-top: 30px;'><a href='#index' style='float: right; margin-top: 6px;'>返回目录</a><b>表名：Config_Grid</b></div>
+                <div>说明：</div>
+                <div>数据列：</div>
+                <table cellspacing='1' cellpadding='0'>
+                    <thead>
+                        <tr>
+                            <td style='width: 40px;'>序号</td>
+                            <td>名称</td>
+                            <td>数据类型</td>
+                            <td>长度</td>
+                            <td>小数位</td>
+                            <td>允许空值</td>
+                            <td>主键</td>
+                            <td>默认值</td>
+                            <td>说明</td>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td style='text-align: center;'>1</td>
+                        <td>GridID</td>
+                        <td align='center'>char(36)</td>
+                        <td align='center'>36</td>
+                        <td align='center'>0</td>
+                        <td align='center'>N</td>
+                        <td align='center'>Y</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>2</td>
+                        <td>ObjName</td>
+                        <td align='center'>varchar(50)</td>
+                        <td align='center'>50</td>
+                        <td align='center'>0</td>
+                        <td align='center'>N</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>3</td>
+                        <td>Rules</td>
+                        <td align='center'>varchar(50)</td>
+                        <td align='center'>250</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>配置规则</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>4</td>
+                        <td>Field</td>
+                        <td align='center'>varchar(40)</td>
+                        <td align='center'>40</td>
+                        <td align='center'>0</td>
+                        <td align='center'>N</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>5</td>
+                        <td>Title</td>
+                        <td align='center'>varchar(50)</td>
+                        <td align='center'>50</td>
+                        <td align='center'>0</td>
+                        <td align='center'>N</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>6</td>
+                        <td>Hidden</td>
+                        <td align='center'>bit</td>
+                        <td align='center'>1</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td>(0)</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>7</td>
+                        <td>OrderNum</td>
+                        <td align='center'>int</td>
+                        <td align='center'>10</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td>(0)</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>8</td>
+                        <td>Width</td>
+                        <td align='center'>int</td>
+                        <td align='center'>10</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td>(100)</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>9</td>
+                        <td>Align</td>
+                        <td align='center'>varchar(10)</td>
+                        <td align='center'>10</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td>"center"</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>10</td>
+                        <td>Sortable</td>
+                        <td align='center'>bit</td>
+                        <td align='center'>1</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>11</td>
+                        <td>Formatter</td>
+                        <td align='center'>varchar(50)</td>
+                        <td align='center'>50</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>12</td>
+                        <td>Styler</td>
+                        <td align='center'>varchar(50)</td>
+                        <td align='center'>50</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>13</td>
+                        <td>Editor</td>
+                        <td align='center'>varchar(50)</td>
+                        <td align='center'>50</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>14</td>
+                        <td>Rowspan</td>
+                        <td align='center'>int</td>
+                        <td align='center'>10</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td>(1)</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>15</td>
+                        <td>Colspan</td>
+                        <td align='center'>int</td>
+                        <td align='center'>10</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td>(1)</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>16</td>
+                        <td>Search</td>
+                        <td align='center'>bit</td>
+                        <td align='center'>1</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td>(0)</td>
+                        <td>是否搜索</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>17</td>
+                        <td>DataType</td>
+                        <td align='center'>varchar(50)</td>
+                        <td align='center'>50</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>数据类型</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>18</td>
+                        <td>Import</td>
+                        <td align='center'>bit</td>
+                        <td align='center'>1</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>是否导入</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>19</td>
+                        <td>Export</td>
+                        <td align='center'>bit</td>
+                        <td align='center'>1</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>是否导出</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>20</td>
+                        <td>Frozen</td>
+                        <td align='center'>bit</td>
+                        <td align='center'>1</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>是否冻结列</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>21</td>
+                        <td>Edit</td>
+                        <td align='center'>bit</td>
+                        <td align='center'>1</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>22</td>
+                        <td>MergeIndex</td>
+                        <td align='center'>int</td>
+                        <td align='center'>10</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td>(1)</td>
+                        <td>合并列索引</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>23</td>
+                        <td>ImportUnique</td>
+                        <td align='center'>bit</td>
+                        <td align='center'>1</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td>(0)</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>24</td>
+                        <td>LastEditTime</td>
+                        <td align='center'>datetime</td>
+                        <td align='center'>23</td>
+                        <td align='center'>3</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td>CURRENT_TIMESTAMP</td>
+                        <td></td>
+                    </tr>
+                </table>
+                <a name='Config_ExcelInfo' />
+                <div style='margin-top: 30px;'><a href='#index' style='float: right; margin-top: 6px;'>返回目录</a><b>表名：Config_ExcelInfo</b></div>
+                <div>说明：</div>
+                <div>数据列：</div>
+                <table cellspacing='1' cellpadding='0'>
+                    <thead>
+                        <tr>
+                            <td style='width: 40px;'>序号</td>
+                            <td>名称</td>
+                            <td>数据类型</td>
+                            <td>长度</td>
+                            <td>小数位</td>
+                            <td>允许空值</td>
+                            <td>主键</td>
+                            <td>默认值</td>
+                            <td>说明</td>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td style='text-align: center;'>1</td>
+                        <td>ExceInfoID</td>
+                        <td align='center'>char(36)</td>
+                        <td align='center'>36</td>
+                        <td align='center'>0</td>
+                        <td align='center'>N</td>
+                        <td align='center'>Y</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>2</td>
+                        <td>ExcelID</td>
+                        <td align='center'>char(36)</td>
+                        <td align='center'>36</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>3</td>
+                        <td>ExcelName</td>
+                        <td align='center'>varchar(400)</td>
+                        <td align='center'>400</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>Excel列中文名</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>4</td>
+                        <td>TableName</td>
+                        <td align='center'>varchar(100)</td>
+                        <td align='center'>100</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>表名</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>5</td>
+                        <td>Field</td>
+                        <td align='center'>varchar(100)</td>
+                        <td align='center'>100</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>表字段名</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>6</td>
+                        <td>Formatter</td>
+                        <td align='center'>varchar(100)</td>
+                        <td align='center'>100</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>格式化</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>7</td>
+                        <td>IsUnique</td>
+                        <td align='center'>bit</td>
+                        <td align='center'>1</td>
+                        <td align='center'>0</td>
+                        <td align='center'>N</td>
+                        <td align='center'></td>
+                        <td>(0)</td>
+                        <td>是否唯一</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>8</td>
+                        <td>IsForeignkey</td>
+                        <td align='center'>bit</td>
+                        <td align='center'>1</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>是否外键</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>9</td>
+                        <td>ForeignTable</td>
+                        <td align='center'>varchar(100)</td>
+                        <td align='center'>100</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>外键对应的表名</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>10</td>
+                        <td>IsRequired</td>
+                        <td align='center'>bit</td>
+                        <td align='center'>1</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td>(0)</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>11</td>
+                        <td>CreateTime</td>
+                        <td align='center'>datetime</td>
+                        <td align='center'>23</td>
+                        <td align='center'>3</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td>CURRENT_TIMESTAMP</td>
+                        <td>创建日期</td>
+                    </tr>
+                </table>
+                <a name='Config_Excel' />
+                <div style='margin-top: 30px;'><a href='#index' style='float: right; margin-top: 6px;'>返回目录</a><b>表名：Config_Excel</b></div>
+                <div>说明：</div>
+                <div>数据列：</div>
+                <table cellspacing='1' cellpadding='0'>
+                    <thead>
+                        <tr>
+                            <td style='width: 40px;'>序号</td>
+                            <td>名称</td>
+                            <td>数据类型</td>
+                            <td>长度</td>
+                            <td>小数位</td>
+                            <td>允许空值</td>
+                            <td>主键</td>
+                            <td>默认值</td>
+                            <td>说明</td>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td style='text-align: center;'>1</td>
+                        <td>ExcelID</td>
+                        <td align='center'>char(36)</td>
+                        <td align='center'>36</td>
+                        <td align='center'>0</td>
+                        <td align='center'>N</td>
+                        <td align='center'>Y</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>2</td>
+                        <td>CnName</td>
+                        <td align='center'>varchar(50)</td>
+                        <td align='center'>50</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>模板中文名称</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>3</td>
+                        <td>EnName</td>
+                        <td align='center'>varchar(50)</td>
+                        <td align='center'>50</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>模板英文名称</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>4</td>
+                        <td>TableNames</td>
+                        <td align='center'>varchar(400)</td>
+                        <td align='center'>400</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>关联的多个表名，以逗号分隔</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>5</td>
+                        <td>StartIndex</td>
+                        <td align='center'>int</td>
+                        <td align='center'>10</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td>(0)</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>6</td>
+                        <td>HeadCrossRowNum</td>
+                        <td align='center'>int</td>
+                        <td align='center'>10</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td>(0)</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>7</td>
+                        <td>CreateTime</td>
+                        <td align='center'>datetime</td>
+                        <td align='center'>23</td>
+                        <td align='center'>3</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td>CURRENT_TIMESTAMP</td>
+                        <td>创建时间</td>
+                    </tr>
+                </table>
+                <a name='Sys_Area' />
+                <div style='margin-top: 30px;'><a href='#index' style='float: right; margin-top: 6px;'>返回目录</a><b>表名：Sys_Area</b></div>
+                <div>说明：</div>
+                <div>数据列：</div>
+                <table cellspacing='1' cellpadding='0'>
+                    <thead>
+                        <tr>
+                            <td style='width: 40px;'>序号</td>
+                            <td>名称</td>
+                            <td>数据类型</td>
+                            <td>长度</td>
+                            <td>小数位</td>
+                            <td>允许空值</td>
+                            <td>主键</td>
+                            <td>默认值</td>
+                            <td>说明</td>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td style='text-align: center;'>1</td>
+                        <td>ID</td>
+                        <td align='center'>int</td>
+                        <td align='center'>10</td>
+                        <td align='center'>0</td>
+                        <td align='center'>N</td>
+                        <td align='center'>Y</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>2</td>
+                        <td>Code</td>
+                        <td align='center'>varchar(50)</td>
+                        <td align='center'>50</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>3</td>
+                        <td>Name</td>
+                        <td align='center'>varchar(100)</td>
+                        <td align='center'>100</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>4</td>
+                        <td>PCode</td>
+                        <td align='center'>varchar(50)</td>
+                        <td align='center'>50</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>5</td>
+                        <td>Sort</td>
+                        <td align='center'>int</td>
+                        <td align='center'>10</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>6</td>
+                        <td>Lvl</td>
+                        <td align='center'>int</td>
+                        <td align='center'>10</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>7</td>
+                        <td>Desc</td>
+                        <td align='center'>varchar(100)</td>
+                        <td align='center'>100</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+                <a name='TestA' />
+                <div style='margin-top: 30px;'><a href='#index' style='float: right; margin-top: 6px;'>返回目录</a><b>表名：TestA</b></div>
+                <div>说明：</div>
+                <div>数据列：</div>
+                <table cellspacing='1' cellpadding='0'>
+                    <thead>
+                        <tr>
+                            <td style='width: 40px;'>序号</td>
+                            <td>名称</td>
+                            <td>数据类型</td>
+                            <td>长度</td>
+                            <td>小数位</td>
+                            <td>允许空值</td>
+                            <td>主键</td>
+                            <td>默认值</td>
+                            <td>说明</td>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td style='text-align: center;'>1</td>
+                        <td>ID</td>
+                        <td align='center'>varchar(50)</td>
+                        <td align='center'>50</td>
+                        <td align='center'>0</td>
+                        <td align='center'>N</td>
+                        <td align='center'>Y</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>2</td>
+                        <td>F1</td>
+                        <td align='center'>varchar(50)</td>
+                        <td align='center'>50</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>3</td>
+                        <td>F2</td>
+                        <td align='center'>bit</td>
+                        <td align='center'>1</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>4</td>
+                        <td>F3</td>
+                        <td align='center'>decimal(8,2)</td>
+                        <td align='center'>8</td>
+                        <td align='center'>2</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>5</td>
+                        <td>F4</td>
+                        <td align='center'>int</td>
+                        <td align='center'>10</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+                <a name='TestB' />
+                <div style='margin-top: 30px;'><a href='#index' style='float: right; margin-top: 6px;'>返回目录</a><b>表名：TestB</b></div>
+                <div>说明：</div>
+                <div>数据列：</div>
+                <table cellspacing='1' cellpadding='0'>
+                    <thead>
+                        <tr>
+                            <td style='width: 40px;'>序号</td>
+                            <td>名称</td>
+                            <td>数据类型</td>
+                            <td>长度</td>
+                            <td>小数位</td>
+                            <td>允许空值</td>
+                            <td>主键</td>
+                            <td>默认值</td>
+                            <td>说明</td>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td style='text-align: center;'>1</td>
+                        <td>ID</td>
+                        <td align='center'>varchar(50)</td>
+                        <td align='center'>50</td>
+                        <td align='center'>0</td>
+                        <td align='center'>N</td>
+                        <td align='center'>Y</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>2</td>
+                        <td>F5</td>
+                        <td align='center'>int</td>
+                        <td align='center'>10</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>3</td>
+                        <td>F6</td>
+                        <td align='center'>varchar(100)</td>
+                        <td align='center'>100</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>4</td>
+                        <td>F7</td>
+                        <td align='center'>varchar(100)</td>
+                        <td align='center'>100</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>5</td>
+                        <td>F8</td>
+                        <td align='center'>varchar(100)</td>
+                        <td align='center'>100</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>6</td>
+                        <td>FK</td>
+                        <td align='center'>varchar(100)</td>
+                        <td align='center'>100</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+                <a name='Sys_UserInfo' />
+                <div style='margin-top: 30px;'><a href='#index' style='float: right; margin-top: 6px;'>返回目录</a><b>表名：Sys_UserInfo</b></div>
+                <div>说明：</div>
+                <div>数据列：</div>
+                <table cellspacing='1' cellpadding='0'>
+                    <thead>
+                        <tr>
+                            <td style='width: 40px;'>序号</td>
+                            <td>名称</td>
+                            <td>数据类型</td>
+                            <td>长度</td>
+                            <td>小数位</td>
+                            <td>允许空值</td>
+                            <td>主键</td>
+                            <td>默认值</td>
+                            <td>说明</td>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td style='text-align: center;'>1</td>
+                        <td>UserInfoID</td>
+                        <td align='center'>char(36)</td>
+                        <td align='center'>36</td>
+                        <td align='center'>0</td>
+                        <td align='center'>N</td>
+                        <td align='center'>Y</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>2</td>
+                        <td>CompanyID</td>
+                        <td align='center'>varchar(50)</td>
+                        <td align='center'>50</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>3</td>
+                        <td>Memo</td>
+                        <td align='center'>varchar(150)</td>
+                        <td align='center'>150</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>4</td>
+                        <td>IsOk</td>
+                        <td align='center'>bit</td>
+                        <td align='center'>1</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>5</td>
+                        <td>AreaID</td>
+                        <td align='center'>char(36)</td>
+                        <td align='center'>36</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+                <a name='Sys_User' />
+                <div style='margin-top: 30px;'><a href='#index' style='float: right; margin-top: 6px;'>返回目录</a><b>表名：Sys_User</b></div>
+                <div>说明：</div>
+                <div>数据列：</div>
+                <table cellspacing='1' cellpadding='0'>
+                    <thead>
+                        <tr>
+                            <td style='width: 40px;'>序号</td>
+                            <td>名称</td>
+                            <td>数据类型</td>
+                            <td>长度</td>
+                            <td>小数位</td>
+                            <td>允许空值</td>
+                            <td>主键</td>
+                            <td>默认值</td>
+                            <td>说明</td>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td style='text-align: center;'>1</td>
+                        <td>UserID</td>
+                        <td align='center'>char(36)</td>
+                        <td align='center'>36</td>
+                        <td align='center'>0</td>
+                        <td align='center'>N</td>
+                        <td align='center'>Y</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>2</td>
+                        <td>UserName</td>
+                        <td align='center'>varchar(100)</td>
+                        <td align='center'>100</td>
+                        <td align='center'>0</td>
+                        <td align='center'>N</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>登录ID</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>3</td>
+                        <td>FullName</td>
+                        <td align='center'>varchar(100)</td>
+                        <td align='center'>100</td>
+                        <td align='center'>0</td>
+                        <td align='center'>N</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>用户真实姓名</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>4</td>
+                        <td>Password</td>
+                        <td align='center'>varchar(300)</td>
+                        <td align='center'>300</td>
+                        <td align='center'>0</td>
+                        <td align='center'>N</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>登陆密码</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>5</td>
+                        <td>PwdExpiredTime</td>
+                        <td align='center'>datetime</td>
+                        <td align='center'>23</td>
+                        <td align='center'>3</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>密码过期时间</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>6</td>
+                        <td>Sex</td>
+                        <td align='center'>bit</td>
+                        <td align='center'>1</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td>(1)</td>
+                        <td>性别 1男0女</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>7</td>
+                        <td>Phone</td>
+                        <td align='center'>varchar(100)</td>
+                        <td align='center'>100</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>工作电话</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>8</td>
+                        <td>Email</td>
+                        <td align='center'>varchar(100)</td>
+                        <td align='center'>100</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>电子邮箱</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>9</td>
+                        <td>Status</td>
+                        <td align='center'>int</td>
+                        <td align='center'>10</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>状态 1 启用 2禁用 3已删</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>10</td>
+                        <td>LoginCount</td>
+                        <td align='center'>int</td>
+                        <td align='center'>10</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td>(0)</td>
+                        <td>登录次数</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>11</td>
+                        <td>LastLoginTime</td>
+                        <td align='center'>datetime</td>
+                        <td align='center'>23</td>
+                        <td align='center'>3</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>最后登录时间</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>12</td>
+                        <td>LastLoginIP</td>
+                        <td align='center'>varchar(50)</td>
+                        <td align='center'>50</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td>公司ID</td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>13</td>
+                        <td>RoleIDs</td>
+                        <td align='center'>varchar(500)</td>
+                        <td align='center'>500</td>
+                        <td align='center'>0</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style='text-align: center;'>14</td>
+                        <td>CreateTime</td>
+                        <td align='center'>datetime</td>
+                        <td align='center'>23</td>
+                        <td align='center'>3</td>
+                        <td align='center'>Y</td>
+                        <td align='center'></td>
+                        <td>CURRENT_TIMESTAMP</td>
+                        <td>创建日期</td>
+                    </tr>
+                </table>
+            </div>
+        </body>
+</html>

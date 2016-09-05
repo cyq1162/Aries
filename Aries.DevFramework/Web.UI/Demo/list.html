@@ -11,7 +11,10 @@
     <div style="height: 300px;">
         <div id="dg"></div>
     </div>
-    <pre class="brush:js;toolbar:false">代码：
+    <pre class="brush:js;toolbar:false">
+        GitHub 开源：<a href="https://github.com/cyq1162/Aries"  target="_blank">https://github.com/cyq1162/Aries</a>
+        <hr />
+        代码：
 &lt;script type=&quot;text/javascript&quot;&gt;
         var customToolbar = AR.Utility.queryString('toolbar');
         var dg = new AR.DataGrid('V_Test', 'TestA');
@@ -68,9 +71,12 @@
     grid.options = {
         queryParams: { "a": 1 },
         onLoadSuccess: function () {
+            grid.datagrid("freezeRow", 1);
+            grid.datagrid("freezeRow", 2);
            // alert('options.onLoadSuccess');
         },
         onBeforeLoad: function () {
+           
            // alert('onBeforeLoad');
         }
     }

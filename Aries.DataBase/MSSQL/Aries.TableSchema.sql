@@ -63,7 +63,7 @@
 (
     [GridID] uniqueidentifier Default (newid()) NOT NULL,
     [ObjName] varchar(50) NOT NULL,
-    [ViewName] nvarchar(50) NULL,
+    [Rules] nvarchar(250) NULL,
     [Field] varchar(40) NOT NULL,
     [Title] nvarchar(50) NOT NULL,
     [Hidden] bit Default (0) NULL,
@@ -82,11 +82,11 @@
     [Export] bit NULL,
     [Frozen] bit NULL,
     [Edit] bit NULL,
-    [MergeIndexed] int Default (1) NULL,
+    [MergeIndex] int Default (1) NULL,
     [ImportUnique] bit Default (0) NULL,
     [LastEditTime] datetime Default getdate() NULL,
     PRIMARY KEY ([GridID]) 
-)exec sp_addextendedproperty N'MS_Description', N'下拉框对象名称', N'user', N'dbo', N'table', N'Config_Grid', N'column', N'ViewName';exec sp_addextendedproperty N'MS_Description', N'是否搜索', N'user', N'dbo', N'table', N'Config_Grid', N'column', N'Search';exec sp_addextendedproperty N'MS_Description', N'数据类型', N'user', N'dbo', N'table', N'Config_Grid', N'column', N'DataType';exec sp_addextendedproperty N'MS_Description', N'是否导入', N'user', N'dbo', N'table', N'Config_Grid', N'column', N'Import';exec sp_addextendedproperty N'MS_Description', N'是否导出', N'user', N'dbo', N'table', N'Config_Grid', N'column', N'Export';exec sp_addextendedproperty N'MS_Description', N'是否冻结列', N'user', N'dbo', N'table', N'Config_Grid', N'column', N'Frozen';exec sp_addextendedproperty N'MS_Description', N'合并列索引', N'user', N'dbo', N'table', N'Config_Grid', N'column', N'MergeIndexed';CREATE TABLE [Config_ExcelInfo] 
+)exec sp_addextendedproperty N'MS_Description', N'配置规则', N'user', N'dbo', N'table', N'Config_Grid', N'column', N'Rules';exec sp_addextendedproperty N'MS_Description', N'是否搜索', N'user', N'dbo', N'table', N'Config_Grid', N'column', N'Search';exec sp_addextendedproperty N'MS_Description', N'数据类型', N'user', N'dbo', N'table', N'Config_Grid', N'column', N'DataType';exec sp_addextendedproperty N'MS_Description', N'是否导入', N'user', N'dbo', N'table', N'Config_Grid', N'column', N'Import';exec sp_addextendedproperty N'MS_Description', N'是否导出', N'user', N'dbo', N'table', N'Config_Grid', N'column', N'Export';exec sp_addextendedproperty N'MS_Description', N'是否冻结列', N'user', N'dbo', N'table', N'Config_Grid', N'column', N'Frozen';exec sp_addextendedproperty N'MS_Description', N'合并列索引', N'user', N'dbo', N'table', N'Config_Grid', N'column', N'MergeIndex';CREATE TABLE [Config_ExcelInfo] 
 (
     [ExceInfoID] uniqueidentifier Default (newid()) NOT NULL,
     [ExcelID] uniqueidentifier NULL,

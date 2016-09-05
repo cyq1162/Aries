@@ -425,7 +425,7 @@
             },
             HeaderMenu: function () {
                 this.isHidden = false;
-                this.Items = [{ "text": "配置", "onclick": "$Core.Common._Internal.onConfigClick", "lv2action": "config" }];
+                this.Items = [{ "text": "配置", "onclick": "AR.Common._Internal.onConfigClick", "lv2action": "config" }];
                 /**
                 *向工具条添加按钮
                 *@param{string} text 按钮显示的文本
@@ -438,10 +438,10 @@
             },
             ContextMenu: function () {
                 this.isHidden = false;
-                this.Items = [{ "text": "添加同级", "onclick": "$Core.Common._Internal.onAdd,true", "lv2action": "add" },
-                    { "text": "添加子级", "onclick": "$Core.Common._Internal.onAdd", "lv2action": "add" },
-                    { "text": "编辑", "onclick": "$Core.Common._Internal.Editor.onEdit", "lv2action": "edit" },
-                    { "text": "删除", "onclick": "$Core.Common._Internal.Editor.onDel", "lv2action": "del" }
+                this.Items = [{ "text": "添加同级", "onclick": "AR.Common._Internal.onAdd,true", "lv2action": "add" },
+                    { "text": "添加子级", "onclick": "AR.Common._Internal.onAdd", "lv2action": "add" },
+                    { "text": "编辑", "onclick": "AR.Common._Internal.Editor.onEdit", "lv2action": "edit" },
+                    { "text": "删除", "onclick": "AR.Common._Internal.Editor.onDel", "lv2action": "del" }
                 ];
                 /**
                 *向工具条添加按钮
@@ -554,6 +554,7 @@
                     $Core.Global.DG.operating = dg;
                     $Core.Utility.Window.open(url, "", false);
                 }
+                else { alert("找到不到对象:" + dgid); }
             }
         },
         Formatter: {
@@ -1015,8 +1016,12 @@
             dg.Search.BtnQuery.$target = $('<input class="query" value="" type="button" />');
             dg.Search.BtnReset.$target = $('<input class="reset" type="reset" value="" />');
             //需要指定按钮对象，如果样式不对将不触发事件
-            divButtons.append($("<a>").append(dg.Search.BtnQuery.$target));
-            divButtons.append($("<a>").append(dg.Search.BtnReset.$target));
+            if (!dg.Search.BtnQuery.isHidden) {
+                divButtons.append($("<a>").append(dg.Search.BtnQuery.$target));
+            }
+            if (!dg.Search.BtnReset.isHidden) {
+                divButtons.append($("<a>").append(dg.Search.BtnReset.$target));
+            }
             form.append(divButtons);
         }
         dg.ToolArea.$target.append(dg.Search.$target);
@@ -1420,8 +1425,7 @@
         //绑定一个下拉控件
         function combobox(that, comboboxOption) {
             that.combobox(comboboxOption);
-            if (that.combobox("options").data.length > 0 && !comboboxOption.multiple)
-            {
+            if (that.combobox("options").data.length > 0 && !comboboxOption.multiple) {
                 if (that.combobox("options").data.length > 2 || that.attr('defaultindex')) {
                     var selectedIndex = parseInt(that.attr('defaultindex'));
                     var unshowid = that.attr('unshowid') == 'true';
@@ -1736,7 +1740,7 @@
                 setTimeout(function () { initConfigKeyCombobox() }, 5);
                 return;
             }
-            $("[configKey]").each(function () {
+            $("[configkey]").each(function () {
                 bindConfigKey($(this));
             });
             $Core.Combobox.onAfterExecute("configkey");
@@ -1763,6 +1767,14 @@
             });
 
         };
+        initDialogCombobox = function () {
+            $("[dialog]").each(function () {
+                $(this).on("click", function () {
+                    $Core.Utility.Window.inputDialog($(this));
+                });
+
+            });
+        }
         //设置Easyui下拉框的值
         function setValueToCombobox(data) {
             if ($.type(data) == 'object') {
@@ -1790,6 +1802,7 @@
             onInit: function () {
                 initConfigKeyCombobox();//初始化configKey配置的项
                 initObjNameCombobox();//初始化objName配置的项
+                initDialogCombobox();//初始化dialog配置的项
             },
             bind: bindComboboxies,
             setValues: setValueToCombobox,

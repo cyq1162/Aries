@@ -79,13 +79,14 @@
                     break;
             }
         }
-        //获取列表的选中项，返回ID数组
+        //获取列表的选中项，返回数组
         this.getChecked = function () {
             if (this.$target == null) {
                 return [];
             }
             return this.datagrid("getChecked");
         };
+        //获取列表的选中项，返回ID数组
         this.getCheckedId = function (key) {
             if (this.$target == null) {
                 return [];
@@ -170,7 +171,7 @@
         }
         var dg = this;
         var interval;
-        $Core.Utility.Ajax.post("GetHeader", dg.objName, dg.options.queryParams, null, null,
+        $Core.Utility.Ajax.post("GetHeader", dg.objName + "," + dg.tableName, dg.options.queryParams, null, null,
             function (dg) {
                 return function (result) {
                     //拿到了Header，但GetKeyValuet Init，Combobox事件还没。
@@ -270,12 +271,8 @@
                 e.preventDefault();
                 if (!dg.headMenu) {
                     dg.headMenu = $('<div/>').appendTo('body');
-                    _createMenu(dg.HeaderMenu.Items, dg, dg.headMenu);
+                    _createMenu(e, dg.HeaderMenu.Items, dg, dg.headMenu);
                 }
-                dg.headMenu.menu('show', {
-                    left: e.pageX,
-                    top: e.pageY
-                });
             },
             onContextMenu: function (e, index, row) {
                 if (row == undefined) {
@@ -286,12 +283,8 @@
                 dg.datagrid('select', row[idField]);
                 if (!dg.rowMenu) {
                     dg.rowMenu = $('<div/>').appendTo('body');
-                    _createMenu(dg.ContextMenu.Items, dg, dg.rowMenu, row);
+                    _createMenu(e, dg.ContextMenu.Items, dg, dg.rowMenu, row);
                 }
-                dg.rowMenu.menu('show', {
-                    left: e.pageX,
-                    top: e.pageY
-                });
             }
         };
         var opts = dg.options;
@@ -338,7 +331,7 @@
         //_createEditor(dg);
         var options = $.extend(cfg, opts);
         //请求URL地址设置
-        options.url = (opts.url || $Core.Utility.Ajax.Settings.url) + "?sys_method=GetList&sys_objName=" + dg.objName + "&sys_tableName=" + dg.tableName;
+        options.url = $Core.Global.route.root + "?sys_method=GetList&sys_objName=" + dg.objName + "&sys_tableName=" + dg.tableName;
         if (dg.type == "datagrid") {
             dg.$target = $("#" + dg.id).datagrid(options);
         }
@@ -359,14 +352,15 @@
 
     }
 
-    function _createMenu(items, dg, $menu, row) {
+    function _createMenu(e, items, dg, $menu, row) {
         var actionKeys = $Core.Global.Variable.actionKeys;
         if (!actionKeys) { return; }
         $menu.menu({});
-
+        var hasMenu = false;
         for (var i = 0; i < items.length; i++) {
             var menu = items[i];
             if (actionKeys.indexOf(',' + menu.lv2action + ',') != -1) {
+                hasMenu = true;
                 if (typeof (menu.onclick) == "string") {
                     menu.onclick = function (row, that, dgid, items) {
                         try {
@@ -384,9 +378,14 @@
                         };
                     }(row, this, dg.id, menu.onclick.split(','));
                 }
+                $menu.menu('appendItem', menu);
             }
-            $menu.menu('appendItem', menu);
-
+        }
+        if (hasMenu) {
+            $menu.menu('show', {
+                left: e.pageX,
+                top: e.pageY
+            });
         }
     }
     //创建行内右键菜单

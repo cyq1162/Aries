@@ -22,6 +22,7 @@ namespace Aries.Controllers
         {
             switch (TableName)
             {
+                case "V_SYS_UserList":
                 case "Sys_User":
                     ObjName = "V_SYS_UserList";
                     MDataRow row = GetOne();
@@ -40,6 +41,7 @@ namespace Aries.Controllers
         {
             switch (TableName)
             {
+                case "V_SYS_UserList":
                 case "Sys_User":
                     jsonResult = sysLogic.AddUser();
                     break;
@@ -55,6 +57,7 @@ namespace Aries.Controllers
         {
             switch (TableName)
             {
+                case "V_SYS_UserList":
                 case "Sys_User":
                     jsonResult = sysLogic.UpdateUser();
                     break;
@@ -68,6 +71,7 @@ namespace Aries.Controllers
         {
             switch (TableName)
             {
+                case "V_SYS_UserList":
                 case "Sys_User":
                     jsonResult = sysLogic.DeleteUser();
                     break;
@@ -84,7 +88,7 @@ namespace Aries.Controllers
                 case "V_SYS_UserList"://重写是为了支持文本数据库
                     if (AppConfig.DB.DefaultDalType == DalType.Txt)
                     {
-                        return Select(GridConfig.SelectType.Show).Rows[0];
+                        return Select(GridConfig.SelectType.All).FindRow(GetID);
                     }
                     break;
             }

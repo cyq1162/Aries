@@ -3135,6 +3135,11 @@
             表名
             </summary>
         </member>
+        <member name="P:CYQ.Data.Table.MDataTable.Description">
+            <summary>
+            表名描述
+            </summary>
+        </member>
         <member name="P:CYQ.Data.Table.MDataTable.Columns">
             <summary>
             表格的架构列
@@ -4199,6 +4204,11 @@
         <member name="P:CYQ.Data.Table.MDataColumn.Table">
             <summary>
             架构所引用的表
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Table.MDataColumn.Description">
+            <summary>
+            表名描述
             </summary>
         </member>
         <member name="P:CYQ.Data.Table.MDataColumn.JointPrimary">

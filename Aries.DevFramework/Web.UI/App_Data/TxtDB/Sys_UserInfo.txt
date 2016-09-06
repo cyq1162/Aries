@@ -1,0 +1,3 @@
+{"UserInfoID":"System.Guid","CompanyID":"System.String","Memo":"System.String","IsOk":"System.Boolean","AreaID":"System.Guid"},
+{"UserInfoID":"6a8aaec9-7fe0-430d-919d-935ebb09af40","Memo":"xxxxx"},
+{"UserInfoID":"d8e1ae3b-8451-436a-a59b-c7516e711b9c","Memo":"xxxx"}

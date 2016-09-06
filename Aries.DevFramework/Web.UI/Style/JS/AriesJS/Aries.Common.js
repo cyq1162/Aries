@@ -1743,9 +1743,10 @@
             $("[configkey]").each(function () {
                 bindConfigKey($(this));
             });
+            setValueToCombobox();
             $Core.Combobox.onAfterExecute("configkey");
         }
-        onAfterBind = function (type) { };//定义绑定的事件。
+        onAfterBind = function (type) { $Core.Combobox.isLoadCompleted = true; };//定义绑定的事件。
         initObjNameCombobox = function () {
             //提交请求获取数据
             var item_data = [];
@@ -1759,13 +1760,15 @@
                     }
                 }
             });
-            loadComboboxData(item_data, null, function () {
-                $("[objname]").each(function () {
-                    bindObjName($(this));
+            if (item_data.length > 0) {
+                loadComboboxData(item_data, null, function () {
+                    $("[objname]").each(function () {
+                        bindObjName($(this));
+                    });
+                    setValueToCombobox();
+                    $Core.Combobox.onAfterExecute("objname");
                 });
-                $Core.Combobox.onAfterExecute("objname");
-            });
-
+            }
         };
         initDialogCombobox = function () {
             $("[dialog]").each(function () {
@@ -1776,7 +1779,8 @@
             });
         }
         //设置Easyui下拉框的值
-        function setValueToCombobox(data) {
+        function setValueToCombobox() {
+            var data = $Core.Combobox.values;
             if ($.type(data) == 'object') {
                 var reg_date = /^\d{4}(-|\/)\d{2}(-|\/)\d{2}\s?.*$/;
                 $("[comboname]").each(function () {
@@ -1798,6 +1802,10 @@
                 });
             }
         };
+        function setValues(data)
+        {
+            $Core.Combobox.values = data;
+        }
         $Core.Combobox = {
             onInit: function () {
                 initConfigKeyCombobox();//初始化configKey配置的项
@@ -1805,8 +1813,9 @@
                 initDialogCombobox();//初始化dialog配置的项
             },
             bind: bindComboboxies,
-            setValues: setValueToCombobox,
-            onAfterExecute: onAfterBind
+            setValues: setValues,
+            onAfterExecute: onAfterBind,
+            values: {}
         };
     })();
 })(jQuery, AR);

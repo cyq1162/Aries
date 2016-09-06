@@ -314,7 +314,7 @@ namespace Aries.Core.Auth
                 {
                     if (action.Fill(UserID))
                     {
-                        MDataRow row = action.Data;
+                        MDataRow row = action.Data.Clone();//克隆，不改变原有的结构。
                         action.ResetTable(TableNames.Sys_UserInfo);
                         if (action.Fill(UserID))
                         {

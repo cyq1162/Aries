@@ -144,8 +144,8 @@ namespace Aries.Logic
                 dt = action.Select();
             }
             dt.JoinOnName = Sys_User.UserID.ToString();
-            dt.Join(TableNames.Sys_UserInfo, Sys_UserInfo.UserInfoID.ToString());
-            return dt.Select(PageIndex, PageSize, GetWhere() + GetOrderBy(Sys_User.UserID.ToString()), GridConfig.GetSelectColumns(ObjName, st));
+            MDataTable joinDt = dt.Join(TableNames.Sys_UserInfo, Sys_UserInfo.UserInfoID.ToString());
+            return joinDt.Select(PageIndex, PageSize, GetWhere() + GetOrderBy(Sys_User.UserID.ToString()), GridConfig.GetSelectColumns(ObjName, st));
         }
 
         #endregion

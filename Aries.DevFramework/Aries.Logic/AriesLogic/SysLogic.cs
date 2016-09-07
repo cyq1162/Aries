@@ -77,7 +77,7 @@ namespace Aries.Logic
             string jsonResult = string.Empty;
             bool result = false;
             string userName = Query<string>("userName");
-            string pwd = Query<string>("Password");
+            string pwd = Query<string>("password");
             using (MAction action = new MAction(TableNames.Sys_User))
             {
                 action.BeginTransation();

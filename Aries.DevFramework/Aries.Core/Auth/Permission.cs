@@ -375,7 +375,7 @@ namespace Aries.Core.Auth
         }
         private bool CheckSafeKey()
         {
-            HttpCookie cookie = HttpContext.Current.Request.Cookies["sys_safekey"];
+            HttpCookie cookie = HttpContext.Current.Request.Cookies["aries_safekey"];
             if (cookie != null)
             {
                 string value = EncrpytHelper.Decrypt(cookie.Value);

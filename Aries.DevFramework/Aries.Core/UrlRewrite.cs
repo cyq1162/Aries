@@ -3,6 +3,7 @@ using Aries.Core.Extend;
 using Aries.Core.Helper;
 using CYQ.Data;
 using CYQ.Data.Cache;
+using CYQ.Data.Tool;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -65,16 +66,18 @@ namespace Aries.Core
             }
             else if (uri.LocalPath.EndsWith("/login.html"))
             {
+                SetSafeKey();
                 if (WebHelper.IsUseUISite)
                 {
                     HttpCookie cookie = context.Request.Cookies["sys_ui"];
                     if (cookie == null)
                     {
                         cookie = new HttpCookie("sys_ui", "/" + AppConfig.GetApp("UI").Trim('/'));
+                        cookie.Domain = AppConfig.XHtml.Domain;
                         context.Response.Cookies.Add(cookie);
                     }
                 }
-                SetSafeKey();
+                context.Response.Write(" ");//避免服务器不输出Cookie。
             }
             else if (!context.Request.Url.LocalPath.EndsWith("/ajax.html"))
             {
@@ -120,20 +123,20 @@ namespace Aries.Core
         }
         private void SetSafeKey()
         {
-            HttpCookie cookie = context.Request.Cookies["sys_safekey"];
+            HttpCookie cookie = context.Request.Cookies["aries_safekey"];
             if (cookie == null)
             {
-                cookie = new HttpCookie("sys_safekey");
-                cookie.HttpOnly = true;
+                cookie = new HttpCookie("aries_safekey"); 
             }
-
+            cookie.HttpOnly = true;
+            cookie.Domain = AppConfig.XHtml.Domain;
             cookie.Value = EncrpytHelper.Encrypt("aries:" + DateTime.Now.ToString("HHmmss"));
             cookie.Expires = DateTime.Now.AddMinutes(30);
             context.Response.Cookies.Add(cookie);
         }
         private bool IsExistsSafeKey()
         {
-            HttpCookie cookie = context.Request.Cookies["sys_safekey"];
+            HttpCookie cookie = context.Request.Cookies["aries_safekey"];
             if (cookie != null)
             {
                 string value = EncrpytHelper.Decrypt(cookie.Value);
@@ -223,7 +226,7 @@ namespace Aries.Core
         }
         private void WriteError(string tip)
         {
-            context.Response.Write(tip);
+            context.Response.Write(JsonHelper.OutResult(false, tip));
             context.Response.End();
         }
         #endregion

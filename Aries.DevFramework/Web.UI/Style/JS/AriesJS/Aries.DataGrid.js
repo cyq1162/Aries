@@ -12,7 +12,8 @@
         //内部变量
         this.Internal = {
             primarykey: null,
-            headerData: new Array()
+            headerData: new Array(),
+            isLoadCompleted: false
         }
         this.id = id || 'dg';
         this.type = type || "datagrid";
@@ -309,6 +310,7 @@
         var loadSuccess = opts.onLoadSuccess;
         opts.onLoadSuccess = function (dg) {
             return function (data) {
+                dg.Internal.isLoadCompleted = true;
                 if (dg.type == "treegrid") {
                     regKeyDown(dg);
                 }

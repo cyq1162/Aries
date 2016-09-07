@@ -330,6 +330,7 @@ window.AR = (function ($Core) {
 
                 if (configKey || (objName && objName != '' && objName.indexOf('$') == -1))//绑定下拉
                 {
+                    input.attr("onchange", "$Core.Common._Internal.onQuery");//("+dg.id+")
                     input.attr("name", dataArray[i].field);
                     if (configKey) {
                         input.attr("configkey", configKey)
@@ -355,7 +356,7 @@ window.AR = (function ($Core) {
                     if (dataArray[i].rules && dataArray[i].rules.indexOf("$2") != -1) {
                         this._setInputAttr(input, dataArray[i].rules, "$2:");
                     }
-                    input.attr("onchange", "$Core.Common._Internal.onQuery");
+                    
                 }
                 else if (dataArray[i].datatype)//非绑定下拉
                 {

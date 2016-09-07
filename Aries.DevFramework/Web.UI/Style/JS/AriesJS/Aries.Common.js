@@ -532,13 +532,17 @@
                 return json;
             },
             //查询区域的下拉触发事件
-            onQuery: function () {
+            onQuery: function (dgid) {
                 if ($(this).attr('isquery') == "false") {
                     return false;
                 }
                 if (document.readyState == 'complete') {
-                    $(this).parents("form").find(".query").click();
+                    var dg = $Core.Global.DG.operating;//解决下拉自动事件引发2次查询的问题。
+                    if (!dg || dg.Internal.isLoadCompleted) {
+                        $(this).parents("form").find(".query").click();
+                    }
                 }
+            
             },
             onAdd: function (el, dgid, value, index, isSameLevel) {
                 var dg = getDgByKey(dgid);
@@ -1281,26 +1285,29 @@
                         //$target.combobox("textbox").removeClass("validatebox-invalid");              
                     }
                 }
-                option.editable = $target.attr("editable") == "false" ? false : true;;
+                option.editable = $target.attr("editable") == "false" ? false : true;
                 //判断是否多选,级联不处理多选            
                 if (multiple) {
                     registerMultiEvent(option);
                 }
-                var selFun = eval($target.attr("onchange"));
-                if (typeof (eval(selFun)) == "function") {
-                    option.onSelect = eval(selFun);
-                }
+                //if ($(this).attr("onchange")) {
+                    var selFun = eval($target.attr("onchange"));
+                    if (typeof (eval(selFun)) == "function") {
+                        option.onSelect = eval(selFun);
+                    }
+                //}
                 option.data = data;
                 //判断是否级联模式
                 if ($("[parent='" + $target.attr('objname') + "']") && $("[parent='" + $target.attr('objname') + "']").length > 0) {
                     var option_extend = {
                         onSelect: function (record) {
                             var parent_id = record[valueField];
-
-                            var selFun = eval($(this).attr("onchange"));
-                            if (typeof (eval(selFun)) == "function") {
-                                eval(selFun).call(this, record);
-                            }
+                           // if ($(this).attr("onchange")) {
+                                var selFun = eval($(this).attr("onchange"));
+                                if (typeof (eval(selFun)) == "function") {
+                                    eval(selFun).call(this, record);
+                                }
+                            //}
                             if (multiple) {
                                 selectedFilter($(this));
                             }
@@ -1390,11 +1397,13 @@
                     comboboxTree(that, $.extend(true, {}, comboboxOption));
                 }
                 else {
-                    var selFun = eval(that.attr("onchange"));
                     var opts = $.extend(true, {}, comboboxOption);
-                    if (typeof (eval(selFun)) == "function") {
-                        opts.onSelect = eval(selFun);
-                    }
+                    //if ($(this).attr("onchange")) {
+                    var selFun = eval(that.attr("onchange")); //alert(that.attr("onchange"));
+                        if (typeof (eval(selFun)) == "function") {
+                            opts.onSelect = eval(selFun);
+                        }
+                    //}
                     //else {
                     //    opts.onSelect = function (rec) {
                     //        alert(rec);
@@ -1588,10 +1597,12 @@
                 onLoadSuccess: function () {
                     $element.combobox("textbox").removeClass("validatebox-invalid");
                 }, onSelect: function (record) {
-                    var selFun = eval($(this).attr("onchange"));
-                    if (typeof (eval(selFun)) == "function") {
-                        eval(selFun).call(this, record);
-                    }
+                   // if ($(this).attr("onchange")) {
+                    var selFun = eval($(this).attr("onchange")); //alert('self' + JSON.stringify(selFun));
+                        if (typeof (eval(selFun)) == "function") {
+                            eval(selFun).call(this, record);
+                        }
+                   // }
                 }
             }
             if (multiple) {
@@ -1604,10 +1615,12 @@
                     onSelect: function (record) {
                         //var $child = $("[parent='" + $(this).attr("ObjName") + "']");
                         var parent_id = record[valueField];
-                        var selFun = eval($(this).attr("onchange"));
-                        if (typeof (eval(selFun)) == "function") {
-                            eval(selFun).call(this, record);
-                        }
+                        //if ($(this).attr("onchange")) {
+                            var selFun = eval($(this).attr("onchange"));
+                            if (typeof (eval(selFun)) == "function") {
+                                eval(selFun).call(this, record);
+                            }
+                        //}
                         if (multiple) {
                             selectedFilter($(this));
                         }
@@ -1689,10 +1702,13 @@
         //多选默认注册事件
         function registerMultiEvent(opts) {
             opts.onSelect = function (record) {
-                var selFun = eval($(this).attr("onchange"));
-                if (typeof (eval(selFun)) == "function") {
-                    eval(selFun).call(this, record);
-                }
+                //if($(this).attr("onchange"))
+                //{
+                    var selFun = eval($(this).attr("onchange"));
+                    if (typeof (eval(selFun)) == "function") {
+                        eval(selFun).call(this, record);
+                    }
+                //}
                 selectedFilter($(this));
             }
             opts.onUnselect = function () {
@@ -1741,7 +1757,9 @@
                 return;
             }
             $("[configkey]").each(function () {
-                bindConfigKey($(this));
+                if (!$(this).attr("comboname")) {
+                    bindConfigKey($(this));
+                }
             });
             setValueToCombobox();
             $Core.Combobox.onAfterExecute("configkey");
@@ -1802,8 +1820,7 @@
                 });
             }
         };
-        function setValues(data)
-        {
+        function setValues(data) {
             $Core.Combobox.values = data;
         }
         $Core.Combobox = {

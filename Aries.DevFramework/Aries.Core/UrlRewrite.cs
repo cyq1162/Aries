@@ -131,7 +131,7 @@ namespace Aries.Core
             cookie.HttpOnly = true;
             cookie.Domain = AppConfig.XHtml.Domain;
             cookie.Value = EncrpytHelper.Encrypt("aries:" + DateTime.Now.ToString("HHmmss"));
-            cookie.Expires = DateTime.Now.AddMinutes(30);
+            cookie.Expires = DateTime.Now.AddHours(1);
             context.Response.Cookies.Add(cookie);
         }
         private bool IsExistsSafeKey()
@@ -173,9 +173,13 @@ namespace Aries.Core
             {
                 #region 处理Ajax请求
                 //从Url来源页找
-                if (context.Request.UrlReferrer == null || !IsExistsSafeKey())
+                if (context.Request.UrlReferrer == null)
                 {
                     WriteError("Illegal request!");
+                }
+                else if (!IsExistsSafeKey())
+                {
+                    WriteError("Page timeout,please reflesh page!");
                 }
                 //AjaxController是由页面的后两个路径决定了。
                 string[] items = context.Request.UrlReferrer.LocalPath.Split('/');

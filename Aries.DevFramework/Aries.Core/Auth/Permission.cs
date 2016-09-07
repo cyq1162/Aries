@@ -355,12 +355,12 @@ namespace Aries.Core.Auth
                         return false;
                     }
                     return true;
-                case "GetList":
-                    if (!CheckSafeKey())
-                    {
-                        return false;
-                    }
-                    break;
+                //case "GetList":
+                //    if (!CheckSafeKey())
+                //    {
+                //        return false;
+                //    }
+                //    break;
             }
             string key = string.Empty;
             foreach (object item in mi.GetCustomAttributes(typeof(ActionKeyAttribute), true))

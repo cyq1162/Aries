@@ -109,7 +109,7 @@ namespace Aries.Core.Auth
         /// </summary>
         public static void RefleshToken()
         {
-            HttpCookie tokenCookie = HttpContext.Current.Request.Cookies["aires_token"];
+            HttpCookie tokenCookie = HttpContext.Current.Request.Cookies["aries_token"];
             if (tokenCookie != null)
             {
                 tokenCookie.Expires = DateTime.Now.AddHours(1);//续延1小时
@@ -194,8 +194,8 @@ namespace Aries.Core.Auth
         }
         private static void ClearCookie()
         {
-            HttpCookie tokenCookie = new HttpCookie("aires_token");
-            HttpCookie userNameCookie = new HttpCookie("aires_user");
+            HttpCookie tokenCookie = new HttpCookie("aries_token");
+            HttpCookie userNameCookie = new HttpCookie("aries_user");
             tokenCookie.Expires = DateTime.Now.AddDays(-1);
             userNameCookie.Expires = DateTime.Now.AddDays(-1);
             HttpContext.Current.Response.Cookies.Add(tokenCookie);
@@ -203,8 +203,8 @@ namespace Aries.Core.Auth
         }
         private static void WriteCookie(string token, string userName)
         {
-            HttpCookie tokenCookie = new HttpCookie("aires_token", token);// { HttpOnly = !local };
-            HttpCookie userNameCookie = new HttpCookie("aires_user", userName);
+            HttpCookie tokenCookie = new HttpCookie("aries_token", token);// { HttpOnly = !local };
+            HttpCookie userNameCookie = new HttpCookie("aries_user", userName);
             tokenCookie.Domain = AppConfig.XHtml.Domain;
             userNameCookie.Domain = AppConfig.XHtml.Domain;
             tokenCookie.Expires = DateTime.Now.AddHours(1);
@@ -267,7 +267,7 @@ namespace Aries.Core.Auth
                 string loginID = GetTokenValue(2);
                 if (string.IsNullOrEmpty(loginID))
                 {
-                    loginID = GetCookieValue("aires_user");
+                    loginID = GetCookieValue("aries_user");
                 }
                 return loginID;
             }
@@ -345,10 +345,10 @@ namespace Aries.Core.Auth
         {
             get
             {
-                string token = HttpContext.Current.Request["aires_token"];
+                string token = HttpContext.Current.Request["aries_token"];
                 if (string.IsNullOrEmpty(token))
                 {
-                    HttpCookie tokenCookie = HttpContext.Current.Request.Cookies["aires_token"];
+                    HttpCookie tokenCookie = HttpContext.Current.Request.Cookies["aries_token"];
                     if (tokenCookie != null)
                     {
                         token = tokenCookie.Value;
@@ -360,7 +360,7 @@ namespace Aries.Core.Auth
             }
             private set
             {
-                HttpCookie tokenCookie = HttpContext.Current.Request.Cookies["aires_token"];
+                HttpCookie tokenCookie = HttpContext.Current.Request.Cookies["aries_token"];
                 if (tokenCookie != null)
                 {
                     tokenCookie.HttpOnly = false;

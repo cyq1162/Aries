@@ -272,7 +272,13 @@
                 e.preventDefault();
                 if (!dg.headMenu) {
                     dg.headMenu = $('<div/>').appendTo('body');
-                    _createMenu(e, dg.HeaderMenu.Items, dg, dg.headMenu);
+                    _createMenu(dg.HeaderMenu.Items, dg, dg.headMenu);
+                }
+                if (dg.headMenu.hasMenu) {
+                    dg.headMenu.menu('show', {
+                        left: e.pageX,
+                        top: e.pageY
+                    });
                 }
             },
             onContextMenu: function (e, index, row) {
@@ -284,7 +290,13 @@
                 dg.datagrid('select', row[idField]);
                 if (!dg.rowMenu) {
                     dg.rowMenu = $('<div/>').appendTo('body');
-                    _createMenu(e, dg.ContextMenu.Items, dg, dg.rowMenu, row);
+                    _createMenu(dg.ContextMenu.Items, dg, dg.rowMenu, row);
+                }
+                if (dg.rowMenu.hasMenu) {
+                    dg.rowMenu.menu('show', {
+                        left: e.pageX,
+                        top: e.pageY
+                    });
                 }
             }
         };
@@ -354,15 +366,15 @@
 
     }
 
-    function _createMenu(e, items, dg, $menu, row) {
+    function _createMenu(items, dg, $menu, row) {
         var actionKeys = $Core.Global.Variable.actionKeys;
         if (!actionKeys) { return; }
         $menu.menu({});
-        var hasMenu = false;
+        $menu.hasMenu = false;
         for (var i = 0; i < items.length; i++) {
             var menu = items[i];
             if (actionKeys.indexOf(',' + menu.lv2action + ',') != -1) {
-                hasMenu = true;
+                $menu.hasMenu = true;
                 if (typeof (menu.onclick) == "string") {
                     menu.onclick = function (row, that, dgid, items) {
                         try {
@@ -383,12 +395,7 @@
                 $menu.menu('appendItem', menu);
             }
         }
-        if (hasMenu) {
-            $menu.menu('show', {
-                left: e.pageX,
-                top: e.pageY
-            });
-        }
+        
     }
     //创建行内右键菜单
     function _createRowMenu(dg, actionKeys) {

@@ -66,6 +66,7 @@
                         this.onBeforeExecute = function (searchJsonArray) { };
                         this.onAfterExecute = function (searchJsonArray) { };
                         this.onExecute = function (dg, btn_query) {
+                            if (!btn_query) { btn_query = this.$target; }
                             var targetForm = btn_query.parents("form");
                             var searchJson = $Core.Common._Internal.buildSearchJson(targetForm);
                             //装载默认where条件，过滤到表单已有的数据。
@@ -126,6 +127,7 @@
                         */
                         this.onBeforeExecute = function ($form) { };
                         this.onExecute = function (dg, btn_reset) {
+                            if (!btn_reset) { btn_reset = this.$target; }
                             btn_reset.parents("form")[0].reset();
                             if (this.onBeforeExecute(btn_reset.parents("form")[0]) == false) {
                                 return false;
@@ -1035,42 +1037,42 @@
     function _createToolBarHtml(dg) {
         //var div_fn = $('<div class="function-box" id="' + dg.id + '_ToolbarArea">');
         //if (!dg.ToolBar.isHidden) {
-            //div_fn.attr("class", "function-box");
-            //if (dg.type == "datagrid") {
+        //div_fn.attr("class", "function-box");
+        //if (dg.type == "datagrid") {
 
-            var item; actionKeys = $Core.Global.Variable.actionKeys || "";
-            if (actionKeys.indexOf(',add,') > -1 && !dg.ToolBar.BtnAdd.isHidden) {
-                dg.ToolBar.BtnAdd.$target = $('<input class=\"add\" flag=\"btn_add\" type=\"button\" name=\"添加\" value=\"\"/>');
-                item = $("<a>").append(dg.ToolBar.BtnAdd.$target);
+        var item; actionKeys = $Core.Global.Variable.actionKeys || "";
+        if (actionKeys.indexOf(',add,') > -1 && !dg.ToolBar.BtnAdd.isHidden) {
+            dg.ToolBar.BtnAdd.$target = $('<input class=\"add\" flag=\"btn_add\" type=\"button\" name=\"添加\" value=\"\"/>');
+            item = $("<a>").append(dg.ToolBar.BtnAdd.$target);
+            dg.ToolBar.$target.append(item);
+            dg.ToolBar.Items.set("add", dg.ToolBar.BtnAdd);
+        }
+        if (actionKeys.indexOf(',del,') > -1 && !dg.ToolBar.BtnDelBatch.isHidden && dg.isShowCheckBox) {
+            dg.ToolBar.BtnDelBatch.$target = $('<input  class=\"batch_del\" flag=\"btn_del\" type=\"button\" name=\"批量删除\" value=\"\"/>').attr("dgID", dg.id);
+            item = $("<a>").append(dg.ToolBar.BtnDelBatch.$target);
+            dg.ToolBar.$target.append(item);
+            dg.ToolBar.Items.set("del", dg.ToolBar.BtnDelBatch);
+        }
+        if (actionKeys.indexOf(',export,') > -1 && !dg.ToolBar.BtnExport.isHidden) {
+            dg.ToolBar.BtnExport.$target = $('<input class=\"export\" flag=\"btn_export\" type=\"button\"  value=\"\"/>');
+            item = $("<a>").append(dg.ToolBar.BtnExport.$target);
+            dg.ToolBar.$target.append(item);
+            dg.ToolBar.Items.set("export", dg.ToolBar.BtnExport);
+        }
+        if (actionKeys.indexOf(',import,') > -1) {
+            if (!dg.ToolBar.BtnImport.isHidden) {
+                dg.ToolBar.BtnImport.$target = $('<input class=\"import\" flag=\"btn_import\" type=\"button\"  value=\"\"/>');
+                item = $("<a>").append(dg.ToolBar.BtnImport.$target);
                 dg.ToolBar.$target.append(item);
-                dg.ToolBar.Items.set("add", dg.ToolBar.BtnAdd);
+                dg.ToolBar.Items.set("import", dg.ToolBar.BtnImport);
             }
-            if (actionKeys.indexOf(',del,') > -1 && !dg.ToolBar.BtnDelBatch.isHidden && dg.isShowCheckBox) {
-                dg.ToolBar.BtnDelBatch.$target = $('<input  class=\"batch_del\" flag=\"btn_del\" type=\"button\" name=\"批量删除\" value=\"\"/>').attr("dgID", dg.id);
-                item = $("<a>").append(dg.ToolBar.BtnDelBatch.$target);
+            if (!dg.ToolBar.BtnExportTemplate.isHidden) {
+                dg.ToolBar.BtnExportTemplate.$target = $('<input class=\"btn-sm\" flag=\"btn_export_template\" type=\"button\"  value=\"导出模板\"/>');
+                item = $("<a>").append(dg.ToolBar.BtnExportTemplate.$target);
                 dg.ToolBar.$target.append(item);
-                dg.ToolBar.Items.set("del", dg.ToolBar.BtnDelBatch);
+                dg.ToolBar.Items.set("exportTemplate", dg.ToolBar.BtnExportTemplate);
             }
-            if (actionKeys.indexOf(',export,') > -1 && !dg.ToolBar.BtnExport.isHidden) {
-                dg.ToolBar.BtnExport.$target = $('<input class=\"export\" flag=\"btn_export\" type=\"button\"  value=\"\"/>');
-                item = $("<a>").append(dg.ToolBar.BtnExport.$target);
-                dg.ToolBar.$target.append(item);
-                dg.ToolBar.Items.set("export", dg.ToolBar.BtnExport);
-            }
-            if (actionKeys.indexOf(',import,') > -1) {
-                if (!dg.ToolBar.BtnImport.isHidden) {
-                    dg.ToolBar.BtnImport.$target = $('<input class=\"import\" flag=\"btn_import\" type=\"button\"  value=\"\"/>');
-                    item = $("<a>").append(dg.ToolBar.BtnImport.$target);
-                    dg.ToolBar.$target.append(item);
-                    dg.ToolBar.Items.set("import", dg.ToolBar.BtnImport);
-                }
-                if (!dg.ToolBar.BtnExportTemplate.isHidden) {
-                    dg.ToolBar.BtnExportTemplate.$target = $('<input class=\"btn-sm\" flag=\"btn_export_template\" type=\"button\"  value=\"导出模板\"/>');
-                    item = $("<a>").append(dg.ToolBar.BtnExportTemplate.$target);
-                    dg.ToolBar.$target.append(item);
-                    dg.ToolBar.Items.set("exportTemplate", dg.ToolBar.BtnExportTemplate);
-                }
-            }
+        }
         //}
         //else {//处理样式问题（如果去掉或隐藏div_fn，或不设置class为function-box，都显示不出分页控件，只有后期改变其属性）
         //    div_fn.attr("style", "height:0px;padding:0 0;border-bottom:0px");

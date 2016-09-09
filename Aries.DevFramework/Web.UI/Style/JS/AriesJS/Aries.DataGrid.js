@@ -339,8 +339,9 @@
 
         opts = opts || {};
         var searchJson = [];
+        
         if (dg.Search && dg.Search.$target) {
-            var tForm = dg.Search.$target.parents('form');
+            var tForm = dg.Search.$target.children('form');
             searchJson = $Core.Common._Internal.buildSearchJson(tForm);
         }
         if (opts.defaultWhere && opts.defaultWhere.length > 0) {

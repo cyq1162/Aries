@@ -6,7 +6,7 @@
     <script src="/Style/JS/Aries.Loader.js"></script>
 </head>
 <body style="margin-top: -4px; padding:0">
-    <div style="height:330px">
+    <div style="height:375px">
     <table id="dg"></table>
         </div>
     <script>
@@ -33,7 +33,7 @@
             var id, title;
             dg.options = {
                 pageSize: 10,
-                fit: false,
+                //fit: false,
                 onLoadSuccess: function () {
                     title = dg.Internal.headerData[1].title;
                     id = unshowid == "true" ? title : dg.Internal.primarykey;

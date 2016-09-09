@@ -130,7 +130,7 @@
         this.ContextMenu = new $Core.Common._Internal.ContextMenu();
         //工具区（包含搜索区和按钮区）
         this.ToolArea = {
-            id: "div_toolArea_" + $Core.Global.DG.Items.length,
+            id: this.id + "_ToolArea",
             $target: null,
             Search: this.Search,
             ToolBar: this.ToolBar,
@@ -189,6 +189,13 @@
                             $Core.Combobox.onInit();//绑定下拉。
                             $.parser.parse('#' + dg.ToolArea.id); //解析成easyui
                         }
+                        //追加工具条(必须存在function-box样式，不然会影响到分页栏的显示)
+                        dg.ToolBar.$target = $('<div class="function-box" id="' + dg.id + '_ToolbarArea">');
+                        if (dg.ToolBar.isHidden)
+                        {
+                            dg.ToolBar.$target.attr("style", "height:0px;padding:0 0;border-bottom:0px");
+                        }
+                        dg.ToolArea.$target.append(dg.ToolBar.$target);
                     }
                 }
             }(dg)
@@ -395,7 +402,7 @@
                 $menu.menu('appendItem', menu);
             }
         }
-        
+
     }
     //创建行内右键菜单
     function _createRowMenu(dg, actionKeys) {

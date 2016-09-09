@@ -542,7 +542,7 @@
                         $(this).parents("form").find(".query").click();
                     }
                 }
-            
+
             },
             onAdd: function (el, dgid, value, index, isSameLevel) {
                 var dg = getDgByKey(dgid);
@@ -1011,7 +1011,7 @@
             else {
                 $input = dg.Search.$target;
             }
-            dg.Search.$target = $('<div id="div_searchArea" class="cont-list-form cont-box-form">');
+            dg.Search.$target = $('<div id="' + dg.id + '_SearchArea" class="cont-list-form cont-box-form">');
             var form = $("<form>");
             dg.Search.$target.append(form);
             form.append($input);
@@ -1033,8 +1033,8 @@
     };
     //创建工具栏区
     function _createToolBarHtml(dg) {
-        var div_fn = $('<div class="function-box" id="div_toolbarArea">');
-        if (!dg.ToolBar.isHidden) {
+        //var div_fn = $('<div class="function-box" id="' + dg.id + '_ToolbarArea">');
+        //if (!dg.ToolBar.isHidden) {
             //div_fn.attr("class", "function-box");
             //if (dg.type == "datagrid") {
 
@@ -1042,41 +1042,41 @@
             if (actionKeys.indexOf(',add,') > -1 && !dg.ToolBar.BtnAdd.isHidden) {
                 dg.ToolBar.BtnAdd.$target = $('<input class=\"add\" flag=\"btn_add\" type=\"button\" name=\"添加\" value=\"\"/>');
                 item = $("<a>").append(dg.ToolBar.BtnAdd.$target);
-                div_fn.append(item);
+                dg.ToolBar.$target.append(item);
                 dg.ToolBar.Items.set("add", dg.ToolBar.BtnAdd);
             }
             if (actionKeys.indexOf(',del,') > -1 && !dg.ToolBar.BtnDelBatch.isHidden && dg.isShowCheckBox) {
                 dg.ToolBar.BtnDelBatch.$target = $('<input  class=\"batch_del\" flag=\"btn_del\" type=\"button\" name=\"批量删除\" value=\"\"/>').attr("dgID", dg.id);
                 item = $("<a>").append(dg.ToolBar.BtnDelBatch.$target);
-                div_fn.append(item);
+                dg.ToolBar.$target.append(item);
                 dg.ToolBar.Items.set("del", dg.ToolBar.BtnDelBatch);
             }
             if (actionKeys.indexOf(',export,') > -1 && !dg.ToolBar.BtnExport.isHidden) {
                 dg.ToolBar.BtnExport.$target = $('<input class=\"export\" flag=\"btn_export\" type=\"button\"  value=\"\"/>');
                 item = $("<a>").append(dg.ToolBar.BtnExport.$target);
-                div_fn.append(item);
+                dg.ToolBar.$target.append(item);
                 dg.ToolBar.Items.set("export", dg.ToolBar.BtnExport);
             }
             if (actionKeys.indexOf(',import,') > -1) {
                 if (!dg.ToolBar.BtnImport.isHidden) {
                     dg.ToolBar.BtnImport.$target = $('<input class=\"import\" flag=\"btn_import\" type=\"button\"  value=\"\"/>');
                     item = $("<a>").append(dg.ToolBar.BtnImport.$target);
-                    div_fn.append(item);
+                    dg.ToolBar.$target.append(item);
                     dg.ToolBar.Items.set("import", dg.ToolBar.BtnImport);
                 }
                 if (!dg.ToolBar.BtnExportTemplate.isHidden) {
                     dg.ToolBar.BtnExportTemplate.$target = $('<input class=\"btn-sm\" flag=\"btn_export_template\" type=\"button\"  value=\"导出模板\"/>');
                     item = $("<a>").append(dg.ToolBar.BtnExportTemplate.$target);
-                    div_fn.append(item);
+                    dg.ToolBar.$target.append(item);
                     dg.ToolBar.Items.set("exportTemplate", dg.ToolBar.BtnExportTemplate);
                 }
             }
-        }
-        else {//处理样式问题（如果去掉或隐藏div_fn，或不设置class为function-box，都显示不出分页控件，只有后期改变其属性）
-            div_fn.attr("style", "height:0px;padding:0 0;border-bottom:0px");
-        }
-        dg.ToolBar.$target = div_fn;
-        dg.ToolArea.$target.append(dg.ToolBar.$target);
+        //}
+        //else {//处理样式问题（如果去掉或隐藏div_fn，或不设置class为function-box，都显示不出分页控件，只有后期改变其属性）
+        //    div_fn.attr("style", "height:0px;padding:0 0;border-bottom:0px");
+        //}
+        //dg.ToolBar.$target = div_fn;
+        //dg.ToolArea.$target.append(dg.ToolBar.$target);
         _createCustomButton(dg);
     }
     //创建自定义工具条。
@@ -1291,10 +1291,10 @@
                     registerMultiEvent(option);
                 }
                 //if ($(this).attr("onchange")) {
-                    var selFun = eval($target.attr("onchange"));
-                    if (typeof (eval(selFun)) == "function") {
-                        option.onSelect = eval(selFun);
-                    }
+                var selFun = eval($target.attr("onchange"));
+                if (typeof (eval(selFun)) == "function") {
+                    option.onSelect = eval(selFun);
+                }
                 //}
                 option.data = data;
                 //判断是否级联模式
@@ -1302,11 +1302,11 @@
                     var option_extend = {
                         onSelect: function (record) {
                             var parent_id = record[valueField];
-                           // if ($(this).attr("onchange")) {
-                                var selFun = eval($(this).attr("onchange"));
-                                if (typeof (eval(selFun)) == "function") {
-                                    eval(selFun).call(this, record);
-                                }
+                            // if ($(this).attr("onchange")) {
+                            var selFun = eval($(this).attr("onchange"));
+                            if (typeof (eval(selFun)) == "function") {
+                                eval(selFun).call(this, record);
+                            }
                             //}
                             if (multiple) {
                                 selectedFilter($(this));
@@ -1400,9 +1400,9 @@
                     var opts = $.extend(true, {}, comboboxOption);
                     //if ($(this).attr("onchange")) {
                     var selFun = eval(that.attr("onchange")); //alert(that.attr("onchange"));
-                        if (typeof (eval(selFun)) == "function") {
-                            opts.onSelect = eval(selFun);
-                        }
+                    if (typeof (eval(selFun)) == "function") {
+                        opts.onSelect = eval(selFun);
+                    }
                     //}
                     //else {
                     //    opts.onSelect = function (rec) {
@@ -1597,12 +1597,12 @@
                 onLoadSuccess: function () {
                     $element.combobox("textbox").removeClass("validatebox-invalid");
                 }, onSelect: function (record) {
-                   // if ($(this).attr("onchange")) {
+                    // if ($(this).attr("onchange")) {
                     var selFun = eval($(this).attr("onchange")); //alert('self' + JSON.stringify(selFun));
-                        if (typeof (eval(selFun)) == "function") {
-                            eval(selFun).call(this, record);
-                        }
-                   // }
+                    if (typeof (eval(selFun)) == "function") {
+                        eval(selFun).call(this, record);
+                    }
+                    // }
                 }
             }
             if (multiple) {
@@ -1616,10 +1616,10 @@
                         //var $child = $("[parent='" + $(this).attr("ObjName") + "']");
                         var parent_id = record[valueField];
                         //if ($(this).attr("onchange")) {
-                            var selFun = eval($(this).attr("onchange"));
-                            if (typeof (eval(selFun)) == "function") {
-                                eval(selFun).call(this, record);
-                            }
+                        var selFun = eval($(this).attr("onchange"));
+                        if (typeof (eval(selFun)) == "function") {
+                            eval(selFun).call(this, record);
+                        }
                         //}
                         if (multiple) {
                             selectedFilter($(this));
@@ -1704,10 +1704,10 @@
             opts.onSelect = function (record) {
                 //if($(this).attr("onchange"))
                 //{
-                    var selFun = eval($(this).attr("onchange"));
-                    if (typeof (eval(selFun)) == "function") {
-                        eval(selFun).call(this, record);
-                    }
+                var selFun = eval($(this).attr("onchange"));
+                if (typeof (eval(selFun)) == "function") {
+                    eval(selFun).call(this, record);
+                }
                 //}
                 selectedFilter($(this));
             }

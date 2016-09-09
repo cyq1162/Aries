@@ -1,6 +1,6 @@
 # Aries
 ASP.NET Aries is a Rapid Develop Framework for asp.net
-
+<div style='display:none'>
 关于开源与商用的补充协议说明：<br />
 一：关于开源：<br />
 1：框架会持续保持开源，并不断持续改良优化。<br />
@@ -19,3 +19,4 @@ ASP.NET Aries is a Rapid Develop Framework for asp.net
 个人信息为：名字：身份证号。<br />
 
 已登记的企业信息列表（个人的不展示）：http://www.cnblogs.com/cyq1162/p/5749555.html
+</div>

@@ -176,6 +176,14 @@ namespace Aries.Core.Auth
                 {
                     throw new Exception("您没有访问当前请求页面的权限！");
                 }
+                else if (uri.LocalPath.ToLower().EndsWith("dialogview.html"))//关键页面，进一步做权限验证
+                {
+                    string objName = WebHelper.Query<string>("objName", "", false);//去掉前置的_
+                    if (objName=="" || !WebHelper.IsKeyInHtml(objName))
+                    {
+                        throw new Exception("您没有访问当前请求对象的权限！");
+                    }
+                }
             }
         }
         private bool IsEndWith(Uri uri, string key)

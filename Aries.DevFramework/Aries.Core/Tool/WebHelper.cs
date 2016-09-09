@@ -12,6 +12,22 @@ namespace Aries.Core.Helper
 {
     internal static class WebHelper
     {
+        #region 安全Key检测
+        public static bool IsKeyInHtml(string objName)
+        {
+            string path = HttpContext.Current.Server.MapPath(HttpContext.Current.Request.UrlReferrer.LocalPath);
+            if (File.Exists(path))
+            {
+                //检测文件中是否有对应的关键字：
+                string html = File.ReadAllText(path);
+                if (html.Contains("\"" + objName + "\"") || html.Contains("'" + objName + "'"))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        #endregion
         public static bool IsUseUISite
         {
             get

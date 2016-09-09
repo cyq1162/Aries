@@ -160,16 +160,10 @@ namespace Aries.Core
                 case "Get":
                     if (!p.Exists(ObjName))
                     {
-                        string path = context.Server.MapPath(context.Request.UrlReferrer.LocalPath);
-                        if (File.Exists(path))
+                        if (WebHelper.IsKeyInHtml(ObjName))
                         {
-                            //检测文件中是否有对应的关键字：
-                            string html = File.ReadAllText(path);
-                            if (html.Contains("\"" + ObjName + "\"") || html.Contains("'" + ObjName + "'"))
-                            {
-                                p.Set(ObjName, null);
-                                return true;
-                            }
+                            p.Set(ObjName, null);
+                            return true;
                         }
                         return false;
                     }

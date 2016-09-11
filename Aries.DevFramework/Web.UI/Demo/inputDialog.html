@@ -18,24 +18,43 @@
                 <div class="cont-box-form">
                     <div class="line">
                         <div class="short">
-                            <label><em>*</em>（单选）F1：</label>
-                            <input name="F1" dialog="Demo_TestA"  />
+                            <label><em>*</em>（单选）F6：</label>
+                            <input name="F6" dialog="Demo_TestA" />
                         </div>
                         <div class="short">
-                            <label><em>*</em>（多选）F3：</label>
-                            <input name="F3" dialog="Demo_TestA" multiple="true" />
+                            <label><em>*</em>（多选）F7：</label>
+                            <input name="F7" dialog="Demo_TestA" multiple="true" />
                         </div>
-
+                        <div class="short">
+                            <label><em>*</em>（可编辑）F8：</label>
+                            <input name="F8" dialog="Demo_TestA" multiple="true" editable="true" />
+                        </div>
                     </div>
                     <div class="line">
                         <div class="short">
-                            <label><em>*</em>（可编辑）F4：</label>
-                            <input name="F4" dialog="Demo_TestA" multiple="true" editable="true" />
+                            <label><em>*</em>（填充）F1：</label>
+                            <input name="F1" />
+                        </div>
+                        <div class="short">
+                            <label><em>*</em>（填充）F3：</label>
+                            <input name="F3" />
+                        </div>
+                        <div class="short">
+                            <label><em>*</em>（填充）F4：</label>
+                            <input name="F4" />
                         </div>
                     </div>
                 </div>
             </div>
+            <script>
+                AR.Combobox.onAfterExecute = function (type, $input, backPara) {
+                    if (type == "dialog") {
+                        if (!$input.attr("mutiple")) //单选时{
+                            AR.Form.$target.form("load", backPara.datas);
+                    }
+                }
 
+            </script>
     </form>
 </body>
 </html>

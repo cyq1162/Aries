@@ -1793,11 +1793,71 @@
         initDialogCombobox = function () {
             $("[dialog]").each(function () {
                 $(this).on("click", function () {
-                    $Core.Utility.Window.inputDialog($(this));
+                    _showInputDialog($(this));
                 });
 
             });
         }
+        function _showInputDialog($input) {
+            if (!$input || !$input.attr("dialog")) { alert("dialog参数配置错误!"); return; }
+            var href = "/Web/SysAdmin/DialogView.html?objName=" + $input.attr("dialog");
+            if ($input.attr("multiple")) {
+                href += "&multiple=" + $input.attr("multiple");
+            }
+            if ($input.attr("unshowid")) {
+                href += "&unshowid=" + $input.attr("unshowid");
+            }
+            if ($input.attr("editable")) {
+                href += "&editable=" + $input.attr("editable");
+            }
+            var html = '<iframe scrolling="yes" frameborder="0"  src="' + ($Core.Global.Variable.ui || '') + href + '" style="width:100%;height:98%;"></iframe>'
+            var opts = {
+                toolbar: [{
+                    text: '保存',
+                    iconCls: 'icon-ok',
+                    handler: function () {
+                        var options = document.all.returnValue;
+                        if (!options || options.option.data.length == 0) {
+                            alert('请先选中数据');
+                            return;
+                        }
+                        if ($Core.Combobox.onAfterExecute("dialog", $input, options) != false) {
+                            if ($input.attr("multiple")) {
+                                options.option.onUnselect = function (record) {
+                                    if ($(this).combobox("getValues").length == 0) {
+                                        _showInputDialog($(this));//对多选生效
+                                    }
+                                };
+                            }
+                            else {
+                                options.option.onSelect = function (record) {
+                                    _showInputDialog($(this));//对单选生效
+                                };
+                            }
+                            $input.combobox(options.option);
+                            if ($input.attr("multiple")) {
+                                $input.combobox("setValues", options.values);
+                            }
+                            else {
+                                $input.combobox("select", options.values);
+                            }
+                        }
+                        $("#_div_dialog").dialog("close");
+                    }
+                }, {
+                    text: '取消',
+                    iconCls: 'icon-no',
+                    handler: function () { $("#_div_dialog").dialog("close"); }
+                }],
+                closable: false
+            };
+            if ($input.attr("options")) {
+                opts = $.extend(opts, eval('(' + $input.attr("options") + ')'));
+            }
+            document.all.returnValue = undefined;//清空值。
+            $Core.Utility.Window.dialog("选择数据", html, opts);
+
+        };
         //设置Easyui下拉框的值
         function setValueToCombobox() {
             var data = $Core.Combobox.values;

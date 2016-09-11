@@ -44,18 +44,9 @@ window.AR = (function ($Core) {
 
 (function ($, $Core) {
     $Core.Utility = {
-        /**
-        *浅复制对象属性
-        *@param{object} obj 对象
-        */
-        extendPrototype: function (obj) {
-            function Obj() {
-            }
-            Obj.prototype = new obj();
-            return Obj;
-        },
+
         //深度克隆对象
-        cloneObjcet: function (obj) {
+        cloneObject: function (obj) {
             var objClone;
             if (obj.constructor == Object) {
                 objClone = new obj.constructor();
@@ -77,13 +68,13 @@ window.AR = (function ($Core) {
         },
         //克隆数组
         //hasObjcet,数组是否存在对象
-        cloneArray: function (array, hasObjcet) {
+        cloneArray: function (array, hasObject) {
             var newArray = [];
             if (array) {
-                if (hasObjcet == true) {
+                if (hasObject == true) {
                     for (var i = 0, len = array.length; i < len; i++) {
                         if (typeof (array[i]) == "object") {
-                            newArray.push(this.cloneObjcet(array[i]));
+                            newArray.push(this.cloneObject(array[i]));
                         } else {
                             newArray.push(array[i]);
                         }
@@ -94,15 +85,7 @@ window.AR = (function ($Core) {
             }
             return newArray;
         },
-        /**
-         *字符串转为DOM对象
-         *@param {string} html
-        */
-        parseDom: function (html) {
-            var objE = document.createElement("div");
-            objE.innerHTML = arg;
-            return objE.childNodes;
-        },
+
         /**
          *将普通数组转成树形数组，根据数组内对象的id跟parent属性过滤
          *@nodes {array} nodes
@@ -145,39 +128,7 @@ window.AR = (function ($Core) {
             }
             return ostr;
         },
-        /**
-        *验证值是否存在数组内
-        *@param {Array} array
-        *@param {object} value
-        *@return {bool}
-        */
-        isInArray: function (array, value) {
-            var result = false;
-            each: for (var i = 0; i < array.length; i++) {
-                if (array[i].toString() == value.toString()) {
-                    result = true;
-                    break each;
-                }
-            }
-            return result;
-        },
-        /**
-        *搜索对象是否存在数组
-        *@param {array} array 对象数组
-        *@param {object} obj 对象
-        *@param {string} key 根据对象内想要对比的key
-        *@return {bool}
-        */
-        objIsInArray: function (array, obj, key) {
-            var result = false;
-            f1: for (var i = 0; i < array.length; i++) {
-                if (array[i][key] == obj[key]) {
-                    result = true;
-                    break f1;
-                }
-            }
-            return result;
-        },
+
         //生成随机guid数
         guid: function () {
             var S4 = function () {
@@ -200,13 +151,7 @@ window.AR = (function ($Core) {
             }
             return t.split("").reverse().join("") + "." + r;
         },
-        /**
-        *将字符串转换成正常数字
-        *@param {string} s 数字符串
-        */
-        rmoney: function (s) {
-            return parseFloat(s.replace(/[^\d\.-]/g, ""));
-        },
+
         loadJs: function (url, callback) {
             var done = false;
             var script = document.createElement('script');
@@ -692,120 +637,9 @@ window.AR = (function ($Core) {
 *基于Jquery对象的扩展请写在此代码块内
 */
 (function ($) {
-    //渲染容器下的所有数据
-    $.fn.Render = function (url, queryData, attrFlag, renderComplete) {
-        queryData.mid = mid;//带上权限。
-        var self = $(this);
-        $.ajax({
-            type: "post",
-            url: url,
-            data: queryData,
-            success: function (d) {
-                var jsondata = String2Json(d);
-                if (jsondata) {
-                    var jsonSource;
-                    if (jsondata[0]) {
-                        jsonSource = jsondata[0];
-                    } else {
-                        jsonSource = jsondata;
-                    }
-                    if (window.beforeRender && $.isFunction(window.beforeRender)) {
-                        window.beforeRender(jsonSource);
-                    }
-                    self.find("[" + attrFlag + "]").each(function () {
-                        var type = $(this).attr("type");
-                        if (type) {
-
-                            switch (type) {
-                                case "checkbox":
-                                    var ckb_checked = $(this).attr("value") == jsonSource[$(this).attr(attrFlag)] ? true : false;
-                                    $(this).attr("checked", ckb_checked);
-                                    break;
-                                case "radio":
-                                    var rdo_checked = $(this).attr("value") == jsonSource[$(this).attr(attrFlag)] ? true : false;
-                                    if (rdo_checked) {
-                                        $(this)[0].checked = rdo_checked;
-                                    }
-                                    break;
-                                default:
-                                    $(this).val(jsonSource[$(this).attr(attrFlag)]);
-                                    break;
-                            }
-                        } else {
-                            var tname = $(this)[0].tagName.toLowerCase();
-                            if (tname == 'input' || tname == 'textarea') {
-                                $(this).val(jsonSource[$(this).attr(attrFlag)]);
-                            } else {
-                                $(this).html(jsonSource[$(this).attr(attrFlag)]);
-                            }
-                        }
-                    });
-                    if (typeof (renderComplete) == 'function')
-                        renderComplete(jsonSource);
-                }
-                self = null;
-            },
-            error: function () {
-
-            }
-        });
-    }
-
-    //jsondata,需要渲染的数据
-    //attrFlag,需要渲染的标签标记,默认值 = name
-    //renderComplete,渲染完成的事件参数是data
-    $.fn.renderForm = function (jsondata, attrFlag, renderComplete) {
-        if (jsondata) {
-            var jsonSource;
-            if (jsondata[0]) {
-                jsonSource = jsondata[0];
-            } else {
-                jsonSource = jsondata;
-            }
-            attrFlag = attrFlag || 'name';
-            $(this).find("[" + attrFlag + "]").each(function () {
-                var type = $(this).attr("type");
-                if (type) {
-                    switch (type) {
-                        case "checkbox":
-                            var _value = jsonSource[$(this).attr(attrFlag)];
-                            if ($.type(_value) == "boolean") {
-                                $(this).attr("checked", _value);
-                            } else {
-                                var values = _value.split(',');
-                                for (var i = 0; i < values.length; i++) {
-                                    var ckb_checked = $(this).attr("value") == values[i] ? true : false;
-                                    if (ckb_checked) {
-                                        $(this).attr("checked", ckb_checked);
-                                    }
-                                }
-                            }
-                            break;
-                        case "radio":
-                            var rdo_checked = $(this).attr("value") == jsonSource[$(this).attr(attrFlag)] ? true : false;
-                            if (rdo_checked) {
-                                $(this)[0].checked = rdo_checked;
-                            }
-                            break;
-                        default:
-                            $(this).val(jsonSource[$(this).attr(attrFlag)]);
-                            break;
-                    }
-                } else {
-                    if ($(this).attr("value")) {
-
-                    }
-                    $(this).val(jsonSource[$(this).attr(attrFlag)]);
-                }
-            });
-            if (typeof (renderComplete) == 'function')
-                renderComplete(jsonSource);
-        }
-        self = null; //release object remenber
-    }
-
+   
     //转换input变成lable形式
-    $.fn.ConvertToView = function () {
+    $.fn.toView = function () {
         $(this).find(":input[type!='button'][type!='rest']").each(function () {
             var $jqueryItem = jQuery(this);
             if ($jqueryItem.css("display") == "none" || $jqueryItem.attr("type") == "hidden") {
@@ -830,7 +664,7 @@ window.AR = (function ($Core) {
     /**
     *@return {bool}
     */
-    $.IsNullOrEmpty = function (obj) {
+    $.isNullOrEmpty = function (obj) {
         if (obj && obj.trim() != "") {
             return false;
         } else {

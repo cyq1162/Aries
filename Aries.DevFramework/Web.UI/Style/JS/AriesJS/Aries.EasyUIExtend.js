@@ -165,6 +165,13 @@ $.fn.form.methods.load = function (jq, param) {
             $(this).attr("checked", _value);
         }
     });
+    $("span[name],label[name]").each(function () {
+        var value = param[$(this).attr('name')];
+        if (value != undefined)
+        {
+            $(this).html(value);
+        }
+    });
 }
 
 //扩展datagrid的编辑器类型：datetimebox

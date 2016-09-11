@@ -8,28 +8,29 @@
     <link href="/Style/CSS/style.css" rel="stylesheet" />
 </head>
 <body>
-    <form>
-        <div class="cont-box">
-            <div class="cont-box-tit">
-                <h3>Demo_TestA</h3>
-                <a class="arrows hover"></a>
-            </div>
-            <div class="cont-box-in">
-                <div class="cont-box-form">
-                    <div class="line">
-                        <div class="short">
-                            <label><em>*</em>（单选）F6：</label>
-                            <input name="F6" dialog="Demo_TestA" />
-                        </div>
-                        <div class="short">
-                            <label><em>*</em>（多选）F7：</label>
-                            <input name="F7" dialog="Demo_TestA" multiple="true" />
-                        </div>
-                        <div class="short">
-                            <label><em>*</em>（可编辑）F8：</label>
-                            <input name="F8" dialog="Demo_TestA" multiple="true" editable="true" />
-                        </div>
+
+    <div class="cont-box">
+        <div class="cont-box-tit">
+            <h3>Demo_TestA</h3>
+            <a class="arrows hover"></a>
+        </div>
+        <div class="cont-box-in">
+            <div class="cont-box-form">
+                <div class="line">
+                    <div class="short">
+                        <label><em>*</em>（单选）F6：</label>
+                        <input name="F6" dialog="Demo_TestA" />
                     </div>
+                    <div class="short">
+                        <label><em>*</em>（多选）F7：</label>
+                        <input name="F7" dialog="Demo_TestA" multiple="true" />
+                    </div>
+                    <div class="short">
+                        <label><em>*</em>（可编辑）F8：</label>
+                        <input name="F8" dialog="Demo_TestA" multiple="true" editable="true" />
+                    </div>
+                </div>
+                <form>
                     <div class="line">
                         <div class="short">
                             <label><em>*</em>（填充）F1：</label>
@@ -37,24 +38,25 @@
                         </div>
                         <div class="short">
                             <label><em>*</em>（填充）F3：</label>
-                            <input name="F3" />
+                            <span name="F3"></span>
                         </div>
                         <div class="short">
                             <label><em>*</em>（填充）F4：</label>
-                            <input name="F4" />
+                            <label name="F4" ></label>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
-            <script>
-                AR.Combobox.onAfterExecute = function (type, $input, backPara) {
-                    if (type == "dialog") {
-                        if (!$input.attr("mutiple")) //单选时{
-                            AR.Form.$target.form("load", backPara.datas);
-                    }
+        </div>
+        <script>
+            AR.Combobox.onAfterExecute = function (type, $input, backPara) {
+                if (type == "dialog") {
+                    if (!$input.attr("mutiple")) //单选时{
+                        AR.Form.$target.form("load", backPara.datas);
+                        AR.Form.$target.toView();
                 }
+            }
 
-            </script>
-    </form>
+        </script>
 </body>
 </html>

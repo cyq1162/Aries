@@ -861,7 +861,7 @@
                                 actionKeys.indexOf(",del,") > -1 && len++;
                             }
                             if (len > 0) {
-                                var pkColumn = $Core.Utility.cloneObjcet(json_data[i]);
+                                var pkColumn = $Core.Utility.cloneObject(json_data[i]);
                                 pkColumn.formatter = this.pkFormatter(dg);
                                 //if (dg.isEditor) {
                                 //    var len = dg.PKColumn._btnArray.length;
@@ -1141,7 +1141,7 @@
         if (v.toString().indexOf(',') != -1) {
             var array = v.split(','), result = [];
             for (var i = 0; i < obj.length; i++) {
-                if ($Core.Utility.isInArray(array, obj[i]['value'])) {
+                if (array.contains(obj[i]['value'])) {
                     result.push(obj[i]['text']);
                 }
             }
@@ -1165,14 +1165,14 @@
             var valueArray = value.toString().split(',');
             var isIn = false;
             for (var i = 0; i < items.length; i++) {
-                isIn = $Core.Utility.isInArray(valueArray, items[i].value);
+                isIn = valueArray.contains(items[i].value);
                 if (!isIn) {
                     var iValue = items[i].value.toString();
                     if (iValue == "1" || iValue == "0") {
-                        isIn = $Core.Utility.isInArray(valueArray, iValue == "1" ? true : false);
+                        isIn = valueArray.contains(iValue == "1" ? true : false);
                     }
                     else if (iValue == "true" || iValue == "false") {
-                        isIn = $Core.Utility.isInArray(valueArray, iValue == "true" ? 1 : 0);
+                        isIn = valueArray.contains(iValue == "true" ? 1 : 0);
                     }
                 }
                 if (isIn) {
@@ -1192,7 +1192,7 @@
         if (items != undefined && text != undefined && text != null && text.toString() != '') {
             var valueArray = text.toString().split(',');
             for (var i = 0; i < items.length; i++) {
-                if ($Core.Utility.isInArray(valueArray, items[i].text)) {
+                if (valueArray.contains(items[i].text)) {
                     itemValue.push(items[i].value);
                 }
             }

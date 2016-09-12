@@ -45,6 +45,7 @@
                         d.value = rowData[id];
                         comboboxOption.data.push(d);
                         returnValue.values = d.value;
+                        returnValue.datas = rowData;
                         parent.document.all.returnValue = returnValue;
                     }
                 },
@@ -72,6 +73,7 @@
                     comboboxOption.data.push(d);
                 }
                 returnValue.values = dg.getCheckedId(id);
+                returnValue.datas = rows;
                 parent.document.all.returnValue = returnValue;
             }
             else {

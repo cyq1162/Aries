@@ -7,7 +7,9 @@
 
 </head>
 <body>
+    <div title="我要把工具条放这里面来" id="toolbar">
 
+    </div>
     <div style="height: 300px;">
         <div id="dg"></div>
     </div>
@@ -69,11 +71,14 @@
         grid.Search.$target = $('#dg_toolbar');
     }
     grid.options = {
-        queryParams: { "a": 1 },
+        //fit:false,
+        //queryParams: { "a": 1 },
         onLoadSuccess: function () {
-            grid.datagrid("freezeRow", 1);
-            grid.datagrid("freezeRow", 2);
+           // grid.ToolBar.$target.appendTo("#toolbar");
            // alert('options.onLoadSuccess');
+            //grid.datagrid("freezeRow", 1);
+            //grid.datagrid("freezeRow", 2);
+            
         },
         onBeforeLoad: function () {
            
@@ -85,10 +90,9 @@
        // alert('BtnQuery.onBeforeExecute');
     }
     // grid.isShowToolArea = false;
-  // grid.ToolBar.isHidden = true;
+  grid.ToolBar.isHidden = true;
     //grid.Search.isHidden = true;
     //grid.Search.$target.find('[name="F1"]').val('test');    
-
     grid.ToolBar.add('自定义按钮', 'fn', 10, 'btn-lg');
     grid.PKColumn.add('edit', '编辑', null, 'edit.html', '编辑Test表');
     grid.PKColumn.add('del');
@@ -138,5 +142,6 @@
     function imgFormatter(value, row, index) {
         return "<img src='" + value + "\' />";
     }
+    //AR.Utility.Window.showMsg("hellow", "title");
 </script>
 

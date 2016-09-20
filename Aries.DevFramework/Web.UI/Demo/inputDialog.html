@@ -38,11 +38,11 @@
                         </div>
                         <div class="short">
                             <label><em>*</em>（填充）F3：</label>
-                            <span name="F3"></span>
+                            <input name="F3" /><!--<span name="F3"></span>-->
                         </div>
                         <div class="short">
                             <label><em>*</em>（填充）F4：</label>
-                            <label name="F4" ></label>
+                            <input name="F4" /><!--<label name="F4"></label>-->
                         </div>
                     </div>
                 </form>
@@ -50,10 +50,11 @@
         </div>
         <script>
             AR.Combobox.onAfterExecute = function (type, $input, backPara) {
+              //  alert(JSON.stringify(backPara));
                 if (type == "dialog") {
                     if (!$input.attr("mutiple")) //单选时{
                         AR.Form.$target.form("load", backPara.datas);
-                        AR.Form.$target.toView();
+                    //AR.Form.$target.toView();
                 }
             }
 

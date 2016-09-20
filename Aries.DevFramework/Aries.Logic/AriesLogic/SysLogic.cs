@@ -153,7 +153,7 @@ namespace Aries.Logic
 
         #region 菜单权限相关操作
         /// <summary>
-        /// 获取菜单（菜单管理）
+        /// 获取菜单（菜单管理，Json已转小写）
         /// </summary>
         /// <returns></returns>
         public string GetMenuJson()
@@ -165,7 +165,7 @@ namespace Aries.Logic
                 dt = action.Select("ORDER BY menulevel ASC,sortorder asc");
             }
 
-            return dt.ToJson();
+            return dt.ToJson(false, false, true);//字段转小写，兼容Oracle
         }
         /// <summary>
         /// 获取所有权限
@@ -176,7 +176,7 @@ namespace Aries.Logic
             string result = string.Empty;
             using (MAction action = new MAction(TableNames.Sys_Action))
             {
-                result = action.Select().ToJson();
+                result = action.Select().ToJson(false, false, true);
             }
             return result;
         }
@@ -193,7 +193,7 @@ namespace Aries.Logic
             {
                 if (action.Fill(id))
                 {
-                    result = action.Data.ToJson();
+                    result = action.Data.ToJson(true);
                 }
             }
             return result;
@@ -328,7 +328,7 @@ namespace Aries.Logic
         }
         public string GetMenuAndAction()
         {
-            return SysMenu.SysMenuAction.ToJson();
+            return SysMenu.SysMenuAction.ToJson(true, false, true);
         }
 
         public string GetMenuIDsandActionIds()

@@ -142,7 +142,6 @@
     <Content Include="Style\Images\tjlist-icon.png" />
     <Content Include="Style\Images\txtlist-icon.png" />
     <Content Include="Style\Images\wenzi.png" />
-    <Content Include="Style\JS\AjaxUpload.js" />
     <Content Include="Style\JS\AriesJS\Aries.Common.js" />
     <Content Include="Style\JS\AriesJS\Aries.Config.js" />
     <Content Include="Style\JS\AriesJS\Aries.DataGrid.js" />
@@ -522,7 +521,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>4432</DevelopmentServerPort>
+          <DevelopmentServerPort>13392</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:8011/AR</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

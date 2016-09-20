@@ -147,7 +147,6 @@ $.fn.treegrid.defaults.loadFilter = function (data, parentId) {
 };
 
 /**
-* @author 梁水 
 * 重写 Jquery-Easyui form的load事件
 */
 var _formload = $.fn.form.methods.load;
@@ -158,6 +157,19 @@ $.fn.form.methods.load = function (jq, param) {
             param[i] = param[i] == true ? 1 : 0;
         }
     }
+    //兼容Oracle，不区分大小写
+    var _name,_lowerName;
+    $("[name],[comboname]").each(function () {
+        _name = $(this).attr('name') || $(this).attr('comboname');
+        _lowerName=_name.toLowerCase();
+        for (var i in param) {
+            if (i != _name && i.toLowerCase() == _lowerName)
+            {
+                param[_name] = param[i];//追加数据，原来的保留不变
+            }
+        }
+    });
+
     _formload(jq, param);
     $(":checkbox").each(function () {
         var _value = param[$(this).attr('name')];

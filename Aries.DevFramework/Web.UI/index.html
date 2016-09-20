@@ -169,10 +169,10 @@
         var mIsShortcut = false, //用于标记判断是否是快捷菜单点击后的触发
             onHideLevel2 = true;//是否开启隐藏二级空菜单
         $(function () {
-            var menuJsonData = AR.Utility.Ajax.get("GetUserMenu", null, null, false).rows;
+            var menuJsonData = AR.Utility.Ajax.get("GetUserMenu", null, null, false);
 
             var rootID = undefined;
-            var jsondata = formatTreeJson(menuJsonData, 'MenuID', 'MenuName', 'ParentMenuID', rootID);
+            var jsondata = formatTreeJson(menuJsonData, 'menuid', 'menuname', 'parentmenuid', rootID);
 
             var div_menus = $("#div_menus");
             var ul_power = $("#ul_power");
@@ -187,11 +187,11 @@
                 div_menus.html("");
                 var selfID = $(this).children("a").attr("selfid");
 
-                var jsondata = formatTreeJson(menuJsonData, 'MenuID', 'MenuName', 'ParentMenuID', selfID);
+                var jsondata = formatTreeJson(menuJsonData, 'menuid', 'menuname', 'parentmenuid', selfID);
                 if (jsondata.length == 0) {
                     return false;
                 }
-                if (JSON.stringify(jsondata).indexOf('"MenuLevel":3') == -1) {
+                if (JSON.stringify(jsondata).indexOf('"menulevel":3') == -1) {
                     if (onHideLevel2) {
                         div_menus.hide();
                         $('#layout_container').layout('panel', 'north').panel("resize", { height: 82 });
@@ -217,8 +217,8 @@
                 $(this).addClass("hover");
                 ul_power.html("");
                 var selfID = $(this).attr("selfID");
-                var jsondata = formatTreeJson(menuJsonData, 'MenuID', 'MenuName', 'ParentMenuID', selfID);
-                if (JSON.stringify(jsondata).indexOf('"MenuLevel":4') == -1) {  //||jsondata[0].children[0]==undefined 临时处理           
+                var jsondata = formatTreeJson(menuJsonData, 'menuid', 'menuname', 'parentmenuid', selfID);
+                if (JSON.stringify(jsondata).indexOf('"menulevel":4') == -1) {  //||jsondata[0].children[0]==undefined 临时处理           
                     ul_power.removeClass("easyui-tree").addClass("sidebar-nav");
                     initMenu(jsondata, ul_power, 1);
                 }
@@ -227,7 +227,7 @@
                         data: jsondata,
                         loadFilter: function (data) { return data },
                         onClick: function (node) {
-                            showTab(node.attributes.MenuUrl, node.text);
+                            showTab(node.attributes.menuurl, node.text);
                         },
                         onLoadSuccess: function () {
                             //重置图片URL地址
@@ -327,12 +327,12 @@
         function initMenu(jsonSource, Dom, tempIndex) {
             var innnerhtml = "";
             for (var i = 0; i < jsonSource.length; i++) {
-                if (jsonSource[i].attributes.IsShow == 1) {
-                    var MenuID = jsonSource[i].id;
-                    var MenuName = jsonSource[i].text;
-                    var MenuUrl = jsonSource[i].attributes.MenuUrl;
+                if (jsonSource[i].attributes.isshow == 1) {
+                    var menuID = jsonSource[i].id;
+                    var menuName = jsonSource[i].text;
+                    var menuUrl = jsonSource[i].attributes.menuurl;
                     var template = mTemplate[tempIndex];
-                    innnerhtml = innnerhtml + AR.Utility.stringFormat(template, MenuID, MenuName, MenuUrl);
+                    innnerhtml = innnerhtml + AR.Utility.stringFormat(template, menuID, menuName, menuUrl);
                 }
             }
             Dom.html(innnerhtml);
@@ -438,7 +438,7 @@
                 var cn = new Array();
                 for (var i = 0; i < nodesdatas.length; i++) {
                     var n = {}, attrs = {};
-                    if (nodesdatas[i].IsShow == 0) { continue; };
+                    if (nodesdatas[i].isshow == 0) { continue; };
                     each: for (var j in nodesdatas[i]) {
                         if (j == idField || j == textField) {
                             continue each;

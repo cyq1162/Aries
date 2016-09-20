@@ -92,7 +92,7 @@ a:hover{text-decoration:none; color:#ba2636;}
 .cont-box-tit a.arrows{ float:right; display:inline-block; background:url(../images/layout_arrows.png) -16px -16px no-repeat; margin:16px 15px 6px 0; width:16px; height:16px; vertical-align:top;}
 .cont-box-tit a.hover{ background:url(../images/layout_arrows.png) -16px 0 no-repeat;}
 .cont-box-tit a.arrows:hover{ background-color:#fff; -moz-border-radius:3px; -webkit-border-radius:3px; border-radius:3px;margin-right:}
-.cont-box-in{ padding:43px 20px;  zoom:1;}
+.cont-box-in{ padding:28px 20px;  zoom:1;}
 .cont-box-text tr{ height:26px; line-height:26px;}
 .cont-box-text th{ font-weight:normal; text-align:right; color:#333; padding-right:5px;}
 .cont-box-text td{ color:#666;}
@@ -109,9 +109,9 @@ a:hover{text-decoration:none; color:#ba2636;}
 .cont-box-form .line input {width:500px;display:block;}
 .cont-box-form .line input, .cont-box-form .line select, .cont-box-form .line textarea{ border:solid 1px #95b8e7; vertical-align:middle;}
 .cont-box-form .line input{ height:28px !important; line-height:28px !important; width:148px ; padding:0; text-indent:5px; float:left;margin-bottom:12px;border-radius:4px;-webkit-animationborder-radius:4px;-o-border-radius:4px;}
-.cont-box-form .line input#MenuName {width:80% !important;margin-bottom:1%;}
-.cont-box-form .line input#MenuUrl {width:80% !important;margin-bottom:1%;}
-.cont-box-form .line input#SortOrder{width:80% !important;}
+.cont-box-form .line input#menuname {width:80% !important;margin-bottom:1%;}
+.cont-box-form .line input#menuurl {width:80% !important;margin-bottom:1%;}
+.cont-box-form .line input#sortorder{width:80% !important;}
 .cont-box-form .line .formRad {width:76% !important;margin-bottom:1%;}
 .cont-box-form .line-checkbox input{ float:none; margin:0 5px;}
 .combo-text{ vertical-align:top!important; padding:0px!important; border:0 none!important; width:130px; text-indent:3px;}

@@ -1800,7 +1800,7 @@
         }
         function _showInputDialog($input) {
             if (!$input || !$input.attr("dialog")) { alert("dialog参数配置错误!"); return; }
-            var href = "/Web/SysAdmin/DialogView.html?objName=" + $input.attr("dialog");
+            var href = ($Core.Global.Variable.ui || "") + "/Web/SysAdmin/DialogView.html?objName=" + $input.attr("dialog");
             if ($input.attr("multiple")) {
                 href += "&multiple=" + $input.attr("multiple");
             }
@@ -1834,6 +1834,7 @@
                                     _showInputDialog($(this));//对单选生效
                                 };
                             }
+                            
                             $input.combobox(options.option);
                             if ($input.attr("multiple")) {
                                 $input.combobox("setValues", options.values);

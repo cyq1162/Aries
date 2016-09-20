@@ -151,26 +151,23 @@ namespace Aries.Controllers
             sysLogic = new SysLogic(this);
         }
         /// <summary>
-        /// 获取树菜单
-        /// luoshushi
+        /// 获取树菜单(Json转小写)[MenuEdit.html]
         /// </summary>
         public void GetMenu()
         {
             jsonResult = sysLogic.GetMenuJson();
-            jsonResult = jsonResult.Replace(",\"ParentMenuID\":\"\"", "");//兼容为空的情况。
+            jsonResult = jsonResult.Replace(",\"parentmenuid\":\"\"", "");//兼容为空的情况。
         }
 
         /// <summary>
-        /// 获取权限
-        /// luoshushi
+        /// 获取权限（Json转小写）[MenuEdit.html]
         /// </summary>
         public void GetActions()
         {
             jsonResult = sysLogic.GetActions();
         }
         /// <summary>
-        /// 获取菜单详细数据
-        /// luoshushi
+        /// 获取菜单详细数据[MenuEdit.html]
         /// </summary>
         public void GetMenuDetails()
         {
@@ -178,9 +175,8 @@ namespace Aries.Controllers
         }
 
         /// <summary>
-        /// 删除菜单
+        /// 删除菜单[MenuEdit.html]
         /// {id:menuid}
-        /// luoshushi
         /// </summary>
         public void DeleteMenu()
         {
@@ -188,25 +184,31 @@ namespace Aries.Controllers
         }
 
         /// <summary>
-        /// 验证菜单是否有子菜单
+        /// 验证菜单是否有子菜单[MenuEdit.html]
         /// </summary>
         public void ValidMenuHasChild()
         {
             jsonResult = sysLogic.ValidMenuHasChild();
         }
-
+        /// <summary>
+        /// [RoleAction.html]
+        /// </summary>
         public void GetMenuAndAction()
         {
             jsonResult = sysLogic.GetMenuAndAction();
         }
 
-
+        /// <summary>
+        /// [RoleAction.html]
+        /// </summary>
         public void GetMenuIDsandActionIds()
         {
             jsonResult = sysLogic.GetMenuIDsandActionIds();
         }
 
-
+        /// <summary>
+        /// [RoleAction.html]
+        /// </summary>
         public void AddPromission()
         {
             jsonResult = sysLogic.AddPromission();

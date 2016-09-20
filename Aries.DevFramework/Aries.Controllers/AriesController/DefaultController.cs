@@ -105,7 +105,7 @@ namespace Aries.Controllers
                     }
                 }
             }
-            jsonResult = dt.ToJson();
+            jsonResult = dt.ToJson(false, false, true);
         }
     }
 }

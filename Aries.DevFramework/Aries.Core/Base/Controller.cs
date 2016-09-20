@@ -13,6 +13,7 @@ using Aries.Core.Config;
 using Aries.Core.Helper;
 using Aries.Core.Sql;
 using Aries.Core.Extend;
+using Aries.Core.DB;
 
 
 namespace Aries.Core
@@ -438,7 +439,7 @@ namespace Aries.Core
         /// </summary>
         public virtual void GetList()
         {
-            jsonResult = Select(GridConfig.SelectType.Show).ToJson();
+            jsonResult = Select(GridConfig.SelectType.Show).ToJson(true, false, true);
         }
         /// <summary>
         /// 获取一行数据。
@@ -810,9 +811,20 @@ namespace Aries.Core
             {
                 //dt = GridConfig.Check(ObjCode, dt);
             }
-            //顺带处理视图语句与菜单名称的绑定
-            KeyValueConfig.SetTableDescription(ObjName, p.MenuName);
-            jsonResult = dt.ToJson(false, false, true);
+            if (dt.Rows.Count > 0)
+            {
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    dt.Rows[i][Config_Grid.Field].Value = dt.Rows[i].Get<string>(Config_Grid.Field).ToLower();
+                }
+                //顺带处理视图语句与菜单名称的绑定
+                KeyValueConfig.SetTableDescription(ObjName, p.MenuName);
+                jsonResult = dt.ToJson(false, false, true);
+            }
+            else
+            {
+                jsonResult = JsonHelper.OutResult(false, "Init Column Header Fail!");
+            }
         }
         /// <summary>
         /// 下拉框统一处理参数对象
@@ -923,7 +935,7 @@ namespace Aries.Core
                     }
 
                 }
-                jsonResult = string.IsNullOrEmpty(json.ToString()) ? "[]" : json.ToString(true);
+                jsonResult = json.ToString(true);
             }
         }
 

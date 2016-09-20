@@ -30,13 +30,14 @@
         this.options = {
             //需要追求的请求数据(GetHeader也会追加）。
             queryParams: {},
-            defaultWhere: [],
+            defaultWhere: []
         };
         /*可以事先构建，产生插时行时的默认值*/
         this.defaultInsertData = {};
         //对defaultWhere的操作
         this.addWhere = function (key, value, pattern) {
             if (key && value) {
+                if (!pattern) { pattern = "="; }
                 if (!this.options.defaultWhere) {
                     this.options.defaultWhere = [];
                 }
@@ -191,8 +192,7 @@
                         }
                         //追加工具条(必须存在function-box样式，不然会影响到分页栏的显示)
                         dg.ToolBar.$target = $('<div class="function-box" id="' + dg.id + '_ToolbarArea">');
-                        if (dg.ToolBar.isHidden)
-                        {
+                        if (dg.ToolBar.isHidden) {
                             dg.ToolBar.$target.attr("style", "height:0px;padding:0 0;border-bottom:0px");
                         }
                         dg.ToolArea.$target.append(dg.ToolBar.$target);
@@ -339,7 +339,7 @@
 
         opts = opts || {};
         var searchJson = [];
-        
+        var options = $.extend(cfg, opts);
         if (dg.Search && dg.Search.$target) {
             var tForm = dg.Search.$target.children('form');
             searchJson = $Core.Common._Internal.buildSearchJson(tForm);
@@ -348,10 +348,10 @@
             searchJson = searchJson.concat(opts.defaultWhere);
         }
         if (searchJson.length > 0) {
-            cfg.queryParams['sys_search'] = JSON.stringify(searchJson);
+            options.queryParams['sys_search'] = JSON.stringify(searchJson);
         }
-        //_createEditor(dg);
-        var options = $.extend(cfg, opts);
+
+        
         //请求URL地址设置
         options.url = $Core.Global.route.root + "?sys_method=GetList&sys_objName=" + dg.objName + "&sys_tableName=" + dg.tableName;
         if (dg.type == "datagrid") {

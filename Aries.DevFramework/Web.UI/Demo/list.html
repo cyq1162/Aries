@@ -70,21 +70,21 @@
     if (customToolbar) {
         grid.Search.$target = $('#dg_toolbar');
     }
-    grid.options = {
-        //fit:false,
-        //queryParams: { "a": 1 },
-        onLoadSuccess: function () {
-           // grid.ToolBar.$target.appendTo("#toolbar");
-           // alert('options.onLoadSuccess');
-            //grid.datagrid("freezeRow", 1);
-            //grid.datagrid("freezeRow", 2);
+    //grid.options = {
+    //    //fit:false,
+    //    queryParams: { "a": 1 },
+    //    onLoadSuccess: function () {
+    //       // grid.ToolBar.$target.appendTo("#toolbar");
+    //       // alert('options.onLoadSuccess');
+    //        //grid.datagrid("freezeRow", 1);
+    //        //grid.datagrid("freezeRow", 2);
             
-        },
-        onBeforeLoad: function () {
+    //    },
+    //    onBeforeLoad: function () {
            
-           // alert('onBeforeLoad');
-        }
-    }
+    //       // alert('onBeforeLoad');
+    //    }
+    //}
     grid.Search.BtnQuery.onBeforeExecute = function (data)
     {
        // alert('BtnQuery.onBeforeExecute');
@@ -109,10 +109,10 @@
     //    { paramName: 'F1', paramPattern: 'like', paramValue: '1' },
     //    { paramName: 'F3', paramPattern: 'like', paramValue: '3' }
     //];
-    //grid.addWhere("f3", "3");
+   grid.addWhere("f1", "3","like");
     grid.Search.onAfterExecute = function () {
         if (!customToolbar && this.Items.length > 0) {
-            this.Items["F1"] && this.Items["F1"].val('1');
+          //  this.Items["f1"] && this.Items["f1"].val('1');
         }
         // this.Items['F2'].val(1);
         //this.Items['F3'][0].val('2016-07-08');

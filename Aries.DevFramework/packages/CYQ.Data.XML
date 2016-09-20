@@ -2177,12 +2177,12 @@
         </member>
         <member name="F:CYQ.Data.InsertOp.ID">
             <summary>
-            使用此项：插入数据后会返回ID。
+            使用此项：插入数据后会返回ID[默认选项]。
             </summary>
         </member>
         <member name="F:CYQ.Data.InsertOp.Fill">
             <summary>
-            使用此项：插入数据后,会根据返回ID进行查询后填充数据行,[默认选项]
+            使用此项：插入数据后,会根据返回ID进行查询后填充数据行。
             </summary>
         </member>
         <member name="T:CYQ.Data.Orm.DBFast">
@@ -2545,6 +2545,11 @@
             <param name="entityInstance">实体对象,一般写:this</param>
             <param name="tableName">表名,如:Users</param>
             <param name="conn">数据链接,单数据库时可写Null,或写默认链接配置项:"Conn",或直接数据库链接字符串</param>
+        </member>
+        <member name="M:CYQ.Data.Orm.SimpleOrmBase.SetDelayInit(System.Object,System.String,System.String,CYQ.Data.Aop.AopOp)">
+            <summary>
+            将原有的初始化改造成延时加载。
+            </summary>
         </member>
         <member name="M:CYQ.Data.Orm.SimpleOrmBase.Insert">
             <summary>
@@ -3730,6 +3735,11 @@
         <member name="F:CYQ.Data.OracleDal.ManagedName">
             <summary>
             区分Oracle11和Oracle12的Dll名称。
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.OracleDal.isUseOdpNet">
+            <summary>
+            值-1未初始化；0使用OracleClient；1使用DataAccess；2使用ManagedDataAccess
             </summary>
         </member>
         <member name="P:CYQ.Data.OracleDal.IsUseOdpNet">

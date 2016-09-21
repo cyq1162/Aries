@@ -161,11 +161,13 @@ $.fn.form.methods.load = function (jq, param) {
     var _name,_lowerName;
     $("[name],[comboname]").each(function () {
         _name = $(this).attr('name') || $(this).attr('comboname');
-        _lowerName=_name.toLowerCase();
-        for (var i in param) {
-            if (i != _name && i.toLowerCase() == _lowerName)
-            {
-                param[_name] = param[i];//追加数据，原来的保留不变
+        if (_name != undefined) {
+            _lowerName = _name.toLowerCase();
+            for (var i in param) {
+                if (i != _name && i.toLowerCase() == _lowerName) {
+                    param[_name] = param[i];//追加数据，原来的保留不变
+                    break;
+                }
             }
         }
     });

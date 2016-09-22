@@ -15,7 +15,7 @@
     dg.PKColumn.add("detail", "权限分配", 'roleAction', null, "权限分配", "edit");
     dg.bind();
     function roleAction(v, r, i) {
-        var rname = r.RoleName;
+        var rname = r.rolename;
         AR.Utility.Window.open('RoleAction.html?id=' + v, '当前角色（' + rname + '）');
     }
 </script>

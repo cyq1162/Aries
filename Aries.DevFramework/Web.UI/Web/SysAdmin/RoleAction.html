@@ -19,14 +19,11 @@
 </html>
 
 <script type="text/javascript">
-
-    var actionids = "";
-    var menuids = "";
-    var ActionData;
+    var roleID = AR.Utility.queryString("id");
     $(function () {
         $("#btn_save").click(function () {
             $.messager.progress({ title: "温馨提示" });
-            var postData = { RoleID: AR.Utility.queryString("id") };            
+            var postData = { RoleID: roleID };
             if ($('#tree').tree('getRoot').checked) {
                 postData.all = 1;
             } else {
@@ -44,8 +41,8 @@
                             actions[parentNode.id].push(nodes[i].id);
 
                         } else {
-                            actions.MenuID = parentNode.id;
-                            actions.ActionID = 0;
+                            actions.menuid = parentNode.id;
+                            actions.actionid = 0;
                         }
                     }
                 }
@@ -64,21 +61,20 @@
 
         })
 
-        var RoleID = AR.Utility.queryString("id");
-        AR.Utility.Ajax.post("GetMenuAndAction", "Sys_Menu", { RoleID: RoleID }, false, null,
+        
+        AR.Utility.Ajax.post("GetMenuAndAction", "Sys_Menu", { RoleID: roleID }, false, null,
          function (data) {
              $("#tree").tree({
-                 idField: "MenuID",
-                 textField: "MenuName",
+                 idField: "menuid",
+                 textField: "menuname",
                  rootText: "菜单根目录",
                  rootID: undefined,
                  checkbox: true,
-                 parentField: "ParentMenuID",
+                 parentField: "parentmenuid",
                  iconCls: 'icon-mini-add',
                  data: data,
                  onLoadSuccess: function (data) {
                      getActionIds();
-                    // BindIcons(this);
                  }
 
              });
@@ -88,8 +84,7 @@
     })
 
     function getActionIds() {
-        var RoleID = AR.Utility.queryString("id");
-        AR.Utility.Ajax.post("GetMenuIDsandActionIds", "", { RoleID: RoleID }, false, null,
+        AR.Utility.Ajax.post("GetMenuIDsandActionIds", "", { RoleID: roleID }, false, null,
          function (data) {
              for (var i in data) {
                  var node = $("#tree").tree("find", i);
@@ -99,7 +94,7 @@
                      var childen = $("#tree").tree("getChildren", node.target);
                      for (var n = 0; n < action.length; n++) {
                          for (var j = 0; j < childen.length; j++) {
-                             if (childen[j].attributes.ParentMenuID.toString().toLocaleLowerCase() == parentId.toString()) {
+                             if (childen[j].attributes.parentmenuid.toString().toLocaleLowerCase() == parentId.toString()) {
                                  if (childen[j].id.toString().toLocaleLowerCase() == action[n].toString())
                                      $("#tree").tree("check", childen[j].target)
                              }
@@ -107,29 +102,7 @@
                      }
                  }
              }
-
-             //alert(data.menuIDs + "---actionids:" + data.ActionIDs);
          })
     }
-
-
-    function BindEvent() {
-
-    }
-
-    //function BindIcons(tree) {
-    //    var root = $("#tree").tree("getRoot");
-    //    var nodes = $("#tree").tree("getChildren", root.target);
-    //    var style = "background:url('" + "/Style/Images/IconMenu/aqjc.png" + "') no-repeat center center;";
-    //    for (var i = 0; i <= nodes.length - 1; i++) {
-    //        if ($("#tree").tree("isLeaf", nodes[i].target)) {
-    //            var t = nodes[i].target;
-    //            var $t = $(t);
-    //            $t.find(".tree-icon").first().attr("style", style);
-    //        }
-    //    }
-
-    //}
-
 
 </script>

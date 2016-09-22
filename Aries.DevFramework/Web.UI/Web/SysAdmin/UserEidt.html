@@ -27,13 +27,13 @@
                         </div>
                         <div class="short">
                             <label><em>*</em>角色：</label>
-                            <input name="RoleIDs" id="RoleIDs" objname="C_SYS_Role" validtype="combobox" class="easyui-combobox" multiple="true" editable="true" defaultitem="false"  />
+                            <input name="RoleIDs"  objname="C_SYS_Role" validtype="combobox" class="easyui-combobox" multiple="true" editable="true" defaultitem="false"  />
                         </div>
                     </div>
                     <div class="line">
                         <div class="short">
                             <label><em>*</em>登录账号：</label>
-                            <input name="UserName" id="UserName" missingmessage="" class='easyui-validatebox' data-options="required:true,validType:'exists[UserName]'"  />
+                            <input name="UserName" id="UserName" missingmessage="" class='easyui-validatebox' validtype="exists['UserName']"  required="required" />
                         </div>
                         <div class="short">
                             <label><em>*</em>登录密码：</label>

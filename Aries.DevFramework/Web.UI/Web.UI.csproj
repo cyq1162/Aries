@@ -149,7 +149,6 @@
     <Content Include="Style\JS\AriesJS\Aries.EasyUIExtend.js" />
     <Content Include="Style\JS\AriesJS\Aries.Form.js" />
     <Content Include="Style\JS\AriesJS\Aries.Themes.js" />
-    <Content Include="Style\JS\AriesJS\Aries.TreeGrid.js" />
     <Content Include="Style\JS\AriesJS\Aries.Upload.js" />
     <Content Include="Style\JS\AriesJS\Aries.Utility.js" />
     <Content Include="Style\JS\Aries.Loader.js" />

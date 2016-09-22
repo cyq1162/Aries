@@ -1012,6 +1012,7 @@
             }
             else {
                 $input = dg.Search.$target;
+                $input.show();
             }
             dg.Search.$target = $('<div id="' + dg.id + '_SearchArea" class="cont-list-form cont-box-form">');
             var form = $("<form>");

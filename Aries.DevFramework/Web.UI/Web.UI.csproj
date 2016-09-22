@@ -73,6 +73,7 @@
     <Content Include="App_Data\UserType.xml" />
     <Content Include="Demo\combobox.html" />
     <Content Include="Demo\edit.html" />
+    <Content Include="Demo\inputDialog.html" />
     <Content Include="Demo\list.html" />
     <Content Include="Demo\rowedit.html" />
     <Content Include="Demo\treegrid.html" />
@@ -468,6 +469,7 @@
     <Content Include="Web\SysAdmin\Config.html" />
     <Content Include="Web\SysAdmin\ConfigList.html" />
     <Content Include="Web\SysAdmin\CustomView.html" />
+    <Content Include="Web\SysAdmin\DialogView.html" />
     <Content Include="Web\SysAdmin\ExcelConfig.html" />
     <Content Include="Web\SysAdmin\ExcelInfoEdit.html" />
     <Content Include="Web\SysAdmin\ExcelInfoList.html" />

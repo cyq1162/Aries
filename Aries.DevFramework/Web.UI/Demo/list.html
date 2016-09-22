@@ -90,10 +90,10 @@
        // alert('BtnQuery.onBeforeExecute');
     }
     // grid.isShowToolArea = false;
-  grid.ToolBar.isHidden = true;
+ // grid.ToolBar.isHidden = true;
     //grid.Search.isHidden = true;
     //grid.Search.$target.find('[name="F1"]').val('test');    
-    grid.ToolBar.add('自定义按钮', 'fn', 10, 'btn-lg');
+    grid.ToolBar.add('自定义按钮', 'fn', 10, 'btn-lg',"edit");
     grid.PKColumn.add('edit', '编辑', null, 'edit.html', '编辑Test表');
     grid.PKColumn.add('del');
     grid.PKColumn.add('abc', "hello", null, "aaa.html?uid={ID}", "hello world!");//{XXX}的值会被对应的字段值替换（注意大小写）。

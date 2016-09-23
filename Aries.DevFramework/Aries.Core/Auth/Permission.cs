@@ -72,6 +72,7 @@ namespace Aries.Core.Auth
         private static MDictionary<string, string> midTableNameList = new MDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         public void Set(string objName, string tableName)
         {
+            if (string.IsNullOrEmpty(objName)) { return; }
             if (midTableNameList.ContainsKey(MenuID))
             {
                 string value = midTableNameList[MenuID];
@@ -79,7 +80,7 @@ namespace Aries.Core.Auth
                 {
                     value += "," + objName;
                 }
-                if (value.IndexOf(tableName) == -1)
+                if (!string.IsNullOrEmpty(tableName) && value.IndexOf(tableName) == -1)
                 {
                     value += "," + tableName;
                 }
@@ -88,7 +89,7 @@ namespace Aries.Core.Auth
             else
             {
                 string value = objName;
-                if (tableName != objName)
+                if (!string.IsNullOrEmpty(tableName) && tableName != objName)
                 {
                     value += "," + tableName;
                 }
@@ -97,7 +98,7 @@ namespace Aries.Core.Auth
         }
         public bool Exists(string objName)
         {
-            if (midTableNameList.ContainsKey(MenuID))
+            if (!string.IsNullOrEmpty(objName) && midTableNameList.ContainsKey(MenuID))
             {
                 return midTableNameList[MenuID].IndexOf(objName) > -1;
             }
@@ -179,7 +180,7 @@ namespace Aries.Core.Auth
                 else if (uri.LocalPath.ToLower().EndsWith("dialogview.html"))//关键页面，进一步做权限验证
                 {
                     string objName = WebHelper.Query<string>("objName", "", false);//去掉前置的_
-                    if (objName=="" || !WebHelper.IsKeyInHtml(objName))
+                    if (objName == "" || !WebHelper.IsKeyInHtml(objName))
                     {
                         throw new Exception("您没有访问当前请求对象的权限！");
                     }

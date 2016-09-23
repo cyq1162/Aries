@@ -7,6 +7,7 @@ using CYQ.Data.Table;
 using System.Reflection;
 using Aries.Core.Helper;
 using CYQ.Data.Tool;
+using System.IO;
 
 namespace Aries.Core.Auth
 {
@@ -171,34 +172,20 @@ namespace Aries.Core.Auth
         /// <param name="url"></param>
         private void CheckMenu(Uri uri)
         {
-            if (IsEndWith(uri, "") && string.Compare(uri.LocalPath.Substring(0, 7), "/index.", true) != 0) //不是首页
+            if (!HasMenu(uri) && HttpContext.Current.Request.UrlReferrer == null)
             {
-                if (HttpContext.Current.Request.UrlReferrer == null && IsEndWith(uri, "List") && !HasMenu(uri))
+                throw new Exception("No permission to view this page！");
+            }
+            else if (Path.GetFileNameWithoutExtension(uri.LocalPath).ToLower() == "dialogview")//关键页面，进一步做权限验证
+            {
+                string objName = WebHelper.Query<string>("objName", "", false);//去掉前置的_
+                if (objName == "" || !WebHelper.IsKeyInHtml(objName))
                 {
-                    throw new Exception("您没有访问当前请求页面的权限！");
-                }
-                else if (uri.LocalPath.ToLower().EndsWith("dialogview.html"))//关键页面，进一步做权限验证
-                {
-                    string objName = WebHelper.Query<string>("objName", "", false);//去掉前置的_
-                    if (objName == "" || !WebHelper.IsKeyInHtml(objName))
-                    {
-                        throw new Exception("您没有访问当前请求对象的权限！");
-                    }
+                    throw new Exception("No permission on this objName！");
                 }
             }
         }
-        private bool IsEndWith(Uri uri, string key)
-        {
-            string[] items = new[] { ".html", ".aspx", ".shtml" };
-            foreach (string item in items)
-            {
-                if (uri.LocalPath.EndsWith(key + item))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
+
         private MDataRow GetMenu(Uri uri)
         {
             string url = uri.LocalPath;
@@ -237,6 +224,10 @@ namespace Aries.Core.Auth
         {
             string mid = HttpContext.Current.Request["sys_mid"];
             MDataRow menu = GetMenu(uri);
+            if (menu == null && HttpContext.Current.Request.UrlReferrer != null)
+            {
+                menu = GetMenu(HttpContext.Current.Request.UrlReferrer);
+            }
             if (menu == null && !string.IsNullOrEmpty(mid))
             {
                 bool isContain = parentIDList.ContainsKey(uri.LocalPath);
@@ -270,12 +261,12 @@ namespace Aries.Core.Auth
         public bool HasMenu(string menuID)
         {
 
-#if DEBUG
-            if (string.IsNullOrEmpty(menuID) || UserAuth.IsAdmin) // 开发时临时开权限。
-            {
-                return true;
-            }
-#endif
+            //#if DEBUG
+            //            if (string.IsNullOrEmpty(menuID) || UserAuth.IsAdmin) // 开发时临时开权限。
+            //            {
+            //                return true;
+            //            }
+            //#endif
             MDataRow menu = UserMenu.FindRow("MenuID='" + menuID + "'");
             //获取当前请求的Url
             if (menu != null)
@@ -404,109 +395,6 @@ namespace Aries.Core.Auth
             }
             return false;
         }
-        /*
-        /// <summary>
-        /// 默认的权限检测
-        /// </summary>
-        internal bool CheckMethod(string funcName, out MethodEnum m, out string msg)
-        {
 
-            msg = string.Empty;
-            m = MethodEnum.None;
-            //不需要权限的功能：
-            switch (funcName)
-            {
-                case "Login":
-                case "GetKeyValueConfig":
-                    return true;
-
-            }
-            if (funcName.StartsWith("Get"))
-            {
-                if (funcName.Contains("List"))
-                {
-                    m = MethodEnum.GetList;
-                    funcName = "GetList";
-                }
-                else
-                {
-                    m = MethodEnum.Get;
-                    funcName = "Get";
-                }
-            }
-            else if (funcName.StartsWith("Add"))
-            {
-                m = MethodEnum.Add;
-                funcName = "Add";
-            }
-            else if (funcName.StartsWith("Delete"))
-            {
-                m = MethodEnum.Delete;
-                funcName = "Delete";
-            }
-            else if (funcName.StartsWith("Update"))
-            {
-                m = MethodEnum.Update;
-                funcName = "Update";
-            }
-            else if (funcName.StartsWith("Export"))
-            {
-                m = MethodEnum.Export;
-                funcName = "Export";
-            }
-            else if (funcName.StartsWith("Import"))
-            {
-                m = MethodEnum.Import;
-                funcName = "Import";
-            }
-            switch (funcName)
-            {
-                case "Get":
-                case "GetList":
-                    if (!HasMenu())
-                    {
-                        msg = "没有当前页面请求权限！";
-                        return false;
-                    }
-                    break;
-                case "Add":
-                    if (!HasFunc(FuncEnum.Add))
-                    {
-                        msg = "没有添加权限！";
-                        return false;
-                    }
-                    break;
-                case "Delete":
-                    if (!HasFunc(FuncEnum.Del))
-                    {
-                        msg = "没有删除权限！";
-                        return false;
-                    }
-                    break;
-                case "Update":
-                    if (!HasFunc(FuncEnum.Edit))
-                    {
-                        msg = "没有更新权限！";
-                        return false;
-                    }
-                    break;
-                case "Export":
-                    if (!HasFunc(FuncEnum.Export))
-                    {
-                        msg = "没有导出权限！";
-                        return false;
-                    }
-                    break;
-                case "Import":
-                    if (!HasFunc(FuncEnum.Import))
-                    {
-                        msg = "没有导入权限！";
-                        return false;
-                    }
-                    break;
-            }
-            return true;
-        }
-         * */
     }
 }

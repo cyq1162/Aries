@@ -10,7 +10,7 @@ using CYQ.Data;
 
 namespace Aries.Core.Helper
 {
-    internal static class WebHelper
+    internal static partial class WebHelper
     {
         #region 安全Key检测
         public static bool IsKeyInHtml(string objName)
@@ -41,6 +41,17 @@ namespace Aries.Core.Helper
                 }
                 return false;
             }
+        }
+        public static string AriesSuffix
+        {
+            get
+            {
+                return AppConfig.GetApp("Aries.Suffix", ".html");
+            }
+        }
+        public static bool IsAriesSuffix()
+        {
+            return HttpContext.Current.Request.Url.LocalPath.EndsWith(AriesSuffix);
         }
         public static T Query<T>(string key)
         {

@@ -15,9 +15,6 @@ namespace Aries.Core
         internal const string Default = "Default";
         internal const string DefaultController = "DefaultController";
         internal const string AriesController = "Aries.Core.Controller";
-        internal const string TaurusController = "Taurus.Core.Controller";
-        //internal const string DefaultAjaxController = "DefaultAjaxController";
-        //internal const string DefaultViewController = "DefaultViewController";
 
         #region GetAssembly
         private static string _DllName;
@@ -55,66 +52,47 @@ namespace Aries.Core
         #endregion
 
         #region GetControllers
-
-        private static Dictionary<string, Type> _TaurusControllers = new Dictionary<string, Type>(StringComparer.OrdinalIgnoreCase);
         private static Dictionary<string, Type> _AriesControllers = new Dictionary<string, Type>(StringComparer.OrdinalIgnoreCase);
         private static readonly object objLock = new object();
         /// <summary>
         /// 获取控制器
         /// </summary>
-        /// <param name="typeFlag">0：Ajax控制器；1：View控制器</param>
-        /// <returns></returns>
-        private static Dictionary<string, Type> GetControllers(int typeFlag)
+        private static Dictionary<string, Type> GetControllers()
         {
-            if (_AriesControllers.Count == 0 && _TaurusControllers.Count == 0)
+            if (_AriesControllers.Count == 0)
             {
                 lock (objLock)
                 {
-                    if (_AriesControllers.Count == 0 && _TaurusControllers.Count == 0)
+                    if (_AriesControllers.Count == 0)
                     {
                         Assembly ass = GetAssembly();
                         Type[] typeList = ass.GetExportedTypes();
                         foreach (Type type in typeList)
                         {
-                            if (type.BaseType != null)
+                            if (type.BaseType != null && type.BaseType.FullName == AriesController)
                             {
-                                if (type.BaseType.FullName == AriesController)
+                                #region Aries
+                                if (type.Name == DefaultController)
                                 {
-                                    #region Aries
-                                    if (type.Name == DefaultController)
-                                    {
-                                        _AriesControllers.Add(DefaultController, type);
-                                    }
-                                    else
-                                    {
-                                        string[] names = type.FullName.ToLower().Split('.'); //Aa.SystemController
-                                        if (names.Length > 1)
-                                        {
-                                            string className = names[names.Length - 1];
-                                            className = className.Replace(Controller.ToLower(), "");
-                                            
-                                            //string key = Controller.ToLower();
-                                            //if (className.EndsWith(key))
-                                            //{
-                                            //    int subLen = key.Length;
-                                            //    className = className.Substring(0, className.Length - subLen);//不存Controller
-                                            //}
-                                            _AriesControllers.Add(names[names.Length - 2] + "." + className, type);
-                                        }
-                                    }
-                                    #endregion
-
+                                    _AriesControllers.Add(DefaultController, type);
                                 }
-                                else if (type.BaseType.FullName == TaurusController)
+                                else
                                 {
-                                    _TaurusControllers.Add(type.Name.Replace(Controller, ""), type);
+                                    string[] names = type.FullName.ToLower().Split('.'); //Aa.SystemController
+                                    if (names.Length > 1)
+                                    {
+                                        string className = names[names.Length - 1];
+                                        className = className.Replace(Controller.ToLower(), "");
+                                        _AriesControllers.Add(names[names.Length - 2] + "." + className, type);
+                                    }
                                 }
+                                #endregion
                             }
                         }
                     }
                 }
             }
-            return typeFlag == 0 ? _AriesControllers : _TaurusControllers;
+            return _AriesControllers;
         }
         /// <summary>
         /// 通过XXX.className类名获得对应的Controller类
@@ -122,9 +100,9 @@ namespace Aries.Core
         /// <param name="className"></param>
         /// <param name="typeFlag">0：Ajax控制器；1：View控制器</param>
         /// <returns></returns>
-        public static Type GetType(string className, int typeFlag)
+        public static Type GetType(string className)
         {
-            Dictionary<string, Type> controllers = GetControllers(typeFlag);
+            Dictionary<string, Type> controllers = GetControllers();
             if (controllers.ContainsKey(className)) //1：完整匹配【名称空间.类名】
             {
                 return controllers[className];
@@ -132,37 +110,29 @@ namespace Aries.Core
             else
             {
                 string[] items = className.Split('.');
-                if (typeFlag == 0)
+
+                #region Ajax映射处理
+                className = items[items.Length - 1];
+                string okKey = string.Empty;
+                className = "." + className;
+                string path = "." + items[0];
+                foreach (string key in controllers.Keys) //2：部分匹配【.类名】
                 {
-                    #region Ajax映射处理
-                    className = items[items.Length - 1];
-                    string okKey = string.Empty;
-                    className = "." + className;
-                    string path = "." + items[0];
-                    foreach (string key in controllers.Keys) //2：部分匹配【.类名】
+                    if (key.EndsWith(className))
                     {
-                        if (key.EndsWith(className))
-                        {
-                            return controllers[key];
-                        }
-                        else if (key.EndsWith(path))//匹配 目录
-                        {
-                            okKey = key;
-                        }
+                        return controllers[key];
                     }
-                    if (!string.IsNullOrEmpty(okKey))//3：匹配 目录
+                    else if (key.EndsWith(path))//匹配 目录
                     {
-                        return controllers[okKey];
-                    }
-                    #endregion
-                }
-                else if (typeFlag == 1)
-                {
-                    if (!string.IsNullOrEmpty(className) && controllers.ContainsKey(className)) //1：完整匹配【类名】
-                    {
-                        return controllers[className];
+                        okKey = key;
                     }
                 }
+                if (!string.IsNullOrEmpty(okKey))//3：匹配 目录
+                {
+                    return controllers[okKey];
+                }
+                #endregion
+
             }
             if (controllers.ContainsKey(DefaultController))
             {
@@ -170,9 +140,9 @@ namespace Aries.Core
             }
             return null;
         }
-        public static Type GetDefaultType(int typeFlag)
+        public static Type GetDefaultType()
         {
-            Dictionary<string, Type> controllers = GetControllers(typeFlag);
+            Dictionary<string, Type> controllers = GetControllers();
             if (controllers.ContainsKey(DefaultController))
             {
                 return controllers[DefaultController];

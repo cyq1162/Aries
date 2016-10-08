@@ -81,7 +81,7 @@ namespace Aries.Core.Extend
             {
                 foreach (KeyValuePair<string, string> item in fileList)
                 {
-                    if (item.Key.StartsWith("V_") && item.Value.IndexOf('@') == -1)//视图文件,仅处理无参数的。
+                    if (item.Key.StartsWith("V_"))//视图文件
                     {
                         string sql = "";
                         if (item.Value.Contains(":\\"))//存档的是文件路径
@@ -92,7 +92,10 @@ namespace Aries.Core.Extend
                         {
                             sql = item.Value;
                         }
-                        DBTool.GetColumns(sql, GetConn(sql));
+                        if (sql.IndexOf('@') == -1)//仅处理无参数的。
+                        {
+                            DBTool.GetColumns(sql, GetConn(sql));
+                        }
                     }
                 }
 

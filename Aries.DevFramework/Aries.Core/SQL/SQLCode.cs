@@ -198,7 +198,7 @@ namespace Aries.Core.Sql
 
             string key = null;
             //自动配置其它属性
-            if (sql.IndexOf('@') > -1)
+            if (HttpContext.Current != null && sql.IndexOf('@') > -1)
             {
                 string pattern = @"(@[\w^\u4e00-\u9fa5]+)";
                 MatchCollection mt = Regex.Matches(sql, pattern);

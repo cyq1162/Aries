@@ -183,6 +183,7 @@ namespace Aries.Core.Sql
         }
         public static string FormatPara(string sql)
         {
+            if (HttpContext.Current == null) { return sql; }//子线程时不处理 
             if (sql.IndexOf("@UserID") > -1)
             {
                 sql = sql.Replace("@UserID", UserAuth.UserID.ToString());
@@ -198,7 +199,7 @@ namespace Aries.Core.Sql
 
             string key = null;
             //自动配置其它属性
-            if (HttpContext.Current != null && sql.IndexOf('@') > -1)
+            if (sql.IndexOf('@') > -1)
             {
                 string pattern = @"(@[\w^\u4e00-\u9fa5]+)";
                 MatchCollection mt = Regex.Matches(sql, pattern);

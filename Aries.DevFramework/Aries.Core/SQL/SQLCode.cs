@@ -57,8 +57,11 @@ namespace Aries.Core.Sql
             }
             set
             {
-                _FileList.Clear();
-                _FileList = null;
+                if (_FileList != null)
+                {
+                    _FileList.Clear();
+                    _FileList = null;
+                }
             }
         }
         /// <summary>

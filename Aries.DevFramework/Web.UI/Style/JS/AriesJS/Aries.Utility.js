@@ -1,4 +1,4 @@
-﻿
+﻿//AR.Global 定义
 window.AR = (function ($Core) {
     //自定义的健值对数组
     $Core.Dictionary = function () {
@@ -37,11 +37,40 @@ window.AR = (function ($Core) {
         *页面全局变量
         *ui(虚拟应用程序的路径)，actionkeys（页面对应的权限集）,mid（当前菜单ID）
         */
-        Variable: {}
+        Variable: {},
+        //存档用户信息
+        _User: undefined,
+        /*
+       *获取当前登陆用户的信息
+       */
+        GetUser: function (callBack) {
+            var topWin = window;
+            if (!this._User) {
+                this._User = (function (win) {//递归到index.html页取值。
+                    var ar = win.AR;
+                    if (ar.Global._User || win == win.top) {
+                        topWin = win;
+                        return ar.Global._User;
+                    }
+                    return arguments.callee(win.parent.window);
+                })(topWin);
+            }
+            if (!this._User)//从远程获取。
+            {
+                AR.Utility.Ajax.get("GetUserInfo", null, null, true, null, function (data) {
+                    AR.Global._User = data;
+                    callBack && callBack(data);
+                });
+            }
+            else {
+                return this._User;
+            }
+        }
     };
     return $Core;
 })(window.AR || {});
 
+//AR.Utility 定义
 (function ($, $Core) {
     $Core.Utility = {
 
@@ -91,14 +120,18 @@ window.AR = (function ($Core) {
          *@nodes {array} nodes
          *@return {array} 树形数组
         */
-        //获取树形递归,nodes参数是一个对象数组，根据对象的id跟parent属性过滤
+        //获取下拉树形递归,nodes参数是一个对象数组，根据对象的id跟parent属性过滤
         getTree: function (nodes) {
-            return function (parentid) {
+            return function (pid) {
+                pid || (pid=''); //undefined,null,都转''处理
                 var cn = new Array();
-                for (var i = 0; i < nodes.length; i++) {
+                for (var i = 0; i < nodes.length; i++)
+                {
                     var n = nodes[i];
-                    n.id = n.value;
-                    if (n.parent == parentid) {
+                    n.parent || (n.parent='')
+                    if (n.parent == pid)
+                    {
+                        n.id = n.value;
                         n.children = arguments.callee(n.id);
                         cn.push(n);
                     }
@@ -294,14 +327,13 @@ window.AR = (function ($Core) {
                         input.attr("objname", objName);
                     }
                     if (dataArray[i].rules && dataArray[i].rules.indexOf('#') != -1) {
-                        //unshowid 标记只显示text 不显示 value 针对查询区域使用
+                        //onlytext 标记只显示text 不显示 value 针对查询区域使用
                         input.attr('multiple', 'true').attr('pattern', 'IN');
-                        //input.attr("unshowid", true);
                     }
                     if (dataArray[i].rules && dataArray[i].rules.indexOf("$2") != -1) {
                         this._setInputAttr(input, dataArray[i].rules, "$2:");
                     }
-                    
+
                 }
                 else if (dataArray[i].datatype)//非绑定下拉
                 {
@@ -633,11 +665,40 @@ window.AR = (function ($Core) {
     })();
 })(jQuery, AR);
 
-/**
-*基于Jquery对象的扩展请写在此代码块内
-*/
+
+//AR.BtnBase 基类的定义
+(function ($Core) {
+    $Core.ExecuteEvent = ExecuteEvent;
+    function ExecuteEvent() {
+        this.onExecute = function () { }
+        //此方法只有返回false时，才会停止执行onExecute跟onAfterExecute事件
+        this.onBeforeExecute = function () { }
+        this.onAfterExecute = function () { }
+    }
+    $Core.BtnBase = BtnBase;
+    function BtnBase(flag) {
+        ExecuteEvent.call(this)
+        if (flag) {
+            this.$target = $("#" + flag) || $('[flag = ' + flag + ']');
+        }
+        else { this.$target = null; }
+        this.isHidden = false;
+    }
+    /**
+    *该文件依赖与AR.Core.Utility.js文件
+    */
+    $Core.Utility.Ajax.post("GetInitConfig,GetKeyValueConfig", null, null, null, null, function (result) {
+        $Core.Global.Variable = result.GetInitConfig;
+        $Core.Global.Variable.isLoadCompleted = true;
+        $Core.Global.Config = result.GetKeyValueConfig;
+    });
+
+})(AR);
+
+
+//Jquery 扩展定义
 (function ($) {
-   
+
     //转换input变成lable形式
     $.fn.toView = function () {
         $(this).find(":input[type!='button'][type!='rest']").each(function () {
@@ -673,9 +734,8 @@ window.AR = (function ($Core) {
     }
 })(jQuery);
 
-/*
-*原生Javascript的对象属性扩展
-*/
+
+// Javascript对象属性扩展定义
 (function () {
     Array.prototype.remove = function (v) {
         if (this instanceof Array) {

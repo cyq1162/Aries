@@ -82,10 +82,13 @@ namespace Aries.Controllers
             bool result = UserAuth.ChangePassword(Query<string>("pwd"));
             jsonResult = JsonHelper.OutResult(result, result ? "修改成功" : "修改失败");
         }
-        //public void GetUserInfo()
-        //{
-        //    jsonResult = UserAuth.User.ToJson();
-        //}
+        public void GetUserInfo()
+        {
+            MDataRow row=UserAuth.User;
+            row.Columns.Remove("Password");//移除密码。
+            row.Columns.Remove("UserInfoID");//移除重复的主建值。
+            jsonResult = row.ToJson(true);//转小写（兼容oracle）
+        }
         /// <summary>
         /// 用户首页呈现的菜单数据
         /// </summary>

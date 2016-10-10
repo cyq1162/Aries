@@ -1,5 +1,4 @@
-﻿
-
+﻿//AR.Form 定义
 (function ($, $Core, $PCore) {
     $(document).on("click", ".arrows", function () {
         $(this).toggleClass("hover");

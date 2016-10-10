@@ -8,3 +8,13 @@ b：Controllers添加的名称空间必须是Taurus.Core开头。
 c：Web.UI项目添加Views目录（按Taurus流程走）
 
 菜单ID为空时
+
+V3版本之后：
+1：支持Oracle（表头和数据转小写到前端页面）。
+2：修正DialogView.html
+
+
+V3.5 2016-10-11
+1：增加AR.Global.GetUser方法获取当前登陆的用户信息
+2：将Combox从Aries.Common分离，并重了Combobox的大部分代码（同时支持下拉树）
+3：调整Input的个别属性。

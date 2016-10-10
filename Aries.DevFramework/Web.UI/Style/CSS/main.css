@@ -296,7 +296,7 @@ a input.btn-lg:hover{ background:#4797e9;font-size:14px; height:28px!important; 
     background: none repeat scroll 0 0 rgba(207, 207, 208, 0.00);
 }
 
-.tree {margin-left:25px;border-right:1px solid #3d9cd0;border:1px solid #ccc;background:rgba(161, 199, 239, 0.1);padding:10px 6px 3px 6px;margin-top:1%;}
+.tree {border-right:1px solid #3d9cd0;border:1px solid #ccc;background:rgba(161, 199, 239, 0.1);padding:10px 6px 3px 6px;margin-top:1%;}
 .cont-box-in>from {padding-top:26px;padding-bottom:33px;width:100% !important;border:1px solid #e0ecff;height:auto;}
 .tree-node-selected {background:#eaf2ff !important;}
 .tree-node {padding-bottom:6px;}

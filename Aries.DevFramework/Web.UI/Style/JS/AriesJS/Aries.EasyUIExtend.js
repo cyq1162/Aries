@@ -33,7 +33,7 @@ $.fn.panel.defaults.onBeforeDestroy = function () {
 var easyuiErrorFunction = function (XMLHttpRequest) {
     $.messager.progress('close');
     //$.messager.alert('错误', XMLHttpRequest.responseText);
-    alert("error:"+XMLHttpRequest.responseText);
+    alert("error:" + XMLHttpRequest.responseText);
 };
 $.fn.datagrid.defaults.onLoadError = easyuiErrorFunction;
 $.fn.treegrid.defaults.onLoadError = easyuiErrorFunction;
@@ -57,7 +57,7 @@ $.fn.tree.defaults.loadFilter = function (data, parent) {
         if (data.rows) {
             data = data.rows;
         }
-        try{
+        try {
             var data = _getTreeData(data, opt.idField || 'id', opt.textField || 'text', opt.parentField || '_parentId', opt.rootID);
         } catch (ex) {
             return data;
@@ -105,42 +105,30 @@ _openFirstNode = function (data) {
 
 
 $.fn.treegrid.defaults.loadFilter = function (data, parentId) {
-    var opt = $(this).data().treegrid.options, bindData = {};
-    var pagination = $(this).treegrid('getPager');
-    $(pagination).pagination({
-        total: data.total,
-        beforePageText: '第', //页数文本框前显示的汉字  
-        afterPageText: '页    共 {pages} 页',
-        displayMsg: '当前显示 {from} - {to} 条记录   共 {total} 条记录'
-    });
-
-    if (data.rows && opt.parentField) {
-        bindData.total = data.total;
-        bindData.rowcount = data.rowcount;
-        data = data.rows;//2014-4-28,修改人：梁水
+    var op = $(this).data().treegrid.options;
+    if (data.rows) {
+        data = data.rows;
     }
-    var idField, treeField, parentField;
-    if (opt.parentField) {
-        idField = opt.idField || 'id';
-        treeField = opt.treeField || 'text';
-        parentField = opt.parentField || '_parentId';
-        var i, l, treeData = [], tmpMap = [];
+
+    var id = op.idField, name = op.treeField, pid = op.parentField;
+    if (pid) {
+        var i, l, treeData = [], tmpMap = {};
         for (i = 0, l = data.length; i < l; i++) {
-            tmpMap[data[i][idField]] = data[i];
+            data[i][name] || (data[i][name] = '');//处理null为空
+            tmpMap[data[i][id]] = data[i];
         }
         for (i = 0, l = data.length; i < l; i++) {
-            if (tmpMap[data[i][parentField]] && data[i][idField] != data[i][parentField]) {
-                if (!tmpMap[data[i][parentField]]['children'])
-                    tmpMap[data[i][parentField]]['children'] = [];
-                data[i]['text'] = data[i][treeField];
-                tmpMap[data[i][parentField]]['children'].push(data[i]);
-            } else {
-                data[i]['text'] = data[i][treeField];
+            if (tmpMap[data[i][pid]] && data[i][id] != data[i][pid])
+            {
+                tmpMap[data[i][pid]]['children'] ||(tmpMap[data[i][pid]]['children'] = []);
+                tmpMap[data[i][pid]]['children'].push(data[i]);
+            }
+            else {
                 treeData.push(data[i]);
             }
         }
-        bindData.rows = treeData;
-        // return bindData;
+        data = null;
+        tmpMap = null;
         return treeData;
     }
     return data;
@@ -158,7 +146,7 @@ $.fn.form.methods.load = function (jq, param) {
         }
     }
     //兼容Oracle，不区分大小写
-    var _name,_lowerName;
+    var _name, _lowerName;
     $("[name],[comboname]").each(function () {
         _name = $(this).attr('name') || $(this).attr('comboname');
         if (_name != undefined) {
@@ -181,8 +169,7 @@ $.fn.form.methods.load = function (jq, param) {
     });
     $("span[name],label[name]").each(function () {
         var value = param[$(this).attr('name')];
-        if (value != undefined)
-        {
+        if (value != undefined) {
             $(this).html(value);
         }
     });
@@ -296,19 +283,17 @@ $.extend($.fn.validatebox.defaults.rules, {
         },
         message: '输入的日期格式不正确'
     },
-    exists:{
-        validator: function(value,param)
-        {
-            if (!param[0])
-            {
+    exists: {
+        validator: function (value, param) {
+            if (!param[0]) {
                 this.message = "验证规则错误！";
                 return false;
             }
-            var data={};
-            data.v=value;
+            var data = {};
+            data.v = value;
             data.n = param[0].name || param[0];
-            var id=param[1] || AR.Utility.queryString('id');
-            if(id) data.id=id;
+            var id = param[1] || AR.Utility.queryString('id');
+            if (id) data.id = id;
             //method, objName, data, async, url, callback, isShowProgress
             var result = AR.Utility.Ajax.get("Exists", AR.Form.tableName, data, false);
             if (result) {
@@ -324,7 +309,7 @@ $.extend($.fn.validatebox.defaults.rules, {
             }
         }
     },
- 
+
     multiple: {
         validator: function (value, vtypes) {
             var returnFlag = true;

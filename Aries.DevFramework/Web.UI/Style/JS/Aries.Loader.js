@@ -1,9 +1,9 @@
 ﻿/// <reference path="/Style/JS/AriesJS/Aries.Utility.js" />
 /// <reference path="/Style/JS/AriesJS/Aries.Upload.js" />
 /// <reference path="/Style/JS/AriesJS/Aries.DataGrid.js" />
-/// <reference path="/Style/JS/AriesJS/Aries.Form.js" />
 /// <reference path="/Style/JS/AriesJS/Aries.EasyUIExtend.js" />
-/// <reference path="/Style/JS/AriesJS/Aries.Common.js" />
+/// <reference path="/Style/JS/AriesJS/Aries.Combobox.js" />
+/// <reference path="/Style/JS/AriesJS/Aries.Form.js" />
 /// <reference path="json2.js" />
 /// <reference path="/Style/JS/AriesJS/Aries.Config.js" />
 /// <reference path="jquery-1.7.1.min.js" />
@@ -21,7 +21,7 @@ function getCookie(name) {
     return "";
 }
 var ui = getCookie('sys_ui');
-var vs = "v3.100";
+var vs = "v3.500";
 document.write('<link id="lk_theme" href="'+ui+'/Style/JS/EasyUI-1.3.4/themes/default/easyui.css" rel="stylesheet" type="text/css" />');
 document.write('<link href="' + ui + '/Style/CSS/main.css" rel="stylesheet" />');
 document.write('<link href="' + ui + '/Style/JS/EasyUI-1.3.4/themes/icon.css" rel="stylesheet" type="text/css" />');
@@ -34,6 +34,7 @@ document.write('<script src="' + ui + '/Style/JS/AriesJS/Aries.EasyUIExtend.js?v
 document.write('<script src="' + ui + '/Style/JS/AriesJS/Aries.Utility.js?v=' + vs + '"></script>');
 document.write('<script src="' + ui + '/Style/JS/AriesJS/Aries.Upload.js?v=' + vs + '"></script> ');
 document.write('<script src="' + ui + '/Style/JS/AriesJS/Aries.Common.js?v=' + vs + '"></script>');
+document.write('<script src="' + ui + '/Style/JS/AriesJS/Aries.Combobox.js?v=' + vs + '"></script>');
 document.write('<script src="' + ui + '/Style/JS/AriesJS/Aries.DataGrid.js?v=' + vs + '"></script>');
 document.write('<script src="' + ui + '/Style/JS/AriesJS/Aries.Form.js?v=' + vs + '"></script>');
 document.write('<script src="' + ui + '/Style/JS/AriesJS/Aries.Config.js?v=' + vs + '"></script>');

@@ -18,4 +18,7 @@
 {"KeyValueID":"0ba7ee95-b749-457d-8281-5bcf4ca684bc","ConfigKey":"表名描述","ConfigName":"_Demo_TestA","ConfigValue":"Input对话框","Flag":"sys","CreateTime":"2016-09-05 19:08:12"},
 {"KeyValueID":"8fa0eab5-e033-4f51-82db-ce179baa124f","ConfigKey":"表名描述","ConfigName":"Config_Grid","ConfigValue":"Input对话框","Flag":"sys","CreateTime":"2016-09-06 03:12:26"},
 {"KeyValueID":"46ca804f-9055-40c8-b5b5-9a6a79ba65f3","ConfigKey":"表名描述","ConfigName":"Sys_Role","ConfigValue":"权限管理","Flag":"sys","CreateTime":"2016-09-06 19:49:10"},
-{"KeyValueID":"c21dfd8d-613f-4830-bacf-6cd903cf6541","ConfigKey":"表名描述","ConfigName":"Config_KeyValue","ConfigValue":"配置维护","Flag":"sys","CreateTime":"2016-09-07 11:02:12"}
+{"KeyValueID":"c21dfd8d-613f-4830-bacf-6cd903cf6541","ConfigKey":"表名描述","ConfigName":"Config_KeyValue","ConfigValue":"配置维护","Flag":"sys","CreateTime":"2016-09-07 11:02:12"},
+{"KeyValueID":"46096d68-464f-4b02-b5a6-9153c2fb3479","ConfigKey":"表名描述","ConfigName":"sys_Action","ConfigValue":"功能管理","Flag":"sys","CreateTime":"2016-09-08 16:48:34"},
+{"KeyValueID":"911aaf5b-bade-43a2-91ae-b86304dc420d","ConfigKey":"表名描述","ConfigName":"Config_Excel","ConfigValue":"导入配置","Flag":"sys","CreateTime":"2016-09-08 16:48:37"},
+{"KeyValueID":"a366918e-a24a-4288-ab57-a29b858ab5ef","ConfigKey":"表名描述","ConfigName":"_Sys_User","ConfigValue":"Input对话框","Flag":"sys","CreateTime":"2016-09-10 00:08:30"}

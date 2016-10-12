@@ -88,10 +88,10 @@ namespace Aries.Core.Auth
                             {
                                 var dr = dt.NewRow(true);
                                 dr.Set("MenuID", id);
-                                dr.Add("ParentMenuID", menuID);
-                                dr.Add("MenuName", aRow.Get<string>("ActionName"));
-                                dr.Add("ActionIDs", "");
-                                dr.Add("menuIcon", "icon-save");
+                                dr.Set("ParentMenuID", menuID);
+                                dr.Set("MenuName", aRow.Get<string>("ActionName"));
+                                dr.Set("ActionIDs", "");
+                                dr.Set("menuIcon", "icon-save");
                                 // dt.Rows.Add(dr);
                             }
                         }

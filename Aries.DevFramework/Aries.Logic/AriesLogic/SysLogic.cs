@@ -328,7 +328,7 @@ namespace Aries.Logic
         }
         public string GetMenuAndAction()
         {
-            return SysMenu.SysMenuAction.ToJson(true, false, true);
+            return SysMenu.SysMenuAction.ToJson(true, false, RowOp.IgnoreNull, true);
         }
 
         public string GetMenuIDsandActionIds()

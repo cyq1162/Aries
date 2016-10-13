@@ -114,8 +114,8 @@
                                 $("[comboname]").each(function () {
                                     var $target = $(this);
                                     try {
-                                        setCombo($target,"clear");
-                                        setCombo($target,"setValue", "请选择");
+                                        setCombo($target, "clear");
+                                        setCombo($target, "setValue", "请选择");
                                     } catch (e) {
 
                                     }
@@ -810,15 +810,14 @@
             //对默认表头进行处理分组。
             formatHeader: function (dg) {
                 var json_data = $Core.Utility.cloneArray(dg.Internal.headerData, true);
-                var frozen = Array(), cols = Array(), merge = Array(), isMerge = false, megerLen = 0, startIndex = 0;
-                each: for (var i = 0; i < json_data.length; i++) {
+                var frozen = Array(), cols = Array();
+                for (var i = 0; i < json_data.length; i++) {
                     var format, style, configKey, objName;
                     //格式化第一列为主键
                     if (i == 0 && (json_data[i].formatter == undefined || json_data[i].formatter == "#" || json_data[i].formatter == "")) {
-                        frozen.push({ align: 'center', checkbox: dg.isShowCheckBox, hidden: !dg.isShowCheckBox, field: 'ckb' });
+                        frozen.push({ align: 'center', checkbox: dg.isShowCheckBox, hidden: !dg.isShowCheckBox, field: 'ckb', rowspan: 1, colspna: 1 });
 
                         dg.Internal.primarykey = json_data[i].field;
-                        // dg.Internal.idField = json_data[i].field;
                         if (!dg.PKColumn.isHidden && (dg.PKColumn._btnArray.length > 0 || dg.isEditor)) {
                             //检测操作列，权限过滤后还有没有可呈现的控件。
                             var actionKeys = $Core.Global.Variable.actionKeys;
@@ -835,13 +834,9 @@
                             if (len > 0) {
                                 var pkColumn = $Core.Utility.cloneObject(json_data[i]);
                                 pkColumn.formatter = this.pkFormatter(dg);
-                                //if (dg.isEditor) {
-                                //    var len = dg.PKColumn._btnArray.length;
-                                //    pkColumn.width = len == 0 ? 2 * 26 : (2 + len) * 26;
-                                //} else { pkColumn.width = dg.PKColumn._btnArray.length * 26; }
                                 pkColumn.width = len * 32;
-                                delete pkColumn.rowspan;
-                                delete pkColumn.colspna;
+                                //delete pkColumn.rowspan;
+                                //delete pkColumn.colspna;
                                 pkColumn.hidden = false;
                                 var title = getConfigValue("SysConfig", "OperatorTitle");
                                 if (!title) {
@@ -854,22 +849,12 @@
                         }
                     }
 
-                    if (json_data[i].hidden && json_data[i].colspan < 2) {
-                        continue each;
+                    if (json_data[i].hidden) {
+                        continue;
                     }
                     //是否编辑模式
                     if ((dg.isEditor && json_data[i].edit) || dg.type == "treegrid") {
                         this.formatEditor(json_data[i], dg);
-                        //var row = json_data[i];
-                        //if (row && row.editor && row.editor.options && row.editor.type == "combobox") {
-                        //    var isrelaciton = false;
-                        //    if ((typeof (row.formatter) == "string" && row.formatter.indexOf('#') != -1) && /#C_/.test(row.formatter)) {
-                        //        objName = row.formatter.split('#')[1];
-                        //        if (objName.indexOf('=>') != -1) {
-                        //            isrelaciton = true;
-                        //        }
-                        //    }
-                        //}
                     }
                     if (json_data[i].formatter && typeof (json_data[i].formatter) != 'function') {
                         //格式化config表的数据结构
@@ -901,7 +886,6 @@
                             } else {
                                 if (i == 0) {
                                     dg.Internal.primarykey = json_data[i].field;
-                                    //dg.Internal.idField = json_data[i].field;
                                     json_data[i].formatter = format(dg);
                                 } else {
                                     json_data[i].formatter = format;
@@ -923,31 +907,20 @@
 
                     json_data[i].sortable = eval(json_data[i].sortable);
                     json_data[i].hidden = eval(json_data[i].hidden);
-                    if (i == 0 || json_data[i].frozen)// (i == 0)
+                    if (i == 0 || json_data[i].frozen)
                     {
-                        delete json_data[i].rowspan;
-                        delete json_data[i].colspna;
                         frozen.push(json_data[i]);
                     }
                     else {
-                        if (json_data[i].field.indexOf('mg_') != -1) {
-                            delete json_data[i].field;
-                        }
-                        var _index = (json_data[i].mergeindex || 1) - 1;
-                        var _array = cols[_index] || new Array();
-                        _array.push(json_data[i]);
-                        cols[_index] = _array;
+                        cols.push(json_data[i]);
                     }
                 }
-                for (var j = 0, len = cols.length; j < len; j++) {
-                    if (cols[j]) {
-                        for (var k = 0, len1 = cols[j].length; k < len1; k++) {
-                            if (cols[j][k].field && cols[j][k].rowspan == 1) {
-                                cols[j][k].rowspan = len;
-                            }
-                        }
-                    }
-                }
+
+                frozen = getColumnGroup(frozen);
+                cols = getColumnGroup(cols);
+                var maxLen = frozen.length > cols.length ? frozen.length : cols.length;
+                setColumnRowspan(frozen, maxLen);
+                setColumnRowspan(cols, maxLen);
                 return { frozen: frozen, cols: cols };
             }
         },
@@ -967,7 +940,54 @@
         },
 
     }
+    function setColumnRowspan(cols, maxLen) {
+        for (var i = 0; i < cols.length; i++) {
+            for (var k = 0; k < cols[i].length; k++) {
+                if (cols[i][k].field && cols[i][k].rowspan == 1) {
+                    cols[i][k].rowspan = maxLen - i;
+                }
+            }
+        }
+    }
+    function getColumnGroup(cols) {
+        var result = [];
+        var index = 0, num = [0, 0, 0, 0, 0, 0, 0, 0];
+        for (var i = 0; i < cols.length; i++) {
+            var col = cols[i];
+            if (col.field.indexOf('mg_') != -1)//
+            {
+                delete col.field;
+                if (num[index] > 0)//内部嵌套
+                {
+                    index++;
+                    num[index] = col.colspan || 1;
+                    num[index - 1] = num[index - 1] - num[index];//父级数字要减掉子级的数量
+                }
+                else {
+                    num[index] = col.colspan || 1;
+                }
+                result[index] || (result[index] = new Array());
+                result[index].push(col);
+            }
+            else {
+                var level = (num[index] > 0) ? index + 1 : index;
+                if (num[index] > 0) {
+                    num[index]--;
+                    if (num[index] == 0)//列已经够了
+                    {
+                        if (index > 0)//如果是子级
+                        {
+                            index--;
+                        }
+                    }
+                }
+                result[level] || (result[level] = new Array());
+                result[level].push(col);
+            }
 
+        }
+        return result;
+    }
     //创建搜索区
     function _createSearchAreaHtml(dg) {
         var dataArray = [];

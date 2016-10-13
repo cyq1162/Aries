@@ -42,7 +42,7 @@ namespace Aries.Controllers
                             dt = action.Select();
                         }
                         dt.JoinOnName = "ID";
-                        MDataTable joinDt = dt.Join("Demo_TestA", "ID");
+                        MDataTable joinDt = dt.Join("Demo_TestB", "ID");
                         return joinDt.Select(PageIndex, PageSize, GetWhere() + GetOrderBy("ID"), GridConfig.GetSelectColumns(ObjName, st));
                     }
                     break;

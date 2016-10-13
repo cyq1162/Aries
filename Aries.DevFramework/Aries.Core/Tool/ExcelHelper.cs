@@ -102,11 +102,11 @@ namespace Aries.Core.Helper
 
                 int columnCount = dt.Columns.Count;
                 ICell cell;
-                int ColTitleRowCount = 1;
-                if (ExportMulHeader(header, false))
+                int colTitleRowCount = 1;
+                if (IsExportMulHeader(header, false))
                 {
-                    header = header.Select("Export=1 ORDER BY MergeIndexed DESC");
-                    CreateMulHeadExcel(export, header, out ColTitleRowCount, columnCount);
+                    header = header.FindAll("Export=1 order by OrderNum asc");
+                    CreateMulHeadExcel(export, header, out colTitleRowCount, columnCount);
                 }
                 else
                 {
@@ -121,7 +121,7 @@ namespace Aries.Core.Helper
                 }
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
-                    row = sheet.CreateRow(ColTitleRowCount + i);//index代表第N行0,1
+                    row = sheet.CreateRow(colTitleRowCount + i);//index代表第N行0,1
                     for (int j = 0; j < columnCount; j++)
                     {
                         row.CreateCell(j).SetCellValue(dt.Rows[i][j].ToString());
@@ -142,7 +142,7 @@ namespace Aries.Core.Helper
             MemoryStream ms = new MemoryStream();
             if (header != null && header.Rows.Count > 0)
             {
-                MDataTable importHeader = header.FindAll("Import=1");
+                MDataTable importHeader = header.FindAll("Import=1 order by OrderNum asc");
                 try
                 {
                     XSSFWorkbook export = new XSSFWorkbook();
@@ -152,9 +152,9 @@ namespace Aries.Core.Helper
                     int rowStartIndex = 1;
                     CreateValidationSheet(export, validateData, rowStartIndex);
                     #endregion
-                    importHeader.Rows.Sort("ORDER BY MergeIndexed DESC");//Hidden=0 AND (Export=1 OR Field LIKE 'mg_%')
+                    //importHeader.Rows.Sort("ORDER BY MergeIndex DESC");//Hidden=0 AND (Export=1 OR Field LIKE 'mg_%')
                     MDataTable headTable = importHeader.Clone();
-                    int ColTitleRowCount = 0;
+                    int colTitleRowCount = 0;
                     Dictionary<string, int> formatdic = new Dictionary<string, int>();
                     for (int i = importHeader.Rows.Count - 1; i >= 0; i--)//MDataTable 不支持 NOT LIKE 
                     {
@@ -165,7 +165,7 @@ namespace Aries.Core.Helper
                     }
                     int colSum = importHeader.Rows.Count;//实际列数
                     importHeader.Rows.Sort("ORDER BY OrderNum ASC");
-                    if (!ExportMulHeader(header, true))
+                    if (!IsExportMulHeader(header, true))
                     {
 
                         IRow row = sheet.CreateRow(0);
@@ -181,8 +181,8 @@ namespace Aries.Core.Helper
                     }
                     else
                     {
-                        CreateMulHeadExcel(export, headTable, out ColTitleRowCount, colSum);
-                        ColTitleRowCount -= 1;
+                        CreateMulHeadExcel(export, headTable, out colTitleRowCount, colSum);
+                        colTitleRowCount -= 1;
                     }
                     for (int i = 0; i < importHeader.Rows.Count; i++)
                     {
@@ -216,7 +216,7 @@ namespace Aries.Core.Helper
                             //int maxRow = 65535;
                             if (validateData.ContainsKey(formatter))
                             {
-                                regions = new CellRangeAddressList(ColTitleRowCount + 1, maxRow, i, i);
+                                regions = new CellRangeAddressList(colTitleRowCount + 1, maxRow, i, i);
                                 string key = formatter.Split('=')[0].Replace("#", "");// "V" + (char)formatter.Length;// formatter.Replace("#", "V");
                                 /*03版本api
                                 constraint = DVConstraint.CreateFormulaListConstraint(key);//);//validateData[formatter]
@@ -253,7 +253,7 @@ namespace Aries.Core.Helper
                                                 int selfindex = item.Value;
                                                 //int parentindex = formatdic[hereformatter];
                                                 string t = IntToMoreChar(parentindex);
-                                                for (int im = ColTitleRowCount; im < maxRow; im++)
+                                                for (int im = colTitleRowCount; im < maxRow; im++)
                                                 {
                                                     string func = string.Format("@INDIRECT({0}{1})", t, im + 1);
                                                     regions = new CellRangeAddressList(im, im, selfindex, selfindex);
@@ -758,21 +758,18 @@ namespace Aries.Core.Helper
         /// <summary>
         /// 构造excel多级表头
         /// </summary>
-        public static void CreateMulHeadExcel(IWorkbook export, MDataTable dtPbGrid, out int ColTitleCount, int colSum)
+        public static void CreateMulHeadExcel(IWorkbook export, MDataTable dtPbGrid, out int colTitleCount, int colSum)
         {
             ISheet sheet = export.GetSheet("Sheet1");//创建内存Excel
             ICellStyle style = GetStyle(export, HSSFColor.LightOrange.Index);
-            //
-            //MDataTable dtPbGrid = dt.DynamicData as MDataTable;
-            //dtPbGrid.Select("Hidden=0 AND Export=1 ORDER BY MergeIndexed DESC");//Export=1
-            ColTitleCount = Convert.ToInt32(dtPbGrid.Rows[0]["MergeIndexed"].Value);//合并行数
+            colTitleCount = Convert.ToInt32(dtPbGrid.Rows[0]["MergeIndex"].Value);//合并行数
 
             dtPbGrid.Rows.Sort("ORDER BY OrderNum ASC");
 
             Dictionary<MDataRow, int> dic = FixRowIndex(dtPbGrid);
             IRow r;
             ICell cel;
-            for (int c = 0; c < ColTitleCount; c++)
+            for (int c = 0; c < colTitleCount; c++)
             {
                 r = sheet.CreateRow(c);
                 for (int d = 0; d < colSum; d++)//dtPbGrid.Rows.Count
@@ -781,7 +778,7 @@ namespace Aries.Core.Helper
                     cel.CellStyle = style;
                 }
             }
-            MergedRowAndCol(dtPbGrid, dic, export, ColTitleCount);
+            MergedRowAndCol(dtPbGrid, dic, export, colTitleCount);
         }
         /// <summary>
         /// 修正列名排列索引
@@ -863,7 +860,7 @@ namespace Aries.Core.Helper
             {
                 title = dtPbGrid.Rows[i]["Title"].Value.ToString();
                 colspan = Convert.ToInt32(dtPbGrid.Rows[i]["Colspan"].Value);
-                merge = Convert.ToInt32(dtPbGrid.Rows[i]["MergeIndexed"].Value);
+                merge = Convert.ToInt32(dtPbGrid.Rows[i]["MergeIndex"].Value);
                 cellIndex = i;
                 if (dic.ContainsKey(dtPbGrid.Rows[i]))
                 {
@@ -931,56 +928,13 @@ namespace Aries.Core.Helper
         /// <summary>
         /// 是否导出多级表头
         /// </summary>
-        /// <param name="gridDt"></param>
+        /// <param name="dt"></param>
         /// <param name="isExportTemplate"></param>
         /// <returns></returns>
-        private static bool ExportMulHeader(MDataTable gridDt, bool isExportTemplate)
+        private static bool IsExportMulHeader(MDataTable dt, bool isExportTemplate)
         {
-            MDataTable dt = gridDt.FindAll(isExportTemplate ? "Import=1" : "Export=1");
-            return dt.Max<int>("MergeIndexed") != dt.Min<int>("MergeIndexed");
-            #region 原来逻辑
-            /*
-            bool ifHidden = false, ifImport = false, ifExport = false, ifRowspan = false, ifColspan = false, ifMergeIndexed = false;
-            for (int i = 1; i < gridDt.Rows.Count; i++)
-            {
-                ifHidden = gridDt.Rows[i].Get<bool>("Hidden");
-                ifImport = gridDt.Rows[i].Get<bool>("Import");
-                ifExport = gridDt.Rows[i].Get<bool>("Export");
-                ifRowspan = gridDt.Rows[i].Get<bool>("Rowspan");
-                ifColspan = gridDt.Rows[i].Get<bool>("Colspan");
-                ifMergeIndexed = gridDt.Rows[i].Get<bool>("MergeIndexed");
-                if (isExportTemplate)//导出模版
-                {
-                    if (ifHidden && !ifImport)
-                    {
-                        if (ifRowspan && ifColspan && ifMergeIndexed)
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                }
-                else//导出数据
-                {
-                    if (ifHidden && !ifExport)
-                    {
-                        if (ifRowspan && ifColspan && ifMergeIndexed)
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                }
-            }
-            return true;
-            */
-            #endregion
+            return false;//前端已修改了机制，后端还没调整。
+            return dt.FindRow((isExportTemplate ? "Import" : "Export") + "=1 and Field like 'mg_%'") != null;
         }
     }
     public static partial class ExcelHelper

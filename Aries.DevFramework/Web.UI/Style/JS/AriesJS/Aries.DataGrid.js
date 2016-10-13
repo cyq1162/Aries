@@ -265,7 +265,7 @@
             checkOnSelect: false,
             selectOnCheck: false,
             border: true,
-            frozenColumns: [objColumns.frozen],
+            frozenColumns: objColumns.frozen,
             columns: objColumns.cols,
             pageSize: 15,
             pageList: [10, 15, 20, 30, 40, 50, 100],

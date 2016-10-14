@@ -13,3 +13,10 @@ ASP.NET Aries is a Rapid Develop Framework for asp.net
 企业信息为：企业名称、企业网址。<br />
 具体备注信息以网址为：http://www.cnblogs.com/cyq1162/p/5749555.html
 
+<hr />
+Donation(支持捐助作者)：<br />
+支付宝：<br />
+<img src="http://images.cnblogs.com/cnblogs_com/cyq1162/828949/o_2.jpg" width="200" height="200" /><br />
+微信：<br />
+<img src="http://images.cnblogs.com/cnblogs_com/cyq1162/828949/o_1.jpg" width="200" height="200"  />
+

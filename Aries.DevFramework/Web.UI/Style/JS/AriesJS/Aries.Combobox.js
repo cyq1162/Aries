@@ -365,16 +365,8 @@
     function _showInputDialog($input) {
         if (!$input || !$input.attr("dialog")) { alert("dialog参数配置错误!"); return; }
         var href = ($Core.Global.Variable.ui || "") + "/Web/SysAdmin/DialogView.html?objName=" + $input.attr("dialog");
-        if ($input.attr("multiple")) {
-            href += "&multiple=" + $input.attr("multiple");
-        }
-        if ($input.attr("onlytext")) {
-            href += "&onlytext=" + $input.attr("onlytext");
-        }
-        if ($input.attr("editable")) {
-            href += "&editable=" + $input.attr("editable");
-        }
-        var html = '<iframe scrolling="yes" frameborder="0"  src="' + ($Core.Global.Variable.ui || '') + href + '" style="width:100%;height:98%;"></iframe>'
+        document.all.inputDialog = $input;
+        var html = '<iframe scrolling="yes" frameborder="0"  src="' + href + '" style="width:100%;height:98%;"></iframe>'
         var opts = {
             toolbar: [{
                 text: '保存',

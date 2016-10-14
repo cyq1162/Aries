@@ -313,6 +313,11 @@
             MSSQL插入标识ID后关闭此选项[事务开启时有效]
             </summary>;
         </member>
+        <member name="F:CYQ.Data.MAction.IsIgnoreDeleteField">
+            <summary>
+            当DeleteField被设置后（删除转更新操作），如果仍想删除操作（可将些属性置为true）
+            </summary>
+        </member>
         <member name="M:CYQ.Data.MAction.#ctor(System.Object)">
             <summary>
             构造函数
@@ -560,6 +565,11 @@
             更新(Update)操作的自定义表达式设置。
             </summary>
             <param name="updateExpression">例如a字段值自加1："a=a+1"</param>
+        </member>
+        <member name="M:CYQ.Data.MAction.SetPara(System.Object,System.Object)">
+            <summary>
+            参数化传参[当Where条件为参数化(如：name=@name)语句时使用]
+            </summary>
         </member>
         <member name="M:CYQ.Data.MAction.SetPara(System.Object,System.Object,System.Data.DbType)">
             <summary>
@@ -2856,12 +2866,18 @@
             输出Json
             </summary>
         </member>
-        <member name="M:CYQ.Data.Table.MDataTable.ToJson(System.Boolean,System.Boolean,CYQ.Data.Table.RowOp,System.Boolean)">
-            <param name="addHead">输出头部信息[带count、Success、ErrorMsg]</param>
-            <param name="addSchema">首行输出表架构信息,反接收时可还原架构</param>
-            <param name="rowOp">过滤选项</param>
+        <member name="M:CYQ.Data.Table.MDataTable.ToJson(System.Boolean,System.Boolean)">
+            <param name="addHead">输出头部信息[带count、Success、ErrorMsg](默认true)</param>
+            <param name="addSchema">首行输出表架构信息,反接收时可还原架构(默认false)</param>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataTable.ToJson(System.Boolean,System.Boolean,System.Boolean)">
             <param name="isConvertNameToLower">是否将名称转为小写</param>
-            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataTable.ToJson(System.Boolean,System.Boolean,CYQ.Data.Table.RowOp)">
+            <param name="rowOp">过滤选项</param>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataTable.ToJson(System.Boolean,System.Boolean,CYQ.Data.Table.RowOp,System.Boolean,CYQ.Data.Tool.EscapeOp)">
+            <param name="op">符号转义选项</param>
         </member>
         <member name="M:CYQ.Data.Table.MDataTable.WriteJson(System.Boolean,System.Boolean,System.String)">
             <summary>
@@ -3462,12 +3478,12 @@
         </member>
         <member name="F:CYQ.Data.SQL.SqlValue.Desc">
             <summary>
-            对于Bit类型[是/否] 类型的排序：[#DESC]
+            对于Bit类型[是/否] 类型的排序：[#DESC] (Access特殊)
             </summary>
         </member>
         <member name="F:CYQ.Data.SQL.SqlValue.Asc">
             <summary>
-            对于Bit类型[是/否] 类型的排序：[#ASC]
+            对于Bit类型[是/否] 类型的排序：[#ASC] (Access特殊)
             </summary>
         </member>
         <member name="F:CYQ.Data.SQL.SqlValue.True">
@@ -3485,12 +3501,12 @@
             数据库函数 Len 取长度：[#LEN](字段)
             </summary>
         </member>
-        <member name="F:CYQ.Data.SQL.SqlValue.GUID">
+        <member name="F:CYQ.Data.SQL.SqlValue.Guid">
             <summary>
             数据库函数 GUID 获取：[#GETDATE]
             </summary>
         </member>
-        <member name="F:CYQ.Data.SQL.SqlValue.ISNULL">
+        <member name="F:CYQ.Data.SQL.SqlValue.IsNull">
             <summary>
             数据库函数 ISNULL 判断：[#ISNULL](Exr1,Exr2)
             </summary>
@@ -3558,6 +3574,21 @@
             示例： [#CASE#WHEN] languageID={0} [#THEN] 1000000 [#ELSE] 0 [#END]
             </code>
             </example>
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.SQL.SqlValue.Contact">
+            <summary>
+            数据库链接符号 + Oracle下为：||
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.SQL.SqlValue.Left">
+            <summary>
+            数据库Left函数
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.SQL.SqlValue.Right">
+            <summary>
+            数据库Right函数
             </summary>
         </member>
         <member name="T:CYQ.Data.Extension.IField">
@@ -3737,7 +3768,7 @@
             区分Oracle11和Oracle12的Dll名称。
             </summary>
         </member>
-        <member name="F:CYQ.Data.OracleDal.isUseOdpNet">
+        <member name="F:CYQ.Data.OracleDal.clientType">
             <summary>
             值-1未初始化；0使用OracleClient；1使用DataAccess；2使用ManagedDataAccess
             </summary>
@@ -4674,6 +4705,16 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:CYQ.Data.Tool.EscapeOp">
+            <summary>
+            JsonHelper 的符号转义选项
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Tool.EscapeOp.Default">
+            <summary>
+            Web 默认转义，Win不转义
+            </summary>
+        </member>
         <member name="T:CYQ.Data.Tool.JsonHelper">
             <summary>
             json 帮助类
@@ -4684,6 +4725,11 @@
         </member>
         <member name="M:CYQ.Data.Tool.JsonHelper.#ctor(System.Boolean,System.Boolean)">
             <param name="addSchema">是否首行带表结构[MDataTable.LoadFromJson可以还原表的数据类型]</param>
+        </member>
+        <member name="F:CYQ.Data.Tool.JsonHelper.Escape">
+            <summary>
+            转义符号
+            </summary>
         </member>
         <member name="F:CYQ.Data.Tool.JsonHelper.IsConvertNameToLower">
             <summary>

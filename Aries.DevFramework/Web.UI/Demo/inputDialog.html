@@ -19,7 +19,7 @@
                 <div class="line">
                     <div class="short">
                         <label><em>*</em>（单选）F6：</label>
-                        <input name="F6" dialog="Demo_TestA" />
+                        <input id="F6" name="F6" dialog="Demo_TestA"  />
                     </div>
                     <div class="short">
                         <label><em>*</em>（多选）F7：</label>
@@ -49,8 +49,10 @@
             </div>
         </div>
         <script>
+            //追加固定的过滤条件。
+            $("input[name = 'F6']").attr("options","{defaultWhere: [{ paramName: 'F1', paramPattern: 'like', paramValue: '1' }]}");
+            //选择之后事件。
             AR.Combobox.onAfterExecute = function (type, $input, backPara) {
-              //  alert(JSON.stringify(backPara));
                 if (type == "dialog") {
                     if (!$input.attr("mutiple")) //单选时{
                         AR.Form.$target.form("load", backPara.datas);

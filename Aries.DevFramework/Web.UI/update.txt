@@ -18,3 +18,5 @@ V3.5 2016-10-11
 1：增加AR.Global.GetUser方法获取当前登陆的用户信息
 2：将Combox从Aries.Common分离，并重了Combobox的大部分代码（同时支持下拉树）
 3：调整Input的个别属性。
+
+4：InputDialog 增加扩展属性options支持

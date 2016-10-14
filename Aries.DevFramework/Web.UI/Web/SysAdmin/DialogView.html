@@ -5,10 +5,10 @@
     <title></title>
     <script src="/Style/JS/Aries.Loader.js"></script>
 </head>
-<body style="margin-top: -4px; padding:0">
-    <div style="height:375px">
-    <table id="dg"></table>
-        </div>
+<body style="margin-top: -4px; padding: 0">
+    <div style="height: 375px">
+        <table id="dg"></table>
+    </div>
     <script>
         var comboboxOption = {
             valueField: 'value',
@@ -19,24 +19,24 @@
             editable: false
         }
         var returnValue = { option: comboboxOption };
-
+        var $input = parent.document.all.inputDialog;
         var oName = AR.Utility.queryString("objName");
         if (oName) {
             var dg = new AR.DataGrid("_" + oName);
             dg.ToolBar.isHidden = true;
             dg.Search.BtnReset.isHidden = true;
-            var multiple = AR.Utility.queryString("multiple");//这个字段是JQ字段，特殊，赋值后会被变更为相同的文本
-            var unshowid = AR.Utility.queryString("unshowid") == "true";
-            comboboxOption.editable = AR.Utility.queryString("editable") == "true";
+            var multiple = $input.attr("multiple");//这个字段是JQ字段，特殊，赋值后会被变更为相同的文本
+            var onlytext = $input.attr("onlytext") == "true";
+            comboboxOption.editable = $input.attr("editable") == "true";
             dg.isShowCheckBox = multiple == "true" || multiple == "multiple";
             comboboxOption.multiple = dg.isShowCheckBox;
             var id, title;
-            dg.options = {
+            var options = {
                 pageSize: 10,
                 //fit: false,
                 onLoadSuccess: function () {
                     title = dg.Internal.headerData[1].field;
-                    id = unshowid == "true" ? title : dg.Internal.primarykey;
+                    id = (onlytext? title : dg.Internal.primarykey);
                 },
                 onSelect: function (rowIndex, rowData) {
                     if (!dg.isShowCheckBox) {
@@ -59,9 +59,22 @@
                     onCheck();
                 }
             }
+           
+            try {
+                var op = $input.attr("options");
+                if (op) { op = eval("(" + op + ")"); }
+                if (op)
+                {
+                    options = $.extend(options, op);
+                }
+            } catch (e) {
+
+            }
+            
+            dg.options = options;
             dg.bind();
         }
-        else { alert('对象名不对为空'); }
+        else { alert("dialog='this objName' can't be empty!"); }
         function onCheck() {
             var rows = dg.getChecked();
             if (rows && rows.length > 0) {

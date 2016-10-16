@@ -14,9 +14,18 @@ V3版本之后：
 2：修正DialogView.html
 
 
-V3.5 2016-10-11
+V4 2016-10-(11-16)
 1：增加AR.Global.GetUser方法获取当前登陆的用户信息
 2：将Combox从Aries.Common分离，并重了Combobox的大部分代码（同时支持下拉树）
 3：调整Input的个别属性。
-
 4：InputDialog 增加扩展属性options支持
+5：重写多级表头算法（优化多级表头配置）
+6：重写导入导表（Config_Excel表字段有变更）
+7：AR.Combobox 新增加setParas方法
+8：修正一些隐藏的Bug。
+9：调整查询表单的样式。
+10：defaultWhere的参数简化：paramName,paramValue,paramPattern 去掉了param,只有name,value,pattern
+11：支持查询框级联和行内编辑级联
+12：简化部分前端Js代码。
+13：调整配置相关的html名称（菜单路径需要调整）
+

@@ -107,6 +107,10 @@ _openFirstNode = function (data) {
 $.fn.treegrid.defaults.loadFilter = function (data, parentId) {
     var op = $(this).data().treegrid.options;
     if (data.rows) {
+        var pagination = $(this).treegrid('getPager');//处理记录总数
+        $(pagination).pagination({
+            total: data.total
+        });
         data = data.rows;
     }
 

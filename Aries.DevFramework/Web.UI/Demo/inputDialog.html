@@ -50,7 +50,7 @@
         </div>
         <script>
             //追加固定的过滤条件。
-            $("input[name = 'F6']").attr("options","{defaultWhere: [{ paramName: 'F1', paramPattern: 'like', paramValue: '1' }]}");
+            $("input[name = 'F6']").attr("options","{defaultWhere: [{ name: 'F1', pattern: 'like', value: '1' }]}");
             //选择之后事件。
             AR.Combobox.onAfterExecute = function (type, $input, backPara) {
                 if (type == "dialog") {

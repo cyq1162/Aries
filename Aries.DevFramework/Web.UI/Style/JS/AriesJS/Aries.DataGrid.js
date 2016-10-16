@@ -13,6 +13,7 @@
         this.Internal = {
             primarykey: null,
             headerData: new Array(),
+            //contextData:null,
             isLoadCompleted: false
         }
         this.id = id || 'dg';
@@ -35,13 +36,14 @@
         /*可以事先构建，产生插时行时的默认值*/
         this.defaultInsertData = {};
         //对defaultWhere的操作
-        this.addWhere = function (key, value, pattern) {
-            if (key && value) {
+        this.addWhere = function (name, value, pattern, isOr) {
+            if (name && (value || pattern)) {
                 if (!pattern) { pattern = "="; }
                 if (!this.options.defaultWhere) {
                     this.options.defaultWhere = [];
                 }
-                this.options.defaultWhere.push({ "paramName": key, "paramValue": value, "paramPattern": pattern });
+                isOr = (isOr == true? "or" : "and");
+                this.options.defaultWhere.push({ name: name, value: value, pattern: pattern, OrAnd: isOr });
             }
         }
         this.$target = null;
@@ -217,7 +219,10 @@
                 objName = objName.split('=>')[0];
                 obj_item['Parent'] = objName.split('=>')[1];
             }
-            obj_item['objName'] = objName;
+            obj_item['ObjName'] = objName;
+            if ($Core.Combobox.paras[objName] != undefined) {
+                obj_item['Para'] = $Core.Combobox.paras[objName];
+            }
             _postArray.push(obj_item);
         }
         //请求下拉框数据,子页面的下拉列表数据绑定
@@ -307,6 +312,7 @@
                 }
             }
         };
+        if (dg.type == "treegrid") { cfg.pagination = false;}//默认不分页
         var opts = dg.options;
         var beforeLoad = opts.onBeforeLoad;
         opts.onBeforeLoad = function (param) {
@@ -351,7 +357,7 @@
             options.queryParams['sys_search'] = JSON.stringify(searchJson);
         }
 
-        
+
         //请求URL地址设置
         options.url = $Core.Global.route.root + "?sys_method=GetList&sys_objName=" + dg.objName + "&sys_tableName=" + dg.tableName;
         if (dg.type == "datagrid") {
@@ -360,15 +366,14 @@
         else {
             dg.$target = $("#" + dg.id).treegrid(options);
         }
-
         if (options.pagination) {
-            //初始化分页控件
-            var pagination = dg.datagrid('getPager');
-            $(pagination).pagination({
+            var pager = {
                 beforePageText: '第', //页数文本框前显示的汉字  
                 afterPageText: '页    共 {pages} 页',
                 displayMsg: '当前显示 {from} - {to} 条记录   共 {total} 条记录'
-            });
+            };
+            var pagination = dg.datagrid('getPager');
+            $(pagination).pagination(pager);
         }
         $(".datagrid-cell-group").css({ fontWeight: 'bold' }); //设置合并列的加粗样式
 
@@ -724,51 +729,6 @@
             return '<span  title="' + key + '"   op="0">' + key + '</span>';
         }
         return btn;
-    }
-    /*
-    （注）-edit按钮的url对应添加按钮的窗口连接路径 
-    示例:[{ btn: 'edit', url: 'UserView.html',winTitle:"编辑用户",lv2action:'actionname' }, { btn: 'del' }],
-    lv2action属性不写默认无权限控制
-    如需重写打开窗体事件，在调用页面新增 openPage,或者删除行事件delRow 
-    edit  编辑
-    ，del  删除  
-    ，detail   详情
-    ，picture  图片
-    ，download     下载
-    ，diary    日志
-    ，map      地图
-    ，progress     进度
-    ，reviewed     审核通过
-    ，reviewing    审核中
-    ，save     保存
-    */
-    function _setButtons(btnItems) {
-        var dg = this;
-        if (!(btnItems instanceof Array)) {
-            throw TypeError("参数不是数组对象");
-        };
-        var actionKeys = $Core.Global.Variable.actionKeys;
-        each1: for (var i = 0; i < btnItems.length; i++) {
-            var key = btnItems[i]['btn']
-            , url = btnItems[i]['url']
-            , title = btnItems[i]['title']
-            , winTitle = btnItems[i]['winTitle']
-            , btn = $(_getBtnTemp(key))[0]//
-            , lv2action = btnItems[i]['lv2action'] && btnItems[i]['lv2action'].toLowerCase()
-            , click = btnItems[i]['click'];
-            //设置添加按钮的连接
-            if (key == 'edit') {
-                dg.ToolBar.BtnAdd.winUrl = url;
-                dg.ToolBar.BtnAdd.winTitle = (winTitle || "").replace('编辑', '新增');
-            }
-            url && btn.setAttribute("url", url);
-            winTitle && btn.setAttribute("winTitle", winTitle);
-            title && btn.setAttribute("title", title);
-            click && btn.setAttribute("click", click);
-            if ((actionKeys && actionKeys.indexOf(lv2action) != -1) || !lv2action) {
-                dg.Row.Default._btnArray.push(btn);
-            }
-        };
     }
 
     function regSearchButtonEvents(dg) {

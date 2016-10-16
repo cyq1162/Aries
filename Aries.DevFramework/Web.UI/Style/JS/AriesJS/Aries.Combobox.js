@@ -40,7 +40,7 @@
         var key = op.key;
         if (key && $Core.Global.Config[key]) {
             var items = $Core.Global.Config[key];//获取数据
-            op.data = $Core.Utility.cloneArray(items,true);
+            op.data = $Core.Utility.cloneArray(items, true);
             if (!op.tree && op.defaultItem) {
                 op.data.unshift({ text: "请选择", value: "" });
             }
@@ -337,9 +337,10 @@
         $("[objname]").each(function () {
             var objName = $(this).attr("objname");
             var parent = $(this).attr("parent");
+            var para = $(this).attr("para") || $Core.Combobox.paras[objName];
             if (objName && objName.length != 0) {//收集所有对象
                 if (!detectArray(item_data, 'objname', objName)) {
-                    var item = { ObjName: objName, Parent: parent };
+                    var item = { ObjName: objName, Parent: parent, Para: para };
                     item_data.push(item);
                 }
             }
@@ -443,6 +444,9 @@
     function setValues(data) {
         $Core.Combobox.values = data;
     }
+    function setParas(data) {
+        $Core.Combobox.paras = data;
+    }
     function bindCombo($box, op) {
         if (op.tree) {
             op.data = $Core.Utility.getTree(op.data);
@@ -456,8 +460,7 @@
     function setCombo($box, key, value, isTree) {
         var tree = isTree || $box.attr("tree");
         if (tree) {
-            switch (key)
-            {
+            switch (key) {
                 case "select":
                     key = "setValue"; break;
             }
@@ -473,8 +476,11 @@
             initObjNameCombobox();//初始化objName配置的项
             initDialogCombobox();//初始化dialog配置的项
         },
+        setCombo: setCombo,
+        setParas: setParas,
         setValues: setValues,
         onAfterExecute: onAfterBind,
-        values: {}
+        values: {},
+        paras: {}
     };
 })(jQuery, AR);

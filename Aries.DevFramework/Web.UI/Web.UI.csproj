@@ -67,16 +67,40 @@
     <Content Include="App_Data\SQLCode\Sql.sql" />
     <Content Include="App_Data\SQLCode\V_Test.sql" />
     <Content Include="App_Data\SQLCode\命名规范.txt" />
-    <Content Include="App_Data\Users.ts" />
-    <Content Include="App_Data\Users.txt" />
-    <Content Include="App_Data\UserType.ts" />
-    <Content Include="App_Data\UserType.xml" />
+    <Content Include="App_Data\TxtDB\Config_Excel.ts" />
+    <Content Include="App_Data\TxtDB\Config_Excel.txt" />
+    <Content Include="App_Data\TxtDB\Config_ExcelInfo.ts" />
+    <Content Include="App_Data\TxtDB\Config_ExcelInfo.txt" />
+    <Content Include="App_Data\TxtDB\Config_Grid.ts" />
+    <Content Include="App_Data\TxtDB\Config_Grid.txt" />
+    <Content Include="App_Data\TxtDB\Config_KeyValue.ts" />
+    <Content Include="App_Data\TxtDB\Config_KeyValue.txt" />
+    <Content Include="App_Data\TxtDB\Demo_Area.ts" />
+    <Content Include="App_Data\TxtDB\Demo_Area.txt" />
+    <Content Include="App_Data\TxtDB\Demo_TestA.ts" />
+    <Content Include="App_Data\TxtDB\Demo_TestA.txt" />
+    <Content Include="App_Data\TxtDB\Demo_TestB.ts" />
+    <Content Include="App_Data\TxtDB\Demo_TestB.txt" />
+    <Content Include="App_Data\TxtDB\Demo_Tree.ts" />
+    <Content Include="App_Data\TxtDB\Demo_Tree.txt" />
+    <Content Include="App_Data\TxtDB\Sys_Action.ts" />
+    <Content Include="App_Data\TxtDB\Sys_Action.txt" />
+    <Content Include="App_Data\TxtDB\Sys_Menu.ts" />
+    <Content Include="App_Data\TxtDB\Sys_Menu.txt" />
+    <Content Include="App_Data\TxtDB\Sys_Role.ts" />
+    <Content Include="App_Data\TxtDB\Sys_Role.txt" />
+    <Content Include="App_Data\TxtDB\Sys_RoleAction.ts" />
+    <Content Include="App_Data\TxtDB\Sys_RoleAction.txt" />
+    <Content Include="App_Data\TxtDB\Sys_User.ts" />
+    <Content Include="App_Data\TxtDB\Sys_User.txt" />
+    <Content Include="App_Data\TxtDB\Sys_UserInfo.ts" />
+    <Content Include="App_Data\TxtDB\Sys_UserInfo.txt" />
     <Content Include="Demo\combobox.html" />
     <Content Include="Demo\edit.html" />
-    <Content Include="Demo\inputDialog.html" />
     <Content Include="Demo\list.html" />
     <Content Include="Demo\rowedit.html" />
     <Content Include="Demo\treegrid.html" />
+    <Content Include="Demo\inputDialog.html" />
     <Content Include="index.html" />
     <Content Include="login.html" />
     <Content Include="Style\CSS\login.css" />
@@ -143,13 +167,14 @@
     <Content Include="Style\Images\tjlist-icon.png" />
     <Content Include="Style\Images\txtlist-icon.png" />
     <Content Include="Style\Images\wenzi.png" />
+    <Content Include="Style\JS\AriesJS\Aries.Combobox.js" />
+    <Content Include="Style\JS\AriesJS\Aries.Upload.js" />
     <Content Include="Style\JS\AriesJS\Aries.Common.js" />
     <Content Include="Style\JS\AriesJS\Aries.Config.js" />
     <Content Include="Style\JS\AriesJS\Aries.DataGrid.js" />
     <Content Include="Style\JS\AriesJS\Aries.EasyUIExtend.js" />
     <Content Include="Style\JS\AriesJS\Aries.Form.js" />
     <Content Include="Style\JS\AriesJS\Aries.Themes.js" />
-    <Content Include="Style\JS\AriesJS\Aries.Upload.js" />
     <Content Include="Style\JS\AriesJS\Aries.Utility.js" />
     <Content Include="Style\JS\Aries.Loader.js" />
     <Content Include="Style\JS\EasyUI-1.3.4\easyloader.js" />
@@ -465,18 +490,17 @@
     <Content Include="Style\JS\json2.js" />
     <Content Include="update.txt" />
     <Content Include="Web\SysAdmin\ActionList.html" />
-    <Content Include="Web\SysAdmin\Config.html" />
-    <Content Include="Web\SysAdmin\ConfigList.html" />
+    <Content Include="Web\SysAdmin\ConfigGrid.html" />
+    <Content Include="Web\SysAdmin\ConfigKeyValue.html" />
     <Content Include="Web\SysAdmin\CustomView.html" />
-    <Content Include="Web\SysAdmin\DialogView.html" />
-    <Content Include="Web\SysAdmin\ExcelConfig.html" />
-    <Content Include="Web\SysAdmin\ExcelInfoEdit.html" />
-    <Content Include="Web\SysAdmin\ExcelInfoList.html" />
+    <Content Include="Web\SysAdmin\ConfigExcelInfo.html" />
+    <Content Include="Web\SysAdmin\ConfigExcel.html" />
     <Content Include="Web\SysAdmin\MenuEdit.html" />
     <Content Include="Web\SysAdmin\RoleAction.html" />
     <Content Include="Web\SysAdmin\RoleList.html" />
     <Content Include="Web\SysAdmin\UserEidt.html" />
     <Content Include="Web\SysAdmin\UserList.html" />
+    <Content Include="Web\SysAdmin\DialogView.html" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -508,7 +532,11 @@
     <Content Include="Style\JS\EasyUI-1.3.4\themes\gray\images\Thumbs.db" />
     <Content Include="Style\JS\EasyUI-1.3.4\themes\metro\images\Thumbs.db" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Properties\PublishProfiles\Aries_Publish.pubxml" />
+    <Content Include="Resource\Excel\Config_KeyValue.xlsx" />
+    <Content Include="Resource\Excel\V_Test.xls" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -522,7 +550,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>13392</DevelopmentServerPort>
+          <DevelopmentServerPort>4432</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:8011/AR</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

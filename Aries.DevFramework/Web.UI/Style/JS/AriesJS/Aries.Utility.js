@@ -123,14 +123,12 @@ window.AR = (function ($Core) {
         //获取下拉树形递归,nodes参数是一个对象数组，根据对象的id跟parent属性过滤
         getTree: function (nodes) {
             return function (pid) {
-                pid || (pid=''); //undefined,null,都转''处理
+                pid || (pid = ''); //undefined,null,都转''处理
                 var cn = new Array();
-                for (var i = 0; i < nodes.length; i++)
-                {
+                for (var i = 0; i < nodes.length; i++) {
                     var n = nodes[i];
-                    n.parent || (n.parent='')
-                    if (n.parent == pid)
-                    {
+                    n.parent || (n.parent = '')
+                    if (n.parent == pid) {
                         n.id = n.value;
                         n.children = arguments.callee(n.id);
                         cn.push(n);
@@ -240,27 +238,14 @@ window.AR = (function ($Core) {
             }
         },
         download: function (method, data, url) {
-            var url = url || $Core.Global.route, frame_id = "f_id", frame_name = "f_name";
+            var url = url || $Core.Global.route.root, frame_id = "f_id", frame_name = "f_name";
             data || (data = {}), $form = $("<form>");
             $("#" + frame_id).remove();
-
-            var topWin = window, mid = $Core.Global.Variable.mid;
-            if (!mid) {
-                mid = (function (win) {
-                    var ar = win.AR;
-                    if (ar.Global.Variable.mid || win == win.top) {
-                        topWin = win;
-                        return ar.Global.Variable.mid;
-                    }
-                    return arguments.callee(win.parent.window);
-                })(topWin);
-            }
-
             $ifrme = $("<iframe>").attr("id", frame_id).attr("name", frame_name).css({ display: 'none' });
             $form.attr("action", url).attr("target", frame_name)
                 .append($("<input>").attr("name", "sys_method").val(method));
-            if (mid && mid != '' && topWin != window) {
-                $form.append($("<input>").attr("name", "sys_mid").val(mid));
+            if (parent != null && parent != window) {
+                $form.append($("<input>").attr("name", "sys_mid").val($Core.Utility.getSysmid()));
             }
             if (data) { for (var i in data) { $form.append($("<input>").attr("name", i).val(data[i])); } };
             $("body").append($ifrme).append($form);
@@ -281,6 +266,19 @@ window.AR = (function ($Core) {
                 return arguments.callee(win.parent.window);
             })(window);
             return win;
+        },
+        getSysmid: function () {
+            var topWin = window, mid = $Core.Global.Variable.mid;
+            if (!mid) {
+                mid = (function (win) {
+                    var ar = win.AR;
+                    if (ar.Global.Variable.mid || win == win.top) {
+                        return ar.Global.Variable.mid;
+                    }
+                    return arguments.callee(win.parent.window);
+                })(topWin);
+            }
+            return mid;
         },
         //生成表单下拉框。
         createInputHtml: function ($container, dataArray, dg, fromSearch) {
@@ -308,7 +306,9 @@ window.AR = (function ($Core) {
 
                 if (configKey || (objName && objName != '' && objName.indexOf('$') == -1))//绑定下拉
                 {
-                    input.attr("onchange", "$Core.Common._Internal.onQuery");//("+dg.id+")
+                    if (fromSearch) {
+                        input.attr("onchange", "$Core.Common._Internal.onQuery");//("+dg.id+")
+                    }
                     input.attr("name", dataArray[i].field);
                     if (configKey) {
                         input.attr("configkey", configKey)
@@ -597,19 +597,9 @@ window.AR = (function ($Core) {
                 }
             }
             url = $Core.Utility.stringFormat(str, url || that.Settings.url, method);
-            var topWin = window;
-            if (!mid) {
-                mid = (function (win) {
-                    var ar = win.AR;
-                    if (ar.Global.Variable.mid || win == win.top) {
-                        topWin = win;
-                        return ar.Global.Variable.mid;
-                    }
-                    return arguments.callee(win.parent.window);
-                })(topWin);
-            }
             opts.data = data || that.Settings.data;
-            if (mid && mid != '' && topWin != window) {
+            if (parent != null && parent != window) {
+                var mid = $Core.Utility.getSysmid();
                 if (!(data instanceof Array)) {
                     opts.data.sys_mid = mid;
                 } else {
@@ -738,28 +728,25 @@ window.AR = (function ($Core) {
 // Javascript对象属性扩展定义
 (function () {
     Array.prototype.remove = function (v) {
-        if (this instanceof Array) {
-            var index = this.indexOf(v);  //IE9+
-            if (index > -1) {
-                this.splice(index, 1);  //利用splice()函数删除指定元素，splice() 方法用于插入、删除或替换数组的元素
+        if (this instanceof Array && v != undefined && v != null) {
+            for (var i = 0; i < this.length; i++) {
+                if (this[i].toString() == v.toString()) {
+                    this.splice(i, 1);  //利用splice()函数删除指定元素，splice() 方法用于插入、删除或替换数组的元素
+                    return;
+                }
             }
         }
     };
     Array.prototype.contains = function (v) {
         if (this instanceof Array) {
-            if (this.indexOf) {
-                return this.indexOf(v) != -1;
-            } else {
-                var result = false;
-                each: for (var i = 0; i < array.length; i++) {
-                    if (array[i].toString() == value.toString()) {
-                        result = true;
-                        break each;
-                    }
+
+            for (var i = 0; i < this.length; i++) {
+                if (this[i].toString() == v.toString()) {
+                    return true;
                 }
-                return result;
             }
         }
+        return false;
     };
     // 对Date的扩展，将 Date 转化为指定格式的String   
     // 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，   

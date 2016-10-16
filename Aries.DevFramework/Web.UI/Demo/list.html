@@ -7,44 +7,24 @@
 
 </head>
 <body>
-    <div title="我要把工具条放这里面来" id="toolbar">
-
-    </div>
-    <div style="height: 500px;">
-        <div id="dg"></div>
-    </div>
     <pre class="brush:js;toolbar:false">
         GitHub 开源：<a href="https://github.com/cyq1162/Aries"  target="_blank">https://github.com/cyq1162/Aries</a>
-        <hr />
-        代码：
-&lt;script type=&quot;text/javascript&quot;&gt;
-        var customToolbar = AR.Utility.queryString('toolbar');
-        var dg = new AR.DataGrid('V_Test', 'TestA');
-        //自定义工具栏
-        if (customToolbar) {
-            dg.Search.$target = $('#dg_toolbar');
-        }        
-        dg.ToolBar.add('自定义按钮', 'fn', 10,'btn-lg');
-        dg.PKColumn.add('edit', '编辑', null, 'edit.html', '编辑Test表');
-        dg.PKColumn.add('del');
-        dg.bind();
-        function fn() {
-            AR.Utility.Window.showMsg('TEST');
-        }
-        function styleFormatter() {
-            return 'background-color:#ffee00;color:red;';
-        }    
-&lt;/script&gt;</pre>
-    <p>
-        <br />
-    </p>
+</pre>
+    <hr />
+    <div title="我要把工具条放这里面来" id="toolbar">
+    </div>
+    <div style="height: 400px;">
+        <div id="dg"></div>
+    </div>
+
+
     <div id="dg_toolbar" style="display: none;">
         <div class="line">
             <div class="short">
                 <label>自定义F1：</label><input type="text" class="easyui-validatebox easyui-numberbox" validtype="length[1,11]" precision="2" name="F1">
             </div>
             <div class="short">
-                <label>自定义F2：</label><input type="text" configkey="是否" defaultItem="false" name="F2">
+                <label>自定义F2：</label><input type="text" configkey="是否" defaultitem="false" name="F2">
             </div>
         </div>
     </div>
@@ -62,7 +42,7 @@
 </body>
 </html>
 <script type="text/javascript">
-  // alert(JSON.stringify(AR.Global.GetUser()));
+    // alert(JSON.stringify(AR.Global.GetUser()));
     var customToolbar = AR.Utility.queryString('toolbar');
     var grid = new AR.DataGrid('V_Test', 'Demo_TestA');
 
@@ -78,22 +58,21 @@
     //       // alert('options.onLoadSuccess');
     //        //grid.datagrid("freezeRow", 1);
     //        //grid.datagrid("freezeRow", 2);
-            
+
     //    },
     //    onBeforeLoad: function () {
-           
+
     //       // alert('onBeforeLoad');
     //    }
     //}
-    grid.Search.BtnQuery.onBeforeExecute = function (data)
-    {
-       // alert('BtnQuery.onBeforeExecute');
+    grid.Search.BtnQuery.onBeforeExecute = function (data) {
+        // alert('BtnQuery.onBeforeExecute');
     }
     // grid.isShowToolArea = false;
-  //grid.ToolBar.isHidden = true;
+    //grid.ToolBar.isHidden = true;
     //grid.Search.isHidden = true;
     //grid.Search.$target.find('[name="F1"]').val('test');    
-    grid.ToolBar.add('自定义按钮', 'fn', 10, 'btn-lg',"edit");
+    grid.ToolBar.add('自定义按钮', 'fn', 10, 'btn-lg', "edit");
     grid.PKColumn.add('edit', '编辑', null, 'edit.html', '编辑Test表');
     grid.PKColumn.add('del');
     grid.PKColumn.add('abc', "hello", null, "aaa.html?uid={ID}", "hello world!");//{XXX}的值会被对应的字段值替换（注意大小写）。
@@ -106,13 +85,13 @@
         //return s.prop("outHTML");
     };
     //grid.options.defaultWhere = [
-    //    { paramName: 'F1', paramPattern: 'like', paramValue: '1' },
-    //    { paramName: 'F3', paramPattern: 'like', paramValue: '3' }
+    //    { name: 'F1', pattern: 'like', value: '1' },
+    //    { name: 'F3', pattern: 'like', value: '3' }
     //];
-   grid.addWhere("f1", "3","like");
+    grid.addWhere("f1", "3", "like");
     grid.Search.onAfterExecute = function () {
         if (!customToolbar && this.Items.length > 0) {
-          //  this.Items["f1"] && this.Items["f1"].val('1');
+            //  this.Items["f1"] && this.Items["f1"].val('1');
         }
         // this.Items['F2'].val(1);
         //this.Items['F3'][0].val('2016-07-08');
@@ -120,7 +99,7 @@
     }
     //grid.Search.BtnQuery.onBeforeExecute = function (data)
     //{
-    //    data.push({ paramName: 'F2', paramPattern: 'like', paramValue: '2' });
+    //    data.push({ name: 'F2', pattern: 'like', value: '2' });
     //}
     //grid.ToolBar.BtnAdd.winUrl = "http://aries.cyqdata.com"; 
     //grid.ToolBar.BtnAdd.winTitle = "官网示例";

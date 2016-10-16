@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Aries.DevFramework UI")]
 [assembly: AssemblyDescription("Aries开发框架 UI (http://aries.cyqdata.com)")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("秋式软件 （2016-09-06）")]
+[assembly: AssemblyCompany("秋式软件 （2016-10-16）")]
 [assembly: AssemblyProduct("Aries.DevFramework")]
 [assembly: AssemblyCopyright("Copyright ©  秋式软件 2010-2020")]
 [assembly: AssemblyTrademark("Aries.DevFramework")]
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 //
 // 您可以指定所有这些值，也可以使用“修订号”和“内部版本号”的默认值， 
 // 方法是按如下所示使用“*”:
-[assembly: AssemblyVersion("3.0.0.0")]
-[assembly: AssemblyFileVersion("3.0.0.0")]
+[assembly: AssemblyVersion("4.0.0.0")]
+[assembly: AssemblyFileVersion("4.0.0.0")]

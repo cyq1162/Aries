@@ -3091,11 +3091,6 @@
 {"ID":3097,"Code":"3200100011","Name":"扎兰屯市","PCode":"3200100000","Sort":11,"Lvl":3,"Desc":""},
 {"ID":3101,"Code":"3200200014","Name":"新城区","PCode":"3200200000","Sort":14,"Lvl":3,"Desc":"火"},
 {"ID":3102,"Code":"3200200015","Name":"回民区","PCode":"3200200000","Sort":15,"Lvl":3,"Desc":"777"},
-{"ID":3203,"Code":"c5ea4a6a-a760-a64c-6c40-a6f2ec08ce33","Name":"eeeeeeeeee","PCode":"3200200015","Sort":4,"Lvl":4,"Desc":""},
 {"ID":3204,"Code":"666","Name":"eeeee","PCode":"3200200000","Sort":3,"Lvl":3,"Desc":""},
-{"ID":3205,"Code":"ecf3-c44f-5904-08f770a98d3e","Name":"4444","PCode":"3200200015","Sort":44,"Lvl":4,"Desc":"4444"},
 {"ID":3206,"Code":"a3e6de2b-419e-fa5e-0c62-727f29093d30","Name":"ttttt","PCode":"3200200015","Sort":333,"Lvl":null,"Desc":""},
-{"ID":3207,"Code":"rrrrr","Name":"fffff","PCode":"666","Sort":33,"Lvl":33,"Desc":"33"},
-{"ID":3210,"Code":"ag333","Name":"eeeee","PCode":"ttttt","Sort":333,"Lvl":null,"Desc":""},
-{"ID":3211,"Code":"qqqqq","Name":"4444","PCode":"ttttt","Sort":22,"Lvl":2,"Desc":""},
-{"ID":3212,"Code":"3333","Name":null,"PCode":"3333","Sort":33,"Lvl":333,"Desc":null}
+{"ID":3207,"Code":"rrrrr","Name":"fffff","PCode":"666","Sort":33,"Lvl":33,"Desc":"33"}

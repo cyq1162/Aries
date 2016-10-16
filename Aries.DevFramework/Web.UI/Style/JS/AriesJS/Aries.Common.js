@@ -45,40 +45,40 @@
                             if (dg.options.defaultWhere && dg.options.defaultWhere.length > 0) {
                                 for (var i = 0; i < dg.options.defaultWhere.length; i++) {
                                     var isHasData = false;
-                                    var paramName = dg.options.defaultWhere[i].paramName;
+                                    var name = dg.options.defaultWhere[i].name;
                                     for (var j = 0; j < searchJson.length; j++) {
-                                        if (searchJson[j].paramName == paramName) {
+                                        if (searchJson[j].name == name) {
                                             isHasData = true;
                                             break;
                                         }
-                                        if (!isHasData) {
-                                            searchJson.push(dg.options.defaultWhere[i]);
-                                        }
+                                    }
+                                    if (!isHasData) {
+                                        searchJson.push(dg.options.defaultWhere[i]);
                                     }
                                 }
                             }
+
                             if (this.onBeforeExecute(searchJson) == false) {
                                 return;
                             }
                             if (targetForm.form("validate")) {
+                                dg.isEditor && (dg.PKColumn.Editor.editIndex = undefined);
                                 var jsonString = JSON.stringify(searchJson);
-                                var target = dg.$target;
                                 dg.isSearch = true;
                                 if (dg.type == 'treegrid') {
-                                    target.treegrid("options").onBeforeLoad = function (row, param) {
-                                        param.rows = null;
-                                        param.page = null;
+                                    dg.datagrid("options").onBeforeLoad = function (row, param) {
                                         eval("sys_search = '" + jsonString + "'");
                                         param.sys_search = sys_search;
                                     }
-                                    target.treegrid('reload');
+
+                                    dg.datagrid('reload');
                                 }
-                                if (dg.type == 'datagrid') {
+                                else {
                                     var str = jsonString.replace(/\'/g, "!#");
                                     eval("sys_search = '" + str + "'");
                                     var data = { sys_search: sys_search.replace(/!#/g, "'") };
-                                    if (target.datagrid('getRows')) {
-                                        target.datagrid('clearSelections');
+                                    if (dg.datagrid('getRows')) {
+                                        dg.datagrid('clearSelections');
                                     }
                                     dg.datagrid("load", data);
 
@@ -93,67 +93,21 @@
                 that.BtnReset = function () {
                     function Obj() {
                         $Core.BtnBase.call(this);
-                        /**
-                        *充值按钮，可重置条件后赋值
-                        *@param{Array} sys_search
-                        */
                         this.onBeforeExecute = function ($form) { };
                         this.onExecute = function (dg, btn_reset) {
                             if (!btn_reset) { btn_reset = this.$target; }
-                            btn_reset.parents("form")[0].reset();
-                            if (this.onBeforeExecute(btn_reset.parents("form")[0]) == false) {
+                            var $form = btn_reset.parents("form");
+                            if (this.onBeforeExecute($form) == false) {
                                 return false;
                             }
-                            //清楚验证样式
-                            $(".easyui-validatebox").removeClass("validatebox-text").removeClass("validatebox-invalid");
-                            //在做一次标签的清楚，进行测底的清楚残留数据
-                            $("[name]").val("");
-                            var target = $("#" + dg.id);
-                            setTimeout(function () {
-                                $(".combo-value").val("");
-                                $("[comboname]").each(function () {
-                                    var $target = $(this);
-                                    try {
-                                        setCombo($target, "clear");
-                                        setCombo($target, "setValue", "请选择");
-                                    } catch (e) {
-
-                                    }
-                                    try {
-                                        $target.combotree("clear");
-                                        $target.combotree("setValue", "请选择");
-                                    } catch (e) {
-
-                                    }
+                            else {
+                                $form[0].reset();
+                                // 下拉框的值有缓存，要清。
+                                $form.find("[comboname]").each(function () {
+                                    $Core.Combobox.setCombo($(this), "select", "");
                                 });
-
-                            }, 100);
-
-                            if (dg.type == 'treegrid') {
-                                target.treegrid("options").onBeforeLoad = function (row, param) {
-                                    var opts = $("#" + dg.id).datagrid("options");
-                                    var jsonString;
-                                    if (opts.defaultWhere && opts.defaultWhere.length > 0) {
-                                        jsonString = JSON.stringify(opts.defaultWhere);
-                                    }
-                                    param.sys_search = jsonString;
-                                    param.page = null;
-                                    param.rows = null;
-                                }
-                                target.treegrid('reload');
                             }
-                            if (dg.type == 'datagrid') {
-                                if (target.datagrid('getRows')) {
-                                    target.datagrid('clearSelections');
-                                }
-                                var opts = $("#" + dg.id).datagrid("options");
-                                var jsonString;
-                                if (opts.defaultWhere && opts.defaultWhere.length > 0) {
-                                    jsonString = JSON.stringify(opts.defaultWhere);
-                                }
-                                var data = { sys_search: jsonString };
-                                target.datagrid('load', jsonString ? data : []);
-                            }
+                            dg.Search.BtnQuery.onExecute(dg, null);
                             this.onAfterExecute();
                         }
                     }
@@ -316,7 +270,7 @@
                             var checked_ids = dg.getChecked();
                             var jsonString = JSON.stringify($Core.Common._Internal.buildSearchJson(targetForm));
                             if (checked_ids.length > 0) {
-                                var condition = [{ paramName: dg.Internal.primarykey, paramPattern: 'In', paramValue: "(" + checked_ids.join(',') + ")" }];
+                                var condition = [{ name: dg.Internal.primarykey, pattern: 'In', value: "(" + checked_ids.join(',') + ")" }];
                                 jsonString = JSON.stringify(condition);
                             }
                             //window.open(ajaxOptions.href + '?objName=' + objName + '&sys_search='+jsonString, '_self');      
@@ -454,16 +408,16 @@
                     var exist = false;
                     var item;
                     earch: for (var i = 0; i < len; i++) {
-                        if (json[i].paramName == name) {
+                        if (json[i].name == name) {
                             if ($("[comboname=" + name + "]").attr('date')) {
-                                //json[i].paramValue = "'" + json[i].paramValue + " 00:00:00' AND '" + value + " 23:59:59'";
-                                json[i].paramValue = json[i].paramValue.replace(reg_date, " <= '" + value + " 23:59:59'");
-                                json[i].paramPattern = 'LikeOr';
+                                //json[i].value = "'" + json[i].value + " 00:00:00' AND '" + value + " 23:59:59'";
+                                json[i].value = json[i].value.replace(reg_date, " <= '" + value + " 23:59:59'");
+                                json[i].pattern = 'LikeOr';
                             } else {
-                                //json[i].paramValue = "('" + json[i].paramValue + "'" + ',' + "'" + value + "')";
-                                //json[i].paramPattern = 'In';
-                                json[i].paramValue = json[i].paramValue + "," + value;
-                                json[i].paramPattern = op === 'LikeOr' ? 'LikeOr' : 'In';
+                                //json[i].value = "('" + json[i].value + "'" + ',' + "'" + value + "')";
+                                //json[i].pattern = 'In';
+                                json[i].value = json[i].value + "," + value;
+                                json[i].pattern = op === 'LikeOr' ? 'LikeOr' : 'In';
                             }
                             exist = true;
                             break earch;
@@ -475,7 +429,7 @@
                             op = "LikeOr";
                             value = name + ' >= \'' + value + ' 00:00:00\' AND ' + name + ' <= \'' + value + ' 23:59:59\''
                         }
-                        item = { paramName: name, paramValue: value, paramPattern: op };
+                        item = { name: name, value: value, pattern: op };
                     }
                     if (item) {
                         json.push(item);
@@ -483,23 +437,23 @@
                 });
                 (function () {
                     for (var i = 0; i < json.length; i++) {
-                        if (!json[i].paramValue) { return; }
-                        var array = json[i].paramValue.toString().split(',');
-                        if (json[i].paramPattern === 'LikeOr') {
+                        if (!json[i].value) { return; }
+                        var array = json[i].value.toString().split(',');
+                        if (json[i].pattern === 'LikeOr') {
                             if (array.length > 1) {
                                 var tempArray = new Array();
                                 for (var j = 0; j < array.length; j++) {
-                                    tempArray.push(json[i].paramName + " LIKE '%" + array[j] + "%'");
+                                    tempArray.push(json[i].name + " LIKE '%" + array[j] + "%'");
                                 }
-                                json[i].paramValue = tempArray.join(" OR ");
+                                json[i].value = tempArray.join(" OR ");
                                 tempArray = [];
-                            } else if (!reg_date.test(json[i].paramValue)) {
-                                json[i].paramPattern = "Equal";
-                                //json[i].paramPattern = "Like";
+                            } else if (!reg_date.test(json[i].value)) {
+                                json[i].pattern = "Equal";
+                                //json[i].pattern = "Like";
                             }
-                        } else if (json[i].paramPattern !== 'LikeOr' && array.length > 1 && (json[i].paramPattern === 'Between' || json[i].paramPattern === 'In')) {
-                            json[i].paramPattern = 'Between';
-                            json[i].paramValue = array[0] + ' AND ' + array[1];
+                        } else if (json[i].pattern !== 'LikeOr' && array.length > 1 && (json[i].pattern === 'Between' || json[i].pattern === 'In')) {
+                            json[i].pattern = 'Between';
+                            json[i].value = array[0] + ' AND ' + array[1];
                         }
                     }
                 })()
@@ -528,7 +482,7 @@
             onConfigClick: function (el, dgid, value, index) {
                 var dg = getDgByKey(dgid);
                 if (dg) {
-                    var url = $Core.Utility.stringFormat("{0}?objName={1}", $Core.Global.Variable.ui + '/Web/SysAdmin/config.html', dg.objName);
+                    var url = $Core.Utility.stringFormat("{0}?objName={1}", $Core.Global.Variable.ui + '/Web/SysAdmin/ConfigGrid.html', dg.objName);
                     $Core.Global.DG.operating = dg;
                     $Core.Utility.Window.open(url, "", false);
                 }
@@ -815,7 +769,7 @@
                     var format, style, configKey, objName;
                     //格式化第一列为主键
                     if (i == 0 && (json_data[i].formatter == undefined || json_data[i].formatter == "#" || json_data[i].formatter == "")) {
-                        frozen.push({ align: 'center', checkbox: dg.isShowCheckBox, hidden: !dg.isShowCheckBox, field: 'ckb', rowspan: 1, colspna: 1 });
+                        frozen.push({ align: 'center', checkbox: dg.isShowCheckBox, hidden: !dg.isShowCheckBox, field: 'ckb', rowspan: 1, colspan: 1 });
 
                         dg.Internal.primarykey = json_data[i].field;
                         if (!dg.PKColumn.isHidden && (dg.PKColumn._btnArray.length > 0 || dg.isEditor)) {
@@ -834,9 +788,9 @@
                             if (len > 0) {
                                 var pkColumn = $Core.Utility.cloneObject(json_data[i]);
                                 pkColumn.formatter = this.pkFormatter(dg);
+                                pkColumn.colspan = 1;
+                                pkColumn.rowspan = 1;
                                 pkColumn.width = len * 32;
-                                //delete pkColumn.rowspan;
-                                //delete pkColumn.colspna;
                                 pkColumn.hidden = false;
                                 var title = getConfigValue("SysConfig", "OperatorTitle");
                                 if (!title) {
@@ -907,8 +861,7 @@
 
                     json_data[i].sortable = eval(json_data[i].sortable);
                     json_data[i].hidden = eval(json_data[i].hidden);
-                    if (i == 0 || json_data[i].frozen)
-                    {
+                    if (i == 0 || json_data[i].frozen) {
                         frozen.push(json_data[i]);
                     }
                     else {

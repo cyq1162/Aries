@@ -110,7 +110,7 @@
             background-color: #15a4fa;
         }
     </style>
-  
+
     <!--[if IE]>
         <style type="text/css">
             #div_menus {padding-top:40px;}
@@ -125,7 +125,7 @@
             <div class="panel-top">
                 <div class="panel-logo"><a href="#"></a></div>
                 <div class="panel-login">
-                    <span class="area" id="set_theme">皮肤设置</span>                  
+                    <span class="area" id="set_theme">皮肤设置</span>
                     <a id="btn_modify" class="ico1">修改密码</a>
                     <a id="lbUserName" class="ico3"></a>
                     <a href="/logout.html" id="btn_exit" class="ico2">退出</a>
@@ -160,7 +160,9 @@
 
     </div>
     <script>
-        $("#lbUserName").html('【' + AR.Utility.Cookie.get('aries_user') + '】');
+        AR.Global.GetUser(function (data) {
+            $("#lbUserName").html('【' + data.fullname + '】');
+        });
     </script>
     <script type="text/javascript">
 
@@ -272,7 +274,7 @@
                     }
                     ul.children('li').click(function () {
                         var themeName = $(this).children('a').html();
-                        setThemeName(themeName);                        
+                        setThemeName(themeName);
                         AR.Utility.Cookie.set('sys_theme', themeName, 1);
                         that.html('主题【' + (AR.Utility.Cookie.get("sys_theme") || 'default') + '】');
                     }).end().addClass('div_menu');
@@ -294,12 +296,12 @@
                 var $lbl1 = $('<label>').html(' 新密码：');
                 var $lbl2 = $('<label>').html('确认密码：');
                 var $pwd1 = $('<input type="password">').attr('id', 'pwd1');
-                var $pwd2 = $('<input type="password">').attr('id', 'pwd2');                
+                var $pwd2 = $('<input type="password">').attr('id', 'pwd2');
                 var $btnSave = $('<a>').attr('id', 'btn_save').addClass('btn red').html('保存');
                 var $btnClose = $('<a>').attr('id', 'btn_save').addClass('btn blue').html('关闭');
 
                 $div.append($('<p>').append($lbl1).append($pwd1)).append($('<p>').append($lbl2).append($pwd2)).append($btnSave).append($btnClose);
-                AR.Utility.Window.dialog('修改密码', $div, {width:480,height:250});
+                AR.Utility.Window.dialog('修改密码', $div, { width: 480, height: 250 });
 
                 $btnSave.click(function () {
                     var pwd1 = $pwd1.val();
@@ -307,7 +309,7 @@
                     if (pwd1 != pwd2) { AR.Utility.Window.showMsg('输入密码不一致！', '系统提示'); return; };
                     var reg = new RegExp("^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[^a-zA-Z0-9])[^'\"%/\\\\]{8,20}$");
                     if (!reg.exec(pwd2)) {
-                        AR.Utility.Window.showMsg("密码过于简单，必须由[数字、字母、符号]组成的8~20位字符",'系统提示');
+                        AR.Utility.Window.showMsg("密码过于简单，必须由[数字、字母、符号]组成的8~20位字符", '系统提示');
                         return;
                     }
                     AR.Utility.Ajax.post('ChangePassword', null, { pwd: pwd2 }, null, null, function (result) {
@@ -453,7 +455,7 @@
                         n.attributes = attrs;
                     }
                     n.id = nodesdatas[i][idField], n.text = nodesdatas[i][textField], n.state = 'open';
-                    var pid = nodesdatas[i][parentField] == ''?undefined:nodesdatas[i][parentField];
+                    var pid = nodesdatas[i][parentField] == '' ? undefined : nodesdatas[i][parentField];
                     if (pid == parentid) {
                         var id = nodesdatas[i][idField];
                         n.children = arguments.callee(id);

@@ -2823,6 +2823,11 @@
             使用本查询，得到原数据的引用。
             </summary>
         </member>
+        <member name="M:CYQ.Data.Table.MDataTable.GetIndex(System.Object)">
+            <summary>
+            统计满足条件的行所在的索引
+            </summary>
+        </member>
         <member name="M:CYQ.Data.Table.MDataTable.GetCount(System.Object)">
             <summary>
             统计满足条件的行数

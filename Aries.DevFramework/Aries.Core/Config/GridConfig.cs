@@ -50,7 +50,7 @@ namespace Aries.Core.Config
             {
                 if (_FieldTitle.Count == 0)
                 {
-                    if (DBTool.GetDalType(AppConfig.DB.DefaultConn) == DalType.MsSql)
+                    if (AppConfig.DB.DefaultDalType == DalType.MsSql)
                     {
                         MDataTable dt;
                         using (MProc proc = new MProc(field))
@@ -119,10 +119,9 @@ namespace Aries.Core.Config
                     where = " and ImportUnique=1";
                     break;
             }
-            // return KeyValueConfig.ConfigTable.FindAll(
             using (MAction action = new MAction(TableNames.Config_Grid))
             {
-                return action.Select(string.Format("ObjName='{0}' {1} order by OrderNum", objName, where));
+                return action.Select(string.Format("ObjName='{0}' {1} order by frozen desc,OrderNum asc", objName, where));
             }
         }
         private static void FillTable(string objName, MDataTable dt)
@@ -135,40 +134,36 @@ namespace Aries.Core.Config
             {
                 cell = mdc[i];
                 MDataRow row = dt.NewRow();
-                row["ObjName"].Value = formatObjName;
-                row["Field"].Value = cell.ColumnName;
-                row["Title"].Value = fieldTitleDic.ContainsKey(cell.ColumnName) ? fieldTitleDic[cell.ColumnName] : cell.ColumnName;
-                row["Hidden"].Value = i==0;//隐藏主键
-                row["Formatter"].Value = i == 0 ? "#" : "";
-                row["OrderNum"].Value = (i + 1) * 10;
-                row["Width"].Value =100;//第一个主键列<10，则由图标个数*36 自动控制。
-                row["Sortable"].Value = i > 0;
-                row["Import"].Value = i > 0 && !cell.IsCanNull;
-                row["Export"].Value = true;
-                row["Edit"].Value = i > 0;
-                row["Frozen"].Value = i < 4;
-                row["Align"].Value = "center";
-                row["DataType"].Value = DataType.GetType(cell.SqlType).Name.ToLower() + "," + cell.MaxSize + "," + cell.Scale + "," + (cell.IsCanNull ? 0 : 1);
-                if (i > 0)
+                row.Set(Config_Grid.ObjName, formatObjName);
+                row.Set(Config_Grid.Field, cell.ColumnName);
+                row.Set(Config_Grid.Title, fieldTitleDic.ContainsKey(cell.ColumnName) ? fieldTitleDic[cell.ColumnName] : cell.ColumnName);
+                row.Set(Config_Grid.Hidden, i == 0);
+                row.Set(Config_Grid.OrderNum, (i + 1) * 10);
+                row.Set(Config_Grid.Width, 100);
+                row.Set(Config_Grid.Sortable, i > 0);
+                row.Set(Config_Grid.Import, i > 0);
+                row.Set(Config_Grid.Export, i > 0);
+                row.Set(Config_Grid.Colspan, 1);
+                row.Set(Config_Grid.Rowspan, 1);
+                row.Set(Config_Grid.Edit, i > 0);
+                row.Set(Config_Grid.Frozen, i < 4);
+                row.Set(Config_Grid.Align, "center");
+                row.Set(Config_Grid.DataType, DataType.GetType(cell.SqlType).Name.ToLower() + "," + cell.MaxSize + "," + cell.Scale + "," + (cell.IsCanNull ? 0 : 1));
+                if (i == 0) { row.Set(Config_Grid.Formatter, "#"); }
+                else
                 {
                     switch (DataType.GetGroup(cell.SqlType))
                     {
-                        //case 1:
-                        //    row["DataType"].Value = "int";
-                        //    break;
                         case 2:
-                            //row["DataType"].Value = "datetime";
-                            row["Formatter"].Value = "dateFormatter";
+                            row.Set(Config_Grid.Formatter, "dateFormatter");
                             break;
                         case 3:
-                            //row["DataType"].Value = "bool";
-                            row["Formatter"].Value = "boolFormatter";
+                            row.Set(Config_Grid.Formatter, "boolFormatter");
                             break;
                         default:
-                            //row["DataType"].Value = "string";
                             if (cell.MaxSize > 50)
                             {
-                                row["Formatter"].Value = "stringFormatter";
+                                row.Set(Config_Grid.Formatter, "stringFormatter");
                             }
                             break;
                     }
@@ -224,32 +219,36 @@ namespace Aries.Core.Config
             return dt;
         }
         /// <summary>
-        /// 为列头描述字段设置中文，并返回需要格式化的字段名(同时设置字段类型为NVarChar)和配置项（导出时调用到）。
+        /// 返回格式化并设置以下内容：
+        /// 1：设置字段Description描述；2：设置翻译字段的数据类型。
+        /// key:ColumnName value:Formatter
         /// </summary>
-        /// <param name="dt"></param>
+        /// <param name="dt">表数据（dt.DynamicData 存档列头数据）</param>
         /// <returns></returns>
-        public static Dictionary<string, string> SetHeaderDescription(MDataTable dt)
+        public static Dictionary<string, string> GetFormatter(MDataTable dt)
         {
-            Dictionary<string, string> dic = new Dictionary<string, string>();
-            MDataTable config = GetList(dt.TableName, SelectType.All);
-            dt.DynamicData = config;//附加表头信息，Excel导出时（拿数据导出多级表头）
-            MDataRow row;
-            string formatter;
-            foreach (MCellStruct item in dt.Columns)
+            Dictionary<string, string> dic = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            MDataTable config = dt.DynamicData as MDataTable;
+            if (config != null)
             {
-                row = config.FindRow("Field='" + item.ColumnName + "'");
-                if (row != null)
+                MDataRow row;
+                string formatter;
+                foreach (MCellStruct item in dt.Columns)
                 {
-                    item.Description = row.Get<string>("Title");
-                    formatter = row.Get<string>("Formatter");
-                    if (formatter == "boolFormatter")
+                    row = config.FindRow(Config_Grid.Field + "='" + item.ColumnName + "'");
+                    if (row != null)
                     {
-                        formatter = "#是否";//对bool型特殊处理。
-                    }
-                    if (!string.IsNullOrEmpty(formatter) && formatter.Length > 2 && formatter[0] == '#') // 需要格式化的项
-                    {
-                        item.SqlType = System.Data.SqlDbType.NVarChar;//重置数据类型(int数据将格式成文本）
-                        dic.Add(item.ColumnName, formatter.Substring(1));
+                        item.Description = row.Get<string>(Config_Grid.Title);
+                        formatter = row.Get<string>(Config_Grid.Formatter);
+                        if (formatter == "boolFormatter")
+                        {
+                            formatter = "#是否";//对bool型特殊处理。
+                        }
+                        if (!string.IsNullOrEmpty(formatter) && formatter.Length > 2 && formatter[0] == '#') // 需要格式化的项
+                        {
+                            item.SqlType = System.Data.SqlDbType.NVarChar;//重置数据类型(int数据将格式成文本）
+                            dic.Add(item.ColumnName, formatter.Substring(1));
+                        }
                     }
                 }
             }
@@ -264,17 +263,17 @@ namespace Aries.Core.Config
         {
             Dictionary<string, string> formatDic = new Dictionary<string, string>();
             Dictionary<string, string> dic = GetTitleField(dt.TableName);
-            MDataTable config = GetList(objName, SelectType.All);
-            MDataRow row;
+            MDataTable gridConfig = GetList(objName, SelectType.All);
+            MDataRow gridRow;
             foreach (MCellStruct item in dt.Columns)
             {
                 item.TableName = dt.TableName;
-                row = config.FindRow("Title='" + item.ColumnName + "'");
-                if (row != null)
+                gridRow = gridConfig.FindRow(Config_Grid.Title + "='" + item.ColumnName + "'");
+                if (gridRow != null)
                 {
                     item.Description = item.ColumnName;
-                    item.ColumnName = row.Get<string>("Field");
-                    string formatter = row.Get<string>("Formatter");
+                    item.ColumnName = gridRow.Get<string>(Config_Grid.Field);
+                    string formatter = gridRow.Get<string>(Config_Grid.Formatter);
                     if (formatter == "boolFormatter")
                     {
                         formatter = "#是否";//对bool型特殊处理。

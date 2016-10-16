@@ -28,7 +28,7 @@ namespace Aries.Core.Config
                 //{
                 using (MAction action = new MAction(TableNames.Config_KeyValue))
                 {
-                    return action.Select("order by ConfigKey ASC,OrderNo ASC,KeyValueID ASC");
+                    return action.Select("order by ConfigKey ASC,OrderNo ASC");
                 }
                 //}
                 //return _KeyValueTable;
@@ -53,7 +53,7 @@ namespace Aries.Core.Config
                         action.Set(Config_KeyValue.Flag, "sys");
                         if (action.Insert())
                         {
-                           // KeyValueTable = null;//清缓存。
+                            // KeyValueTable = null;//清缓存。
                         }
                     }
                 }
@@ -129,7 +129,7 @@ namespace Aries.Core.Config
                 MDataRow row = ExcelConfig.GetExcelRow(objName);
                 if (row != null)
                 {
-                    description = row.Get<string>(Config_Excel.CnName);
+                    description = row.Get<string>(Config_Excel.Description);
                 }
                 if (string.IsNullOrEmpty(description))
                 {
@@ -191,11 +191,24 @@ namespace Aries.Core.Config
                     string defaultValue = Convert.ToString(dt.Columns[i].DefaultValue);
                     if (!string.IsNullOrEmpty(defaultValue))
                     {
+                        int index = dt.Columns.GetIndex(defaultValue);
+                        if (index == -1 && defaultValue.IndexOf('.') > -1)//处理字段指定
+                        {
+                            string[] items = defaultValue.Split('.');
+                            index = dt.Columns.GetIndex(items[items.Length - 1]);
+                        }
                         foreach (var row in dt.Rows)
                         {
                             if (row[i].IsNullOrEmpty)
                             {
-                                row[i].Value = defaultValue;
+                                if (index > -1)
+                                {
+                                    row[i].Value = row[index].Value;
+                                }
+                                else
+                                {
+                                    row[i].Value = defaultValue;
+                                }
                             }
                         }
                     }
@@ -394,7 +407,7 @@ namespace Aries.Core.Config
         public static Dictionary<string, string[]> GetValidationData(MDataTable dt)
         {
             Dictionary<string, string[]> dic = new Dictionary<string, string[]>(dt.Rows.Count);
-            Dictionary<string, string> SqlDic = new Dictionary<string, string>();
+            Dictionary<string, string> sqlDic = new Dictionary<string, string>();
             foreach (MDataRow row in dt.Rows)
             {
                 string formatter = row.Get<string>(Config_Grid.Formatter);
@@ -407,9 +420,9 @@ namespace Aries.Core.Config
 
                     if (formatter.StartsWith("#C_"))//数据库
                     {
-                        if (!SqlDic.ContainsKey(formatter))
+                        if (!sqlDic.ContainsKey(formatter))
                         {
-                            SqlDic.Add(formatter, SqlCode.GetCode(formatter.Substring(1).Split('=')[0].Trim()) + ";");
+                            sqlDic.Add(formatter, SqlCode.GetCode(formatter.Substring(1).Split('=')[0].Trim()) + ";");
                         }
                     }
                     else
@@ -425,7 +438,7 @@ namespace Aries.Core.Config
                     }
                 }
             }
-            GetFormatterValFromSql(SqlDic, dic);
+            SetFormatterValFromSql(sqlDic, dic);
             return dic;
         }
 
@@ -434,7 +447,7 @@ namespace Aries.Core.Config
         /// </summary>
         /// <param name="formatParas"></param>
         /// <returns></returns>
-        public static void GetFormatterValFromSql(Dictionary<string, string> itemSql, Dictionary<string, string[]> allDataText)
+        public static void SetFormatterValFromSql(Dictionary<string, string> itemSql, Dictionary<string, string[]> allDataText)
         {
             Dictionary<string, MDataTable> objNameItems = new Dictionary<string, MDataTable>();
 

@@ -581,10 +581,11 @@ namespace Aries.Core
         {
             MDataTable dt = Select(GridConfig.SelectType.Export);
             dt.TableName = ObjName;
-            dt.DynamicData = GridConfig.GetList(ObjName, GridConfig.SelectType.All);
-            Dictionary<string, string> formatParas = GridConfig.SetHeaderDescription(dt); //格式化列头（描述）（需要修改列头的数据格式）
+            dt.DynamicData = GridConfig.GetList(ObjName, GridConfig.SelectType.Export);
+            Dictionary<string, string> formatParas = GridConfig.GetFormatter(dt); //格式化列头（描述）（需要修改列头的数据格式）
             KeyValueConfig.FormatNameValue(dt, formatParas, true); //格式化配置项
-            WebHelper.SendFile(KeyValueConfig.GetTableDescription(ObjName, TableName) + "_" + DateTime.Now.ToString("yyyyMMdd") + ".xls", ExcelHelper.CreateExcel(dt));//ExcelHelper.CreateExcel(dt)
+            string fix = ExcelHelper.BookType == ExcelHelper.WorkBookType.High ? ".xlsx" : ".xls";
+            WebHelper.SendFile(KeyValueConfig.GetTableDescription(ObjName, TableName) + "_" + DateTime.Now.ToString("yyyyMMdd") + fix, ExcelHelper.CreateExcel(dt));//ExcelHelper.CreateExcel(dt)
         }
 
         /// <summary>
@@ -596,7 +597,7 @@ namespace Aries.Core
             if (!File.Exists(path))
             {
                 path = path + "x";
-                if (!File.Exists(path))
+                if (!File.Exists(path) && ObjName != TableName)
                 {
                     path = HttpContext.Current.Server.MapPath("~/Resource/Excel/" + TableName + ".xls");
                     if (!File.Exists(path))
@@ -607,24 +608,23 @@ namespace Aries.Core
             }
 
             MemoryStream ms = null;
-
+            string fix = ExcelHelper.BookType == ExcelHelper.WorkBookType.High ? ".xlsx" : ".xls";
             if (File.Exists(path))
             {
                 byte[] data = File.ReadAllBytes(path);
                 ms = new MemoryStream(data, 0, data.Length, false, true);
+                fix = Path.GetExtension(path);
             }
-            string fix = "_模板";
             if (ms == null)
             {
-                fix = "-模板";
                 string objName = ObjName;
-                MDataTable dt = GridConfig.GetList(objName, GridConfig.SelectType.All);//获取所有列的字段名。
-                if (dt.Rows.Count > 0)
+                MDataTable header = GridConfig.GetList(objName, GridConfig.SelectType.Import);//获取所有列的字段名。
+                if (header.Rows.Count > 0)
                 {
-                    ms = ExcelHelper.CreateExcelHeader(dt, KeyValueConfig.GetValidationData(dt));
+                    ms = ExcelHelper.CreateExcelHeader(header, KeyValueConfig.GetValidationData(header));
                 }
             }
-            WebHelper.SendFile(KeyValueConfig.GetTableDescription(ObjName, TableName) + fix + Path.GetExtension(path), ms);
+            WebHelper.SendFile(KeyValueConfig.GetTableDescription(ObjName, TableName) + fix, ms);
         }
         /// <summary>
         /// 下载错误的Excel列表。
@@ -664,16 +664,16 @@ namespace Aries.Core
                 excelInfo = ExcelConfig.GetExcelRow(ObjName);
                 if (excelInfo != null)
                 {
-                    index = excelInfo.Get<int>("StartIndex", 0);
-                    headCrossRowNum = excelInfo.Get<int>("HeadCrossRowNum", 0);
-                    sheetName = excelInfo.Get<string>("CnName");
+                    index = excelInfo.Get<int>(Config_Excel.StartIndex, 0);
+                    headCrossRowNum = excelInfo.Get<int>(Config_Excel.HeadCrossRowNum, 0);
+                    sheetName = excelInfo.Get<string>(Config_Excel.Description);
                 }
             }
             catch (Exception err)
             {
                 Log.WriteLogToTxt(err);//避免其它地方没有升级数据库表脚本。
             }
-            MDataTable dt = ExcelHelper.ReadExcel(excelInfo != null, null, index, headCrossRowNum, sheetName);
+            MDataTable dt = ExcelHelper.ReadExcel(null, sheetName, index, headCrossRowNum, excelInfo != null);
             if (!dt.Columns.Contains("错误信息"))
             {
                 dt.Columns.Add("错误信息", System.Data.SqlDbType.NVarChar);
@@ -730,7 +730,7 @@ namespace Aries.Core
         protected bool FormatExcel(MDataTable dt, MDataRow excelInfo)
         {
 
-            //翻译列头。
+            //翻译列头、设置默认值。
             Dictionary<string, string> formatterDic = ExcelConfig.FormatterTitle(dt, excelInfo, ObjName);//
             //翻译字典值，处理默认值。
             bool result = KeyValueConfig.FormatNameValue(dt, formatterDic, false);
@@ -833,6 +833,7 @@ namespace Aries.Core
         {
             public string ObjName { get; set; }
             public string Parent { get; set; }
+            public string Para { get; set; }
         }
         //[ActionKey("View")]
         /// <summary>
@@ -858,13 +859,13 @@ namespace Aries.Core
                         if (code != item.ObjName)
                         {
                             #region 核心处理
-                            var sql = SqlCode.GetCode(item.ObjName).ToLower();
+                            var sql = SqlCode.GetCode(item.ObjName).ToLower();//已经处理过系统参数和Post参数
                             //格式化请求参数
                             string key = "@text";
                             int index = sql.IndexOf(key);
                             if (index > -1)
                             {
-                                value = Query<string>("q");//easyui远程传递参数
+                                value = Query<string>("q", item.Para);//easyui远程传递参数
                                 if (string.IsNullOrEmpty(value) && sql.IndexOf('=', index - 5, 5) > -1)//处理成1=1，同时有=号
                                 {
                                     int end = index + key.Length;
@@ -885,7 +886,7 @@ namespace Aries.Core
                             #region 找不到，则移除。
                             boxes.RemoveAt(i);
                             //从程序里找。
-                            MDataTable dt = Combobox.Get(item.ObjName, Query<string>("q"));
+                            MDataTable dt = Combobox.Get(item.ObjName, Query<string>("q", item.Para));
                             if (dt != null)
                             {
                                 dtList.Insert(0, dt);
@@ -959,40 +960,7 @@ namespace Aries.Core
             bool result = SqlCode.SaveSourceCode(ObjName, Query<string>("sys_code"), out msg);
             jsonResult = JsonHelper.OutResult(result, result ? "保存成功！" : "保存失败!" + msg);
         }
-        [ActionKey("View")]
-        /// <summary>
-        /// 获取Config_Grid的某配置项的脚本
-        /// </summary>
-        public void GetGridConfigScript()
-        {
-            string script = SqlScript.GetGridConfigScript(ObjName);
-            bool result = !string.IsNullOrEmpty(script);
-            if (result)
-            {
-                WebHelper.SendFile("sys_Grid配置_" + KeyValueConfig.GetTableDescription(ObjName, TableName) + ".sql", script);
-            }
-            else
-            {
-                jsonResult = JsonHelper.OutResult(result, script);
-            }
-        }
-        [ActionKey("View")]
-        /// <summary>
-        /// 获取Config_ExcelInfo的某配置项的脚本
-        /// </summary>
-        public void GetExcelConfigScript()
-        {
-            string script = SqlScript.GetExcelConfigScript(GetID);
-            bool result = !string.IsNullOrEmpty(script);
-            if (result)
-            {
-                WebHelper.SendFile("sys_Excel配置_" + KeyValueConfig.GetTableDescription(ObjName, TableName) + ".sql", script);
-            }
-            else
-            {
-                jsonResult = JsonHelper.OutResult(result, script);
-            }
-        }
+
         [ActionKey("View,Get")]
         /// <summary>
         /// 是否存在某数据。

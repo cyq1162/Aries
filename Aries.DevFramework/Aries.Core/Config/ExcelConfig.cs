@@ -8,6 +8,7 @@ using CYQ.Data.Table;
 using Aries.Core.DB;
 using Aries.Core.Sql;
 using CYQ.Data.Aop;
+using CYQ.Data.Tool;
 
 namespace Aries.Core.Config
 {
@@ -19,13 +20,13 @@ namespace Aries.Core.Config
         /// <summary>
         /// 获取表配置信息
         /// </summary>
-        public static MDataRow GetExcelRow(string idOrEnName)
+        public static MDataRow GetExcelRow(string idOrExcelName)
         {
             using (MAction action = new MAction(TableNames.Config_Excel))
             {
-                bool isID = idOrEnName.Length >= 36 && idOrEnName.Split('-').Length >= 3;
-                string where = isID ? "ExcelID='{0}'" : "EnName='{0}'";
-                if (action.Fill(string.Format(where, idOrEnName)))
+                bool isID = idOrExcelName.Length >= 36 && idOrExcelName.Split('-').Length >= 3;
+                string where = (isID ? Config_Excel.ExcelID : Config_Excel.ExcelName).ToString() + "='{0}'";
+                if (action.Fill(string.Format(where, idOrExcelName)))
                 {
                     return action.Data;
                 }
@@ -41,12 +42,13 @@ namespace Aries.Core.Config
         {
             using (MAction action = new MAction(TableNames.Config_ExcelInfo))
             {
-                return action.Select("ExcelID='" + excelID + "'");
+                return action.Select(Config_Excel.ExcelID + "='" + excelID + "'");
             }
         }
 
         /// <summary>
-        /// 导入时，把中文列头翻译成英文列头。
+        /// 导入时：把中文列头翻译成英文列头（同时处理列头结构）。
+        /// 并返回字典：key:列头,value:格式化名
         /// </summary>
         public static Dictionary<string, string> FormatterTitle(MDataTable dt, MDataRow info, string objName)
         {
@@ -57,12 +59,12 @@ namespace Aries.Core.Config
             }
             else
             {
-                Dictionary<string, string> formatDic = new Dictionary<string, string>();
-                MDataTable config = GetExcelInfo(info.Get<string>(0));
-                if (config != null)
+                Dictionary<string, string> formatDic = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                MDataTable infoConfig = GetExcelInfo(info.Get<string>(0));
+                if (infoConfig != null)
                 {
                     //附加自定义列。
-                    foreach (var configRow in config.Rows)
+                    foreach (var configRow in infoConfig.Rows)
                     {
                         string formatter = configRow.Get<string>(Config_ExcelInfo.Formatter);
                         if (!string.IsNullOrEmpty(formatter) && formatter[0] != '#')//增加默认值的列。
@@ -71,31 +73,31 @@ namespace Aries.Core.Config
                             if (!dt.Columns.Contains(excelName))
                             {
                                 MCellStruct ms = new MCellStruct(excelName, System.Data.SqlDbType.NVarChar);
-                                ms.TableName = configRow.Get<string>("TableName");
+                                ms.TableName = configRow.Get<string>(Config_ExcelInfo.TableName);
                                 dt.Columns.Insert(dt.Columns.Count - 1, ms);
                             }
                         }
                     }
-                    MDataRow row;
+                    MDataRow infoRow;
                     foreach (MCellStruct item in dt.Columns)
                     {
-                        row = config.FindRow("ExcelName='" + item.ColumnName + "'");
-                        if (row == null && item.ColumnName.IndexOf('_') > 0) // 兼容只找一级的映射列。
+                        infoRow = infoConfig.FindRow(Config_ExcelInfo.ExcelName + "='" + item.ColumnName + "'");
+                        if (infoRow == null && item.ColumnName.IndexOf('_') > 0) // 兼容只找一级的映射列。
                         {
                             string columnName = item.ColumnName.Split('_')[0];
-                            row = config.FindRow("ExcelName='" + columnName + "'");
+                            infoRow = infoConfig.FindRow(Config_ExcelInfo.ExcelName + "='" + columnName + "'");
                         }
-                        if (row != null)
+                        if (infoRow != null)
                         {
-                            string field = row.Get<string>("Field");
+                            string field = infoRow.Get<string>(Config_ExcelInfo.Field);
                             if (string.IsNullOrEmpty(field))
                             {
                                 continue;
                             }
+                            item.Description = item.ColumnName;//把中文列名放到描述里。
+                            item.TableName = infoRow.Get<string>(Config_ExcelInfo.TableName);
                             if (string.Compare(item.ColumnName, field, StringComparison.OrdinalIgnoreCase) != 0)
                             {
-                                item.Description = item.ColumnName;//把中文列名放到描述里。
-                                item.TableName = row.Get<string>("TableName");
                                 int index = dt.Columns.GetIndex(field);
                                 if (index < 0)
                                 {
@@ -108,7 +110,7 @@ namespace Aries.Core.Config
                                     dt.Columns[index].ColumnName = dt.Columns[index].TableName + "." + dt.Columns[index].ColumnName;
                                 }
                             }
-                            string formatter = row.Get<string>("Formatter");
+                            string formatter = infoRow.Get<string>(Config_ExcelInfo.Formatter);
                             if (!string.IsNullOrEmpty(formatter)) // 需要格式化的项
                             {
                                 if (formatter.Length > 2 && formatter[0] == '#')
@@ -118,7 +120,7 @@ namespace Aries.Core.Config
                                 }
                                 else
                                 {
-                                    item.DefaultValue = SqlCode.FormatPara(formatter);//如果不是#开头的，设置为默认值。
+                                    item.DefaultValue = SqlCode.FormatPara(formatter);//如果不是#开头的，设置为默认值（同时处理@参数）。
                                 }
                             }
                         }
@@ -142,12 +144,12 @@ namespace Aries.Core.Config
                 MDataTable dtRequired = GetExcelInfo(info.Get<string>(0));//必填项表。
                 if (dtRequired != null && dtRequired.Rows.Count > 0)
                 {
-                    dtRequired = dtRequired.Select("IsRequired=1");
+                    dtRequired = dtRequired.Select(Config_ExcelInfo.IsRequired + "=1");
                     if (dtRequired != null && dtRequired.Rows.Count > 0)
                     {
                         foreach (var row in dtRequired.Rows)
                         {
-                            requiredList.Add(row.Get<string>("TableName") + row.Get<string>("Field"));
+                            requiredList.Add(row.Get<string>(Config_ExcelInfo.TableName) + row.Get<string>(Config_ExcelInfo.Field));
                         }
                     }
                 }
@@ -159,7 +161,7 @@ namespace Aries.Core.Config
             bool isOK = false;
             foreach (var table in tables)//重置列头。
             {
-                MDataColumn mdc = CYQ.Data.Tool.DBTool.GetColumns(table);
+                MDataColumn mdc = DBTool.GetColumns(table);
                 foreach (var cs in dt.Columns)
                 {
                     string[] items = cs.ColumnName.Split('.');
@@ -232,7 +234,7 @@ namespace Aries.Core.Config
                     names = new String[dtImportUnique.Rows.Count];
                     for (int i = 0; i < dtImportUnique.Rows.Count; i++)
                     {
-                        names[i] = dtImportUnique.Rows[i].Get<string>("Field");
+                        names[i] = dtImportUnique.Rows[i].Get<string>(Config_Grid.Field);
                     }
                 }
                 return dt.AcceptChanges(AcceptOp.Auto, null, names);
@@ -244,6 +246,7 @@ namespace Aries.Core.Config
 
             Dictionary<string, string> rowPrimaryValue = new Dictionary<string, string>();//存档每个表每行的主键值。
             Dictionary<string, string> wherePrimaryValue = new Dictionary<string, string>();//存档where条件对应的主键值。
+            int acceptType = excelRow.Get<int>(Config_Excel.AcceptType);
             using (MAction action = new MAction(tables[0]))
             {
                 action.SetAopState(AopOp.CloseAll);
@@ -308,7 +311,7 @@ namespace Aries.Core.Config
                         List<MDataRow> rowList = configTable.FindAll("TableName='" + table + "' and IsUnique=1");
                         if (rowList != null && rowList.Count > 0)
                         {
-                            bool IsUniqueOr = excelRow.Get<bool>("IsUniqueOr");
+                            bool isUniqueOr = excelRow.Get<bool>(Config_Excel.WhereType);
                             List<MDataCell> cells = new List<MDataCell>();
                             string errText = string.Empty;
                             int errorCount = 0;
@@ -330,7 +333,7 @@ namespace Aries.Core.Config
                             }
                             if (errorCount > 0)
                             {
-                                if (!IsUniqueOr || errorCount == rowList.Count)
+                                if (!isUniqueOr || errorCount == rowList.Count)
                                 {
                                     result = false;
                                     dt.DynamicData = new Exception(errText);
@@ -339,14 +342,15 @@ namespace Aries.Core.Config
                             }
 
                             MDataCell[] item2s = cells.ToArray();
-                            where = action.GetWhere(!IsUniqueOr, item2s);
+                            where = action.GetWhere(!isUniqueOr, item2s);
                             item2s = null;
                             rowList = null;
                         }
                         if (!string.IsNullOrEmpty(where))
                         {
+                            MDataRow data = action.Data.Clone();
                             action.SetSelectColumns(action.Data.PrimaryCell.ColumnName);
-                            if (action.Fill(where))//根据条件查出主键ID
+                            if (action.Fill(where))//根据条件查出主键ID (数据被清空)
                             {
                                 string key = table + where;
                                 if (wherePrimaryValue.ContainsKey(key))
@@ -357,7 +361,8 @@ namespace Aries.Core.Config
                                 {
                                     rowPrimaryValue.Add(table + i, action.Get<string>(action.Data.PrimaryCell.ColumnName));//记录上一个主键值。
                                 }
-                                if (action.Data.GetState() == 2)
+                                action.Data.LoadFrom(data, RowOp.IgnoreNull, false);//还原数据。
+                                if (action.Data.GetState() == 2 && acceptType != 1)//排除掉仅插入选项
                                 {
                                     ExcelResult eResult = excelConfigExtend.BeforeUpdate(action.Data, row);
                                     if (eResult == ExcelResult.Ignore || (eResult == ExcelResult.Default && action.Update(where)))
@@ -376,7 +381,7 @@ namespace Aries.Core.Config
                                     continue;//已经存在了，同时没有可更新字段
                                 }
                             }
-                            else if (!string.IsNullOrEmpty(action.DebugInfo))//产生错误信息，发生异常
+                            else if (action.RecordsAffected == -2)//产生错误信息，发生异常
                             {
                                 result = false;
                                 dt.DynamicData = new Exception("[第" + (i + 1) + "行数据]：" + action.DebugInfo);
@@ -385,7 +390,7 @@ namespace Aries.Core.Config
                         }
                         #endregion
 
-                        if (action.Data.GetState() == 0)
+                        if (action.Data.GetState() == 0 || acceptType == 2)//仅更新则跳过插入
                         {
                             continue;//没有可映射插入的列。
                         }

@@ -24,13 +24,26 @@ namespace Aries.Core.Extend
             switch (key)
             {
                 case "C_SYS_Table":
-                    if (!string.IsNullOrEmpty(filter))
+                    if (!string.IsNullOrEmpty(filter)) // 有过滤条件
                     {
-                        if (CrossDb.DbTables.ContainsKey(filter))
+                        
+                        string[] items = filter.Split(',');
+
+                        if (items.Length == 1 && items[0].EndsWith("Conn"))
                         {
-                            foreach (var item in CrossDb.DbTables[filter])
+                            if (CrossDb.DbTables.ContainsKey(filter))
                             {
-                                newDic.Add(item.Key, item.Key);
+                                foreach (var item in CrossDb.DbTables[filter])
+                                {
+                                    newDic.Add(item.Key, item.Key);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            foreach (string item in items)
+                            {
+                                newDic.Add(item, item);
                             }
                         }
                     }
@@ -48,18 +61,28 @@ namespace Aries.Core.Extend
                 case "C_SYS_Column":
                     if (!string.IsNullOrEmpty(filter))
                     {
-                        MDataColumn mdc = DBTool.GetColumns(CrossDb.GetEnum(filter));
-                        foreach (var item in mdc)
+                        dt = new MDataTable(key);
+                        dt.Columns.Add("value");
+                        dt.Columns.Add("text");
+                        dt.Columns.Add("parent");
+                        string[] items = filter.Split(',');
+                        foreach (string item in items)
                         {
-                            newDic.Add(item.ColumnName, item.ColumnName);
+                            MDataColumn mdc = DBTool.GetColumns(CrossDb.GetEnum(item));
+                            foreach (MCellStruct ms in mdc)
+                            {
+                                dt.NewRow(true).Set(0, ms.ColumnName).Set(1, ms.ColumnName).Set(2, item);
+                            }
                         }
+                       
                     }
+
                     break;
 
             }
-            dt = MDataTable.CreateFrom(newDic);
-            if (dt != null)
+            if (dt == null)
             {
+                dt = MDataTable.CreateFrom(newDic);
                 dt.Columns[0].ColumnName = "value";
                 dt.Columns[1].ColumnName = "text";
                 if (dt.Columns.Count > 2)

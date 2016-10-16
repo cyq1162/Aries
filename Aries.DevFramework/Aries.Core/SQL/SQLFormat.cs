@@ -23,64 +23,60 @@ namespace Aries.Core.Sql
         public static string Format(string searchList)
         {
             string sql = string.Empty;
-            List<SearchItem> sos = JsonHelper.ToList<SearchItem>(searchList);
+            List<SearchPara> sos = JsonHelper.ToList<SearchPara>(searchList);
             if (sos != null && sos.Count > 0)
             {
                 sql = BuildSQL(sos);
             }
             return sql;
         }
-        private static string BuildSQL(List<SearchItem> sos)
+        private static string BuildSQL(List<SearchPara> sos)
         {
-            StringBuilder sql = new StringBuilder(" 1=1 ");
-            foreach (SearchItem obj in sos)
+            StringBuilder sql = new StringBuilder();
+            string key1 = " {0} {1}", key2 = " {0} {1} {2} {3}";
+            if (sos.Count > 1)//条件加括号。
             {
-                //处理简单查询
-                if (string.IsNullOrEmpty(obj.ParamOrAnd))
+                key1 = " {0} ({1})";
+                key2 = " {0} ({1} {2} {3})";
+            }
+            for (int i = 0; i < sos.Count; i++)
+            {
+                SearchPara obj = sos[i];
+                if (i == 0) { obj.OrAnd = ""; }
+                else
                 {
-
-                    switch (obj.ParamPattern.ToLower())
-                    {
-                        case "in":
-                        case "between":
-                        case "greater":
-                        case "greaterequal":
-                        case "less":
-                        case "lessEqual":
-                        case "likeor":
-                        case "isnull":
-                            break;
-                        case "like":
-                            obj.ParamValue = "'%" + obj.ParamValue + "%'";
-                            break;
-                        default:
-                            obj.ParamValue = "'" + obj.ParamValue + "'";
-                            break;
-                    }
-                    if (obj.ParamPattern.ToLower() == "likeor")
-                    {
-                        sql.AppendFormat(" AND ({0}) ", obj.ParamValue);
-                    }
-                    else
-                    {
-                        sql.AppendFormat(" AND {0} {1} {2}", obj.ParamName, GetOperate(obj.ParamPattern), obj.ParamValue);
-                    }
-
+                    obj.OrAnd = (obj.OrAnd == "or" ? "or" : "and");
+                }
+                switch (obj.Pattern.ToLower())
+                {
+                    case "in":
+                    case "between":
+                    case "greater":
+                    case "greaterequal":
+                    case "less":
+                    case "lessEqual":
+                    case "likeor":
+                        break;
+                    case "isnull":
+                        obj.Pattern = "is null";
+                        break;
+                    case "notnull":
+                        obj.Pattern = "is not null";
+                        break;
+                    case "like":
+                        obj.Value = "'%" + obj.Value + "%'";
+                        break;
+                    default:
+                        obj.Value = "'" + obj.Value + "'";
+                        break;
+                }
+                if (obj.Pattern.ToLower() == "likeor")
+                {
+                    sql.AppendFormat(key1, obj.OrAnd, obj.Value);
                 }
                 else
                 {
-                    if (obj.ParamPattern.ToLower() == "like")
-                    {
-                        sql.AppendFormat(" {3} {0} {1} '%{2}%' ", obj.ParamName, GetOperate(obj.ParamPattern), obj.ParamValue, obj.ParamOrAnd);
-                    }
-                    else if (obj.ParamPattern.ToLower() == "isnull")
-                    {
-                        sql.AppendFormat(" {3} {0} {1} {2} ", obj.ParamName, GetOperate(obj.ParamPattern), obj.ParamValue, obj.ParamOrAnd);
-                    }
-                    else
-                    {
-                        sql.AppendFormat(" {3} {0} {1} '{2}'", obj.ParamName, GetOperate(obj.ParamPattern), obj.ParamValue, obj.ParamOrAnd);
-                    }
+                    sql.AppendFormat(key2, obj.OrAnd, obj.Name, GetOperate(obj.Pattern), obj.Value);
                 }
             }
             return sql.ToString();
@@ -108,34 +104,28 @@ namespace Aries.Core.Sql
         }
         #endregion
     }
-    internal class SearchItem
+    internal class SearchPara
     {
-        public string ParamName
+        public string Name
         {
             get;
             set;
         }
-        public string ParamValue
-        {
-            get;
-            set;
-        }
-
-        public string ParamPattern
-        {
-            get;
-            set;
-        }
-        public string ParamOrAnd
-        {
-            get;
-            set;
-        }
-        public string GroupName
+        public string Value
         {
             get;
             set;
         }
 
+        public string Pattern
+        {
+            get;
+            set;
+        }
+        public string OrAnd
+        {
+            get;
+            set;
+        }
     }
 }

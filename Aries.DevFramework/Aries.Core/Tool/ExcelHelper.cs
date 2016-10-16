@@ -1,14 +1,15 @@
-﻿using NPOI.HSSF.UserModel;
+﻿using NPOI.HSSF.UserModel;//2007 以下
 using NPOI.HSSF.Util;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
-using NPOI.XSSF.UserModel;
+using NPOI.XSSF.UserModel;//2007 以上
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using CYQ.Data;
 using CYQ.Data.Table;
+using Aries.Core.DB;
 
 namespace Aries.Core.Helper
 {
@@ -17,6 +18,33 @@ namespace Aries.Core.Helper
     /// </summary>
     public static partial class ExcelHelper
     {
+        internal static WorkBookType BookType = WorkBookType.Aoto;
+        public enum WorkBookType
+        {
+            /// <summary>
+            /// 自动处理
+            /// </summary>
+            Aoto,
+            /// <summary>
+            /// 97-2007
+            /// </summary>
+            Low,
+            /// <summary>
+            /// 2007以上
+            /// </summary>
+            High
+        }
+        internal static IWorkbook GetWorkBook()
+        {
+            if (BookType == WorkBookType.High)
+            {
+                return new XSSFWorkbook();
+            }
+            else
+            {
+                return new HSSFWorkbook();
+            }
+        }
         /// <summary>
         /// 获取合并单元格的合并行。
         /// </summary>
@@ -79,6 +107,7 @@ namespace Aries.Core.Helper
             style.FillForegroundColor = colorIndex;// NPOI.HSSF.Util.HSSFColor.RED.index;
             style.FillPattern = NPOI.SS.UserModel.FillPattern.SolidForeground;
             style.Alignment = HorizontalAlignment.Center;
+            style.VerticalAlignment = VerticalAlignment.Center;
             return style;
         }
 
@@ -92,41 +121,10 @@ namespace Aries.Core.Helper
             MemoryStream ms = new MemoryStream();
             try
             {
-                MDataTable header = dt.DynamicData as MDataTable;
-                HSSFWorkbook export = new HSSFWorkbook();
-                ICellStyle style = GetStyle(export, HSSFColor.LightOrange.Index);
-                ISheet sheet = export.CreateSheet("Sheet1");//创建内存Excel
-                IRow row = sheet.CreateRow(0);//index代表第N行
-                row.Height = 500;
-                string title = string.Empty;
-
-                int columnCount = dt.Columns.Count;
-                ICell cell;
-                int colTitleRowCount = 1;
-                if (IsExportMulHeader(header, false))
-                {
-                    header = header.FindAll("Export=1 order by OrderNum asc");
-                    CreateMulHeadExcel(export, header, out colTitleRowCount, columnCount);
-                }
-                else
-                {
-                    for (int i = 0; i < columnCount; i++)
-                    {
-                        title = string.IsNullOrEmpty(dt.Columns[i].Description) ? dt.Columns[i].ColumnName : dt.Columns[i].Description;
-                        cell = row.CreateCell(i);
-                        cell.SetCellValue(title);//设置列头
-                        sheet.SetColumnWidth(i, 3000);
-                        cell.CellStyle = style;
-                    }
-                }
-                for (int i = 0; i < dt.Rows.Count; i++)
-                {
-                    row = sheet.CreateRow(colTitleRowCount + i);//index代表第N行0,1
-                    for (int j = 0; j < columnCount; j++)
-                    {
-                        row.CreateCell(j).SetCellValue(dt.Rows[i][j].ToString());
-                    }
-                }
+                IWorkbook export = GetWorkBook();//2003版本以上。
+                int maxLevel = 0;
+                ISheet sheet = SetHeader(export, dt.DynamicData as MDataTable, dt.Columns, out maxLevel);
+                SetData(sheet, dt, maxLevel);
                 export.Write(ms);
                 ms.Flush();
                 ms.Close();
@@ -137,176 +135,14 @@ namespace Aries.Core.Helper
             }
             return ms;
         }
-        public static MemoryStream CreateExcelHeader(MDataTable header, Dictionary<string, string[]> validateData)
-        {
-            MemoryStream ms = new MemoryStream();
-            if (header != null && header.Rows.Count > 0)
-            {
-                MDataTable importHeader = header.FindAll("Import=1 order by OrderNum asc");
-                try
-                {
-                    XSSFWorkbook export = new XSSFWorkbook();
-                    ICellStyle style = GetStyle(export, HSSFColor.LightOrange.Index);
-                    ISheet sheet = export.CreateSheet("Sheet1");//创建内存Excel
-                    #region 创建引用
-                    int rowStartIndex = 1;
-                    CreateValidationSheet(export, validateData, rowStartIndex);
-                    #endregion
-                    //importHeader.Rows.Sort("ORDER BY MergeIndex DESC");//Hidden=0 AND (Export=1 OR Field LIKE 'mg_%')
-                    MDataTable headTable = importHeader.Clone();
-                    int colTitleRowCount = 0;
-                    Dictionary<string, int> formatdic = new Dictionary<string, int>();
-                    for (int i = importHeader.Rows.Count - 1; i >= 0; i--)//MDataTable 不支持 NOT LIKE 
-                    {
-                        if (importHeader.Rows[i]["Field"].Value.ToString().IndexOf("mg") > -1)
-                        {
-                            importHeader.Rows.RemoveAt(i);//非字段列移除
-                        }
-                    }
-                    int colSum = importHeader.Rows.Count;//实际列数
-                    importHeader.Rows.Sort("ORDER BY OrderNum ASC");
-                    if (!IsExportMulHeader(header, true))
-                    {
 
-                        IRow row = sheet.CreateRow(0);
-                        ICell cell;
-                        for (int i = 0; i < colSum; i++)
-                        {
-                            string title = importHeader.Rows[i]["Title"].Value.ToString();
-                            cell = row.CreateCell(i);
-                            cell.SetCellValue(title);//设置列头
-                            sheet.SetColumnWidth(i, 3000);
-                            cell.CellStyle = style;
-                        }
-                    }
-                    else
-                    {
-                        CreateMulHeadExcel(export, headTable, out colTitleRowCount, colSum);
-                        colTitleRowCount -= 1;
-                    }
-                    for (int i = 0; i < importHeader.Rows.Count; i++)
-                    {
-                        string formater = importHeader.Rows[i].Get<string>("Formatter");
-                        if (!string.IsNullOrEmpty(formater) && formater.Length > 1 && !formatdic.ContainsKey(formater))
-                        {
-                            formatdic.Add(formater, i);//存储列索引
-                        }
-                    }
-
-                    int maxRow = 50000;//限制最大行数(07之前版本的excel最大行数为65536，但NOPI似乎没有支持到最大行数,这里设置为50000行,到60000行数据有效性失效)
-                    XSSFSheet xssfSheet = (XSSFSheet)sheet;
-                    XSSFDataValidationHelper dvHelper = new XSSFDataValidationHelper(xssfSheet);
-
-                    for (int i = 0; i < importHeader.Rows.Count; i++)
-                    {
-                        MDataRow dtRow = importHeader.Rows[i];
-
-                        string formatter = dtRow.Get<string>("Formatter");
-
-                        if (formatter == "boolFormatter")
-                        {
-                            formatter = "#是否";//对bool型特殊处理。
-                        }
-                        if (!string.IsNullOrEmpty(formatter) && formatter.StartsWith("#") && validateData != null && formatter.Length > 1)//&& validateData.ContainsKey(formatter)
-                        {
-                            //处理数据的有效性
-                            CellRangeAddressList regions = null;
-                            IDataValidationConstraint constraint = null;
-                            IDataValidation dataValidate = null;
-                            //int maxRow = 65535;
-                            if (validateData.ContainsKey(formatter))
-                            {
-                                regions = new CellRangeAddressList(colTitleRowCount + 1, maxRow, i, i);
-                                string key = formatter.Split('=')[0].Replace("#", "");// "V" + (char)formatter.Length;// formatter.Replace("#", "V");
-                                /*03版本api
-                                constraint = DVConstraint.CreateFormulaListConstraint(key);//);//validateData[formatter]
-                                dataValidate = new HSSFDataValidation(regions, constraint);
-                                */
-                                constraint = dvHelper.CreateFormulaListConstraint(key);
-                                dataValidate = dvHelper.CreateValidation(constraint, regions);
-                                sheet.AddValidationData(dataValidate);
-
-                                //regions = new CellRangeAddressList(ColTitleRowCount, maxRow, i, i);
-                                //string key = formatter.Split('=')[0].Replace("#", "");// "V" + (char)formatter.Length;// formatter.Replace("#", "V");
-                                //constraint = DVConstraint.CreateFormulaListConstraint(key);//);//validateData[formatter]
-                                //dataValidate = new HSSFDataValidation(regions, constraint);
-                                //sheet.AddValidationData(dataValidate);
-
-                            }
-                            //
-                            if (formatter.StartsWith("#C"))//级联要接着父级后加数据有效性才行
-                            {
-                                string Parentformatter = formatter;
-                                while (formatdic.ContainsKey(Parentformatter))
-                                {
-                                    int point = 0;
-                                    int parentindex = formatdic[Parentformatter];
-                                    formatdic.Remove(Parentformatter);
-                                    foreach (var item in formatdic)
-                                    {
-                                        if (item.Key.IndexOf('=') > -1)
-                                        {
-                                            string parent = item.Key.Split('=')[1];
-                                            parent = parent.Replace(">", "#");
-                                            if (parent.Equals(Parentformatter.Split('=')[0]))
-                                            {
-                                                int selfindex = item.Value;
-                                                //int parentindex = formatdic[hereformatter];
-                                                string t = IntToMoreChar(parentindex);
-                                                for (int im = colTitleRowCount; im < maxRow; im++)
-                                                {
-                                                    string func = string.Format("@INDIRECT({0}{1})", t, im + 1);
-                                                    regions = new CellRangeAddressList(im, im, selfindex, selfindex);
-                                                    constraint = dvHelper.CreateFormulaListConstraint(func);
-                                                    dataValidate = dvHelper.CreateValidation(constraint, regions);
-                                                    sheet.AddValidationData(dataValidate);
-                                                }
-                                                //for (int im = ColTitleRowCount; im < maxRow; im++)//1000应为maxRow
-                                                //{
-                                                //    string func = "INDIRECT(" + t + (im + 1) + ")";//excel2013不能级联，03可以，其他没测过
-                                                //    regions = new CellRangeAddressList(ColTitleRowCount, im, selfindex, selfindex);
-                                                //    constraint = DVConstraint.CreateFormulaListConstraint(func);
-                                                //    dataValidate = new HSSFDataValidation(regions, constraint);
-                                                //    sheet.AddValidationData(dataValidate);
-                                                //}
-                                                Parentformatter = item.Key;
-                                                break;
-                                            }
-                                        }
-                                        point += 1;
-                                    }
-                                    if (point.Equals(formatdic.Count))
-                                    {
-                                        Parentformatter = string.Empty;
-                                    }
-                                }
-                            }
-
-                        }
-                    }
-                    export.Write(ms);
-                    ms.Flush();
-                    ms.Close();
-                }
-                catch (Exception err)
-                {
-                    Log.WriteLogToTxt(err);
-                }
-            }
-            return ms;
-        }
 
         /// <summary>
         /// 读取Excel头（特殊点：多级表头会组合名称）
         /// </summary>
         /// <param name="stream"></param>
         /// <returns></returns>
-        public static MDataTable ReadExcel(Stream stream = null, string sheetName = null)
-        {
-            return ReadExcel(false, stream, 0, 0, sheetName);
-        }
-
-        public static MDataTable ReadExcel(bool isMergedCellName, Stream stream = null, int startIndex = 0, int headCrossRowNum = 0, string sheetName = null)
+        public static MDataTable ReadExcel(Stream stream = null, string sheetName = null, int startIndex = 0, int headCrossRowNum = 0, bool isMergeCellName = false)
         {
             if (stream == null)
             {
@@ -318,16 +154,9 @@ namespace Aries.Core.Helper
             if (stream != null)
             {
                 IWorkbook workbook;
-                //try
-                //{
+
                 GC.Collect();//下一行代码会增长太多内存，提前调用，能降低内存。
                 workbook = WorkbookFactory.Create(stream);
-                //}
-                //catch (Exception)
-                //{
-
-                //    workbook = new NPOI.XSSF.UserModel.XSSFWorkbook(stream);
-                //}
                 int sheetIndex = 0;
                 if (!string.IsNullOrEmpty(sheetName))
                 {
@@ -338,7 +167,7 @@ namespace Aries.Core.Helper
                         sheetIndex = 0;
                     }
                 }
-                return ReadExcel(workbook, sheetIndex, isMergedCellName, stream, startIndex, headCrossRowNum);
+                return ReadExcel(workbook, stream, sheetIndex, startIndex, headCrossRowNum, isMergeCellName);
             }
             return null;
         }
@@ -351,8 +180,9 @@ namespace Aries.Core.Helper
         /// <param name="startIndex">开始索引</param>
         /// <param name="headCrossRowNum">头部跨行数（为0时自动识别）</param>
         /// <returns></returns>
-        public static MDataTable ReadExcel(IWorkbook workbook, int sheetIndex, bool isMergedCellName, Stream stream = null, int startIndex = 0, int headCrossRowNum = 0)
+        private static MDataTable ReadExcel(IWorkbook workbook, Stream stream = null, int sheetIndex = 0, int startIndex = 0, int headCrossRowNum = 0, bool isMergedCellName = false)
         {
+
             MDataTable dt = new MDataTable();
             try
             {
@@ -489,7 +319,7 @@ namespace Aries.Core.Helper
                         }
                         MDataRow tbRow = dt.NewRow();
                         bool isOk = false;
-                        for (int j = 0; j < excelRow.Cells.Count; j++)
+                        for (int j = 0; j < dt.Columns.Count; j++)
                         {
                             #region 读一行
                             sheetCell = excelRow.GetCell(j, MissingCellPolicy.RETURN_BLANK_AS_NULL);
@@ -582,6 +412,7 @@ namespace Aries.Core.Helper
                             }
                         }
                     }
+                    workbook.Close();//关闭了，dt.DynamicData带出了Sheet,还是可以后续使用（估计NPOI的没处理）
                 }
             }
             catch (Exception err)
@@ -707,10 +538,46 @@ namespace Aries.Core.Helper
             return null;
         }
 
-        public static void CreateValidationSheet(IWorkbook export, Dictionary<string, string[]> validateData, int rowStartIndex)
+        /// <summary>
+        /// 导出Excel列头模板
+        /// </summary>
+        /// <param name="header">列头数据</param>
+        /// <param name="validateData">有效性数据</param>
+        /// <returns></returns>
+        internal static MemoryStream CreateExcelHeader(MDataTable header, Dictionary<string, string[]> validateData)
         {
-            rowStartIndex = 0;
-            //  Dictionary<string, string> refDic = new Dictionary<string, string>();    
+            MemoryStream ms = new MemoryStream();
+            if (header != null && header.Rows.Count > 0)
+            {
+                try
+                {
+                    IWorkbook export = GetWorkBook();
+                    int maxLevel = 0;
+                    ISheet sheet = SetHeader(export, header, null, out maxLevel);
+                    CreateValidationSheet(export, validateData);
+                    CreateCascadeSheet(sheet, header, validateData, maxLevel);
+                    export.Write(ms);
+                    ms.Flush();
+                    ms.Close();
+                    export.Close();
+                    export = null;
+                }
+                catch (Exception err)
+                {
+                    Log.WriteLogToTxt(err);
+                }
+            }
+            return ms;
+        }
+
+        /// <summary>
+        /// 生成Sheet2的下拉验证数据
+        /// </summary>
+        /// <param name="export"></param>
+        /// <param name="validateData"></param>
+        private static void CreateValidationSheet(IWorkbook export, Dictionary<string, string[]> validateData)
+        {
+            int rowStartIndex = 0;
             ISheet refSheet = export.CreateSheet("Sheet2");
 
             int rowCount = rowStartIndex;
@@ -738,171 +605,285 @@ namespace Aries.Core.Helper
                 }
 
                 IName range = export.CreateName();
-                string title = IntToMoreChar(cellIndex);
-                //char c = (char)(cellIndex + 65);
+                string title = ConvertIndexToChar(cellIndex);
                 range.RefersToFormula = string.Format("Sheet2!${0}${1}:${0}${2}", title, rowStartIndex + 1, items.Value.Length + rowStartIndex);
-                range.NameName = items.Key.Split('=')[0].Replace("#", "");
-                // range.NameName = "V" + c;// items.Key.Replace("#", "V");// "v" + items.Key.GetHashCode();// "aa" + items.Key.Length;// 
-                // refDic.Add(items.Key, range.NameName);
-                ////处理数据的有效性
-                //CellRangeAddressList regions = new CellRangeAddressList(rowStartIndex, items.Value.Length + rowStartIndex, cellIndex, cellIndex);
-                //DVConstraint constraint = DVConstraint.CreateFormulaListConstraint(range.NameName);//validateData[formatter]
-                //HSSFDataValidation dataValidate = new HSSFDataValidation(regions, constraint);
-                //workSheet.AddValidationData(dataValidate);
-
+                range.NameName = items.Key.Split('=')[0].Replace("#", "").Replace(" ", "");//不允许存在空格
                 cellIndex++;
             }
-            // return refDic;
+
         }
 
         /// <summary>
-        /// 构造excel多级表头
+        /// 生成Sheet的级联指定
         /// </summary>
-        public static void CreateMulHeadExcel(IWorkbook export, MDataTable dtPbGrid, out int colTitleCount, int colSum)
+        private static void CreateCascadeSheet(ISheet sheet, MDataTable header, Dictionary<string, string[]> validateData, int maxLevel)
         {
-            ISheet sheet = export.GetSheet("Sheet1");//创建内存Excel
-            ICellStyle style = GetStyle(export, HSSFColor.LightOrange.Index);
-            colTitleCount = Convert.ToInt32(dtPbGrid.Rows[0]["MergeIndex"].Value);//合并行数
-
-            dtPbGrid.Rows.Sort("ORDER BY OrderNum ASC");
-
-            Dictionary<MDataRow, int> dic = FixRowIndex(dtPbGrid);
-            IRow r;
-            ICell cel;
-            for (int c = 0; c < colTitleCount; c++)
+            Dictionary<string, int> formatdic = new Dictionary<string, int>();
+            MDataTable[] dt2 = header.Split(Config_Grid.Field + " like 'mg_%'");
+            header = dt2[1];//去掉多级表头的数据。
+            for (int i = 0; i < header.Rows.Count; i++)
             {
-                r = sheet.CreateRow(c);
-                for (int d = 0; d < colSum; d++)//dtPbGrid.Rows.Count
+                string formater = header.Rows[i].Get<string>(Config_Grid.Formatter);
+                if (!string.IsNullOrEmpty(formater) && formater.Length > 1 && !formatdic.ContainsKey(formater))
                 {
-                    cel = r.CreateCell(d);
-                    cel.CellStyle = style;
+                    formatdic.Add(formater, i);//存储列索引
                 }
             }
-            MergedRowAndCol(dtPbGrid, dic, export, colTitleCount);
+
+            int maxRow = 1000;//限制最大行数(07之前版本的excel最大行数为65536，但NOPI似乎没有支持到最大行数,这里设置为50000行,到60000行数据有效性失效)
+            IDataValidationHelper dvHelper = sheet.GetDataValidationHelper();
+
+
+            for (int i = 0; i < header.Rows.Count; i++)
+            {
+                MDataRow dtRow = header.Rows[i];
+
+                string formatter = dtRow.Get<string>(Config_Grid.Formatter);
+
+                if (formatter == "boolFormatter")
+                {
+                    formatter = "#是否";//对bool型特殊处理。
+                }
+                if (!string.IsNullOrEmpty(formatter) && formatter.StartsWith("#") && validateData != null && formatter.Length > 1)//&& validateData.ContainsKey(formatter)
+                {
+                    //处理数据的有效性
+                    CellRangeAddressList regions = null;
+                    IDataValidationConstraint constraint = null;
+                    IDataValidation dataValidate = null;
+                    if (validateData.ContainsKey(formatter))
+                    {
+                        regions = new CellRangeAddressList(maxLevel, maxRow, i, i);
+                        string key = formatter.Split('=')[0].Replace("#", "").Replace(" ", "");// "V" + (char)formatter.Length;// formatter.Replace("#", "V");
+                        constraint = dvHelper.CreateFormulaListConstraint(key);
+                        dataValidate = dvHelper.CreateValidation(constraint, regions);
+                        sheet.AddValidationData(dataValidate);
+                    }
+                    if (formatter.StartsWith("#C"))//级联要接着父级后加数据有效性才行
+                    {
+                        string parentFormatter = formatter;
+                        while (formatdic.ContainsKey(parentFormatter))
+                        {
+                            int point = 0;
+                            int parentindex = formatdic[parentFormatter];
+                            formatdic.Remove(parentFormatter);
+                            foreach (var item in formatdic)
+                            {
+                                if (item.Key.IndexOf('=') > -1)
+                                {
+                                    string parent = item.Key.Split('=')[1];
+                                    parent = parent.Replace(">", "#");
+                                    if (parent.Equals(parentFormatter.Split('=')[0]))
+                                    {
+                                        int selfindex = item.Value;
+                                        string t = ConvertIndexToChar(parentindex);
+                                        for (int im = maxLevel; im < maxRow; im++)
+                                        {
+                                            string func = string.Format("INDIRECT(${0}${1})", t, im + 1);
+                                            regions = new CellRangeAddressList(im, im, selfindex, selfindex);
+                                            constraint = dvHelper.CreateFormulaListConstraint(func);
+                                            dataValidate = dvHelper.CreateValidation(constraint, regions);
+                                            sheet.AddValidationData(dataValidate);
+                                        }
+                                        parentFormatter = item.Key;
+                                        break;
+                                    }
+                                }
+                                point += 1;
+                            }
+                            if (point.Equals(formatdic.Count))
+                            {
+                                parentFormatter = string.Empty;
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+
+        /// <summary>
+        /// 设置Excel数据
+        /// </summary>
+        /// <param name="dt">数据表</param>
+        /// <param name="startIndex">数据的起始索引</param>
+        private static void SetData(ISheet sheet, MDataTable dt, int startIndex)
+        {
+            //设置数据
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                IRow row = sheet.CreateRow(startIndex + i);//index代表第N行0,1
+                for (int j = 0; j < dt.Columns.Count; j++)
+                {
+                    row.CreateCell(j).SetCellValue(dt.Rows[i][j].ToString());
+                }
+            }
         }
         /// <summary>
-        /// 修正列名排列索引
+        ///  设置Excel列头数据（支持多级表头）。
+        /// <param name="maxLevel">表头的层级数</param>
         /// </summary>
-        /// <param name="dtPbGrid"></param>
-        /// <returns></returns>
-        public static Dictionary<MDataRow, int> FixRowIndex(MDataTable dtPbGrid)
+        private static ISheet SetHeader(IWorkbook export, MDataTable header, MDataColumn columns, out int maxLevel)
         {
-            Dictionary<MDataRow, int> dic = new Dictionary<MDataRow, int>();
-            string FieldVal = string.Empty;
-            int Colspan = 0;
-            int index = -1;
-            for (int i = 0; i < dtPbGrid.Rows.Count; i++)
+            ISheet sheet = export.CreateSheet("Sheet1");//创建内存Excel
+            ICellStyle style = GetStyle(export, HSSFColor.LightOrange.Index);
+            if (header != null && header.FindRow(Config_Grid.Field + " like 'mg_%'") != null)
             {
-                FieldVal = dtPbGrid.Rows[i]["Field"].Value.ToString();
-                Colspan = Convert.ToInt32(dtPbGrid.Rows[i]["Colspan"].Value);
+                Dictionary<int, List<MDataRow>> headerGroup = GetColumnGroup(header);// header 包含mg_
+                MDataTable[] items = header.Split(Config_Grid.Field + " like 'mg_%'");
+                CreateMergeHeader(sheet, style, headerGroup, items[1]);
+                maxLevel = headerGroup.Count;
+            }
+            else
+            {
 
-                if (dic.ContainsKey(dtPbGrid.Rows[i]))
+                IRow row = sheet.CreateRow(0);//index代表第N行
+                if (columns != null)
                 {
-                    continue;
-                }
-                if (FieldVal.StartsWith("mg") && Colspan > 1)
-                {
-                    if (!dic.ContainsKey(dtPbGrid.Rows[i]))
+                    for (int i = 0; i < columns.Count; i++)
                     {
-                        index += 1;
-                        dic.Add(dtPbGrid.Rows[i], index);//加自身
-                    }
-                    for (int j = 1; j <= Colspan; j++)
-                    {
-                        if (dtPbGrid.Rows[i + j]["Field"].Value.ToString().StartsWith("mg"))
-                        {
-                            if (!dic.ContainsKey(dtPbGrid.Rows[i + j]))
-                            {
-                                dic.Add(dtPbGrid.Rows[i + j], index);
-                            }
-                        }
-                        else
-                        {
-                            if (!dic.ContainsKey(dtPbGrid.Rows[i + j]))
-                            {
-                                dic.Add(dtPbGrid.Rows[i + j], index);
-                                break;
-                            }
-
-                        }
+                        string title = string.IsNullOrEmpty(columns[i].Description) ? columns[i].ColumnName : columns[i].Description;
+                        ICell cell = row.CreateCell(i);
+                        cell.SetCellValue(title);//设置列头
+                        sheet.SetColumnWidth(i, 3000);
+                        cell.CellStyle = style;
                     }
                 }
                 else
                 {
-                    if (!dic.ContainsKey(dtPbGrid.Rows[i]))
+                    for (int i = 0; i < header.Rows.Count; i++)
                     {
-                        index += 1;
-                        dic.Add(dtPbGrid.Rows[i], index);
+                        string title = header.Rows[i].Get<string>(Config_Grid.Title);
+                        ICell cell = row.CreateCell(i);
+                        cell.SetCellValue(title);//设置列头
+                        sheet.SetColumnWidth(i, 3000);
+                        cell.CellStyle = style;
+                    }
+                }
+                maxLevel = 1;
+            }
 
+            return sheet;
+        }
+
+        /// <summary>
+        /// 获得多表头层级，并分组(算法和前端Aries.Common.Js里的getColumnGroup一致)
+        /// </summary>
+        private static Dictionary<int, List<MDataRow>> GetColumnGroup(MDataTable header)
+        {
+            Dictionary<int, List<MDataRow>> result = new Dictionary<int, List<MDataRow>>();
+            int index = 0;
+            int[] num = new int[6];
+            for (int i = 0; i < header.Rows.Count; i++)
+            {
+                MDataRow row = header.Rows[i];
+                if (row.Get<string>(Config_Grid.Field).IndexOf("mg_") != -1)
+                {
+                    int colspan = row.Get<int>(Config_Grid.Colspan, 1);
+                    if (num[index] > 0)//内部嵌套
+                    {
+                        index++;
+                        num[index] = colspan;
+                        num[index - 1] = num[index - 1] - num[index];//父级数字要减掉子级的数量
+                    }
+                    else
+                    {
+                        num[index] = colspan;
+                    }
+                    if (!result.ContainsKey(index)) { result.Add(index, new List<MDataRow>()); }
+                    result[index].Add(row);
+                }
+                else
+                {
+                    var level = (num[index] > 0) ? index + 1 : index;
+                    if (num[index] > 0)
+                    {
+                        num[index]--;
+                        if (num[index] == 0)//列已经够了
+                        {
+                            if (index > 0)//如果是子级
+                            {
+                                index--;
+                            }
+                        }
+                    }
+                    if (!result.ContainsKey(level)) { result.Add(level, new List<MDataRow>()); }
+                    result[level].Add(row);
+                }
+            }
+            //设置RowSpan属性
+            int maxLen = result.Count;
+            for (int i = 0; i < result.Count; i++)
+            {
+                for (int k = 0; k < result[i].Count; k++)
+                {
+                    MDataRow row = result[i][k];
+                    if (row.Get<int>(Config_Grid.Rowspan, 1) == 1 && !row.Get<string>(Config_Grid.Field).StartsWith("mg_"))
+                    {
+                        row.Set(Config_Grid.Rowspan, maxLen - i);
                     }
                 }
             }
-            return dic;
+            return result;
         }
-        /// <summary>
-        /// 合并行列
-        /// </summary>
-        /// <param name="dtPbGrid"></param>
-        /// <param name="dic"></param>
-        /// <param name="export"></param>
-        /// <param name="maxMerge"></param>
-        public static void MergedRowAndCol(MDataTable dtPbGrid, Dictionary<MDataRow, int> dic, IWorkbook export, int maxMerge)
+        private static void CreateMergeHeader(ISheet sheet, ICellStyle style, Dictionary<int, List<MDataRow>> headerGroup, MDataTable header)
         {
-            string title = string.Empty;
-            ICellStyle style = GetStyle(export, HSSFColor.LightOrange.Index);
-            ISheet sheet = export.GetSheet("Sheet1");
-            ICell cell;
-            IRow row;
-            int cellIndex = 0;
-            int colspan = 0, merge = 0;
-            int dex = 0;
-            for (int i = 0; i < dtPbGrid.Rows.Count; i++)
+            for (int i = 0; i < headerGroup.Count; i++) //事先创建好每一行数据,之后能才产生合并数据。
             {
-                title = dtPbGrid.Rows[i]["Title"].Value.ToString();
-                colspan = Convert.ToInt32(dtPbGrid.Rows[i]["Colspan"].Value);
-                merge = Convert.ToInt32(dtPbGrid.Rows[i]["MergeIndex"].Value);
-                cellIndex = i;
-                if (dic.ContainsKey(dtPbGrid.Rows[i]))
+                IRow row = sheet.CreateRow(i);
+                for (int d = 0; d < header.Rows.Count; d++)
                 {
-                    dex = dic[dtPbGrid.Rows[i]];//取索引
+                    ICell cel = row.CreateCell(d);
+                    cel.CellStyle = style;
                 }
-                if (!i.Equals(dex))
-                {
-                    cellIndex = dex;
-                }
-                int rf = 0, rl = 0, cf = 0, cl = 0;
-                row = sheet.GetRow(merge - 1);
+            }
+
+            //设置标题和合并单元格。
+            foreach (KeyValuePair<int, List<MDataRow>> item in headerGroup)
+            {
+                IRow row = sheet.GetRow(item.Key);
                 row.Height = 300;
-                if (colspan > 1)//跨列
+                int cellIndex = 0;
+                for (int i = 0; i < item.Value.Count; i++)
                 {
-                    rf = merge - 1; rl = merge - 1; cf = cellIndex; cl = cellIndex + colspan - 1;
+                    MDataRow data = item.Value[i];
+                    int colspan = data.Get<int>(Config_Grid.Colspan, 1);
+                    int rowspan = data.Get<int>(Config_Grid.Rowspan, 1);
+                    string title = data.Get<string>(Config_Grid.Title);
+                    if (i == 0)
+                    {
+                        string field = data.Get<string>(Config_Grid.Field);
+                        cellIndex = header.GetIndex(Config_Grid.Field + "='" + field + "'");
+                        if (cellIndex < 0) { cellIndex = 0; }
+                    }
+                    if (colspan > 1 || rowspan > 1)
+                    {
+                        sheet.AddMergedRegion(new CellRangeAddress(item.Key, item.Key + rowspan - 1, cellIndex, cellIndex + colspan - 1));//合并单元格
+                    }
+                    ICell cell = row.GetCell(cellIndex, MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                    sheet.SetColumnWidth(cell.ColumnIndex, 4000);
+
+                    cell.SetCellValue(title);
+                    cellIndex += colspan;
+
                 }
-                else//跨行
-                {
-                    rf = merge - 1; rl = maxMerge - 1; cf = cellIndex; cl = cellIndex;
-                }
-                cell = row.GetCell(cellIndex, MissingCellPolicy.CREATE_NULL_AS_BLANK);
-                //cell.CellStyle = style;
-                cell.SetCellValue(title);
-                sheet.SetColumnWidth(cellIndex, 4000);
-                sheet.AddMergedRegion(new CellRangeAddress(rf, rl, cf, cl));
             }
         }
+
         /// <summary>
         /// 索引转换为excel字母列名
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="index"></param>
         /// <returns></returns>
-        private static string IntToMoreChar(int value)
+        private static string ConvertIndexToChar(int index)
         {
             string rtn = string.Empty;
             List<int> iList = new List<int>();
 
-            value += 1;
-            while (value / 26 != 0 || value % 26 != 0)
+            index += 1;
+            while (index / 26 != 0 || index % 26 != 0)
             {
-                iList.Add(value % 26);
-                value /= 26;
+                iList.Add(index % 26);
+                index /= 26;
             }
             for (int j = 0; j < iList.Count - 1; j++)
             {
@@ -925,17 +906,6 @@ namespace Aries.Core.Helper
             return rtn;
         }
 
-        /// <summary>
-        /// 是否导出多级表头
-        /// </summary>
-        /// <param name="dt"></param>
-        /// <param name="isExportTemplate"></param>
-        /// <returns></returns>
-        private static bool IsExportMulHeader(MDataTable dt, bool isExportTemplate)
-        {
-            return false;//前端已修改了机制，后端还没调整。
-            return dt.FindRow((isExportTemplate ? "Import" : "Export") + "=1 and Field like 'mg_%'") != null;
-        }
     }
     public static partial class ExcelHelper
     {

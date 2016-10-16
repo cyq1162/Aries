@@ -28,7 +28,7 @@ namespace Aries.Logic
                 _MAction = new MAction(tableName);
                 _MAction.SetAopState(AopOp.CloseAll);
                 _MAction.BeginTransation();
-                _MAction.SetTransLevel(IsolationLevel.ReadUncommitted);
+               // _MAction.SetTransLevel(IsolationLevel.ReadCommitted);
             }
             return _MAction;
         }

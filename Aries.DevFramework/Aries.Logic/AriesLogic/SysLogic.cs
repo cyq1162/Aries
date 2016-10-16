@@ -393,8 +393,8 @@ namespace Aries.Logic
         public string GetExcelMapping()
         {
             MDataRow row = ExcelConfig.GetExcelRow(Query<string>("ID"));
-            string objName = row.Get<string>("EnName");
-            string[] TableNames = row.Get<string>("TableNames").Split(',');
+            string objName = row.Get<string>(Config_Excel.ExcelName);
+            string[] TableNames = row.Get<string>(Config_Excel.TableNames).Split(',');
             Dictionary<string, string> dic = new Dictionary<string, string>();
             JsonHelper js = new JsonHelper();
             foreach (string name in TableNames)
@@ -424,18 +424,21 @@ namespace Aries.Logic
 
     public partial class SysLogic
     {
+        /// <summary>
+        /// 根据Excel导入模板创建初始映射数据到（Config_ExcelInfo）表中。
+        /// </summary>
         public void InitExcelColumn()
         {
             string excelID = Query<string>("ExcelID");
             MDataRow row = ExcelConfig.GetExcelRow(excelID);
             if (row != null)
             {
-                string EnName = row.Get<string>(Config_Excel.EnName);
-                string path = Context.Server.MapPath("~/Resource/Excel/" + EnName + ".xls");
+                string excelName = row.Get<string>(Config_Excel.ExcelName);
+                string path = Context.Server.MapPath("~/Resource/Excel/" + excelName + ".xls");
                 bool isExists = File.Exists(path);
                 if (!isExists)
                 {
-                    path = Context.Server.MapPath("~/Resource/Excel/" + EnName + ".xlsx");
+                    path = Context.Server.MapPath("~/Resource/Excel/" + excelName + ".xlsx");
                     isExists = File.Exists(path);
                 }
                 if (isExists)
@@ -443,7 +446,7 @@ namespace Aries.Logic
                     MDataTable table;
                     using (FileStream stream = File.OpenRead(path))
                     {
-                        table = ExcelHelper.ReadExcel(true, stream, row.Get<int>("StartIndex"), row.Get<int>("HeadCrossRowNum"));
+                        table = ExcelHelper.ReadExcel(stream, null, row.Get<int>(Config_Excel.StartIndex), row.Get<int>(Config_Excel.HeadCrossRowNum), true);
                     }
                     if (table != null && table.Columns.Count > 0)
                     {
@@ -458,7 +461,8 @@ namespace Aries.Logic
                                 for (int i = 0; i < mdc.Count; i++)
                                 {
                                     MCellStruct ms = mdc[i];
-                                    bool result = action.Fill(string.Format("Field='{0}' And TableName='{1}' order by Formatter desc", ms.ColumnName, EnName));
+                                    bool result = action.Fill(string.Format("{0}='{1}' And {2}='{3}' order by {4} desc",
+                                      Config_Grid.Field, ms.ColumnName, Config_Grid.ObjName, excelName, Config_Grid.Formatter));
                                     if (string.IsNullOrEmpty(ms.Description))
                                     {
                                         if (result)
@@ -493,6 +497,9 @@ namespace Aries.Logic
                                 action.Set(Config_ExcelInfo.ExceInfoID, Guid.NewGuid());
                                 action.Set(Config_ExcelInfo.ExcelID, excelID);
                                 action.Set(Config_ExcelInfo.ExcelName, st.ColumnName);
+                                action.Set(Config_ExcelInfo.IsForeignkey, false);
+                                action.Set(Config_ExcelInfo.IsRequired, false);
+                                action.Set(Config_ExcelInfo.IsUnique, false);
                                 string name = st.ColumnName.Split('_')[0];
                                 MCellStruct key = null;
                                 foreach (var ms in msList)
@@ -504,6 +511,13 @@ namespace Aries.Logic
                                             action.Set(Config_ExcelInfo.TableName, msList[ms.Key]); key = ms.Key;
                                             action.Set(Config_ExcelInfo.Field, ms.Key.ColumnName);
                                             action.Set(Config_ExcelInfo.Formatter, ms.Key.DefaultValue);
+                                            if (!ms.Key.IsCanNull) { action.Set(Config_ExcelInfo.IsRequired, true); }
+                                            if (ms.Key.IsUniqueKey) { action.Set(Config_ExcelInfo.IsUnique, true); }
+                                            if (ms.Key.IsForeignKey)
+                                            {
+                                                action.Set(Config_ExcelInfo.IsForeignkey, true);
+                                                action.Set(Config_ExcelInfo.ForeignTable, ms.Key.FKTableName);
+                                            }
                                             break;
                                         }
                                     }

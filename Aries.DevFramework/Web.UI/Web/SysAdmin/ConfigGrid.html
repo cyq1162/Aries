@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <script src="/Style/JS/Aries.Loader.js"></script>
+    <style>
+        span > b {
+            cursor: pointer;
+            margin-left: 20px;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <table id="dg"></table>
+</body>
+</html>
+<script type="text/javascript">
+    var objName = AR.Utility.queryString('objName');
+    var dg = new AR.DataGrid("Config_Grid");
+    dg.ToolBar.BtnImport.isHidden = true;
+    dg.ToolBar.BtnExportTemplate.isHidden = true;
+    dg.options = {
+        pagination: false,
+        sortName: 'Frozen desc,OrderNum',
+        sortOrder: 'asc',
+        defaultWhere: [{ name: 'ObjName', pattern: '=', value: objName }]
+    }
+    dg.isEditor = true;
+    dg.defaultInsertData = {
+        objname: objName, align: 'center', width: 100, ordernum: 100, rowspan: 1, colspan: 1, mergeIndex: 1, datatype: 'string,50,0,0'
+    };
+    dg.ToolBar.add('关闭窗口', 'AR.Utility.Window.close', 4);
+    dg.ToolBar.addHtml("<span style='margin-left: 50px; color:gray;'><strong>" + objName + "</strong></span>", 5);
+    dg.ToolBar.addHtml("<span onclick = 'showView()'><b>查看脚本</b></span>", 6);
+    dg.ToolBar.addHtml("<span onclick = 'openConfigExcel()'><b>高级Excel导入配置</b></span>", 8);
+    dg.ToolBar.addHtml("<span onclick = 'showFormHtml()'><b>生成表单Html</b></span>", 9);
+    dg.PKColumn.Editor.BtnSave.onAfterExecute = function () {
+        AR.Utility.Window.refresh = true;
+    }
+    dg.bind();
+    function showView() {
+        AR.Utility.Ajax.post("GetSQL", objName, null, null, null, function (result) {
+            if (result && result.success) {
+                var $arae = $('<textarea>').css({ width: '99%', height: '96%' });
+                $arae.html(result.msg.replace(/<br\/>/g, "\r\n"));
+                AR.Utility.Window.dialog(objName, $arae, {
+                    toolbar: [{
+                        text: '保存',
+                        iconCls: 'icon-save',
+                        handler: function () {
+                            result = AR.Utility.Ajax.post("SaveSQL", objName, { "sys_code": $arae.val() }, false);
+                            if (result && result.msg) {
+                                AR.Utility.Window.showMsg(result.msg, "消息提示");
+                            }
+                        }
+                    }]
+                });
+            }
+        });
+    }
+
+    function openConfigExcel() {
+        AR.Utility.Window.open('ConfigExcel.html?ExcelName=' + objName, 'Excel导入配置');
+    }
+    function showFormHtml() {
+        var dg = parent.AR.Global.DG.operating;
+        var headData = dg.Internal.headerData;
+        var $form = $('<form>');
+        var $div_tip = $('<div class="cont-box">')
+            .append(
+                $('<div class="cont-box-tit">')
+                .append($('<h3>').html(objName)
+                .append($('<a class="arrows hover">'))
+                )
+            );
+        var $div_content = $('<div class="cont-box-in">');
+        var $div = $('<div class="cont-box-form">');
+        AR.Utility.createInputHtml($div, headData.slice(1), dg, false);
+        var $btn = $('<div class="btn">');
+        $btn.append($('<a>').append($('<input>').addClass('submit')));
+        $btn.append($('<a>').append($('<input>').addClass('return')));
+        $btn.append($('<input type="hidden">').attr('name', dg.Internal.primarykey));
+        $div.append($btn);
+        $form.append($div_tip);
+        $form.append($div_content.append($div));
+        AR.Utility.Window.dialog(objName + " Html", $form[0].outerHTML.replace(/</g, '&lt;').replace(/>/g, '&gt;'));
+    }
+</script>

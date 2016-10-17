@@ -127,6 +127,7 @@ namespace Aries.Core.Auth
                 return _menuID;
             }
         }
+        private string _UrlMenuID;
         /// <summary>
         /// 针对Url当前请求获取的菜单ID
         /// </summary>
@@ -134,12 +135,15 @@ namespace Aries.Core.Auth
         {
             get
             {
-                MDataRow row = GetMenu(ReuqestUri);
-                if (row != null)
+                if (string.IsNullOrEmpty(_UrlMenuID))
                 {
-                    return row.Get<string>("MenuID");
+                    MDataRow row = GetMenu(ReuqestUri);
+                    if (row != null)
+                    {
+                        _UrlMenuID = row.Get<string>("MenuID");
+                    }
                 }
-                return string.Empty;
+                return _UrlMenuID;
             }
         }
         private Uri ReuqestUri

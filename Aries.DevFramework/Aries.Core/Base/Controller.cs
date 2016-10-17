@@ -806,6 +806,11 @@ namespace Aries.Core
             if (dt == null || dt.Rows.Count == 0)
             {
                 dt = GridConfig.Create(ObjCode, dt.GetSchema(false));
+                if (p.UrlMenuID != string.Empty)//仅处理配置了菜单的数据。
+                {
+                    //顺带处理视图语句与菜单名称的绑定
+                    KeyValueConfig.SetTableDescription(ObjName, p.MenuName);
+                }
             }
             else
             {
@@ -817,8 +822,6 @@ namespace Aries.Core
                 {
                     dt.Rows[i][Config_Grid.Field].Value = dt.Rows[i].Get<string>(Config_Grid.Field).ToLower();
                 }
-                //顺带处理视图语句与菜单名称的绑定
-                KeyValueConfig.SetTableDescription(ObjName, p.MenuName);
                 jsonResult = dt.ToJson(false, false, true);
             }
             else

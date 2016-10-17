@@ -111,15 +111,7 @@
                         if (obj.success != undefined && obj.success) {
                             msg = "操作成功！";
                             if ($PCore.Global.DG.operating) {
-                                try {
-                                    if ($PCore.Global.DG.operating.type == 'datagrid') {
-                                        $PCore.Global.DG.operating.datagrid('reload');
-                                    } else {
-                                        $PCore.Global.DG.operating.$target.treegrid('reload');
-                                    }
-                                } catch (e) {
-
-                                }
+                                $PCore.Global.DG.operating.datagrid('reload');
                             }
                         }
                         $PCore.Utility.Window.showMsg(msg);

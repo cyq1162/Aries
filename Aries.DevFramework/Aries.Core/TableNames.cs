@@ -13,7 +13,7 @@ namespace Aries.Core.DB
     public enum Config_Excel { ExcelID, ExcelName, Description, TableNames, StartIndex, HeadCrossRowNum, WhereType, AcceptType, CreateTime }
     public enum Config_KeyValue { KeyValueID, ConfigKey, ConfigName, ConfigValue, Flag, Notes, OrderNo, CreateTime }
     public enum Config_ExcelInfo { ExceInfoID, ExcelID, ExcelName, TableName, Field, Formatter, IsUnique, IsForeignkey, ForeignTable, IsRequired, CreateTime }
-    public enum Sys_UserInfo { UserInfoID, CompanyID, Memo, IsOk, AreaID }
+    public enum Sys_UserInfo { UserInfoID }
     public enum Sys_User { UserID, UserName, FullName, Password, PwdExpiredTime, Sex, Phone, Email, Status, LoginCount, LastLoginTime, LastLoginIP, RoleIDs, CreateTime }
     #endregion
 }

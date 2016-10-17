@@ -508,7 +508,7 @@
             {
                 if(action.Fill("name='路过秋天'")) //或者action.Fill(888) 或者 action.Fill(id=888)
                 {
-                    action.SetTo(labUserName);
+                    action.UI.SetTo(labUserName);
                 }
             }
             </code></example>
@@ -5132,6 +5132,13 @@
             设置字符状态(返回true则为关键词，返回false则当为普通字符处理）
             </summary>
         </member>
+        <member name="M:CYQ.Data.Tool.JsonSplit.GetCharCount(System.String,System.Char)">
+            <summary>
+            获取字符在字符串出现的次数
+            </summary>
+            <param name="c"></param>
+            <returns></returns>
+        </member>
         <member name="T:CYQ.Data.Tool.JsonSplit.CharState">
             <summary>
             字符状态
@@ -5163,6 +5170,31 @@
             </summary>
             <typeparam name="K">key</typeparam>
             <typeparam name="V">value</typeparam>
+        </member>
+        <member name="M:CYQ.Data.Tool.MDictionary`2.Get(`0)">
+            <summary>
+            当Key为int时，通过此方法取值
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.Tool.MDictionary`2.Set(`0,`1)">
+            <summary>
+            当Key为int时，通过此方法取值
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Tool.MDictionary`2.Item(`0)">
+            <summary>
+            索引取值
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="P:CYQ.Data.Tool.MDictionary`2.Item(System.Int32)">
+            <summary>
+            通过index索引取值
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:CYQ.Data.Tool.StaticTool">
             <summary>
@@ -5255,7 +5287,7 @@
             <param name="otherParentControls">可选（其它的父控件）</param>
             <example><code>
             action.SetAutoPrefix("txt","ddl");//设置控件的前缀
-            action.SetToAll(this);
+            action.UI.SetToAll(this);
             </code></example>
         </member>
         <member name="M:CYQ.Data.UI.MActionUI.SetTo(System.Object)">
@@ -5264,7 +5296,7 @@
             </summary>
             <param name="control">控件对象</param>
             <example><code>
-            示例：action.SetTo(txtUserName);//同于：txtUserName.Text=action.Get&lt;string&gt;(Users.UserName);
+            示例：action.UI.SetTo(txtUserName);//同于：txtUserName.Text=action.Get&lt;string&gt;(Users.UserName);
             </code></example>
         </member>
         <member name="M:CYQ.Data.UI.MActionUI.SetTo(System.Object,System.String)">
@@ -5279,7 +5311,7 @@
             </summary>
             <param name="control">控件对象</param>
             <example><code>
-            示例：action.GetFrom(txtUserName);//获取TextBox默认Text属性的值
+            示例：action.UI.GetFrom(txtUserName);//获取TextBox默认Text属性的值
             </code></example>
         </member>
         <member name="M:CYQ.Data.UI.MActionUI.GetFrom(System.Object,System.String)">

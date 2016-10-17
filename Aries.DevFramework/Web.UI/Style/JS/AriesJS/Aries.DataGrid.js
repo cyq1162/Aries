@@ -6,9 +6,9 @@
         *objName：视图名，表名，或者sql文件指定的路径
         *tbName:指定的操作主表名称
         *id 默认值 dg      
-        *type 默认值datagrid，可设值为treegrid
+        *isTreeGrid 默认false(datagrid)，可设值为true(treegrid) 
         */
-    function DataGrid(objName, tbName, id, type) {
+    function DataGrid(objName, tbName, id, isTreeGrid) {
         //内部变量
         this.Internal = {
             primarykey: null,
@@ -17,7 +17,7 @@
             isLoadCompleted: false
         }
         this.id = id || 'dg';
-        this.type = type || "datagrid";
+        this.isTreeGrid = isTreeGrid || isTreeGrid == "treegrid";
         //主表名
         this.tableName = tbName || objName;
         //对象（视图）名称
@@ -42,45 +42,39 @@
                 if (!this.options.defaultWhere) {
                     this.options.defaultWhere = [];
                 }
-                isOr = (isOr == true? "or" : "and");
+                isOr = (isOr == true ? "or" : "and");
                 this.options.defaultWhere.push({ name: name, value: value, pattern: pattern, OrAnd: isOr });
             }
         }
         this.$target = null;
         this.datagrid = function (v1, v2) {
-            switch (this.type) {
-                case "datagrid":
-                    switch (v1) {
-                        case "deleteRow":
-                            this.$target.datagrid(v1, v2);
-                            return this.$target.treegrid("acceptChanges");
-                        case "reload":
-                            this.$target.datagrid("unselectAll");
-                            this.$target.datagrid("uncheckAll");
-                            break;
-                    }
-                    return this.$target.datagrid(v1, v2);
-                    break;
-                case "treegrid":
-                    switch (v1) {
-                        case "getRowIndex":
-                            return v2[this.options.idField];
-                        case "deleteRow":
-                            //if (!this.$target.treegrid("find", v2))//getcheckeds有数据缓存。
-                            //{
-                            //    return;
-                            //}
-                            return this.$target.treegrid("remove", v2);//先删
-                        case "appendRow":
-                            v1 = "append";
-                            break;
-                        case "reload":
-                            this.$target.treegrid("unselectAll");
-                            this.$target.treegrid("uncheckAll");
-                            break;
-                    }
-                    return this.$target.treegrid(v1, v2);
-                    break;
+            if (this.isTreeGrid) {
+                switch (v1) {
+                    case "getRowIndex":
+                        return v2[this.options.idField];
+                    case "deleteRow":
+                        return this.$target.treegrid("remove", v2);//先删
+                    case "appendRow":
+                        v1 = "append";
+                        break;
+                    case "reload":
+                        this.$target.treegrid("unselectAll");
+                        this.$target.treegrid("uncheckAll");
+                        break;
+                }
+                return this.$target.treegrid(v1, v2);
+            }
+            else {
+                switch (v1) {
+                    case "deleteRow":
+                        this.$target.datagrid(v1, v2);
+                        return this.$target.treegrid("acceptChanges");
+                    case "reload":
+                        this.$target.datagrid("unselectAll");
+                        this.$target.datagrid("uncheckAll");
+                        break;
+                }
+                return this.$target.datagrid(v1, v2);
             }
         }
         //获取列表的选中项，返回数组
@@ -144,7 +138,7 @@
         $Core.Global.DG.Items.set(this.id, this);
         $Core.Global.DG.operating = this;
         //如果是编辑模式 绑定行点击事件
-        if (this.isEditor || this.type == "treegrid") {
+        if (this.isEditor || this.isTreeGrid) {
             var that = this;
             var dbClick = this.options.onDblClickRow;
             this.options.onDblClickRow = function (index, row) {
@@ -312,7 +306,7 @@
                 }
             }
         };
-        if (dg.type == "treegrid") { cfg.pagination = false;}//默认不分页
+        if (dg.isTreeGrid) { cfg.pagination = false; }//默认不分页
         var opts = dg.options;
         var beforeLoad = opts.onBeforeLoad;
         opts.onBeforeLoad = function (param) {
@@ -336,7 +330,7 @@
         opts.onLoadSuccess = function (dg) {
             return function (data) {
                 dg.Internal.isLoadCompleted = true;
-                if (dg.type == "treegrid") {
+                if (dg.isTreeGrid) {
                     regKeyDown(dg);
                 }
                 loadSuccess && loadSuccess(data);
@@ -360,11 +354,11 @@
 
         //请求URL地址设置
         options.url = $Core.Global.route.root + "?sys_method=GetList&sys_objName=" + dg.objName + "&sys_tableName=" + dg.tableName;
-        if (dg.type == "datagrid") {
-            dg.$target = $("#" + dg.id).datagrid(options);
+        if (dg.isTreeGrid) {
+            dg.$target = $("#" + dg.id).treegrid(options);
         }
         else {
-            dg.$target = $("#" + dg.id).treegrid(options);
+            dg.$target = $("#" + dg.id).datagrid(options);
         }
         if (options.pagination) {
             var pager = {
@@ -568,7 +562,7 @@
                     }
                     if (responseData.success != undefined && responseData.success) {
                         $Core.Utility.Window.showMsg("删除成功");
-                        if (dg.options.pagination || dg.type == "datagrid") {
+                        if (dg.options.pagination || !dg.isTreeGrid) {
                             dg.reload();
                         }
                         else {//不分页，时，只移除当前节点，避免树型节点太大。
@@ -889,7 +883,7 @@
         var editResult = false;
         var editor = dg.datagrid("getEditors", index);
         if (editor.length > 0 && dg.datagrid('validateRow', index)) {
-            var isTreeTrid = dg.type == "treegrid";
+            var isTreeTrid = dg.isTreeGrid;
             var row = null;
             if (dbclick) {
                 if (isTreeTrid) {
@@ -897,7 +891,7 @@
                 }
                 else {
                     //data只存档1级的数据，不适合treegrid
-                    row = $.extend(true, {}, $.data(dg.$target[0], dg.type).data.rows[index]);
+                    row = $.extend(true, {}, $.data(dg.$target[0], "datagrid").data.rows[index]);
                 }
             }
             else { row = $.extend(true, {}, dg.getSelected()); }

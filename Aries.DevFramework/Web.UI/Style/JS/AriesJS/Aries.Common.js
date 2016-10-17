@@ -65,7 +65,7 @@
                                 dg.isEditor && (dg.PKColumn.Editor.editIndex = undefined);
                                 var jsonString = JSON.stringify(searchJson);
                                 dg.isSearch = true;
-                                if (dg.type == 'treegrid') {
+                                if (dg.isTreeGrid) {
                                     dg.datagrid("options").onBeforeLoad = function (row, param) {
                                         eval("sys_search = '" + jsonString + "'");
                                         param.sys_search = sys_search;
@@ -173,7 +173,7 @@
                         this.onBeforeExecute = function (index, isSameLevel) { };
                         this.onExecute = function (dg, index, isSameLevel) {
                             if (this.onBeforeExecute(index, isSameLevel) == false) { return; };
-                            var isTreeGrid = dg.type == "treegrid";
+                            var isTreeGrid = dg.isTreeGrid;
                             if (!this.winUrl && (dg.isEditor || isTreeGrid)) {
                                 if (endEditing(dg)) {
                                     dg.PKColumn.Editor.operator = "Add";
@@ -807,7 +807,7 @@
                         continue;
                     }
                     //是否编辑模式
-                    if ((dg.isEditor && json_data[i].edit) || dg.type == "treegrid") {
+                    if ((dg.isEditor && json_data[i].edit) || dg.isTreeGrid) {
                         this.formatEditor(json_data[i], dg);
                     }
                     if (json_data[i].formatter && typeof (json_data[i].formatter) != 'function') {
@@ -981,11 +981,6 @@
     };
     //创建工具栏区
     function _createToolBarHtml(dg) {
-        //var div_fn = $('<div class="function-box" id="' + dg.id + '_ToolbarArea">');
-        //if (!dg.ToolBar.isHidden) {
-        //div_fn.attr("class", "function-box");
-        //if (dg.type == "datagrid") {
-
         var item; actionKeys = $Core.Global.Variable.actionKeys || "";
         if (actionKeys.indexOf(',add,') > -1 && !dg.ToolBar.BtnAdd.isHidden) {
             dg.ToolBar.BtnAdd.$target = $('<input class=\"add\" flag=\"btn_add\" type=\"button\" name=\"添加\" value=\"\"/>');

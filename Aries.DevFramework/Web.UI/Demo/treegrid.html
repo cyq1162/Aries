@@ -6,7 +6,7 @@
     <title></title>
 </head>
 <body>
- <!--   <div style="height: 440px;">
+    <!--   <div style="height: 440px;">
         <table id="tg"></table>
     </div>
     <hr />-->
@@ -14,23 +14,14 @@
         <table id="grid"></table>
     </div>
     <script type="text/javascript">
-        //var tg = new AR.DataGrid('Demo_Tree', null, "tg", "treegrid");
-        //tg.options = {
-        //    idField: "ID",
-        //    treeField: "Name",
-        //    parentField: "ParentID",
-        //}
-        //tg.bind();
-        var tg = new AR.DataGrid('Demo_Area', null, "grid", "treegrid");
-        //dg.isEditor = true;
-        //dg.type = "treegrid";
+        var tg = new AR.DataGrid('Demo_Area', null, "grid", true);
         tg.options = {
             idField: "code",
             treeField: "name",
             parentField: "pcode",
             pagination: true,
             onEditing: function (index, row) {
-                alert(index + "," + row);
+                alert("onEditing-" + index + ":" + JSON.stringify(row));
             }
         }
         // dg.addWhere("lvl", "(3)", "in");

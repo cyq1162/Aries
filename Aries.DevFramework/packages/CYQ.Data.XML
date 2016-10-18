@@ -3944,6 +3944,15 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:CYQ.Data.SQL.SqlCreate.GetColumnName(CYQ.Data.Table.MDataColumn,System.Boolean,CYQ.Data.DalType)">
+            <summary>
+            获得批量导入的列名。
+            </summary>
+            <param name="mdc"></param>
+            <param name="keepID"></param>
+            <param name="dalType"></param>
+            <returns></returns>
+        </member>
         <member name="P:CYQ.Data.SQL.SqlCreate.AutoID">
             <summary>
             oracle序列名称

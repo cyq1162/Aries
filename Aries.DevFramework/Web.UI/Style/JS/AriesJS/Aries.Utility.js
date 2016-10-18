@@ -737,11 +737,13 @@ window.AR = (function ($Core) {
             }
         }
     };
-    Array.prototype.contains = function (v) {
+    //是否包含指定的值（值，Key）
+    Array.prototype.contains = function (v, k) {
         if (this instanceof Array) {
-
+            var value;
             for (var i = 0; i < this.length; i++) {
-                if (this[i].toString() == v.toString()) {
+                value = k ? this[i][k] : this[i];
+                if (value.toString() == v.toString()) {
                     return true;
                 }
             }

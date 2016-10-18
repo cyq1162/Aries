@@ -257,17 +257,6 @@
             return triggerSelect($box);
         })
     }
-    //侦测数据是否已经存在
-    function detectArray(array, objKey, currentKey) {
-        var flag = false;
-        for (var i in array) {
-            if (array[i][objKey] == currentKey) {
-                flag = true;
-                break;
-            }
-        }
-        return flag;
-    }
     //多选默认注册事件
     function registerMultiEvent(opts) {
         opts.onSelect = function (record) {
@@ -334,17 +323,21 @@
     initObjNameCombobox = function () {
         //提交请求获取数据
         var item_data = [];
+        var checkData = [];
         $("[objname]").each(function () {
             var objName = $(this).attr("objname");
             var parent = $(this).attr("parent");
-            var para = $(this).attr("para") || $Core.Combobox.paras[objName];
-            if (objName && objName.length != 0) {//收集所有对象
-                if (!detectArray(item_data, 'objname', objName)) {
+            var para = $(this).attr("para") || $Core.Combobox.paras[objName] || "";
+            if (objName && objName.length != 0) {
+                var checkKey = objName.toString().toLowerCase() + "_" + para.toString().toLowerCase();
+                if (!checkData.contains(checkKey)) {
+                    checkData.push(checkKey);
                     var item = { ObjName: objName, Parent: parent, Para: para };
                     item_data.push(item);
                 }
             }
         });
+        checkData = null;
         if (item_data.length > 0) {
             loadComboboxData(item_data, null, function () {
                 $("[objname]").each(function () {

@@ -263,7 +263,7 @@ namespace Aries.Core.Config
                         var row = dt.Rows[i];
                         foreach (var cell in row)//遍历所有数据行
                         {
-                            if (cell.Struct.TableName == table)//过滤出属于本表的字段。
+                            if (cell.Struct.TableName != null && cell.Struct.TableName.ToLower() == table.ToLower())//过滤出属于本表的字段。
                             {
                                 string[] items = cell.ColumnName.Split('.');
                                 string columnName = items[items.Length - 1];

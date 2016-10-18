@@ -17,9 +17,9 @@
     <label>onchange=onchange：（事件...........）</label><input type="text" objname="C_PB_Province" onchange="onchange"/>
     <hr />
     <h3>单选级联</h3>
-    <label>省份：</label><input type="text" id="sel" objname="C_PB_Province2" />
-    <label>城市：</label><input type="text"  objname="C_PB_City2" parent="C_PB_Province2" />
-    <label>区域：</label><input type="text" objname="C_PB_District2" parent="C_PB_City2" />
+    <label>省份：</label><input type="text" name="prov" objname="C_PB_Province2" />
+    <label>城市：</label><input type="text" name="city"  objname="C_PB_City2" parent="C_PB_Province2" />
+    <label>区域：</label><input type="text" name="dist" objname="C_PB_District2" parent="C_PB_City2" />
     <hr />
     <h3>多选级联</h3>
     <label>省份：</label><input type="text" objname="C_PB_Province3" multiple="true" />
@@ -48,7 +48,8 @@
             AR.Combobox.setValues({ gender: 0 });
         }
         else {
-            AR.Combobox.setValues({ onlytext: "河东区" }); 
+            AR.Combobox.setValues({ onlytext: "河东区" });
+            AR.Combobox.setValues({ prov: "200000000", city: "200100000" });
         }
     }
     

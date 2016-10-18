@@ -353,18 +353,18 @@ namespace Aries.Core.Auth
                 case "GetInitConfig":
                 case "GetKeyValueConfig":
                 case "GetHeader":
-                case "GetCombobox":
-                    if (!CheckSafeKey())
+                    if (!CheckSafeKey(20))
                     {
                         return false;
                     }
                     return true;
-                //case "GetList":
-                //    if (!CheckSafeKey())
-                //    {
-                //        return false;
-                //    }
-                //    break;
+                case "GetList":
+                case "GetCombobox":
+                    if (!CheckSafeKey(0))
+                    {
+                        return false;
+                    }
+                    return true;
             }
             string key = string.Empty;
             foreach (object item in mi.GetCustomAttributes(typeof(ActionKeyAttribute), true))
@@ -377,7 +377,7 @@ namespace Aries.Core.Auth
             }
             return HasFunc(key);
         }
-        private bool CheckSafeKey()
+        private bool CheckSafeKey(int second)
         {
             HttpCookie cookie = HttpContext.Current.Request.Cookies["aries_safekey"];
             if (cookie != null)
@@ -385,6 +385,7 @@ namespace Aries.Core.Auth
                 string value = EncrpytHelper.Decrypt(cookie.Value);
                 if (value.StartsWith("aries:"))
                 {
+                    if (second == 0) { return true; }
                     int time;
                     if (int.TryParse(value.Split(':')[1], out time))
                     {
@@ -392,7 +393,7 @@ namespace Aries.Core.Auth
 #if DEBUG
                         return result > -1 && result < 120;//2分钟的调试时间
 #else
-                        return result > -1 && result < 10;
+                        return result > -1 && result < second;
 #endif
                     }
                 }

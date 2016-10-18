@@ -18,6 +18,7 @@
         op.key = $input.attr("configkey") || $input.attr("objname");
         op.defaultItem = $input.attr("defaultitem") != "false";
         op.parent = $input.attr("parent");
+        op.para = $input.attr("para");
         op.tree = $input.attr("tree") == "true";
         //op.defaultIndex = $input.attr("defaultindex");
         if ($input.attr("onlytext") == "true") {
@@ -145,28 +146,28 @@
     }
 
     function loadComboboxData(item_data, condition, onLoadedEvent) {
-        var comboxData = $Core.Global.comboxData;
+        // var comboxData = $Core.Global.comboxData;
         //此判断是因为List跟Edit的请求方式不一样
-        if (condition == undefined && comboxData.length > 0) {
-            var _removeIndex = new Array();//需要移除的项
-            for (var i = 0; i < comboxData.length; i++) {
-                for (var k in comboxData[i]) {
-                    if (k == undefined) continue;
-                    for (var j = 0; j < item_data.length; j++) {
-                        for (var kk in item_data[j]) {
-                            if (kk && k == item_data[j][kk]) {
-                                _removeIndex.push(j);
-                            }
-                        }
-                    }
-                }
-            }
-            if (_removeIndex.length > 0) {
-                for (var i = _removeIndex.length; i > 0 ; i--) {
-                    item_data.splice(_removeIndex[i], 1);
-                }
-            }
-        }
+        //if (condition == undefined && comboxData.length > 0) {
+        //    var _removeIndex = new Array();//需要移除的项
+        //    for (var i = 0; i < comboxData.length; i++) {
+        //        for (var k in comboxData[i]) {
+        //            if (k == undefined) continue;
+        //            for (var j = 0; j < item_data.length; j++) {
+        //                for (var kk in item_data[j]) {
+        //                    if (kk && k == item_data[j][kk]) {
+        //                        _removeIndex.push(j);
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //    if (_removeIndex.length > 0) {
+        //        for (var i = _removeIndex.length; i > 0 ; i--) {
+        //            item_data.splice(_removeIndex[i], 1);
+        //        }
+        //    }
+        //}
         //结束请求，开始渲染
         if (item_data.length > 0) {
             var _post_data = { sys_json: JSON.stringify(item_data) };
@@ -179,7 +180,7 @@
                 if (!(result instanceof Array)) {
                     result = [result];
                 }
-
+                var comboxData = $Core.Global.comboxData;
                 for (var i = 0, len = result.length; i < len; i++) {
                     for (var k in result[i]) {
                         var flag = true;
@@ -205,23 +206,32 @@
 
         }
     }
-
-    //多级联下拉处理---------------------------------
+    //级联的绑定
     function reBind(pid, $input, parentOp) {
-        var ds = $Core.Global.comboxData;
         var op = _getOption($input);
-        var boxData; var new_data = [];
-        for (var i = 0; i < ds.length; i++) {
-            if (ds[i][op.key]) {
-                boxData = ds[i][op.key];
-                for (var j = 0; j < boxData.length; j++) {
-                    if (boxData[j].parent == pid) {
-                        new_data.push(boxData[j]);
-                    }
-                }
-                break;
-            }
+        if (!pid && pid != "0") {
+            _reBind(op, $input, parentOp, []);//绑定空数组。
+            return;
         }
+        var ds = $Core.Global.comboxData;
+        var data = ds.get(op.key);//内部存档还是数组
+        data && (data = data.get("parent", pid));
+        if (data && data.length > 0) {
+            _reBind(op, $input, parentOp, data);
+        }
+        else {
+            //远程读取
+            var json = [{ ObjName: op.key, Parent: pid, Para: op.para }];
+            loadComboboxData(json, null, function () {
+                return function () {
+                    var d = $Core.Global.comboxData.get(op.key) || [];
+                    _reBind(op, $input, parentOp, d);
+                }
+            }(op, $input, parentOp));
+        }
+    }
+    //多级联下拉处理---------------------------------
+    function _reBind(op, $input, parentOp, data) {
         //如果父级为多选逻辑处理
         var isAddDefaultItem = true;
         if (parentOp.multiple) {
@@ -230,11 +240,11 @@
                 orignalData = setCombo($input, "getData");
             }
             if (orignalData.length > 0) {
-                new_data = orignalData.concat(new_data);
+                data = orignalData.concat(data);
                 isAddDefaultItem = false;
             }
         }
-        op.data = new_data;
+        op.data = data;
         if (isAddDefaultItem && !op.tree && op.defaultItem && (op.data.length == 0 || op.data[0][op.textField] != "请选择")) {
             op.data.unshift({ text: "请选择", value: "" });
         }
@@ -242,7 +252,6 @@
             setCombo($input, "textbox").removeClass("validatebox-invalid");
         };
         _cascadeBindCombo($input, op);
-
     }
     //递归触发事件(将下级重置为请选择)
     function triggerSelect($input) {
@@ -328,11 +337,11 @@
             var objName = $(this).attr("objname");
             var parent = $(this).attr("parent");
             var para = $(this).attr("para") || $Core.Combobox.paras[objName] || "";
-            if (objName && objName.length != 0) {
+            if (objName && objName.length != 0 && parent == undefined) {
                 var checkKey = objName.toString().toLowerCase() + "_" + para.toString().toLowerCase();
                 if (!checkData.contains(checkKey)) {
                     checkData.push(checkKey);
-                    var item = { ObjName: objName, Parent: parent, Para: para };
+                    var item = { ObjName: objName, Parent: "", Para: para };
                     item_data.push(item);
                 }
             }
@@ -341,7 +350,9 @@
         if (item_data.length > 0) {
             loadComboboxData(item_data, null, function () {
                 $("[objname]").each(function () {
-                    bindObjName($(this));
+                    if (!$(this).attr("parent")) {
+                        bindObjName($(this));
+                    }
                 });
                 $Core.Combobox.onAfterExecute("objname");
                 setValueToCombobox();
@@ -413,13 +424,12 @@
     //设置Easyui下拉框的值
     function setValueToCombobox() {
         var data = $Core.Combobox.values;
-        if ($.type(data) == 'object') {
+        if (data) {
             var reg_date = /^\d{4}(-|\/)\d{2}(-|\/)\d{2}\s?.*$/;
-            $("[comboname]").each(function () {
-                var value = data[$(this).attr("comboname")];
+            for (var k in data) {
+                var value = data[k];
                 if (value != undefined && !reg_date.test(value)) {
-                    try {
-                        setCombo($(this), "clear");
+                    $("[comboname='" + k + "']").each(function () {
                         if (value.toString().indexOf(',') != -1 && value.toString().split(',').length > 1) {
                             value = value.split(',');
                             for (var i = 0; i < value.length; i++) {
@@ -429,16 +439,23 @@
                         } else {
                             setCombo($(this), "select", value.toString());
                         }
-                    } catch (e) { }
+                       
+                        if ($(this).attr("parent")) { 
+                            var opData = setCombo($(this), "getData");// 级联和设值（不知道谁先执行的，所以检测是否绑定了数据）
+                            if (opData.length <= 1) {
+                                $(this).attr("defaultValue", value);
+                            }
+                        }
+                    });
                 }
-            });
+            }
         }
     };
     function setValues(data) {
-        $Core.Combobox.values = data;
+        $Core.Combobox.values = $.extend($Core.Combobox.values, data);
     }
     function setParas(data) {
-        $Core.Combobox.paras = data;
+        $Core.Combobox.paras = $.extend($Core.Combobox.paras, data);;
     }
     function bindCombo($box, op) {
         if (op.tree) {
@@ -448,7 +465,12 @@
         else {
             $box.combobox(op);
         }
-        if (!op.tree && op.data.length > 0) { setCombo($box, "select", op.data[0][op.valueField]); }
+        var value = $box.attr("defaultValue");//重新赋值。
+        if (value && op.data.contains(value, "value")) {
+            setCombo($box, "select", value);
+            $box.removeAttr("defaultValue");
+        }
+        else if (!op.tree && op.data.length > 0) { setCombo($box, "select", op.data[0][op.valueField]); }
     }
     function setCombo($box, key, value, isTree) {
         var tree = isTree || $box.attr("tree");

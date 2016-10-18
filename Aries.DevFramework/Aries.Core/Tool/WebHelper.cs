@@ -81,7 +81,7 @@ namespace Aries.Core.Helper
             {
                 try
                 {
-                    result = Convert.ChangeType(value, t);
+                    result = ChangeType(value, t);
                 }
                 catch
                 {
@@ -108,7 +108,65 @@ namespace Aries.Core.Helper
             }
             return returnValue.Trim(' ');
         }
-
+        private static object ChangeType(object value, Type t)
+        {
+            if (t == null)
+            {
+                return null;
+            }
+            string strValue = Convert.ToString(value);
+            if (t.IsGenericType && t.Name.StartsWith("Nullable"))
+            {
+                t = Nullable.GetUnderlyingType(t);
+                if (strValue == "")
+                {
+                    return null;
+                }
+            }
+            if (t.Name == "String")
+            {
+                return strValue;
+            }
+            if (strValue == "")
+            {
+                return Activator.CreateInstance(t);
+            }
+            else if (t.IsValueType)
+            {
+                if (t.Name == "Guid")
+                {
+                    return new Guid(strValue);
+                }
+                return Convert.ChangeType(strValue, t);
+            }
+            else
+            {
+                return Convert.ChangeType(value, t);
+            }
+        }
+        internal static string ReplacePara(string sql, string key, string value)
+        {
+            if (!string.IsNullOrEmpty(sql) && !string.IsNullOrEmpty(key))
+            {
+                //格式化请求参数
+                int index = sql.IndexOf(key);
+                if (index > -1)
+                {
+                    if (string.IsNullOrEmpty(value) && sql.IndexOf('=', index - 5, 5) > -1)//处理成1=1，同时有=号
+                    {
+                        int end = index + key.Length + 1;//可能参数后面有'@parnet'
+                        string temp = sql.Substring(0, index - 5);
+                        int start = temp.LastIndexOf(' ');
+                        sql = sql.Replace(sql.Substring(start + 1, end - start - 1), "1=1 ");
+                    }
+                    else
+                    {
+                        sql = sql.Replace(key, value);
+                    }
+                }
+            }
+            return sql;
+        }
         #region 下载文件
 
         public static void SendFile(string fileName, string saveText)

@@ -3,19 +3,19 @@
 --说明：注意命名规范:C_模块名_业务名 and PCode in (@parent)
 
 C_SYS_Role=	 SELECT RoleID AS value, RoleName AS text FROM Sys_Role
-C_SYS_Department=SELECT ID AS value, DepartmentName AS text,ParentID as TopComID FROM System_Department  where DepartmentName like '%@text%'
+C_SYS_Department=SELECT ID AS value, DepartmentName AS text,ParentID as TopComID FROM System_Department  where DepartmentName like '%@para%'
 --区域表
 
 C_PB_Province =	SELECT Code AS value,Name AS text,PCode AS parent FROM Demo_Area WHERE Lvl = 1
-C_PB_City     =	SELECT Code AS value,Name AS text,PCode AS parent FROM Demo_Area WHERE Lvl = 2 
-C_PB_District =	SELECT Code AS value,Name AS text,PCode AS parent FROM Demo_Area WHERE Lvl = 3   
+C_PB_City     =	SELECT Code AS value,Name AS text,PCode AS parent FROM Demo_Area WHERE Lvl = 2 and PCode='@parent'
+C_PB_District =	SELECT Code AS value,Name AS text,PCode AS parent FROM Demo_Area WHERE Lvl = 3 and PCode='@parent'
 
 C_PB_Province3 =	SELECT Code AS value,Name AS text,PCode AS parent FROM Demo_Area WHERE Lvl = 1
-C_PB_City3     =	SELECT Code AS value,Name AS text,PCode AS parent FROM Demo_Area WHERE Lvl = 2
-C_PB_District3 =	SELECT Code AS value,Name AS text,PCode AS parent FROM Demo_Area WHERE Lvl = 3
+C_PB_City3     =	SELECT Code AS value,Name AS text,PCode AS parent FROM Demo_Area WHERE Lvl = 2 and PCode='@parent'
+C_PB_District3 =	SELECT Code AS value,Name AS text,PCode AS parent FROM Demo_Area WHERE Lvl = 3 and PCode='@parent'
 
 C_PB_Province2 =	SELECT Code AS value,Name AS text,PCode AS parent FROM Demo_Area WHERE Lvl = 1
-C_PB_City2     =	SELECT Code AS value,Name AS text,PCode AS parent FROM Demo_Area WHERE Lvl = 2
-C_PB_District2 =	SELECT Code AS value,Name AS text,PCode AS parent FROM Demo_Area WHERE Lvl = 3
+C_PB_City2     =	SELECT Code AS value,Name AS text,PCode AS parent FROM Demo_Area WHERE Lvl = 2 and PCode='@parent'
+C_PB_District2 =	SELECT Code AS value,Name AS text,PCode AS parent FROM Demo_Area WHERE Lvl = 3 and PCode='@parent'
 
 C_PB_ProvinceCity=SELECT Code AS value,Name AS text,PCode AS parent FROM Demo_Area WHERE Lvl = 1 or Lvl=2

@@ -854,7 +854,6 @@ namespace Aries.Core
                 {
                     List<MDataTable> dtList = new List<MDataTable>();
                     StringBuilder sb = new StringBuilder();
-                    string value = null;
                     for (int i = 0; i < boxes.Count; i++)
                     {
                         ComboboxItem item = boxes[i];
@@ -863,24 +862,9 @@ namespace Aries.Core
                         {
                             #region 核心处理
                             var sql = SqlCode.GetCode(item.ObjName).ToLower();//已经处理过系统参数和Post参数
-                            //格式化请求参数
-                            string key = "@text";
-                            int index = sql.IndexOf(key);
-                            if (index > -1)
-                            {
-                                value = Query<string>("q", item.Para);//easyui远程传递参数
-                                if (string.IsNullOrEmpty(value) && sql.IndexOf('=', index - 5, 5) > -1)//处理成1=1，同时有=号
-                                {
-                                    int end = index + key.Length;
-                                    string temp = sql.Substring(0, index - 5);
-                                    int start = temp.LastIndexOf(' ');
-                                    sql = sql.Replace(sql.Substring(start + 1, end - start - 1), "1=1");
-                                }
-                                else
-                                {
-                                    sql = sql.Replace(key, value);
-                                }
-                            }
+                            sql = WebHelper.ReplacePara(sql, "@para", item.Para);
+                            sql = WebHelper.ReplacePara(sql, "@parent", item.Parent);
+
                             sb.Append(sql + ";");
                             #endregion
                         }
@@ -931,10 +915,10 @@ namespace Aries.Core
                     for (int i = 0; i < dtList.Count; i++)
                     {
                         json.Add(boxes[i].ObjName, dtList[i].Rows.Count > 0 ? dtList[i].ToJson(false, false, true) : "[]", true);
-                        if (!string.IsNullOrEmpty(boxes[i].Parent))
-                        {
-                            json.Add("Target", boxes[i].Parent);
-                        }
+                        //if (!string.IsNullOrEmpty(boxes[i].Parent))
+                        //{
+                        //    json.Add("Target", boxes[i].Parent);
+                        //}
                         json.AddBr();
                     }
 

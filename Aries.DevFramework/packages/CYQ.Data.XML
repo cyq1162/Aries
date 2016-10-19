@@ -2046,6 +2046,11 @@
             输出类型
             </summary>
         </member>
+        <member name="F:CYQ.Data.ParaType.InputOutput">
+            <summary>
+            输入输出类型
+            </summary>
+        </member>
         <member name="F:CYQ.Data.ParaType.ReturnValue">
             <summary>
             返回值类型

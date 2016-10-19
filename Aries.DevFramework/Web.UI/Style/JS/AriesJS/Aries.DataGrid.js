@@ -277,7 +277,7 @@
             pageSize: 15,
             pageList: [10, 15, 20, 30, 40, 50, 100],
             fit: true,
-            fitColumns: false,
+            fitColumns: true,
             pagination: true,
             rownumbers: true,
             autoRowHeight: false,

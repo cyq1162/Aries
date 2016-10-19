@@ -547,8 +547,8 @@
                     if (opts.callback && typeof (opts.callback) != "function") {
                         throw TypeError("the callback parameter not is a function");
                     }
-                    if (d.success == false && !opts.callback) {
-                        $Core.Utility.Window.showMsg(d.msg);
+                    if (d.success == false && !opts.callback && $.messager) {
+                        $Core.Utility.Window.showMsg(d.msg);//需要引用easyui，而其它页面可能没有
                         json = null;
                     } else {
                         if (opts.callback) {

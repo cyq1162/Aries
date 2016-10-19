@@ -1,5 +1,13 @@
 ﻿
 +function ($, $Core) {
+    /**
+   *该文件依赖与AR.Core.Utility.js文件
+   */
+    $Core.Utility.Ajax.post("GetInitConfig,GetKeyValueConfig", null, null, null, null, function (result) {
+        $Core.Global.Variable = result.GetInitConfig;
+        $Core.Global.Variable.isLoadCompleted = true;
+        $Core.Global.Config = result.GetKeyValueConfig;
+    });
     //==================================Internal Function Region======================================================
     $Core.DataGrid = DataGrid;
     /**
@@ -718,7 +726,7 @@
         }();
     }
     function _getBtnTemp(key) {
-        var btn = $Core.PKTemplate[key];
+        var btn = $Core.Global.DG.PKTemplate[key];
         if (btn == undefined) {
             return '<span  title="' + key + '"   op="0">' + key + '</span>';
         }

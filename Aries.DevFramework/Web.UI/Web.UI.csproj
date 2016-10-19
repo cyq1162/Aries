@@ -170,13 +170,12 @@
     <Content Include="Style\JS\AriesJS\Aries.Combobox.js" />
     <Content Include="Style\JS\AriesJS\Aries.Upload.js" />
     <Content Include="Style\JS\AriesJS\Aries.Common.js" />
-    <Content Include="Style\JS\AriesJS\Aries.Config.js" />
     <Content Include="Style\JS\AriesJS\Aries.DataGrid.js" />
     <Content Include="Style\JS\AriesJS\Aries.EasyUIExtend.js" />
     <Content Include="Style\JS\AriesJS\Aries.Form.js" />
-    <Content Include="Style\JS\AriesJS\Aries.Themes.js" />
     <Content Include="Style\JS\AriesJS\Aries.Utility.js" />
     <Content Include="Style\JS\Aries.Loader.js" />
+    <Content Include="Style\JS\AriesJS\Aries.Global.js" />
     <Content Include="Style\JS\EasyUI-1.3.4\easyloader.js" />
     <Content Include="Style\JS\EasyUI-1.3.4\jquery.easyui.min.js" />
     <Content Include="Style\JS\EasyUI-1.3.4\jquery.min.js" />

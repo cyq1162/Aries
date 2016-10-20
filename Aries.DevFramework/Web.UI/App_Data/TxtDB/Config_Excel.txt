@@ -1,2 +1,3 @@
 {"ExcelID":"System.Guid","ExcelName":"System.String","Description":"System.String","TableNames":"System.String","StartIndex":"System.Int32","HeadCrossRowNum":"System.Int32","WhereType":"System.Byte","AcceptType":"System.Byte","CreateTime":"System.DateTime"},
-{"ExcelID":"a3410cbc-144d-e90e-53ed-897eee8df4e6","ExcelName":"V_Test","Description":"V_Test","TableNames":"Demo_TestA,Demo_TestB","StartIndex":0,"HeadCrossRowNum":0,"WhereType":0,"AcceptType":1,"CreateTime":"2016-05-09 09:18:26"}
+{"ExcelID":"a3410cbc-144d-e90e-53ed-897eee8df4e6","ExcelName":"V_Test","Description":"V_Test","TableNames":"Demo_TestA,Demo_TestB","StartIndex":0,"HeadCrossRowNum":0,"WhereType":0,"AcceptType":1,"CreateTime":"2016-05-09 09:18:26"},
+{"ExcelID":"f8754ebd-b722-0e9d-002f-2510100d07cf","ExcelName":"V_Test2","Description":"V_Test2","TableNames":"Demo_TestA,Demo_TestB","StartIndex":0,"HeadCrossRowNum":0,"WhereType":0,"AcceptType":0,"CreateTime":"2016-10-20 00:00:00"}

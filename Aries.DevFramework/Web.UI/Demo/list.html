@@ -89,6 +89,7 @@
     //    { name: 'F3', pattern: 'like', value: '3' }
     //];
     grid.addWhere("f1", "3", "like");
+    grid.removeWhere("f1");
     grid.Search.onAfterExecute = function () {
         if (!customToolbar && this.Items.length > 0) {
             //  this.Items["f1"] && this.Items["f1"].val('1');

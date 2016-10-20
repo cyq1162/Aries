@@ -54,6 +54,11 @@
                 this.options.defaultWhere.push({ name: name, value: value, pattern: pattern, OrAnd: isOr });
             }
         }
+        this.removeWhere = function (name) {
+            if (name && this.options.defaultWhere && this.options.defaultWhere.length > 0) {
+                this.options.defaultWhere.remove(name, "name");
+            }
+        }
         this.$target = null;
         this.datagrid = function (v1, v2) {
             if (this.isTreeGrid) {

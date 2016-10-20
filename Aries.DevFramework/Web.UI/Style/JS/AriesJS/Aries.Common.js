@@ -390,19 +390,21 @@
                     if ($(this).val() == '' || $(this).val() == '请选择' || $(this).val() == null) {
                         return;
                     }
-                    var op = 'Like';
-                    //因为easyui渲染下拉框后把之前的input影藏
-                    if ($(this).attr("type") == 'hidden' && !$("[comboname=" + $(this).attr("name") + "]").attr("multiple")) {
-                        op = 'Equal';
+                    var $input = $("[comboname=" + $(this).attr("name") + "]");
+                    var $box = $input[0] ? $input : $(this);//是否下拉
+                    var op = 'like';//默认
+                    var pattern = $box.attr("pattern");
+                    if ($box.attr("multiple") === 'multiple') {
+                        op = 'LikeOr';//多选时不能自定义
                     }
-                    var pattern = $("[comboname=" + $(this).attr("name") + "]").attr("pattern");
-                    if (pattern) {
-                        op = pattern;
+                    else if (pattern) {
+                        op = pattern;//自定义
                     }
-                    //处理多选下拉框的查询语句标记
-                    if ($("[comboname=" + $(this).attr("name") + "]").attr("multiple") === 'multiple') {
-                        op = 'LikeOr';
+                    else if ($input[0] && $(this).attr("type") == 'hidden')
+                    {
+                        op = '=';//单选时，easyui渲染下拉框后把之前的input hidden
                     }
+
                     var name = $(this).attr("name"), value = $(this).val();
                     var len = json.length;
                     var exist = false;
@@ -410,12 +412,9 @@
                     earch: for (var i = 0; i < len; i++) {
                         if (json[i].name == name) {
                             if ($("[comboname=" + name + "]").attr('date')) {
-                                //json[i].value = "'" + json[i].value + " 00:00:00' AND '" + value + " 23:59:59'";
                                 json[i].value = json[i].value.replace(reg_date, " <= '" + value + " 23:59:59'");
                                 json[i].pattern = 'LikeOr';
                             } else {
-                                //json[i].value = "('" + json[i].value + "'" + ',' + "'" + value + "')";
-                                //json[i].pattern = 'In';
                                 json[i].value = json[i].value + "," + value;
                                 json[i].pattern = op === 'LikeOr' ? 'LikeOr' : 'In';
                             }
@@ -425,7 +424,7 @@
                     }
                     //如果不存在重复的name值，新增项
                     if (!exist) {
-                        if ($("[comboname=" + name + "]").attr('date')) {
+                        if ($box.attr('date')) {
                             op = "LikeOr";
                             value = name + ' >= \'' + value + ' 00:00:00\' AND ' + name + ' <= \'' + value + ' 23:59:59\''
                         }
@@ -448,8 +447,7 @@
                                 json[i].value = tempArray.join(" OR ");
                                 tempArray = [];
                             } else if (!reg_date.test(json[i].value)) {
-                                json[i].pattern = "Equal";
-                                //json[i].pattern = "Like";
+                                json[i].pattern = "=";
                             }
                         } else if (json[i].pattern !== 'LikeOr' && array.length > 1 && (json[i].pattern === 'Between' || json[i].pattern === 'In')) {
                             json[i].pattern = 'Between';

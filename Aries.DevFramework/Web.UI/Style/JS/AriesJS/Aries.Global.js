@@ -43,7 +43,7 @@ window.AR = (function ($Core) {
         },
         route: { root: 'ajax.html' },
         themes: ['default', 'black', 'gray', 'metro'],
-        
+
         comboxData: [],
         //存档Config_KeyValue的数据。
         Config: {},
@@ -142,10 +142,12 @@ window.AR = (function ($Core) {
 
 // Javascript对象属性扩展定义
 (function () {
-    Array.prototype.remove = function (v) {
+    Array.prototype.remove = function (v, k) {
         if (this instanceof Array && v != undefined && v != null) {
+            var value;
             for (var i = 0; i < this.length; i++) {
-                if (this[i].toString() == v.toString()) {
+                value = k ? this[i][k] : this[i];
+                if (value.toString() == v.toString()) {
                     this.splice(i, 1);  //利用splice()函数删除指定元素，splice() 方法用于插入、删除或替换数组的元素
                     return;
                 }

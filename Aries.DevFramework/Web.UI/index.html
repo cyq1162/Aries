@@ -196,6 +196,12 @@
 
                 var jsondata = formatTreeJson(menuJsonData, 'menuid', 'menuname', 'parentmenuid', selfID);
                 if (jsondata.length == 0) {
+                    //没有子级
+                    var url = $(this).children("a").attr("linkurl");
+                    if (url != '#') {
+                        var text = $(this).children("a").html();
+                        showTab(url, text);
+                    }
                     return false;
                 }
                 if (JSON.stringify(jsondata).indexOf('"menulevel":3') == -1) {
@@ -379,8 +385,10 @@
             $("#ul_power> li").removeClass("hover");
             $(this).addClass("hover");
             var text = $(this).children("a").html();
-            var url = $(this).children("a").attr("linkURL");
-            showTab(url, text);
+            var url = $(this).children("a").attr("linkurl");
+            if (url != '#') {
+                showTab(url, text);
+            }
         });
 
         //是否直接打开一个tab

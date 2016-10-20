@@ -535,6 +535,7 @@
     <None Include="Properties\PublishProfiles\Aries_Publish.pubxml" />
     <Content Include="Resource\Excel\Config_KeyValue.xlsx" />
     <Content Include="Resource\Excel\V_Test.xls" />
+    <Content Include="Resource\Excel\V_Test2.xls" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

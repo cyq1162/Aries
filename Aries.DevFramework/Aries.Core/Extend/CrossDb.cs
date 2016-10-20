@@ -40,8 +40,15 @@ namespace Aries.Core.Extend
                             string name = item.Name.ToLower();
                             if (!string.IsNullOrEmpty(name) && name.EndsWith("conn"))
                             {
+                                try
+                                {
+                                    CacheManage.PreLoadDBSchemaToCache(name, true);
+                                }
+                                catch
+                                {
 
-                                CacheManage.PreLoadDBSchemaToCache(name, true);
+                                }
+                               
                             }
                         }
                         ThreadBreak.AddGlobalThread(new ParameterizedThreadStart(LoadViewSchema));
@@ -52,52 +59,42 @@ namespace Aries.Core.Extend
                 }
             }
         }
-        /// <summary>
-        /// 处理脚本升级。
-        /// </summary>
-        //static void DealUpdateSql()
-        //{
-        //    MDataColumn mdc = DBTool.GetColumns(TableNames.Config_Grid);
-        //    if (mdc != null)
-        //    {
-        //        MCellStruct ms = mdc["ViewName"];
-        //        if (ms != null)
-        //        {
-        //            ms.ColumnName = Config_Grid.Rules.ToString();
-        //            ms.MaxSize = 150;
-        //            ms.AlterOp = AlterOp.Rename;
-        //            DBTool.AlterTable(TableNames.Config_Grid.ToString(), mdc);
-        //        }
-        //    }
-        //}
+
         static void fyw_Changed(object sender, FileSystemEventArgs e)
         {
             SqlCode.FileList = null;
         }
         static void LoadViewSchema(object para)
         {
-            Dictionary<string, string> fileList = SqlCode.FileList;
-            if (fileList != null && fileList.Count > 0)
+            try
             {
-                foreach (KeyValuePair<string, string> item in fileList)
+                Dictionary<string, string> fileList = SqlCode.FileList;
+                if (fileList != null && fileList.Count > 0)
                 {
-                    if (item.Key.StartsWith("V_"))//视图文件
+                    foreach (KeyValuePair<string, string> item in fileList)
                     {
-                        string sql = "";
-                        if (item.Value.Contains(":\\"))//存档的是文件路径
+                        if (item.Key.StartsWith("V_"))//视图文件
                         {
-                            sql = SqlCode.GetCode(item.Key);
-                        }
-                        else
-                        {
-                            sql = item.Value;
-                        }
-                        if (sql.IndexOf('@') == -1)//仅处理无参数的。
-                        {
-                            DBTool.GetColumns(sql, GetConn(sql));
+                            string sql = "";
+                            if (item.Value.Contains(":\\"))//存档的是文件路径
+                            {
+                                sql = SqlCode.GetCode(item.Key);
+                            }
+                            else
+                            {
+                                sql = item.Value;
+                            }
+                            if (sql.IndexOf('@') == -1)//仅处理无参数的。
+                            {
+                                DBTool.GetColumns(sql, GetConn(sql));
+                            }
                         }
                     }
+
                 }
+            }
+            catch
+            {
 
             }
         }

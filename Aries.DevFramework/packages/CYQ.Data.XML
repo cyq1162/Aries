@@ -1239,7 +1239,7 @@
         </member>
         <member name="M:CYQ.Data.Cache.CacheManage.PreLoadDBSchemaToCache(System.String,System.Boolean)">
             <summary>
-            通过该方法可以预先加载整个数据库的表结构缓存
+            通过该方法可以预先加载整个数据库的表结构缓存(异常会抛，外层Try Catch)
             </summary>
             <param name="conn">指定数据链接</param>
             <param name="isUseThread">是否开启线程</param>
@@ -3240,6 +3240,11 @@
             该执行不会开启事务。
             </summary>
         </member>
+        <member name="F:CYQ.Data.Table.AcceptOp.Truncate">
+            <summary>
+            清空表（只有和Insert或InsertWithID组合使用时才有效）
+            </summary>
+        </member>
         <member name="T:CYQ.Data.Table.BreakOp">
             <summary>
             MDataTable 与 MDataRow SetState 的过滤选项
@@ -4588,6 +4593,11 @@
         <member name="M:CYQ.Data.Table.MDataTableBatchAction.CheckGUIDAndDateTime(CYQ.Data.DalType)">
             <summary>
             检测GUID，若空，补值。
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Table.MDataTableBatchAction.IsTruncate">
+            <summary>
+            Insert前是否先清表
             </summary>
         </member>
         <member name="T:CYQ.Data.Table.Op">

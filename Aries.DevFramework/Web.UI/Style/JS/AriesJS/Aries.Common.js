@@ -101,10 +101,13 @@
                                 return false;
                             }
                             else {
-                                $form[0].reset();
                                 // 下拉框的值有缓存，要清。
                                 $form.find("[comboname]").each(function () {
-                                    $Core.Combobox.setCombo($(this), "select", "");
+                                    $Core.Combobox.setCombo($(this), "clear");
+                                });
+                                //input，要清
+                                $form.find("input:[name]").each(function () {
+                                    $(this).val("");
                                 });
                             }
                             dg.Search.BtnQuery.onExecute(dg, null);

@@ -304,7 +304,7 @@ namespace Aries.Core.Helper
                     }
                     if (dt.Columns.Count > 0)
                     {
-                        dt.Conn = dt.Columns.Count.ToString();//找个变量存储实际的列的长度，在SetError中使用。（dt可能在SetError前列被变更)
+                        dt.Description = dt.Columns.Count.ToString();//找个变量存储实际的列的长度，在SetError中使用。（dt可能在SetError前列被变更)
                     }
                     #endregion
 
@@ -473,7 +473,7 @@ namespace Aries.Core.Helper
                     }
                     //int cellCount = excelRow.Cells.Count;
                     int cellCount;
-                    if (!int.TryParse(dt.Conn, out cellCount))
+                    if (!int.TryParse(dt.Description, out cellCount))
                     {
                         cellCount = excelRow.LastCellNum;   //修复左上角第一个单元格为空时，错误信息错位的问题
                     }

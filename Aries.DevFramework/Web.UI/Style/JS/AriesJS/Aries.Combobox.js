@@ -430,8 +430,10 @@
                 var value = data[k];
                 if (value != undefined && !reg_date.test(value)) {
                     $("[comboname='" + k + "']").each(function () {
+                        setCombo($(this), "clear");
                         if (value.toString().indexOf(',') != -1 && value.toString().split(',').length > 1) {
                             value = value.split(',');
+
                             for (var i = 0; i < value.length; i++) {
                                 setCombo($(this), "select", value[i]);
                             }

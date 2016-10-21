@@ -143,7 +143,6 @@ $.fn.treegrid.defaults.loadFilter = function (data, parentId) {
 */
 var _formload = $.fn.form.methods.load;
 $.fn.form.methods.load = function (jq, param) {
-
     for (var i in param) {/*处理下拉绑定Boolean类型的数据还原。*/
         if (typeof (param[i]) == "boolean") {
             param[i] = param[i] == true ? 1 : 0;
@@ -163,7 +162,6 @@ $.fn.form.methods.load = function (jq, param) {
             }
         }
     });
-
     _formload(jq, param);
     $(":checkbox").each(function () {
         var _value = param[$(this).attr('name')];

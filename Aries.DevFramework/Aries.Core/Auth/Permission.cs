@@ -8,6 +8,7 @@ using System.Reflection;
 using Aries.Core.Helper;
 using CYQ.Data.Tool;
 using System.IO;
+using CYQ.Data.Cache;
 
 namespace Aries.Core.Auth
 {
@@ -226,27 +227,42 @@ namespace Aries.Core.Auth
         /// <param name="url">菜单的相对路径</param>
         public bool HasMenu(Uri uri)
         {
-            string mid = HttpContext.Current.Request["sys_mid"];
-            MDataRow menu = GetMenu(uri);
-            if (menu == null && HttpContext.Current.Request.UrlReferrer != null)
+            string key = UserAuth.UserID + ":" + uri.PathAndQuery;
+            MDataRow menu = CacheManage.LocalInstance.Get(key) as MDataRow;
+            if (menu == null)
             {
-                menu = GetMenu(HttpContext.Current.Request.UrlReferrer);
-            }
-            if (menu == null && !string.IsNullOrEmpty(mid))
-            {
-                bool isContain = parentIDList.ContainsKey(uri.LocalPath);
-                if (isContain)
+                menu = GetMenu(uri);
+                string mid = HttpContext.Current.Request["sys_mid"];
+                if (menu == null && HttpContext.Current.Request.UrlReferrer != null)
                 {
-                    mid = parentIDList[uri.LocalPath];//如果已经存在，则取存在过的。
+                    menu = GetMenu(HttpContext.Current.Request.UrlReferrer);
                 }
-                menu = UserMenu.FindRow("MenuID='" + mid + "'");
-                if (menu != null && !isContain)
+                if (menu == null && !string.IsNullOrEmpty(mid))
                 {
-                    parentIDList.Add(uri.LocalPath, mid);
+                    bool isContain = parentIDList.ContainsKey(uri.LocalPath);
+                    if (isContain)
+                    {
+                        mid = parentIDList[uri.LocalPath];//如果已经存在，则取存在过的。
+                    }
+                    menu = UserMenu.FindRow("MenuID='" + mid + "'");
+                    if (menu != null && !isContain)
+                    {
+                        switch (Path.GetFileNameWithoutExtension(HttpContext.Current.Request.UrlReferrer.LocalPath).ToLower())
+                        {
+                            case "configgrid": //如果是系统页面，则忽略
+                            case "dialogview":
+                                break;
+                            default:
+                                parentIDList.Add(uri.LocalPath, mid);
+                                break;
+                        }
+
+                    }
                 }
             }
             if (menu != null)
             {
+                CacheManage.LocalInstance.Set(key, menu, 0.5);//存档30秒。
                 _menuID = menu.Get<string>("MenuID");
                 MenuName = menu.Get<string>("MenuName");
             }

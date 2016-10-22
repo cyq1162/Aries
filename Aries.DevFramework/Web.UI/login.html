@@ -51,7 +51,11 @@
                     if (result.msg) {
                         alert(result.msg);
                     }
-                    else { alert(JSON.stringify(result));}
+                    else {
+                        var msg = JSON.stringify(result);
+                        if (msg == "{}") { msg = "please check webconfig httpmoudle!";}
+                        alert(msg);
+                    }
                 }
             }
         }

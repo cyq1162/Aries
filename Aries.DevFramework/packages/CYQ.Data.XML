@@ -40,6 +40,13 @@
             获取Web.config或App.config的connectionStrings节点的值。
             </summary>
         </member>
+        <member name="M:CYQ.Data.AppConfig.SetConn(System.String,System.String)">
+            <summary>
+            添加自定义链接（内存有效，并未写入config文件）
+            </summary>
+            <param name="name">名称</param>
+            <param name="connectionString">链接字符串</param>
+        </member>
         <member name="P:CYQ.Data.AppConfig.IsEnumToInt">
             <summary>
             是否使用表字段枚举转Int方式（默认为false）。
@@ -315,7 +322,7 @@
         </member>
         <member name="F:CYQ.Data.MAction.IsIgnoreDeleteField">
             <summary>
-            当DeleteField被设置后（删除转更新操作），如果仍想删除操作（可将些属性置为true）
+            当DeleteField被设置后（删除转更新操作），如果仍想删除操作（可将此属性置为true）
             </summary>
         </member>
         <member name="M:CYQ.Data.MAction.#ctor(System.Object)">
@@ -4817,7 +4824,7 @@
             <param name="errIndex">错误的字符索引</param>
             <returns></returns>
         </member>
-        <member name="M:CYQ.Data.Tool.JsonHelper.GetJosnValue(System.String,System.String)">
+        <member name="M:CYQ.Data.Tool.JsonHelper.GetValue(System.String,System.String)">
             <summary>
             获取Json字符串的值
             </summary>

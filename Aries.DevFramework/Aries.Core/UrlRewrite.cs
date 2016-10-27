@@ -183,26 +183,27 @@ namespace Aries.Core
             }
             else if (!IsExistsSafeKey())
             {
-                WriteError("Page timeout,please reflesh page!");
+                WriteError(context.Request.UrlReferrer.PathAndQuery);//"Page timeout,please reflesh page!"
             }
             //AjaxController是由页面的后两个路径决定了。
-            string[] items = context.Request.UrlReferrer.LocalPath.Split('/');
+            string[] items = context.Request.UrlReferrer.LocalPath.TrimStart('/').Split('/');
             string className = Path.GetFileNameWithoutExtension(items[items.Length - 1].ToLower());
             //从来源页获取className 可能是/aaa/bbb.shtml 先找aaa.bbb看看有木有，如果没有再找bbb
             if (items.Length > 1)
             {
                 t = InvokeLogic.GetType(items[items.Length - 2].ToLower() + "." + className);
             }
-            else
+            if (t == null)
             {
                 t = InvokeLogic.GetDefaultType();
+                if (t == null)
+                {
+                    WriteError("You need to create a controller for coding !");
+                }
             }
             #endregion
 
-            if (t == null)
-            {
-                WriteError("You need to create a controller for coding !");
-            }
+           
             try
             {
                 object o = Activator.CreateInstance(t);//实例化

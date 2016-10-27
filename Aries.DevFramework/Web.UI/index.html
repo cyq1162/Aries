@@ -174,7 +174,7 @@
         var mIsShortcut = false, //用于标记判断是否是快捷菜单点击后的触发
             onHideLevel2 = true;//是否开启隐藏二级空菜单
         $(function () {
-            var menuJsonData = AR.Utility.Ajax.get("GetUserMenu", null, null, false);
+            var menuJsonData = AR.Utility.Ajax.get("GetUserMenu");
 
             var rootID = undefined;
             var jsondata = formatTreeJson(menuJsonData, 'menuid', 'menuname', 'parentmenuid', rootID);
@@ -332,7 +332,7 @@
                         AR.Utility.Window.showMsg("密码过于简单，必须由[数字、字母、符号]组成的8~20位字符", '系统提示');
                         return;
                     }
-                    AR.Utility.Ajax.post('ChangePassword', null, { pwd: pwd2 }, null, null, function (result) {
+                    AR.Utility.Ajax.post('ChangePassword', null, { pwd: pwd2 }, function (result) {
                         if (result.success) {
                             AR.Utility.Window.closeDialog();
                         }

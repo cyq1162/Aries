@@ -50,6 +50,8 @@ namespace Aries.Core.Sql
                 switch (obj.Pattern.ToLower())
                 {
                     case "in":
+                        obj.Value = "(" + obj.Value.Trim(')', '(') + ")";
+                        break;
                     case "between":
                     case "greater":
                     case "greaterequal":

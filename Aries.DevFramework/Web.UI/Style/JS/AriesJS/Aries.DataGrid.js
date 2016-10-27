@@ -3,7 +3,7 @@
     /**
    *该文件依赖与AR.Core.Utility.js文件
    */
-    $Core.Utility.Ajax.post("GetInitConfig,GetKeyValueConfig", null, null, null, null, function (result) {
+    $Core.Utility.Ajax.post("GetInitConfig,GetKeyValueConfig", null, null, function (result) {
         $Core.Global.Variable = result.GetInitConfig;
         $Core.Global.Variable.isLoadCompleted = true;
         $Core.Global.Config = result.GetKeyValueConfig;
@@ -182,7 +182,7 @@
         }
         var dg = this;
         var interval;
-        $Core.Utility.Ajax.post("GetHeader", dg.objName + "," + dg.tableName, dg.options.queryParams, null, null,
+        $Core.Utility.Ajax.post("GetHeader", dg.objName + "," + dg.tableName, dg.options.queryParams,
             function (dg) {
                 return function (result) {
                     //拿到了Header，但GetKeyValuet Init，Combobox事件还没。
@@ -234,17 +234,23 @@
         }
         //请求下拉框数据,子页面的下拉列表数据绑定
         if (_postArray.length > 0) {
-            var _postdata = { sys_json: JSON.stringify(_postArray) };
-            if ($Core.combobox_params && $.type($Core.combobox_params) == "object") {
-                _postdata = $.extend({}, _postdata, $Core.combobox_params);
-            }
-            $Core.Utility.Ajax.post("GetCombobox", "objName", _postdata, null, null,
-                function (dg) {
-                    return function (result) {
-                        $Core.Global.comboxData = $Core.Global.comboxData.concat(result);
-                        interval = setInterval(function () { bindGrid(dg, interval); }, 5);
-                    }
-                }(dg));
+            $Core.Combobox.loadComboboxData(_postArray, function (dg) {
+                return function () {
+                    interval = setInterval(function () { bindGrid(dg, interval); }, 5);
+                }
+            }(dg));
+
+            //var _postdata = { sys_json: JSON.stringify(_postArray) };
+            //if ($Core.combobox_params && $.type($Core.combobox_params) == "object") {
+            //    _postdata = $.extend({}, _postdata, $Core.combobox_params);
+            //}
+            //$Core.Utility.Ajax.post("GetCombobox", "objName", _postdata,
+            //    function (dg) {
+            //        return function (result) {
+            //            $Core.Global.comboxData = $Core.Global.comboxData.concat(result);
+            //            interval = setInterval(function () { bindGrid(dg, interval); }, 5);
+            //        }
+            //    }(dg));
 
         }
         else {
@@ -569,7 +575,7 @@
             }
 
             $Core.Utility.Window.confirm('确认删除操作吗？', null, function () {
-                $Core.Utility.Ajax.post("Delete", dg.tableName, { "id": ids.join(',') }, false, null, function (responseData) {
+                $Core.Utility.Ajax.post("Delete", dg.tableName, { "id": ids.join(',') }, function (responseData) {
                     if (dg.ToolBar.BtnDelBatch.onAfterExecute(ids, index, responseData) == false) {
                         return;
                     }
@@ -647,7 +653,7 @@
                             dg.datagrid("selectRow", index);
                             if (dg.datagrid("getSelected")[dg.Internal.primarykey]) {
                                 $Core.Utility.Window.confirm("确定删除此条信息吗？", null, function () {
-                                    var result = $Core.Utility.Ajax.post("Delete", dg.tableName, { id: value }, false, null, function (result) {
+                                     $Core.Utility.Ajax.post("Delete", dg.tableName, { id: value }, function (result) {
                                         if (result.success) {
                                             dg.datagrid('deleteRow', index);
                                         }
@@ -932,7 +938,7 @@
                         if (dg.PKColumn.Editor.BtnSave.onBeforeExecute(row[dg.Internal.primarykey], index, post_data) == false) {
                             return;
                         }
-                        $Core.Utility.Ajax.post(dg.PKColumn.Editor.operator, dg.tableName, post_data, true, null, function (result) {
+                        $Core.Utility.Ajax.post(dg.PKColumn.Editor.operator, dg.tableName, post_data, function (result) {
                             if (result.success) {
                                 if (dg.PKColumn.Editor.operator == "Add") {
                                     _change_data[dg.Internal.primarykey] = result.msg;//这里才是将ID写回去的地方。

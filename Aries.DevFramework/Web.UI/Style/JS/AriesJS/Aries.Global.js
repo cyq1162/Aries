@@ -43,7 +43,7 @@ window.AR = (function ($Core) {
         },
         route: { root: 'ajax.html' },
         themes: ['default', 'black', 'gray', 'metro'],
-
+        //存档objname下拉数的数据。
         comboxData: [],
         //存档Config_KeyValue的数据。
         Config: {},
@@ -71,7 +71,7 @@ window.AR = (function ($Core) {
             }
             if (!this._User)//从远程获取。
             {
-                AR.Utility.Ajax.get("GetUserInfo", null, null, true, null, function (data) {
+                AR.Utility.Ajax.get("GetUserInfo", null, null, function (data) {
                     AR.Global._User = data;
                     callBack && callBack(data);
                 });
@@ -207,5 +207,22 @@ window.AR = (function ($Core) {
                 fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
         return fmt;
     };
-
+    String.prototype.endWith = function (str) {
+        if (str == null || str == "" || this.length == 0 || str.length > this.length)
+            return false;
+        if (this.substring(this.length - str.length) == str)
+            return true;
+        else
+            return false;
+        return true;
+    };
+    String.prototype.startWith = function (str) {
+        if (str == null || str == "" || this.length == 0 || str.length > this.length)
+            return false;
+        if (this.substr(0, str.length) == str)
+            return true;
+        else
+            return false;
+        return true;
+    };
 })();

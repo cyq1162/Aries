@@ -80,7 +80,7 @@
     var checkboxData;
     //加载权限
     function createPromisson() {
-        AR.Utility.Ajax.post("GetActions", "Sys_Action", {}, false, null, function (data) {
+        AR.Utility.Ajax.post("GetActions", "Sys_Action", {}, function (data) {
             checkboxData = data;
             createCheck();
         });
@@ -133,7 +133,7 @@
                 msg = "该节点下包含子节点，确认删除？";
             }
             AR.Utility.Window.confirm(msg, "提示", function () {
-                AR.Utility.Ajax.post("DeleteMenu", "Sys_Menu", { id: node.id }, false, null,
+                AR.Utility.Ajax.post("DeleteMenu", "Sys_Menu", { id: node.id },
                 function (data) {
                     if (data.success) {
                         $("#ul_menus").tree("remove", node.target);
@@ -148,7 +148,7 @@
     }
     function checkHasChild(id) {
         var result = false;
-        AR.Utility.Ajax.post("ValidMenuHasChild", "Sys_Menu", { menuid: id }, false, null,
+        AR.Utility.Ajax.post("ValidMenuHasChild", "Sys_Menu", { menuid: id },
       function (data) {
           result = data.success
       });
@@ -156,7 +156,7 @@
     }
     //初始化菜单
     function initMenu() {
-        AR.Utility.Ajax.post("GetMenu", "Sys_Menu", {}, false, null,
+        AR.Utility.Ajax.post("GetMenu", "Sys_Menu", {},
           function (data) {
               $("#ul_menus").tree({
                   idField: "menuid",
@@ -214,7 +214,7 @@
     //加载编辑框
     function initEdit(menuid) {
         $("#form1").form("clear");
-        AR.Utility.Ajax.post("GetMenuDetails", "Sys_Menu", { id: menuid }, false, null,
+        AR.Utility.Ajax.post("GetMenuDetails", "Sys_Menu", { id: menuid },
          function (data) {
              $("#form1").form('load', data);
              selectPromisson(data.actionids);

@@ -22,10 +22,10 @@ namespace Aries.Core.Auth
             {
                 //if (_MenuTable == null)
                 //{
-                    using (MAction action = new MAction(TableNames.Sys_Menu))
-                    {
-                        return action.Select("order by MenuLevel ASC,SortOrder ASC");
-                    }
+                using (MAction action = new MAction(TableNames.Sys_Menu))
+                {
+                    return action.Select("order by MenuLevel ASC,SortOrder ASC");
+                }
                 //}
                 //return _MenuTable;
             }
@@ -45,10 +45,10 @@ namespace Aries.Core.Auth
             {
                 //if (_ActionTable == null)
                 //{
-                    using (MAction action = new MAction(TableNames.Sys_Action))
-                    {
-                        return action.Select();
-                    }
+                using (MAction action = new MAction(TableNames.Sys_Action))
+                {
+                    return action.Select();
+                }
                 //}
                 //return _ActionTable;
             }
@@ -161,21 +161,32 @@ namespace Aries.Core.Auth
             {
                 dt.Distinct();//去掉重复行。
 
-                MDataTable action = ActionTable;
+                MDataTable actions = ActionTable;
+                MDataTable menus = MenuTable;
+                MDataRow menuRow = null;
+                string mid = "";
                 foreach (MDataRow row in dt.Rows)
                 {
-                    string menuID = row.Get<string>("MenuID");
-                    string actionID = row.Get<string>("ActionID");
-                    MDataRow aRow = action.FindRow("ActionID='" + actionID + "'");
-                    if (aRow != null)
+                    string menuID = row.Get<string>(Sys_RoleAction.MenuID);
+                    if (menuID != mid)
                     {
-                        if (dic.ContainsKey(menuID))
+                        mid = menuID;
+                        menuRow = menus.FindRow(mid);
+                    }
+                    if (menuRow != null)
+                    {
+                        string actionID = row.Get<string>(Sys_RoleAction.ActionID);
+                        MDataRow aRow = actions.FindRow(Sys_Action.ActionID + "='" + actionID + "'");
+                        if (aRow != null && aRow.Get<bool>(Sys_Action.IsEnabled, true) && menuRow.Get<string>(Sys_Menu.ActionIDs).IndexOf(actionID) > -1)
                         {
-                            dic[menuID] = dic[menuID] + "," + (onlyID ? actionID : aRow.Get<string>("ActionRefName").Trim());
-                        }
-                        else
-                        {
-                            dic.Add(menuID, (onlyID ? actionID : aRow.Get<string>("ActionRefName").Trim()));
+                            if (dic.ContainsKey(menuID))
+                            {
+                                dic[menuID] = dic[menuID] + "," + (onlyID ? actionID : aRow.Get<string>(Sys_Action.ActionRefName).Trim());
+                            }
+                            else
+                            {
+                                dic.Add(menuID, (onlyID ? actionID : aRow.Get<string>(Sys_Action.ActionRefName).Trim()));
+                            }
                         }
                     }
                 }

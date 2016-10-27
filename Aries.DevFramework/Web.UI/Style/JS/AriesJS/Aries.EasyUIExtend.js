@@ -94,16 +94,12 @@ _getTreeData = function (nodes, idField, textField, parentField, rootID) {
         return cn;
     }(rootID);
 }
-
-
 _openFirstNode = function (data) {
     if (data[0].children && data[0].children.length > 0) {
         data[0].state = 'open';
         arguments.callee(data[0].children);
     }
 }
-
-
 $.fn.treegrid.defaults.loadFilter = function (data, parentId) {
     var op = $(this).data().treegrid.options;
     if (data.rows) {
@@ -137,7 +133,13 @@ $.fn.treegrid.defaults.loadFilter = function (data, parentId) {
     }
     return data;
 };
-
+$.fn.datagrid.defaults.loadFilter = function (d)
+{
+    if (d.success == false && d.msg && d.msg.startWith("/") && d.msg.endWith(".html")) {
+        location.href = d.msg;//跳转到登陆。
+    }
+    return d;
+}
 /**
 * 重写 Jquery-Easyui form的load事件
 */
@@ -297,7 +299,7 @@ $.extend($.fn.validatebox.defaults.rules, {
             var id = param[1] || AR.Utility.queryString('id');
             if (id) data.id = id;
             //method, objName, data, async, url, callback, isShowProgress
-            var result = AR.Utility.Ajax.get("Exists", AR.Form.tableName, data, false);
+            var result = AR.Utility.Ajax.get("Exists", AR.Form.tableName, data);
             if (result) {
                 if (result.success) {
                     this.message = "该数据已存在！";

@@ -333,11 +333,11 @@ namespace Aries.Logic
 
         public string GetMenuIDsandActionIds()
         {
-            string RoleID = Query<String>("RoleID");
+            string roleID = Query<String>("RoleID");
             MDataTable raDt = null;
             using (MAction action = new MAction(TableNames.Sys_RoleAction))
             {
-                raDt = action.Select("RoleID ='" + RoleID + "'");
+                raDt = action.Select("RoleID ='" + roleID + "'");
             }
             Dictionary<string, string> dic = SysMenu.RoleActionToDic(raDt, true);
             return JsonHelper.ToJson(dic);

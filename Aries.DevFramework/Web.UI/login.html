@@ -41,7 +41,7 @@
             var uid = $("#username").val();
             var pwd = $("#password").val();
             var data = { "uid": uid, "pwd": pwd };
-            var result = AR.Utility.Ajax.post("Login", null, data, false);
+            var result = AR.Utility.Ajax.post("Login", null, data);
             if (result)
             {
                 if (result.success) {
@@ -51,11 +51,7 @@
                     if (result.msg) {
                         alert(result.msg);
                     }
-                    else {
-                        var msg = JSON.stringify(result);
-                        if (msg == "{}") { msg = "please check webconfig httpmoudle!";}
-                        alert(msg);
-                    }
+                    else { alert(JSON.stringify(result));}
                 }
             }
         }

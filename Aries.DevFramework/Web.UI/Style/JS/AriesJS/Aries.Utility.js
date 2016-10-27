@@ -14,7 +14,7 @@
             for (var key in obj) {
                 if (objClone[key] != obj[key]) {
                     if (typeof (obj[key]) == "object") {
-                        objClone[key] = clone(obj[key]);
+                        objClone[key] = this.cloneObject(obj[key]);
                     } else {
                         objClone[key] = obj[key];
                     }
@@ -211,8 +211,7 @@
         },
         //生成表单下拉框。
         createInputHtml: function ($container, dataArray, dg, fromSearch) {
-            var line;
-            var objName, cssName;
+            var line, configKey, objName, cssName;
             for (var i = 0, len = dataArray.length; i < len; i++) {
                 if (i % 3 == 0) {
                     line = $("<div class=\"line\">");
@@ -224,59 +223,56 @@
                 var input = $("<input type=\"text\"/>");
                 var input2;//日期时的第二个框
                 //如果是下拉框模式执行以下代码
-                var configKey;
-                if ((typeof (dataArray[i].formatter) == "string" && dataArray[i].formatter.indexOf('#') != -1)) {
-                    if (/C_+/.test(dataArray[i].formatter)) {
-                        objName = dataArray[i].formatter.split('#')[1];
+                var formatter = dataArray[i].formatter;
+                if (formatter && formatter.length > 1 && formatter.indexOf('#') != -1) {
+                    if (/C_+/.test(formatter)) {
+                        objName = formatter.split('#')[1];
                     } else {
-                        configKey = dataArray[i].formatter.split('#')[1];
+                        configKey = formatter.split('#')[1];
                     }
                 }
 
-                if (configKey || (objName && objName != '' && objName.indexOf('$') == -1))//绑定下拉
+                if (configKey || objName)//绑定下拉
                 {
-                    if (fromSearch) {
-                        input.attr("onchange", "$Core.Common._Internal.onQuery");//("+dg.id+")
-                    }
                     input.attr("name", dataArray[i].field);
                     if (configKey) {
                         input.attr("configkey", configKey)
                         configKey = undefined;
                     }
                     else {
-                        if (objName.indexOf('#') > -1) {
-                            objName = objName.split('#')[1];
-                        }
-                        var arrayObjname = [];
                         if (objName.indexOf('=>')) {
-                            arrayObjname = objName.split('=>');
+                            var arrayObjname = objName.split('=>');
                             objName = arrayObjname[0];
                             input.attr("parent", arrayObjname[1]);
                         }
                         input.attr("objname", objName);
                     }
-                    if (dataArray[i].rules && dataArray[i].rules.indexOf('#') != -1) {
-                        //onlytext 标记只显示text 不显示 value 针对查询区域使用
-                        input.attr('multiple', 'true').attr('pattern', 'IN');
+                    if (dataArray[i].rules) {
+                        this._setInputAttr(input, dataArray[i].rules, "$:");
                     }
-                    if (dataArray[i].rules && dataArray[i].rules.indexOf("$2") != -1) {
-                        this._setInputAttr(input, dataArray[i].rules, "$2:");
+                    if (!input.attr("pattern")) {
+                        input.attr("pattern", "=");
                     }
-
+                    if (fromSearch && !input.attr("multiple")) {
+                        input.attr("onchange", "$Core.Common._Internal.onQuery");//("+dg.id+")
+                    }
                 }
                 else if (dataArray[i].datatype)//非绑定下拉
                 {
+                    input.attr("pattern", "like");
                     var dtype = dataArray[i].datatype.split(',');
                     switch (dtype[0]) {
                         case "date":
                         case "datetime":
                             cssName = "easyui-datebox";
                             input.attr("name", dataArray[i].field).addClass(cssName).attr("date", true).width(150).attr("validType", "datebox");
-                            if (fromSearch && dataArray[i].rules && dataArray[i].rules.indexOf('$1') != -1) {
+                            if (fromSearch && dataArray[i].rules) {
                                 input.width(95);
-                                this._setInputAttr(input, dataArray[i].rules, "$1:", label);
+                                input.attr("pattern", "<=");
+                                this._setInputAttr(input, dataArray[i].rules, "$:", label);
                                 if (input.attr("clone") != "false") {
                                     input2 = input.clone(true);
+                                    input2.attr("pattern", ">=");
                                     div_item.append(input2).append($("<span>").html("&nbsp;至&nbsp;"));
                                 }
                             }
@@ -296,11 +292,13 @@
                                 }
                             }
                             input.attr("name", dataArray[i].field).addClass(cssName);
-                            if (fromSearch && dataArray[i].rules && dataArray[i].rules.indexOf('$1') != -1) {
+                            if (fromSearch && dataArray[i].rules) {
                                 input.width(68);
-                                this._setInputAttr(input, dataArray[i].rules, "$1:", label);
+                                input.attr("pattern", "<=");
+                                this._setInputAttr(input, dataArray[i].rules, "$:", label);
                                 if (input.attr("clone") != "false") {
                                     input2 = input.clone(true);
+                                    input2.attr("pattern", ">=");
                                     div_item.append(input2).append($("<span>").html("&nbsp;-&nbsp;").css({ "display": "block", "float": "left" }));
                                 }
                             }
@@ -308,8 +306,8 @@
                         default:
                             if (dtype[0] == "string") { cssName = ""; }
                             input.attr("name", dataArray[i].field).addClass(cssName);
-                            if (fromSearch && dataArray[i].rules && dataArray[i].rules.indexOf('$1') != -1) {
-                                this._setInputAttr(input, dataArray[i].rules, "$1:", label);
+                            if (fromSearch && dataArray[i].rules) {
+                                this._setInputAttr(input, dataArray[i].rules, "$:", label);
                             }
                             break;
                     }
@@ -348,8 +346,11 @@
             }
         },
         _setInputAttr: function ($input, rules, splitFlag, $label) {
-            var _rules = rules.split(splitFlag)[1];
-            if (_rules) {
+            if (typeof (rules) == "object") { rules = JSON.stringify(rules); }
+            if (rules.indexOf('{') == -1) { return;}
+            var sp = rules.split("{")
+            var _rules = "{" + sp[sp.length - 1];//取最后一个
+            if (_rules && _rules[0] == '{') {
                 _rules = eval("(" + _rules + ")");
                 for (var name in _rules) {
                     var value = _rules[name];
@@ -357,11 +358,15 @@
                         case "width":
                             $input.width(value);
                             break;
-                        case "heigth":
-                            $input.heigth(value);
+                        case "height":
+                            $input.height(value);
                             break;
                         case "title":
                             if ($label) { $label.html(value + "："); }
+                            break;
+                        case "multiple":
+                            $input.attr(name, value);//多选，没有指定操作符时
+                            if (!_rules["pattern"]) { $input.attr("pattern", "in"); }
                             break;
                         default:
                             $input.attr(name, value);
@@ -506,11 +511,11 @@
                 async: true,
                 callback: null
             },
-            get: function (method, objName, data, async, url, callback, isShowProgress) {
-                return ajax.call(this, method, objName, data, async, 'GET', url, callback, isShowProgress);
+            get: function (method, objName, data, callback, isShowProgress) {
+                return ajax.call(this, method, objName, data, false, 'GET', null, callback, isShowProgress);
             },
-            post: function (method, objName, data, async, url, callback, isShowProgress) {
-                return ajax.call(this, method, objName, data, async, 'POST', url, callback, isShowProgress);
+            post: function (method, objName, data, callback, isShowProgress) {
+                return ajax.call(this, method, objName, data, false, 'POST', null, callback, isShowProgress);
             }
         }
         function ajax(method, objName, data, async, type, url, callback, isShowProgress) {
@@ -539,7 +544,7 @@
             opts.callback = callback || that.Settings.callback;
             $.ajax({
                 type: type,
-                async: (async == false && (!callback)) ? false : that.Settings.async,
+                async: (async == false && !callback) ? false : that.Settings.async,
                 url: url || that.Settings.url,
                 data: opts.data,
                 dataType: that.Settings.dataType || "json",
@@ -547,10 +552,14 @@
                     if (opts.callback && typeof (opts.callback) != "function") {
                         throw TypeError("the callback parameter not is a function");
                     }
+                    if (d.success == false && d.msg && d.msg.startWith("/") && d.msg.endWith(".html")) {
+                        location.href = d.msg;//跳转到登陆。
+                    }
                     if (d.success == false && d.msg && !opts.callback && $.messager) {
                         $Core.Utility.Window.showMsg(d.msg);//需要引用easyui，而其它页面可能没有
                         json = null;
-                    } else {
+                    }
+                    else {
                         if (opts.callback) {
                             opts.callback(d);
                         }

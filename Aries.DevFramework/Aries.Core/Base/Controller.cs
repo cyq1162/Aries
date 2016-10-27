@@ -68,7 +68,7 @@ namespace Aries.Core
                     }
                     else
                     {
-                        WriteError("You haven't log on yet！");
+                        WriteError(AppConfig.GetApp("UI") + "/login.html");
                     }
                 }
                 if (items.Length > 1)
@@ -805,7 +805,7 @@ namespace Aries.Core
             MDataTable dt = GridConfig.GetList(ObjName, GridConfig.SelectType.All);
             if (dt == null || dt.Rows.Count == 0)
             {
-                dt = GridConfig.Create(ObjCode, dt.GetSchema(false));
+                dt = GridConfig.Create(ObjName, ObjCode, dt.GetSchema(false));
                 if (p.UrlMenuID != string.Empty)//仅处理配置了菜单的数据。
                 {
                     //顺带处理视图语句与菜单名称的绑定
@@ -814,7 +814,7 @@ namespace Aries.Core
             }
             else
             {
-                //dt = GridConfig.Check(ObjCode, dt);
+                //dt = GridConfig.Check(ObjName,ObjCode, dt);
             }
             if (dt.Rows.Count > 0)
             {
@@ -861,7 +861,7 @@ namespace Aries.Core
                         if (code != item.ObjName)
                         {
                             #region 核心处理
-                            var sql = SqlCode.GetCode(item.ObjName).ToLower();//已经处理过系统参数和Post参数
+                            var sql = SqlCode.GetCode(item.ObjName);//已经处理过系统参数和Post参数
                             sql = WebHelper.ReplacePara(sql, "@para", item.Para);
                             sql = WebHelper.ReplacePara(sql, "@parent", item.Parent);
 

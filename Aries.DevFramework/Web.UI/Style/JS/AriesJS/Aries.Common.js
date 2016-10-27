@@ -270,10 +270,10 @@
                             ifrme && ifrme.remove(); form_export && form_export.remove();
                             var objName = dg.tableName;
                             var targetForm = $(".function-box").siblings("div").find('form');
-                            var checked_ids = dg.getChecked();
+                            var checked_ids = dg.getCheckedId();
                             var jsonString = JSON.stringify($Core.Common._Internal.buildSearchJson(targetForm));
                             if (checked_ids.length > 0) {
-                                var condition = [{ name: dg.Internal.primarykey, pattern: 'In', value: "(" + checked_ids.join(',') + ")" }];
+                                var condition = [{ name: dg.Internal.primarykey, pattern: 'in', value: checked_ids.join(',')}];
                                 jsonString = JSON.stringify(condition);
                             }
                             //window.open(ajaxOptions.href + '?objName=' + objName + '&sys_search='+jsonString, '_self');      
@@ -388,90 +388,74 @@
             //构建查询条件json格式,search事件调用，返回的Json数组
             buildSearchJson: function (targetForm) {
                 var json = [], reg_date = /<=\s('[^']+')/;
-                $inputs = targetForm.find("[name]:input[type!=button][type!='reset']");
-                $inputs.each(function () {
-                    if ($(this).val() == '' || $(this).val() == '请选择' || $(this).val() == null) {
-                        return;
-                    }
-                    var $input = $("[comboname=" + $(this).attr("name") + "]");
-                    var $box = $input[0] ? $input : $(this);//是否下拉
-                    var op = 'like';//默认
-                    var pattern = $box.attr("pattern");
-                    if ($box.attr("multiple") === 'multiple') {
-                        op = 'LikeOr';//多选时不能自定义
-                    }
-                    else if (pattern) {
-                        op = pattern;//自定义
-                    }
-                    else if ($input[0] && $(this).attr("type") == 'hidden')
-                    {
-                        op = '=';//单选时，easyui渲染下拉框后把之前的input hidden
-                    }
 
-                    var name = $(this).attr("name"), value = $(this).val();
-                    var len = json.length;
-                    var exist = false;
-                    var item;
-                    earch: for (var i = 0; i < len; i++) {
-                        if (json[i].name == name) {
-                            if ($("[comboname=" + name + "]").attr('date')) {
-                                json[i].value = json[i].value.replace(reg_date, " <= '" + value + " 23:59:59'");
-                                json[i].pattern = 'LikeOr';
-                            } else {
-                                json[i].value = json[i].value + "," + value;
-                                json[i].pattern = op === 'LikeOr' ? 'LikeOr' : 'In';
+                var $inputs = targetForm.find("input[type!=button][type!='reset']");
+                if ($inputs[0]) {
+                    var pattern = "like", $box, value, isDate = false;
+                    cto: for (var i = 0; i < $inputs.length; i++) {
+                        $box = $($inputs[i]);
+                        if ($box.attr("pattern"))
+                        {
+                            pattern = $box.attr("pattern")
+                        }
+                        else if (pattern == "like" && ($box.attr("configkey") || $box.attr("objname"))) {
+                            pattern = "=";
+                        }
+                        var name = $box.attr("name");
+                        isDate = $box.attr("date") != undefined || isDate;
+                        if (!name) {
+                            continue cto;
+                        }
+                       
+                        value = $box.val();
+                        if (value == '' || value == null || value == '请选择') {
+                            pattern = "like";
+                            isDate = false;
+                            continue cto;
+                        }
+                        if (pattern == "in") {
+                            //找到上一个
+                            var firstOne = json.get("name", name);
+                            if (firstOne && firstOne[0]) // 已存在
+                            {
+                                firstOne[0].value = firstOne[0].value + ",'" + value + "'";
+                                continue cto;
                             }
-                            exist = true;
-                            break earch;
+                            value = "'" + value + "'";
                         }
-                    }
-                    //如果不存在重复的name值，新增项
-                    if (!exist) {
-                        if ($box.attr('date')) {
-                            op = "LikeOr";
-                            value = name + ' >= \'' + value + ' 00:00:00\' AND ' + name + ' <= \'' + value + ' 23:59:59\''
+                        if (isDate && value.length < 14) {
+                            if (pattern == ">=")
+                                value = "'" + value + " 00:00:00'";
+                            else if (pattern == "<=")
+                                value = value = "'" + value + " 23:59:59'";
                         }
-                        item = { name: name, value: value, pattern: op };
-                    }
-                    if (item) {
+                        item = { name: name, value: value, pattern: pattern };
                         json.push(item);
+
                     }
-                });
-                (function () {
-                    for (var i = 0; i < json.length; i++) {
-                        if (!json[i].value) { return; }
-                        var array = json[i].value.toString().split(',');
-                        if (json[i].pattern === 'LikeOr') {
-                            if (array.length > 1) {
-                                var tempArray = new Array();
-                                for (var j = 0; j < array.length; j++) {
-                                    tempArray.push(json[i].name + " LIKE '%" + array[j] + "%'");
-                                }
-                                json[i].value = tempArray.join(" OR ");
-                                tempArray = [];
-                            } else if (!reg_date.test(json[i].value)) {
-                                json[i].pattern = "=";
-                            }
-                        } else if (json[i].pattern !== 'LikeOr' && array.length > 1 && (json[i].pattern === 'Between' || json[i].pattern === 'In')) {
-                            json[i].pattern = 'Between';
-                            json[i].value = array[0] + ' AND ' + array[1];
-                        }
-                    }
-                })()
+                }
                 return json;
             },
             //查询区域的下拉触发事件
             onQuery: function (dgid) {
-                if ($(this).attr('isquery') == "false") {
-                    return false;
-                }
-                if (document.readyState == 'complete') {
-                    var dg = $Core.Global.DG.operating;//解决下拉自动事件引发2次查询的问题。
-                    if (!dg || dg.Internal.isLoadCompleted) {
-                        $(this).parents("form").find(".query").click();
+                if (!this.isClicking) {
+                    this.isClicking = true;
+                    if ($(this).attr('isquery') == "false") {
+                        return false;
                     }
-                }
+                    if (document.readyState == 'complete') {
+                        var dg = $Core.Global.DG.operating;//解决下拉自动事件引发2次查询的问题。
+                        if (!dg || dg.Internal.isLoadCompleted) {
+                            $(this).parents("form").find(".query").click();
+                        }
+                    }
+                    setTimeout(function (obj) {
+                        return function () {
+                            obj.isClicking = false;//避免下拉框重置和加载引发多次查询
+                        }
+                    }(this), 100);
 
+                }
             },
             onAdd: function (el, dgid, value, index, isSameLevel) {
                 var dg = getDgByKey(dgid);
@@ -529,7 +513,7 @@
                             result = getConfigName(configKey, value);
                         }
                     }
-                    result = $Core.Common.Formatter.onAfterConfigFormatter(configKey, result, row, index);
+                    result = $Core.Common.Formatter.onAfterExecute(configKey, result, row, index);
                     if (result && result.toString().indexOf('<') == -1) {
                         result = $Core.Common.Formatter.stringFormatter(result);
                     }
@@ -537,7 +521,7 @@
                 }
             },
             //本方法仅供重写，可以实现值变更后加链接等效果。
-            onAfterConfigFormatter: function (configKey, value, row, index) {
+            onAfterExecute: function (key, value, row, index) {
                 return value;
             },
             objFormatter: function (objName) {
@@ -550,6 +534,7 @@
                             result = getNameByValue(_obj, value);
                         }
                     }
+                    result = $Core.Common.Formatter.onAfterExecute(objName, result, row, index);
                     if (result && result.toString().indexOf('<') == -1) {
                         result = $Core.Common.Formatter.stringFormatter(result);
                     }
@@ -673,10 +658,12 @@
                                 }
                             }
                         }
-                        var isMultiple = false;
-                        if (row.rules && row.rules.indexOf('#') != -1) {
-                            isMultiple = true;
-                        }
+                        var isMultiple = false;//先不支持行内编辑的多选
+                        //if (row.rules && typeof (row.rules) == "string" && row.rules.indexOf("{") > -1) {
+                        //    var sp = row.rules.split("{");
+                        //    sp = eval("({" + sp[sp.length - 1] + ")");
+                        //    isMultiple = sp.multiple && sp.multiple.toString() != "false";
+                        //}
                         settings.options = {
                             multiple: isMultiple,
                             valueField: 'value',
@@ -719,32 +706,42 @@
                             }
                         }
                     } else {
-                        if (row.datatype.indexOf('int') != -1 || row.datatype.indexOf('double') != -1 || row.datatype.indexOf('decimal') != -1) {
-                            type = 'numberbox';
-                            var prec = row.datatype.split(',')[2];
-                            settings.options = {
-                                precision: prec,
-                                validType: 'number'
-                            }
-                        }
-                        if (row.datatype.indexOf('boolean') != -1) {
-                            type = 'checkbox';
-                            settings.options = {
-                                on: 1,
-                                off: 0
-                            }
-                            row.formatter = function (v, r) {
-                                if (v && v == 1) {
-                                    return "<input type='checkbox' checked='checked' disabled='disabled' />";
+                        switch (row.datatype.split(',')[0]) {
+                            case "int32":
+                            case "int64":
+                            case "int16":
+                            case "byte":
+                            case "double":
+                            case "single":
+                            case "decimal":
+                                type = 'numberbox';
+                                var prec = row.datatype.split(',')[2];
+                                settings.options = {
+                                    precision: prec,
+                                    validType: 'number'
                                 }
-                                return "<input type='checkbox' disabled='disabled' />";
-                            }
-                        }
-                        if (row.datatype.indexOf('datetime') != -1) {
-                            settings.options = {
-                                validType: 'datebox'
-                            }
-                            type = 'datebox';
+                                break;
+                            case "date":
+                            case "datetime":
+                                settings.options = {
+                                    validType: 'datebox'
+                                }
+                                type = 'datebox';
+                                break;
+                            case "bool":
+                            case "boolean":
+                                type = 'checkbox';
+                                settings.options = {
+                                    on: 1,
+                                    off: 0
+                                }
+                                row.formatter = function (v, r) {
+                                    if (v && v == 1) {
+                                        return "<input type='checkbox' checked='checked' disabled='disabled' />";
+                                    }
+                                    return "<input type='checkbox' disabled='disabled' />";
+                                }
+                                break;
                         }
                     }
                     settings.type = type;

@@ -34,7 +34,7 @@ namespace Aries.Core.Auth
                 else
                 {
                     action.SetPara("UserName", userName, System.Data.DbType.String);
-                    where = "Status=1 and (UserName=:?UserName or Phone=:?UserName or Email=:?UserName)";
+                    where = "Status=1 and (UserName=@UserName or Phone=@UserName or Email=@UserName)";
                 }
                 if (action.Fill(where))
                 {

@@ -25,10 +25,11 @@
             op.onlyText = true;
             op.valueField = "text";
         }
-
-        var selFun = eval($input.attr("onchange"));
-        if (typeof (eval(selFun)) == "function") {
-            op.onSelect = eval(selFun);
+        if (!op.multiple) {
+            var selFun = eval($input.attr("onchange"));
+            if (typeof (eval(selFun)) == "function") {
+                op.onSelect = eval(selFun);
+            }
         }
         return op;
     }
@@ -145,49 +146,23 @@
         }
     }
 
-    function loadComboboxData(item_data, condition, onLoadedEvent) {
-        // var comboxData = $Core.Global.comboxData;
-        //此判断是因为List跟Edit的请求方式不一样
-        //if (condition == undefined && comboxData.length > 0) {
-        //    var _removeIndex = new Array();//需要移除的项
-        //    for (var i = 0; i < comboxData.length; i++) {
-        //        for (var k in comboxData[i]) {
-        //            if (k == undefined) continue;
-        //            for (var j = 0; j < item_data.length; j++) {
-        //                for (var kk in item_data[j]) {
-        //                    if (kk && k == item_data[j][kk]) {
-        //                        _removeIndex.push(j);
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //    if (_removeIndex.length > 0) {
-        //        for (var i = _removeIndex.length; i > 0 ; i--) {
-        //            item_data.splice(_removeIndex[i], 1);
-        //        }
-        //    }
-        //}
-        //结束请求，开始渲染
+    function loadComboboxData(item_data, onLoadedEvent) {
         if (item_data.length > 0) {
             var _post_data = { sys_json: JSON.stringify(item_data) };
             var result = Array();
-            if (condition) {
-                _post_data = $.extend({}, _post_data, condition);
-            }
             //此处变更为异步。
-            $Core.Utility.Ajax.post("GetCombobox", null, _post_data, null, null, function (result) {
+            $Core.Utility.Ajax.post("GetCombobox", null, _post_data, function (result) {
                 if (!(result instanceof Array)) {
                     result = [result];
                 }
                 var comboxData = $Core.Global.comboxData;
-                for (var i = 0, len = result.length; i < len; i++) {
-                    for (var k in result[i]) {
+                for (var i = 0, len = result.length; i < len; i++) {//[C1:[],C2:[]]
+                    for (var k in result[i]) {//k 是objName
                         var flag = true;
                         for (var ii = 0; ii < comboxData.length; ii++) {
                             for (var kk in comboxData[ii]) {
                                 if (kk == k) {
-                                    comboxData[ii][kk] = result[i][k];
+                                    comboxData[ii][kk].concat(result[i][k]);
                                     flag = false;
                                 }
                             }
@@ -222,7 +197,7 @@
         else {
             //远程读取
             var json = [{ ObjName: op.key, Parent: pid, Para: op.para }];
-            loadComboboxData(json, null, function () {
+            loadComboboxData(json, function () {
                 return function () {
                     var d = $Core.Global.comboxData.get(op.key) || [];
                     _reBind(op, $input, parentOp, d);
@@ -348,7 +323,7 @@
         });
         checkData = null;
         if (item_data.length > 0) {
-            loadComboboxData(item_data, null, function () {
+            loadComboboxData(item_data, function () {
                 $("[objname]").each(function () {
                     if (!$(this).attr("parent")) {
                         bindObjName($(this));
@@ -370,14 +345,13 @@
     function _showInputDialog($input) {
         if (!$input || !$input.attr("dialog")) { alert("dialog参数配置错误!"); return; }
         var href = ($Core.Global.Variable.ui || "") + "/Web/SysAdmin/DialogView.html?objName=" + $input.attr("dialog");
-        document.all.inputDialog = $input;
         var html = '<iframe scrolling="yes" frameborder="0"  src="' + href + '" style="width:100%;height:98%;"></iframe>'
         var opts = {
             toolbar: [{
                 text: '保存',
                 iconCls: 'icon-ok',
                 handler: function () {
-                    var options = document.all.returnValue;
+                    var options = $Core.Global.returnValue;
                     if (!options || options.option.data.length == 0) {
                         alert('请先选中数据');
                         return;
@@ -416,7 +390,8 @@
         if ($input.attr("options")) {
             opts = $.extend(opts, eval('(' + $input.attr("options") + ')'));
         }
-        document.all.returnValue = undefined;//清空值。
+        $Core.Global.inputDialog = $input
+        $Core.Global.returnValue = undefined;//清空值。
         $Core.Utility.Window.dialog("选择数据", html, opts);
 
     };
@@ -441,8 +416,8 @@
                         } else {
                             setCombo($(this), "select", value.toString());
                         }
-                       
-                        if ($(this).attr("parent")) { 
+
+                        if ($(this).attr("parent")) {
                             var opData = setCombo($(this), "getData");// 级联和设值（不知道谁先执行的，所以检测是否绑定了数据）
                             if (opData.length <= 1) {
                                 $(this).attr("defaultValue", value);
@@ -497,6 +472,7 @@
         setParas: setParas,
         setValues: setValues,
         onAfterExecute: onAfterBind,
+        loadComboboxData: loadComboboxData,
         values: {},
         paras: {}
     };

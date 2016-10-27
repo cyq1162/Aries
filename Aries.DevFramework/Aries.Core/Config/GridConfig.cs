@@ -124,17 +124,16 @@ namespace Aries.Core.Config
                 return action.Select(string.Format("ObjName='{0}' {1} order by frozen desc,OrderNum asc", objName, where));
             }
         }
-        private static void FillTable(string objName, MDataTable dt)
+        private static void FillTable(string objName, string objCode, MDataTable dt)
         {
-            string formatObjName = objName.Contains(" ") ? objName.Substring(objName.LastIndexOf(' ')).Trim() : objName;
             Dictionary<string, string> fieldTitleDic = GridConfig.FieldTitle;
-            MDataColumn mdc = DBTool.GetColumns(CrossDb.GetEnum(objName));
+            MDataColumn mdc = DBTool.GetColumns(CrossDb.GetEnum(objCode));
             MCellStruct cell = null;
             for (int i = 0; i < mdc.Count; i++)
             {
                 cell = mdc[i];
                 MDataRow row = dt.NewRow();
-                row.Set(Config_Grid.ObjName, formatObjName);
+                row.Set(Config_Grid.ObjName, objName);
                 row.Set(Config_Grid.Field, cell.ColumnName);
                 row.Set(Config_Grid.Title, fieldTitleDic.ContainsKey(cell.ColumnName) ? fieldTitleDic[cell.ColumnName] : cell.ColumnName);
                 row.Set(Config_Grid.Hidden, i == 0);
@@ -174,21 +173,20 @@ namespace Aries.Core.Config
         /// <summary>
         /// 创建数据结构行
         /// </summary>
-        public static MDataTable Create(string objName, MDataTable schema)
+        public static MDataTable Create(string objName, string objCode, MDataTable schema)
         {
-            string formatObjName = objName.Contains(" ") ? objName.Substring(objName.LastIndexOf(' ')).Trim() : objName;
-            FillTable(objName, schema);
+            FillTable(objName, objCode, schema);
             if (schema.AcceptChanges(AcceptOp.Insert))
             {
-                return GetList(formatObjName, SelectType.All);
+                return GetList(objName, SelectType.All);
             }
             return schema;
         }
-        public static MDataTable Check(string objName, MDataTable dt)
+        public static MDataTable Check(string objName, string objCode, MDataTable dt)
         {
 #if DEBUG
             MDataTable newDt = dt.GetSchema(false);
-            FillTable(objName, newDt);//重新获取。
+            FillTable(objName, objCode, newDt);//重新获取。
 
             MDataTable addTable = dt.GetSchema(false);
             bool needUpdate = false;

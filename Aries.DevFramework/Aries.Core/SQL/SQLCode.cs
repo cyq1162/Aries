@@ -153,6 +153,7 @@ namespace Aries.Core.Sql
         {
             if (!string.IsNullOrEmpty(key))
             {
+                if (key[0] == '_') { key = key.Substring(1); }
                 Dictionary<string, string> fileList = FileList;
                 if (fileList.ContainsKey(key))
                 {
@@ -173,10 +174,10 @@ namespace Aries.Core.Sql
                         text = string.Format(text, stringFormatValues);
                     }
                     text = FormatPara(text.Trim());//去掉空格
-                    if (key[0] == 'V' && text[0] != '(')//补充语法
-                    {
-                        text = "(" + text + ") " + key;
-                    }
+                    //if (key[0] == 'V' && text[0] != '(')//补充语法
+                    //{
+                    //    text = "(" + text + ") " + key;
+                    //}
 
                     //参数化格式
                     return text;
@@ -210,7 +211,9 @@ namespace Aries.Core.Sql
                 {
                     if (!string.IsNullOrEmpty(item.Value) && item.Value.Length > 1)
                     {
+                        //先处理UserAuth，再处理Post的表单
                         key = item.Value.Substring(1);
+
                         string value = HttpContext.Current.Request[key];
                         if (!string.IsNullOrEmpty(value))
                         {

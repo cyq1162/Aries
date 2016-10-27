@@ -32,7 +32,7 @@
                 if ($PCore && $PCore.Global.DG.action == "Update") {
                     if ($PCore.Global.DG.operating) {
                         var id = $Core.Utility.queryString("id");
-                        this.data = $Core.Utility.Ajax.post(this.method, this.objName, { "id": id }, false, this.url);
+                        this.data = $Core.Utility.Ajax.post(this.method, this.objName, { "id": id });
                         if (this.onBeforeFillForm(this.data) == false) { return; }
                         this.$target.form("load", this.data);
                         $Core.Combobox.setValues(this.data);
@@ -102,7 +102,7 @@
                 }
                 if (this.BtnCommit && this.BtnCommit.onBeforeExecute(formData) == false) { return; }
                 if ($targetForm.form("validate")) {
-                    var obj = $Core.Utility.Ajax.post(mthodName || ((this.method.toLowerCase() != 'get') && this.method) || $PCore.Global.DG.action, tableName || this.objName || $PCore.Global.DG.operating.tableName, formData, false, url || $Core.Form.url);
+                    var obj = $Core.Utility.Ajax.post(mthodName || ((this.method.toLowerCase() != 'get') && this.method) || $PCore.Global.DG.action, tableName || this.objName || $PCore.Global.DG.operating.tableName, formData);
                     if (callBack && typeof (callBack) == "function") {
                         callBack.call(this, obj);
                     }

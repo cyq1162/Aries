@@ -10,6 +10,7 @@
         <table id="dg"></table>
     </div>
     <script>
+        var $input = parent.AR.Global.inputDialog;
         var comboboxOption = {
             valueField: 'value',
             textField: 'text',
@@ -19,7 +20,6 @@
             editable: false
         }
         var returnValue = { option: comboboxOption };
-        var $input = parent.document.all.inputDialog;
         var oName = AR.Utility.queryString("objName");
         if (oName) {
             var dg = new AR.DataGrid("_" + oName);
@@ -36,7 +36,7 @@
                 //fit: false,
                 onLoadSuccess: function () {
                     title = dg.Internal.headerData[1].field;
-                    id = (onlytext? title : dg.Internal.primarykey);
+                    id = (onlytext ? title : dg.Internal.primarykey);
                 },
                 onSelect: function (rowIndex, rowData) {
                     if (!dg.isShowCheckBox) {
@@ -46,7 +46,7 @@
                         comboboxOption.data.push(d);
                         returnValue.values = d.value;
                         returnValue.datas = rowData;
-                        parent.document.all.returnValue = returnValue;
+                        parent.AR.Global.returnValue = returnValue;
                     }
                 },
                 onCheck: function (rowIndex, rowData) {
@@ -59,18 +59,17 @@
                     onCheck();
                 }
             }
-           
+
             try {
                 var op = $input.attr("options");
                 if (op) { op = eval("(" + op + ")"); }
-                if (op)
-                {
+                if (op) {
                     options = $.extend(options, op);
                 }
             } catch (e) {
 
             }
-            
+
             dg.options = options;
             dg.bind();
         }
@@ -87,10 +86,10 @@
                 }
                 returnValue.values = dg.getCheckedId(id);
                 returnValue.datas = rows;
-                parent.document.all.returnValue = returnValue;
+                parent.AR.Global.returnValue = returnValue;
             }
             else {
-                parent.document.all.returnValue = undefined;
+                parent.AR.Global.returnValue = undefined;
             }
         }
     </script>

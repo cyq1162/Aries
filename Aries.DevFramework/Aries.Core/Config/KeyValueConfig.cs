@@ -207,7 +207,18 @@ namespace Aries.Core.Config
                                 }
                                 else
                                 {
-                                    row[i].Value = defaultValue;
+                                    switch (defaultValue.ToLower())
+                                    {
+                                        case "now()":
+                                            row[i].Value = DateTime.Now;
+                                            break;
+                                        case "newid()":
+                                            row[i].Value = Guid.NewGuid();
+                                            break;
+                                        default:
+                                            row[i].Value = defaultValue;
+                                            break;
+                                    }
                                 }
                             }
                         }

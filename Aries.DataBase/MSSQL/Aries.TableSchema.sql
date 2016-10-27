@@ -180,17 +180,32 @@ CREATE TABLE [Demo_Tree]
 
 exec sp_addextendedproperty N'MS_Description', N'', N'user', N'dbo', N'table', N'Demo_Tree';
 
+CREATE TABLE [Editlog] 
+(
+    [ID] int IDENTITY(1,1) NOT NULL,
+    [TableName] nvarchar(2000) NULL,
+    [KeyID] nvarchar(2000) NULL,
+    [Content] nvarchar(2000) NULL,
+    [UserID] nvarchar(2000) NULL,
+    [EditTime] datetime Default getdate() NULL,
+    PRIMARY KEY ([ID]) 
+)
+
+exec sp_addextendedproperty N'MS_Description', N'', N'user', N'dbo', N'table', N'Editlog';
+
 CREATE TABLE [Sys_Action] 
 (
     [ActionID] uniqueidentifier Default (newid()) NOT NULL,
     [ActionName] nvarchar(100) NOT NULL,
     [ActionRefName] nvarchar(100) NOT NULL,
+    [IsEnabled] bit Default (1) NULL,
     PRIMARY KEY ([ActionID]) 
 )
 
 exec sp_addextendedproperty N'MS_Description', N'功能标识', N'user', N'dbo', N'table', N'Sys_Action', N'column', N'ActionID';
 exec sp_addextendedproperty N'MS_Description', N'中文描述', N'user', N'dbo', N'table', N'Sys_Action', N'column', N'ActionName';
 exec sp_addextendedproperty N'MS_Description', N'英文引用', N'user', N'dbo', N'table', N'Sys_Action', N'column', N'ActionRefName';
+exec sp_addextendedproperty N'MS_Description', N'是否启用', N'user', N'dbo', N'table', N'Sys_Action', N'column', N'IsEnabled';
 exec sp_addextendedproperty N'MS_Description', N'', N'user', N'dbo', N'table', N'Sys_Action';
 
 CREATE TABLE [Sys_Menu] 

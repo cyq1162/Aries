@@ -159,17 +159,39 @@ CREATE TABLE Demo_TestB
     PRIMARY KEY (ID) 
 )
 
+CREATE TABLE Demo_Tree 
+(
+    ID NUMBER(10) NOT NULL,
+    Name nvarchar2(50) NULL,
+    ParentID NUMBER(10) NULL,
+    CreateTime date NULL,
+    PRIMARY KEY (ID) 
+)
+
+CREATE TABLE Editlog 
+(
+    ID NUMBER(10) NOT NULL,
+    TableName nvarchar2(2000) NULL,
+    KeyID nvarchar2(2000) NULL,
+    Content nvarchar2(2000) NULL,
+    UserID nvarchar2(2000) NULL,
+    EditTime date Default sysdate NULL,
+    PRIMARY KEY (ID) 
+)
+
 CREATE TABLE Sys_Action 
 (
     ActionID char(36) Default (SYS_GUID()) NOT NULL,
     ActionName nvarchar2(100) NOT NULL,
     ActionRefName nvarchar2(100) NOT NULL,
+    IsEnabled NUMBER(1) Default (1) NULL,
     PRIMARY KEY (ActionID) 
 )
 
 comment on column SYS_ACTION.ACTIONID  is '功能标识';
 comment on column SYS_ACTION.ACTIONNAME  is '中文描述';
 comment on column SYS_ACTION.ACTIONREFNAME  is '英文引用';
+comment on column SYS_ACTION.ISENABLED  is '是否启用';
 
 CREATE TABLE Sys_Menu 
 (

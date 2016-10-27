@@ -112,11 +112,23 @@ CREATE TABLE `Demo_Tree`
     PRIMARY KEY (`ID`) 
 );
 
+CREATE TABLE `Editlog` 
+(
+    `ID` int AUTO_INCREMENT NOT NULL,
+    `TableName` varchar(2000) NULL,
+    `KeyID` varchar(2000) NULL,
+    `Content` varchar(2000) NULL,
+    `UserID` varchar(2000) NULL,
+    `EditTime` datetime NULL,
+    PRIMARY KEY (`ID`) 
+);
+
 CREATE TABLE `Sys_Action` 
 (
     `ActionID` char(36) NOT NULL COMMENT '功能标识',
     `ActionName` varchar(100) NOT NULL COMMENT '中文描述',
     `ActionRefName` varchar(100) NOT NULL COMMENT '英文引用',
+    `IsEnabled` bit Default 1 NULL COMMENT '是否启用',
     PRIMARY KEY (`ActionID`) 
 );
 

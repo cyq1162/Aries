@@ -3917,6 +3917,11 @@
             <param name="type">"U"或"V"</param>
             <param name="name">表名或视图名</param>
         </member>
+        <member name="M:CYQ.Data.SQL.TableSchema.GetTableDescription(System.String,System.String)">
+            <summary>
+            获得表的描述
+            </summary>
+        </member>
         <member name="T:CYQ.Data.SQL.SqlCreate">
             <summary>
             数据操作语句类

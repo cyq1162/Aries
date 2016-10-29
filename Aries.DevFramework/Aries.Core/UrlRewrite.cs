@@ -183,7 +183,9 @@ namespace Aries.Core
             }
             else if (!IsExistsSafeKey())
             {
-                WriteError(context.Request.UrlReferrer.PathAndQuery);//"Page timeout,please reflesh page!"
+                string path = context.Request.UrlReferrer.PathAndQuery;
+                if (path == "/") { path = "/index.html"; }
+                WriteError(path);//"Page timeout,please reflesh page!"
             }
             //AjaxController是由页面的后两个路径决定了。
             string[] items = context.Request.UrlReferrer.LocalPath.TrimStart('/').Split('/');

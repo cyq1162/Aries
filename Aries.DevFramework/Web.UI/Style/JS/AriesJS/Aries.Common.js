@@ -429,7 +429,7 @@
                             else if (pattern == "<=")
                                 value = value = "'" + value + " 23:59:59'";
                         }
-                        item = { name: name, value: value, pattern: pattern };
+                        var item = { name: name, value: value, pattern: pattern };
                         json.push(item);
 
                     }

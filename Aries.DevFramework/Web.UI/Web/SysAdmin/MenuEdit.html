@@ -242,11 +242,10 @@
     var _commit = AR.Form.commit;
     //提交表单
     AR.Form.commit = function (jq) {
+        var action=AR.Global.DG.action;
         var node = $("#ul_menus").tree("getSelected");
-
-
-        if (AR.Global.DG.action == "Add") {
-            var menuLevel = 0;
+        var menuLevel = 0;
+        if (action == "Add") {
             if (currNode.attributes == null) {
                 $("#menulevel").val(1);
                 menuLevel = 1;
@@ -261,34 +260,33 @@
                 return;
             }
         }
-
         _commit(jq, AR.Global.DG.action, "Sys_Menu", null, false, function (data) {
-            if (AR.Global.DG.action.toLocaleLowerCase() == "add") {
-                if (data.success) {
+            if (action == "Add")
+            {
+                if (data.success)
+                {
+                    $("#ul_menus").tree("append", {
+                        parent: currNode.target,
+                        data: [{
+                            id: data.msg,
+                            text: $("[name='menuname']").val(),
+                            attributes: { menulevel: menuLevel }
+                        }]
+                    });
                     AR.Utility.Window.showMsg("添加成功！");
-                } else {
-                    AR.Utility.Window.showMsg(data.msg);
-                    return;
                 }
-            } else {
-                AR.Utility.Window.showMsg(data.msg);
+                else
+                {
+                    AR.Utility.Window.showMsg(data.msg);
+                }
             }
-            if (AR.Global.DG.action == "Update") {
+            else
+            {
                 $("#ul_menus").tree("update", {
                     target: currNode.target,
                     text: $("[name='menuname']").val()
                 });
-
-            } else {
-                $("#ul_menus").tree("append", {
-                    parent: currNode.target,
-                    data: [{
-                        id: data.msg,
-                        text: $("[name='menuname']").val(),
-                        attributes: { menulevel: menulevel }
-                    }]
-                });
-
+                AR.Utility.Window.showMsg(data.msg);
             }
         });
 

@@ -185,7 +185,32 @@
         </member>
         <member name="P:CYQ.Data.AppConfig.Cache.MemCacheServers">
             <summary>
-            分布式缓存的服务器配置，多个用逗号（,）分隔
+            MemCache分布式缓存的服务器配置，多个用逗号（,）分隔
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.AppConfig.Cache.MemCacheServersBak">
+            <summary>
+            MemCache 备份服务器（当主服务器挂了后，请求会转向备用机）
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.AppConfig.Cache.RedisServers">
+            <summary>
+            Redis分布式缓存的服务器配置，多个用逗号（,）分隔
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.AppConfig.Cache.RedisUseDBCount">
+            <summary>
+            Redis 使用的DB数（默认1，使用db0）
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.AppConfig.Cache.RedisUseDBIndex">
+            <summary>
+            Redis 使用的DB 索引（默认0，若配置，则会忽略RedisUseDBCount）
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.AppConfig.Cache.RedisServersBak">
+            <summary>
+            Redis  备份服务器（当主服务器挂了后，请求会转向备用机）
             </summary>
         </member>
         <member name="P:CYQ.Data.AppConfig.Cache.DefaultCacheTime">
@@ -1253,12 +1278,22 @@
         </member>
         <member name="P:CYQ.Data.Cache.CacheManage.Instance">
             <summary>
-            返回唯一实例(根据是否配置AppConfig.Cache.MemCacheServers的服务器决定启用本地缓存或分布式缓存）
+            返回唯一实例(根据配置(AppConfig.Cache.XXXCacheServers)决定启用顺序：Redis、MemCache、本地缓存）
             </summary>
         </member>
         <member name="P:CYQ.Data.Cache.CacheManage.LocalInstance">
             <summary>
             单机本地缓存
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Cache.CacheManage.MemCacheInstance">
+            <summary>
+            MemCache缓存（需要配置AppConfig.Cache.MemCacheServers）
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Cache.CacheManage.RedisInstance">
+            <summary>
+            Redis缓存（需要配置AppConfig.Cache.RedisServers）
             </summary>
         </member>
         <member name="P:CYQ.Data.Cache.CacheManage.Count">
@@ -1288,7 +1323,12 @@
         </member>
         <member name="F:CYQ.Data.Cache.CacheType.MemCache">
             <summary>
-            分布式MemCached缓存
+            MemCached分布式缓存
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Cache.CacheType.Redis">
+            <summary>
+            Redis分布式缓存
             </summary>
         </member>
         <member name="T:CYQ.Data.Cache.CacheKeyType">
@@ -1459,7 +1499,7 @@
         </member>
         <member name="T:CYQ.Data.Cache.MemCache">
             <summary>
-            分布式缓存类
+            MemCache分布式缓存类
             </summary>
         </member>
         <member name="T:CYQ.Data.Cache.FNV1_32">
@@ -1582,22 +1622,6 @@
             This method returns true if the value was successfully replaced.
             </summary>
         </member>
-        <member name="M:CYQ.Data.Cache.MemcachedClient.Append(System.String,System.Object)">
-            <summary>
-            This method corresponds to the "append" command in the memcached protocol.
-            It will append the given value to the given key, if the key already exists.
-            Modifying a key with this command will not change its expiry time.
-            Using the overload it is possible to specify a custom hash to override server selection.
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Cache.MemcachedClient.Prepend(System.String,System.Object)">
-            <summary>
-            This method corresponds to the "prepend" command in the memcached protocol.
-            It will prepend the given value to the given key, if the key already exists.
-            Modifying a key with this command will not change its expiry time.
-            Using the overload it is possible to specify a custom hash to override server selection.
-            </summary>
-        </member>
         <member name="M:CYQ.Data.Cache.MemcachedClient.Get(System.String)">
             <summary>
             This method corresponds to the "get" command in the memcached protocol.
@@ -1608,65 +1632,12 @@
             Use the overload to specify a custom hash to override server selection.
             </summary>
         </member>
-        <member name="M:CYQ.Data.Cache.MemcachedClient.Gets(System.String,System.UInt64@)">
-            <summary>
-            This method corresponds to the "gets" command in the memcached protocol.
-            It works exactly like the Get method, but it will also return the cas unique value for the item.
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Cache.MemcachedClient.Get(System.String[])">
-            <summary>
-            This method executes a multi-get. It will group the keys by server and execute a single get 
-            for each server, and combine the results. The returned object[] will have the same size as
-            the given key array, and contain either null or a value at each position according to
-            the key on that position.
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Cache.MemcachedClient.Gets(System.String[],System.UInt64[]@)">
-            <summary>
-            This method does a multi-gets. It functions exactly like the multi-get method, but it will
-            also return an array of cas unique values as an out parameter.
-            </summary>
-        </member>
         <member name="M:CYQ.Data.Cache.MemcachedClient.Delete(System.String)">
             <summary>
             This method corresponds to the "delete" command in the memcache protocol.
             It will immediately delete the given key and corresponding value.
             Use the overloads to specify an amount of time the item should be in the delete queue on the server,
             or to specify a custom hash to override server selection.
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Cache.MemcachedClient.SetCounter(System.String,System.UInt64)">
-            <summary>
-            This method sets the key to the given value, and stores it in a format such that the methods
-            Increment and Decrement can be used successfully on it, i.e. decimal representation of a 64-bit unsigned integer. 
-            Using the overloads it is possible to specify an expiry time, either relative as a TimeSpan or 
-            absolute as a DateTime. It is also possible to specify a custom hash to override server selection.
-            This method returns true if the counter was successfully set.
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Cache.MemcachedClient.GetCounter(System.String)">
-            <summary>
-            This method returns the value for the given key as a ulong?, a nullable 64-bit unsigned integer.
-            It returns null if the item did not exist, was not stored properly as per the SetCounter method, or 
-            if it was not able to successfully retrieve the item.
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Cache.MemcachedClient.Increment(System.String,System.UInt64)">
-            <summary>
-            This method corresponds to the "incr" command in the memcached protocol.
-            It will increase the item with the given value and return the new value.
-            It will return null if the item did not exist, was not stored properly as per the SetCounter method, or 
-            if it was not able to successfully retrieve the item. 
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Cache.MemcachedClient.Decrement(System.String,System.UInt64)">
-            <summary>
-            This method corresponds to the "decr" command in the memcached protocol.
-            It will decrease the item with the given value and return the new value. If the new value would be 
-            less than 0, it will be set to 0, and the method will return 0.
-            It will return null if the item did not exist, was not stored properly as per the SetCounter method, or 
-            if it was not able to successfully retrieve the item. 
             </summary>
         </member>
         <member name="M:CYQ.Data.Cache.MemcachedClient.FlushAll">
@@ -1686,13 +1657,6 @@
             This method corresponds to the "stats" command in the memcached protocol.
             It will send the stats command to all servers, and it will return a Dictionary for each server
             containing the results of the command.
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Cache.MemcachedClient.Stats(System.String)">
-            <summary>
-            This method corresponds to the "stats" command in the memcached protocol.
-            It will send the stats command to the server that corresponds to the given key, hash or host,
-            and return a Dictionary containing the results of the command.
             </summary>
         </member>
         <member name="M:CYQ.Data.Cache.MemcachedClient.Status">
@@ -1748,71 +1712,90 @@
             The default value is 1048576 bytes = 1MB.
             </summary>
         </member>
-        <member name="T:CYQ.Data.Cache.PooledSocket">
+        <member name="F:CYQ.Data.Cache.MSocket.DB">
             <summary>
-            The PooledSocket class encapsulates a socket connection to a specified memcached server.
-            It contains a buffered stream for communication, and methods for sending and retrieving
-            data from the memcached server, as well as general memcached error checking.
+            额外扩展的属性（用于Redis）
             </summary>
         </member>
-        <member name="M:CYQ.Data.Cache.PooledSocket.Dispose">
+        <member name="M:CYQ.Data.Cache.MSocket.Dispose">
             <summary>
             Disposing of a PooledSocket object in any way causes it to be returned to its SocketPool.
             </summary>
         </member>
-        <member name="M:CYQ.Data.Cache.PooledSocket.Close">
+        <member name="M:CYQ.Data.Cache.MSocket.Close">
             <summary>
             This method closes the underlying stream and socket.
             </summary>
         </member>
-        <member name="M:CYQ.Data.Cache.PooledSocket.Write(System.String)">
+        <member name="M:CYQ.Data.Cache.MSocket.Write(System.String)">
             <summary>
             Writes a string to the socket encoded in UTF8 format.
             </summary>
         </member>
-        <member name="M:CYQ.Data.Cache.PooledSocket.Write(System.Byte[])">
+        <member name="M:CYQ.Data.Cache.MSocket.Write(System.Byte[])">
             <summary>
             Writes an array of bytes to the socket and flushes the stream.
             </summary>
         </member>
-        <member name="M:CYQ.Data.Cache.PooledSocket.ReadLine">
+        <member name="M:CYQ.Data.Cache.MSocket.ReadLine">
             <summary>
             Reads from the socket until the sequence '\r\n' is encountered, 
             and returns everything up to but not including that sequence as a UTF8-encoded string
+            返回Null即没有数据了！
             </summary>
         </member>
-        <member name="M:CYQ.Data.Cache.PooledSocket.ReadResponse">
+        <member name="M:CYQ.Data.Cache.MSocket.ReadLineBytes">
+            <summary>
+            读一行的数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.Cache.MSocket.ReadResponse">
             <summary>
             Reads a response line from the socket, checks for general memcached errors, and returns the line.
             If an error is encountered, this method will throw an exception.
             </summary>
         </member>
-        <member name="M:CYQ.Data.Cache.PooledSocket.Read(System.Byte[])">
+        <member name="M:CYQ.Data.Cache.MSocket.Read(System.Byte[])">
             <summary>
             Fills the given byte array with data from the socket.
             </summary>
         </member>
-        <member name="M:CYQ.Data.Cache.PooledSocket.SkipUntilEndOfLine">
+        <member name="M:CYQ.Data.Cache.MSocket.SkipToEndOfLine">
             <summary>
             Reads from the socket until the sequence '\r\n' is encountered.
             </summary>
         </member>
-        <member name="M:CYQ.Data.Cache.PooledSocket.Reset">
+        <member name="M:CYQ.Data.Cache.MSocket.Reset">
             <summary>
             Resets this PooledSocket by making sure the incoming buffer of the socket is empty.
             If there was any leftover data, this method return true.
             </summary>
         </member>
-        <member name="P:CYQ.Data.Cache.PooledSocket.IsAlive">
+        <member name="P:CYQ.Data.Cache.MSocket.IsAlive">
             <summary>
             Checks if the underlying socket and stream is connected and available.
             </summary>
+        </member>
+        <member name="M:CYQ.Data.Cache.Serializer.Serialize(System.Object,CYQ.Data.Cache.SerializedType@,System.UInt32)">
+            <summary>
+            序列化
+            </summary>
+            <param name="value">值</param>
+            <param name="type">返回序列化类型</param>
+            <param name="compressionThreshold">指定超过长度时启用压缩功能</param>
+            <returns></returns>
         </member>
         <member name="T:CYQ.Data.Cache.ServerPool">
             <summary>
             The ServerPool encapsulates a collection of memcached servers and the associated SocketPool objects.
             This class contains the server-selection logic, and contains methods for executing a block of code on 
             a socket from the server corresponding to a given key.
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Cache.ServerPool.serverPoolBak">
+            <summary>
+            备份的Socket池，如果某主机挂了，在配置了备份的情况下，会由备份Socket池提供服务。
             </summary>
         </member>
         <member name="M:CYQ.Data.Cache.ServerPool.#ctor(System.String[])">
@@ -1843,6 +1826,17 @@
             acquiring or returning PooledSockets.
             </summary>
         </member>
+        <member name="F:CYQ.Data.Cache.SocketPool.socketPoolBak">
+            <summary>
+            备份的Socket池，如果某主机挂了，在配置了备份的情况下，会由备份Socket池提供服务。
+            （问题：主SocketPool怎么找到对应的备份？）
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Cache.SocketPool.socketDeadTime">
+            <summary>
+            Socket的挂科时间。
+            </summary>
+        </member>
         <member name="F:CYQ.Data.Cache.SocketPool.deadEndPointSecondsUntilRetry">
             <summary>
             If the host stops responding, we mark it as dead for this amount of seconds, 
@@ -1863,9 +1857,10 @@
             wrong while creating the new socket, this pool's endpoint will be marked as dead
             and all subsequent calls to this method will return null until the retry interval
             has passed.
+            这个方法扩展（备份链接池）
             </summary>
         </member>
-        <member name="M:CYQ.Data.Cache.SocketPool.Return(CYQ.Data.Cache.PooledSocket)">
+        <member name="M:CYQ.Data.Cache.SocketPool.Return(CYQ.Data.Cache.MSocket)">
             <summary>
             Returns a socket to the pool.
             If the socket is dead, it will be destroyed.
@@ -1996,6 +1991,168 @@
         <member name="P:CYQ.Data.Cache.LocalCache.RemainMemoryBytes">
             <summary>
             还可用的缓存字节数
+            </summary>
+        </member>
+        <member name="T:CYQ.Data.Cache.RedisCache">
+            <summary>
+            Redis分布式缓存类
+            </summary>
+        </member>
+        <member name="T:CYQ.Data.Cache.RedisClient">
+            <summary>
+            Memcached client main class.
+            Use the static methods Setup and GetInstance to setup and get an instance of the client for use.
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Cache.RedisClient.Setup(System.String,System.String[])">
+            <summary>
+            Static method for creating an instance. This method will throw an exception if the name already exists.
+            </summary>
+            <param name="name">The name of the instance.</param>
+            <param name="servers">A list of memcached servers in standard notation: host:port. 
+            If port is omitted, the default value of 11211 is used. 
+            Both IP addresses and host names are accepted, for example:
+            "localhost", "127.0.0.1", "cache01.example.com:12345", "127.0.0.1:12345", etc.</param>
+        </member>
+        <member name="M:CYQ.Data.Cache.RedisClient.Exists(System.String)">
+            <summary>
+            Static method which checks if a given named RedisClient instance exists.
+            </summary>
+            <param name="name">The name of the instance.</param>
+            <returns></returns>
+        </member>
+        <member name="F:CYQ.Data.Cache.RedisClient.defaultInstance">
+            <summary>
+            Static method for getting the default instance named "default".
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Cache.RedisClient.GetInstance(System.String)">
+            <summary>
+            Static method for getting an instance. 
+            This method will first check for named instances that has been set up programmatically.
+            If no such instance exists, it will check the "beitmemcached" section of the standard 
+            config file and see if it can find configuration info for it there.
+            If that also fails, an exception is thrown.
+            </summary>
+            <param name="name">The name of the instance.</param>
+            <returns>The named instance.</returns>
+        </member>
+        <member name="F:CYQ.Data.Cache.RedisClient.compressionThreshold">
+            <summary>
+            指定数据长度超过值时进行压缩
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Cache.RedisClient.hash(System.String)">
+            <summary>
+            Private key hashing method that uses the modified FNV hash.
+            </summary>
+            <param name="key">The key to hash.</param>
+            <returns>The hashed key.</returns>
+        </member>
+        <member name="M:CYQ.Data.Cache.RedisClient.hash(System.UInt32)">
+            <summary>
+            Private hashing method for user-supplied hash values.
+            </summary>
+            <param name="hashvalue">The user-supplied hash value to hash.</param>
+            <returns>The hashed value</returns>
+        </member>
+        <member name="M:CYQ.Data.Cache.RedisClient.hash(System.String[])">
+            <summary>
+            Private multi-hashing method.
+            </summary>
+            <param name="keys">An array of keys to hash.</param>
+            <returns>An arrays of hashes.</returns>
+        </member>
+        <member name="M:CYQ.Data.Cache.RedisClient.hash(System.UInt32[])">
+            <summary>
+            Private multi-hashing method for user-supplied hash values.
+            </summary>
+            <param name="hashvalues">An array of keys to hash.</param>
+            <returns>An arrays of hashes.</returns>
+        </member>
+        <member name="M:CYQ.Data.Cache.RedisClient.checkKey(System.String)">
+            <summary>
+            Private key-checking method.
+            Throws an exception if the key does not conform to memcached protocol requirements:
+            It may not contain whitespace, it may not be null or empty, and it may not be longer than 250 characters.
+            </summary>
+            <param name="key">The key to check.</param>
+        </member>
+        <member name="M:CYQ.Data.Cache.RedisClient.FlushAll">
+            <summary>
+            This method corresponds to the "flush_all" command in the memcached protocol.
+            When this method is called, it will send the flush command to all servers, thereby deleting
+            all items on all servers.
+            Use the overloads to set a delay for the flushing. If the parameter staggered is set to true,
+            the client will increase the delay for each server, i.e. the first will flush after delay*0, 
+            the second after delay*1, the third after delay*2, etc. If set to false, all servers will flush 
+            after the same delay.
+            It returns true if the command was successful on all servers.
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Cache.RedisClient.Stats">
+            <summary>
+            This method corresponds to the "stats" command in the memcached protocol.
+            It will send the stats command to all servers, and it will return a Dictionary for each server
+            containing the results of the command.
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Cache.RedisClient.Status">
+            <summary>
+            This method retrives the status from the serverpool. It checks the connection to all servers
+            and returns usage statistics for each server.
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Cache.RedisClient.KeyPrefix">
+            <summary>
+            If you specify a key prefix, it will be appended to all keys before they are sent to the memcached server.
+            They key prefix is not used when calculating which server a key belongs to.
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Cache.RedisClient.SendReceiveTimeout">
+            <summary>
+            The send receive timeout is used to determine how long the client should wait for data to be sent 
+            and received from the server, specified in milliseconds. The default value is 2000.
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Cache.RedisClient.ConnectTimeout">
+            <summary>
+            The connect timeout is used to determine how long the client should wait for a connection to be established,
+            specified in milliseconds. The default value is 2000.
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Cache.RedisClient.MinPoolSize">
+            <summary>
+            The min pool size determines the number of sockets the socket pool will keep.
+            Note that no sockets will be created on startup, only on use, so the socket pool will only
+            contain this amount of sockets if the amount of simultaneous requests goes above it.
+            The default value is 5.
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Cache.RedisClient.MaxPoolSize">
+            <summary>
+            The max pool size determines how large the socket connection pool is allowed to grow.
+            There can be more sockets in use than this amount, but when the extra sockets are returned, they will be destroyed.
+            The default value is 10.
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Cache.RedisClient.SocketRecycleAge">
+            <summary>
+            If the pool contains more than the minimum amount of sockets, and a socket is returned that is older than this recycle age
+            that socket will be destroyed instead of put back in the pool. This allows the pool to shrink back to the min pool size after a peak in usage.
+            The default value is 30 minutes.
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Cache.RedisClient.CompressionThreshold">
+            <summary>
+            If an object being stored is larger in bytes than the compression threshold, it will internally be compressed before begin stored,
+            and it will transparently be decompressed when retrieved. Only strings, byte arrays and objects can be compressed.
+            The default value is 1048576 bytes = 1MB.
+            </summary>
+        </member>
+        <member name="T:CYQ.Data.Cache.RedisCommand">
+            <summary>
+            RedisCommand
             </summary>
         </member>
         <member name="P:CYQ.Data.ConnBean.Conn">
@@ -4834,7 +4991,7 @@
             获取Json字符串的值
             </summary>
             <param name="json">Json字符串</param>
-            <param name="key">键值</param>
+            <param name="key">键值(有层级时用：XXX.YYY.ZZZ)</param>
             <returns></returns>
         </member>
         <member name="M:CYQ.Data.Tool.JsonHelper.OutResult(System.Boolean,System.String,System.Collections.Generic.Dictionary{System.String,System.Object}[])">

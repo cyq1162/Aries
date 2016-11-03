@@ -18,6 +18,7 @@ namespace Aries.Core.Sql
             {"less","<"},{"lessEqual","<="},
             {"in","IN"},{"datetimepoint",""},{"notequal","<>"},
             {"isnull","is Null"},
+            {"notnull","is not Null"},
             {"and","AND"},{"or","OR"}
         };
         public static string Format(string searchList)
@@ -60,10 +61,8 @@ namespace Aries.Core.Sql
                     case "likeor":
                         break;
                     case "isnull":
-                        obj.Pattern = "is null";
-                        break;
                     case "notnull":
-                        obj.Pattern = "is not null";
+                        obj.Value = "";
                         break;
                     case "like":
                         obj.Value = "'%" + obj.Value + "%'";

@@ -52,16 +52,12 @@
     //绑定
     function bindObjName($input) {
         var comboxData = $Core.Global.comboxData;
-        if (comboxData && comboxData.length > 0) {
+        if (comboxData) {
             var op = _getOption($input);
             //这里不处理子集下拉框，在后面递归一次性处理
             if (op.parent) { return; }
-            //var $target = $input, data;//.addClass(".easyui-combobox")
-            for (var i = 0; i < comboxData.length; i++) {
-                if (comboxData[i][op.key]) {
-                    op.data = $Core.Utility.cloneArray(comboxData[i][op.key], true);//克隆，避免后续追加的请选择影响原有数据。
-                    break;
-                }
+            if (comboxData[op.key]) {
+                op.data = $Core.Utility.cloneArray(comboxData[op.key], true);//克隆，避免后续追加的请选择影响原有数据。
             }
             if (!op.tree && op.defaultItem && (op.data.length == 0 || op.data[0][op.textField] != "请选择")) {
                 op.data.unshift({ text: "请选择", value: "" });
@@ -152,29 +148,23 @@
             var result = Array();
             //此处变更为异步。
             $Core.Utility.Ajax.post("GetCombobox", null, _post_data, function (result) {
-                if (!(result instanceof Array)) {
-                    result = [result];
-                }
-                var comboxData = $Core.Global.comboxData;
-                for (var i = 0, len = result.length; i < len; i++) {//[C1:[],C2:[]]
-                    for (var k in result[i]) {//k 是objName
-                        var flag = true;
-                        for (var ii = 0; ii < comboxData.length; ii++) {
-                            for (var kk in comboxData[ii]) {
-                                if (kk == k) {
-                                    comboxData[ii][kk].concat(result[i][k]);
-                                    flag = false;
+                if (result) {
+                    var comboxData = $Core.Global.comboxData;
+                    for (var objName in result) {
+                        if (comboxData[objName]) {
+
+                            var resultData = result[objName];
+                            var boxData = comboxData[objName];
+                            for (var i = 0; i < resultData.length; i++) {
+                                if (!boxData.contains(resultData[i].value, "value")) {
+                                    comboxData[objName].push(resultData[i]);
                                 }
                             }
                         }
-                        if (flag == true) {
-                            $Core.Global.comboxData = $Core.Global.comboxData.concat(result[i]);
+                        else {
+                            comboxData[objName] = result[objName];
                         }
                     }
-                }
-
-                if (comboxData && !(comboxData instanceof Array)) {
-                    $Core.Global.comboxData = [comboxData];
                 }
                 onLoadedEvent && onLoadedEvent();
             });
@@ -189,7 +179,7 @@
             return;
         }
         var ds = $Core.Global.comboxData;
-        var data = ds.get(op.key);//内部存档还是数组
+        var data = ds[op.key];
         data && (data = data.get("parent", pid));
         if (data && data.length > 0) {
             _reBind(op, $input, parentOp, data);
@@ -199,10 +189,11 @@
             var json = [{ ObjName: op.key, Parent: pid, Para: op.para }];
             loadComboboxData(json, function () {
                 return function () {
-                    var d = $Core.Global.comboxData.get(op.key) || [];
+                    var d = $Core.Global.comboxData[op.key] || [];
+                    d && (d = d.get("parent", pid));
                     _reBind(op, $input, parentOp, d);
                 }
-            }(op, $input, parentOp));
+            }(op, $input, parentOp, pid));
         }
     }
     //多级联下拉处理---------------------------------
@@ -219,7 +210,7 @@
                 isAddDefaultItem = false;
             }
         }
-        op.data = data;
+        op.data = data || [];
         if (isAddDefaultItem && !op.tree && op.defaultItem && (op.data.length == 0 || op.data[0][op.textField] != "请选择")) {
             op.data.unshift({ text: "请选择", value: "" });
         }
@@ -417,7 +408,7 @@
                             setCombo($(this), "select", value.toString());
                         }
 
-                        if ($(this).attr("parent")) {
+                        if ($(this).attr("parent") && !$(this).attr("defaultValue")) {
                             var opData = setCombo($(this), "getData");// 级联和设值（不知道谁先执行的，所以检测是否绑定了数据）
                             if (opData.length <= 1) {
                                 $(this).attr("defaultValue", value);
@@ -444,8 +435,10 @@
         }
         var value = $box.attr("defaultValue");//重新赋值。
         if (value && op.data.contains(value, "value")) {
-            setCombo($box, "select", value);
             $box.removeAttr("defaultValue");
+            setTimeout(function () {
+                setCombo($box, "select", value);
+            }, 100);
         }
         else if (!op.tree && op.data.length > 0) { setCombo($box, "select", op.data[0][op.valueField]); }
     }

@@ -273,7 +273,7 @@
                             var checked_ids = dg.getCheckedId();
                             var jsonString = JSON.stringify($Core.Common._Internal.buildSearchJson(targetForm));
                             if (checked_ids.length > 0) {
-                                var condition = [{ name: dg.Internal.primarykey, pattern: 'in', value: checked_ids.join(',')}];
+                                var condition = [{ name: dg.Internal.primarykey, pattern: 'in', value: checked_ids.join(',') }];
                                 jsonString = JSON.stringify(condition);
                             }
                             //window.open(ajaxOptions.href + '?objName=' + objName + '&sys_search='+jsonString, '_self');      
@@ -394,8 +394,7 @@
                     var pattern = "like", $box, value, isDate = false;
                     cto: for (var i = 0; i < $inputs.length; i++) {
                         $box = $($inputs[i]);
-                        if ($box.attr("pattern"))
-                        {
+                        if ($box.attr("pattern")) {
                             pattern = $box.attr("pattern")
                         }
                         else if (pattern == "like" && ($box.attr("configkey") || $box.attr("objname"))) {
@@ -406,7 +405,7 @@
                         if (!name) {
                             continue cto;
                         }
-                       
+
                         value = $box.val();
                         if (value == '' || value == null || value == '请选择') {
                             pattern = "like";
@@ -651,11 +650,9 @@
                             data = $Core.Global.Config[configKey] || [];
                         }
                         if (objName) {
-                            each: for (var i = 0; i < $Core.Global.comboxData.length; i++) {
-                                if ($Core.Global.comboxData[i][objName]) {
-                                    data = $Core.Global.comboxData[i][objName];
-                                    break each;
-                                }
+                            if ($Core.Global.comboxData[objName]) {
+                                data = $Core.Global.comboxData[objName];
+
                             }
                         }
                         var isMultiple = false;//先不支持行内编辑的多选
@@ -686,11 +683,8 @@
                                             var subArray = new Array();
                                             (function (key, parent_id) {
                                                 var all_array_children;
-                                                f1: for (var j = 0; j < $Core.Global.comboxData.length; j++) {
-                                                    if ($Core.Global.comboxData[j][key]) {
-                                                        all_array_children = $Core.Global.comboxData[j][key];
-                                                        break f1;
-                                                    }
+                                                if ($Core.Global.comboxData[key]) {
+                                                    all_array_children = $Core.Global.comboxData[key];
                                                 }
                                                 for (var k = 0; k < all_array_children.length; k++) {
                                                     if (all_array_children[k].parent == parent_id) {
@@ -1062,15 +1056,7 @@
         }
     }
     function getObj(objName) {
-        var obj = new Object();
-        var comboxData = $Core.Global.comboxData;
-        for (var i = 0; i < comboxData.length; i++) {
-            if (comboxData[i][objName]) {
-                obj = comboxData[i][objName];
-                break;
-            }
-        }
-        return obj;
+        return $Core.Global.comboxData[objName];
     };
     function getNameByValue(obj, v) {
         var value = v;

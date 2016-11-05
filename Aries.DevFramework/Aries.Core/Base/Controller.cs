@@ -915,15 +915,10 @@ namespace Aries.Core
                     for (int i = 0; i < dtList.Count; i++)
                     {
                         json.Add(boxes[i].ObjName, dtList[i].Rows.Count > 0 ? dtList[i].ToJson(false, false, true) : "[]", true);
-                        //if (!string.IsNullOrEmpty(boxes[i].Parent))
-                        //{
-                        //    json.Add("Target", boxes[i].Parent);
-                        //}
-                        json.AddBr();
                     }
-
+                    json.AddBr();
                 }
-                jsonResult = json.ToString(true);
+                jsonResult = json.ToString();
             }
         }
 

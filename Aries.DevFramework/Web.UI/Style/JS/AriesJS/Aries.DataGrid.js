@@ -239,19 +239,6 @@
                     interval = setInterval(function () { bindGrid(dg, interval); }, 5);
                 }
             }(dg));
-
-            //var _postdata = { sys_json: JSON.stringify(_postArray) };
-            //if ($Core.combobox_params && $.type($Core.combobox_params) == "object") {
-            //    _postdata = $.extend({}, _postdata, $Core.combobox_params);
-            //}
-            //$Core.Utility.Ajax.post("GetCombobox", "objName", _postdata,
-            //    function (dg) {
-            //        return function (result) {
-            //            $Core.Global.comboxData = $Core.Global.comboxData.concat(result);
-            //            interval = setInterval(function () { bindGrid(dg, interval); }, 5);
-            //        }
-            //    }(dg));
-
         }
         else {
             interval = setInterval(function () { bindGrid(dg, interval); }, 5);

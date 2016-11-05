@@ -43,8 +43,8 @@ window.AR = (function ($Core) {
         },
         route: { root: 'ajax.html' },
         themes: ['default', 'black', 'gray', 'metro'],
-        //存档objname下拉数的数据。
-        comboxData: [],
+        //存档objname下拉数的数据{objnameA:[],objnameB:{}...}。
+        comboxData: {},
         //存档Config_KeyValue的数据。
         Config: {},
         /*

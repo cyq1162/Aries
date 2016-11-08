@@ -190,7 +190,7 @@
             loadComboboxData(json, function () {
                 return function () {
                     var d = $Core.Global.comboxData[op.key] || [];
-                    d && (d = d.get("parent", pid));
+                    d && (d = d.get("parent", pid) || []);
                     _reBind(op, $input, parentOp, d);
                 }
             }(op, $input, parentOp, pid));
@@ -210,7 +210,7 @@
                 isAddDefaultItem = false;
             }
         }
-        op.data = data || [];
+        op.data = data;
         if (isAddDefaultItem && !op.tree && op.defaultItem && (op.data.length == 0 || op.data[0][op.textField] != "请选择")) {
             op.data.unshift({ text: "请选择", value: "" });
         }

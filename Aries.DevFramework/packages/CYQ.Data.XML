@@ -78,6 +78,11 @@
             框架的运行路径（Bin目录）
             </summary>
         </member>
+        <member name="P:CYQ.Data.AppConfig.WebRootPath">
+            <summary>
+            Web根目录
+            </summary>
+        </member>
         <member name="T:CYQ.Data.AppConfig.XHtml">
             <summary>
             XHtml 相关的配置
@@ -326,9 +331,10 @@
             </summary>
         </member>
         <member name="T:CYQ.Data.MAction">
-            <summary>
-            数据操作类[可操作单表/视图]
-            </summary>
+             <summary>
+             Manipulate：table / view / custom statement
+            <para>操作：表/视图/自定义语句</para>
+             </summary>
         </member>
         <member name="F:CYQ.Data.MAction._sourceTableName">
             <summary>
@@ -352,274 +358,174 @@
         </member>
         <member name="M:CYQ.Data.MAction.#ctor(System.Object)">
             <summary>
-            构造函数
+            Instantiation
+            <para>实例化</para>
             </summary>
-            <param name="tableNamesEnum">表名/视图名称</param>
-            <example><code>
-                MAction action=new MAction(TableNames.Users);
-            或  MAction action=new MAction("Users");
-            或  MAction action=new MAction("(select m.*,u.UserName from Users u left join Message m on u.ID=m.UserID) v");
-            或  MAction action=new MAction(ViewNames.Users);//传视图
-            或多数据库方式：
-            MAction action=new MAction(U_DataBaseNameEnum.Users);
-            说明：自动截取数据库链接[U_及Enum为前后缀],取到的数据库配置项为DataBaseNameConn
-            U_为表 V_为视图 P_为存储过程
-            </code></example>
+            <param name="tableNamesEnum">Parameters: table name, view, custom statement, DataRow
+            <para>参数：表名、视图、自定义语句、MDataRow</para></param>
         </member>
         <member name="M:CYQ.Data.MAction.#ctor(System.Object,System.String)">
-            <summary>
-            构造函数2
-            </summary>
-            <param name="tableNamesEnum">表名/视图名称</param>
-            <param name="conn">web.config下的connectionStrings的name配置项名称,或完整的链接字符串</param>
-            <example><code>
-                MAction action=new MAction(TableNames.Users,"Conn");
-            或  MAction action=new MAction(TableNames.Users,"server=.;database=CYQ;uid=sa;pwd=123456");
-            </code></example>
+            <param name="conn">Database connection statement or configuration key
+            <para>数据库链接语句或配置Key</para></param>
         </member>
         <member name="M:CYQ.Data.MAction.ResetTable(System.Object)">
             <summary>
-            表切换,在A表时，如果需要操作B,不需要重新new一个MAaction,可直接换用本函数切换
+            Toggle Table Action: To switch between other tables, use this method
+            <para>切换表操作：如需操作其它表，通过此方法切换</para>
             </summary>
-            <param name="tableObj">要切换的表/视图名</param>
-            <example><code>
-                using(MAction action = new MAction(TableNames.Users))
-                {
-                    if (action.Fill("UserName='路过秋天'"))
-                    {
-                        int id = action.Get&lt;int&gt;(Users.ID);
-                        if (action.ResetTable(TableNames.Message))
-                        {
-                             //other logic...
-                        }
-                    }
-                }
-            </code></example>
+            <param name="tableObj">Parameters: table name, view, custom statement, DataRow
+            <para>参数：表名、视图、自定义语句、MDataRow</para></param>
         </member>
         <member name="M:CYQ.Data.MAction.ResetTable(System.Object,System.Boolean)">
-            <summary>
-            表切换
-            </summary>
-            <param name="tableObj">要切换的表/视图名</param>
-            <param name="resetState">是否重置原有的数据状态（默认true)</param>
+            <param name="resetState">Reset Row State (defaultValue:true)
+            <para>是否重置原有的数据状态（默认true)</para></param>
         </member>
-        <member name="M:CYQ.Data.MAction.ResetTable(System.Object,System.String)">
-            <summary>
-            表切换
-            </summary>
-            <param name="tableObj">要切换的表/视图名</param>
-            <param name="newDbName">要切换的数据库名称</param>
+        <member name="M:CYQ.Data.MAction.ResetTable(System.Object,System.Boolean,System.String)">
+            <param name="newDbName">Other DataBaseName
+            <para>其它数据库名称</para></param>
         </member>
         <member name="M:CYQ.Data.MAction.Insert">
             <summary>
-             插入数据
+            Insert To DataBase
+             <para>插入数据</para>
             </summary>
-            <example><code>
-            using(MAction action=new MAction(TableNames.Users))
-            {
-                action.Set(Users.UserName,"路过秋天");
-                action.Insert();
-            }
-            </code></example>
         </member>
         <member name="M:CYQ.Data.MAction.Insert(CYQ.Data.InsertOp)">
-            <summary>
-            插入数据
-            </summary>
-            <param name="option">插入选项</param>
+            <param name="option">InsertOp
+            <para>插入选项</para></param>
         </member>
         <member name="M:CYQ.Data.MAction.Insert(System.Boolean)">
-            <summary>
-             插入数据
-            </summary>
-            <param name="autoSetValue">自动从控制获取值</param>
+            <param name="autoSetValue">Automatic get values from context
+            <para>自动取值（从上下文环境中）</para></param>
         </member>
         <member name="M:CYQ.Data.MAction.Insert(System.Boolean,CYQ.Data.InsertOp)">
-            <summary>
-            插入数据
-            </summary>
-            <param name="autoSetValue">是否自动获取值[自动从控件获取值,需要先调用SetAutoPrefix方法设置控件前缀]</param>
-            <example><code>
-            using(MAction action=new MAction(TableNames.Users))
-            {
-                action.SetAutoPrefix("txt","ddl");
-                action.Insert(true);
-            }
-            </code></example>
+            <param name="option">InsertOp
+            <para>插入选项</para></param>
         </member>
         <member name="M:CYQ.Data.MAction.Update">
             <summary>
-             更新数据[不传where条件时将自动尝试从UI获取]
+            Update to database [Will automatically try to fetch from the UI when conditions are not passed]
+            <para>更新数据[不传where条件时将自动尝试从UI获取]</para>
             </summary>
-            <example><code>
-            using(MAction action=new MAction(TableNames.Users))
-            {
-                action.Set(Users.UserName,"路过秋天");
-                action.Set(Users.ID,1);
-                action.Update();
-            }
-            </code></example>
         </member>
         <member name="M:CYQ.Data.MAction.Update(System.Object)">
-            <summary>
-             更新数据
-            </summary>
-            <param name="where">where条件,可直接传id的值如:[88],或传完整where条件如:[id=88 and name='路过秋天']</param>
-            <example><code>
-            using(MAction action=new MAction(TableNames.Users))
-            {
-                action.Set(Users.UserName,"路过秋天");
-                action.Update("id=1");
-            }
-            </code></example>
+            <param name="where">Sql statement where the conditions: 88, "id = 88"
+            <para>sql语句的where条件：88、"id=88"</para></param>
         </member>
         <member name="M:CYQ.Data.MAction.Update(System.Boolean)">
-            <summary>
-             更新数据
-            </summary>
-            <param name="autoSetValue">是否自动获取值[自动从控件获取值,需要先调用SetAutoPrefix或SetAutoParentControl方法设置控件前缀]</param>
+            <param name="autoSetValue">Automatic get values from context
+            <para>自动取值（从上下文环境中）</para></param>
         </member>
         <member name="M:CYQ.Data.MAction.Update(System.Object,System.Boolean)">
-            <summary>
-             更新数据
-            </summary>
-            <param name="where">where条件,可直接传id的值如:[88],或传完整where条件如:[id=88 and name='路过秋天']</param>
-            <param name="autoSetValue">是否自动获取值[自动从控件获取值,需要先调用SetAutoPrefix或SetAutoParentControl方法设置控件前缀]</param>
-            <example><code>
-            using(MAction action=new MAction(TableNames.Users))
-            {
-                action.SetAutoPrefix("txt","ddl");
-                action.Update("name='路过秋天'",true);
-            }
-            </code></example>
+            <param name="autoSetValue">Automatic get values from context
+            <para>自动取值（从上下文环境中）</para></param>
         </member>
         <member name="M:CYQ.Data.MAction.Delete">
             <summary>
-             删除数据[不传where条件时将自动尝试从UI获取]
+            Delete from database [Will automatically try to fetch from the UI when conditions are not passed]
+            <para>删除数据[不传where条件时将自动尝试从UI获取]</para>
             </summary>
         </member>
         <member name="M:CYQ.Data.MAction.Delete(System.Object)">
-            <summary>
-             删除数据
-            </summary>
-            <param name="where">where条件,可直接传id的值如:[88],或传完整where条件如:[id=88 and name='路过秋天']</param>
+            <param name="where">Sql statement where the conditions: 88, "id = 88"
+            <para>sql语句的where条件：88、"id=88"</para></param>
         </member>
         <member name="M:CYQ.Data.MAction.Select">
-            <summary>
-            选择所有数据
-            </summary>
+             <summary>
+             select all data
+            <para>选择所有数据</para>
+             </summary>
         </member>
         <member name="M:CYQ.Data.MAction.Select(System.Object)">
-            <summary>
-            根据条件查询所有数据
-            </summary>
-            <param name="where">where条件如:id>1</param>
+            <param name="where">Sql statement where the conditions: 88, "id = 88"
+            <para>sql语句的where条件：88、"id=88"</para></param>
+        </member>
+        <member name="M:CYQ.Data.MAction.Select(System.Int32,System.Int32)">
+            <param name="pageIndex">pageIndex<para>第几页</para></param>
+            <param name="pageSize">pageSize<para>每页数量[为0时默认选择所有]</para></param>
         </member>
         <member name="M:CYQ.Data.MAction.Select(System.Int32,System.Int32,System.Object,System.Int32@)">
-            <summary>
-            带分布功能的选择[多条件查询,选择所有时只需把PageIndex/PageSize设置为0]
-            </summary>
-            <param name="pageIndex">第几页</param>
-            <param name="pageSize">每页数量[为0时默认选择所有]</param>
-            <param name="where"> 查询条件[可附带 order by 语句]</param>
-            <param name="rowCount">返回的记录总数</param>
-            <returns>返回值MDataTable</returns>
+            <param name="rowCount">The total number of records returned
+            <para>返回的记录总数</para></param>
         </member>
         <member name="M:CYQ.Data.MAction.Fill">
             <summary>
-            填充自身，即单行选择[不传where条件时将自动尝试从UI获取]
+            Select top one row to fill this.Data
+            <para>选择一行数据，并填充到Data属性[不传where条件时将自动尝试从UI获取]</para>
             </summary>
         </member>
         <member name="M:CYQ.Data.MAction.Fill(System.Object)">
-            <summary>
-            填充自身[即单行选择]（填充后所有非Null值的状态会变更为1）
-            </summary>
-            <param name="where">where条件,可直接传id的值如:[88],或传完整where条件如:"id=88 or name='路过秋天'"</param>
-            <example><code>
-            using(MAction action=new MAction(TableNames.Users))
-            {
-                if(action.Fill("name='路过秋天'")) //或者action.Fill(888) 或者 action.Fill(id=888)
-                {
-                    action.UI.SetTo(labUserName);
-                }
-            }
-            </code></example>
+            <param name="where">Sql statement where the conditions: 88, "id = 88"
+            <para>sql语句的where条件：88、"id=88"</para></param>
         </member>
         <member name="M:CYQ.Data.MAction.GetCount">
             <summary>
-            返回记录总数
+            Returns the number of records
+            <para>返回记录数</para>
             </summary>
         </member>
         <member name="M:CYQ.Data.MAction.GetCount(System.Object)">
-            <summary>
-            返回记录总数
-            </summary>
-            <param name="where">where条件,可直接传id的值如:[88],或传完整where条件如:[id=88 and name='路过秋天']</param>
+            <param name="where">Sql statement where the conditions: 88, "id = 88"
+            <para>sql语句的where条件：88、"id=88"</para></param>
         </member>
         <member name="M:CYQ.Data.MAction.Exists(System.Object)">
             <summary>
-            是否存在指定条件的数据
+            Whether or not the specified condition exists
+            <para>是否存在指定条件的数据</para>
             </summary>
-            <param name="where">where条件,可直接传id的值如:[88],或传完整where条件如:[id=88 and name='路过秋天']</param>
+            <param name="where">Sql statement where the conditions: 88, "id = 88"
+            <para>sql语句的where条件：88、"id=88"</para></param>
         </member>
         <member name="M:CYQ.Data.MAction.Get``1(System.Object)">
             <summary>
-            取值
+            Get value from this.Data
+            <para>从Data属性里取值</para>
             </summary>
         </member>
         <member name="M:CYQ.Data.MAction.Get``1(System.Object,``0)">
-            <summary>
-            取值
-            </summary>
-            <param name="key">字段名</param>
-            <param name="defaultValue">值为Null时的默认替换值</param>
+            <param name="defaultValue">defaultValue<para>值为Null时的默认替换值</para></param>
         </member>
         <member name="M:CYQ.Data.MAction.Set(System.Object,System.Object)">
             <summary>
-            设置值,例如:[action.Set(TableName.ID,10);]
+            Set value to this.Data
+            <para>为Data属性设置值</para>
             </summary>
-            <param name="key">字段名称,可用枚举如:[TableName.ID]</param>
-            <param name="value">要设置给字段的值</param>
-            <example><code>
-            set示例：action.Set(Users.UserName,"路过秋天");
-            get示例：int id=action.Get&lt;int&gt;(Users.ID);
-            </code></example>
+            <param name="key">columnName<para>列名</para></param>
+            <param name="value">value<para>值</para></param>
         </member>
         <member name="M:CYQ.Data.MAction.Set(System.Object,System.Object,System.Int32)">
-            <summary>
-            设置值
-            </summary>
-            <param name="state">手工设置状态[0:未更改；1:已赋值,值相同[可插入]；2:已赋值,值不同[可更新]]</param>
-            <returns></returns>
+            <param name="state">set value state (0: unchanged; 1: assigned, the same value [insertable]; 2: assigned, different values [updateable])
+            <para>设置值状态[0:未更改；1:已赋值,值相同[可插入]；2:已赋值,值不同[可更新]]</para></param>
         </member>
         <member name="M:CYQ.Data.MAction.SetExpression(System.String)">
             <summary>
-            更新(Update)操作的自定义表达式设置。
+            Sets a custom expression for the Update operation.
+            <para>为Update操作设置自定义表达式。</para>
             </summary>
-            <param name="updateExpression">例如a字段值自加1："a=a+1"</param>
+            <param name="updateExpression">as："a=a+1"<para>如："a=a+1"</para></param>
         </member>
         <member name="M:CYQ.Data.MAction.SetPara(System.Object,System.Object)">
             <summary>
-            参数化传参[当Where条件为参数化(如：name=@name)语句时使用]
+            Parameterized pass [used when the Where condition is a parameterized (such as: name = @ name) statement]
+            <para>参数化传参[当Where条件为参数化(如：name=@name)语句时使用]</para>
             </summary>
+            <param name="paraName">paraName<para>参数名称</para></param>
+            <param name="value">value<para>参数值</para></param>
         </member>
         <member name="M:CYQ.Data.MAction.SetPara(System.Object,System.Object,System.Data.DbType)">
-            <summary>
-            参数化传参[当Where条件为参数化(如：name=@name)语句时使用]
-            </summary>
-            <param name="paraName">参数名称</param>
-            <param name="value">参数值</param>
-            <param name="dbType">参数类型</param>
+            <param name="dbType">dbType<para>参数类型</para></param>
         </member>
         <member name="M:CYQ.Data.MAction.SetPara(System.Collections.Generic.List{CYQ.Data.Aop.AopCustomDbPara})">
             <summary>
-            参数化传参[传进多个参数列表]
+            Aop scenes can only be used by the parameterization of the Senate
+            <para>Aop场景才可能使用的参数化传参</para>
             </summary>
-            <param name="customParas">Aop场景使用，传进多个参数。</param>
+            <param name="customParas">Paras<para>参数列表</para></param>
         </member>
         <member name="M:CYQ.Data.MAction.ClearPara">
             <summary>
-            清除(SetPara设置的)自定义参数
+            Clears paras (from SetPara method)
+            <para>清除(SetPara设置的)自定义参数</para>
             </summary>
         </member>
         <member name="M:CYQ.Data.MAction.ClearParameters">
@@ -629,141 +535,141 @@
         </member>
         <member name="M:CYQ.Data.MAction.SetSelectColumns(System.Object[])">
             <summary>
-            本方法可以在单表使用时查询指定的列[设置后可使用Fill与Select方法]
-            提示：分页查询时，排序条件的列必须指定选择。
+            Specifies the column to read
+            <para>指定读取的列</para>
             </summary>
-            <param name="columnNames">可设置多个列名[调用Fill或Select后,本参数将被清除]</param>
+            <param name="columnNames">as："columnA","columnB as B"</param>
         </member>
         <member name="M:CYQ.Data.MAction.GetWhere(System.Boolean,CYQ.Data.Table.MDataCell[])">
             <summary>
-            根据元数据列组合where条件。
+             Get where statement
+            <para>根据元数据列组合where条件。</para>
             </summary>
-            <param name="isAnd">true为and连接，反之为or链接</param>
-            <param name="cells">单元格</param>
-            <returns></returns>
         </member>
         <member name="M:CYQ.Data.MAction.GetWhere(CYQ.Data.Table.MDataCell[])">
-            <summary>
-            根据元数据列组合and连接的where条件。
-            </summary>
-            <param name="cells">单元格</param>
-            <returns></returns>
+            <param name="isAnd">connect by and/or<para>true为and连接，反之为or链接</para></param>
+            <param name="cells">MDataCell<para>单元格</para></param>
         </member>
         <member name="M:CYQ.Data.MAction.SetTransLevel(System.Data.IsolationLevel)">
             <summary>
-            设置事务级别
+            Set the transaction level
+            <para>设置事务级别</para>
             </summary>
-            <param name="level"></param>
+            <param name="level">IsolationLevel</param>
         </member>
         <member name="M:CYQ.Data.MAction.BeginTransation">
             <summary>
-            开始事务
+            Begin Transation
+            <para>开始事务</para>
             </summary>
         </member>
         <member name="M:CYQ.Data.MAction.EndTransation">
             <summary>
-            提交结束事务[默认调用Close/Disponse时会自动调用]
-            如果需要提前结束事务,可调用此方法
+            Commit Transation
+            <para>提交事务</para>
             </summary>
         </member>
         <member name="M:CYQ.Data.MAction.RollBack">
             <summary>
-            事务回滚
+            RollBack Transation
+            <para>事务回滚</para>
             </summary>
         </member>
         <member name="M:CYQ.Data.MAction.Dispose(System.Boolean)">
             <summary>
-            释放资源
+            Dispose
+            <para>释放资源</para>
             </summary>
         </member>
         <member name="M:CYQ.Data.MAction.SetAopState(CYQ.Data.Aop.AopOp)">
             <summary>
-            设置Aop状态
+            Set Aop State
+            <para>设置Aop状态</para>
             </summary>
-            <param name="op">Aop状态选项</param>
-            <returns></returns>
         </member>
         <member name="M:CYQ.Data.MAction.SetAopPara(System.Object)">
             <summary>
-            需要传递额外的参数供Aop使用时可设置。
+            Pass additional parameters for Aop use
+            <para>传递额外的参数供Aop使用</para>
             </summary>
-            <param name="para"></param>
         </member>
         <member name="P:CYQ.Data.MAction.Data">
             <summary>
-            Fill完之后返回的行数据
+            Archive the rows of the data structure
+            <para>存档数据结构的行</para>
             </summary>
         </member>
         <member name="P:CYQ.Data.MAction.TableName">
-            <summary>
-            当前操作的表名(若操作的是视图语句，则为最后的视图名字）
-            </summary>
+             <summary>
+             Table name (if the view statement is the operation, the final view of the name)
+            <para>当前操作的表名(若操作的是视图语句，则为最后的视图名字</para> ）
+             </summary>
         </member>
         <member name="P:CYQ.Data.MAction.ConnectionString">
-            <summary>
-            获取当前数据库链接字符串
-            </summary>
+             <summary>
+             The database connection string
+            <para>数据库链接字符串</para> 
+             </summary>
         </member>
         <member name="P:CYQ.Data.MAction.DebugInfo">
-            <summary>
-            调试信息[如需要查看所有执行的SQL语句,请设置AppDebug.OpenDebugInfo或配置文件OpenDebugInfo项为ture]
-            </summary>
+             <summary>
+             Get or set debugging information [need to set App Config.Debug.Open DebugInfo to ture]
+            <para>获取或设置调试信息[需要设置AppConfig.Debug.OpenDebugInfo为ture]</para>
+             </summary>
         </member>
         <member name="P:CYQ.Data.MAction.DalType">
             <summary>
-            当前操作的数据库类型[Access/Mssql/Oracle/SQLite/MySql/Txt/Xml等]
+            The database type
+            <para>数据库类型</para>
             </summary>
         </member>
         <member name="P:CYQ.Data.MAction.DataBase">
             <summary>
-            当前操作的数据库名称
+            The database name
+            <para>数据库名称</para>
             </summary>
         </member>
         <member name="P:CYQ.Data.MAction.DalVersion">
             <summary>
-            当前操作的数据库的版本号
+            The database version
+            数据库的版本号
             </summary>
         </member>
         <member name="P:CYQ.Data.MAction.RecordsAffected">
             <summary>
-            执行SQL命令时受影响的行数（-2则为异常）。
+            The number of rows affected when executing a SQL command (-2 is an exception)
+            <para>执行SQL命令时受影响的行数（-2则为异常）。</para>
             </summary>
         </member>
         <member name="P:CYQ.Data.MAction.TimeOut">
-            <summary>
-            命令超时设置[单位秒]
-            </summary>
+             <summary>
+             Command Timeout[seconds]
+            <para>命令超时设置[单位秒]</para>
+             </summary>
         </member>
         <member name="P:CYQ.Data.MAction.AllowInsertID">
-            <summary>
-            对于主键列为：Int自增标识的，是否允许手动插入ID
-            </summary>
+             <summary>
+             Whether to allow manual insertion of IDs for self-incrementing primary key identification
+            <para>自增主键标识的，是否允许手动插入ID</para> 
+             </summary>
         </member>
         <member name="P:CYQ.Data.MAction.UI">
             <summary>
-            UI操作
+            Manipulate UI
+            <para>UI操作</para>
             </summary>
         </member>
         <member name="T:CYQ.Data.MProc">
-            <summary>
-            存储过程或SQL语句操作类
-            </summary>
-            <example><code>
-            使用示例：
-                      MDataTable table;
-            实例化：  using(MProc proc = new MProc(ProcNames.GetList))
-                      {
-            添加参数：    proc.Set(GetList.ID, 10);
-            获取列表：    table = proc.ExeMDataTable();
-            关闭链接：}
-            绑定控件：table.Bind(GridView1);
-            </code></example>
+             <summary>
+             Manipulate：sql / procedure
+            <para>操作：SQL或存储过程</para>
+             </summary>
         </member>
         <member name="M:CYQ.Data.MProc.op_Implicit(CYQ.Data.MAction)~CYQ.Data.MProc">
             <summary>
-            将一个MAction 转换成一个MProc。
+            Change MAction to MProc
+            <para>将一个MAction 转换成一个MProc。</para>
             </summary>
-            <returns></returns>
         </member>
         <member name="F:CYQ.Data.MProc._conn">
             <summary>
@@ -772,76 +678,43 @@
         </member>
         <member name="M:CYQ.Data.MProc.#ctor(System.Object)">
             <summary>
-            构造函数
+            Instantiation
+            <para>实例化</para>
             </summary>
-            <param name="procNameOrSql">存储过程名称,可通过枚举传入</param>
-            <example><code>
-                MProc action=new MProc(ProcNames.SelectAll);
-            或  MProc action=new MProc("SelectAll");
-            或多数据库方式：
-            MAction action=new MAction(P_DataBaseNameEnum.SelectAll);
-            说明：自动截取数据库链接[P_及Enum为前后缀],取到的数据库配置项为DataBaseNameConn
-            U_为表 V_为视图 P_为存储过程
-            </code></example>
+            <param name="procNameOrSql">Parameters: sql or procedure
+            <para>参数：SQL语句或存储过程名称</para></param>
         </member>
-        <member name="M:CYQ.Data.MProc.#ctor(System.Object,System.String,System.Boolean[])">
-            <summary>
-            构造函数2
-            </summary>
-            <param name="procNameOrSql">存储过程名称,可通过枚举传入</param>
-            <param name="conn">web.config下的connectionStrings的name配置项名称,或完整的链接字符串</param>
-            <example><code>
-                MProc action=new MProc(ProcNames.SelectAll,"CYQ");
-            或  MProc action=new MProc(ProcNames.SelectAll,"server=.;database=CYQ;uid=sa;pwd=123456");
-            </code></example>
+        <member name="M:CYQ.Data.MProc.ResetProc(System.Object,System.Boolean)">
+            <param name="isClearPara">IsClearParameters
+            <para>是否清除参数</para></param>
         </member>
-        <member name="M:CYQ.Data.MProc.ResetProc(System.Object,System.Boolean[])">
-            <summary>
-             表切存储过程,在操作完A存储过程后，如果需要操作B存储过程,不需要重新new一个MProc,可直接换用本函数切换
-            用法参考MAction的ResetTable
-            </summary>
-            <param name="procNameOrSql">存储过程名或Sql语句</param>
-            <param name="isClearParaAndisFixProc">允许多两个bool参数：1：是否清除参数；2：是否为存储过程</param>
-        </member>
-        <member name="M:CYQ.Data.MProc.ResetProc(System.Object)">
-            <summary>
-             表切存储过程,在操作完A存储过程后，如果需要操作B存储过程,不需要重新new一个MProc,可直接换用本函数切换
-            用法参考MAction的ResetTable
-            </summary>
-        </member>
+        <!-- 对于成员“M:CYQ.Data.MProc.ResetProc(System.Object)”忽略有格式错误的 XML 注释 -->
         <member name="M:CYQ.Data.MProc.ExeMDataTable">
             <summary>
-            返回MDataTable
+            Get MDataTable
             </summary>
-            <returns></returns>
         </member>
         <member name="M:CYQ.Data.MProc.ExeMDataTableList">
             <summary>
-            执行的语句有多个结果集返回
+            Get MDataTables
             </summary>
-            <returns></returns>
         </member>
         <member name="M:CYQ.Data.MProc.ExeNonQuery">
             <summary>
-            返回受影响的行数[用于更新或删除]，执行异常时返回-2
+            Returns the number of rows affected [used to insert update or delete], and returns -2 if an exception is executed
+            <para>返回受影响的行数[用于更新或删除]，执行异常时返回-2</para>
             </summary>
-            <returns></returns>
         </member>
         <member name="M:CYQ.Data.MProc.ExeScalar``1">
             <summary>
-            返回首行首列的单个值
+            Returns the value of the first column of the first row
+            <para>返回首行首列的值</para>
             </summary>
         </member>
         <member name="M:CYQ.Data.MProc.Set(System.Object,System.Object)">
             <summary>
-            设置存储过程参数
-            </summary>
-            <param name="paraName">参数名称如["ID"或Users.ID]</param>
-            <param name="value">参数值如"11"</param>
-        </member>
-        <member name="M:CYQ.Data.MProc.Set(System.Object,System.Object,System.Data.DbType)">
-            <summary>
-            设置存储过程参数
+            <para>Set Input Para</para>
+            <para>设置存储过程Input参数</para>
             </summary>
         </member>
         <member name="M:CYQ.Data.MProc.SetCustom(System.Object,CYQ.Data.ParaType)">
@@ -851,108 +724,114 @@
         </member>
         <member name="M:CYQ.Data.MProc.SetCustom(System.Object,CYQ.Data.ParaType,System.Object)">
             <summary>
-            设置特殊自定义参数
+            <para>Set the stored procedure OutPut, the return value and other special types of parameters</para>
+            <para>设置存储过程OutPut、返回值等特殊类型参数</para>
             </summary>
-            <param name="paraName">参数名称</param>
-            <param name="paraType">参数类型</param>
-            <param name="value">参数值</param>
         </member>
         <member name="M:CYQ.Data.MProc.SetCustom(System.Object,CYQ.Data.ParaType,System.Object,System.String)">
-            <summary>
-            设置特殊自定义参数
-            </summary>
-            <param name="typeName">MSSQL的用户定义表类型的名称</param>
+            <param name="typeName">MSSQL The name of the user-defined table type<para>MSSQL的用户定义表类型的名称</para></param>
         </member>
         <member name="M:CYQ.Data.MProc.Clear">
             <summary>
-            清除存储过程参数
+            Clear Parameters
+            <para>清除存储过程参数</para>
             </summary>
         </member>
         <member name="M:CYQ.Data.MProc.SetAopState(CYQ.Data.Aop.AopOp)">
             <summary>
-            设置Aop状态
+            Set Aop State
+            <para>设置Aop状态</para>
             </summary>
-            <param name="op">Aop状态选项</param>
-            <returns></returns>
         </member>
         <member name="M:CYQ.Data.MProc.SetAopPara(System.Object)">
             <summary>
-            需要传递额外的参数供Aop使用时可设置。
+            Pass additional parameters for Aop use
+            <para>传递额外的参数供Aop使用</para>
             </summary>
-            <param name="para"></param>
         </member>
         <member name="M:CYQ.Data.MProc.SetTransLevel(System.Data.IsolationLevel)">
             <summary>
-            设置事务级别
+            Set the transaction level
+            <para>设置事务级别</para>
             </summary>
-            <param name="level">事务级别</param>
+            <param name="level">IsolationLevel</param>
         </member>
         <member name="M:CYQ.Data.MProc.BeginTransation">
             <summary>
-            开启事务
+            Begin Transation
+            <para>开始事务</para>
             </summary>
         </member>
         <member name="M:CYQ.Data.MProc.EndTransation">
             <summary>
-            提交结束事务[默认调用Close/Disponse时会自动调用]
-            如果需要提前结束事务,可调用此方法
+            Commit Transation
+            <para>提交事务</para>
             </summary>
         </member>
         <member name="M:CYQ.Data.MProc.RollBack">
             <summary>
-            事务回滚
+            RollBack Transation
+            <para>事务回滚</para>
             </summary>
         </member>
         <member name="M:CYQ.Data.MProc.Dispose">
             <summary>
-            释放资源
+            Dispose
+            <para>释放资源</para>
             </summary>
         </member>
         <member name="P:CYQ.Data.MProc.DebugInfo">
-            <summary>
-            调试信息[如需要查看所有执行的SQL语句,请设置配置文件OpenDebugInfo项为ture]
-            </summary>
+             <summary>
+             Get or set debugging information [need to set App Config.Debug.Open DebugInfo to ture]
+            <para>获取或设置调试信息[需要设置AppConfig.Debug.OpenDebugInfo为ture]</para>
+             </summary>
         </member>
         <member name="P:CYQ.Data.MProc.DalType">
             <summary>
-            当前操作的数据库类型[Access/Mssql/Oracle/SQLite/MySql等]
+            The database type
+            <para>数据库类型</para>
             </summary>
         </member>
         <member name="P:CYQ.Data.MProc.DataBase">
             <summary>
-            当前操作的数据库名称
+            The database name
+            <para>数据库名称</para>
             </summary>
         </member>
         <member name="P:CYQ.Data.MProc.DalVersion">
             <summary>
-            当前操作的数据库的版本号
+            The database version
+            数据库的版本号
             </summary>
         </member>
         <member name="P:CYQ.Data.MProc.RecordsAffected">
             <summary>
-            执行SQL命令时受影响的行数（-2则为异常）。
+            The number of rows affected when executing a SQL command (-2 is an exception)
+            <para>执行SQL命令时受影响的行数（-2则为异常）。</para>
             </summary>
         </member>
         <member name="P:CYQ.Data.MProc.ConnectionString">
-            <summary>
-            获取当前数据库链接字符串
-            </summary>
+             <summary>
+             The database connection string
+            <para>数据库链接字符串</para> 
+             </summary>
         </member>
         <member name="P:CYQ.Data.MProc.TimeOut">
-            <summary>
-            命令超时设置[单位秒]
-            </summary>
+             <summary>
+             Command Timeout[seconds]
+            <para>命令超时设置[单位秒]</para>
+             </summary>
         </member>
         <member name="P:CYQ.Data.MProc.ReturnValue">
             <summary>
-            存储过程的返回值
+            Get Procedure Return Value
+            <para>存储过程的返回值</para>
             </summary>
         </member>
         <member name="P:CYQ.Data.MProc.OutPutValue">
             <summary>
-            存储过程的OutPut值
-            单个输出时为值；
-            多个输出时为Dictionary
+            The OutPut value for the stored procedure: Dictionary for multiple values
+            <para>存储过程的OutPut值：多个值时为Dictionary</para>
             </summary>
         </member>
         <member name="M:CYQ.Data.NoSqlAction.ResetStaticVar">
@@ -1155,37 +1034,6 @@
             单机存档： 表的baseKey:key1,key2,key3...
             </summary>
         </member>
-        <member name="T:CYQ.Data.Cache.CacheDependencyInfo">
-            <summary>
-            缓存依赖信息
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Cache.CacheDependencyInfo.callCount">
-            <summary>
-            被调用的次数。
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Cache.CacheDependencyInfo.createTime">
-            <summary>
-            缓存产生的时间
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Cache.CacheDependencyInfo.cacheMinutes">
-            <summary>
-            缓存多少分钟
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Cache.CacheDependencyInfo.SetState(System.Boolean)">
-            <summary>
-            标识缓存对象的更改状态
-            </summary>
-            <param name="isChange"></param>
-        </member>
-        <member name="P:CYQ.Data.Cache.CacheDependencyInfo.IsChanged">
-            <summary>
-            系统文件依赖是否发生改变
-            </summary>
-        </member>
         <member name="T:CYQ.Data.Cache.CacheManage">
             <summary>
             全局缓存类
@@ -1193,16 +1041,16 @@
             <example><code>
             使用示例：
             实例化： CacheManage cache=CacheManage.Instance;
-            添加：   cache.Add("路过秋天",new MDataTable);
+            添加：   Cache.Set("路过秋天",new MDataTable);
             判断：   if(cache.Contains("路过秋天"))
                      {
             获取：       MDataTable table=cache.Get("路过秋天") as MDataTable;
                      }
             </code></example>
         </member>
-        <member name="M:CYQ.Data.Cache.CacheManage.Add(System.String,System.Object)">
+        <member name="M:CYQ.Data.Cache.CacheManage.Set(System.String,System.Object)">
             <summary>
-            添加一个Cache对象
+            设置一个Cache对象
             </summary>
         </member>
         <member name="M:CYQ.Data.Cache.CacheManage.Clear">
@@ -1220,38 +1068,9 @@
             获得一个Cache对象
             </summary>
         </member>
-        <member name="M:CYQ.Data.Cache.CacheManage.GetFileDependencyHasChanged(System.String)">
-            <summary>
-            获取目标的文件依赖是否发生更改
-            </summary>
-            <param name="key"></param>
-            <returns></returns>
-        </member>
-        <member name="M:CYQ.Data.Cache.CacheManage.GetHasChanged(System.String)">
-            <summary>
-            获取缓存对象是否被手工标识为已更改
-            </summary>
-            <param name="key"></param>
-            <returns></returns>
-        </member>
         <member name="M:CYQ.Data.Cache.CacheManage.Remove(System.String)">
             <summary>
             删除一个Cache对象
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Cache.CacheManage.Set(System.String,System.Object)">
-            <summary>
-            缓存设置：有则更新，无则添加
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Cache.CacheManage.SetChange(System.String,System.Boolean)">
-            <summary>
-            手动对缓存象标识为已更改
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Cache.CacheManage.Update(System.String,System.Object)">
-            <summary>
-            更新缓存，缓存存在则更更新，不存在则跳过
             </summary>
         </member>
         <member name="M:CYQ.Data.Cache.CacheManage.GetKey(CYQ.Data.Cache.CacheKeyType,System.String)">
@@ -1296,19 +1115,19 @@
             Redis缓存（需要配置AppConfig.Cache.RedisServers）
             </summary>
         </member>
+        <member name="P:CYQ.Data.Cache.CacheManage.CacheType">
+            <summary>
+            缓存的实例类型
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Cache.CacheManage.CacheInfo">
+            <summary>
+            缓存的信息
+            </summary>
+        </member>
         <member name="P:CYQ.Data.Cache.CacheManage.Count">
             <summary>
             获和缓存总数
-            </summary>
-        </member>
-        <member name="P:CYQ.Data.Cache.CacheManage.RemainMemoryBytes">
-            <summary>
-            还可用的缓存字节数
-            </summary>
-        </member>
-        <member name="P:CYQ.Data.Cache.CacheManage.RemainMemoryPercentage">
-            <summary>
-            还可用的缓存百分比
             </summary>
         </member>
         <member name="T:CYQ.Data.Cache.CacheType">
@@ -1495,6 +1314,70 @@
         <member name="M:CYQ.Data.Aop.IAop.OnLoad">
             <summary>
             Aop 首次加载时被触发的事件
+            </summary>
+        </member>
+        <member name="T:CYQ.Data.Cache.LocalCache">
+            <summary>
+            单机缓存类
+            为兼容.NET Core 去掉Web.Caching，重写
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Cache.LocalCache.Get(System.String)">
+            <summary>
+            获得一个Cache对象
+            </summary>
+            <param name="key">标识</param>
+        </member>
+        <member name="M:CYQ.Data.Cache.LocalCache.Contains(System.String)">
+            <summary>
+            是否存在缓存
+            </summary>
+            <param name="key">标识</param>
+            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.Cache.LocalCache.Set(System.String,System.Object)">
+            <summary>
+            添加一个Cache对象
+            </summary>
+            <param name="key">标识</param>
+            <param name="value">对象值</param>
+        </member>
+        <member name="M:CYQ.Data.Cache.LocalCache.Set(System.String,System.Object,System.Double)">
+            <param name="cacheMinutes">缓存时间(单位分钟)</param>
+        </member>
+        <member name="M:CYQ.Data.Cache.LocalCache.Set(System.String,System.Object,System.Double,System.String)">
+            <param name="fileName">文件依赖路径</param>
+        </member>
+        <member name="M:CYQ.Data.Cache.LocalCache.Remove(System.String)">
+            <summary>
+            删除一个Cache对象
+            </summary>
+            <param name="key">标识</param>
+        </member>
+        <member name="M:CYQ.Data.Cache.LocalCache.RemoveList(System.Collections.Generic.List{System.String})">
+            <summary>
+            移除Key和Value
+            </summary>
+            <param name="removeKeys"></param>
+        </member>
+        <member name="M:CYQ.Data.Cache.LocalCache.Clear">
+            <summary>
+            清除所有缓存
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Cache.LocalCache.CacheInfo">
+            <summary>
+            获取缓存信息对象列表
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Cache.LocalCache.WorkInfo">
+            <summary>
+            内存工作信息
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Cache.LocalCache.Count">
+            <summary>
+            获和缓存总数
             </summary>
         </member>
         <member name="T:CYQ.Data.Cache.MemCache">
@@ -1869,128 +1752,6 @@
             If there are something inbetween those values, the age of the socket is checked. 
             If it is older than the SocketRecycleAge, it is destroyed, otherwise it will be 
             put back in the pool.
-            </summary>
-        </member>
-        <member name="T:CYQ.Data.Cache.LocalCache">
-            <summary>
-            单机缓存类
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Cache.LocalCache.theState">
-            <summary>
-            非线程安全。
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Cache.LocalCache.Get(System.String)">
-            <summary>
-            获得一个Cache对象
-            </summary>
-            <param name="key">标识</param>
-        </member>
-        <member name="M:CYQ.Data.Cache.LocalCache.Contains(System.String)">
-            <summary>
-            是否存在缓存
-            </summary>
-            <param name="key">标识</param>
-            <returns></returns>
-        </member>
-        <member name="M:CYQ.Data.Cache.LocalCache.Add(System.String,System.Object)">
-            <summary>
-            添加一个Cache对象
-            </summary>
-            <param name="key">标识</param>
-            <param name="value">对象值</param>
-        </member>
-        <member name="M:CYQ.Data.Cache.LocalCache.Add(System.String,System.Object,System.String)">
-            <param name="fileName">关联的文件</param>
-        </member>
-        <member name="M:CYQ.Data.Cache.LocalCache.Add(System.String,System.Object,System.Double)">
-            <param name="cacheMinutes">缓存时间(单位分钟)</param>
-        </member>
-        <member name="M:CYQ.Data.Cache.LocalCache.Add(System.String,System.Object,System.String,System.Double)">
-            <param name="cacheMinutes">缓存时间(单位分钟)</param>
-        </member>
-        <member name="M:CYQ.Data.Cache.LocalCache.Add(System.String,System.Object,System.String,System.Double,System.Web.Caching.CacheItemPriority)">
-            <param name="level">缓存级别[高于Normal的将不受定时缓存清理的限制]</param>
-        </member>
-        <member name="M:CYQ.Data.Cache.LocalCache.Set(System.String,System.Object)">
-            <summary>
-            缓存设置：有则更新，无则添加
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Cache.LocalCache.Update(System.String,System.Object)">
-            <summary>
-            更新缓存，缓存存在则更更新，不存在则跳过
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Cache.LocalCache.Insert(System.String,System.Object,System.String,System.Double,System.Web.Caching.CacheItemPriority)">
-            <summary>
-            相对底层Cache添加方法,添加一个Cache请用Add方法
-            </summary>
-            <param name="key">标识</param>
-            <param name="value">对象值</param>
-            <param name="fileName">依赖文件</param>
-            <param name="cacheMinutes">缓存分钟数</param>
-            <param name="level" >缓存级别</param>
-        </member>
-        <member name="M:CYQ.Data.Cache.LocalCache.Remove(System.String)">
-            <summary>
-            删除一个Cache对象
-            </summary>
-            <param name="key">标识</param>
-        </member>
-        <member name="M:CYQ.Data.Cache.LocalCache.Clear">
-            <summary>
-            清除所有缓存
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Cache.LocalCache.GetFileDependencyHasChanged(System.String)">
-            <summary>
-            获取目标的文件依赖是否发生更改
-            </summary>
-            <param name="key"></param>
-            <returns></returns>
-        </member>
-        <member name="M:CYQ.Data.Cache.LocalCache.SetChange(System.String,System.Boolean)">
-            <summary>
-            手动对缓存象标识为已更改
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Cache.LocalCache.GetHasChanged(System.String)">
-            <summary>
-            获取缓存对象是否被手工标识为已更改
-            </summary>
-            <param name="key"></param>
-            <returns></returns>
-        </member>
-        <member name="P:CYQ.Data.Cache.LocalCache.CacheInfo">
-            <summary>
-            获取当前缓存信息对象列表
-            </summary>
-        </member>
-        <member name="P:CYQ.Data.Cache.LocalCache.CacheTable">
-            <summary>
-            获取缓存信息对象列表（以表信息返回，默认5分钟更新一次，特殊情况会快速更新（如：Key被添加移除时））
-            </summary>
-        </member>
-        <member name="P:CYQ.Data.Cache.LocalCache.WorkInfo">
-            <summary>
-            内存工作信息
-            </summary>
-        </member>
-        <member name="P:CYQ.Data.Cache.LocalCache.Count">
-            <summary>
-            获和缓存总数
-            </summary>
-        </member>
-        <member name="P:CYQ.Data.Cache.LocalCache.RemainMemoryPercentage">
-            <summary>
-            还可用的缓存百分比
-            </summary>
-        </member>
-        <member name="P:CYQ.Data.Cache.LocalCache.RemainMemoryBytes">
-            <summary>
-            还可用的缓存字节数
             </summary>
         </member>
         <member name="T:CYQ.Data.Cache.RedisCache">
@@ -2909,6 +2670,281 @@
             获取指定的表架构生成的SQL(Alter Table)语句
             </summary>
         </member>
+        <member name="T:CYQ.Data.Table.MDataRow">
+            <summary>
+            一行记录
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.GetItemValue(System.Int32)">
+            <summary>
+            此方法被Emit所调用
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.GetItemValues">
+            <summary>
+            返回数组值
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.Get``1(System.Object)">
+            <summary>
+            取值
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.ToTable">
+            <summary>
+            将行的数据转成两列（ColumnName、Value）的表
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.Clear">
+            <summary>
+            将行的数据行的值全重置为Null
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.GetState">
+            <summary>
+            获取行的当前状态[0:未更改；1:已赋值,值相同[可插入]；2:已赋值,值不同[可更新]]
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.GetState(System.Boolean)">
+            <summary>
+            获取行的当前状态[0:未更改；1:已赋值,值相同[可插入]；2:已赋值,值不同[可更新]]
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.Set(System.Object,System.Object)">
+            <summary>
+            为行设置值
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.Set(System.Object,System.Object,System.Int32)">
+            <summary>
+            为行设置值
+            </summary>
+            <param name="key">字段名</param>
+            <param name="value">值</param>
+            <param name="state">手工设置状态[0:未更改；1:已赋值,值相同[可插入]；2:已赋值,值不同[可更新]]</param>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.SetState(System.Int32)">
+            <summary>
+            将行的数据行的状态全部重置
+            </summary>
+            <param name="state">状态[0:未更改；1:已赋值,值相同[可插入]；2:已赋值,值不同[可更新]]</param>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.SetState(System.Int32,CYQ.Data.Table.BreakOp)">
+            <summary>
+            将行的数据行的状态全部重置
+            </summary>
+            <param name="state">状态[0:未更改；1:已赋值,值相同[可插入]；2:已赋值,值不同[可更新]]</param>
+            <param name="op">状态设置选项</param>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.Clone">
+            <summary>
+            复制一行
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.CreateFrom(System.Object)">
+            <summary>
+            从实体、Json、Xml、IEnumerable接口实现的类、MDataRow
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.CreateFrom(System.Object,System.Type)">
+            <summary>
+            从实体、Json、Xml、IEnumerable接口实现的类、MDataRow
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.ToJson">
+            <summary>
+            输出行的数据Json
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.ToJson(CYQ.Data.Table.RowOp)">
+            <summary>
+            输出行的数据Json
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.ToJson(CYQ.Data.Table.RowOp,System.Boolean)">
+            <summary>
+            输出Json
+            </summary>
+            <param name="op">过滤条件</param>
+            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.WriteJson(System.String,CYQ.Data.Table.RowOp)">
+            <summary>
+            将json保存到指定文件中
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.ToEntity``1">
+            <summary>
+            转成实体
+            </summary>
+            <typeparam name="T">实体名称</typeparam>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.SetToAll(System.Object[])">
+            <summary>
+            将值批量赋给UI
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.SetToAll(System.String,System.Object[])">
+            <summary>
+            将值批量赋给UI
+            </summary>
+            <param name="autoPrefix">自动前缀，多个可用逗号分隔</param>
+            <param name="parentControls">页面控件</param>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.LoadFrom">
+            <summary>
+            从Web Post表单里取值。
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.LoadFrom(System.Boolean,System.Object[])">
+            <summary>
+            从Web Post表单里取值 或 从Winform、WPF的表单控件里取值。
+            <param name="isWeb">True为Web应用，反之为Win应用</param>
+            <param name="prefixOrParentControl">Web时设置前缀，Win时设置父容器控件</param>
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.LoadFrom(CYQ.Data.Table.MDataRow)">
+            <summary>
+            从别的行加载值
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.LoadFrom(CYQ.Data.Table.MDataRow,CYQ.Data.Table.RowOp,System.Boolean)">
+            <summary>
+            从别的行加载值
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.LoadFrom(CYQ.Data.Table.MDataRow,CYQ.Data.Table.RowOp,System.Boolean,System.Boolean)">
+            <summary>
+            从别的行加载值
+            </summary>
+            <param name="row">要加载数据的行</param>
+            <param name="rowOp">行选项[从其它行加载的条件]</param>
+            <param name="isAllowAppendColumn">如果row带有新列，是否加列</param>
+            <param name="isWithValueState">是否同时加载值的状态[默认值为：true]</param>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.LoadFrom(System.Object[])">
+            <summary>
+            从数组里加载值
+            </summary>
+            <param name="values"></param>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.LoadFrom(System.String)">
+            <summary>
+            从json里加载值
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.LoadFrom(System.Collections.IEnumerable)">
+            <summary>
+            从泛型字典集合里加载
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.LoadFrom(System.Object)">
+            <summary>
+            将实体转成数据行。
+            </summary>
+            <param name="entity">实体对象</param>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.LoadFrom(System.Object,CYQ.Data.Table.BreakOp)">
+            <summary>
+            将实体转成数据行。
+            </summary>
+            <param name="entity">实体对象</param>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.SetToEntity(System.Object)">
+            <summary>
+            将行中的数据值赋给实体对象
+            </summary>
+            <param name="obj">实体对象</param>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.SetToEntity(System.Object@,CYQ.Data.Table.MDataRow)">
+            <summary>
+            将指定行的数据赋给实体对象。
+            </summary>
+            <param name="obj"></param>
+            <param name="row"></param>
+        </member>
+        <member name="P:CYQ.Data.Table.MDataRow.Columns">
+            <summary>
+            获取列头
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Table.MDataRow.Conn">
+            <summary>
+            所依属的数据库配置项名称[当MAction从带有架构的行加载时,此链接若存在,优先成为默认的数据库链接]
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Table.MDataRow.TableName">
+            <summary>
+            原始表名[未经过多数据库兼容处理]
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Table.MDataRow.Item(System.Object)">
+            <summary>
+            输入枚举型数据
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Table.MDataRow.Table">
+            <summary>
+            获取该行拥有其架构的 MDataTable。
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Table.MDataRow.ItemArray">
+            <summary>
+            通过一个数组来获取或设置此行的所有值。
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Table.MDataRow.RowError">
+            <summary>
+            获取或设置行的自定义错误说明。
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Table.MDataRow.PrimaryCell">
+            <summary>
+            获取第一个关键主键列
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Table.MDataRow.JointPrimaryCell">
+            <summary>
+            获取联合主键列表（若有多个主键）
+            </summary>
+        </member>
+        <member name="T:CYQ.Data.Table.MDataRowCollection">
+            <summary>
+            实现Winform DataGridView 的添加编辑和删除操作功能。
+            </summary>
+            <summary>
+            行集合
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRowCollection.op_Implicit(System.Data.DataRowCollection)~CYQ.Data.Table.MDataRowCollection">
+            <summary>
+            隐式转换列头
+            </summary>
+            <param name="rows"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRowCollection.Add(System.Object[])">
+            <summary>
+            创建使用指定值的行，并将其添加到 MDataRowCollection 中
+            </summary>
+            <param name="values"></param>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRowCollection.Add(CYQ.Data.Table.MDataRow,System.Boolean)">
+            <summary>
+            添加行[默认重置状态为true]
+            </summary>
+            <param name="item">行</param>
+            <param name="resetState">重置状态,[默认true]，重置后的行数据不参与MDataTable的批量更新操作,状态在重新赋值时改变。</param>
+        </member>
+        <member name="P:CYQ.Data.Table.MDataRowCollection.Table">
+            <summary>
+            获取该行拥有其架构的 MDataTable。
+            </summary>
+        </member>
         <member name="T:CYQ.Data.Table.MDataTable">
             <summary>
             表格
@@ -3365,14 +3401,329 @@
             返回（查询时）记录总数。
             </summary>
         </member>
-        <member name="T:CYQ.Data.Table.MDataTableJoin">
+        <member name="T:CYQ.Data.Table.MDataCell">
             <summary>
-            表间的关联关系
+            单元格
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataCell.FixValue">
+            <summary>
+            数据类型被切换，重新修正值的类型。
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataCell.FixValue(System.Exception@)">
+            <summary>
+            数据类型被切换，重新修正值的类型。
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataCell.ChangeValue(System.Object,System.Type,System.Int32,System.Exception@)">
+            <summary>
+             值的数据类型转换。
+            </summary>
+            <param name="value">要被转换的值</param>
+            <param name="convertionType">要转换成哪种类型</param>
+            <param name="groupID">数据库类型的组号</param>
+            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataCell.SetDefaultValueToValue">
+            <summary>
+            设置默认值。
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataCell.ToString">
+            <summary>
+            已被重载，默认返回Value值。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataCell.Equals(System.Object)">
+            <summary>
+            是否值相同[已重写该方法]
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataCell.ToRow">
+            <summary>
+            转成行
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Table.MDataCell.Value">
+            <summary>
+            值
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Table.MDataCell.IsNull">
+            <summary>
+            值是否为Null值[只读属性]
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Table.MDataCell.IsNullOrEmpty">
+            <summary>
+            值是否为Null或为空[只读属性]
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Table.MDataCell.ColumnName">
+            <summary>
+            列名[只读属性]
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Table.MDataCell.Struct">
+            <summary>
+            单元格的结构
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Table.MDataCell.State">
+            <summary>
+            Value的状态:0;未改,1;进行赋值操作[但值相同],2:赋值,值不同改变了
+            </summary>
+        </member>
+        <member name="T:CYQ.Data.Table.MCellStruct">
+            <summary>
+            单元结构属性
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Table.MCellStruct.IsPrimaryKey">
+            <summary>
+            是否关键字
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Table.MCellStruct.IsUniqueKey">
+            <summary>
+            是否唯一索引
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Table.MCellStruct.IsForeignKey">
+            <summary>
+            是否外键
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Table.MCellStruct.FKTableName">
+            <summary>
+            外键表名
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Table.MCellStruct.Description">
+            <summary>
+            字段描述
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Table.MCellStruct.DefaultValue">
+            <summary>
+            默认值
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Table.MCellStruct.IsCanNull">
+            <summary>
+            是否允许为Null
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Table.MCellStruct.IsAutoIncrement">
+            <summary>
+            是否自增加
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Table.MCellStruct.OldName">
+            <summary>
+            旧的列名（AlterOp为Rename时可用）
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Table.MCellStruct.ColumnName">
+            <summary>
+            列名
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Table.MCellStruct.TableName">
+            <summary>
+            表名
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Table.MCellStruct.MaxSize">
+            <summary>
+            最大字节
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Table.MCellStruct.Scale">
+            <summary>
+            精度（小数位）
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Table.MCellStruct.SqlTypeName">
+            <summary>
+            原始的数据库字段类型名称
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Table.MCellStruct.Clone">
+            <summary>
+            克隆一个对象。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:CYQ.Data.Table.MCellStruct.MDataColumn">
+            <summary>
+            结构集合
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Table.MCellStruct.SqlType">
+            <summary>
+            SqlDbType类型
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Table.MCellStruct.AlterOp">
+            <summary>
+            列结构改变状态
+            </summary>
+        </member>
+        <member name="T:CYQ.Data.Table.MCellValue">
+            <summary>
+            单元结构的值
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Table.MCellValue.State">
+            <summary>
+            状态改变:0;未改,1;进行赋值操作[但值相同],2:赋值,值不同改变了
+            </summary>
+        </member>
+        <member name="T:CYQ.Data.Table.MDataColumn">
+            <summary>
+            头列表集合
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Table.MDataColumn.CheckDuplicate">
+            <summary>
+            添加列时，检测名称是否重复(默认为true)。
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataColumn.op_Implicit(System.Data.DataColumnCollection)~CYQ.Data.Table.MDataColumn">
+            <summary>
+            隐式转换列头
+            </summary>
+            <param name="columns"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataColumn.GetIndex(System.String)">
+            <summary>
+            获取列所在的索引位置(若不存在返回-1）
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataColumn.SetOrdinal(System.String,System.Int32)">
+            <summary>
+            将 列 的序号或位置更改为指定的序号或位置。
+            </summary>
+            <param name="columnName">列名</param>
+            <param name="ordinal">序号</param>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataColumn.ToJson(System.Boolean)">
+            <summary>
+            输出Json格式的表构架
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataColumn.ToRow(System.String)">
+            <summary>
+            转成行
+            </summary>
+            <param name="tableName">表名</param>
+            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataColumn.WriteSchema(System.String)">
+            <summary>
+            保存表架构到外部文件中(json格式）
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Table.MDataColumn.dalType">
+            <summary>
+            当前的数据库类型。
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Table.MDataColumn.isViewOwner">
+            <summary>
+            该结构是否由视图拥有
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataColumn.ToTable">
+            <summary>
+            将表结构的数据转成Table显示
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataColumn.Add(System.String)">
+            <summary>
+            添加列
+            </summary>
+            <param name="columnName">列名</param>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataColumn.Add(System.String,System.Data.SqlDbType)">
+            <param name="SqlType">列的数据类型</param>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataColumn.Add(System.String,System.Data.SqlDbType,System.Boolean)">
+            <param name="isAutoIncrement">是否自增ID列</param>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataColumn.Add(System.String,System.Data.SqlDbType,System.Boolean,System.Boolean,System.Int32,System.Boolean,System.Object)">
+            <param name="defaultValue">默认值[日期类型请传入SqlValue.GetDate]</param>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataColumn.CreateFrom(System.String)">
+            <summary>
+            从Json或文件中加载成列信息
+            </summary>
+            <param name="jsonOrFileName">Json或文件（完整路径）名称</param>
+            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataColumn.CreateFrom(System.String,System.Boolean)">
+            <summary>
+            从Json或文件中加载成列信息
+            </summary>
+            <param name="jsonOrFileName">Json或文件（完整路径）名称</param>
+            <param name="readTxtOrXml">是否从.txt或.xml文件中读取架构（默认为true）</param>
+            <returns></returns>
+        </member>
+        <member name="P:CYQ.Data.Table.MDataColumn.Table">
+            <summary>
+            架构所引用的表
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Table.MDataColumn.Description">
+            <summary>
+            表名描述
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Table.MDataColumn.JointPrimary">
+            <summary>
+            联合主键
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Table.MDataColumn.FirstPrimary">
+            <summary>
+            第一个主键
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Table.MDataColumn.FirstUnique">
+            <summary>
+            首个唯一键
             </summary>
         </member>
         <member name="T:CYQ.Data.Table.MDataView">
             <summary>
             仅用于Winform的列表绑定。
+            </summary>
+        </member>
+        <member name="T:CYQ.Data.Table.MDataProperty">
+            <summary>
+            实现Winform的表格控件绑定功能。
+            </summary>
+        </member>
+        <member name="T:CYQ.Data.Tool.FastToT`1">
+            <summary>
+            快速转换类[数据量越大[500条起],性能越高]
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Tool.FastToT`1.Create(CYQ.Data.Table.MDataTable)">
+            <summary>
+            构建一个ORM实体转换器
+            </summary>
+            <typeparam name="T">转换的目标类型</typeparam>
+            <param name="schema">表数据架构</param>
+        </member>
+        <member name="T:CYQ.Data.Table.MDataTableJoin">
+            <summary>
+            表间的关联关系
             </summary>
         </member>
         <member name="T:CYQ.Data.Table.AcceptOp">
@@ -3396,6 +3747,11 @@
             <summary>
             批量更新
             该执行会开启事务。
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Table.AcceptOp.Delete">
+            <summary>
+            批量删除
             </summary>
         </member>
         <member name="F:CYQ.Data.Table.AcceptOp.Auto">
@@ -3459,37 +3815,37 @@
             输出具有更新状态的值
             </summary>
         </member>
-        <member name="T:CYQ.Data.Table.SysType">
+        <member name="T:CYQ.Data.Tool.SysType">
             <summary>
             转实体所用参数
             </summary>
         </member>
-        <member name="F:CYQ.Data.Table.SysType.Base">
+        <member name="F:CYQ.Data.Tool.SysType.Base">
             <summary>
             基础类型
             </summary>
         </member>
-        <member name="F:CYQ.Data.Table.SysType.Enum">
+        <member name="F:CYQ.Data.Tool.SysType.Enum">
             <summary>
             枚举类型
             </summary>
         </member>
-        <member name="F:CYQ.Data.Table.SysType.Array">
+        <member name="F:CYQ.Data.Tool.SysType.Array">
             <summary>
             数组
             </summary>
         </member>
-        <member name="F:CYQ.Data.Table.SysType.Collection">
+        <member name="F:CYQ.Data.Tool.SysType.Collection">
             <summary>
             集合类型
             </summary>
         </member>
-        <member name="F:CYQ.Data.Table.SysType.Generic">
+        <member name="F:CYQ.Data.Tool.SysType.Generic">
             <summary>
             泛型
             </summary>
         </member>
-        <member name="F:CYQ.Data.Table.SysType.Custom">
+        <member name="F:CYQ.Data.Tool.SysType.Custom">
             <summary>
             自定义类
             </summary>
@@ -4162,577 +4518,6 @@
             重命名列状态
             </summary>
         </member>
-        <member name="T:CYQ.Data.Table.MCellValue">
-            <summary>
-            单元结构的值
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Table.MCellValue.State">
-            <summary>
-            状态改变:0;未改,1;进行赋值操作[但值相同],2:赋值,值不同改变了
-            </summary>
-        </member>
-        <member name="T:CYQ.Data.Table.MCellStruct">
-            <summary>
-            单元结构属性
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Table.MCellStruct.IsPrimaryKey">
-            <summary>
-            是否关键字
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Table.MCellStruct.IsUniqueKey">
-            <summary>
-            是否唯一索引
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Table.MCellStruct.IsForeignKey">
-            <summary>
-            是否外键
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Table.MCellStruct.FKTableName">
-            <summary>
-            外键表名
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Table.MCellStruct.Description">
-            <summary>
-            字段描述
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Table.MCellStruct.DefaultValue">
-            <summary>
-            默认值
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Table.MCellStruct.IsCanNull">
-            <summary>
-            是否允许为Null
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Table.MCellStruct.IsAutoIncrement">
-            <summary>
-            是否自增加
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Table.MCellStruct.OldName">
-            <summary>
-            旧的列名（AlterOp为Rename时可用）
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Table.MCellStruct.ColumnName">
-            <summary>
-            列名
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Table.MCellStruct.TableName">
-            <summary>
-            表名
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Table.MCellStruct.MaxSize">
-            <summary>
-            最大字节
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Table.MCellStruct.Scale">
-            <summary>
-            精度（小数位）
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Table.MCellStruct.SqlTypeName">
-            <summary>
-            原始的数据库字段类型名称
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Table.MCellStruct.Clone">
-            <summary>
-            克隆一个对象。
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="P:CYQ.Data.Table.MCellStruct.MDataColumn">
-            <summary>
-            结构集合
-            </summary>
-        </member>
-        <member name="P:CYQ.Data.Table.MCellStruct.SqlType">
-            <summary>
-            SqlDbType类型
-            </summary>
-        </member>
-        <member name="P:CYQ.Data.Table.MCellStruct.AlterOp">
-            <summary>
-            列结构改变状态
-            </summary>
-        </member>
-        <member name="T:CYQ.Data.Table.MDataCell">
-            <summary>
-            单元格
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataCell.FixValue">
-            <summary>
-            数据类型被切换，重新修正值的类型。
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataCell.FixValue(System.Exception@)">
-            <summary>
-            数据类型被切换，重新修正值的类型。
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataCell.ChangeValue(System.Object,System.Type,System.Int32,System.Exception@)">
-            <summary>
-             值的数据类型转换。
-            </summary>
-            <param name="value">要被转换的值</param>
-            <param name="convertionType">要转换成哪种类型</param>
-            <param name="groupID">数据库类型的组号</param>
-            <returns></returns>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataCell.SetDefaultValueToValue">
-            <summary>
-            设置默认值。
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataCell.ToString">
-            <summary>
-            已被重载，默认返回Value值。
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataCell.Equals(System.Object)">
-            <summary>
-            是否值相同[已重写该方法]
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataCell.ToRow">
-            <summary>
-            转成行
-            </summary>
-        </member>
-        <member name="P:CYQ.Data.Table.MDataCell.Value">
-            <summary>
-            值
-            </summary>
-        </member>
-        <member name="P:CYQ.Data.Table.MDataCell.IsNull">
-            <summary>
-            值是否为Null值[只读属性]
-            </summary>
-        </member>
-        <member name="P:CYQ.Data.Table.MDataCell.IsNullOrEmpty">
-            <summary>
-            值是否为Null或为空[只读属性]
-            </summary>
-        </member>
-        <member name="P:CYQ.Data.Table.MDataCell.ColumnName">
-            <summary>
-            列名[只读属性]
-            </summary>
-        </member>
-        <member name="P:CYQ.Data.Table.MDataCell.Struct">
-            <summary>
-            单元格的结构
-            </summary>
-        </member>
-        <member name="P:CYQ.Data.Table.MDataCell.State">
-            <summary>
-            Value的状态:0;未改,1;进行赋值操作[但值相同],2:赋值,值不同改变了
-            </summary>
-        </member>
-        <member name="T:CYQ.Data.Table.MDataColumn">
-            <summary>
-            头列表集合
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Table.MDataColumn.CheckDuplicate">
-            <summary>
-            添加列时，检测名称是否重复(默认为true)。
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataColumn.op_Implicit(System.Data.DataColumnCollection)~CYQ.Data.Table.MDataColumn">
-            <summary>
-            隐式转换列头
-            </summary>
-            <param name="columns"></param>
-            <returns></returns>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataColumn.GetIndex(System.String)">
-            <summary>
-            获取列所在的索引位置(若不存在返回-1）
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataColumn.SetOrdinal(System.String,System.Int32)">
-            <summary>
-            将 列 的序号或位置更改为指定的序号或位置。
-            </summary>
-            <param name="columnName">列名</param>
-            <param name="ordinal">序号</param>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataColumn.ToJson(System.Boolean)">
-            <summary>
-            输出Json格式的表构架
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataColumn.ToRow(System.String)">
-            <summary>
-            转成行
-            </summary>
-            <param name="tableName">表名</param>
-            <returns></returns>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataColumn.WriteSchema(System.String)">
-            <summary>
-            保存表架构到外部文件中(json格式）
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Table.MDataColumn.dalType">
-            <summary>
-            当前的数据库类型。
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Table.MDataColumn.isViewOwner">
-            <summary>
-            该结构是否由视图拥有
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataColumn.ToTable">
-            <summary>
-            将表结构的数据转成Table显示
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataColumn.Add(System.String)">
-            <summary>
-            添加列
-            </summary>
-            <param name="columnName">列名</param>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataColumn.Add(System.String,System.Data.SqlDbType)">
-            <param name="SqlType">列的数据类型</param>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataColumn.Add(System.String,System.Data.SqlDbType,System.Boolean)">
-            <param name="isAutoIncrement">是否自增ID列</param>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataColumn.Add(System.String,System.Data.SqlDbType,System.Boolean,System.Boolean,System.Int32,System.Boolean,System.Object)">
-            <param name="defaultValue">默认值[日期类型请传入SqlValue.GetDate]</param>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataColumn.CreateFrom(System.String)">
-            <summary>
-            从Json或文件中加载成列信息
-            </summary>
-            <param name="jsonOrFileName">Json或文件（完整路径）名称</param>
-            <returns></returns>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataColumn.CreateFrom(System.String,System.Boolean)">
-            <summary>
-            从Json或文件中加载成列信息
-            </summary>
-            <param name="jsonOrFileName">Json或文件（完整路径）名称</param>
-            <param name="readTxtOrXml">是否从.txt或.xml文件中读取架构（默认为true）</param>
-            <returns></returns>
-        </member>
-        <member name="P:CYQ.Data.Table.MDataColumn.Table">
-            <summary>
-            架构所引用的表
-            </summary>
-        </member>
-        <member name="P:CYQ.Data.Table.MDataColumn.Description">
-            <summary>
-            表名描述
-            </summary>
-        </member>
-        <member name="P:CYQ.Data.Table.MDataColumn.JointPrimary">
-            <summary>
-            联合主键
-            </summary>
-        </member>
-        <member name="P:CYQ.Data.Table.MDataColumn.FirstPrimary">
-            <summary>
-            第一个主键
-            </summary>
-        </member>
-        <member name="P:CYQ.Data.Table.MDataColumn.FirstUnique">
-            <summary>
-            首个唯一键
-            </summary>
-        </member>
-        <member name="T:CYQ.Data.Table.MDataProperty">
-            <summary>
-            实现Winform的表格控件绑定功能。
-            </summary>
-        </member>
-        <member name="T:CYQ.Data.Table.MDataRow">
-            <summary>
-            一行记录
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.GetItemValue(System.Int32)">
-            <summary>
-            此方法被Emit所调用
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.GetItemValues">
-            <summary>
-            返回数组值
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.Get``1(System.Object)">
-            <summary>
-            取值
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.ToTable">
-            <summary>
-            将行的数据转成两列（ColumnName、Value）的表
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.Clear">
-            <summary>
-            将行的数据行的值全重置为Null
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.GetState">
-            <summary>
-            获取行的当前状态[0:未更改；1:已赋值,值相同[可插入]；2:已赋值,值不同[可更新]]
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.GetState(System.Boolean)">
-            <summary>
-            获取行的当前状态[0:未更改；1:已赋值,值相同[可插入]；2:已赋值,值不同[可更新]]
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.Set(System.Object,System.Object)">
-            <summary>
-            为行设置值
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.Set(System.Object,System.Object,System.Int32)">
-            <summary>
-            为行设置值
-            </summary>
-            <param name="key">字段名</param>
-            <param name="value">值</param>
-            <param name="state">手工设置状态[0:未更改；1:已赋值,值相同[可插入]；2:已赋值,值不同[可更新]]</param>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.SetState(System.Int32)">
-            <summary>
-            将行的数据行的状态全部重置
-            </summary>
-            <param name="state">状态[0:未更改；1:已赋值,值相同[可插入]；2:已赋值,值不同[可更新]]</param>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.SetState(System.Int32,CYQ.Data.Table.BreakOp)">
-            <summary>
-            将行的数据行的状态全部重置
-            </summary>
-            <param name="state">状态[0:未更改；1:已赋值,值相同[可插入]；2:已赋值,值不同[可更新]]</param>
-            <param name="op">状态设置选项</param>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.Clone">
-            <summary>
-            复制一行
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.CreateFrom(System.Object)">
-            <summary>
-            从实体、Json、Xml、IEnumerable接口实现的类、MDataRow
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.CreateFrom(System.Object,System.Type)">
-            <summary>
-            从实体、Json、Xml、IEnumerable接口实现的类、MDataRow
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.ToJson">
-            <summary>
-            输出行的数据Json
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.ToJson(CYQ.Data.Table.RowOp)">
-            <summary>
-            输出行的数据Json
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.ToJson(CYQ.Data.Table.RowOp,System.Boolean)">
-            <summary>
-            输出Json
-            </summary>
-            <param name="op">过滤条件</param>
-            <returns></returns>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.WriteJson(System.String,CYQ.Data.Table.RowOp)">
-            <summary>
-            将json保存到指定文件中
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.ToEntity``1">
-            <summary>
-            转成实体
-            </summary>
-            <typeparam name="T">实体名称</typeparam>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.SetToAll(System.Object[])">
-            <summary>
-            将值批量赋给UI
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.SetToAll(System.String,System.Object[])">
-            <summary>
-            将值批量赋给UI
-            </summary>
-            <param name="autoPrefix">自动前缀，多个可用逗号分隔</param>
-            <param name="parentControls">页面控件</param>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.LoadFrom">
-            <summary>
-            从Web Post表单里取值。
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.LoadFrom(System.Boolean,System.Object[])">
-            <summary>
-            从Web Post表单里取值 或 从Winform、WPF的表单控件里取值。
-            <param name="isWeb">True为Web应用，反之为Win应用</param>
-            <param name="prefixOrParentControl">Web时设置前缀，Win时设置父容器控件</param>
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.LoadFrom(CYQ.Data.Table.MDataRow)">
-            <summary>
-            从别的行加载值
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.LoadFrom(CYQ.Data.Table.MDataRow,CYQ.Data.Table.RowOp,System.Boolean)">
-            <summary>
-            从别的行加载值
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.LoadFrom(CYQ.Data.Table.MDataRow,CYQ.Data.Table.RowOp,System.Boolean,System.Boolean)">
-            <summary>
-            从别的行加载值
-            </summary>
-            <param name="row">要加载数据的行</param>
-            <param name="rowOp">行选项[从其它行加载的条件]</param>
-            <param name="isAllowAppendColumn">如果row带有新列，是否加列</param>
-            <param name="isWithValueState">是否同时加载值的状态[默认值为：true]</param>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.LoadFrom(System.Object[])">
-            <summary>
-            从数组里加载值
-            </summary>
-            <param name="values"></param>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.LoadFrom(System.String)">
-            <summary>
-            从json里加载值
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.LoadFrom(System.Collections.IEnumerable)">
-            <summary>
-            从泛型字典集合里加载
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.LoadFrom(System.Object)">
-            <summary>
-            将实体转成数据行。
-            </summary>
-            <param name="entity">实体对象</param>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.LoadFrom(System.Object,CYQ.Data.Table.BreakOp)">
-            <summary>
-            将实体转成数据行。
-            </summary>
-            <param name="entity">实体对象</param>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.SetToEntity(System.Object)">
-            <summary>
-            将行中的数据值赋给实体对象
-            </summary>
-            <param name="obj">实体对象</param>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.SetToEntity(System.Object@,CYQ.Data.Table.MDataRow)">
-            <summary>
-            将指定行的数据赋给实体对象。
-            </summary>
-            <param name="obj"></param>
-            <param name="row"></param>
-        </member>
-        <member name="P:CYQ.Data.Table.MDataRow.Columns">
-            <summary>
-            获取列头
-            </summary>
-        </member>
-        <member name="P:CYQ.Data.Table.MDataRow.Conn">
-            <summary>
-            所依属的数据库配置项名称[当MAction从带有架构的行加载时,此链接若存在,优先成为默认的数据库链接]
-            </summary>
-        </member>
-        <member name="P:CYQ.Data.Table.MDataRow.TableName">
-            <summary>
-            原始表名[未经过多数据库兼容处理]
-            </summary>
-        </member>
-        <member name="P:CYQ.Data.Table.MDataRow.Item(System.Object)">
-            <summary>
-            输入枚举型数据
-            </summary>
-        </member>
-        <member name="P:CYQ.Data.Table.MDataRow.Table">
-            <summary>
-            获取该行拥有其架构的 MDataTable。
-            </summary>
-        </member>
-        <member name="P:CYQ.Data.Table.MDataRow.ItemArray">
-            <summary>
-            通过一个数组来获取或设置此行的所有值。
-            </summary>
-        </member>
-        <member name="P:CYQ.Data.Table.MDataRow.RowError">
-            <summary>
-            获取或设置行的自定义错误说明。
-            </summary>
-        </member>
-        <member name="P:CYQ.Data.Table.MDataRow.PrimaryCell">
-            <summary>
-            获取第一个关键主键列
-            </summary>
-        </member>
-        <member name="P:CYQ.Data.Table.MDataRow.JointPrimaryCell">
-            <summary>
-            获取联合主键列表（若有多个主键）
-            </summary>
-        </member>
-        <member name="T:CYQ.Data.Table.MDataRowCollection">
-            <summary>
-            行集合
-            </summary>
-            <summary>
-            实现Winform DataGridView 的添加编辑和删除操作功能。
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRowCollection.Add(System.Object[])">
-            <summary>
-            创建使用指定值的行，并将其添加到 MDataRowCollection 中
-            </summary>
-            <param name="values"></param>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRowCollection.Add(CYQ.Data.Table.MDataRow,System.Boolean)">
-            <summary>
-            添加行[默认重置状态为true]
-            </summary>
-            <param name="item">行</param>
-            <param name="resetState">重置状态,[默认true]，重置后的行数据不参与MDataTable的批量更新操作,状态在重新赋值时改变。</param>
-        </member>
-        <member name="P:CYQ.Data.Table.MDataRowCollection.Table">
-            <summary>
-            获取该行拥有其架构的 MDataTable。
-            </summary>
-        </member>
         <member name="T:CYQ.Data.Table.MDataTableBatchAction">
             <summary>
             批量操作。
@@ -4884,18 +4669,6 @@
             <summary>
             SQL操作符号
             </summary>
-        </member>
-        <member name="T:CYQ.Data.Tool.FastToT`1">
-            <summary>
-            快速转换类[数据量越大[500条起],性能越高]
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Tool.FastToT`1.Create(CYQ.Data.Table.MDataTable)">
-            <summary>
-            构建一个ORM实体转换器
-            </summary>
-            <typeparam name="T">转换的目标类型</typeparam>
-            <param name="schema">表数据架构</param>
         </member>
         <member name="M:CYQ.Data.Tool.IOHelper.ReadAllText(System.String)">
             <summary>
@@ -5359,7 +5132,7 @@
         </member>
         <member name="T:CYQ.Data.Tool.MDictionary`2">
             <summary>
-            半线程安全字典类
+            线程安全字典类
             </summary>
             <typeparam name="K">key</typeparam>
             <typeparam name="V">value</typeparam>
@@ -6101,16 +5874,6 @@
             文档是否取自缓存
             </summary>
         </member>
-        <member name="P:CYQ.Data.Xml.XHtmlBase.IsCacheChanged">
-            <summary>
-            Cache发生变化[用户更改缓存并设置更改标识]
-            </summary>
-        </member>
-        <member name="P:CYQ.Data.Xml.XHtmlBase.IsXHtmlChanged">
-            <summary>
-            目标XHtml文件是否被修改
-            </summary>
-        </member>
         <member name="P:CYQ.Data.Xml.XHtmlBase.CacheMinutes">
             <summary>
             缓存分钟数
@@ -6119,6 +5882,11 @@
         <member name="P:CYQ.Data.Xml.XHtmlBase.OutXml">
             <summary>
             返回最终格式化后的XHtml内容。
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Xml.XHtmlBase.IsXHtmlChanged">
+            <summary>
+            加载的Html是否已改变
             </summary>
         </member>
         <member name="M:CYQ.Data.Xml.XHtmlAction.#ctor">

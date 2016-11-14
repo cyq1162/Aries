@@ -107,22 +107,24 @@ namespace Aries.Core.Config
             switch (st)
             {
                 case SelectType.Show:
-                    where = " and (Hidden=0 or Formatter='#')";
+                    where = "Hidden=0 or Formatter='#'";
                     break;
                 case SelectType.Export:
-                    where = " and Export=1";
+                    where = "Export=1";
                     break;
                 case SelectType.Import:
-                    where = " and Import=1";
+                    where = "Import=1";
                     break;
                 case SelectType.ImportUnique:
-                    where = " and ImportUnique=1";
+                    where = "ImportUnique=1";
                     break;
             }
+            MDataTable dt;
             using (MAction action = new MAction(TableNames.Config_Grid))
             {
-                return action.Select(string.Format("ObjName='{0}' {1} order by frozen desc,OrderNum asc", objName, where));
+                dt = action.Select(string.Format("ObjName='{0}' order by frozen desc,OrderNum asc", objName));
             }
+            return dt.FindAll(where);//自动缓存只存档一份，同时兼容文本数据库
         }
         private static void FillTable(string objName, string objCode, MDataTable dt)
         {

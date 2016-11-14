@@ -545,9 +545,9 @@
              Get where statement
             <para>根据元数据列组合where条件。</para>
             </summary>
+            <param name="isAnd">connect by and/or<para>true为and连接，反之为or链接</para></param>
         </member>
         <member name="M:CYQ.Data.MAction.GetWhere(CYQ.Data.Table.MDataCell[])">
-            <param name="isAnd">connect by and/or<para>true为and连接，反之为or链接</para></param>
             <param name="cells">MDataCell<para>单元格</para></param>
         </member>
         <member name="M:CYQ.Data.MAction.SetTransLevel(System.Data.IsolationLevel)">
@@ -3587,6 +3587,11 @@
             头列表集合
             </summary>
         </member>
+        <member name="F:CYQ.Data.Table.MDataColumn.columnIndex">
+            <summary>
+            存储列名的索引
+            </summary>
+        </member>
         <member name="F:CYQ.Data.Table.MDataColumn.CheckDuplicate">
             <summary>
             添加列时，检测名称是否重复(默认为true)。
@@ -4005,6 +4010,11 @@
             <param name="flag">[0:转成标准值],[1:转成各数据库值],[2:转成各数据库值并补充字符串前后缀]</param>
             <param name="sqlDbType">该列的值</param>
             <returns></returns>
+        </member>
+        <member name="P:CYQ.Data.SQL.SqlInjection.FilterKeyList">
+            <summary>
+            用List 也是因为内存读写异常问题（所有的[]数组，看似都有这问题）
+            </summary>
         </member>
         <member name="T:CYQ.Data.SQL.SqlValue">
             <summary>
@@ -4473,7 +4483,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:CYQ.Data.SQL.SqlCreate.GetWhere(CYQ.Data.DalType,System.Boolean,CYQ.Data.Table.MDataCell[])">
+        <member name="M:CYQ.Data.SQL.SqlCreate.GetWhere(CYQ.Data.DalType,System.Boolean,System.Collections.Generic.List{CYQ.Data.Table.MDataCell})">
             <summary>
             根据元数据列组合where条件。
             </summary>
@@ -4649,7 +4659,7 @@
             条件比较
             </summary>
         </member>
-        <member name="M:CYQ.Data.Table.MDataTableFilter.CompareMore(CYQ.Data.Table.MDataRow,CYQ.Data.Table.TFilter[])">
+        <member name="M:CYQ.Data.Table.MDataTableFilter.CompareMore(CYQ.Data.Table.MDataRow,System.Collections.Generic.List{CYQ.Data.Table.TFilter})">
             <summary>
             值比较
             </summary>
@@ -5165,6 +5175,11 @@
         <member name="T:CYQ.Data.Tool.StaticTool">
             <summary>
             静态方法工具类
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Tool.StaticTool.propCache">
+            <summary>
+            将PropertyInfo[] 改成PropertyInfo List，是因为.NET的CLR会引发内存读写异常（启用IntelliTrace时）
             </summary>
         </member>
         <member name="M:CYQ.Data.Tool.StaticTool.GetPropertyInfo(System.Type)">

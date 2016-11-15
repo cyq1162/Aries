@@ -1,12 +1,14 @@
-﻿/// <reference path="/Style/JS/AriesJS/Aries.Utility.js" />
+﻿/// <reference path="/Style/JS/jquery-1.7.1.min.js" />
+/// <reference path="/Style/JS/json2.js" />
+/// <reference path="/Style/JS/EasyUI-1.3.4/jquery.easyui.min.js" />
+/// <reference path="/Style/JS/AriesJS/Aries.Global.js" />
+/// <reference path="/Style/JS/AriesJS/Aries.Utility.js" />
 /// <reference path="/Style/JS/AriesJS/Aries.Upload.js" />
-/// <reference path="/Style/JS/AriesJS/Aries.DataGrid.js" />
-/// <reference path="/Style/JS/AriesJS/Aries.EasyUIExtend.js" />
+/// <reference path="/Style/JS/AriesJS/Aries.Common.js" />
 /// <reference path="/Style/JS/AriesJS/Aries.Combobox.js" />
+/// <reference path="/Style/JS/AriesJS/Aries.DataGrid.js" />
 /// <reference path="/Style/JS/AriesJS/Aries.Form.js" />
-/// <reference path="json2.js" />
-/// <reference path="/Style/JS/AriesJS/Aries.Config.js" />
-/// <reference path="jquery-1.7.1.min.js" />
+
 function getCookie(name) {
     var c = document.cookie;
     var start = c.indexOf(name);
@@ -22,7 +24,7 @@ function getCookie(name) {
 }
 var themeName = getCookie('sys_theme') || 'default';
 var ui = getCookie('sys_ui');
-var vs = "v4.312";
+var vs = "v4.313";
 document.write('<link id="lk_theme" href="' + ui + '/Style/JS/EasyUI-1.3.4/themes/' + themeName + '/easyui.css" rel="stylesheet" type="text/css" />');
 document.write('<link href="' + ui + '/Style/CSS/main.css" rel="stylesheet" />');
 document.write('<link href="' + ui + '/Style/JS/EasyUI-1.3.4/themes/icon.css" rel="stylesheet" type="text/css" />');

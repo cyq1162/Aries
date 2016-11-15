@@ -1016,7 +1016,12 @@ namespace Aries.Core
         {
             get
             {
-                return Query<string>("order", "desc");
+                string order = Query<string>("order");
+                if (order != "asc")
+                {
+                    return order;//支持前端简化成一个sortName配置
+                }
+                return string.Empty;
             }
         }
         public T Query<T>(Enum key)

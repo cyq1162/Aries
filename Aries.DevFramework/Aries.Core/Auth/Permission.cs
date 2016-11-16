@@ -181,7 +181,7 @@ namespace Aries.Core.Auth
             {
                 throw new Exception("No permission to view this page！");
             }
-            else if (Path.GetFileNameWithoutExtension(uri.LocalPath).ToLower() == "dialogview")//关键页面，进一步做权限验证
+            else if (HttpContext.Current.Request.UrlReferrer.LocalPath != uri.LocalPath && Path.GetFileNameWithoutExtension(uri.LocalPath).ToLower() == "dialogview")//关键页面，进一步做权限验证
             {
                 string objName = WebHelper.Query<string>("objName", "", false);//去掉前置的_
                 if (objName == "" || !WebHelper.IsKeyInHtml(objName))

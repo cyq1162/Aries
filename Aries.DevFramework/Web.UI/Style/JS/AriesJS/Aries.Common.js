@@ -138,11 +138,13 @@
                 *@param{int} index 按钮的索引排序值从1开始,默认值最后
                 *@param{string} css 样式名称，默认值'btn-sm'
                 *@param{string} lv2action 二级权限控制，默认值0
+                *@param{string} name 对象的名称，用于在Items[name]获取
                 */
-                that.add = function (text, fname, index, css, lv2action) {
+                that.add = function (text, fname, index, css, lv2action, name) {
                     var obj = new Object();
                     obj.index = index || this._btnArray.length + 1;
                     obj.lv2action = lv2action;
+                    obj.name = name;
                     obj.btn = {
                         title: text,
                         click: fname,
@@ -152,15 +154,17 @@
                 }
                 /**
                 *向工具条添加自定义的HTML元素
-                *@param{string} HTMLString 一个字符串标签
+                *@param{string} htmlString 一个字符串标签
                 *@param{string} index 按钮的索引排序值从1开始,默认值最后
                 *@param{int} lv2action 二级权限控制，默认值0
+                *@param{string} name 对象的名称，用于在Items[name]获取
                 */
-                that.addHtml = function (HTMLString, index, lv2action) {
+                that.addHtml = function (htmlString, index, lv2action, name) {
                     var obj = new Object();
                     obj.index = index || this._btnArray.length + 1;
+                    obj.name = name;
                     obj.btn = {
-                        html: HTMLString,
+                        html: htmlString,
                         lv2action: lv2action
                     }
                     this._btnArray.push(obj);
@@ -1025,6 +1029,7 @@
         for (var i = 0, len = btnArray.length; i < len; i++) {
             if (btnArray[i] == undefined) { continue; }
             var lv2action = btnArray[i].lv2action && btnArray[i].lv2action.toLowerCase();
+            var name = btnArray[i].name;
             if (!lv2action || actionKeys.indexOf(',' + lv2action + ",") > -1) {
                 var index = btnArray[i].index;
                 var btn = btnArray[i].btn,
@@ -1051,7 +1056,9 @@
                     }
                 }
                 //外部是_createToolbar.call(dg, dg.ToolBar._btnArray);调用方式，所以上下文被换成了datagrid
-                dg.ToolBar.Items.set(lv2action || title || btnClick, { "isCustom": true, $target: item });
+                if (name) {
+                    dg.ToolBar.Items.set(name, { "isCustom": true, $target: item });
+                }
             }
         }
     }

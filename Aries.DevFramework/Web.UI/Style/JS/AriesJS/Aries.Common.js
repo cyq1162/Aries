@@ -26,9 +26,7 @@
                 var that = this;
                 $Core.BtnBase.call(that);
                 that.$target = null;
-                /*
-                存档所有Input的对象数组，在调用bind()方法后才能获取。
-                */
+                //存档所有Input的对象数组，在调用bind()方法后才能获取。
                 that.Items = new $Core.Dictionary();
                 that.BtnQuery = function () {
                     function Obj() {

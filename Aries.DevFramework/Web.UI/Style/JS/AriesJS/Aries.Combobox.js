@@ -381,6 +381,7 @@
         if ($input.attr("options")) {
             opts = $.extend(opts, eval('(' + $input.attr("options") + ')'));
         }
+        $Core.Global.inputDialogOpts = opts;
         $Core.Global.inputDialog = $input
         $Core.Global.returnValue = undefined;//清空值。
         $Core.Utility.Window.dialog("选择数据", html, opts);

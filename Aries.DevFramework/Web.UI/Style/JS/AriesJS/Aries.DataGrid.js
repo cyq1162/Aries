@@ -43,7 +43,7 @@
         };
         /*可以事先构建，产生插时行时的默认值*/
         this.defaultInsertData = {};
-        //对defaultWhere的操作。
+        //对defaultWhere的操作
         this.addWhere = function (name, value, pattern, isOr) {
             if (name && (value || pattern)) {
                 if (!pattern) { pattern = "="; }

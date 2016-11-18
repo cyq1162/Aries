@@ -43,10 +43,19 @@
                         var d = {};
                         d.text = rowData[title];
                         d.value = rowData[id];
-                        comboboxOption.data.push(d);
+                        comboboxOption.data[0] = d;
                         returnValue.values = d.value;
                         returnValue.datas = rowData;
                         parent.AR.Global.returnValue = returnValue;
+                    }
+                },
+                onDblClickRow: function (rowIndex, rowData) {
+                    if (!dg.isShowCheckBox) {
+                        var opts = parent.AR.Global.inputDialogOpts;
+                        opts.toolbar[0].handler();//自动触发确定按钮事件
+                    }
+                    else {
+                        dg.datagrid("checkRow", rowIndex);
                     }
                 },
                 onCheck: function (rowIndex, rowData) {

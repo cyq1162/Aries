@@ -479,7 +479,7 @@
         this._btnArray = new Array();
         /**
         *如果设置clickname url&winTitle则无效
-        *@param{string} key 指向$Core.Common.js文件buttons_temp对象中的key值
+        *@param{string} key 即指向AR.Global.DG.PKTemplate的属性值
         *@param{string} title 鼠标划过显示的文字
         *@param{string} clickname 事件名
         *@param{string} url 打开页面的URL

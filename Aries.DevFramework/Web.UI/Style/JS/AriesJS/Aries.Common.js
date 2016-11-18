@@ -598,7 +598,7 @@
                             }
                             len++;
                             var $btn = $(btn.outerHTML);
-                            obj.set(btn.lv2action || btn.key, $btn);
+                            obj.set(btn.key, $btn);
                             $div.append($btn);
                         }
                     }

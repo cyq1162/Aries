@@ -32,13 +32,8 @@ window.AR = (function ($Core) {
                 edit: '<a class="bj" title="编辑" op="1"></a>',
                 del: '<a class="sc" title="删除"></a>',
                 detail: '<a class="ckxq" title="查看详情" op="0"></a>',
-                picture: '<a  class="cktp" title="查看图片" op="0"></a>',
-                download: '<a  class="xz" title="下载" op="0"></a>',
                 save: '<a class="bc" title="保存"   op="0"></a>',
-                file: '<a class="wj" title="文件"   op="0"></a>',
-                save: '<a class="bc" title="保存"   op="0"></a>',
-                upload: '<a class="bc" title="上传"   op="0"></a>',
-                remove: '<a class="sc" title="移除"   op="0"></a>'
+                cancel: '<a class="cx" title="撤销"   op="0"></a>'
             }
         },
         route: { root: 'ajax.html' },

@@ -28,7 +28,8 @@
         //hasObjcet,数组是否存在对象
         cloneArray: function (array, hasObject) {
             var newArray = [];
-            if (array) {
+            if (array)
+            {
                 if (hasObject == true) {
                     for (var i = 0, len = array.length; i < len; i++) {
                         if (typeof (array[i]) == "object") {
@@ -37,8 +38,12 @@
                             newArray.push(array[i]);
                         }
                     }
-                } else {
-                    newArray = null;
+                }
+                else
+                {
+                    for (var i = 0; i < array.length; i++) {
+                        newArray.push(array[i]);
+                    }
                 }
             }
             return newArray;

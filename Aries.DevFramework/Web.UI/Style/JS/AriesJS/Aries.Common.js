@@ -547,7 +547,7 @@
             pkFormatter: function (dg) {
                 return function (value, row, index) {
 
-                    var btnArray = dg.PKColumn._btnArray;
+                    var btnArray = $Core.Utility.cloneArray(dg.PKColumn._btnArray, false);
                     value = row[dg.Internal.primarykey];
                     var result = dg.PKColumn.onBeforeExecute(value, row, index, btnArray);
                     if (result) {

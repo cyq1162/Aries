@@ -722,6 +722,10 @@
             return Obj;
 
         }();
+        //参数：value, row, index, btnArray
+        this.onBeforeExecute = function () { }
+        //参数：value, row, index, $div
+        this.onAfterExecute = function () { };
     }
     function _getBtnTemp(key) {
         var btn = $Core.Global.DG.PKTemplate[key];

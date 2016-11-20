@@ -51,6 +51,7 @@
                     this.options.defaultWhere = [];
                 }
                 isOr = (isOr == true ? "or" : "and");
+                this.removeWhere(name);//若有则移除。
                 this.options.defaultWhere.push({ name: name, value: value, pattern: pattern, OrAnd: isOr });
             }
         }

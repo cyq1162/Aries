@@ -144,7 +144,6 @@ window.AR = (function ($Core) {
                 value = k ? this[i][k] : this[i];
                 if (value.toString() == v.toString()) {
                     this.splice(i, 1);  //利用splice()函数删除指定元素，splice() 方法用于插入、删除或替换数组的元素
-                    return;
                 }
             }
         }
@@ -162,15 +161,28 @@ window.AR = (function ($Core) {
         }
         return false;
     };
+    //返回满足条件的第一个元素（原来的对象）
     Array.prototype.get = function (k, v) {
         if (this instanceof Array) {
             var result = [];
             for (var i = 0; i < this.length; i++) {
                 if (this[i][k]) {
-                    if (v == undefined) {
-                        return this[i][k];
+                    if (v == undefined || this[i][k].toString() == v.toString()) {
+                        return this[i];
                     }
-                    else if (this[i][k].toString() == v.toString()) {
+                }
+            }
+        }
+        return null;
+    };
+    //找到满足条件的新的数组(在新的数组中)
+    Array.prototype.select = function (k, v) {
+        if (this instanceof Array) {
+            var result = [];
+            for (var i = 0; i < this.length; i++) {
+                if (this[i][k]) {
+                    if (v == undefined || this[i][k].toString() == v.toString())
+                    {
                         result.push(this[i]);
                     }
                 }

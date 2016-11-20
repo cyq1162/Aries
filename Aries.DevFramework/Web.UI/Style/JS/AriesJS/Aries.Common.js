@@ -419,9 +419,9 @@
                         if (pattern == "in") {
                             //找到上一个
                             var firstOne = json.get("name", name);
-                            if (firstOne && firstOne[0]) // 已存在
+                            if (firstOne) // 已存在
                             {
-                                firstOne[0].value = firstOne[0].value + ",'" + value + "'";
+                                firstOne.value = firstOne.value + ",'" + value + "'";
                                 continue cto;
                             }
                             value = "'" + value + "'";

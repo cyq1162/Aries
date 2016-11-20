@@ -43,8 +43,11 @@
         if (key && $Core.Global.Config[key]) {
             var items = $Core.Global.Config[key];//获取数据
             op.data = $Core.Utility.cloneArray(items, true);
-            if (!op.tree && op.defaultItem) {
+            if (!op.tree && op.defaultItem && (op.data.length == 0 || op.data[0][op.textField] != "请选择")) {
                 op.data.unshift({ text: "请选择", value: "" });
+            }
+            if (op.multiple) {
+                registerMultiEvent(op);
             }
             bindCombo($input, op);
         }
@@ -180,7 +183,7 @@
         }
         var ds = $Core.Global.comboxData;
         var data = ds[op.key];
-        data && (data = data.get("parent", pid));
+        data && (data = data.select("parent", pid));
         if (data && data.length > 0) {
             _reBind(op, $input, parentOp, data);
         }
@@ -190,7 +193,7 @@
             loadComboboxData(json, function () {
                 return function () {
                     var d = $Core.Global.comboxData[op.key] || [];
-                    d && (d = d.get("parent", pid) || []);
+                    d && (d = d.select("parent", pid) || []);
                     _reBind(op, $input, parentOp, d);
                 }
             }(op, $input, parentOp, pid));

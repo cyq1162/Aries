@@ -177,11 +177,12 @@ namespace Aries.Core.Auth
         /// <param name="url"></param>
         private void CheckMenu(Uri uri)
         {
-            if (!HasMenu(uri) && HttpContext.Current.Request.UrlReferrer == null)
+            Uri refUri = HttpContext.Current.Request.UrlReferrer;
+            if (!HasMenu(uri) && refUri == null)
             {
                 throw new Exception("No permission to view this page！");
             }
-            else if (HttpContext.Current.Request.UrlReferrer.LocalPath != uri.LocalPath && Path.GetFileNameWithoutExtension(uri.LocalPath).ToLower() == "dialogview")//关键页面，进一步做权限验证
+            else if (refUri != null && refUri.LocalPath != uri.LocalPath && Path.GetFileNameWithoutExtension(uri.LocalPath).ToLower() == "dialogview")//关键页面，进一步做权限验证
             {
                 string objName = WebHelper.Query<string>("objName", "", false);//去掉前置的_
                 if (objName == "" || !WebHelper.IsKeyInHtml(objName))

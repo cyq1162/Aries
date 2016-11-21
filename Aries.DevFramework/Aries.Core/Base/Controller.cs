@@ -391,6 +391,16 @@ namespace Aries.Core
                 _ObjName = value;
             }
         }
+        /// <summary>
+        /// 跨库对象表名称
+        /// </summary>
+        public object CrossTableName
+        {
+            get
+            {
+                return CrossDb.GetEnum(TableName);
+            }
+        }
         private string _TableName;
         /// <summary>
         /// 对象视图名称的主表名
@@ -476,7 +486,7 @@ namespace Aries.Core
         {
             bool result = false;
             string msg = string.Empty;
-            using (MAction action = new MAction(CrossObjName))
+            using (MAction action = new MAction(CrossTableName))
             {
                 SetKeyValue(action.Data);
                 result = action.Insert(true, InsertOp.ID);
@@ -517,7 +527,7 @@ namespace Aries.Core
         public virtual void Delete()
         {
 
-            using (MAction action = new MAction(CrossObjName))
+            using (MAction action = new MAction(CrossTableName))
             {
                 var primaryKey = action.Data.PrimaryCell.ColumnName;
                 string where = GetID;
@@ -550,7 +560,7 @@ namespace Aries.Core
         [ActionKey("Edit,Update")]
         public virtual void Update()
         {
-            using (MAction action = new MAction(CrossObjName))
+            using (MAction action = new MAction(CrossTableName))
             {
                 SetKeyValue(action.Data);
                 if (action.Update(true))

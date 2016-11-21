@@ -97,6 +97,10 @@ namespace Aries.Core
             return _IBase.GetWhereIn(primaryKey, requestKey);
         }
 
+        public object CrossTableName
+        {
+            get { return _IBase.CrossTableName; }
+        }
         public string TableName
         {
             get { return _IBase.TableName; }
@@ -131,5 +135,8 @@ namespace Aries.Core
         {
             return _IBase.GetOrderBy(defaultSort);
         }
+
+
+       
     }
 }

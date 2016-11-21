@@ -12,8 +12,10 @@
             //用于获取数据的函数指向，默认值Get
             this.method = "Get";
             //用于拦截form表单的请求数据对象名，可以表名，视图名
-            this.objName = $PCore.Global.DG.operating && $PCore.Global.DG.operating.objName;
-            this.tableName = $PCore.Global.DG.operating && $PCore.Global.DG.operating.tableName;
+            this.objName = $PCore && $PCore.Global.DG.operating && $PCore.Global.DG.operating.objName;
+            this.tableName = $PCore && $PCore.Global.DG.operating && $PCore.Global.DG.operating.tableName;
+            //动作：Add 或 Update
+            this.action = $PCore && $PCore.Global.DG.action;
             this.url = $Core.Global.route.root;
             /**
             * 获取了数据，准备回填表单前（参数：data）
@@ -29,16 +31,14 @@
                 if (this.onBeforeExecute() === false) {
                     return;
                 }
-                if ($PCore && $PCore.Global.DG.action == "Update") {
-                    if ($PCore.Global.DG.operating) {
-                        var id = $Core.Utility.queryString("id");
-                        this.data = $Core.Utility.Ajax.post(this.method, this.objName, { "id": id });
-                        if (this.onBeforeFillForm(this.data) == false) { return; }
-                        this.$target.form("load", this.data);
-                        $Core.Combobox.setValues(this.data);
-                    }
+                var id = $Core.Utility.queryString("id");
+                if (id && this.action == "Update" && this.objName) {
+                    this.data = $Core.Utility.Ajax.post(this.method, this.objName, { "id": id });
+                    if (this.onBeforeFillForm(this.data) == false) { return; }
+                    this.$target.form("load", this.data);
+                    $Core.Combobox.setValues(this.data);
                 }
-                this.onAfterExecute();
+                this.onAfterExecute(this.data);
             };
             this.onInit = function () {
                 this.$target = $("form:eq(0)");
@@ -102,7 +102,9 @@
                 }
                 if (this.BtnCommit && this.BtnCommit.onBeforeExecute(formData) == false) { return; }
                 if ($targetForm.form("validate")) {
-                    var obj = $Core.Utility.Ajax.post(mthodName || ((this.method.toLowerCase() != 'get') && this.method) || $PCore.Global.DG.action, tableName || this.objName || $PCore.Global.DG.operating.tableName, formData);
+                    var tName = tableName || this.tableName;
+                    var oName = this.objName;
+                    var obj = $Core.Utility.Ajax.post(mthodName || ((this.method.toLowerCase() != 'get') && this.method) || this.action, oName + "," + tName, formData);
                     if (callBack && typeof (callBack) == "function") {
                         callBack.call(this, obj);
                     }
@@ -110,13 +112,15 @@
                         var msg = obj.msg;
                         if (obj.success != undefined && obj.success) {
                             msg = "操作成功！";
-                            if ($PCore.Global.DG.operating) {
+                            if ($PCore && $PCore.Global.DG.operating) {
                                 $PCore.Global.DG.operating.datagrid('reload');
                             }
                         }
-                        $PCore.Utility.Window.showMsg(msg);
-                        if (obj.success) {
-                            $Core.Utility.Window.close();
+                        if ($PCore) {
+                            $PCore.Utility.Window.showMsg(msg);
+                            if (obj.success) {
+                                $Core.Utility.Window.close();
+                            }
                         }
                         this.BtnCommit && this.BtnCommit.onAfterExecute(obj);
                     }
@@ -171,9 +175,7 @@
         $Core.Combobox.onInit();
         $Core.Form.onInit();
         registEvent("keydown");
-        if ($PCore.Global.DG.operating) {
-            $Core.Form.onExecute();
-        }
+        $Core.Form.onExecute();
     });
 })(jQuery, AR, parent.AR);
 

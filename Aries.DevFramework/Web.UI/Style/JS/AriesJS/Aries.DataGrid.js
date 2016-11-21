@@ -225,7 +225,6 @@
             var obj_item = {};
             if (objName.indexOf('=>') != -1) {
                 objName = objName.split('=>')[0];
-                obj_item['Parent'] = objName.split('=>')[1];
             }
             obj_item['ObjName'] = objName;
             if ($Core.Combobox.paras[objName] != undefined) {

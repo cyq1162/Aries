@@ -13,13 +13,13 @@ namespace Aries.Core.Sql
         #region Build SQL Contents
         private static Dictionary<string, string> sqlDic = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
-            {"like","LIKE"},{"between","between"},
+            {"like","like"},{"between","between"},
             {"equal","="},{"greater",">"},{"greaterequal",">="},
             {"less","<"},{"lessEqual","<="},
-            {"in","IN"},{"datetimepoint",""},{"notequal","<>"},
-            {"isnull","is Null"},
-            {"notnull","is not Null"},
-            {"and","AND"},{"or","OR"}
+            {"in","in"},{"notequal","<>"},
+            {"isnull","is null"},
+            {"notnull","is not null"},
+            {"and","and"},{"or","or"}
         };
         public static string Format(string searchList)
         {
@@ -48,27 +48,29 @@ namespace Aries.Core.Sql
                 {
                     obj.OrAnd = (obj.OrAnd == "or" ? "or" : "and");
                 }
-                switch (obj.Pattern.ToLower())
+                string pattern = GetOperate(obj.Pattern);
+                switch (pattern)
                 {
                     case "in":
                         obj.Value = "(" + obj.Value.Trim(')', '(') + ")";
                         break;
                     case "between":
-                    case "greater":
-                    case "greaterequal":
-                    case "less":
-                    case "lessEqual":
+                    case ">":
+                    case ">=":
+                    case "<":
+                    case "<=":
                     case "likeor":
                         break;
-                    case "isnull":
-                    case "notnull":
+                    case "is null":
+                    case "is not null":
                         obj.Value = "";
                         break;
                     case "like":
-                        obj.Value = "'%" + obj.Value + "%'";
+                        obj.Value = "'%" + obj.Value.Trim('\'') + "%'";
                         break;
+                    case "=":
                     default:
-                        obj.Value = "'" + obj.Value + "'";
+                        obj.Value = "'" + obj.Value.Trim('\'') + "'";
                         break;
                 }
                 if (obj.Pattern.ToLower() == "likeor")
@@ -77,7 +79,7 @@ namespace Aries.Core.Sql
                 }
                 else
                 {
-                    sql.AppendFormat(key2, obj.OrAnd, obj.Name, GetOperate(obj.Pattern), obj.Value);
+                    sql.AppendFormat(key2, obj.OrAnd, obj.Name, pattern, obj.Value);
                 }
             }
             return sql.ToString();

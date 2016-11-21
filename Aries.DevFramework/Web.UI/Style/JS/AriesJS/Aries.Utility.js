@@ -28,8 +28,7 @@
         //hasObjcet,数组是否存在对象
         cloneArray: function (array, hasObject) {
             var newArray = [];
-            if (array)
-            {
+            if (array) {
                 if (hasObject == true) {
                     for (var i = 0, len = array.length; i < len; i++) {
                         if (typeof (array[i]) == "object") {
@@ -39,8 +38,7 @@
                         }
                     }
                 }
-                else
-                {
+                else {
                     for (var i = 0; i < array.length; i++) {
                         newArray.push(array[i]);
                     }
@@ -269,7 +267,8 @@
                     switch (dtype[0]) {
                         case "date":
                         case "datetime":
-                            cssName = "easyui-datebox";
+                            var type = dataArray[i].formatter == "dateFormatter" ? "date" : "datetime";
+                            cssName = "easyui-" + type + "box";
                             input.attr("name", dataArray[i].field).addClass(cssName).attr("date", true).width(150).attr("validType", "datebox");
                             if (fromSearch && dataArray[i].rules) {
                                 input.width(95);
@@ -352,7 +351,7 @@
         },
         _setInputAttr: function ($input, rules, splitFlag, $label) {
             if (typeof (rules) == "object") { rules = JSON.stringify(rules); }
-            if (rules.indexOf('{') == -1) { return;}
+            if (rules.indexOf('{') == -1) { return; }
             var sp = rules.split("{")
             var _rules = "{" + sp[sp.length - 1];//取最后一个
             if (_rules && _rules[0] == '{') {

@@ -426,11 +426,16 @@
                             }
                             value = "'" + value + "'";
                         }
-                        if (isDate && value.length < 14) {
-                            if (pattern == ">=")
+                        if (isDate) {
+                            if (value.length > 10) {
+                                value = "'" + value + "'";
+                            }
+                            else if (pattern == ">=") {
                                 value = "'" + value + " 00:00:00'";
-                            else if (pattern == "<=")
+                            }
+                            else if (pattern == "<=") {
                                 value = value = "'" + value + " 23:59:59'";
+                            }
                         }
                         var item = { name: name, value: value, pattern: pattern };
                         json.push(item);

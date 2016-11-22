@@ -103,7 +103,7 @@
                 if (this.BtnCommit && this.BtnCommit.onBeforeExecute(formData) == false) { return; }
                 if ($targetForm.form("validate")) {
                     var tName = tableName || this.tableName;
-                    var oName = this.objName;
+                    var oName = this.objName || tName;
                     var obj = $Core.Utility.Ajax.post(mthodName || ((this.method.toLowerCase() != 'get') && this.method) || this.action, oName + "," + tName, formData);
                     if (callBack && typeof (callBack) == "function") {
                         callBack.call(this, obj);

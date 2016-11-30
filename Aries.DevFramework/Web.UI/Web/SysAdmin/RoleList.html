@@ -12,7 +12,7 @@
 <script type="text/javascript">
     var dg = new AR.DataGrid("Sys_Role");
     dg.isEditor = true;
-    dg.PKColumn.add("detail", "权限分配", 'roleAction', null, "权限分配", "edit");
+    dg.PKColumn.add("detail", "权限分配", 'roleAction', null, "权限分配", "auth");
     dg.bind();
     function roleAction(v, r, i) {
         var rname = r.rolename;

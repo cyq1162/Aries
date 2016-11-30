@@ -176,7 +176,7 @@ namespace Aries.Logic
             string result = string.Empty;
             using (MAction action = new MAction(TableNames.Sys_Action))
             {
-                result = action.Select().ToJson(false, false, true);
+                result = action.Select("order by SortOrder asc").ToJson(false, false, true);
             }
             return result;
         }
@@ -252,7 +252,14 @@ namespace Aries.Logic
             MDataTable dt;
             if (Query<string>("all") == "1")
             {
-                dt = SysMenu.MenuTable;
+                if (UserAuth.IsSuperAdmin)
+                {
+                    dt = SysMenu.MenuTable;
+                }
+                else
+                {
+                    dt = SysMenu.GetUserMenu(true);
+                }
             }
             else
             {
@@ -288,26 +295,10 @@ namespace Aries.Logic
 
             string roleID = Query<string>("RoleID");
             bool result = false;
-            //MDataColumn mdc = new MDataColumn();
-            //mdc.Add("RoleID", SqlDbType.NVarChar);
-            //mdc.Add("MenuID", SqlDbType.NVarChar);
-            //mdc.Add("ActionID", SqlDbType.NVarChar);
             MDataTable dt = GetTable(roleID);// MDataTable.CreateFrom(strArr, mdc);
 
             if (dt != null && dt.Rows.Count > 0)
             {
-                //for (int i = 0; i < dt.Rows.Count; i++)
-                //{
-                //    MDataRow row = dt.Rows[i];
-                //    if (row["MenuID"].IsNullOrEmpty || row["ActionID"].IsNullOrEmpty)
-                //    {
-                //        dt.Rows.RemoveAt(i);
-                //        i--;
-                //        continue;
-                //    }
-                //    row.Set("RoleID", roleID);
-                //}
-                //dt.TableName = TableNames.Sys_RoleAction.ToString();
                 //删除该角色下面所有权限
                 using (MAction action = new MAction(TableNames.Sys_RoleAction))
                 {

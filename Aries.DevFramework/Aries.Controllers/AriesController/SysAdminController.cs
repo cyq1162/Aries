@@ -10,6 +10,7 @@ using Aries.Logic;
 using Aries.Core.Config;
 using Aries.Core.Helper;
 using Aries.Core.Auth;
+using Aries.Core.DB;
 
 namespace Aries.Controllers
 {
@@ -20,6 +21,7 @@ namespace Aries.Controllers
     {
         public override void Get()
         {
+
             switch (TableName)
             {
                 case "V_SYS_UserList":
@@ -117,6 +119,7 @@ namespace Aries.Controllers
                     {
                         dt = base.Select(st);
                     }
+
                     break;
                 default:
                     dt = base.Select(st);
@@ -124,7 +127,39 @@ namespace Aries.Controllers
             }
             return dt;
         }
-
+        public override string GetWhere()
+        {
+            string where = base.GetWhere();
+            if (!UserAuth.IsSuperAdmin)
+            {
+                switch (ObjName)
+                {
+                    case "Sys_Role":
+                        string w = "RoleID<>'" + UserAuth.SuperAdminRoleID + "'";
+                        if (string.IsNullOrEmpty(where))
+                        {
+                            where = w;
+                        }
+                        else
+                        {
+                            where = w + " and " + where;
+                        }
+                        break;
+                    case "V_SYS_UserList":
+                        w = "RoleIDs not like '%" + UserAuth.SuperAdminRoleID + "%'";
+                        if (string.IsNullOrEmpty(where))
+                        {
+                            where = w;
+                        }
+                        else
+                        {
+                            where = w + " and " + where;
+                        }
+                        break;
+                }
+            }
+            return where;
+        }
         //protected override void EndInvoke(string methodName)
         //{
         //    //CYQ.Data 已具备自动缓存功能，所以可以简化掉一些手工的缓存机制。

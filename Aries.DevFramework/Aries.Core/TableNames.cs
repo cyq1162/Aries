@@ -9,7 +9,7 @@ namespace Aries.Core.DB
     public enum Sys_RoleAction { RoleActionID, RoleID, MenuID, ActionID }
     public enum Sys_Role { RoleID, RoleName, Notes }
     public enum Sys_Menu { MenuID, ParentMenuID, MenuName, MenuUrl, MenuLevel, SortOrder, MenuIcon, BigMenuIcon, IsShortcut, IsShow, ActionIDs }
-    public enum Sys_Action { ActionID, ActionName, ActionRefName, IsEnabled }
+    public enum Sys_Action { ActionID, ActionName, ActionRefName, IsEnabled, IsSys, SortOrder }
     public enum Config_Excel { ExcelID, ExcelName, Description, TableNames, StartIndex, HeadCrossRowNum, WhereType, AcceptType, CreateTime }
     public enum Config_KeyValue { KeyValueID, ConfigKey, ConfigName, ConfigValue, Flag, Notes, OrderNo, CreateTime }
     public enum Config_ExcelInfo { ExceInfoID, ExcelID, ExcelName, TableName, Field, Formatter, IsUnique, IsForeignkey, ForeignTable, IsRequired, CreateTime }

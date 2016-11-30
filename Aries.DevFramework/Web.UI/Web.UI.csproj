@@ -63,9 +63,11 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\SQLCode\Demo\V_ArticleList.sql" />
     <Content Include="App_Data\SQLCode\Sql_Combobox.sql" />
     <Content Include="App_Data\SQLCode\Sql.sql" />
     <Content Include="App_Data\SQLCode\V_Test.sql" />
+    <Content Include="App_Data\SQLCode\Sql_Demo.sql" />
     <Content Include="App_Data\SQLCode\命名规范.txt" />
     <Content Include="App_Data\TxtDB\Config_Excel.ts" />
     <Content Include="App_Data\TxtDB\Config_Excel.txt" />
@@ -488,6 +490,8 @@
     <Content Include="Style\JS\jquery-1.7.1.min.js" />
     <Content Include="Style\JS\json2.js" />
     <Content Include="update.txt" />
+    <Content Include="Web\Article\ArticleList.html" />
+    <Content Include="Web\Article\ArticleEidt.html" />
     <Content Include="Web\SysAdmin\ActionList.html" />
     <Content Include="Web\SysAdmin\ConfigGrid.html" />
     <Content Include="Web\SysAdmin\ConfigKeyValue.html" />

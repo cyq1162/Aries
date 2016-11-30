@@ -11,6 +11,7 @@
 </html>
 <script>
     var dg = new AR.DataGrid("Sys_Action");
+    dg.options = { sortName: "IsSys desc,SortOrder asc"};
     dg.isEditor = true;
     dg.bind();
 </script>

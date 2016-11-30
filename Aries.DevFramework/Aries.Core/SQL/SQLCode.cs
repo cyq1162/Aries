@@ -200,7 +200,10 @@ namespace Aries.Core.Sql
             {
                 sql = sql.Replace("@FullName", UserAuth.FullName);
             }
-
+            if (sql.IndexOf("@SuperAdminRoleID") > -1)
+            {
+                sql = sql.Replace("@SuperAdminRoleID", UserAuth.IsSuperAdmin ? Guid.Empty.ToString() : UserAuth.SuperAdminRoleID);
+            }
             string key = null;
             //自动配置其它属性
             if (sql.IndexOf('@') > -1)

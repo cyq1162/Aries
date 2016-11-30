@@ -51,7 +51,6 @@ namespace Aries.Core.Auth
                             string userID = action.Get<string>(Sys_User.UserID);
                             userName = action.Get<string>(Sys_User.UserName);
                             string fullName = action.Get<string>(Sys_User.FullName, userName);
-                            token = EncrpytHelper.Encrypt(DateTime.Now.Day + "," + userID + "," + userName + "," + fullName);
                             if (action.DalType == DalType.Txt || action.DalType == DalType.Xml)
                             {
                                 action.Set(Sys_User.LoginCount, action.Get<int>(Sys_User.LoginCount, 0) + 1);
@@ -64,6 +63,9 @@ namespace Aries.Core.Auth
                             action.Set(Sys_User.LastLoginIP, HttpContext.Current.Request.UserHostAddress);
                             //action.SetPara("UserName", userName, System.Data.DbType.String);
                             action.Update(where);//更新信息。
+                            //获取角色名称
+                            string roleIDs = action.Get<string>(Sys_User.RoleIDs);
+                            token = EncrpytHelper.Encrypt(DateTime.Now.Day + "," + userID + "," + userName + "," + fullName + "," + roleIDs);
                         }
                         else
                         {
@@ -195,7 +197,7 @@ namespace Aries.Core.Auth
         private static void ClearCookie()
         {
             HttpCookie tokenCookie = new HttpCookie("aries_token");
-           // HttpCookie userNameCookie = new HttpCookie("aries_user");//为了保留记住用户名功能，不清用户名Cookie
+            // HttpCookie userNameCookie = new HttpCookie("aries_user");//为了保留记住用户名功能，不清用户名Cookie
             tokenCookie.Expires = DateTime.Now.AddDays(-1);
             //userNameCookie.Expires = DateTime.Now.AddDays(-1);
             HttpContext.Current.Response.Cookies.Add(tokenCookie);
@@ -282,18 +284,44 @@ namespace Aries.Core.Auth
                 return GetTokenValue(3);
             }
         }
-
         /// <summary>
-        /// 是否系统管理员账号
+        /// 用户的角色IDs
+        /// </summary>
+        public static string RoleIDs
+        {
+            get
+            {
+                return GetTokenValue(4);
+            }
+        }
+        /// <summary>
+        /// 是否普通管理员账号(运营级别)
         /// </summary>
         public static bool IsAdmin
         {
             get
             {
-                return UserName.ToLower().EndsWith("admin");
+                if (string.IsNullOrEmpty(AdminRoleID))
+                {
+                    return false;
+                }
+                return RoleIDs.Contains(AdminRoleID);
             }
         }
-
+        /// <summary>
+        /// 是否系统管理员账号(开发级别)
+        /// </summary>
+        public static bool IsSuperAdmin
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(SuperAdminRoleID))
+                {
+                    return false;
+                }
+                return RoleIDs.Contains(SuperAdminRoleID);
+            }
+        }
 
         /// <summary>
         /// 当前电脑PC端在线人数
@@ -373,5 +401,47 @@ namespace Aries.Core.Auth
 
         #endregion
 
+    }
+
+    public static partial class UserAuth
+    {
+        private static string _AdminRoleID;
+        public static string AdminRoleID
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_AdminRoleID))
+                {
+                    using (MAction action = new MAction(TableNames.Sys_Role))
+                    {
+                        string where = string.Format("{0}='Admin' or {0}= '普通管理员'", Sys_Role.RoleName);
+                        if (action.Fill(where))
+                        {
+                            _AdminRoleID = action.Get<string>(Sys_Role.RoleID);
+                        }
+                    }
+                }
+                return _AdminRoleID;
+            }
+        }
+        private static string _SuperAdminRoleID;
+        public static string SuperAdminRoleID
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_SuperAdminRoleID))
+                {
+                    using (MAction action = new MAction(TableNames.Sys_Role))
+                    {
+                        string where = string.Format("{0}='SuperAdmin' or {0}= '超级管理员'", Sys_Role.RoleName);
+                        if (action.Fill(where))
+                        {
+                            _SuperAdminRoleID = action.Get<string>(Sys_Role.RoleID);
+                        }
+                    }
+                }
+                return _SuperAdminRoleID;
+            }
+        }
     }
 }

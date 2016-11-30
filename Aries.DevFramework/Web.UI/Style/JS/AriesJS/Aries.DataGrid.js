@@ -410,68 +410,7 @@
         }
 
     }
-    //创建行内右键菜单
-    function _createRowMenu(dg, actionKeys) {
 
-        //var node = undefined;
-        //tg = $("#" + dg.id);
-        //tgOptions = tg.treegrid("options");
-
-        //if (actionKeys && actionKeys.indexOf(',config,') != -1)
-        //    dg.rowMenu.menu('appendItem', {
-        //        text: "添加", name: 'add', onclick: function () {
-        //            //node = tg.treegrid('getSelected');
-        //            //var _rowId = 0;
-        //            //var objRow = function () {
-        //            //    var cols = tg.treegrid("options").columns[0]; //因为获取列返回的是跟二维数组
-        //            //    var _item = {};
-        //            //    for (var i = 0; i < cols.length; i++) {
-        //            //        _item[cols[i].field] = '';
-        //            //    }
-        //            //    if (node.children && node.children.length > 0) {
-        //            //        _rowId = node.children[node.children.length - 1][tgOptions.idField] + 1;
-        //            //    } else {
-        //            //        _rowId = node[tgOptions.idField] + '01';
-        //            //    }
-        //            //    _item[tgOptions.idField] = _rowId;
-        //            //    _item[tgOptions.parentField] = node[tgOptions.idField];
-        //            //    if (tgOptions.fullpathField) {
-        //            //        _item[tgOptions.fullpathField] = node[tgOptions.fullpathField] ? (node[tgOptions.fullpathField] + '|' + node[tgOptions.idField]) : node[tgOptions.idField];
-        //            //    }
-        //            //    return _item;
-        //            //}();
-        //            //tg.treegrid('append', {
-        //            //    parent: node[tgOptions.idField],
-        //            //    data: [objRow]
-        //            //});
-        //            //tg.treegrid('beginEdit', _rowId);
-        //            //tg.treegrid('select', _rowId);
-        //            //dg.editRow = tg.treegrid('getSelected');
-        //            //dg.operator = 'Add';
-        //        }
-        //    });
-        //dg.rowMenu.menu('appendItem', {
-        //    text: "编辑", name: 'edit', onclick: function () {
-        //        var row = dg.datagrid("getSelected");
-        //        _onDbClickRow(row[dg.options.idField], row, dg);
-        //    }
-        //});
-        //dg.rowMenu.menu('appendItem', {
-        //    text: "移除", name: 'remove', onclick: function () {
-        //        node = tg.treegrid('getSelected');
-        //        var id = node[tgOptions.idField];
-        //        $Core.Utility.Window.confirm('确认删除吗？', null, function () {
-        //            var obj = $Core.ajax('Delete', dg.tableName, { id: StringFormat.execute("{0}", id) }, false);
-        //            if (obj.success) {
-        //                tg.treegrid('remove', id);
-        //                //tg.treegrid("reload");
-        //            }
-        //            $Core.Utility.Window.showMsg(obj.msg);
-        //        });
-
-        //    }
-        //});
-    }
     function PKColumn(dg) {
         $Core.BtnBase.call(this);
         //存档每行的主键列信息，只能在数据呈现之后获取,如onLoadSuccess事件

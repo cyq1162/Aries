@@ -47,7 +47,7 @@ namespace Aries.Core.Auth
                 //{
                 using (MAction action = new MAction(TableNames.Sys_Action))
                 {
-                    return action.Select();
+                    return action.Select("order by SortOrder ASC");
                 }
                 //}
                 //return _ActionTable;
@@ -70,17 +70,26 @@ namespace Aries.Core.Auth
         {
             get
             {
-                MDataTable dt = MenuTable.Clone();
+                MDataTable dt;
+                if (!UserAuth.IsSuperAdmin)
+                {
+                    dt = GetUserMenu(true);
+                }
+                else
+                {
+                    dt = MenuTable;
+                }
                 MDataTable action = ActionTable;
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     var row = dt.Rows[i];
+                    string menuID = row.Get<string>("MenuID");
                     string actionIDs = row.Get<string>("ActionIDs");
                     if (!string.IsNullOrEmpty(actionIDs))
                     {
                         string[] ids = actionIDs.Split(',');
                         string refNames = string.Empty, actionNames = string.Empty;
-                        string menuID = row.Get<string>("MenuID");
+
                         foreach (string id in ids)
                         {
                             var aRow = action.FindRow("ActionID='" + id + "'");
@@ -108,47 +117,63 @@ namespace Aries.Core.Auth
         {
             get
             {
-                string roleIDs = UserAuth.User.Get<string>("RoleIDs");
-                if (!string.IsNullOrEmpty(roleIDs))
+                return GetUserMenu(false);
+            }
+        }
+
+        public static MDataTable GetUserMenu(bool onlyID)
+        {
+            string roleIDs = UserAuth.RoleIDs;
+            if (!string.IsNullOrEmpty(roleIDs))
+            {
+                roleIDs = "RoleID in ('" + roleIDs.Replace(",", "','") + "')";
+                MDataTable dt;
+                using (MAction action = new MAction(TableNames.Sys_RoleAction))
                 {
-                    roleIDs = "RoleID in ('" + roleIDs.Replace(",", "','") + "')";
-                    MDataTable dt;
-                    using (MAction action = new MAction(TableNames.Sys_RoleAction))
+                    action.SetSelectColumns("MenuID", "ActionID");
+                    dt = action.Select(roleIDs);
+                }
+                if (dt.Rows.Count > 0)
+                {
+                    Dictionary<string, string> dic = RoleActionToDic(dt, onlyID);
+                    MDataTable menuDt = MenuTable;
+                    #region 组合有权限的菜单
+                    if (!onlyID)
                     {
-                        action.SetSelectColumns("MenuID", "ActionID");
-                        dt = action.Select(roleIDs);
-                    }
-                    if (dt.Rows.Count > 0)
-                    {
-                        Dictionary<string, string> dic = RoleActionToDic(dt);
-                        MDataTable menuDt = MenuTable.Clone();
-                        #region 组合有权限的菜单
                         menuDt.Columns.Add("ActionRefNames", System.Data.SqlDbType.NVarChar);
-                        for (int i = 0; i < menuDt.Rows.Count; i++)
+                    }
+                    for (int i = 0; i < menuDt.Rows.Count; i++)
+                    {
+                        MDataRow row = menuDt.Rows[i];
+                        string menuID = row.Get<string>("MenuID");
+                        if (!dic.ContainsKey(menuID))
                         {
-                            MDataRow row = menuDt.Rows[i];
-                            string menuID = row.Get<string>("MenuID");
-                            if (!dic.ContainsKey(menuID))
+                            if (!HasChild(menuID, MenuTable, dic))
                             {
-                                if (!HasChild(menuID, MenuTable, dic))
-                                {
-                                    menuDt.Rows.RemoveAt(i);
-                                    i--;
-                                }
+                                menuDt.Rows.RemoveAt(i);
+                                i--;
+                            }
+                        }
+                        else
+                        {
+                            if (onlyID)
+                            {
+                                row.Set("ActionIDs", dic[menuID]);
                             }
                             else
                             {
                                 row.Set("ActionRefNames", dic[menuID]);
                             }
                         }
-                        #endregion
-                        return menuDt;
                     }
-
+                    #endregion
+                    return menuDt;
                 }
-                return null;
+
             }
+            return null;
         }
+
         /// <summary>
         /// 角色权限表转字典
         /// </summary>

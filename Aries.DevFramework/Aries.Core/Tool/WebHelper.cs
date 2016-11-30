@@ -7,19 +7,34 @@ using System.Web.UI;
 using System.Net;
 using System.Data;
 using CYQ.Data;
+using CYQ.Data.Tool;
+using CYQ.Data.Cache;
 
 namespace Aries.Core.Helper
 {
     internal static partial class WebHelper
     {
+
         #region 安全Key检测
         public static bool IsKeyInHtml(string objName)
         {
+            CacheManage cache = CacheManage.LocalInstance;
+
             string path = HttpContext.Current.Server.MapPath(HttpContext.Current.Request.UrlReferrer.LocalPath);
-            if (File.Exists(path))
+            string has = path.GetHashCode().ToString();
+            string html = string.Empty;
+            if (cache.Contains(has))
+            {
+                html = cache.Get<string>(has);
+            }
+            else if (File.Exists(path))
+            {
+                html = File.ReadAllText(path);
+                cache.Set(has, html, 0, path);
+            }
+            if (!string.IsNullOrEmpty(html))
             {
                 //检测文件中是否有对应的关键字：
-                string html = File.ReadAllText(path);
                 if (html.Contains("\"" + objName + "\"") || html.Contains("'" + objName + "'"))
                 {
                     return true;

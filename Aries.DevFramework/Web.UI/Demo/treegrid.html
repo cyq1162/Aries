@@ -15,6 +15,11 @@
     </div>
     <script type="text/javascript">
         var tg = new AR.DataGrid('Demo_Area', null, "grid", true);
+        tg.HeaderMenu.add("自定义配置", 'fn', 'config');
+        function fn(el, dgid, value, index)
+        {
+            alert(value);
+        }
         tg.options = {
             idField: "code",
             treeField: "name",
@@ -26,7 +31,7 @@
         }
         // dg.addWhere("lvl", "(3)", "in");
         tg.addWhere("id", "3000", ">");
-        tg.HeaderMenu.add("配置2", 'ttt', 'config');
+        
         tg.ToolBar.BtnAdd.onBeforeExecute = function (index, isSameLevel) {
             tg.defaultInsertData[tg.options.idField] = "ag";//自定义主键
         }

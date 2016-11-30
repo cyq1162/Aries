@@ -180,25 +180,14 @@ CREATE TABLE [Demo_Tree]
 
 exec sp_addextendedproperty N'MS_Description', N'', N'user', N'dbo', N'table', N'Demo_Tree';
 
-CREATE TABLE [Editlog] 
-(
-    [ID] int IDENTITY(1,1) NOT NULL,
-    [TableName] nvarchar(2000) NULL,
-    [KeyID] nvarchar(2000) NULL,
-    [Content] nvarchar(2000) NULL,
-    [UserID] nvarchar(2000) NULL,
-    [EditTime] datetime Default getdate() NULL,
-    PRIMARY KEY ([ID]) 
-)
-
-exec sp_addextendedproperty N'MS_Description', N'', N'user', N'dbo', N'table', N'Editlog';
-
 CREATE TABLE [Sys_Action] 
 (
     [ActionID] uniqueidentifier Default (newid()) NOT NULL,
     [ActionName] nvarchar(100) NOT NULL,
     [ActionRefName] nvarchar(100) NOT NULL,
     [IsEnabled] bit Default (1) NULL,
+    [IsSys] bit Default (0) NULL,
+    [SortOrder] int Default (999) NULL,
     PRIMARY KEY ([ActionID]) 
 )
 
@@ -305,7 +294,6 @@ CREATE TABLE [Sys_UserInfo]
     [UserInfoID] uniqueidentifier Default (newid()) NOT NULL,
     [CompanyID] nvarchar(50) NULL,
     [Memo] nvarchar(150) NULL,
-    [IsOk] bit NULL,
     [AreaID] uniqueidentifier NULL,
     PRIMARY KEY ([UserInfoID]) 
 )
@@ -313,7 +301,6 @@ CREATE TABLE [Sys_UserInfo]
 exec sp_addextendedproperty N'MS_Description', N'用户ID', N'user', N'dbo', N'table', N'Sys_UserInfo', N'column', N'UserInfoID';
 exec sp_addextendedproperty N'MS_Description', N'公司ID（未用到）', N'user', N'dbo', N'table', N'Sys_UserInfo', N'column', N'CompanyID';
 exec sp_addextendedproperty N'MS_Description', N'用户备注', N'user', N'dbo', N'table', N'Sys_UserInfo', N'column', N'Memo';
-exec sp_addextendedproperty N'MS_Description', N'仅Demo（未用到）', N'user', N'dbo', N'table', N'Sys_UserInfo', N'column', N'IsOk';
 exec sp_addextendedproperty N'MS_Description', N'区域ID（未用到）', N'user', N'dbo', N'table', N'Sys_UserInfo', N'column', N'AreaID';
 exec sp_addextendedproperty N'MS_Description', N'', N'user', N'dbo', N'table', N'Sys_UserInfo';
 

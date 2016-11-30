@@ -1,8 +1,16 @@
 ﻿/*  Table：Config_Excel   */
 insert into Config_Excel(ExcelID,ExcelName,Description,TableNames,StartIndex,HeadCrossRowNum,WhereType,AcceptType,CreateTime) 
+ values('f8754ebd-b722-0e9d-002f-2510100d07cf','V_Test2','V_Test2222','Demo_TestA,Demo_TestB',0,0,0,0,to_date('2016/10/20 0:00:00','yyyy-mm-dd hh24:mi:ss'));
+insert into Config_Excel(ExcelID,ExcelName,Description,TableNames,StartIndex,HeadCrossRowNum,WhereType,AcceptType,CreateTime) 
  values('a3410cbc-144d-e90e-53ed-897eee8df4e6','V_Test','V_Test','Demo_TestA,Demo_TestB',0,0,0,1,to_date('2016/5/9 9:18:26','yyyy-mm-dd hh24:mi:ss'));
+insert into Config_Excel(ExcelID,ExcelName,Description,TableNames,StartIndex,HeadCrossRowNum,WhereType,AcceptType,CreateTime) 
+ values('fb700287-84c2-8118-f8bd-b70f458ac48f','V_Test3','这是测试的','Demo_TestA,Demo_TestB',0,0,0,0,to_date('2016/11/28 0:00:00','yyyy-mm-dd hh24:mi:ss'));
 
 /*  Table：Config_ExcelInfo   */
+insert into Config_ExcelInfo(ExceInfoID,ExcelID,ExcelName,TableName,Field,Formatter,IsUnique,IsForeignkey,ForeignTable,IsRequired,CreateTime) 
+ values('9d000fed-38e1-4e69-aafb-0822f25783b1','f8754ebd-b722-0e9d-002f-2510100d07cf','F8','','','',0,0,'',0,to_date('2016/10/20 14:00:54','yyyy-mm-dd hh24:mi:ss'));
+insert into Config_ExcelInfo(ExceInfoID,ExcelID,ExcelName,TableName,Field,Formatter,IsUnique,IsForeignkey,ForeignTable,IsRequired,CreateTime) 
+ values('39f09652-64b4-4e17-bb79-1a08ddfbbb0f','fb700287-84c2-8118-f8bd-b70f458ac48f','F3','Demo_TestA','F3','',0,0,'',0,to_date('2016/11/28 21:50:59','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_ExcelInfo(ExceInfoID,ExcelID,ExcelName,TableName,Field,Formatter,IsUnique,IsForeignkey,ForeignTable,IsRequired,CreateTime) 
  values('c3b04f9e-d9e6-4253-a761-25319f3e539a','a3410cbc-144d-e90e-53ed-897eee8df4e6','F3','Demo_TestA','F3','',0,0,'',0,to_date('2016/10/16 16:38:36','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_ExcelInfo(ExceInfoID,ExcelID,ExcelName,TableName,Field,Formatter,IsUnique,IsForeignkey,ForeignTable,IsRequired,CreateTime) 
@@ -12,17 +20,47 @@ insert into Config_ExcelInfo(ExceInfoID,ExcelID,ExcelName,TableName,Field,Format
 insert into Config_ExcelInfo(ExceInfoID,ExcelID,ExcelName,TableName,Field,Formatter,IsUnique,IsForeignkey,ForeignTable,IsRequired,CreateTime) 
  values('752a77dd-2b91-4743-91f1-4adfd36ba42d','a3410cbc-144d-e90e-53ed-897eee8df4e6','F4','Demo_TestA','F4','@UserID',1,0,'',0,to_date('2016/10/16 16:38:36','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_ExcelInfo(ExceInfoID,ExcelID,ExcelName,TableName,Field,Formatter,IsUnique,IsForeignkey,ForeignTable,IsRequired,CreateTime) 
+ values('9ce21a16-9386-423f-8aa4-52aff90bfb88','fb700287-84c2-8118-f8bd-b70f458ac48f','F7','Demo_TestB','F7','Demo_TestA.F3',0,0,'',0,to_date('2016/11/28 21:50:59','yyyy-mm-dd hh24:mi:ss'));
+insert into Config_ExcelInfo(ExceInfoID,ExcelID,ExcelName,TableName,Field,Formatter,IsUnique,IsForeignkey,ForeignTable,IsRequired,CreateTime) 
  values('55b31261-92ff-48af-b7ec-5ad9ce652b1b','a3410cbc-144d-e90e-53ed-897eee8df4e6','F8','Demo_TestB','F8','',0,0,'',0,to_date('2016/10/16 16:38:36','yyyy-mm-dd hh24:mi:ss'));
+insert into Config_ExcelInfo(ExceInfoID,ExcelID,ExcelName,TableName,Field,Formatter,IsUnique,IsForeignkey,ForeignTable,IsRequired,CreateTime) 
+ values('b16c8ad3-0619-4d6e-b5ff-5f3f39a19789','f8754ebd-b722-0e9d-002f-2510100d07cf','F1','','','',0,0,'',0,to_date('2016/10/20 14:00:54','yyyy-mm-dd hh24:mi:ss'));
+insert into Config_ExcelInfo(ExceInfoID,ExcelID,ExcelName,TableName,Field,Formatter,IsUnique,IsForeignkey,ForeignTable,IsRequired,CreateTime) 
+ values('74f856c7-b393-4335-a8b3-70b9b020e262','f8754ebd-b722-0e9d-002f-2510100d07cf','F5','','','',0,0,'',0,to_date('2016/10/20 14:00:54','yyyy-mm-dd hh24:mi:ss'));
+insert into Config_ExcelInfo(ExceInfoID,ExcelID,ExcelName,TableName,Field,Formatter,IsUnique,IsForeignkey,ForeignTable,IsRequired,CreateTime) 
+ values('9c143af2-244f-4ea8-aee4-774380707c7c','fb700287-84c2-8118-f8bd-b70f458ac48f','ID','Demo_TestB','ID','@UserID',0,1,'Demo_TestA',0,to_date('2016/11/28 0:00:00','yyyy-mm-dd hh24:mi:ss'));
+insert into Config_ExcelInfo(ExceInfoID,ExcelID,ExcelName,TableName,Field,Formatter,IsUnique,IsForeignkey,ForeignTable,IsRequired,CreateTime) 
+ values('22e71bfb-c0ac-428e-aac8-80bb061cfbfc','fb700287-84c2-8118-f8bd-b70f458ac48f','F6','Demo_TestB','F6','',0,0,'',0,to_date('2016/11/28 21:50:59','yyyy-mm-dd hh24:mi:ss'));
+insert into Config_ExcelInfo(ExceInfoID,ExcelID,ExcelName,TableName,Field,Formatter,IsUnique,IsForeignkey,ForeignTable,IsRequired,CreateTime) 
+ values('65202899-b08e-4fa5-a292-850442df551a','f8754ebd-b722-0e9d-002f-2510100d07cf','F2','','','',0,0,'',0,to_date('2016/10/20 14:00:54','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_ExcelInfo(ExceInfoID,ExcelID,ExcelName,TableName,Field,Formatter,IsUnique,IsForeignkey,ForeignTable,IsRequired,CreateTime) 
  values('6c563e8a-10f0-4eb9-a091-8530541204e9','a3410cbc-144d-e90e-53ed-897eee8df4e6','F5','Demo_TestB','F5','F8',0,0,'',0,to_date('2016/10/16 16:38:36','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_ExcelInfo(ExceInfoID,ExcelID,ExcelName,TableName,Field,Formatter,IsUnique,IsForeignkey,ForeignTable,IsRequired,CreateTime) 
  values('ba86c51c-44ba-4607-8958-912970e67e84','a3410cbc-144d-e90e-53ed-897eee8df4e6','F2','Demo_TestA','F2','#是否',0,0,'',0,to_date('2016/10/16 16:38:36','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_ExcelInfo(ExceInfoID,ExcelID,ExcelName,TableName,Field,Formatter,IsUnique,IsForeignkey,ForeignTable,IsRequired,CreateTime) 
+ values('96490057-5f02-4a10-9e06-92a16e811739','f8754ebd-b722-0e9d-002f-2510100d07cf','F3','','','',0,0,'',0,to_date('2016/10/20 14:00:54','yyyy-mm-dd hh24:mi:ss'));
+insert into Config_ExcelInfo(ExceInfoID,ExcelID,ExcelName,TableName,Field,Formatter,IsUnique,IsForeignkey,ForeignTable,IsRequired,CreateTime) 
  values('cad40b08-50d0-449a-a849-93ceffb40752','a3410cbc-144d-e90e-53ed-897eee8df4e6','FK','Demo_TestB','FK','F8',0,0,'',0,to_date('2016/10/16 0:00:00','yyyy-mm-dd hh24:mi:ss'));
+insert into Config_ExcelInfo(ExceInfoID,ExcelID,ExcelName,TableName,Field,Formatter,IsUnique,IsForeignkey,ForeignTable,IsRequired,CreateTime) 
+ values('ab7c748a-2f50-4fff-88da-941f9268fcbb','fb700287-84c2-8118-f8bd-b70f458ac48f','F4','Demo_TestA','F4','',1,0,'',0,to_date('2016/11/28 21:50:59','yyyy-mm-dd hh24:mi:ss'));
+insert into Config_ExcelInfo(ExceInfoID,ExcelID,ExcelName,TableName,Field,Formatter,IsUnique,IsForeignkey,ForeignTable,IsRequired,CreateTime) 
+ values('1ed5f947-2592-473b-b7e3-a410ed0a459e','fb700287-84c2-8118-f8bd-b70f458ac48f','F1','Demo_TestA','F1','',0,0,'',0,to_date('2016/11/28 21:50:59','yyyy-mm-dd hh24:mi:ss'));
+insert into Config_ExcelInfo(ExceInfoID,ExcelID,ExcelName,TableName,Field,Formatter,IsUnique,IsForeignkey,ForeignTable,IsRequired,CreateTime) 
+ values('00d1bccf-52f2-40b6-bd0b-b1db3a5d89d5','fb700287-84c2-8118-f8bd-b70f458ac48f','F2','Demo_TestA','F2','',1,0,'',0,to_date('2016/11/28 21:50:59','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_ExcelInfo(ExceInfoID,ExcelID,ExcelName,TableName,Field,Formatter,IsUnique,IsForeignkey,ForeignTable,IsRequired,CreateTime) 
  values('5706b5b0-fb37-4d44-bf5a-b449910fb23e','a3410cbc-144d-e90e-53ed-897eee8df4e6','F7','Demo_TestB','F7','',0,0,'',0,to_date('2016/10/16 16:38:36','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_ExcelInfo(ExceInfoID,ExcelID,ExcelName,TableName,Field,Formatter,IsUnique,IsForeignkey,ForeignTable,IsRequired,CreateTime) 
+ values('ea304b62-650e-4d28-b048-d2b2c7d1bf97','f8754ebd-b722-0e9d-002f-2510100d07cf','F6','','','',0,0,'',0,to_date('2016/10/20 14:00:54','yyyy-mm-dd hh24:mi:ss'));
+insert into Config_ExcelInfo(ExceInfoID,ExcelID,ExcelName,TableName,Field,Formatter,IsUnique,IsForeignkey,ForeignTable,IsRequired,CreateTime) 
+ values('9d8519f8-945a-4971-a91d-da1afd0066c4','f8754ebd-b722-0e9d-002f-2510100d07cf','F7','','','',0,0,'',0,to_date('2016/10/20 14:00:54','yyyy-mm-dd hh24:mi:ss'));
+insert into Config_ExcelInfo(ExceInfoID,ExcelID,ExcelName,TableName,Field,Formatter,IsUnique,IsForeignkey,ForeignTable,IsRequired,CreateTime) 
  values('3c5312ed-902e-493a-9323-dba96b95372e','a3410cbc-144d-e90e-53ed-897eee8df4e6','F1','Demo_TestA','F1','',1,0,'',0,to_date('2016/10/16 16:38:36','yyyy-mm-dd hh24:mi:ss'));
+insert into Config_ExcelInfo(ExceInfoID,ExcelID,ExcelName,TableName,Field,Formatter,IsUnique,IsForeignkey,ForeignTable,IsRequired,CreateTime) 
+ values('93948ef7-f44f-4002-908b-e092796244e2','fb700287-84c2-8118-f8bd-b70f458ac48f','F8','Demo_TestB','F8','@UserName',0,0,'',0,to_date('2016/11/28 21:50:59','yyyy-mm-dd hh24:mi:ss'));
+insert into Config_ExcelInfo(ExceInfoID,ExcelID,ExcelName,TableName,Field,Formatter,IsUnique,IsForeignkey,ForeignTable,IsRequired,CreateTime) 
+ values('d69137e2-1259-4f86-8daf-e1f978530ac9','f8754ebd-b722-0e9d-002f-2510100d07cf','F4','','','',0,0,'',0,to_date('2016/10/20 14:00:54','yyyy-mm-dd hh24:mi:ss'));
+insert into Config_ExcelInfo(ExceInfoID,ExcelID,ExcelName,TableName,Field,Formatter,IsUnique,IsForeignkey,ForeignTable,IsRequired,CreateTime) 
+ values('a9cd4dd9-5fbb-426b-b768-f44b9bc73fff','fb700287-84c2-8118-f8bd-b70f458ac48f','F5','Demo_TestB','F5','',0,0,'',0,to_date('2016/11/28 21:50:59','yyyy-mm-dd hh24:mi:ss'));
 
 /*  Table：Config_Grid   */
 insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,Align,Sortable,Formatter,Styler,Editor,Rowspan,Colspan,Search,DataType,Import,Export,Frozen,Edit,MergeIndex,ImportUnique,LastEditTime) 
@@ -45,6 +83,8 @@ insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,A
  values('dea533d7-030b-49e7-87f1-0a46b7b883d9','Demo_TestB','','ID','ID',1,10,100,'center',0,'#','','',1,1,0,'string,50,0,1',0,1,1,0,1,0,to_date('2016/10/15 23:47:24','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,Align,Sortable,Formatter,Styler,Editor,Rowspan,Colspan,Search,DataType,Import,Export,Frozen,Edit,MergeIndex,ImportUnique,LastEditTime) 
  values('95c85991-697e-460e-bd64-0b3059457e7b','Config_KeyValue','','Flag','分类标记',1,50,100,'center',1,'stringFormatter','','',1,1,0,'string,100,0,0',0,1,0,1,1,0,to_date('2016/5/9 9:00:46','yyyy-mm-dd hh24:mi:ss'));
+insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,Align,Sortable,Formatter,Styler,Editor,Rowspan,Colspan,Search,DataType,Import,Export,Frozen,Edit,MergeIndex,ImportUnique,LastEditTime) 
+ values('ff78894c-a989-4a9a-8274-0ebd1e21bf56','Sys_Action','','IsSys','是否系统',0,50,100,'center',1,'boolFormatter','','',1,1,0,'boolean,50,0,0',0,0,0,1,1,0,to_date('2016/11/30 14:34:37','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,Align,Sortable,Formatter,Styler,Editor,Rowspan,Colspan,Search,DataType,Import,Export,Frozen,Edit,MergeIndex,ImportUnique,LastEditTime) 
  values('ad49b8f1-c67f-4781-993f-10aef3f1b75d','Sys_Area','','ID','ID',0,10,100,'center',0,'','','',1,1,0,'int32,10,0,1',0,1,1,0,1,0,to_date('2016/5/9 16:34:45','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,Align,Sortable,Formatter,Styler,Editor,Rowspan,Colspan,Search,DataType,Import,Export,Frozen,Edit,MergeIndex,ImportUnique,LastEditTime) 
@@ -114,7 +154,7 @@ insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,A
 insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,Align,Sortable,Formatter,Styler,Editor,Rowspan,Colspan,Search,DataType,Import,Export,Frozen,Edit,MergeIndex,ImportUnique,LastEditTime) 
  values('4518811e-f7e0-4723-898b-402e4c5c191e','Demo_TestA','','ID','ID',1,10,100,'center',0,'#','','',1,1,0,'string,50,0,1',0,1,1,0,1,0,to_date('2016/8/10 10:36:17','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,Align,Sortable,Formatter,Styler,Editor,Rowspan,Colspan,Search,DataType,Import,Export,Frozen,Edit,MergeIndex,ImportUnique,LastEditTime) 
- values('ac83943e-7419-4506-8b79-40550af5c76b','Demo_TestB','','F7','F7',0,40,100,'center',1,'#C_PB_Province2','','',1,1,1,'string,100,0,0',1,1,1,1,1,0,to_date('2016/10/15 23:47:24','yyyy-mm-dd hh24:mi:ss'));
+ values('ac83943e-7419-4506-8b79-40550af5c76b','Demo_TestB','$:{multiple:true}','F7','F7',0,40,100,'center',1,'#C_PB_Province2','','',1,1,1,'string,100,0,0',1,1,1,1,1,0,to_date('2016/10/15 23:47:24','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,Align,Sortable,Formatter,Styler,Editor,Rowspan,Colspan,Search,DataType,Import,Export,Frozen,Edit,MergeIndex,ImportUnique,LastEditTime) 
  values('672ea915-78a3-4caf-b800-4062c8ef23a6','Config_ExcelInfo','','IsForeignkey','外键',0,80,100,'center',1,'boolFormatter','','',1,1,0,'boolean,1,0,0',0,1,0,1,1,0,to_date('2016/5/9 9:18:28','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,Align,Sortable,Formatter,Styler,Editor,Rowspan,Colspan,Search,DataType,Import,Export,Frozen,Edit,MergeIndex,ImportUnique,LastEditTime) 
@@ -132,17 +172,15 @@ insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,A
 insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,Align,Sortable,Formatter,Styler,Editor,Rowspan,Colspan,Search,DataType,Import,Export,Frozen,Edit,MergeIndex,ImportUnique,LastEditTime) 
  values('72fe612a-f35c-4301-aec3-48781a36f79a','V_SYS_UserList','','Sex','性别',0,60,100,'center',0,'#性别','','',1,1,1,'boolean,1,0,0',0,1,0,0,1,0,to_date('2016/3/30 15:47:28','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,Align,Sortable,Formatter,Styler,Editor,Rowspan,Colspan,Search,DataType,Import,Export,Frozen,Edit,MergeIndex,ImportUnique,LastEditTime) 
- values('f7c175af-7add-4c37-bd80-490a526374f4','sys_Action','','ActionID','操作',1,10,1,'center',0,'#','','',1,1,0,'guid,36,0,1',0,1,1,0,1,0,to_date('2016/5/9 9:00:49','yyyy-mm-dd hh24:mi:ss'));
+ values('f7c175af-7add-4c37-bd80-490a526374f4','sys_Action','$3:{fitColumns:true}','ActionID','操作',1,10,1,'center',0,'#','','',1,1,0,'guid,36,0,1',0,1,1,0,1,0,to_date('2016/5/9 9:00:49','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,Align,Sortable,Formatter,Styler,Editor,Rowspan,Colspan,Search,DataType,Import,Export,Frozen,Edit,MergeIndex,ImportUnique,LastEditTime) 
  values('79313eeb-84f4-4fa4-abe1-49b8fa405536','Config_Grid','','Field','字段',0,40,100,'left',0,'','','',1,1,0,'string,40,0,1',1,1,1,1,1,0,to_date('2016/4/26 10:11:37','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,Align,Sortable,Formatter,Styler,Editor,Rowspan,Colspan,Search,DataType,Import,Export,Frozen,Edit,MergeIndex,ImportUnique,LastEditTime) 
  values('13bbfb6c-eb5c-44a8-80ce-4a29a2e58c1e','sys_Action','','ActionName','权限名称',0,20,100,'center',1,'stringFormatter','','',1,1,0,'string,100,0,1',1,1,1,1,1,0,to_date('2016/5/9 9:00:49','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,Align,Sortable,Formatter,Styler,Editor,Rowspan,Colspan,Search,DataType,Import,Export,Frozen,Edit,MergeIndex,ImportUnique,LastEditTime) 
- values('4f9c007d-1ac6-4e3b-b28c-4c1c2cef3fd1','V_Test','$1:{title:"自定义标题F1"}','F1','F1',0,20,100,'center',1,'','','',1,1,1,'string,50,0,0',0,1,1,1,1,0,to_date('2016/5/10 15:47:01','yyyy-mm-dd hh24:mi:ss'));
+ values('4f9c007d-1ac6-4e3b-b28c-4c1c2cef3fd1','V_Test','$1:{title:"自定义标题F1",pattern:''''=''''}','F1','F1',0,20,100,'center',1,'','','',1,1,1,'string,50,0,0',0,1,1,1,1,0,to_date('2016/5/10 15:47:01','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,Align,Sortable,Formatter,Styler,Editor,Rowspan,Colspan,Search,DataType,Import,Export,Frozen,Edit,MergeIndex,ImportUnique,LastEditTime) 
  values('45555602-26fa-4d87-a532-4e9e26316da2','Config_Grid','','Rules','格式规则',0,210,100,'center',0,'','','',1,1,0,'string,50,0,0',0,1,0,1,1,0,to_date('2016/4/26 10:11:37','yyyy-mm-dd hh24:mi:ss'));
-insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,Align,Sortable,Formatter,Styler,Editor,Rowspan,Colspan,Search,DataType,Import,Export,Frozen,Edit,MergeIndex,ImportUnique,LastEditTime) 
- values('4711e5d1-72fd-4ab4-a95a-508ed6405919','V_Test','','DDD','DD2',0,100,100,'center',0,'','','',1,1,0,'string,50,0,0',0,0,0,0,1,0,to_date('2016/9/2 19:31:24','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,Align,Sortable,Formatter,Styler,Editor,Rowspan,Colspan,Search,DataType,Import,Export,Frozen,Edit,MergeIndex,ImportUnique,LastEditTime) 
  values('7babd9f8-9b09-4628-9cb8-518ed4776f04','V_SYS_UserList','','UserID','操作',1,10,1,'center',0,'#','','',1,1,0,'guid,16,0,1',0,1,1,0,1,0,to_date('2016/3/30 15:47:28','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,Align,Sortable,Formatter,Styler,Editor,Rowspan,Colspan,Search,DataType,Import,Export,Frozen,Edit,MergeIndex,ImportUnique,LastEditTime) 
@@ -266,6 +304,8 @@ insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,A
 insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,Align,Sortable,Formatter,Styler,Editor,Rowspan,Colspan,Search,DataType,Import,Export,Frozen,Edit,MergeIndex,ImportUnique,LastEditTime) 
  values('969fd082-c2dc-4695-8530-c59cf2ac6909','V_Test','','mg_fk','Fk表头一只',0,85,100,'center',0,'','','',1,2,0,'string,50,0,0',0,0,0,0,1,0,to_date('2016/9/24 1:56:49','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,Align,Sortable,Formatter,Styler,Editor,Rowspan,Colspan,Search,DataType,Import,Export,Frozen,Edit,MergeIndex,ImportUnique,LastEditTime) 
+ values('8a5510bd-3318-4450-b8e5-c7a1e0b4603c','Sys_Action','','IsEnabled','是否启用',0,40,100,'center',0,'boolFormatter','','',1,1,0,'boolean,50,0,0',0,0,1,1,1,0,to_date('2016/10/26 15:50:37','yyyy-mm-dd hh24:mi:ss'));
+insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,Align,Sortable,Formatter,Styler,Editor,Rowspan,Colspan,Search,DataType,Import,Export,Frozen,Edit,MergeIndex,ImportUnique,LastEditTime) 
  values('372973fb-a89e-4a8f-b077-c88a594b90f0','_Sys_User','','FullName','FullName',0,30,100,'center',1,'stringFormatter','','',1,1,0,'string,100,0,1',1,1,1,1,1,0,to_date('2016/9/10 0:08:30','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,Align,Sortable,Formatter,Styler,Editor,Rowspan,Colspan,Search,DataType,Import,Export,Frozen,Edit,MergeIndex,ImportUnique,LastEditTime) 
  values('2b2a9ed3-d90c-4215-9297-c9c16e083ba7','Config_Grid','','Colspan','跨列',0,877,30,'center',0,'','','',1,1,0,'int32,10,0,0',0,1,0,1,1,0,to_date('2016/4/26 10:11:37','yyyy-mm-dd hh24:mi:ss'));
@@ -282,11 +322,13 @@ insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,A
 insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,Align,Sortable,Formatter,Styler,Editor,Rowspan,Colspan,Search,DataType,Import,Export,Frozen,Edit,MergeIndex,ImportUnique,LastEditTime) 
  values('876e09ba-b754-4f24-bdca-db4e9703129b','Sys_Area','','Code','Code',0,20,100,'center',1,'','','',1,1,0,'string,50,0,0',0,1,1,1,1,0,to_date('2016/5/9 16:34:45','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,Align,Sortable,Formatter,Styler,Editor,Rowspan,Colspan,Search,DataType,Import,Export,Frozen,Edit,MergeIndex,ImportUnique,LastEditTime) 
- values('691b4283-2d5e-489c-988c-dccc8c47734f','V_Test','','F2','F2',0,30,100,'center',1,'#是否','','',1,1,1,'boolean,1,0,0',0,1,1,1,1,0,to_date('2016/5/10 15:47:01','yyyy-mm-dd hh24:mi:ss'));
+ values('691b4283-2d5e-489c-988c-dccc8c47734f','V_Test','$:{configkey:''''''''}','F2','F2',0,30,100,'center',1,'#是否','','',1,1,1,'boolean,1,0,0',0,1,1,1,1,0,to_date('2016/5/10 15:47:01','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,Align,Sortable,Formatter,Styler,Editor,Rowspan,Colspan,Search,DataType,Import,Export,Frozen,Edit,MergeIndex,ImportUnique,LastEditTime) 
  values('727d5700-ba89-4f42-832b-e476a4654452','Sys_Area','','Sort','Sort',0,50,100,'center',1,'','','',1,1,0,'int32,10,0,0',0,1,0,1,1,0,to_date('2016/5/9 16:34:45','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,Align,Sortable,Formatter,Styler,Editor,Rowspan,Colspan,Search,DataType,Import,Export,Frozen,Edit,MergeIndex,ImportUnique,LastEditTime) 
  values('e2e5cb59-81f6-4454-a0cb-e5465d89865f','V_SYS_UserList','','IsOk','IsOk',1,180,100,'center',0,'boolFormatter','','',1,1,0,'boolean,1,0,0',0,1,0,0,1,0,to_date('2016/3/30 15:47:28','yyyy-mm-dd hh24:mi:ss'));
+insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,Align,Sortable,Formatter,Styler,Editor,Rowspan,Colspan,Search,DataType,Import,Export,Frozen,Edit,MergeIndex,ImportUnique,LastEditTime) 
+ values('2599c597-2486-40aa-b696-e5df14d17074','Sys_Action','','SortOrder','排序号',0,60,100,'center',1,'','','',1,1,0,'string,50,0,0',0,0,0,1,1,0,to_date('2016/11/30 14:34:55','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,Align,Sortable,Formatter,Styler,Editor,Rowspan,Colspan,Search,DataType,Import,Export,Frozen,Edit,MergeIndex,ImportUnique,LastEditTime) 
  values('213e5377-5ac7-4f08-ab10-e7f94fcfbadc','Config_Grid','','ObjName','对象名',0,20,100,'center',0,'','','',1,1,0,'string,50,0,1',1,1,1,1,1,0,to_date('2016/4/26 10:11:37','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,Align,Sortable,Formatter,Styler,Editor,Rowspan,Colspan,Search,DataType,Import,Export,Frozen,Edit,MergeIndex,ImportUnique,LastEditTime) 
@@ -338,13 +380,9 @@ insert into Config_KeyValue(KeyValueID,ConfigKey,ConfigName,ConfigValue,Flag,Not
 insert into Config_KeyValue(KeyValueID,ConfigKey,ConfigName,ConfigValue,Flag,Notes,OrderNo,CreateTime) 
  values('4d2074d6-4720-4d61-9d91-31910c3dc869','导入方式','仅更新','2','','',2,to_date('2016/10/16 19:47:50','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_KeyValue(KeyValueID,ConfigKey,ConfigName,ConfigValue,Flag,Notes,OrderNo,CreateTime) 
- values('37f69c94-3ebe-4c28-ae6e-334c196df7e4','表名描述','sys_Action','功能管理','sys',null,999,to_date('2016/10/16 21:12:08','yyyy-mm-dd hh24:mi:ss'));
-insert into Config_KeyValue(KeyValueID,ConfigKey,ConfigName,ConfigValue,Flag,Notes,OrderNo,CreateTime) 
  values('e00de83e-9b63-4ad0-9511-469000c9400d','账号状态','停用','2','','',999,to_date('2014/11/11 11:37:47','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_KeyValue(KeyValueID,ConfigKey,ConfigName,ConfigValue,Flag,Notes,OrderNo,CreateTime) 
  values('f26442a5-faa2-4bc3-8177-4a0ba8e6146d','是否','否','0','','333',999,to_date('2014/11/11 11:37:47','yyyy-mm-dd hh24:mi:ss'));
-insert into Config_KeyValue(KeyValueID,ConfigKey,ConfigName,ConfigValue,Flag,Notes,OrderNo,CreateTime) 
- values('117c9c0f-07ee-40a9-bb9f-4b8aefde1abd','表名描述','Config_Grid','普通列表','sys',null,999,to_date('2016/9/12 15:46:03','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_KeyValue(KeyValueID,ConfigKey,ConfigName,ConfigValue,Flag,Notes,OrderNo,CreateTime) 
  values('77ca2ee2-5cea-4ba2-9e04-5a5c9c2da8c2','导入方式','插入或更新','0','','',0,to_date('2016/10/16 19:47:35','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_KeyValue(KeyValueID,ConfigKey,ConfigName,ConfigValue,Flag,Notes,OrderNo,CreateTime) 
@@ -370,8 +408,6 @@ insert into Config_KeyValue(KeyValueID,ConfigKey,ConfigName,ConfigValue,Flag,Not
 insert into Config_KeyValue(KeyValueID,ConfigKey,ConfigName,ConfigValue,Flag,Notes,OrderNo,CreateTime) 
  values('a366918e-a24a-4288-ab57-a29b858ab5ef','表名描述','_Sys_User','Input对话框','sys','',999,to_date('2016/9/10 0:08:30','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_KeyValue(KeyValueID,ConfigKey,ConfigName,ConfigValue,Flag,Notes,OrderNo,CreateTime) 
- values('5a52177c-f319-44a5-b95d-ac72ef0ac61d','表名描述','Demo_TestA','行内编辑列表','sys',null,999,to_date('2016/10/16 21:11:57','yyyy-mm-dd hh24:mi:ss'));
-insert into Config_KeyValue(KeyValueID,ConfigKey,ConfigName,ConfigValue,Flag,Notes,OrderNo,CreateTime) 
  values('a9836e3e-bbe4-4f3e-8963-af06e4963403','SysConfig','OperatorTitle','操作','','',999,to_date('2016/9/1 1:03:26','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_KeyValue(KeyValueID,ConfigKey,ConfigName,ConfigValue,Flag,Notes,OrderNo,CreateTime) 
  values('911aaf5b-bade-43a2-91ae-b86304dc420d','表名描述','Config_Excel','导入配置','sys','',999,to_date('2016/9/8 16:48:37','yyyy-mm-dd hh24:mi:ss'));
@@ -382,23 +418,19 @@ insert into Config_KeyValue(KeyValueID,ConfigKey,ConfigName,ConfigValue,Flag,Not
 insert into Config_KeyValue(KeyValueID,ConfigKey,ConfigName,ConfigValue,Flag,Notes,OrderNo,CreateTime) 
  values('a662070b-ab2a-4f0a-a6da-df03640c0a91','表名描述','Demo_Area','树形表格','sys','',999,to_date('2016/9/5 17:21:20','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_KeyValue(KeyValueID,ConfigKey,ConfigName,ConfigValue,Flag,Notes,OrderNo,CreateTime) 
- values('97c39b4b-f045-4764-b54c-e580d8ef741b','表名描述','Sys_Role','权限管理','sys',null,999,to_date('2016/10/16 21:12:14','yyyy-mm-dd hh24:mi:ss'));
-insert into Config_KeyValue(KeyValueID,ConfigKey,ConfigName,ConfigValue,Flag,Notes,OrderNo,CreateTime) 
  values('596a4a36-ff60-453b-83df-e8e6e34e013f','表名描述','V_Test','普通列表','sys','',999,to_date('2016/5/10 14:35:49','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_KeyValue(KeyValueID,ConfigKey,ConfigName,ConfigValue,Flag,Notes,OrderNo,CreateTime) 
  values('c9000a82-2e52-40e6-ba4d-ebef95cf4e46','账号状态','锁定','3','','',999,to_date('2014/11/11 11:37:47','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_KeyValue(KeyValueID,ConfigKey,ConfigName,ConfigValue,Flag,Notes,OrderNo,CreateTime) 
  values('a58f89d2-4f23-471b-b05c-f9b9ff7337a6','是否','是','1','','32323',999,to_date('2014/11/11 11:37:47','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_KeyValue(KeyValueID,ConfigKey,ConfigName,ConfigValue,Flag,Notes,OrderNo,CreateTime) 
- values('f293551e-c41d-4c64-b440-fadd8f1dc061','表名描述','Demo_Area','树形表格','sys',null,999,to_date('2016/10/16 21:11:58','yyyy-mm-dd hh24:mi:ss'));
-insert into Config_KeyValue(KeyValueID,ConfigKey,ConfigName,ConfigValue,Flag,Notes,OrderNo,CreateTime) 
  values('9bae6656-0bb0-438b-9e9d-fc06fcbfab56','性别','男','1','','32323',999,to_date('2014/11/11 11:37:47','yyyy-mm-dd hh24:mi:ss'));
 
 /*  Table：Demo_Area   */
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(1,'100000000','北京市','',1,1,'直辖市');
+ values(1,'100000000','北京市','',1,1,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(2,'200000000','天津市','',2,1,'直辖市');
+ values(2,'200000000','天津市','',2,1,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(3,'200100000','天津市','200000000',2,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
@@ -438,7 +470,7 @@ insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description)
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(21,'200100018','蓟县','200100000',18,3,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(22,'300000000','上海市','',3,1,'直辖市');
+ values(22,'300000000','上海市','',3,1,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(23,'300100000','上海市','300000000',3,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
@@ -480,7 +512,7 @@ insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description)
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(42,'300100019','崇明县','300100000',19,3,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(43,'400000000','重庆市','',4,1,'直辖市');
+ values(43,'400000000','重庆市','',4,1,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(44,'400100000','重庆市','400000000',4,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
@@ -564,7 +596,7 @@ insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description)
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(84,'400100040','彭水苗族土家族自治县','400100000',40,3,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(85,'500000000','河北省','',5,1,'省份');
+ values(85,'500000000','河北省','',5,1,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(86,'500100000','邯郸市','500000000',5,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
@@ -916,7 +948,7 @@ insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description)
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(260,'501000165','沙河市','501000000',165,3,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(261,'600000000','山西省','',6,1,'省份');
+ values(261,'600000000','山西省','',6,1,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(262,'600100000','朔州市','600000000',16,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
@@ -1166,7 +1198,7 @@ insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description)
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(385,'601100113','河津市','601100000',113,3,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(386,'700000000','台湾省','',7,1,'省份');
+ values(386,'700000000','台湾省','',7,1,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(387,'700100000','台北市','700000000',363,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
@@ -1182,7 +1214,7 @@ insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description)
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(393,'700700000','嘉义市','700000000',369,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(394,'800000000','辽宁省','',8,1,'省份');
+ values(394,'800000000','辽宁省','',8,1,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(395,'800100000','沈阳市','800000000',27,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
@@ -1412,7 +1444,7 @@ insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description)
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(508,'801400100','兴城市','801400000',100,3,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(509,'900000000','吉林省','',9,1,'省份');
+ values(509,'900000000','吉林省','',9,1,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(510,'900100000','长春市','900000000',41,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
@@ -1552,7 +1584,7 @@ insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description)
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(578,'900900060','临江市','900900000',60,3,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(579,'1000000000','黑龙江省','',10,1,'省份');
+ values(579,'1000000000','黑龙江省','',10,1,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(580,'1000100000','哈尔滨市','1000000000',50,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
@@ -1834,7 +1866,7 @@ insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description)
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(719,'1001300127','杜尔伯特蒙古族自治县','1001300000',127,3,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(720,'1100000000','江苏省','',11,1,'省份');
+ values(720,'1100000000','江苏省','',11,1,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(721,'1100100000','南京市','1100000000',63,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
@@ -2074,7 +2106,7 @@ insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description)
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(839,'1101300106','泗洪县','1101300000',106,3,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(840,'1200000000','浙江省','',12,1,'省份');
+ values(840,'1200000000','浙江省','',12,1,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(841,'1200100000','舟山市','1200000000',76,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
@@ -2278,7 +2310,7 @@ insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description)
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(941,'1201100090','临海市','1201100000',90,3,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(942,'1300000000','安徽省','',13,1,'省份');
+ values(942,'1300000000','安徽省','',13,1,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(943,'1300100000','合肥市','1300000000',87,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
@@ -2522,7 +2554,7 @@ insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description)
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(1063,'1301700104','宁国市','1301700000',104,3,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(1064,'1400000000','福建省','',14,1,'省份');
+ values(1064,'1400000000','福建省','',14,1,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(1065,'1400100000','福州市','1400000000',104,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
@@ -2710,7 +2742,7 @@ insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description)
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(1157,'1400900084','建阳市','1400900000',84,3,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(1158,'1500000000','江西省','',15,1,'省份');
+ values(1158,'1500000000','江西省','',15,1,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(1159,'1500100000','鹰潭市','1500000000',113,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
@@ -2932,7 +2964,7 @@ insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description)
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(1268,'1501100099','芦溪县','1501100000',99,3,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(1269,'1600000000','山东省','',16,1,'省份');
+ values(1269,'1600000000','山东省','',16,1,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(1270,'1600100000','菏泽市','1600000000',124,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
@@ -3248,7 +3280,7 @@ insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description)
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(1426,'1601700140','临清市','1601700000',140,3,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(1427,'1700000000','河南省','',17,1,'省份');
+ values(1427,'1700000000','河南省','',17,1,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(1428,'1700100000','商丘市','1700000000',141,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
@@ -3602,7 +3634,7 @@ insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description)
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(1603,'1701800158','灵宝市','1701800000',158,3,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(1604,'1800000000','湖北省','',18,1,'省份');
+ values(1604,'1800000000','湖北省','',18,1,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(1605,'1800100000','武汉市','1800000000',159,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
@@ -3834,7 +3866,7 @@ insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description)
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(1719,'1801700000','潜江市','1800000000',175,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(1720,'1900000000','湖南省','',19,1,'省份');
+ values(1720,'1900000000','湖南省','',19,1,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(1721,'1900100000','岳阳市','1900000000',176,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
@@ -4108,7 +4140,7 @@ insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description)
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(1856,'1901400122','江华瑶族自治县','1901400000',122,3,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(1857,'2000000000','广东省','',20,1,'省份');
+ values(1857,'2000000000','广东省','',20,1,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(1858,'2000100000','广州市','2000000000',190,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
@@ -4392,7 +4424,7 @@ insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description)
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(1998,'2002100000','东莞市','2000000000',210,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(1999,'2100000000','甘肃省','',21,1,'省份');
+ values(1999,'2100000000','甘肃省','',21,1,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(2000,'2100100000','兰州市','2100000000',211,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
@@ -4594,7 +4626,7 @@ insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description)
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(2099,'2101400086','夏河县','2101400000',86,3,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(2100,'2200000000','四川省','',22,1,'省份');
+ values(2100,'2200000000','四川省','',22,1,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(2101,'2200100000','成都市','2200000000',225,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
@@ -5000,7 +5032,7 @@ insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description)
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(2302,'2202100181','苍溪县','2202100000',181,3,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(2303,'2300000000','贵州省','',23,1,'省份');
+ values(2303,'2300000000','贵州省','',23,1,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(2304,'2300100000','贵阳市','2300000000',246,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
@@ -5196,7 +5228,7 @@ insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description)
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(2400,'2300900088','安龙县','2300900000',88,3,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(2401,'2400000000','海南省','',24,1,'省份');
+ values(2401,'2400000000','海南省','',24,1,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(2402,'2400100000','海口市','2400000000',255,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
@@ -5242,7 +5274,7 @@ insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description)
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(2423,'2401800000','琼中黎族苗族自治县','2400000000',272,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(2424,'2500000000','云南省','',25,1,'省份');
+ values(2424,'2500000000','云南省','',25,1,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(2425,'2500100000','西双版纳傣族自治州','2500000000',273,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
@@ -5534,7 +5566,7 @@ insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description)
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(2569,'2501600129','宁蒗彝族自治县','2501600000',129,3,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(2570,'2600000000','青海省','',26,1,'省份');
+ values(2570,'2600000000','青海省','',26,1,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(2571,'2600100000','海北藏族自治州','2600000000',289,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
@@ -5638,7 +5670,7 @@ insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description)
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(2621,'2600800043','天峻县','2600800000',43,3,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(2622,'2700000000','陕西省','',27,1,'省份');
+ values(2622,'2700000000','陕西省','',27,1,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(2623,'2700100000','西安市','2700000000',297,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
@@ -5874,7 +5906,7 @@ insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description)
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(2739,'2701000107','宜君县','2701000000',107,3,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(2740,'2800000000','广西壮族自治区','',28,1,'自治区');
+ values(2740,'2800000000','广西壮族自治区','',28,1,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(2741,'2800100000','防城港市','2800000000',307,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
@@ -6122,7 +6154,7 @@ insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description)
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(2863,'2801400109','合浦县','2801400000',109,3,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(2864,'2900000000','西藏自治区','',29,1,'自治区');
+ values(2864,'2900000000','西藏自治区','',29,1,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(2865,'2900100000','拉萨市','2900000000',321,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
@@ -6284,7 +6316,7 @@ insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description)
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(2944,'2900700073','措勤县','2900700000',73,3,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(2945,'3000000000','宁夏回族自治区','',30,1,'自治区');
+ values(2945,'3000000000','宁夏回族自治区','',30,1,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(2946,'3000100000','银川市','3000000000',328,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
@@ -6338,7 +6370,7 @@ insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description)
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(2971,'3000500021','海原县','3000500000',21,3,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(2972,'3100000000','新 疆维吾尔自治区','',31,1,'自治区');
+ values(2972,'3100000000','新 疆维吾尔自治区','',31,1,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(2973,'3100100000','塔城地区','3100000000',333,2,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
@@ -6552,7 +6584,7 @@ insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description)
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(3084,'3101800094','尼勒克县','3101800000',94,3,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(3085,'3200000000','内蒙古自治区','',32,1,'自治区');
+ values(3085,'3200000000','内蒙古自治区','',32,1,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(3087,'3200100001','海拉尔区','3200100000',1,3,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
@@ -6576,47 +6608,21 @@ insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description)
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
  values(3097,'3200100011','扎兰屯市','3200100000',11,3,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(3101,'3200200014','新城区','3200200000',14,3,'火');
+ values(3101,'3200200014','新城区','3200200000',14,3,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(3102,'3200200015','回民区','3200200000',15,3,'777');
+ values(3102,'3200200015','回民区','3200200000',15,3,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(3203,'c5ea4a6a-a760-a64c-6c40-a6f2ec08ce33','eeeeeeeeee','3200200015',4,4,'');
+ values(3204,'666','eeeee','3200200000',3,3,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(3204,'666','eeeee','3200200000',3,3,'');
+ values(3206,'a3e6de2b-419e-fa5e-0c62-727f29093d30','ttttt','3200200015',333,null,null);
 insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(3205,'ecf3-c44f-5904-08f770a98d3e','4444','3200200015',44,4,'4444');
-insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(3206,'a3e6de2b-419e-fa5e-0c62-727f29093d30','ttttt','3200200015',333,null,'');
-insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(3207,'rrrrr','fffff','666',33,33,'33');
-insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(3210,'ag333','eeeee','ttttt',333,null,'');
-insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(3211,'qqqqq','33333','ttttt',22,2,'');
-insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(3212,'3333','333','3333',33,333,'3333');
-insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(3214,'ag','','',null,null,'');
-insert into Demo_Area(ID,Code,Name,PCode,Sort,Lvl,Description) 
- values(3215,'ag2','44444','',null,null,'');
+ values(3207,'rrrrr','fffff','666',33,33,null);
 
 /*  Table：Demo_TestA   */
 insert into Demo_TestA(ID,F1,F2,F3,F4) 
- values('0ccc9bbd-ba4d-4316-b4b6-65ab986489c1','333',0,333.00,33);
-insert into Demo_TestA(ID,F1,F2,F3,F4) 
- values('11823e6a-99bc-46bf-94ef-f59b506754b9','333',0,333.00,null);
-insert into Demo_TestA(ID,F1,F2,F3,F4) 
- values('26d89197-7a77-4f77-b793-9de75f2ddaca','111',0,22.00,2);
-insert into Demo_TestA(ID,F1,F2,F3,F4) 
  values('2c2b6b19-2b8e-4961-b6f0-ebca921d657b','311',1,31.00,31);
 insert into Demo_TestA(ID,F1,F2,F3,F4) 
- values('2c47dad2-4941-4a8a-89e8-497c6a3f11c7','311',1,31.00,31);
-insert into Demo_TestA(ID,F1,F2,F3,F4) 
  values('2ff92056-d3aa-497b-96a9-554b9be39fbb','3115',1,666.00,31);
-insert into Demo_TestA(ID,F1,F2,F3,F4) 
- values('3ef7a762-0cf6-4d69-94ea-ec9d6ad611b7','1212',0,null,333);
-insert into Demo_TestA(ID,F1,F2,F3,F4) 
- values('450b3cdc-b2b5-45f1-b83e-4bdd4554486a','222',0,11.00,1);
 insert into Demo_TestA(ID,F1,F2,F3,F4) 
  values('478ce6f1-d2a3-483e-8419-e7954f0bc2b5','3114',1,666.00,31);
 insert into Demo_TestA(ID,F1,F2,F3,F4) 
@@ -6624,93 +6630,71 @@ insert into Demo_TestA(ID,F1,F2,F3,F4)
 insert into Demo_TestA(ID,F1,F2,F3,F4) 
  values('5b8845d7-7ada-4cf2-ba91-76e2fa162915','3111',1,31.00,31);
 insert into Demo_TestA(ID,F1,F2,F3,F4) 
+ values('7b7aad70-3c45-470f-a245-ed896650ff24','323',1,3.00,32);
+insert into Demo_TestA(ID,F1,F2,F3,F4) 
  values('90e229ec-2fcd-494b-a0c7-b7e819c87694','311',1,31.00,31);
 insert into Demo_TestA(ID,F1,F2,F3,F4) 
  values('9c015ff9-094c-4a8c-9e5e-096b95a3312e','3116',1,666.00,31);
 insert into Demo_TestA(ID,F1,F2,F3,F4) 
- values('9dc820ce-a4eb-4ea5-bb50-281d69d348cb','3113',0,31.00,31);
+ values('9dc820ce-a4eb-4ea5-bb50-281d69d348cb','5555',1,31.00,31);
 insert into Demo_TestA(ID,F1,F2,F3,F4) 
- values('a2652566-7bc9-4eaa-8874-2405f6b9ec4e','2222',1,111.00,222);
+ values('d33f50e7-f152-4980-8777-f4cd94c6cf75','3112',0,31.00,31);
 insert into Demo_TestA(ID,F1,F2,F3,F4) 
- values('c5bc9b1d-ef61-44ec-95ae-d46329622d51','3113',0,31.00,31);
-insert into Demo_TestA(ID,F1,F2,F3,F4) 
- values('d33f50e7-f152-4980-8777-f4cd94c6cf75','3112',1,31.00,31);
-insert into Demo_TestA(ID,F1,F2,F3,F4) 
- values('f896c770-e4ab-4be2-bd37-e20033427b55','3111',1,31.00,31);
+ values('f896c770-e4ab-4be2-bd37-e20033427b55','3333',1,31.00,3232);
 
 /*  Table：Demo_TestB   */
 insert into Demo_TestB(ID,F5,F6,F7,F8,FK) 
- values('068a0d1c-87f3-4aa9-a89c-b4a7b1c7c54e',5,'6',null,null,null);
+ values('1e1d8c72-b3f9-4199-8b52-21da9a9926dc',null,'','200000000','200100000','');
 insert into Demo_TestB(ID,F5,F6,F7,F8,FK) 
- values('1',1,'a''''b','a\\b','a\\0','<div id="nav_menu"><a href="http://home.cnblogs.com/">园子</a><a href="http://news.cnblogs.com">新闻</a><a href="http://q.cnblogs.com/">博问</a><a href="http://ing.cnblogs.com/">闪存</a><a href="http://group.cnblogs.com/">小组</a><a href="http://wz.cnblogs.com/">收藏</a><a href="http://job.cnblogs.com/">招聘</a><a href="http://kb.cnblogs.com/">知识库</a><a href="http://zzk.cnblogs.com/">找找看</a></div>');
+ values('2c2b6b19-2b8e-4961-b6f0-ebca921d657b',66,'66','2000000000','2000100000','66');
 insert into Demo_TestB(ID,F5,F6,F7,F8,FK) 
- values('1502ce8b-0209-4b77-bc31-0125de0e3164',null,'','','','d8e1ae3b-8451-436a-a59b-c7516e711b9c');
+ values('2c47dad2-4941-4a8a-89e8-497c6a3f11c7',66,'66','1900000000','1900300000','66');
 insert into Demo_TestB(ID,F5,F6,F7,F8,FK) 
- values('154ef666-bb79-4154-8de7-9dbb9874fdfb',5,'6',null,null,null);
+ values('478ce6f1-d2a3-483e-8419-e7954f0bc2b5',66,'66','500000000','500400000','66');
 insert into Demo_TestB(ID,F5,F6,F7,F8,FK) 
- values('1c3f64cc-211b-419c-9e3e-56878eb96cda',5,'6',null,null,null);
+ values('5b8845d7-7ada-4cf2-ba91-76e2fa162915',66,'66','200000000','200100000','66');
 insert into Demo_TestB(ID,F5,F6,F7,F8,FK) 
- values('1d0a330c-42a9-4ac1-9d3a-71df2180f2fa',5,'6',null,null,null);
+ values('85002786-054a-4e29-9afa-2d0972488e46',443,'33','200000000','400100000','');
 insert into Demo_TestB(ID,F5,F6,F7,F8,FK) 
- values('2c2b6b19-2b8e-4961-b6f0-ebca921d657b',66,'66','2','66','66');
+ values('90e229ec-2fcd-494b-a0c7-b7e819c87694',66,'66','100000000','','66');
 insert into Demo_TestB(ID,F5,F6,F7,F8,FK) 
- values('2c47dad2-4941-4a8a-89e8-497c6a3f11c7',66,'66','2','66','66');
+ values('9c015ff9-094c-4a8c-9e5e-096b95a3312e',66,'66','400000000','400100000','66');
 insert into Demo_TestB(ID,F5,F6,F7,F8,FK) 
- values('3bb2d48f-f4c4-4e07-aeb5-7d114af4d840',null,'','','','d8e1ae3b-8451-436a-a59b-c7516e711b9c');
+ values('9dc820ce-a4eb-4ea5-bb50-281d69d348cb',66,'66','1300000000','1300100000','66');
 insert into Demo_TestB(ID,F5,F6,F7,F8,FK) 
- values('478ce6f1-d2a3-483e-8419-e7954f0bc2b5',66,'66','2','66','66');
+ values('d0c83254-be0f-49e7-a072-aff6a98d008a',66,'66','300000000','300100000','66');
 insert into Demo_TestB(ID,F5,F6,F7,F8,FK) 
- values('51cfdb37-c91a-41a7-966d-37cb9134f71f',null,'3113','','','');
+ values('d33f50e7-f152-4980-8777-f4cd94c6cf75',66,'66','2900000000','2900400000','66');
 insert into Demo_TestB(ID,F5,F6,F7,F8,FK) 
- values('5b8845d7-7ada-4cf2-ba91-76e2fa162915',66,'66','2','66','66');
-insert into Demo_TestB(ID,F5,F6,F7,F8,FK) 
- values('88864c3f-0e0a-4526-862a-5ad87c759a49',5,'6',null,null,null);
-insert into Demo_TestB(ID,F5,F6,F7,F8,FK) 
- values('90e229ec-2fcd-494b-a0c7-b7e819c87694',66,'66','2','66','66');
-insert into Demo_TestB(ID,F5,F6,F7,F8,FK) 
- values('9c015ff9-094c-4a8c-9e5e-096b95a3312e',66,'66','2','66','66');
-insert into Demo_TestB(ID,F5,F6,F7,F8,FK) 
- values('9dc820ce-a4eb-4ea5-bb50-281d69d348cb',66,'66','2','66','66');
-insert into Demo_TestB(ID,F5,F6,F7,F8,FK) 
- values('a2f3d450-9e36-4a33-a3a9-6633310351a7',5,'6',null,null,null);
-insert into Demo_TestB(ID,F5,F6,F7,F8,FK) 
- values('bb971193-afd3-4177-b7db-d7653d3f84eb',5,'6',null,null,null);
-insert into Demo_TestB(ID,F5,F6,F7,F8,FK) 
- values('c5bc9b1d-ef61-44ec-95ae-d46329622d51',null,'3113','','','');
-insert into Demo_TestB(ID,F5,F6,F7,F8,FK) 
- values('d0c83254-be0f-49e7-a072-aff6a98d008a',66,'66','2','66','66');
-insert into Demo_TestB(ID,F5,F6,F7,F8,FK) 
- values('d291747a-d328-4b42-9844-5c91550a7954',null,'3113','','','');
-insert into Demo_TestB(ID,F5,F6,F7,F8,FK) 
- values('d33f50e7-f152-4980-8777-f4cd94c6cf75',66,'66','2','66','66');
-insert into Demo_TestB(ID,F5,F6,F7,F8,FK) 
- values('f0b03d26-b379-4343-a18a-b2452a6aed9e',5,'6',null,null,null);
-insert into Demo_TestB(ID,F5,F6,F7,F8,FK) 
- values('f896c770-e4ab-4be2-bd37-e20033427b55',66,'66','2','66','66');
-insert into Demo_TestB(ID,F5,F6,F7,F8,FK) 
- values('fbdf9901-474f-4d7e-8b06-d784f3763b24',5,'6',null,null,null);
-insert into Demo_TestB(ID,F5,F6,F7,F8,FK) 
- values('fed4ee1a-63ca-46e8-ac31-f1e2e9cb909f',5,'6',null,null,null);
+ values('f896c770-e4ab-4be2-bd37-e20033427b55',66,'66','200000000','200100000','66');
+
+/*  Table：Demo_Tree   */
+insert into Demo_Tree(ID,Name,ParentID,CreateTime) 
+ values(1,'ppp',null,null);
+insert into Demo_Tree(ID,Name,ParentID,CreateTime) 
+ values(2,'21212333',null,null);
 
 /*  Table：Sys_Action   */
-insert into Sys_Action(ActionID,ActionName,ActionRefName) 
- values('71e39291-59d3-4ed6-9ae1-0d7df7da2f91','导入','import');
-insert into Sys_Action(ActionID,ActionName,ActionRefName) 
- values('630e0452-00d6-4452-8a5c-19b2c3115ee3','配置表头','config');
-insert into Sys_Action(ActionID,ActionName,ActionRefName) 
- values('cf8f418e-2468-4f6c-96cf-3302a2d9fa9b','删除','del');
-insert into Sys_Action(ActionID,ActionName,ActionRefName) 
- values('c97f8956-5c79-4393-8423-34451a1bcc95','查看SQL','viewsql');
-insert into Sys_Action(ActionID,ActionName,ActionRefName) 
- values('d0739946-99e0-4770-8d2a-6faf25a8457a','新增','add');
-insert into Sys_Action(ActionID,ActionName,ActionRefName) 
- values('8a59a358-5a8f-4cb4-b600-9313028b911b','导出','export');
-insert into Sys_Action(ActionID,ActionName,ActionRefName) 
- values('15b73068-6c0f-49c9-800c-a7216cb2d079','查看界面','view');
-insert into Sys_Action(ActionID,ActionName,ActionRefName) 
- values('a9ee0f5e-ff85-4f00-ac18-f6118286671d','保存SQL','savesql');
-insert into Sys_Action(ActionID,ActionName,ActionRefName) 
- values('1c613ade-6665-49fb-b298-faf1b82dd6d2','编辑','edit');
+insert into Sys_Action(ActionID,ActionName,ActionRefName,IsEnabled,IsSys,SortOrder) 
+ values('8bc4d68a-ec7d-48f7-97c4-03a09836f45c','分配权限','auth',1,1,19);
+insert into Sys_Action(ActionID,ActionName,ActionRefName,IsEnabled,IsSys,SortOrder) 
+ values('71e39291-59d3-4ed6-9ae1-0d7df7da2f91','导入','import',1,1,9);
+insert into Sys_Action(ActionID,ActionName,ActionRefName,IsEnabled,IsSys,SortOrder) 
+ values('630e0452-00d6-4452-8a5c-19b2c3115ee3','配置表头','config',1,1,13);
+insert into Sys_Action(ActionID,ActionName,ActionRefName,IsEnabled,IsSys,SortOrder) 
+ values('cf8f418e-2468-4f6c-96cf-3302a2d9fa9b','删除','del',1,1,5);
+insert into Sys_Action(ActionID,ActionName,ActionRefName,IsEnabled,IsSys,SortOrder) 
+ values('c97f8956-5c79-4393-8423-34451a1bcc95','查看SQL','viewsql',1,1,15);
+insert into Sys_Action(ActionID,ActionName,ActionRefName,IsEnabled,IsSys,SortOrder) 
+ values('d0739946-99e0-4770-8d2a-6faf25a8457a','新增','add',1,1,1);
+insert into Sys_Action(ActionID,ActionName,ActionRefName,IsEnabled,IsSys,SortOrder) 
+ values('8a59a358-5a8f-4cb4-b600-9313028b911b','导出','export',1,1,11);
+insert into Sys_Action(ActionID,ActionName,ActionRefName,IsEnabled,IsSys,SortOrder) 
+ values('15b73068-6c0f-49c9-800c-a7216cb2d079','查看界面','view',1,1,7);
+insert into Sys_Action(ActionID,ActionName,ActionRefName,IsEnabled,IsSys,SortOrder) 
+ values('a9ee0f5e-ff85-4f00-ac18-f6118286671d','保存SQL','savesql',1,1,17);
+insert into Sys_Action(ActionID,ActionName,ActionRefName,IsEnabled,IsSys,SortOrder) 
+ values('1c613ade-6665-49fb-b298-faf1b82dd6d2','编辑','edit',1,1,3);
 
 /*  Table：Sys_Menu   */
 insert into Sys_Menu(MenuID,ParentMenuID,MenuName,MenuUrl,MenuLevel,SortOrder,MenuIcon,BigMenuIcon,IsShortcut,IsShow,ActionIDs) 
@@ -6718,775 +6702,381 @@ insert into Sys_Menu(MenuID,ParentMenuID,MenuName,MenuUrl,MenuLevel,SortOrder,Me
 insert into Sys_Menu(MenuID,ParentMenuID,MenuName,MenuUrl,MenuLevel,SortOrder,MenuIcon,BigMenuIcon,IsShortcut,IsShow,ActionIDs) 
  values('76fe9cef-11e1-4752-b7a8-01c220e9e473',null,'AA','#',1,10,'','',null,1,'');
 insert into Sys_Menu(MenuID,ParentMenuID,MenuName,MenuUrl,MenuLevel,SortOrder,MenuIcon,BigMenuIcon,IsShortcut,IsShow,ActionIDs) 
- values('33c3179e-1ddc-4655-a65e-0b27ef10da8d','3b5e2f04-9f2a-48b0-9bc7-27701971484c','菜单管理','/Web/SysAdmin/MenuEdit.html',2,5,'','',0,1,'cf8f418e-2468-4f6c-96cf-3302a2d9fa9b,d0739946-99e0-4770-8d2a-6faf25a8457a,15b73068-6c0f-49c9-800c-a7216cb2d079,1c613ade-6665-49fb-b298-faf1b82dd6d2');
+ values('2e388df1-ad13-40d5-b183-0987ed2ebe93',null,'外链','http://taurus.cyqdata.com',1,15,'','',null,1,'15b73068-6c0f-49c9-800c-a7216cb2d079');
 insert into Sys_Menu(MenuID,ParentMenuID,MenuName,MenuUrl,MenuLevel,SortOrder,MenuIcon,BigMenuIcon,IsShortcut,IsShow,ActionIDs) 
- values('72997801-a545-468d-b7a9-0b9f1d0613ac','8d60d828-56de-4b56-9c14-93fa94ccf300','Input对话框','/Demo/InputDialog.html',2,11,'','',null,1,'630e0452-00d6-4452-8a5c-19b2c3115ee3,cf8f418e-2468-4f6c-96cf-3302a2d9fa9b,d0739946-99e0-4770-8d2a-6faf25a8457a,15b73068-6c0f-49c9-800c-a7216cb2d079,1c613ade-6665-49fb-b298-faf1b82dd6d2');
+ values('33c3179e-1ddc-4655-a65e-0b27ef10da8d','3b5e2f04-9f2a-48b0-9bc7-27701971484c','菜单管理','/Web/SysAdmin/MenuEdit.html',2,5,'','',0,1,'d0739946-99e0-4770-8d2a-6faf25a8457a,1c613ade-6665-49fb-b298-faf1b82dd6d2,cf8f418e-2468-4f6c-96cf-3302a2d9fa9b,15b73068-6c0f-49c9-800c-a7216cb2d079');
 insert into Sys_Menu(MenuID,ParentMenuID,MenuName,MenuUrl,MenuLevel,SortOrder,MenuIcon,BigMenuIcon,IsShortcut,IsShow,ActionIDs) 
- values('5fc6b135-85be-4234-970d-14918c26f958','8d60d828-56de-4b56-9c14-93fa94ccf300','级联【行内、导出】','/Web/SysAdmin/CustomView.html?objname=Demo_TestB',2,201,'','',null,1,'71e39291-59d3-4ed6-9ae1-0d7df7da2f91,630e0452-00d6-4452-8a5c-19b2c3115ee3,cf8f418e-2468-4f6c-96cf-3302a2d9fa9b,c97f8956-5c79-4393-8423-34451a1bcc95,d0739946-99e0-4770-8d2a-6faf25a8457a,8a59a358-5a8f-4cb4-b600-9313028b911b,15b73068-6c0f-49c9-800c-a7216cb2d079,a9ee0f5e-ff85-4f00-ac18-f6118286671d,1c613ade-6665-49fb-b298-faf1b82dd6d2');
+ values('72997801-a545-468d-b7a9-0b9f1d0613ac','8d60d828-56de-4b56-9c14-93fa94ccf300','Input对话框','/Demo/InputDialog.html',2,11,'','',null,1,'d0739946-99e0-4770-8d2a-6faf25a8457a,1c613ade-6665-49fb-b298-faf1b82dd6d2,cf8f418e-2468-4f6c-96cf-3302a2d9fa9b,15b73068-6c0f-49c9-800c-a7216cb2d079,630e0452-00d6-4452-8a5c-19b2c3115ee3');
+insert into Sys_Menu(MenuID,ParentMenuID,MenuName,MenuUrl,MenuLevel,SortOrder,MenuIcon,BigMenuIcon,IsShortcut,IsShow,ActionIDs) 
+ values('5fc6b135-85be-4234-970d-14918c26f958','8d60d828-56de-4b56-9c14-93fa94ccf300','级联【行内、导出】','/Web/SysAdmin/CustomView.html?objname=Demo_TestB',2,201,'','',null,1,'d0739946-99e0-4770-8d2a-6faf25a8457a,1c613ade-6665-49fb-b298-faf1b82dd6d2,cf8f418e-2468-4f6c-96cf-3302a2d9fa9b,15b73068-6c0f-49c9-800c-a7216cb2d079,71e39291-59d3-4ed6-9ae1-0d7df7da2f91,8a59a358-5a8f-4cb4-b600-9313028b911b,630e0452-00d6-4452-8a5c-19b2c3115ee3,c97f8956-5c79-4393-8423-34451a1bcc95,a9ee0f5e-ff85-4f00-ac18-f6118286671d');
 insert into Sys_Menu(MenuID,ParentMenuID,MenuName,MenuUrl,MenuLevel,SortOrder,MenuIcon,BigMenuIcon,IsShortcut,IsShow,ActionIDs) 
  values('3b5e2f04-9f2a-48b0-9bc7-27701971484c',null,'系统管理','#',1,30,'','',0,1,'');
 insert into Sys_Menu(MenuID,ParentMenuID,MenuName,MenuUrl,MenuLevel,SortOrder,MenuIcon,BigMenuIcon,IsShortcut,IsShow,ActionIDs) 
- values('edd516a1-4180-4f0e-ac16-292d7dd4febd','3b5e2f04-9f2a-48b0-9bc7-27701971484c','功能管理','/Web/SysAdmin/ActionList.html',2,10,'','',null,1,'630e0452-00d6-4452-8a5c-19b2c3115ee3,cf8f418e-2468-4f6c-96cf-3302a2d9fa9b,d0739946-99e0-4770-8d2a-6faf25a8457a,8a59a358-5a8f-4cb4-b600-9313028b911b,15b73068-6c0f-49c9-800c-a7216cb2d079,a9ee0f5e-ff85-4f00-ac18-f6118286671d,1c613ade-6665-49fb-b298-faf1b82dd6d2');
+ values('edd516a1-4180-4f0e-ac16-292d7dd4febd','3b5e2f04-9f2a-48b0-9bc7-27701971484c','功能管理','/Web/SysAdmin/ActionList.html',2,10,'','',null,1,'d0739946-99e0-4770-8d2a-6faf25a8457a,1c613ade-6665-49fb-b298-faf1b82dd6d2,cf8f418e-2468-4f6c-96cf-3302a2d9fa9b,15b73068-6c0f-49c9-800c-a7216cb2d079,8a59a358-5a8f-4cb4-b600-9313028b911b,630e0452-00d6-4452-8a5c-19b2c3115ee3,a9ee0f5e-ff85-4f00-ac18-f6118286671d');
 insert into Sys_Menu(MenuID,ParentMenuID,MenuName,MenuUrl,MenuLevel,SortOrder,MenuIcon,BigMenuIcon,IsShortcut,IsShow,ActionIDs) 
- values('3493cabc-667d-459c-bab8-3a8f7d58842e','3b5e2f04-9f2a-48b0-9bc7-27701971484c','Excel导入配置','/Web/SysAdmin/ConfigExcel.html',2,60,'','',null,1,'D0739946-99E0-4770-8D2A-6FAF25A8457A,1C613ADE-6665-49FB-B298-FAF1B82DD6D2,15B73068-6C0F-49C9-800C-A7216CB2D079,CF8F418E-2468-4F6C-96CF-3302A2D9FA9B,630E0452-00D6-4452-8A5C-19B2C3115EE3');
+ values('3493cabc-667d-459c-bab8-3a8f7d58842e','3b5e2f04-9f2a-48b0-9bc7-27701971484c','Excel导入配置','/Web/SysAdmin/ConfigExcel.html',2,60,'','',null,1,'d0739946-99e0-4770-8d2a-6faf25a8457a,1c613ade-6665-49fb-b298-faf1b82dd6d2,cf8f418e-2468-4f6c-96cf-3302a2d9fa9b,15b73068-6c0f-49c9-800c-a7216cb2d079,630e0452-00d6-4452-8a5c-19b2c3115ee3');
 insert into Sys_Menu(MenuID,ParentMenuID,MenuName,MenuUrl,MenuLevel,SortOrder,MenuIcon,BigMenuIcon,IsShortcut,IsShow,ActionIDs) 
- values('177b5c8e-465e-4bc1-80aa-45ddbb65c911','80a620b6-175a-493f-b7b5-54c61c1fd1e9','EE','Demo/list.html',4,2,'','',null,1,'15b73068-6c0f-49c9-800c-a7216cb2d079');
+ values('177b5c8e-465e-4bc1-80aa-45ddbb65c911','80a620b6-175a-493f-b7b5-54c61c1fd1e9','EE','Demo/list.html',4,4,'','',null,1,'15b73068-6c0f-49c9-800c-a7216cb2d079');
 insert into Sys_Menu(MenuID,ParentMenuID,MenuName,MenuUrl,MenuLevel,SortOrder,MenuIcon,BigMenuIcon,IsShortcut,IsShow,ActionIDs) 
  values('80a620b6-175a-493f-b7b5-54c61c1fd1e9','626e25c2-2dde-4847-8edc-e87dbb92bb1d','CC','#',3,1,'','',null,1,'');
 insert into Sys_Menu(MenuID,ParentMenuID,MenuName,MenuUrl,MenuLevel,SortOrder,MenuIcon,BigMenuIcon,IsShortcut,IsShow,ActionIDs) 
- values('86f8c95f-48c0-4f0c-9503-5b4605aeb378','3b5e2f04-9f2a-48b0-9bc7-27701971484c','配置维护','/web/SysAdmin/ConfigKeyValue.html',2,4,'','',null,1,'71e39291-59d3-4ed6-9ae1-0d7df7da2f91,630e0452-00d6-4452-8a5c-19b2c3115ee3,cf8f418e-2468-4f6c-96cf-3302a2d9fa9b,c97f8956-5c79-4393-8423-34451a1bcc95,d0739946-99e0-4770-8d2a-6faf25a8457a,8a59a358-5a8f-4cb4-b600-9313028b911b,15b73068-6c0f-49c9-800c-a7216cb2d079,a9ee0f5e-ff85-4f00-ac18-f6118286671d,1c613ade-6665-49fb-b298-faf1b82dd6d2');
+ values('86f8c95f-48c0-4f0c-9503-5b4605aeb378','3b5e2f04-9f2a-48b0-9bc7-27701971484c','配置维护','/web/SysAdmin/ConfigKeyValue.html',2,4,'','',null,1,'d0739946-99e0-4770-8d2a-6faf25a8457a,1c613ade-6665-49fb-b298-faf1b82dd6d2,cf8f418e-2468-4f6c-96cf-3302a2d9fa9b,15b73068-6c0f-49c9-800c-a7216cb2d079,8a59a358-5a8f-4cb4-b600-9313028b911b,630e0452-00d6-4452-8a5c-19b2c3115ee3,c97f8956-5c79-4393-8423-34451a1bcc95,a9ee0f5e-ff85-4f00-ac18-f6118286671d');
 insert into Sys_Menu(MenuID,ParentMenuID,MenuName,MenuUrl,MenuLevel,SortOrder,MenuIcon,BigMenuIcon,IsShortcut,IsShow,ActionIDs) 
- values('eba566dc-95e7-4529-bf2e-656c7a490d69','3b5e2f04-9f2a-48b0-9bc7-27701971484c','权限管理','/Web/SysAdmin/Rolelist.html',2,30,'','',0,1,'630e0452-00d6-4452-8a5c-19b2c3115ee3,cf8f418e-2468-4f6c-96cf-3302a2d9fa9b,d0739946-99e0-4770-8d2a-6faf25a8457a,15b73068-6c0f-49c9-800c-a7216cb2d079,1c613ade-6665-49fb-b298-faf1b82dd6d2');
+ values('eba566dc-95e7-4529-bf2e-656c7a490d69','3b5e2f04-9f2a-48b0-9bc7-27701971484c','权限管理','/Web/SysAdmin/Rolelist.html',2,30,'','',0,1,'d0739946-99e0-4770-8d2a-6faf25a8457a,1c613ade-6665-49fb-b298-faf1b82dd6d2,cf8f418e-2468-4f6c-96cf-3302a2d9fa9b,15b73068-6c0f-49c9-800c-a7216cb2d079,630e0452-00d6-4452-8a5c-19b2c3115ee3,8bc4d68a-ec7d-48f7-97c4-03a09836f45c');
 insert into Sys_Menu(MenuID,ParentMenuID,MenuName,MenuUrl,MenuLevel,SortOrder,MenuIcon,BigMenuIcon,IsShortcut,IsShow,ActionIDs) 
- values('9bb56ff2-6715-4838-a660-773e6c7eeb45','8d60d828-56de-4b56-9c14-93fa94ccf300','定义查询区域','Demo/list.html?toolbar=true',2,110,'','',null,1,'71e39291-59d3-4ed6-9ae1-0d7df7da2f91,630e0452-00d6-4452-8a5c-19b2c3115ee3,cf8f418e-2468-4f6c-96cf-3302a2d9fa9b,c97f8956-5c79-4393-8423-34451a1bcc95,d0739946-99e0-4770-8d2a-6faf25a8457a,819f8aac-82e9-4a4b-ad1e-84824a985d73,8a59a358-5a8f-4cb4-b600-9313028b911b,15b73068-6c0f-49c9-800c-a7216cb2d079,a9ee0f5e-ff85-4f00-ac18-f6118286671d,1c613ade-6665-49fb-b298-faf1b82dd6d2');
+ values('9bb56ff2-6715-4838-a660-773e6c7eeb45','8d60d828-56de-4b56-9c14-93fa94ccf300','定义查询区域','Demo/list.html?toolbar=true',2,110,'','',null,1,'d0739946-99e0-4770-8d2a-6faf25a8457a,1c613ade-6665-49fb-b298-faf1b82dd6d2,cf8f418e-2468-4f6c-96cf-3302a2d9fa9b,15b73068-6c0f-49c9-800c-a7216cb2d079,71e39291-59d3-4ed6-9ae1-0d7df7da2f91,8a59a358-5a8f-4cb4-b600-9313028b911b,630e0452-00d6-4452-8a5c-19b2c3115ee3,c97f8956-5c79-4393-8423-34451a1bcc95,a9ee0f5e-ff85-4f00-ac18-f6118286671d');
 insert into Sys_Menu(MenuID,ParentMenuID,MenuName,MenuUrl,MenuLevel,SortOrder,MenuIcon,BigMenuIcon,IsShortcut,IsShow,ActionIDs) 
- values('e844697e-900e-42b2-a96a-89ff5233c29b','8d60d828-56de-4b56-9c14-93fa94ccf300','树形表格','/demo/treegrid.html',2,210,'','',null,1,'71e39291-59d3-4ed6-9ae1-0d7df7da2f91,630e0452-00d6-4452-8a5c-19b2c3115ee3,cf8f418e-2468-4f6c-96cf-3302a2d9fa9b,c97f8956-5c79-4393-8423-34451a1bcc95,d0739946-99e0-4770-8d2a-6faf25a8457a,819f8aac-82e9-4a4b-ad1e-84824a985d73,8a59a358-5a8f-4cb4-b600-9313028b911b,15b73068-6c0f-49c9-800c-a7216cb2d079,a9ee0f5e-ff85-4f00-ac18-f6118286671d,1c613ade-6665-49fb-b298-faf1b82dd6d2');
+ values('e844697e-900e-42b2-a96a-89ff5233c29b','8d60d828-56de-4b56-9c14-93fa94ccf300','树形表格','/demo/treegrid.html',2,210,'','',null,1,'d0739946-99e0-4770-8d2a-6faf25a8457a,1c613ade-6665-49fb-b298-faf1b82dd6d2,cf8f418e-2468-4f6c-96cf-3302a2d9fa9b,15b73068-6c0f-49c9-800c-a7216cb2d079,71e39291-59d3-4ed6-9ae1-0d7df7da2f91,8a59a358-5a8f-4cb4-b600-9313028b911b,630e0452-00d6-4452-8a5c-19b2c3115ee3,c97f8956-5c79-4393-8423-34451a1bcc95,a9ee0f5e-ff85-4f00-ac18-f6118286671d');
 insert into Sys_Menu(MenuID,ParentMenuID,MenuName,MenuUrl,MenuLevel,SortOrder,MenuIcon,BigMenuIcon,IsShortcut,IsShow,ActionIDs) 
  values('8d60d828-56de-4b56-9c14-93fa94ccf300',null,'功能演示','#',1,20,'','',0,1,'');
 insert into Sys_Menu(MenuID,ParentMenuID,MenuName,MenuUrl,MenuLevel,SortOrder,MenuIcon,BigMenuIcon,IsShortcut,IsShow,ActionIDs) 
- values('e4312e26-edb8-4e9d-9a66-96b7f252d559','3b5e2f04-9f2a-48b0-9bc7-27701971484c','用户管理','/Web/SysAdmin/UserList.html?t=1',2,1,'/Resource/Images/IconMenu/gxgfwh.png','',0,1,'71e39291-59d3-4ed6-9ae1-0d7df7da2f91,630e0452-00d6-4452-8a5c-19b2c3115ee3,cf8f418e-2468-4f6c-96cf-3302a2d9fa9b,c97f8956-5c79-4393-8423-34451a1bcc95,d0739946-99e0-4770-8d2a-6faf25a8457a,819f8aac-82e9-4a4b-ad1e-84824a985d73,8a59a358-5a8f-4cb4-b600-9313028b911b,15b73068-6c0f-49c9-800c-a7216cb2d079,a9ee0f5e-ff85-4f00-ac18-f6118286671d,1c613ade-6665-49fb-b298-faf1b82dd6d2');
+ values('e4312e26-edb8-4e9d-9a66-96b7f252d559','3b5e2f04-9f2a-48b0-9bc7-27701971484c','用户管理','/Web/SysAdmin/UserList.html',2,1,'/Resource/Images/IconMenu/gxgfwh.png','',0,1,'d0739946-99e0-4770-8d2a-6faf25a8457a,1c613ade-6665-49fb-b298-faf1b82dd6d2,cf8f418e-2468-4f6c-96cf-3302a2d9fa9b,15b73068-6c0f-49c9-800c-a7216cb2d079,71e39291-59d3-4ed6-9ae1-0d7df7da2f91,8a59a358-5a8f-4cb4-b600-9313028b911b,630e0452-00d6-4452-8a5c-19b2c3115ee3,c97f8956-5c79-4393-8423-34451a1bcc95,a9ee0f5e-ff85-4f00-ac18-f6118286671d');
 insert into Sys_Menu(MenuID,ParentMenuID,MenuName,MenuUrl,MenuLevel,SortOrder,MenuIcon,BigMenuIcon,IsShortcut,IsShow,ActionIDs) 
- values('13ce68d5-1261-4bec-95ac-b56f708f480b','8d60d828-56de-4b56-9c14-93fa94ccf300','普通列表','Demo/list.html',2,100,'','',null,1,'71e39291-59d3-4ed6-9ae1-0d7df7da2f91,630e0452-00d6-4452-8a5c-19b2c3115ee3,cf8f418e-2468-4f6c-96cf-3302a2d9fa9b,c97f8956-5c79-4393-8423-34451a1bcc95,d0739946-99e0-4770-8d2a-6faf25a8457a,819f8aac-82e9-4a4b-ad1e-84824a985d73,8a59a358-5a8f-4cb4-b600-9313028b911b,15b73068-6c0f-49c9-800c-a7216cb2d079,a9ee0f5e-ff85-4f00-ac18-f6118286671d,1c613ade-6665-49fb-b298-faf1b82dd6d2');
+ values('13ce68d5-1261-4bec-95ac-b56f708f480b','8d60d828-56de-4b56-9c14-93fa94ccf300','普通列表','Demo/list.html',2,100,'','',null,1,'d0739946-99e0-4770-8d2a-6faf25a8457a,1c613ade-6665-49fb-b298-faf1b82dd6d2,cf8f418e-2468-4f6c-96cf-3302a2d9fa9b,15b73068-6c0f-49c9-800c-a7216cb2d079,8a59a358-5a8f-4cb4-b600-9313028b911b,630e0452-00d6-4452-8a5c-19b2c3115ee3,c97f8956-5c79-4393-8423-34451a1bcc95,a9ee0f5e-ff85-4f00-ac18-f6118286671d');
 insert into Sys_Menu(MenuID,ParentMenuID,MenuName,MenuUrl,MenuLevel,SortOrder,MenuIcon,BigMenuIcon,IsShortcut,IsShow,ActionIDs) 
  values('626e25c2-2dde-4847-8edc-e87dbb92bb1d','76fe9cef-11e1-4752-b7a8-01c220e9e473','BBB','#',2,1,'','',null,1,'');
 insert into Sys_Menu(MenuID,ParentMenuID,MenuName,MenuUrl,MenuLevel,SortOrder,MenuIcon,BigMenuIcon,IsShortcut,IsShow,ActionIDs) 
- values('bd3c53a3-55eb-427a-8707-f525682955ba','8d60d828-56de-4b56-9c14-93fa94ccf300','行内编辑列表','Demo/rowedit.html',2,200,'','',null,1,'71e39291-59d3-4ed6-9ae1-0d7df7da2f91,630e0452-00d6-4452-8a5c-19b2c3115ee3,cf8f418e-2468-4f6c-96cf-3302a2d9fa9b,c97f8956-5c79-4393-8423-34451a1bcc95,d0739946-99e0-4770-8d2a-6faf25a8457a,819f8aac-82e9-4a4b-ad1e-84824a985d73,8a59a358-5a8f-4cb4-b600-9313028b911b,15b73068-6c0f-49c9-800c-a7216cb2d079,a9ee0f5e-ff85-4f00-ac18-f6118286671d,1c613ade-6665-49fb-b298-faf1b82dd6d2');
+ values('bd3c53a3-55eb-427a-8707-f525682955ba','8d60d828-56de-4b56-9c14-93fa94ccf300','行内编辑列表','Demo/rowedit.html',2,200,'','',null,1,'d0739946-99e0-4770-8d2a-6faf25a8457a,1c613ade-6665-49fb-b298-faf1b82dd6d2,cf8f418e-2468-4f6c-96cf-3302a2d9fa9b,15b73068-6c0f-49c9-800c-a7216cb2d079,71e39291-59d3-4ed6-9ae1-0d7df7da2f91,8a59a358-5a8f-4cb4-b600-9313028b911b,630e0452-00d6-4452-8a5c-19b2c3115ee3,c97f8956-5c79-4393-8423-34451a1bcc95,a9ee0f5e-ff85-4f00-ac18-f6118286671d');
 
 /*  Table：Sys_Role   */
 insert into Sys_Role(RoleID,RoleName,Notes) 
- values('d8e1ae3b-8451-436a-a59b-c7516e711b9c','超级管理员','55555');
+ values('53536a66-0d99-4ee8-b4a6-5928129d0ab6','普通管理员','运营级别的权限');
+insert into Sys_Role(RoleID,RoleName,Notes) 
+ values('d8e1ae3b-8451-436a-a59b-c7516e711b9c','超级管理员','开发级别的权限');
 
 /*  Table：Sys_RoleAction   */
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('e2b7af62-7770-4086-921a-00615516e727','d8e1ae3b-8451-436a-a59b-c7516e711b9c','3493cabc-667d-459c-bab8-3a8f7d58842e','CF8F418E-2468-4F6C-96CF-3302A2D9FA9B');
+ values('6fb78c16-acb0-4f5d-a384-0374af18ade0','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','15b73068-6c0f-49c9-800c-a7216cb2d079');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('f8c69870-9bfd-4955-90fb-00c90d8f99e4','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','819f8aac-82e9-4a4b-ad1e-84824a985d73');
+ values('975e0a73-2331-4dcf-a678-03ab0df58020','53536a66-0d99-4ee8-b4a6-5928129d0ab6','eba566dc-95e7-4529-bf2e-656c7a490d69','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('3149a851-14b6-446e-8cc2-00d38a667a34','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','8a59a358-5a8f-4cb4-b600-9313028b911b');
+ values('b5227116-5eca-4650-ab83-0781522bed71','53536a66-0d99-4ee8-b4a6-5928129d0ab6','eba566dc-95e7-4529-bf2e-656c7a490d69','15b73068-6c0f-49c9-800c-a7216cb2d079');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('2c0235c6-9bad-4dee-891c-018b50b2f717','d8e1ae3b-8451-436a-a59b-c7516e711b9c','eba566dc-95e7-4529-bf2e-656c7a490d69','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
+ values('de3b2faa-a430-480a-9be5-0b4d63619243','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','1c613ade-6665-49fb-b298-faf1b82dd6d2');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('088954c8-c313-411b-816c-01db5413f12c','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','c97f8956-5c79-4393-8423-34451a1bcc95');
+ values('81b9629b-bed8-49ef-a029-0bd17eacb039','53536a66-0d99-4ee8-b4a6-5928129d0ab6','9bb56ff2-6715-4838-a660-773e6c7eeb45','8a59a358-5a8f-4cb4-b600-9313028b911b');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('c6445e22-b240-4b01-941a-0295af4f444f','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','630e0452-00d6-4452-8a5c-19b2c3115ee3');
+ values('967a8af2-6ace-41db-b0e6-0cc5dd4290ef','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','630e0452-00d6-4452-8a5c-19b2c3115ee3');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('2437b42b-661d-4ad3-9744-029c0707b8b9','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','d0739946-99e0-4770-8d2a-6faf25a8457a');
+ values('ca013ca4-3c36-4428-8320-0e5b83d10f30','d8e1ae3b-8451-436a-a59b-c7516e711b9c','72997801-a545-468d-b7a9-0b9f1d0613ac','630e0452-00d6-4452-8a5c-19b2c3115ee3');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('2308ccab-1473-4a79-bf09-02f268ef6fea','d8e1ae3b-8451-436a-a59b-c7516e711b9c','72997801-a545-468d-b7a9-0b9f1d0613ac','1c613ade-6665-49fb-b298-faf1b82dd6d2');
+ values('01435d1d-7455-4bfe-9eb0-0f4c901cca48','53536a66-0d99-4ee8-b4a6-5928129d0ab6','bd3c53a3-55eb-427a-8707-f525682955ba','d0739946-99e0-4770-8d2a-6faf25a8457a');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('6d56bc92-fb70-49ba-9be3-03d7eed97217','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','630e0452-00d6-4452-8a5c-19b2c3115ee3');
+ values('96ea6566-3248-4a4f-bec6-0fb9f5d7e877','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','630e0452-00d6-4452-8a5c-19b2c3115ee3');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('52743b79-4b21-4b50-ba03-04f415378a25','d8e1ae3b-8451-436a-a59b-c7516e711b9c','72997801-a545-468d-b7a9-0b9f1d0613ac','1c613ade-6665-49fb-b298-faf1b82dd6d2');
+ values('2a6cbe02-6eb6-4d2a-b3c5-1091da1d1a4b','53536a66-0d99-4ee8-b4a6-5928129d0ab6','72997801-a545-468d-b7a9-0b9f1d0613ac','630e0452-00d6-4452-8a5c-19b2c3115ee3');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('42d437b4-a39f-4a87-b592-0535f4a8633e','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','15b73068-6c0f-49c9-800c-a7216cb2d079');
+ values('f95aa142-e2c6-4182-a1ee-10db6c115fcd','d8e1ae3b-8451-436a-a59b-c7516e711b9c','5fc6b135-85be-4234-970d-14918c26f958','1c613ade-6665-49fb-b298-faf1b82dd6d2');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('8867dc0a-03c5-42cf-b9e4-06a1998ca332','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','d0739946-99e0-4770-8d2a-6faf25a8457a');
+ values('c11eed76-6a22-4285-8a93-11919aa3896b','53536a66-0d99-4ee8-b4a6-5928129d0ab6','e844697e-900e-42b2-a96a-89ff5233c29b','8a59a358-5a8f-4cb4-b600-9313028b911b');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('396324b3-b60f-416f-8927-06bd64c3b902','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
+ values('e3e1f201-058d-4a4a-ab2c-122b4e7df101','53536a66-0d99-4ee8-b4a6-5928129d0ab6','813318ba-b3a7-437c-9405-016dcf48f224','15b73068-6c0f-49c9-800c-a7216cb2d079');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('bf6efbd0-0d2f-4ae8-8569-073548c17742','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','15b73068-6c0f-49c9-800c-a7216cb2d079');
+ values('55914746-304f-48c9-882c-126039b1db39','d8e1ae3b-8451-436a-a59b-c7516e711b9c','5fc6b135-85be-4234-970d-14918c26f958','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('05baf41d-f558-4a0d-9166-07c6f5e8114e','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','819f8aac-82e9-4a4b-ad1e-84824a985d73');
+ values('647adce6-2f09-4e32-8983-132da31ee15e','53536a66-0d99-4ee8-b4a6-5928129d0ab6','bd3c53a3-55eb-427a-8707-f525682955ba','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('ac449ef9-bde9-4bc6-8d02-08da9ef321bd','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','8a59a358-5a8f-4cb4-b600-9313028b911b');
+ values('4f714332-927c-4b90-92cf-1467a61cfe5b','53536a66-0d99-4ee8-b4a6-5928129d0ab6','eba566dc-95e7-4529-bf2e-656c7a490d69','d0739946-99e0-4770-8d2a-6faf25a8457a');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('257bb254-0b78-4aff-959b-098b890f4f89','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
+ values('a24c2c92-6bd6-4f0a-bb0a-1545d34f8f6e','53536a66-0d99-4ee8-b4a6-5928129d0ab6','e844697e-900e-42b2-a96a-89ff5233c29b','15b73068-6c0f-49c9-800c-a7216cb2d079');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('b474b4d6-e6c0-4edf-b95a-0a720e3e8cc2','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','15b73068-6c0f-49c9-800c-a7216cb2d079');
+ values('33e326f6-2ae8-4dc4-87ff-15f83c4f67b5','d8e1ae3b-8451-436a-a59b-c7516e711b9c','2e388df1-ad13-40d5-b183-0987ed2ebe93','15b73068-6c0f-49c9-800c-a7216cb2d079');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('e69f714c-6d27-4c33-976d-0ab64b28c06d','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','8a59a358-5a8f-4cb4-b600-9313028b911b');
+ values('9a2d82b6-a584-4be6-af73-163fcc197f6a','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('875ff98f-858d-4d32-bebd-0b75ca045ced','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
+ values('113c4966-d46d-4fcd-9853-1ece935717f5','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','d0739946-99e0-4770-8d2a-6faf25a8457a');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('c67905d4-7ff0-458a-ac46-0b9f01bd6cb7','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','1c613ade-6665-49fb-b298-faf1b82dd6d2');
+ values('834f0a43-9708-45b6-9762-1fc9cae7014f','d8e1ae3b-8451-436a-a59b-c7516e711b9c','5fc6b135-85be-4234-970d-14918c26f958','8a59a358-5a8f-4cb4-b600-9313028b911b');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('3d6f509f-ef4e-49f8-8def-0c5c2b3f8464','d8e1ae3b-8451-436a-a59b-c7516e711b9c','33c3179e-1ddc-4655-a65e-0b27ef10da8d','1c613ade-6665-49fb-b298-faf1b82dd6d2');
+ values('cf93d384-bd65-4454-9a0d-1fe786a07c25','53536a66-0d99-4ee8-b4a6-5928129d0ab6','9bb56ff2-6715-4838-a660-773e6c7eeb45','c97f8956-5c79-4393-8423-34451a1bcc95');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('9ff87b6e-6963-4281-8070-0cd3a1ecacda','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','819f8aac-82e9-4a4b-ad1e-84824a985d73');
+ values('6bc91075-4ab3-41ef-8b19-20ebf4f27e07','d8e1ae3b-8451-436a-a59b-c7516e711b9c','eba566dc-95e7-4529-bf2e-656c7a490d69','1c613ade-6665-49fb-b298-faf1b82dd6d2');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('066c5c98-c52a-4cc7-9fe8-0e5eeecb5c01','d8e1ae3b-8451-436a-a59b-c7516e711b9c','813318ba-b3a7-437c-9405-016dcf48f224','15b73068-6c0f-49c9-800c-a7216cb2d079');
+ values('af9b6355-9c9e-4020-b159-22a770eb11f6','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('f547340a-7384-4cb8-93f9-1089a576f810','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','c97f8956-5c79-4393-8423-34451a1bcc95');
+ values('9b506bc4-34ad-47bd-83ee-244a94cfe7bf','53536a66-0d99-4ee8-b4a6-5928129d0ab6','e4312e26-edb8-4e9d-9a66-96b7f252d559','8a59a358-5a8f-4cb4-b600-9313028b911b');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('7255ca2a-6b0d-4d57-ab17-122bae544dbb','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','8a59a358-5a8f-4cb4-b600-9313028b911b');
+ values('dd4e4926-e2e4-406c-aaf5-245d47780ab0','53536a66-0d99-4ee8-b4a6-5928129d0ab6','e844697e-900e-42b2-a96a-89ff5233c29b','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('c31ee182-2d26-4004-add7-1259d6e21a94','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','819f8aac-82e9-4a4b-ad1e-84824a985d73');
+ values('d48a0b47-b433-41fc-bb1d-2651e5aebb77','53536a66-0d99-4ee8-b4a6-5928129d0ab6','bd3c53a3-55eb-427a-8707-f525682955ba','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('f3e826e8-5a8e-4ac2-9e0b-128c942f80cc','d8e1ae3b-8451-436a-a59b-c7516e711b9c','33c3179e-1ddc-4655-a65e-0b27ef10da8d','1c613ade-6665-49fb-b298-faf1b82dd6d2');
+ values('e71d3dbb-a634-46fd-b5c7-28643e59108f','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','819f8aac-82e9-4a4b-ad1e-84824a985d73');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('cef27c75-bb82-47e9-8f28-12ad4a56c770','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','819f8aac-82e9-4a4b-ad1e-84824a985d73');
+ values('607853d9-215c-4360-b70d-2c7f53b9916f','d8e1ae3b-8451-436a-a59b-c7516e711b9c','3493cabc-667d-459c-bab8-3a8f7d58842e','15B73068-6C0F-49C9-800C-A7216CB2D079');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('a6bea722-5e13-4b01-848e-1357837e221b','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
+ values('20910ef7-ca15-4854-9776-2fbff292026f','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','15b73068-6c0f-49c9-800c-a7216cb2d079');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('efd772ff-6cc0-41ae-8600-13d65b777dd9','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','15b73068-6c0f-49c9-800c-a7216cb2d079');
+ values('4a1a32f6-893b-4148-b23f-30f594966677','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','819f8aac-82e9-4a4b-ad1e-84824a985d73');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('979068f2-83ca-43bb-9f8b-19c290863d5f','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','d0739946-99e0-4770-8d2a-6faf25a8457a');
+ values('f8e28b30-57f9-48c8-bfb9-31180da34f6b','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','c97f8956-5c79-4393-8423-34451a1bcc95');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('98f31ccc-c870-4a2e-8f0f-1a9771626598','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
+ values('e39f8781-0b43-429b-af98-31fc0918eb94','53536a66-0d99-4ee8-b4a6-5928129d0ab6','13ce68d5-1261-4bec-95ac-b56f708f480b','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('439a665d-fed5-40c8-aee5-1d4d13d7eb7d','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','c97f8956-5c79-4393-8423-34451a1bcc95');
+ values('40aab83d-02e6-4b3c-8176-32f7f8133019','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','8a59a358-5a8f-4cb4-b600-9313028b911b');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('11ae3ab6-e5e9-465e-b806-1d7a1588d13c','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','c97f8956-5c79-4393-8423-34451a1bcc95');
+ values('6a6c98b2-0ae5-4268-ab8f-35867c485e17','53536a66-0d99-4ee8-b4a6-5928129d0ab6','5fc6b135-85be-4234-970d-14918c26f958','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('4c148dca-0cb1-4d53-8700-1e345680362b','d8e1ae3b-8451-436a-a59b-c7516e711b9c','3493cabc-667d-459c-bab8-3a8f7d58842e','630E0452-00D6-4452-8A5C-19B2C3115EE3');
+ values('2a6c7ed5-bd37-4252-b572-35a28947380e','d8e1ae3b-8451-436a-a59b-c7516e711b9c','3493cabc-667d-459c-bab8-3a8f7d58842e','630E0452-00D6-4452-8A5C-19B2C3115EE3');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('2c780e95-df28-434a-99c4-1eb0d666ce44','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','8a59a358-5a8f-4cb4-b600-9313028b911b');
+ values('cc211f2e-3e5e-41c3-b5c4-379381a9378e','53536a66-0d99-4ee8-b4a6-5928129d0ab6','5fc6b135-85be-4234-970d-14918c26f958','15b73068-6c0f-49c9-800c-a7216cb2d079');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('6f4814a2-33db-4395-b53d-1f19e335d3cd','d8e1ae3b-8451-436a-a59b-c7516e711b9c','eba566dc-95e7-4529-bf2e-656c7a490d69','15b73068-6c0f-49c9-800c-a7216cb2d079');
+ values('51d12529-3870-457d-a924-3b24e4c12ceb','53536a66-0d99-4ee8-b4a6-5928129d0ab6','177b5c8e-465e-4bc1-80aa-45ddbb65c911','15b73068-6c0f-49c9-800c-a7216cb2d079');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('0d8bd348-d463-462a-b23f-20fb93816384','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','15b73068-6c0f-49c9-800c-a7216cb2d079');
+ values('8a47bc83-758e-4378-b750-418ad4d701b1','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','8a59a358-5a8f-4cb4-b600-9313028b911b');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('ff10d6f1-1736-4b0d-a70b-213b8f5f3609','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','630e0452-00d6-4452-8a5c-19b2c3115ee3');
+ values('20e291cc-bee8-4081-9f64-41ef01201313','53536a66-0d99-4ee8-b4a6-5928129d0ab6','9bb56ff2-6715-4838-a660-773e6c7eeb45','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('83511c88-a2f3-47ef-9830-21b5bba737dd','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
+ values('56cf184a-7ecd-4058-9d5c-45ad0908a0fb','d8e1ae3b-8451-436a-a59b-c7516e711b9c','eba566dc-95e7-4529-bf2e-656c7a490d69','630e0452-00d6-4452-8a5c-19b2c3115ee3');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('952d6548-013d-4444-ba52-21b8cb6cf8ee','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','819f8aac-82e9-4a4b-ad1e-84824a985d73');
+ values('bf0d8be3-4fad-459e-931d-466a18f904f1','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','8a59a358-5a8f-4cb4-b600-9313028b911b');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('c613c35d-e4cc-4293-8fea-22a822cfadc1','d8e1ae3b-8451-436a-a59b-c7516e711b9c','3493cabc-667d-459c-bab8-3a8f7d58842e','1C613ADE-6665-49FB-B298-FAF1B82DD6D2');
+ values('cf4b4306-bbcd-4c7b-ad92-4b89d5c2fa73','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('bbecbe9b-a986-4214-82c8-235025459849','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
+ values('d8cfd621-2f70-4857-93b4-4ba5183ad7dc','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','8a59a358-5a8f-4cb4-b600-9313028b911b');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('25cfbbe2-d1f3-4de4-b742-23fb56952df8','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
+ values('c18a5fa1-ec01-4886-98f7-4cb2bdc96194','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('e152ab62-c868-4a27-8dda-247bd73c4ad1','d8e1ae3b-8451-436a-a59b-c7516e711b9c','5fc6b135-85be-4234-970d-14918c26f958','630e0452-00d6-4452-8a5c-19b2c3115ee3');
+ values('d603a53c-2035-41ee-b94f-4d7203faccc8','d8e1ae3b-8451-436a-a59b-c7516e711b9c','813318ba-b3a7-437c-9405-016dcf48f224','15b73068-6c0f-49c9-800c-a7216cb2d079');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('62d99a8b-6518-4619-a4c0-2a5af56385d7','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','8a59a358-5a8f-4cb4-b600-9313028b911b');
+ values('ee5c7843-9f01-49f3-923b-4d8a04cb07f9','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','d0739946-99e0-4770-8d2a-6faf25a8457a');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('f5b304c7-6d53-46e8-bd2f-2a9f80d628a4','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','8a59a358-5a8f-4cb4-b600-9313028b911b');
+ values('73ec8bb2-d7bd-4a15-ac03-52eec17d12a3','53536a66-0d99-4ee8-b4a6-5928129d0ab6','e4312e26-edb8-4e9d-9a66-96b7f252d559','d0739946-99e0-4770-8d2a-6faf25a8457a');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('c8f7d0a0-b3a1-4b15-92a3-2b017d02dfa2','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','1c613ade-6665-49fb-b298-faf1b82dd6d2');
+ values('1cbde9de-9e77-45cd-9935-54b7eea68867','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('398e3cda-5184-4efe-bfec-2ba6c63a01d2','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','8a59a358-5a8f-4cb4-b600-9313028b911b');
+ values('1b22a11e-09f0-4f1a-8fee-556a37e35160','53536a66-0d99-4ee8-b4a6-5928129d0ab6','eba566dc-95e7-4529-bf2e-656c7a490d69','8bc4d68a-ec7d-48f7-97c4-03a09836f45c');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('31eed6dc-837c-44d0-bff1-2c4d2896954d','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','1c613ade-6665-49fb-b298-faf1b82dd6d2');
+ values('87284aab-5658-422e-ab2c-56b9fe1a20d7','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','819f8aac-82e9-4a4b-ad1e-84824a985d73');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('06648a48-2ab9-41a4-ae24-2c798bbef11c','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
+ values('94083086-7703-4fe0-a6a4-580aae2b1404','53536a66-0d99-4ee8-b4a6-5928129d0ab6','72997801-a545-468d-b7a9-0b9f1d0613ac','d0739946-99e0-4770-8d2a-6faf25a8457a');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('3450018b-c51a-4e63-b7ff-2ce637e1fe60','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
+ values('0510b5d3-7db3-4cdc-9d6a-61a6e95f27d2','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('2db5a584-1131-4535-8746-2dc6ccaaccf0','d8e1ae3b-8451-436a-a59b-c7516e711b9c','eba566dc-95e7-4529-bf2e-656c7a490d69','630e0452-00d6-4452-8a5c-19b2c3115ee3');
+ values('791b38e5-ddf6-4b59-88ae-6528b5b53843','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','15b73068-6c0f-49c9-800c-a7216cb2d079');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('07fb5ab9-01a3-4c2a-8bb3-2e5e0ed69935','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','630e0452-00d6-4452-8a5c-19b2c3115ee3');
+ values('7ba8176e-67f0-4a8d-9d28-66e2c4d3b4a8','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','d0739946-99e0-4770-8d2a-6faf25a8457a');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('02a1418f-31fe-4118-8921-2ea819414e83','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
+ values('167416bc-6f72-42b7-9ee7-690488a6eee4','d8e1ae3b-8451-436a-a59b-c7516e711b9c','3493cabc-667d-459c-bab8-3a8f7d58842e','1C613ADE-6665-49FB-B298-FAF1B82DD6D2');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('98d35618-a366-47f3-a1ef-2f4272976365','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','c97f8956-5c79-4393-8423-34451a1bcc95');
+ values('78cee798-713e-414c-88a2-69f4928120f6','53536a66-0d99-4ee8-b4a6-5928129d0ab6','bd3c53a3-55eb-427a-8707-f525682955ba','15b73068-6c0f-49c9-800c-a7216cb2d079');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('8d9aa2dd-2153-4584-a749-2fa6e1970ae0','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','d0739946-99e0-4770-8d2a-6faf25a8457a');
+ values('9568b29b-dbed-469f-b219-6ab5e9dd8b9f','53536a66-0d99-4ee8-b4a6-5928129d0ab6','e4312e26-edb8-4e9d-9a66-96b7f252d559','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('62084e04-fc26-421a-b221-2fbcbea760db','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','8a59a358-5a8f-4cb4-b600-9313028b911b');
+ values('728b9f12-a555-4c13-9abc-6d29c722326c','53536a66-0d99-4ee8-b4a6-5928129d0ab6','72997801-a545-468d-b7a9-0b9f1d0613ac','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('59704c41-22bd-4f0b-96aa-2fde0ed50435','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
+ values('3479e124-6d2c-4152-ad04-6d51c5ccdac7','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('1462a2be-eaa8-4ddd-8785-31912e14f473','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
+ values('2a0d8763-2389-49a7-896f-6e93d0b630d4','d8e1ae3b-8451-436a-a59b-c7516e711b9c','5fc6b135-85be-4234-970d-14918c26f958','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('6c215146-2c9e-4564-990e-31d2449578c3','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','8a59a358-5a8f-4cb4-b600-9313028b911b');
+ values('d0ec6e53-26c9-475a-b3c1-6ee874d493b8','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('76c88579-7586-41cf-9d9e-32596a24f12a','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
+ values('b51540cd-6099-4011-bf43-71b8c0e7c7a3','53536a66-0d99-4ee8-b4a6-5928129d0ab6','5fc6b135-85be-4234-970d-14918c26f958','8a59a358-5a8f-4cb4-b600-9313028b911b');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('f824b648-118b-49d4-9299-32c0e398ddd2','d8e1ae3b-8451-436a-a59b-c7516e711b9c','72997801-a545-468d-b7a9-0b9f1d0613ac','630e0452-00d6-4452-8a5c-19b2c3115ee3');
+ values('cf193530-ee06-4a9b-9530-71e5b4fd38b6','53536a66-0d99-4ee8-b4a6-5928129d0ab6','e4312e26-edb8-4e9d-9a66-96b7f252d559','630e0452-00d6-4452-8a5c-19b2c3115ee3');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('0e084110-c279-43f9-8020-33dd163255a5','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','c97f8956-5c79-4393-8423-34451a1bcc95');
+ values('86b6bfe4-879a-4a54-930b-72c474232b62','53536a66-0d99-4ee8-b4a6-5928129d0ab6','e4312e26-edb8-4e9d-9a66-96b7f252d559','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('9dfddf4a-dbe6-4a57-a45c-34017c08dc20','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','630e0452-00d6-4452-8a5c-19b2c3115ee3');
+ values('a36bc372-d8e7-4483-9d5d-7368420e89b5','d8e1ae3b-8451-436a-a59b-c7516e711b9c','5fc6b135-85be-4234-970d-14918c26f958','15b73068-6c0f-49c9-800c-a7216cb2d079');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('8147e5d8-3418-4b52-a049-341e9e17fcc7','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','d0739946-99e0-4770-8d2a-6faf25a8457a');
+ values('56126846-fe3a-46be-8b25-7454e2c8f126','53536a66-0d99-4ee8-b4a6-5928129d0ab6','5fc6b135-85be-4234-970d-14918c26f958','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('78c8b128-f63d-4b07-9b37-3597750225d2','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','1c613ade-6665-49fb-b298-faf1b82dd6d2');
+ values('f0002aa3-ddd4-4e35-9728-75674dde4b9b','d8e1ae3b-8451-436a-a59b-c7516e711b9c','3493cabc-667d-459c-bab8-3a8f7d58842e','D0739946-99E0-4770-8D2A-6FAF25A8457A');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('9d9bf03f-4f87-4c42-9d31-35f5fa8489a1','d8e1ae3b-8451-436a-a59b-c7516e711b9c','72997801-a545-468d-b7a9-0b9f1d0613ac','15b73068-6c0f-49c9-800c-a7216cb2d079');
+ values('7748d4fc-fe2d-45a6-8a35-75a910f25076','d8e1ae3b-8451-436a-a59b-c7516e711b9c','5fc6b135-85be-4234-970d-14918c26f958','d0739946-99e0-4770-8d2a-6faf25a8457a');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('d9ed6827-127b-4af4-9f3c-3600cd934d8f','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','15b73068-6c0f-49c9-800c-a7216cb2d079');
+ values('e64fbe3e-5801-493c-8857-7ade5146b434','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','1c613ade-6665-49fb-b298-faf1b82dd6d2');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('b73a4a57-f218-4d55-9c4e-36856393e04c','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','d0739946-99e0-4770-8d2a-6faf25a8457a');
+ values('f3d57549-50de-4cc3-a620-7f0be632de95','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','15b73068-6c0f-49c9-800c-a7216cb2d079');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('8faef89b-7411-4c8d-8c73-36f7770b37eb','d8e1ae3b-8451-436a-a59b-c7516e711b9c','33c3179e-1ddc-4655-a65e-0b27ef10da8d','15b73068-6c0f-49c9-800c-a7216cb2d079');
+ values('19b339c4-7d46-4fcf-b5c7-7f25c018b880','53536a66-0d99-4ee8-b4a6-5928129d0ab6','bd3c53a3-55eb-427a-8707-f525682955ba','630e0452-00d6-4452-8a5c-19b2c3115ee3');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('8cb4ca7e-efee-4f56-9b4c-3730b760b312','d8e1ae3b-8451-436a-a59b-c7516e711b9c','33c3179e-1ddc-4655-a65e-0b27ef10da8d','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
+ values('253ca8e0-da3b-4470-8e01-7f4c9da15316','d8e1ae3b-8451-436a-a59b-c7516e711b9c','eba566dc-95e7-4529-bf2e-656c7a490d69','8bc4d68a-ec7d-48f7-97c4-03a09836f45c');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('e65889ee-4b50-4ba6-8329-37a9db048702','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','c97f8956-5c79-4393-8423-34451a1bcc95');
+ values('647f7433-94b7-47cc-ad5d-818614f573a3','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','8a59a358-5a8f-4cb4-b600-9313028b911b');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('12acc37c-3011-4225-bb41-37d05a313fa7','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','630e0452-00d6-4452-8a5c-19b2c3115ee3');
+ values('c7b8cc24-fdd6-4114-a5b7-82c279327f3b','53536a66-0d99-4ee8-b4a6-5928129d0ab6','9bb56ff2-6715-4838-a660-773e6c7eeb45','630e0452-00d6-4452-8a5c-19b2c3115ee3');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('6488cadb-92d5-49fa-909e-3886cf50f0a8','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
+ values('ea268dae-9e4f-4277-9628-870f7daaa51b','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','1c613ade-6665-49fb-b298-faf1b82dd6d2');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('ece1000f-6cdd-4874-8c29-39d43d64640c','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','1c613ade-6665-49fb-b298-faf1b82dd6d2');
+ values('5de97c97-12eb-45e0-97b5-874d95ea59f1','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('2c8e3c82-34d2-4c9f-bc19-3a5f9bd74a66','d8e1ae3b-8451-436a-a59b-c7516e711b9c','33c3179e-1ddc-4655-a65e-0b27ef10da8d','d0739946-99e0-4770-8d2a-6faf25a8457a');
+ values('6198b199-d59e-412e-82a7-8ac31b90fdd4','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('970093c4-8224-452f-ac8d-3bdef6e3ac63','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
+ values('f1b9991e-6303-404a-80ff-8b48e46161d8','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','d0739946-99e0-4770-8d2a-6faf25a8457a');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('2fa5347c-303d-48e1-b4ba-3eb3869d478d','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
+ values('34128b5b-8036-4dff-abb8-8dec718af3ca','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','630e0452-00d6-4452-8a5c-19b2c3115ee3');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('a2beca08-8b56-463b-8886-3ee192d67dc8','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','630e0452-00d6-4452-8a5c-19b2c3115ee3');
+ values('8675a28c-4fbd-4668-a0ca-8e7dbd300690','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','630e0452-00d6-4452-8a5c-19b2c3115ee3');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('73542a1f-5526-40e9-9aeb-3f6144794231','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
+ values('838f978e-25fd-4715-add5-8f45a3da6a36','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','d0739946-99e0-4770-8d2a-6faf25a8457a');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('8a9debbd-9308-4bc8-89dc-407b2eb96354','d8e1ae3b-8451-436a-a59b-c7516e711b9c','5fc6b135-85be-4234-970d-14918c26f958','1c613ade-6665-49fb-b298-faf1b82dd6d2');
+ values('3e6932f0-97c0-4009-a052-910790143099','53536a66-0d99-4ee8-b4a6-5928129d0ab6','13ce68d5-1261-4bec-95ac-b56f708f480b','1c613ade-6665-49fb-b298-faf1b82dd6d2');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('9532e7de-8f61-4cf8-b45c-40c8a34268b1','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','15b73068-6c0f-49c9-800c-a7216cb2d079');
+ values('ed08b6f5-6050-4d2e-b9f0-930891a4c14a','53536a66-0d99-4ee8-b4a6-5928129d0ab6','9bb56ff2-6715-4838-a660-773e6c7eeb45','1c613ade-6665-49fb-b298-faf1b82dd6d2');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('00cbce26-67d2-4d0d-8905-41662ed3e648','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
+ values('f0f13aca-d9ef-4f92-b01a-944caa57caa3','53536a66-0d99-4ee8-b4a6-5928129d0ab6','e4312e26-edb8-4e9d-9a66-96b7f252d559','1c613ade-6665-49fb-b298-faf1b82dd6d2');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('685eaf15-5a8f-4ce7-9a88-41698a18e036','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','c97f8956-5c79-4393-8423-34451a1bcc95');
+ values('8dad363b-3c43-4edb-9e79-948844208d12','53536a66-0d99-4ee8-b4a6-5928129d0ab6','e844697e-900e-42b2-a96a-89ff5233c29b','d0739946-99e0-4770-8d2a-6faf25a8457a');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('dc4aa55d-e3c8-41b9-94c5-418da1c6f2f3','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','1c613ade-6665-49fb-b298-faf1b82dd6d2');
+ values('7748ca90-d99b-460e-81b1-9557150d8d99','53536a66-0d99-4ee8-b4a6-5928129d0ab6','5fc6b135-85be-4234-970d-14918c26f958','1c613ade-6665-49fb-b298-faf1b82dd6d2');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('546ae51e-0155-4808-a59b-41f986870857','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','d0739946-99e0-4770-8d2a-6faf25a8457a');
+ values('c2d0d9a1-2eb5-4a2b-8e95-95b1e85a124d','53536a66-0d99-4ee8-b4a6-5928129d0ab6','e4312e26-edb8-4e9d-9a66-96b7f252d559','15b73068-6c0f-49c9-800c-a7216cb2d079');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('f9ec3770-3483-4abe-bf52-425b37333e02','d8e1ae3b-8451-436a-a59b-c7516e711b9c','33c3179e-1ddc-4655-a65e-0b27ef10da8d','1c613ade-6665-49fb-b298-faf1b82dd6d2');
+ values('03d08996-5292-4831-be06-9712261c5d18','53536a66-0d99-4ee8-b4a6-5928129d0ab6','5fc6b135-85be-4234-970d-14918c26f958','c97f8956-5c79-4393-8423-34451a1bcc95');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('584469bd-e641-47c0-8166-436288fd6d7f','d8e1ae3b-8451-436a-a59b-c7516e711b9c','813318ba-b3a7-437c-9405-016dcf48f224','15b73068-6c0f-49c9-800c-a7216cb2d079');
+ values('b1ca8598-1fde-4a1a-aa20-99282d82ed4b','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','c97f8956-5c79-4393-8423-34451a1bcc95');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('025722d6-acb9-4d88-b8ee-43d51887e169','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','1c613ade-6665-49fb-b298-faf1b82dd6d2');
+ values('53497121-4a1b-4b91-9b22-9c1e3015b3e0','d8e1ae3b-8451-436a-a59b-c7516e711b9c','5fc6b135-85be-4234-970d-14918c26f958','630e0452-00d6-4452-8a5c-19b2c3115ee3');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('6b4bdc90-ee3c-4502-a2ba-4539246e3a18','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','819f8aac-82e9-4a4b-ad1e-84824a985d73');
+ values('98bcfb4c-a6ed-46ff-878e-9e7fda04bc9d','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','8a59a358-5a8f-4cb4-b600-9313028b911b');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('b5b74093-0e4a-4d03-8688-456c60442529','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','d0739946-99e0-4770-8d2a-6faf25a8457a');
+ values('b248d3fa-53a4-48a6-aeba-a012387efb45','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','c97f8956-5c79-4393-8423-34451a1bcc95');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('be4c869a-0d09-4a22-a80b-46e3a44fce11','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','d0739946-99e0-4770-8d2a-6faf25a8457a');
+ values('bca816bb-ce8b-49db-939c-a180a233afb4','53536a66-0d99-4ee8-b4a6-5928129d0ab6','9bb56ff2-6715-4838-a660-773e6c7eeb45','d0739946-99e0-4770-8d2a-6faf25a8457a');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('31ced280-bd5c-4dc8-8a08-478b247aab94','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','630e0452-00d6-4452-8a5c-19b2c3115ee3');
+ values('c84e896b-6630-4eab-89cd-a55a87173cd1','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','1c613ade-6665-49fb-b298-faf1b82dd6d2');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('653d5392-31b2-4210-8f0c-485b40b791f3','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','15b73068-6c0f-49c9-800c-a7216cb2d079');
+ values('9ac5bb45-5730-419c-945a-a5e5d425450d','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','630e0452-00d6-4452-8a5c-19b2c3115ee3');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('fc8fbf2f-6943-4baf-91a2-488ab8fcd92c','d8e1ae3b-8451-436a-a59b-c7516e711b9c','5fc6b135-85be-4234-970d-14918c26f958','c97f8956-5c79-4393-8423-34451a1bcc95');
+ values('89fe6305-9ac6-441a-a043-a6b598e865f1','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('b446ae92-25c4-45cd-b63a-48ce4e9fedd2','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','15b73068-6c0f-49c9-800c-a7216cb2d079');
+ values('ae5cd9e3-d436-4708-9f85-a8a31ca9df1f','53536a66-0d99-4ee8-b4a6-5928129d0ab6','bd3c53a3-55eb-427a-8707-f525682955ba','1c613ade-6665-49fb-b298-faf1b82dd6d2');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('1ab01cb1-da90-47d5-9584-490c980de070','d8e1ae3b-8451-436a-a59b-c7516e711b9c','33c3179e-1ddc-4655-a65e-0b27ef10da8d','d0739946-99e0-4770-8d2a-6faf25a8457a');
+ values('01a20129-d07e-4d90-9704-a8fe3fea7cf0','53536a66-0d99-4ee8-b4a6-5928129d0ab6','bd3c53a3-55eb-427a-8707-f525682955ba','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('b0229efd-c022-4ab4-acc5-4992ecf2da68','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','15b73068-6c0f-49c9-800c-a7216cb2d079');
+ values('72f655dd-4291-4513-96a9-a9a521d1eaab','d8e1ae3b-8451-436a-a59b-c7516e711b9c','eba566dc-95e7-4529-bf2e-656c7a490d69','d0739946-99e0-4770-8d2a-6faf25a8457a');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('5eed572d-98db-414c-b827-4ad2f8aa1618','d8e1ae3b-8451-436a-a59b-c7516e711b9c','72997801-a545-468d-b7a9-0b9f1d0613ac','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
+ values('f6f9db69-8444-49f7-892f-ac25b2382322','53536a66-0d99-4ee8-b4a6-5928129d0ab6','2e388df1-ad13-40d5-b183-0987ed2ebe93','15b73068-6c0f-49c9-800c-a7216cb2d079');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('e8c4b8ba-3f13-4df9-9965-4c41a87f47c9','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','15b73068-6c0f-49c9-800c-a7216cb2d079');
+ values('82f2ebb8-7924-4936-9dd6-ac3e9619b36b','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','15b73068-6c0f-49c9-800c-a7216cb2d079');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('e10dc8fd-a46f-46be-8ad1-4c67690fcc88','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','d0739946-99e0-4770-8d2a-6faf25a8457a');
+ values('d74230d5-703e-45ea-97c8-ad7399868d0e','53536a66-0d99-4ee8-b4a6-5928129d0ab6','e4312e26-edb8-4e9d-9a66-96b7f252d559','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('84713abf-7202-4247-8222-4c8fec682bcc','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','d0739946-99e0-4770-8d2a-6faf25a8457a');
+ values('9af7bfda-afa4-483c-87bf-b087eb2abd21','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','c97f8956-5c79-4393-8423-34451a1bcc95');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('e7feaae4-0863-4c66-819d-4cddf17f04e6','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','d0739946-99e0-4770-8d2a-6faf25a8457a');
+ values('5b672039-2b8e-4913-87f6-b17ea1996980','d8e1ae3b-8451-436a-a59b-c7516e711b9c','33c3179e-1ddc-4655-a65e-0b27ef10da8d','15b73068-6c0f-49c9-800c-a7216cb2d079');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('31f45da0-1a9c-4b1b-8d4b-4dcd5add0076','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','630e0452-00d6-4452-8a5c-19b2c3115ee3');
+ values('df4e38aa-df1d-41be-b036-b20cd8a7000a','53536a66-0d99-4ee8-b4a6-5928129d0ab6','e844697e-900e-42b2-a96a-89ff5233c29b','630e0452-00d6-4452-8a5c-19b2c3115ee3');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('01aa85f3-977b-4474-9d98-4e8438330101','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','1c613ade-6665-49fb-b298-faf1b82dd6d2');
+ values('8c74e978-8333-4e88-988a-b3e6ce3896d5','d8e1ae3b-8451-436a-a59b-c7516e711b9c','eba566dc-95e7-4529-bf2e-656c7a490d69','15b73068-6c0f-49c9-800c-a7216cb2d079');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('89d6332e-676e-44e9-8cc8-509f160e3cf0','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','d0739946-99e0-4770-8d2a-6faf25a8457a');
+ values('872febe8-397b-44eb-a8c9-b3ea0c5d9c51','53536a66-0d99-4ee8-b4a6-5928129d0ab6','72997801-a545-468d-b7a9-0b9f1d0613ac','1c613ade-6665-49fb-b298-faf1b82dd6d2');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('c6fbfb2d-1e16-43a0-a1ad-50b583280462','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','d0739946-99e0-4770-8d2a-6faf25a8457a');
+ values('43429739-d970-41d7-826a-b5eba8411760','53536a66-0d99-4ee8-b4a6-5928129d0ab6','e844697e-900e-42b2-a96a-89ff5233c29b','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('4cd30526-a538-4d4c-84c7-52a0ddd5fd07','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
+ values('db19f5f0-f5e8-4ec3-9e36-b6e49c0d33f5','d8e1ae3b-8451-436a-a59b-c7516e711b9c','3493cabc-667d-459c-bab8-3a8f7d58842e','CF8F418E-2468-4F6C-96CF-3302A2D9FA9B');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('34b2f16c-762b-4c03-8a54-53878b7efa8a','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','1c613ade-6665-49fb-b298-faf1b82dd6d2');
+ values('39af34ad-3526-4373-8468-bb9b57213fd4','53536a66-0d99-4ee8-b4a6-5928129d0ab6','e844697e-900e-42b2-a96a-89ff5233c29b','c97f8956-5c79-4393-8423-34451a1bcc95');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('05e3e869-6161-4bcc-8d1e-539b269e7f7a','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','8a59a358-5a8f-4cb4-b600-9313028b911b');
+ values('ae338256-e59c-4aa1-9891-bd20bae6090a','d8e1ae3b-8451-436a-a59b-c7516e711b9c','72997801-a545-468d-b7a9-0b9f1d0613ac','1c613ade-6665-49fb-b298-faf1b82dd6d2');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('8558e9c3-d850-4fa6-a096-54dc06d9bdd6','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','8a59a358-5a8f-4cb4-b600-9313028b911b');
+ values('13750659-e022-4298-bfb3-be9d9838931e','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','d0739946-99e0-4770-8d2a-6faf25a8457a');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('e09cab85-8f52-47f4-8b6d-559a96bc23f4','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','630e0452-00d6-4452-8a5c-19b2c3115ee3');
+ values('1aa1a6a2-7cfc-41d1-89a2-bea19a93c60a','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','819f8aac-82e9-4a4b-ad1e-84824a985d73');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('98e1fbed-5b3a-4d6c-b3b5-5622562979f4','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','8a59a358-5a8f-4cb4-b600-9313028b911b');
+ values('07823150-e79c-4bd7-a21a-c0076705db98','53536a66-0d99-4ee8-b4a6-5928129d0ab6','5fc6b135-85be-4234-970d-14918c26f958','630e0452-00d6-4452-8a5c-19b2c3115ee3');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('d0de9bda-867e-43de-8be1-56bbec78afd5','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','1c613ade-6665-49fb-b298-faf1b82dd6d2');
+ values('f1d5fe04-a63f-48f5-8d43-c02a59dd740f','d8e1ae3b-8451-436a-a59b-c7516e711b9c','72997801-a545-468d-b7a9-0b9f1d0613ac','d0739946-99e0-4770-8d2a-6faf25a8457a');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('4eef39e0-8488-4780-ac6c-57f061586df9','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','1c613ade-6665-49fb-b298-faf1b82dd6d2');
+ values('6b1641b3-a54d-4905-a1a6-c09d9f15b1e4','53536a66-0d99-4ee8-b4a6-5928129d0ab6','13ce68d5-1261-4bec-95ac-b56f708f480b','8a59a358-5a8f-4cb4-b600-9313028b911b');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('fcd93bc6-d5d4-433c-a32c-583cd9aa7442','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
+ values('17b4f4d3-a4b5-43f7-a0ae-c0ce70a6e8ac','d8e1ae3b-8451-436a-a59b-c7516e711b9c','33c3179e-1ddc-4655-a65e-0b27ef10da8d','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('b0b8facb-afa2-43ff-8a87-58908784d3c2','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
+ values('6177930a-e46c-4fb9-8625-c195198fa728','53536a66-0d99-4ee8-b4a6-5928129d0ab6','bd3c53a3-55eb-427a-8707-f525682955ba','c97f8956-5c79-4393-8423-34451a1bcc95');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('2a0f7382-1df8-4704-92fa-5a2b93eda6ac','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
+ values('89c746d3-8985-4bfc-9e5c-c3eb2475ba5f','53536a66-0d99-4ee8-b4a6-5928129d0ab6','9bb56ff2-6715-4838-a660-773e6c7eeb45','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('8c04e587-6c9d-45fc-b7bf-5a3119c1b091','d8e1ae3b-8451-436a-a59b-c7516e711b9c','3493cabc-667d-459c-bab8-3a8f7d58842e','D0739946-99E0-4770-8D2A-6FAF25A8457A');
+ values('d6419a5f-2096-4965-81f2-c42aaf62986f','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','15b73068-6c0f-49c9-800c-a7216cb2d079');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('5bc1778d-5124-4ea8-95ca-5a5cb278ae03','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
+ values('64315ca3-6088-4e4b-84d7-c53fc56b6e67','53536a66-0d99-4ee8-b4a6-5928129d0ab6','9bb56ff2-6715-4838-a660-773e6c7eeb45','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('d62223a4-bd1f-4ade-8491-5c73be9223a5','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','819f8aac-82e9-4a4b-ad1e-84824a985d73');
+ values('823ed3f8-18ba-4a90-91ad-c5ccd58d2831','53536a66-0d99-4ee8-b4a6-5928129d0ab6','eba566dc-95e7-4529-bf2e-656c7a490d69','1c613ade-6665-49fb-b298-faf1b82dd6d2');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('62ed2ea0-e789-4e58-962b-5dedbe648bd6','d8e1ae3b-8451-436a-a59b-c7516e711b9c','eba566dc-95e7-4529-bf2e-656c7a490d69','630e0452-00d6-4452-8a5c-19b2c3115ee3');
+ values('631fb6d5-316a-4402-af47-c948836e0a0c','53536a66-0d99-4ee8-b4a6-5928129d0ab6','13ce68d5-1261-4bec-95ac-b56f708f480b','630e0452-00d6-4452-8a5c-19b2c3115ee3');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('fab209c3-b0ae-4043-b47a-5df856d35fb5','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','c97f8956-5c79-4393-8423-34451a1bcc95');
+ values('7c8239d5-afdf-400d-ad43-cc174b4fd2ab','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','630e0452-00d6-4452-8a5c-19b2c3115ee3');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('09e77668-55c1-495b-a86b-5f126d1b7261','d8e1ae3b-8451-436a-a59b-c7516e711b9c','5fc6b135-85be-4234-970d-14918c26f958','8a59a358-5a8f-4cb4-b600-9313028b911b');
+ values('2df47cc3-d1c8-4c3f-a814-ccfc96c8f9ff','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','1c613ade-6665-49fb-b298-faf1b82dd6d2');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('dc59c965-d179-4da7-a4ff-605e4cdbdb7e','d8e1ae3b-8451-436a-a59b-c7516e711b9c','3493cabc-667d-459c-bab8-3a8f7d58842e','15B73068-6C0F-49C9-800C-A7216CB2D079');
+ values('67ee534e-355e-4bd1-8b09-d077d83af8c8','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('596844ce-5a02-4b7a-abcd-61f55f7a5d6e','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','c97f8956-5c79-4393-8423-34451a1bcc95');
+ values('a72600b0-6c64-47f4-95bd-d112dcea5883','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','1c613ade-6665-49fb-b298-faf1b82dd6d2');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('4dfde8d0-7901-41be-a017-6352ba5133df','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','c97f8956-5c79-4393-8423-34451a1bcc95');
+ values('d3e026b9-f7f6-471e-b522-d20d5e496519','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('d95526fd-1b18-4956-b658-638db1efd0b3','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','8a59a358-5a8f-4cb4-b600-9313028b911b');
+ values('a9b4d05c-1c56-44a0-ae5f-d2ca519ffd4a','d8e1ae3b-8451-436a-a59b-c7516e711b9c','5fc6b135-85be-4234-970d-14918c26f958','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('65c2d181-2b3c-4119-ab85-63f5eeccd63a','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','c97f8956-5c79-4393-8423-34451a1bcc95');
+ values('b61b59a7-9514-4718-a20f-d3871a2c5043','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('bcb306cb-92dd-4ce0-bc0a-64977e51a3b2','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','630e0452-00d6-4452-8a5c-19b2c3115ee3');
+ values('c2eedd96-8bd6-4c51-9f64-d395a4875aeb','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','1c613ade-6665-49fb-b298-faf1b82dd6d2');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('28580e37-3035-4c4d-9039-64f81b37f7c5','d8e1ae3b-8451-436a-a59b-c7516e711b9c','33c3179e-1ddc-4655-a65e-0b27ef10da8d','d0739946-99e0-4770-8d2a-6faf25a8457a');
+ values('27f8cf4f-7860-4a23-bd77-d5e5f6f32deb','d8e1ae3b-8451-436a-a59b-c7516e711b9c','177b5c8e-465e-4bc1-80aa-45ddbb65c911','15b73068-6c0f-49c9-800c-a7216cb2d079');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('bf8fe50a-c47a-4539-bf97-64fd53d6ce99','d8e1ae3b-8451-436a-a59b-c7516e711b9c','33c3179e-1ddc-4655-a65e-0b27ef10da8d','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
+ values('340c4da6-e835-48b9-9e1f-db6e043e9189','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('2a19a275-112f-4604-a449-653e49c5308c','d8e1ae3b-8451-436a-a59b-c7516e711b9c','33c3179e-1ddc-4655-a65e-0b27ef10da8d','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
+ values('028191f6-d02f-422a-9929-db79167c79a6','d8e1ae3b-8451-436a-a59b-c7516e711b9c','33c3179e-1ddc-4655-a65e-0b27ef10da8d','1c613ade-6665-49fb-b298-faf1b82dd6d2');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('b9f650e9-c030-4778-87ec-656280191843','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
+ values('304e05bc-8620-4fe2-901c-dcb976c4e61d','d8e1ae3b-8451-436a-a59b-c7516e711b9c','33c3179e-1ddc-4655-a65e-0b27ef10da8d','d0739946-99e0-4770-8d2a-6faf25a8457a');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('8e15b1f1-210e-4f34-8aeb-671d6863e2bf','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','8a59a358-5a8f-4cb4-b600-9313028b911b');
+ values('89dcd96d-c94a-47db-a2a5-dcd3d3564ecc','d8e1ae3b-8451-436a-a59b-c7516e711b9c','5fc6b135-85be-4234-970d-14918c26f958','c97f8956-5c79-4393-8423-34451a1bcc95');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('e98d2bb7-6328-4bf9-862d-682363372e6f','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','d0739946-99e0-4770-8d2a-6faf25a8457a');
+ values('89e6ca5e-080c-4457-b032-de54b3f895a3','53536a66-0d99-4ee8-b4a6-5928129d0ab6','5fc6b135-85be-4234-970d-14918c26f958','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('3021c8af-b964-4dba-81a3-68944dc51ba6','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','15b73068-6c0f-49c9-800c-a7216cb2d079');
+ values('8984a70b-cfd4-483e-9b4c-e21d07e88548','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','630e0452-00d6-4452-8a5c-19b2c3115ee3');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('a82688b8-12c0-4796-a42b-69fde3f5671e','d8e1ae3b-8451-436a-a59b-c7516e711b9c','3493cabc-667d-459c-bab8-3a8f7d58842e','630E0452-00D6-4452-8A5C-19B2C3115EE3');
+ values('9337c69a-b9be-4bed-84f0-e4a65895402b','d8e1ae3b-8451-436a-a59b-c7516e711b9c','72997801-a545-468d-b7a9-0b9f1d0613ac','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('5c83c2e6-871a-461f-9edc-6a17d5cb9ea0','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','8a59a358-5a8f-4cb4-b600-9313028b911b');
+ values('6b759a96-5471-4b41-b409-e4c2091d1ad7','53536a66-0d99-4ee8-b4a6-5928129d0ab6','e844697e-900e-42b2-a96a-89ff5233c29b','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('193d6e1f-3a91-44a2-8be0-6a55caec6f82','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
+ values('7f457619-1c53-4a3a-a33e-e5def5f30668','53536a66-0d99-4ee8-b4a6-5928129d0ab6','bd3c53a3-55eb-427a-8707-f525682955ba','8a59a358-5a8f-4cb4-b600-9313028b911b');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('a88cfbd3-431f-43a6-b20b-6b1b911c5731','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
+ values('0d84be94-730c-499d-8129-e9dec92bc51e','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','d0739946-99e0-4770-8d2a-6faf25a8457a');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('9d63d824-4922-437f-be8d-6b5c8e35254a','d8e1ae3b-8451-436a-a59b-c7516e711b9c','eba566dc-95e7-4529-bf2e-656c7a490d69','15b73068-6c0f-49c9-800c-a7216cb2d079');
+ values('074176ee-c23b-499d-bb39-ea130f148fb9','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','8a59a358-5a8f-4cb4-b600-9313028b911b');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('eec7c54c-9322-469d-91df-6b8bcfded3aa','d8e1ae3b-8451-436a-a59b-c7516e711b9c','eba566dc-95e7-4529-bf2e-656c7a490d69','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
+ values('2b8d0d37-0ccd-42c9-9ba9-ea7b1b49fc8c','53536a66-0d99-4ee8-b4a6-5928129d0ab6','13ce68d5-1261-4bec-95ac-b56f708f480b','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('f95f6feb-3882-4be0-9d15-6b8fa3e44b95','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
+ values('349a54bb-88e8-4ad6-8992-ed6a3b4a0503','d8e1ae3b-8451-436a-a59b-c7516e711b9c','72997801-a545-468d-b7a9-0b9f1d0613ac','15b73068-6c0f-49c9-800c-a7216cb2d079');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('9f19e4b8-ac80-4237-a410-6bab60f69ae7','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','15b73068-6c0f-49c9-800c-a7216cb2d079');
+ values('8d051c9c-d574-46d7-b777-f0a751b9d21e','53536a66-0d99-4ee8-b4a6-5928129d0ab6','e4312e26-edb8-4e9d-9a66-96b7f252d559','c97f8956-5c79-4393-8423-34451a1bcc95');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('aa4e9468-ff13-4007-9161-6bf7d0d611ba','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
+ values('9e7bf3d2-e92f-498f-ac01-f18e98a194f2','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('86774779-2c05-437c-90ec-6c51a69dcfef','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','8a59a358-5a8f-4cb4-b600-9313028b911b');
+ values('928706fd-2ee3-4c9d-a472-f2851dbc3d85','53536a66-0d99-4ee8-b4a6-5928129d0ab6','9bb56ff2-6715-4838-a660-773e6c7eeb45','15b73068-6c0f-49c9-800c-a7216cb2d079');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('3a6a29b0-e37f-44b6-befe-6d1f9b32b66d','d8e1ae3b-8451-436a-a59b-c7516e711b9c','eba566dc-95e7-4529-bf2e-656c7a490d69','1c613ade-6665-49fb-b298-faf1b82dd6d2');
+ values('7b332d26-0869-45e0-961a-f2ef507ff535','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('c2ae794e-9be2-4dea-ae08-6d729f3a79b3','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','15b73068-6c0f-49c9-800c-a7216cb2d079');
+ values('d203682a-fa8d-47da-8b16-f436f125b19f','53536a66-0d99-4ee8-b4a6-5928129d0ab6','5fc6b135-85be-4234-970d-14918c26f958','d0739946-99e0-4770-8d2a-6faf25a8457a');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('87201a9d-c15c-4aef-947c-6edaf14af756','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','15b73068-6c0f-49c9-800c-a7216cb2d079');
+ values('0dc8d091-028e-49a0-a708-f4580a7e6974','53536a66-0d99-4ee8-b4a6-5928129d0ab6','13ce68d5-1261-4bec-95ac-b56f708f480b','d0739946-99e0-4770-8d2a-6faf25a8457a');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('0cb0728e-92e5-44ff-9d39-705733f70de9','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
+ values('f76905a5-4dbc-4a7c-be0d-f4726b217a98','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('f0895b62-6989-4529-a25d-711ebeb0815f','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
+ values('1c7c8deb-bcbf-4424-a153-f6c040074145','53536a66-0d99-4ee8-b4a6-5928129d0ab6','e844697e-900e-42b2-a96a-89ff5233c29b','1c613ade-6665-49fb-b298-faf1b82dd6d2');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('9085f84a-456b-4ec5-a111-712f11c92632','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
+ values('17d72aa6-565f-45c0-b35b-f6ec4550bfa2','d8e1ae3b-8451-436a-a59b-c7516e711b9c','eba566dc-95e7-4529-bf2e-656c7a490d69','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('d08ddc7f-8467-4465-96ca-73ab2442a045','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','630e0452-00d6-4452-8a5c-19b2c3115ee3');
+ values('a3216a5c-2685-4fec-b335-f8bc6d31eb43','53536a66-0d99-4ee8-b4a6-5928129d0ab6','72997801-a545-468d-b7a9-0b9f1d0613ac','15b73068-6c0f-49c9-800c-a7216cb2d079');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('a4b9cd9f-4f62-4195-8665-744c6314cf75','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','c97f8956-5c79-4393-8423-34451a1bcc95');
+ values('d490207f-a1d4-408f-9523-f8f96adcd736','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','15b73068-6c0f-49c9-800c-a7216cb2d079');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('beca9f58-a926-4bdd-b84d-745c15d18f7b','d8e1ae3b-8451-436a-a59b-c7516e711b9c','72997801-a545-468d-b7a9-0b9f1d0613ac','d0739946-99e0-4770-8d2a-6faf25a8457a');
+ values('49e9d35e-65c5-490d-82ec-fc987b09824f','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','c97f8956-5c79-4393-8423-34451a1bcc95');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('5c91e545-d693-4141-949f-74d5048f1cd6','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','d0739946-99e0-4770-8d2a-6faf25a8457a');
+ values('9a3d6e1e-c0de-4ab1-bcef-fd6abbbf293e','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','c97f8956-5c79-4393-8423-34451a1bcc95');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('15399420-3252-4928-8a4a-758b0e60ff45','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
+ values('a0fd634c-e5bf-4ff0-ad09-fd88978dcaec','53536a66-0d99-4ee8-b4a6-5928129d0ab6','13ce68d5-1261-4bec-95ac-b56f708f480b','15b73068-6c0f-49c9-800c-a7216cb2d079');
 insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('759073b0-c900-4aed-a88b-779902bbdcdb','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','1c613ade-6665-49fb-b298-faf1b82dd6d2');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('7f6aedda-d818-4e98-abc6-784dd8ce903c','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','630e0452-00d6-4452-8a5c-19b2c3115ee3');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('198fe8d2-dde1-4d59-aade-78ba270e73a7','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','c97f8956-5c79-4393-8423-34451a1bcc95');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('c162c593-133c-437c-967e-79735a8ed326','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','15b73068-6c0f-49c9-800c-a7216cb2d079');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('cc9e3a8a-d2d4-4bc2-b0bd-797791b247d7','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','15b73068-6c0f-49c9-800c-a7216cb2d079');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('40ac58f4-5cde-4a2f-9efa-7ba404580e98','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('65e4ad7a-79e8-44d0-aaff-7d9cc8a0622f','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','630e0452-00d6-4452-8a5c-19b2c3115ee3');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('802cd139-b1b4-40e5-b8a9-7dc88a767c54','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('a4b4e8cb-2fe8-465e-8346-7de7d26bfc56','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','1c613ade-6665-49fb-b298-faf1b82dd6d2');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('987348ce-9300-4c50-bc8a-7ef98148f7ed','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','d0739946-99e0-4770-8d2a-6faf25a8457a');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('b807524a-5c31-4372-b731-7f973456f86b','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('e4432f27-9e00-469e-8006-80d185cd2e28','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','c97f8956-5c79-4393-8423-34451a1bcc95');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('e1cc9d6c-22c1-4507-a0d2-80daa74ab029','d8e1ae3b-8451-436a-a59b-c7516e711b9c','3493cabc-667d-459c-bab8-3a8f7d58842e','1C613ADE-6665-49FB-B298-FAF1B82DD6D2');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('be4bed6f-4c51-49ff-89ac-81be76c7fd7e','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('634d99e9-e717-49f2-b9c8-82148dd5cf2f','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','1c613ade-6665-49fb-b298-faf1b82dd6d2');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('aef67bc8-64a0-4024-9df7-82700e35f5c9','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','8a59a358-5a8f-4cb4-b600-9313028b911b');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('9903c1bc-65f5-4410-a5fc-8353349450fe','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('8be3dbc4-0baf-4e84-b5c7-8367b0bf3c02','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('d8f3a7a8-ec11-4fcd-86e8-84efe3cb7886','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','1c613ade-6665-49fb-b298-faf1b82dd6d2');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('640ec2e7-5ccd-466e-af3c-855ee2949a4f','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','8a59a358-5a8f-4cb4-b600-9313028b911b');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('9fac66af-b69a-4301-b6f4-85b7f30697ba','d8e1ae3b-8451-436a-a59b-c7516e711b9c','3493cabc-667d-459c-bab8-3a8f7d58842e','CF8F418E-2468-4F6C-96CF-3302A2D9FA9B');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('5b21091f-d145-4f71-b740-86a11ddba488','d8e1ae3b-8451-436a-a59b-c7516e711b9c','3493cabc-667d-459c-bab8-3a8f7d58842e','15B73068-6C0F-49C9-800C-A7216CB2D079');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('465c0ef5-8029-4e3e-84a8-873c6f745c2b','d8e1ae3b-8451-436a-a59b-c7516e711b9c','72997801-a545-468d-b7a9-0b9f1d0613ac','630e0452-00d6-4452-8a5c-19b2c3115ee3');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('97f2af11-58a7-4add-b362-877b3633f50f','d8e1ae3b-8451-436a-a59b-c7516e711b9c','33c3179e-1ddc-4655-a65e-0b27ef10da8d','d0739946-99e0-4770-8d2a-6faf25a8457a');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('6cf598e3-df9d-4763-855c-884269e06fbc','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','8a59a358-5a8f-4cb4-b600-9313028b911b');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('201b490c-9cab-4af9-98be-8940b260a77b','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','15b73068-6c0f-49c9-800c-a7216cb2d079');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('feefa378-8019-4c8e-9cdb-897446dcdee4','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','d0739946-99e0-4770-8d2a-6faf25a8457a');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('3a3a293c-6e9e-4666-8d3c-898a49b2d11d','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','15b73068-6c0f-49c9-800c-a7216cb2d079');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('555b5157-3c2d-4e92-a45b-8a6c2db32835','d8e1ae3b-8451-436a-a59b-c7516e711b9c','813318ba-b3a7-437c-9405-016dcf48f224','15b73068-6c0f-49c9-800c-a7216cb2d079');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('3ae2d650-20bd-43e8-bfc0-8b0a30ac4a4e','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','d0739946-99e0-4770-8d2a-6faf25a8457a');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('f793dabd-6314-49ea-b7ce-8c68e4db0b4e','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','1c613ade-6665-49fb-b298-faf1b82dd6d2');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('a5ce4bd8-5e36-47a3-9008-8de06b7ce9d7','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','d0739946-99e0-4770-8d2a-6faf25a8457a');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('50788771-a268-45cf-ba00-8e9a6cb8a6aa','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','8a59a358-5a8f-4cb4-b600-9313028b911b');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('99ec3bf6-88ac-4a45-aa74-8f25333c1654','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('4a67362b-57fc-4e5b-b348-90ded1c3ebbf','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','c97f8956-5c79-4393-8423-34451a1bcc95');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('c9152056-c6fc-41cb-b070-90e87d1b93bc','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('ccf9ffe7-0625-4a88-a863-91582d065772','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('50f80be0-318f-4e14-b364-91fb3ffef73c','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','819f8aac-82e9-4a4b-ad1e-84824a985d73');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('87a3dcbe-16b9-4182-882b-927ff05e7d06','d8e1ae3b-8451-436a-a59b-c7516e711b9c','eba566dc-95e7-4529-bf2e-656c7a490d69','1c613ade-6665-49fb-b298-faf1b82dd6d2');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('19250872-211e-439a-a781-92d83454170c','d8e1ae3b-8451-436a-a59b-c7516e711b9c','eba566dc-95e7-4529-bf2e-656c7a490d69','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('a738e9b9-02e3-48a8-8ac1-93a491af95e8','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','1c613ade-6665-49fb-b298-faf1b82dd6d2');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('0c040296-470d-4b4a-a0db-93b7254a39a0','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','d0739946-99e0-4770-8d2a-6faf25a8457a');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('0c3d2fa5-28aa-4461-a824-943fe90d7fd0','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('9f032731-df53-4b28-b036-954929f7a1a7','d8e1ae3b-8451-436a-a59b-c7516e711b9c','eba566dc-95e7-4529-bf2e-656c7a490d69','d0739946-99e0-4770-8d2a-6faf25a8457a');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('3cc082f9-a74a-4a90-90e5-96cdd9dda7bc','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('62b3b317-486a-48b4-93c5-986ba435314b','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','1c613ade-6665-49fb-b298-faf1b82dd6d2');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('4ef58e8c-0f19-4024-98e2-987145313f6b','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','630e0452-00d6-4452-8a5c-19b2c3115ee3');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('8315fccd-2a85-49d5-88d7-98f1b4db52b1','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','d0739946-99e0-4770-8d2a-6faf25a8457a');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('f7885dcc-fd9d-44bb-948e-9983c6d5e828','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('2b19772a-2226-4f2f-996f-99c44ac8d314','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','15b73068-6c0f-49c9-800c-a7216cb2d079');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('7140274a-d6ea-425c-9a33-9a8aa083f032','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('1273aa74-12cc-4a4f-9bd9-9ac0d45901c0','d8e1ae3b-8451-436a-a59b-c7516e711b9c','177b5c8e-465e-4bc1-80aa-45ddbb65c911','15b73068-6c0f-49c9-800c-a7216cb2d079');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('02aa54aa-6174-42f6-bc4e-9b5a600b8f02','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('79631165-6cdb-47de-b31a-9d9acc07e25f','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','c97f8956-5c79-4393-8423-34451a1bcc95');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('2a9e7835-0b0d-4f49-9736-9f74c158b11b','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('db42219c-6db9-4aef-a11f-9fc27637a79b','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','1c613ade-6665-49fb-b298-faf1b82dd6d2');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('10e47e0b-d3f5-46ce-9993-a10f6079d4ab','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('2e244db4-8ea0-4ae1-a496-a14ccaaf1846','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','8a59a358-5a8f-4cb4-b600-9313028b911b');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('4f807cb1-4ef4-4e1a-998a-a26120cad0d4','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','1c613ade-6665-49fb-b298-faf1b82dd6d2');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('861420d6-fda6-419d-ae23-a353d6abc42d','d8e1ae3b-8451-436a-a59b-c7516e711b9c','eba566dc-95e7-4529-bf2e-656c7a490d69','1c613ade-6665-49fb-b298-faf1b82dd6d2');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('a45f27b1-35b7-4330-9bc5-a3ba8f2eeb29','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','15b73068-6c0f-49c9-800c-a7216cb2d079');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('93f50a08-e1ba-492e-8761-a423a500aed8','d8e1ae3b-8451-436a-a59b-c7516e711b9c','eba566dc-95e7-4529-bf2e-656c7a490d69','630e0452-00d6-4452-8a5c-19b2c3115ee3');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('d03c9c56-534f-464c-9224-a55a1903787d','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','630e0452-00d6-4452-8a5c-19b2c3115ee3');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('268d245d-0ef6-4b73-858a-a597674d73f4','d8e1ae3b-8451-436a-a59b-c7516e711b9c','33c3179e-1ddc-4655-a65e-0b27ef10da8d','1c613ade-6665-49fb-b298-faf1b82dd6d2');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('29eb956a-3697-4a56-a5d0-a63f8d308543','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('5b5204b2-6ccf-4c6c-9e2f-a67f69fe7c04','d8e1ae3b-8451-436a-a59b-c7516e711b9c','33c3179e-1ddc-4655-a65e-0b27ef10da8d','15b73068-6c0f-49c9-800c-a7216cb2d079');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('2f9d0ec7-266d-47c9-b20c-a6922a65fdc0','d8e1ae3b-8451-436a-a59b-c7516e711b9c','3493cabc-667d-459c-bab8-3a8f7d58842e','630E0452-00D6-4452-8A5C-19B2C3115EE3');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('04db6b83-4b28-46a4-8a5e-a7022f3b764b','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','630e0452-00d6-4452-8a5c-19b2c3115ee3');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('7cc63e89-d9d8-460d-8d2f-a786d3ec1af8','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','819f8aac-82e9-4a4b-ad1e-84824a985d73');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('5be265bb-aa1d-4f70-870e-a7a57b5f0910','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','c97f8956-5c79-4393-8423-34451a1bcc95');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('73913254-a509-46fd-8973-a7a6711633dc','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('fa9346bc-db23-4d09-af95-a7de86d3f057','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','630e0452-00d6-4452-8a5c-19b2c3115ee3');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('64f210fd-b24a-4eb8-a75b-a8b5a0defac1','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('f71388d2-5d91-4017-b82e-ac2c85c67e41','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('da0ec21b-e00c-4e3f-a09e-ac77c3c2ea4c','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','15b73068-6c0f-49c9-800c-a7216cb2d079');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('1473cb5a-3fc8-4537-8756-ac7ab8d9495c','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('e22ef04c-d291-41be-b94e-ac7dcd7840d8','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('e558b34f-989d-4f70-936a-ad1e83e72859','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','d0739946-99e0-4770-8d2a-6faf25a8457a');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('20876389-a8f0-4219-b913-af5793a1bbc6','d8e1ae3b-8451-436a-a59b-c7516e711b9c','33c3179e-1ddc-4655-a65e-0b27ef10da8d','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('eae064ef-f9d4-4e9f-9469-afdb924b2a2b','d8e1ae3b-8451-436a-a59b-c7516e711b9c','5fc6b135-85be-4234-970d-14918c26f958','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('c32d1793-f74a-484a-b774-b00c38e12843','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','d0739946-99e0-4770-8d2a-6faf25a8457a');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('b3075356-9118-49c8-88bd-b149282b5458','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','8a59a358-5a8f-4cb4-b600-9313028b911b');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('2a264ebd-d08a-4337-8f1f-b17061ce0932','d8e1ae3b-8451-436a-a59b-c7516e711b9c','eba566dc-95e7-4529-bf2e-656c7a490d69','1c613ade-6665-49fb-b298-faf1b82dd6d2');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('0e1db0f8-5e3b-4c40-ae17-b198d107f373','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','819f8aac-82e9-4a4b-ad1e-84824a985d73');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('cedd8564-5618-4584-9e55-b1ee9bd6360e','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','c97f8956-5c79-4393-8423-34451a1bcc95');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('bf456961-dbd0-41ad-b569-b25e1057e0b3','d8e1ae3b-8451-436a-a59b-c7516e711b9c','3493cabc-667d-459c-bab8-3a8f7d58842e','CF8F418E-2468-4F6C-96CF-3302A2D9FA9B');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('bdbaa891-58f2-4cf0-8c0b-b2744bc7d118','d8e1ae3b-8451-436a-a59b-c7516e711b9c','813318ba-b3a7-437c-9405-016dcf48f224','15b73068-6c0f-49c9-800c-a7216cb2d079');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('2f1b1736-5257-4e74-b9c7-b2cd5cf9d79d','d8e1ae3b-8451-436a-a59b-c7516e711b9c','5fc6b135-85be-4234-970d-14918c26f958','15b73068-6c0f-49c9-800c-a7216cb2d079');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('c5c13958-8c77-4863-b6af-b3b59c020e3e','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','c97f8956-5c79-4393-8423-34451a1bcc95');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('b0756526-6220-47a9-960e-b40e7a8fe148','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('13ad6f52-5fee-4396-9523-b4a30265e4dd','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','d0739946-99e0-4770-8d2a-6faf25a8457a');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('62a4eb0b-3880-4d3c-81c1-b4a85a29c895','d8e1ae3b-8451-436a-a59b-c7516e711b9c','33c3179e-1ddc-4655-a65e-0b27ef10da8d','15b73068-6c0f-49c9-800c-a7216cb2d079');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('323a3ed6-1b0c-412b-8396-b4ad28b0f75c','d8e1ae3b-8451-436a-a59b-c7516e711b9c','72997801-a545-468d-b7a9-0b9f1d0613ac','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('69263b5c-d542-4a68-b4c1-b5025e790f13','d8e1ae3b-8451-436a-a59b-c7516e711b9c','177b5c8e-465e-4bc1-80aa-45ddbb65c911','15b73068-6c0f-49c9-800c-a7216cb2d079');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('a089b6e7-9976-449b-bb1b-b53369c046ed','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','15b73068-6c0f-49c9-800c-a7216cb2d079');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('9431915e-ed4f-4ef1-830a-b553c37bdd35','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('2b2c7e4e-9d00-49ce-81b5-b6202dd6c07f','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','630e0452-00d6-4452-8a5c-19b2c3115ee3');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('15c80fbc-6081-4b63-b3d5-b66432bc4439','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','8a59a358-5a8f-4cb4-b600-9313028b911b');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('5a9b8034-dfb1-4748-af6a-b6b15b17fffb','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('80f44fab-11b6-461a-a614-b6b59ce94ba6','d8e1ae3b-8451-436a-a59b-c7516e711b9c','eba566dc-95e7-4529-bf2e-656c7a490d69','d0739946-99e0-4770-8d2a-6faf25a8457a');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('1816a583-e394-4e3e-aa41-b6eec29d00cf','d8e1ae3b-8451-436a-a59b-c7516e711b9c','177b5c8e-465e-4bc1-80aa-45ddbb65c911','15b73068-6c0f-49c9-800c-a7216cb2d079');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('8e903d6d-d0a6-4b72-936a-b79032b88ab3','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','630e0452-00d6-4452-8a5c-19b2c3115ee3');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('2fa522d6-900e-4eb1-8824-b8b2532904c2','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('fa0b91f0-b362-4576-90bd-ba289c5a60bb','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','8a59a358-5a8f-4cb4-b600-9313028b911b');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('f0882cbb-c05a-458a-b838-bc18fca8ddab','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','8a59a358-5a8f-4cb4-b600-9313028b911b');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('91a9566c-09c5-4d05-8b63-bcfd06096bc0','d8e1ae3b-8451-436a-a59b-c7516e711b9c','3493cabc-667d-459c-bab8-3a8f7d58842e','CF8F418E-2468-4F6C-96CF-3302A2D9FA9B');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('61363d26-a1bf-4997-92c2-bdc60e79e3a0','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','d0739946-99e0-4770-8d2a-6faf25a8457a');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('46bc4827-3ffd-4436-9502-beb0b8b02fc0','d8e1ae3b-8451-436a-a59b-c7516e711b9c','5fc6b135-85be-4234-970d-14918c26f958','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('f58a6839-6742-445a-999a-bfa698e19cfc','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','819f8aac-82e9-4a4b-ad1e-84824a985d73');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('316806cd-619d-4ab4-ac25-c018fa9386de','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','630e0452-00d6-4452-8a5c-19b2c3115ee3');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('bb7c875e-7919-4afb-9ece-c076b77201f1','d8e1ae3b-8451-436a-a59b-c7516e711b9c','72997801-a545-468d-b7a9-0b9f1d0613ac','d0739946-99e0-4770-8d2a-6faf25a8457a');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('9e5bda84-3772-458b-be50-c0838242524e','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','15b73068-6c0f-49c9-800c-a7216cb2d079');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('0fb6fc0b-5205-46f1-8252-c178ed2fb573','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','819f8aac-82e9-4a4b-ad1e-84824a985d73');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('4b4cb11f-a4af-40c2-9c4d-c329946895de','d8e1ae3b-8451-436a-a59b-c7516e711b9c','eba566dc-95e7-4529-bf2e-656c7a490d69','d0739946-99e0-4770-8d2a-6faf25a8457a');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('9cf4acfc-b627-4b9f-8cf8-c474fb846916','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','1c613ade-6665-49fb-b298-faf1b82dd6d2');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('403c726d-3b06-4b5e-95c6-c65f47e04f78','d8e1ae3b-8451-436a-a59b-c7516e711b9c','72997801-a545-468d-b7a9-0b9f1d0613ac','1c613ade-6665-49fb-b298-faf1b82dd6d2');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('f90443ea-26e9-4edd-850a-c6a2d2624aa4','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('863c7ed5-0963-42b9-bca4-c7523afec969','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','1c613ade-6665-49fb-b298-faf1b82dd6d2');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('93879eba-b9e3-481e-9ba9-c92528ea447f','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','1c613ade-6665-49fb-b298-faf1b82dd6d2');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('574012b9-6b7f-46b9-bbb4-c9d71363ee88','d8e1ae3b-8451-436a-a59b-c7516e711b9c','72997801-a545-468d-b7a9-0b9f1d0613ac','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('d3227354-3740-48be-bb5c-c9ea41a30a60','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('53d91a1c-da79-4611-971e-ca0fcf5eb93c','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('ae765b9a-83f6-4385-8a0e-cb3a093be694','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','630e0452-00d6-4452-8a5c-19b2c3115ee3');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('f19b7a6b-ab1d-4b9b-bfbc-cb9618cf2d01','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('b9835285-1c8a-42f7-94ce-ccd1737dd1b6','d8e1ae3b-8451-436a-a59b-c7516e711b9c','3493cabc-667d-459c-bab8-3a8f7d58842e','D0739946-99E0-4770-8D2A-6FAF25A8457A');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('4008f87a-b09e-4419-be98-ccfdb5b518d9','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('f7f6b766-d261-4474-9d2f-cdac9041db6b','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('cb6d48f8-bdd6-4251-864f-cdb0e265418a','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','15b73068-6c0f-49c9-800c-a7216cb2d079');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('bcb22253-2ad5-40b3-a30f-ce025b58e316','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('c37b2e3a-1e08-4392-8112-d0aba6391431','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','8a59a358-5a8f-4cb4-b600-9313028b911b');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('1520851d-db41-4e17-8971-d25ad57db760','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','1c613ade-6665-49fb-b298-faf1b82dd6d2');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('9b2a7636-57ae-448e-91c0-d2e91420b782','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('448ad479-7440-4484-8e57-d4377d5dd495','d8e1ae3b-8451-436a-a59b-c7516e711b9c','5fc6b135-85be-4234-970d-14918c26f958','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('e868f004-1b1c-47df-976c-d505a404849a','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','819f8aac-82e9-4a4b-ad1e-84824a985d73');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('b22976ca-e8a4-47db-a9bd-d679332428fe','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','15b73068-6c0f-49c9-800c-a7216cb2d079');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('3eed198e-c868-4f72-84e2-d6d62da3d99b','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('a99f432d-cc3a-4f9f-800c-d6fdc28a39b1','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','819f8aac-82e9-4a4b-ad1e-84824a985d73');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('dcd7a80c-9fa7-4bfe-9119-d7f9eb6ed6e1','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('d5148282-8404-431d-b9e6-d88f77aa0be0','d8e1ae3b-8451-436a-a59b-c7516e711b9c','72997801-a545-468d-b7a9-0b9f1d0613ac','d0739946-99e0-4770-8d2a-6faf25a8457a');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('76e594c1-6631-4987-94af-da14e34174ad','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','630e0452-00d6-4452-8a5c-19b2c3115ee3');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('48d6fccd-f50d-4482-b4bf-db05866f5e09','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('ba36f235-5d10-4bc0-bf02-db486eebe4fa','d8e1ae3b-8451-436a-a59b-c7516e711b9c','177b5c8e-465e-4bc1-80aa-45ddbb65c911','15b73068-6c0f-49c9-800c-a7216cb2d079');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('5498b5c8-7d2a-4378-9fef-db97a50488cb','d8e1ae3b-8451-436a-a59b-c7516e711b9c','eba566dc-95e7-4529-bf2e-656c7a490d69','15b73068-6c0f-49c9-800c-a7216cb2d079');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('6ba52297-2374-4489-81e8-dbd6d82ae432','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','630e0452-00d6-4452-8a5c-19b2c3115ee3');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('cad44bfe-98b8-4cd0-82fe-dc0e4f3a7b9e','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','819f8aac-82e9-4a4b-ad1e-84824a985d73');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('9f7c5237-b82e-4eae-b0cd-dd2f1f62194e','d8e1ae3b-8451-436a-a59b-c7516e711b9c','eba566dc-95e7-4529-bf2e-656c7a490d69','15b73068-6c0f-49c9-800c-a7216cb2d079');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('17d77495-8c61-4806-9d27-dd59b05632d6','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','d0739946-99e0-4770-8d2a-6faf25a8457a');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('72214c3e-8005-4878-aca5-dda258a57704','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','1c613ade-6665-49fb-b298-faf1b82dd6d2');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('d2616a8b-1f86-4880-8422-de77110a0898','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','630e0452-00d6-4452-8a5c-19b2c3115ee3');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('11807b8e-3294-4534-ac4e-df625af718ca','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','8a59a358-5a8f-4cb4-b600-9313028b911b');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('42c770a4-2bb2-4a3f-a106-df6d9ae5a803','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','630e0452-00d6-4452-8a5c-19b2c3115ee3');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('765e5d71-8886-43f6-8abb-e009296cd2d4','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('201b57fe-c12a-4545-aafa-e197ce82e68d','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('2068e6f4-2265-46b7-bbd8-e1f80d1b55c1','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','819f8aac-82e9-4a4b-ad1e-84824a985d73');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('a1afc281-fae7-4489-b6e4-e20fccd742a7','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','819f8aac-82e9-4a4b-ad1e-84824a985d73');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('4975eede-005a-4028-bcd8-e2a5b78d1153','d8e1ae3b-8451-436a-a59b-c7516e711b9c','33c3179e-1ddc-4655-a65e-0b27ef10da8d','15b73068-6c0f-49c9-800c-a7216cb2d079');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('adfca254-c5fd-44d1-a12b-e39096ff463f','d8e1ae3b-8451-436a-a59b-c7516e711b9c','eba566dc-95e7-4529-bf2e-656c7a490d69','630e0452-00d6-4452-8a5c-19b2c3115ee3');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('93ef9805-20e3-4303-b612-e512aea1c2d6','d8e1ae3b-8451-436a-a59b-c7516e711b9c','eba566dc-95e7-4529-bf2e-656c7a490d69','d0739946-99e0-4770-8d2a-6faf25a8457a');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('b0b449dc-5305-46c4-b639-e6d1e93db4ff','d8e1ae3b-8451-436a-a59b-c7516e711b9c','5fc6b135-85be-4234-970d-14918c26f958','d0739946-99e0-4770-8d2a-6faf25a8457a');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('471616ad-2be5-47ed-ba6f-e73d3ff3bccf','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('a76b8406-68fc-44cf-9779-e7bfc715748a','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','d0739946-99e0-4770-8d2a-6faf25a8457a');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('f75b4171-df3c-4ecc-898d-e8de5739fb65','d8e1ae3b-8451-436a-a59b-c7516e711b9c','3493cabc-667d-459c-bab8-3a8f7d58842e','630E0452-00D6-4452-8A5C-19B2C3115EE3');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('089675f3-03dd-42d4-8ba5-e921fcbc7f62','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('cd1e35c9-b92c-440f-bfa6-e9a00a1d55d3','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','1c613ade-6665-49fb-b298-faf1b82dd6d2');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('754f9966-e7d7-4959-8d9f-eb628ddbb570','d8e1ae3b-8451-436a-a59b-c7516e711b9c','72997801-a545-468d-b7a9-0b9f1d0613ac','15b73068-6c0f-49c9-800c-a7216cb2d079');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('f01e8b60-7694-46d5-9197-ebefdd6ec1ae','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('1ed70660-ae1d-452a-a9fa-ec1ad75dece5','d8e1ae3b-8451-436a-a59b-c7516e711b9c','72997801-a545-468d-b7a9-0b9f1d0613ac','15b73068-6c0f-49c9-800c-a7216cb2d079');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('c1b10023-08ca-4a9f-b5f2-ed0cea759205','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','c97f8956-5c79-4393-8423-34451a1bcc95');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('c1010066-e71e-45f9-aab2-ed472293f7f7','d8e1ae3b-8451-436a-a59b-c7516e711b9c','13ce68d5-1261-4bec-95ac-b56f708f480b','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('019f2822-864b-44c9-b529-ef1ba50ddeeb','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','630e0452-00d6-4452-8a5c-19b2c3115ee3');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('2590916e-3143-4308-a674-f129c016fc4e','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','15b73068-6c0f-49c9-800c-a7216cb2d079');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('acc1f3b0-9786-48fe-83b0-f1a81d47b7dc','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','1c613ade-6665-49fb-b298-faf1b82dd6d2');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('8702e0ed-eb21-4928-87a7-f3b6d7d0489a','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','c97f8956-5c79-4393-8423-34451a1bcc95');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('56ddf79b-119e-4a96-964d-f4546be11f3a','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('f95f345c-da49-41c8-93f8-f488bb681e9a','d8e1ae3b-8451-436a-a59b-c7516e711b9c','3493cabc-667d-459c-bab8-3a8f7d58842e','1C613ADE-6665-49FB-B298-FAF1B82DD6D2');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('649cb1f7-8a0a-495d-ab9c-f5b0d4b1a456','d8e1ae3b-8451-436a-a59b-c7516e711b9c','3493cabc-667d-459c-bab8-3a8f7d58842e','1C613ADE-6665-49FB-B298-FAF1B82DD6D2');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('e6dd56b1-17ef-405f-b6b5-f5d183f1bbe1','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','1c613ade-6665-49fb-b298-faf1b82dd6d2');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('50536bc9-53b8-432d-866c-f685ed12f48e','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','819f8aac-82e9-4a4b-ad1e-84824a985d73');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('345e81b9-f361-4723-b46f-f6b239335913','d8e1ae3b-8451-436a-a59b-c7516e711b9c','3493cabc-667d-459c-bab8-3a8f7d58842e','15B73068-6C0F-49C9-800C-A7216CB2D079');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('5093f5a8-7d01-429e-9ac1-f70ee72c8d9e','d8e1ae3b-8451-436a-a59b-c7516e711b9c','86f8c95f-48c0-4f0c-9503-5b4605aeb378','c97f8956-5c79-4393-8423-34451a1bcc95');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('53c3953b-5ea8-4014-a95e-f76c00b9486a','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','71e39291-59d3-4ed6-9ae1-0d7df7da2f91');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('2a8a5b4b-4a1a-4683-a813-f89ba8a8d1a3','d8e1ae3b-8451-436a-a59b-c7516e711b9c','eba566dc-95e7-4529-bf2e-656c7a490d69','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('b6d84fdc-bd85-47c5-ab25-f97c589a6bce','d8e1ae3b-8451-436a-a59b-c7516e711b9c','9bb56ff2-6715-4838-a660-773e6c7eeb45','c97f8956-5c79-4393-8423-34451a1bcc95');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('233d7423-b824-4a69-830e-fa2881579dd3','d8e1ae3b-8451-436a-a59b-c7516e711b9c','edd516a1-4180-4f0e-ac16-292d7dd4febd','630e0452-00d6-4452-8a5c-19b2c3115ee3');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('fda7d3e9-a1dc-4f33-9e4e-fb742640b1e2','d8e1ae3b-8451-436a-a59b-c7516e711b9c','3493cabc-667d-459c-bab8-3a8f7d58842e','D0739946-99E0-4770-8D2A-6FAF25A8457A');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('208a4682-9371-488a-84b3-fc5267fae9fc','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e4312e26-edb8-4e9d-9a66-96b7f252d559','15b73068-6c0f-49c9-800c-a7216cb2d079');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('aaf30277-7d9e-4b84-8c65-fcba2c8ceaaa','d8e1ae3b-8451-436a-a59b-c7516e711b9c','3493cabc-667d-459c-bab8-3a8f7d58842e','15B73068-6C0F-49C9-800C-A7216CB2D079');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('b4a65109-a9f0-4593-8fa6-fd69f22d939c','d8e1ae3b-8451-436a-a59b-c7516e711b9c','3493cabc-667d-459c-bab8-3a8f7d58842e','D0739946-99E0-4770-8D2A-6FAF25A8457A');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('1cc17ab4-b051-43f6-9b64-fde8a1f4651e','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','a9ee0f5e-ff85-4f00-ac18-f6118286671d');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('cdb60253-00eb-4f04-b135-fe116b6faada','d8e1ae3b-8451-436a-a59b-c7516e711b9c','e844697e-900e-42b2-a96a-89ff5233c29b','cf8f418e-2468-4f6c-96cf-3302a2d9fa9b');
-insert into Sys_RoleAction(RoleActionID,RoleID,MenuID,ActionID) 
- values('d5ed2445-b0d3-4128-bcbd-fe7da214aae0','d8e1ae3b-8451-436a-a59b-c7516e711b9c','bd3c53a3-55eb-427a-8707-f525682955ba','819f8aac-82e9-4a4b-ad1e-84824a985d73');
+ values('6974d758-41ee-47b0-aab2-ff2627f876f8','53536a66-0d99-4ee8-b4a6-5928129d0ab6','13ce68d5-1261-4bec-95ac-b56f708f480b','c97f8956-5c79-4393-8423-34451a1bcc95');
 
 /*  Table：Sys_User   */
 insert into Sys_User(UserID,UserName,FullName,Password,PwdExpiredTime,Sex,Phone,Email,Status,LoginCount,LastLoginTime,LastLoginIP,RoleIDs,CreateTime) 
- values('6a8aaec9-7fe0-430d-919d-935ebb09af40','abcdeee','aaa21212','J/uQ5NtvHWh8rQe2M5lBXA##',to_date('2016/9/6 18:06:21','yyyy-mm-dd hh24:mi:ss'),1,'13431142222','a@a.com',1,0,null,'','d8e1ae3b-8451-436a-a59b-c7516e711b9c',to_date('2016/8/15 14:46:34','yyyy-mm-dd hh24:mi:ss'));
+ values('6a8aaec9-7fe0-430d-919d-935ebb09af40','admin2','普通管理员','nDE4HzLUuqc#',to_date('2017/10/24 18:06:21','yyyy-mm-dd hh24:mi:ss'),1,'13431142222','a@a.com',1,6,to_date('2016/11/30 16:00:39','yyyy-mm-dd hh24:mi:ss'),'::1','53536a66-0d99-4ee8-b4a6-5928129d0ab6',to_date('2016/8/15 14:46:34','yyyy-mm-dd hh24:mi:ss'));
 insert into Sys_User(UserID,UserName,FullName,Password,PwdExpiredTime,Sex,Phone,Email,Status,LoginCount,LastLoginTime,LastLoginIP,RoleIDs,CreateTime) 
- values('d8e1ae3b-8451-436a-a59b-c7516e711b9c','admin','系统管理员','nDE4HzLUuqc#',to_date('2019/5/11 15:00:53','yyyy-mm-dd hh24:mi:ss'),1,'13431142222','admin@admin.com',1,206,to_date('2016/10/16 22:47:37','yyyy-mm-dd hh24:mi:ss'),'::1','d8e1ae3b-8451-436a-a59b-c7516e711b9c',to_date('2016/5/9 8:41:22','yyyy-mm-dd hh24:mi:ss'));
+ values('d8e1ae3b-8451-436a-a59b-c7516e711b9c','admin','系统管理员','nDE4HzLUuqc#',to_date('2019/5/11 15:00:53','yyyy-mm-dd hh24:mi:ss'),1,'13431142222','admin@admin.com',1,276,to_date('2016/11/30 16:16:15','yyyy-mm-dd hh24:mi:ss'),'::1','d8e1ae3b-8451-436a-a59b-c7516e711b9c',to_date('2016/5/9 8:41:22','yyyy-mm-dd hh24:mi:ss'));
 
 /*  Table：Sys_UserInfo   */
-insert into Sys_UserInfo(UserInfoID,CompanyID,Memo,IsOk,AreaID) 
- values('142a013b-0545-4f74-a82c-0474c68c6d1a',null,null,null,null);
-insert into Sys_UserInfo(UserInfoID,CompanyID,Memo,IsOk,AreaID) 
- values('2b221c9b-5b6e-43b5-ace2-2395d64d546b',null,null,null,null);
-insert into Sys_UserInfo(UserInfoID,CompanyID,Memo,IsOk,AreaID) 
- values('2c2ddf83-a563-456c-8ec4-2da25cb66918',null,null,null,null);
-insert into Sys_UserInfo(UserInfoID,CompanyID,Memo,IsOk,AreaID) 
- values('19c053c4-fbd9-4efe-b677-4b36d3863744','300',null,null,null);
-insert into Sys_UserInfo(UserInfoID,CompanyID,Memo,IsOk,AreaID) 
- values('c96847ea-71d7-4431-8fbf-4d9c0ba7c027',null,null,null,null);
-insert into Sys_UserInfo(UserInfoID,CompanyID,Memo,IsOk,AreaID) 
- values('6a8aaec9-7fe0-430d-919d-935ebb09af40',null,'xxxxx',null,null);
-insert into Sys_UserInfo(UserInfoID,CompanyID,Memo,IsOk,AreaID) 
- values('3b621f48-2896-4501-af78-9a79ed7078a1',null,null,null,null);
-insert into Sys_UserInfo(UserInfoID,CompanyID,Memo,IsOk,AreaID) 
- values('0fabf8a2-3583-47c4-950f-a7794cf88d03',null,null,null,null);
-insert into Sys_UserInfo(UserInfoID,CompanyID,Memo,IsOk,AreaID) 
- values('e37ca342-1a54-46e3-a2ed-b98da3c5d886',null,null,null,null);
-insert into Sys_UserInfo(UserInfoID,CompanyID,Memo,IsOk,AreaID) 
- values('d8e1ae3b-8451-436a-a59b-c7516e711b9c',null,'xxxxeee',null,null);
-insert into Sys_UserInfo(UserInfoID,CompanyID,Memo,IsOk,AreaID) 
- values('4fe83270-7ec1-49a4-b215-dc2428e03c50',null,null,null,null);
+insert into Sys_UserInfo(UserInfoID,CompanyID,Memo,AreaID) 
+ values('6a8aaec9-7fe0-430d-919d-935ebb09af40','','xxxxx',null);
+insert into Sys_UserInfo(UserInfoID,CompanyID,Memo,AreaID) 
+ values('d8e1ae3b-8451-436a-a59b-c7516e711b9c','','xxxxeee',null);
 

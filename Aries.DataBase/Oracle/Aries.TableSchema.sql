@@ -168,23 +168,14 @@ CREATE TABLE Demo_Tree
     PRIMARY KEY (ID) 
 )
 
-CREATE TABLE Editlog 
-(
-    ID NUMBER(10) NOT NULL,
-    TableName nvarchar2(2000) NULL,
-    KeyID nvarchar2(2000) NULL,
-    Content nvarchar2(2000) NULL,
-    UserID nvarchar2(2000) NULL,
-    EditTime date Default sysdate NULL,
-    PRIMARY KEY (ID) 
-)
-
 CREATE TABLE Sys_Action 
 (
     ActionID char(36) Default (SYS_GUID()) NOT NULL,
     ActionName nvarchar2(100) NOT NULL,
     ActionRefName nvarchar2(100) NOT NULL,
     IsEnabled NUMBER(1) Default (1) NULL,
+    IsSys NUMBER(1) Default (0) NULL,
+    SortOrder NUMBER(10) Default (999) NULL,
     PRIMARY KEY (ActionID) 
 )
 
@@ -286,7 +277,6 @@ CREATE TABLE Sys_UserInfo
     UserInfoID char(36) Default (SYS_GUID()) NOT NULL,
     CompanyID nvarchar2(50) NULL,
     Memo nvarchar2(150) NULL,
-    IsOk NUMBER(1) NULL,
     AreaID char(36) NULL,
     PRIMARY KEY (UserInfoID) 
 )
@@ -294,6 +284,5 @@ CREATE TABLE Sys_UserInfo
 comment on column SYS_USERINFO.USERINFOID  is '用户ID';
 comment on column SYS_USERINFO.COMPANYID  is '公司ID（未用到）';
 comment on column SYS_USERINFO.MEMO  is '用户备注';
-comment on column SYS_USERINFO.ISOK  is '仅Demo（未用到）';
 comment on column SYS_USERINFO.AREAID  is '区域ID（未用到）';
 

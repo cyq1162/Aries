@@ -424,8 +424,8 @@ a input.btn-lg:hover{ background:#4797e9;font-size:14px; height:28px!important; 
 
 
 /*强制修改 easy ui里面样式。。。。。   */
-.layout-split-west .panel-header {text-align:center !important;height:30px; line-height:30px;font-size:16px !important;background:#286cd2 url(../images/icon3.png)
-                                   no-repeat -13px center ;z-index:999;}
+.layout-split-west .panel-header {text-align:center !important;height:30px; line-height:30px;font-size:16px !important;
+background:#286cd2 url(../images/icon3.png) no-repeat -13px center !important;z-index:999;filter:initial;}
 .layout-split-west .panel-header .panel-title {font-size:16px !important;line-height:30px !important;color:#fff !important;}
 .tabs{height:39px !important;}
 .tabs li a.tabs-inner {height:29px !important;line-height:33px;}

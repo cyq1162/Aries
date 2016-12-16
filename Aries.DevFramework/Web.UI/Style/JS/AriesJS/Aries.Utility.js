@@ -559,7 +559,7 @@
                     if (d.success == false && d.msg && d.msg.startWith("/") && d.msg.endWith(".html")) {
                         location.href = d.msg;//跳转到登陆。
                     }
-                    if (d.success == false && d.msg && !opts.callback && $.messager) {
+                    else if (d.success == false && d.msg && !opts.callback && $.messager) {
                         $Core.Utility.Window.showMsg(d.msg);//需要引用easyui，而其它页面可能没有
                         json = null;
                     }

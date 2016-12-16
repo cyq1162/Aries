@@ -47,7 +47,7 @@ namespace Aries.Controllers
                 case "Sys_User":
                     jsonResult = sysLogic.AddUser();
                     break;
-                case "System_Menu":
+                case "Sys_Menu":
                     jsonResult = sysLogic.AddMenu();
                     break;
                 default:

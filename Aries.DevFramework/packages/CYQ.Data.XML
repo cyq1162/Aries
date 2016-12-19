@@ -30,6 +30,11 @@
             获取Web.config或App.config的数字值（允许值不存在或为空时输出默认值）。
             </summary>
         </member>
+        <member name="M:CYQ.Data.AppConfig.GetAppBool(System.String,System.Boolean)">
+            <summary>
+            获取Web.config或App.config的数字值（允许值不存在或为空时输出默认值）。
+            </summary>
+        </member>
         <member name="M:CYQ.Data.AppConfig.GetConn(System.String,System.String@)">
             <summary>
             获取Web.config或App.config的connectionStrings节点的值。
@@ -306,28 +311,33 @@
             </summary>
         </member>
         <member name="T:CYQ.Data.AppDebug">
-            <summary>
-            应用程序调试类,能截到应用程序所有执行的SQL
-            </summary>
+             <summary>
+             this class can intercept sql
+            <para> 应用程序调试类,能截到应用程序所有执行的SQL</para>
+             </summary>
         </member>
         <member name="M:CYQ.Data.AppDebug.Start">
             <summary>
-            开始记录调试信息
+            start to record sql
+            <para>开始记录调试信息</para>
             </summary>
         </member>
         <member name="M:CYQ.Data.AppDebug.Stop">
             <summary>
-            停止并清除记录的调试信息
+            stop to record sql
+            <para>停止并清除记录的调试信息</para>
             </summary>
         </member>
         <member name="P:CYQ.Data.AppDebug.IsRecording">
             <summary>
-            正在记录中
+            is recoreding sql ?
+            <para>正在记录中</para>
             </summary>
         </member>
         <member name="P:CYQ.Data.AppDebug.Info">
             <summary>
-            获取调试信息
+            get sql detail info
+            <para>获取调试信息</para>
             </summary>
         </member>
         <member name="T:CYQ.Data.MAction">
@@ -1178,52 +1188,6 @@
         <member name="T:CYQ.Data.Aop.AopEnum">
             <summary>
             框架内部数据库操作方法枚举
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Aop.AopEnum.Select">
-            <summary>
-            查询多条记录方法 [参数为顺序为：Aop.AopEnum.Fill, out result, _TableName, aop_where, aop_otherInfo]
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Aop.AopEnum.Insert">
-            <summary>
-            插入方法 [参数为顺序为：Aop.AopEnum.Insert, out result, _TableName, aop_Row, aop_otherInfo]
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Aop.AopEnum.Update">
-            <summary>
-            更新方法  [参数为顺序为：Aop.AopEnum.Update, out result, _TableName, aop_Row, aop_otherInfo]
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Aop.AopEnum.Delete">
-            <summary>
-            删除方法  [参数为顺序为：Aop.AopEnum.Fill, out result, _TableName,aop_Row,aop_where, aop_otherInfo]
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Aop.AopEnum.Fill">
-            <summary>
-            查询一条记录方法 [参数为顺序为：Aop.AopEnum.Fill, out result, _TableName, aop_where, aop_otherInfo]
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Aop.AopEnum.GetCount">
-            <summary>
-            取记录总数 [参数为顺序为：Aop.AopEnum.GetCount, out result, _TableName, aop_where, aop_otherInfo]
-            </summary>
-        </member>
-        <!-- 对于成员“F:CYQ.Data.Aop.AopEnum.ExeMDataTableList”忽略有格式错误的 XML 注释 -->
-        <member name="F:CYQ.Data.Aop.AopEnum.ExeMDataTable">
-            <summary>
-            MProc查询返回MDataTable方法 [参数为顺序为：AopEnum.ExeMDataTable, out result, procName, isProc, DbParameterCollection, aopInfo]
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Aop.AopEnum.ExeNonQuery">
-            <summary>
-            MProc执行返回受影响行数方法 [参数为顺序为：AopEnum.ExeNonQuery, out result, procName, isProc, DbParameterCollection, aopInfo]
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Aop.AopEnum.ExeScalar">
-            <summary>
-            MProc执行返回首行首列方法 [参数为顺序为：AopEnum.ExeScalar, out result, procName, isProc, DbParameterCollection, aopInfo]
             </summary>
         </member>
         <member name="T:CYQ.Data.Aop.AopResult">
@@ -2107,22 +2071,26 @@
         </member>
         <member name="T:CYQ.Data.InsertOp">
             <summary>
-            MAction的Insert方法的返回值选项
+            MAction Insert Options
+            <para>MAction的Insert方法的返回值选项</para>
             </summary>
         </member>
         <member name="F:CYQ.Data.InsertOp.None">
             <summary>
-            使用此项：插入数据后[MSSQL会返回ID,其它数据库则不会返回ID]
+            only insert,no return autoIncrement id
+            <para>使用此项：插入数据后[MSSQL会返回ID,其它数据库则不会返回ID]</para>
             </summary>
         </member>
         <member name="F:CYQ.Data.InsertOp.ID">
             <summary>
-            使用此项：插入数据后会返回ID[默认选项]。
+            insert and return autoincrement id (default option)
+            <para>使用此项：插入数据后会返回ID[默认选项]。</para>
             </summary>
         </member>
         <member name="F:CYQ.Data.InsertOp.Fill">
             <summary>
-            使用此项：插入数据后,会根据返回ID进行查询后填充数据行。
+            insert and select top 1 data to fill row
+            <para>使用此项：插入数据后,会根据返回ID进行查询后填充数据行。</para>
             </summary>
         </member>
         <member name="T:CYQ.Data.Orm.DBFast">
@@ -3526,11 +3494,6 @@
             旧的列名（AlterOp为Rename时可用）
             </summary>
         </member>
-        <member name="F:CYQ.Data.Table.MCellStruct.ColumnName">
-            <summary>
-            列名
-            </summary>
-        </member>
         <member name="F:CYQ.Data.Table.MCellStruct.TableName">
             <summary>
             表名
@@ -3562,6 +3525,11 @@
             结构集合
             </summary>
         </member>
+        <member name="P:CYQ.Data.Table.MCellStruct.ColumnName">
+            <summary>
+            列名
+            </summary>
+        </member>
         <member name="P:CYQ.Data.Table.MCellStruct.SqlType">
             <summary>
             SqlDbType类型
@@ -3585,6 +3553,11 @@
         <member name="T:CYQ.Data.Table.MDataColumn">
             <summary>
             头列表集合
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Table.MDataColumn.IsColumnNameChanged">
+            <summary>
+            列名是否变更
             </summary>
         </member>
         <member name="F:CYQ.Data.Table.MDataColumn.columnIndex">
@@ -4169,7 +4142,8 @@
         </member>
         <member name="T:CYQ.Data.LogType">
             <summary>
-            日志类型
+            LogType
+            <para>日志类型</para>
             </summary>
         </member>
         <member name="F:CYQ.Data.LogType.Debug">
@@ -4199,7 +4173,8 @@
         </member>
         <member name="T:CYQ.Data.Log">
             <summary>
-            日志静态类（可将日志输出到文本中）
+            Write Log to txt or database
+            <para>日志静态类（可将日志输出到文本中）</para>
             </summary>
         </member>
         <member name="M:CYQ.Data.Log.WriteLog(System.String)">
@@ -4210,72 +4185,32 @@
         </member>
         <member name="M:CYQ.Data.Log.WriteLogToDB(System.Exception)">
             <summary>
-             将日志写到数据库中[需要配置LogConn项后方生效 ]
+            write log to database [LogConn must has config value]
+             <para>将日志写到数据库中[需要配置LogConn项后方生效 ]</para>
             </summary>
-            <param name="err">日志信息</param>
         </member>
         <member name="M:CYQ.Data.Log.WriteLogToDB(System.String)">
             <summary>
-             将日志写到数据库中[需要配置LogConn项后方生效 ]
+            write log to database [LogConn must has config value]
+             <para>将日志写到数据库中[需要配置LogConn项后方生效 ]</para>
             </summary>
-            <param name="message">日志信息</param>
-        </member>
-        <member name="M:CYQ.Data.Log.WriteLogToDB(System.String,CYQ.Data.LogType)">
-            <summary>
-             将日志写到数据库中[需要配置LogConn项后方生效 ]
-            </summary>
-            <param name="message">日志信息</param>
-            <param name="logType">日志类型</param>
-        </member>
-        <member name="M:CYQ.Data.Log.WriteLogToDB(System.String,CYQ.Data.LogType,System.String)">
-            <summary>
-             将日志写到数据库中[需要配置LogConn项后方生效 ]
-            </summary>
-            <param name="message">日志信息</param>
-            <param name="logType">日志类型</param>
-            <param name="userName">用户账号</param>
-        </member>
-        <member name="M:CYQ.Data.Log.WriteLogToDB(System.String,System.String,System.String)">
-            <summary>
-             将日志写到数据库中[需要配置LogConn项后方生效 ]
-            </summary>
-            <param name="message">日志信息</param>
-            <param name="logType">日志类型</param>
-            <param name="userName">用户账号</param>
         </member>
         <member name="M:CYQ.Data.Log.WriteLogToTxt(System.String)">
             <summary>
-            将日志写到外部txt[web.config中配置路径，配置项为Logpath,默认路径为 "Log/" ]
-            </summary>
-            <param name="message">日志内容</param>
-        </member>
-        <member name="M:CYQ.Data.Log.WriteLogToTxt(System.String,CYQ.Data.LogType)">
-            <summary>
-            将日志写到外部txt[web.config中配置路径，配置项为Logpath,默认路径为 "Log/" ]
-            </summary>
-            <param name="message">日志内容</param>
-            <param name="logType">日志类型</param>
-        </member>
-        <member name="M:CYQ.Data.Log.WriteLogToTxt(System.String,System.String)">
-            <summary>
-            将日志写到外部txt[web.config中配置路径，配置项为Logpath,默认路径为 "Log/" ]
-            </summary>
-            <param name="message">日志内容</param>
-            <param name="logType">日志类型</param>
-        </member>
-        <member name="M:CYQ.Data.Log.WriteLogToTxt(System.Exception)">
-            <summary>
-            将异常写入文件
+            Write log to txt
+             <para>将日志写到外部txt[web.config中配置路径，配置项为Logpath,默认路径为 "Log/" ]</para>
             </summary>
         </member>
         <member name="M:CYQ.Data.Log.GetExceptionMessage(System.Exception)">
             <summary>
-            获取异常的内部信息
+            Convert Exception to string
+            <para>获取异常的内部信息</para>
             </summary>
         </member>
         <member name="T:CYQ.Data.SysLogs">
             <summary>
-            日志记录到数据库（需要配置LogConn链接后方有效）
+            A class for you to Write log to database
+            <para>日志记录到数据库（需要配置LogConn链接后方有效）</para>
             </summary>
         </member>
         <member name="P:CYQ.Data.SysLogs.ID">
@@ -4609,6 +4544,11 @@
             操作符号:"like"
             </summary>
         </member>
+        <member name="F:CYQ.Data.Table.Op.NotLike">
+            <summary>
+            操作符号:"not like"
+            </summary>
+        </member>
         <member name="F:CYQ.Data.Table.Op.IsNull">
             <summary>
             是否Null值
@@ -4661,7 +4601,7 @@
         </member>
         <member name="M:CYQ.Data.Table.MDataTableFilter.CompareMore(CYQ.Data.Table.MDataRow,System.Collections.Generic.List{CYQ.Data.Table.TFilter})">
             <summary>
-            值比较
+            多条件下值比较
             </summary>
         </member>
         <member name="M:CYQ.Data.Table.MDataTableFilter.SplitWhereOrderby(System.String@,System.String@)">
@@ -4688,7 +4628,8 @@
         </member>
         <member name="T:CYQ.Data.Tool.EscapeOp">
             <summary>
-            JsonHelper 的符号转义选项
+            Escape json char options
+            <para>JsonHelper 的符号转义选项</para>
             </summary>
         </member>
         <member name="F:CYQ.Data.Tool.EscapeOp.Default">
@@ -4698,110 +4639,118 @@
         </member>
         <member name="T:CYQ.Data.Tool.JsonHelper">
             <summary>
-            json 帮助类
+            Json class for you easy to operate json
+            <para>功能全面的json帮助类</para>
             </summary>
         </member>
         <member name="M:CYQ.Data.Tool.JsonHelper.#ctor(System.Boolean)">
-            <param name="addHead">是否带输出头</param>
+            <param name="addHead">with easyui header ?<para>是否带输出头</para></param>
         </member>
         <member name="M:CYQ.Data.Tool.JsonHelper.#ctor(System.Boolean,System.Boolean)">
-            <param name="addSchema">是否首行带表结构[MDataTable.LoadFromJson可以还原表的数据类型]</param>
+            <param name="addSchema">first row with table schema ?
+            <para>是否首行带表结构[MDataTable.LoadFromJson可以还原表的数据类型]</para></param>
         </member>
         <member name="F:CYQ.Data.Tool.JsonHelper.Escape">
             <summary>
-            转义符号
+            Escape options
+            <para>转义符号</para>
             </summary>
         </member>
         <member name="F:CYQ.Data.Tool.JsonHelper.IsConvertNameToLower">
             <summary>
-            是否将名称转为小写
+            convert filed to lower
+            <para>是否将名称转为小写</para>
             </summary>
         </member>
         <member name="F:CYQ.Data.Tool.JsonHelper.DateTimeFormatter">
             <summary>
-            日期的格式化（默认：yyyy-MM-dd HH:mm:ss）
+            formate datetime
+            <para>日期的格式化（默认：yyyy-MM-dd HH:mm:ss）</para>
             </summary>
         </member>
         <member name="M:CYQ.Data.Tool.JsonHelper.AddBr">
             <summary>
-            添加完一行数据后调用此方法换行
+            flag a json is end and start a new json
+            <para> 添加完一个Json数据后调用此方法换行</para>
             </summary>
         </member>
         <member name="M:CYQ.Data.Tool.JsonHelper.AddFoot(System.String,System.String)">
             <summary>
-            添加底部数据（只有AddHead为true情况才能添加数据）
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Tool.JsonHelper.AddFoot(System.String,System.String,System.Boolean)">
-            <summary>
-             添加底部数据（只有AddHead为true情况才能添加数据）
+            attach json data (AddHead must be true)
+            <para>添加底部数据（只有AddHead为true情况才能添加数据）</para>
             </summary>
         </member>
         <member name="M:CYQ.Data.Tool.JsonHelper.Add(System.String,System.String)">
             <summary>
-            添加一个字段的值
+            add json key value
+            <para>添加一个字段的值</para>
             </summary>
-            <param name="name"></param>
-            <param name="value"></param>
         </member>
         <member name="M:CYQ.Data.Tool.JsonHelper.Add(System.String,System.String,System.Boolean)">
-            <summary>
-            添加一个字段的值
-            </summary>
-            <param name="noQuotes">值不带引号</param>
+            <param name="noQuotes">value is no quotes
+            <para>值不带引号</para></param>
         </member>
         <member name="M:CYQ.Data.Tool.JsonHelper.ToString">
             <summary>
-            输出Json字符串
+            out json result
+            <para>输出Json字符串</para>
             </summary>
+        </member>
+        <member name="M:CYQ.Data.Tool.JsonHelper.ToString(System.Boolean)">
+            <param name="arrayEnd">end with [] ?</param>
+            <returns></returns>
         </member>
         <member name="M:CYQ.Data.Tool.JsonHelper.IsJson(System.String)">
             <summary>
-            检测是否Json格式的字符串
+            check string is json
+            <para>检测是否Json格式的字符串</para>
             </summary>
-            <param name="json">要检测的字符串</param>
         </member>
         <member name="M:CYQ.Data.Tool.JsonHelper.IsJson(System.String,System.Int32@)">
-            <summary>
-            检测是否Json格式的字符串
-            </summary>
-            <param name="json">要检测的字符串</param>
-            <param name="errIndex">错误的字符索引</param>
-            <returns></returns>
+            <param name="errIndex">the index of the error char
+            <para>错误的字符索引</para></param>
         </member>
         <member name="M:CYQ.Data.Tool.JsonHelper.GetValue(System.String,System.String)">
             <summary>
-            获取Json字符串的值
+            Get json value
+            <para>获取Json字符串的值</para>
             </summary>
-            <param name="json">Json字符串</param>
-            <param name="key">键值(有层级时用：XXX.YYY.ZZZ)</param>
+            <param name="key">the name or key of json
+            <para>键值(有层级时用：XXX.YYY.ZZZ)</para></param>
             <returns></returns>
         </member>
-        <member name="M:CYQ.Data.Tool.JsonHelper.OutResult(System.Boolean,System.String,System.Collections.Generic.Dictionary{System.String,System.Object}[])">
+        <member name="M:CYQ.Data.Tool.JsonHelper.OutResult(System.Boolean,System.String)">
             <summary>
-            返回Json格式的结果信息
+            a easy method for you to return a json
+            <para>返回Json格式的结果信息</para>
             </summary>
+        </member>
+        <member name="M:CYQ.Data.Tool.JsonHelper.OutResult(System.Boolean,System.String,System.Boolean)">
+            <param name="noQuates">no ""</param>
         </member>
         <member name="M:CYQ.Data.Tool.JsonHelper.Split(System.String)">
             <summary>
-            将Json分隔成键值对。
+             split json to dicationary
+            <para>将Json分隔成键值对。</para>
             </summary>
         </member>
         <member name="M:CYQ.Data.Tool.JsonHelper.SplitArray(System.String)">
             <summary>
-            将Json 数组分隔成多个键值对。
+             split json to dicationary array
+            <para>将Json 数组分隔成多个键值对。</para>
             </summary>
         </member>
         <member name="M:CYQ.Data.Tool.JsonHelper.Fill(CYQ.Data.Table.MDataTable)">
             <summary>
-            从数据表中取数据填充,最终可输出json字符串
+            Fill obj and get json from  ToString() method
+            <para>从数据表中取数据填充,最终可输出json字符串</para>
             </summary>
         </member>
         <member name="M:CYQ.Data.Tool.JsonHelper.Fill(CYQ.Data.Table.MDataRow)">
             <summary>
-            从数据行中填充，最终可输出json字符串。
+            Fill obj and get json from  ToString() method
+            <para>从数据行中取数据填充,最终可输出json字符串</para>
             </summary>
-            <param name="row"></param>
         </member>
         <member name="M:CYQ.Data.Tool.JsonHelper.Fill(CYQ.Data.Table.MDataColumn,System.Boolean)">
             <summary>
@@ -4812,7 +4761,8 @@
         </member>
         <member name="M:CYQ.Data.Tool.JsonHelper.Fill(System.Object)">
             <summary>
-            可从类(对象,泛型List、泛型Dictionary）中填充，最终可输出json字符串。
+             Fill obj and get json from  ToString() method
+            <para>可从类(对象,泛型List、泛型Dictionary）中填充，最终可输出json字符串。</para>
             </summary>
             <param name="obj">实体类对象</param>
         </member>
@@ -4831,74 +4781,66 @@
         </member>
         <member name="M:CYQ.Data.Tool.JsonHelper.ToEntity``1(System.String)">
             <summary>
-            将Json转换为实体
+            Convert json to Entity
+            <para>将Json转换为实体</para>
             </summary>
-            <typeparam name="T">类型</typeparam>
-            <param name="json">json数据</param>
+            <typeparam name="T">Type<para>类型</para></typeparam>
         </member>
         <member name="M:CYQ.Data.Tool.JsonHelper.ToList``1(System.String)">
             <summary>
-            将Json转换为实体列表
+             Convert json to Entity List
+             <para>将Json转换为实体列表</para>
             </summary>
-            <typeparam name="T">类型</typeparam>
-            <param name="json">json数据</param>
+            <typeparam name="T">Type<para>类型</para></typeparam>
         </member>
         <member name="M:CYQ.Data.Tool.JsonHelper.ToJson(System.Object)">
             <summary>
-            将一个对象（实体，泛型List，字典Dictionary）转成Json
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Tool.JsonHelper.ToJson(System.Object,System.Boolean)">
-            <summary>
-            将一个对象（实体，泛型List，字典Dictionary）转成Json
+            Convert object to json
+            <para>将一个对象（实体，泛型List，字典Dictionary）转成Json</para>
             </summary>
         </member>
         <member name="M:CYQ.Data.Tool.JsonHelper.ToJson(System.Object,System.Boolean,CYQ.Data.Table.RowOp)">
-            <summary>
-             将一个对象（实体，泛型List，字典Dictionary）转成Json
-            </summary>
-            <param name="obj">对象</param>
-            <param name="isConvertNameToLower">字段是否转小写</param>
-            <param name="op">默认值为RowOp.All</param>
-            <returns></returns>
+            <param name="op">default value is RowOp.All
+            <para>默认值为RowOp.All</para></param>
         </member>
         <member name="M:CYQ.Data.Tool.JsonHelper.ToXml(System.String)">
             <summary>
-            将一个Json转成Xml
+            Convert json to Xml
+            <para>将一个Json转成Xml</para>
             </summary>
-            <param name="json">Json字符串</param>
         </member>
         <member name="M:CYQ.Data.Tool.JsonHelper.ToXml(System.String,System.Boolean)">
-            <summary>
-            将一个Json转成Xml
-            </summary>
-            <param name="json">Json字符串</param>
-            <param name="isWithAttr">是否转成属性，默认true</param>
-            <returns></returns>
+            <param name="isWithAttr">default value is true
+            <para>是否转成属性，默认true</para></param>
         </member>
         <member name="P:CYQ.Data.Tool.JsonHelper.RowOp">
             <summary>
-             Json输出行数据的过滤选项
+             filter json data
+            <para>Json输出行数据的过滤选项</para>
             </summary>
         </member>
         <member name="P:CYQ.Data.Tool.JsonHelper.Success">
             <summary>
-            是否成功   
+             is success
+            <para>是否成功</para>
             </summary>
         </member>
         <member name="P:CYQ.Data.Tool.JsonHelper.ErrorMsg">
             <summary>
-            错误提示信息   
+            Error message
+            <para>错误提示信息  </para> 
             </summary>
         </member>
         <member name="P:CYQ.Data.Tool.JsonHelper.RowCount">
             <summary>
-            当前返回的行数
+            data rows count
+            <para>当前返回的行数</para>
             </summary>
         </member>
         <member name="P:CYQ.Data.Tool.JsonHelper.Total">
             <summary>
-            所有记录的总数（多数用于分页的记录总数）。
+            totla count
+            <para>所有记录的总数（多数用于分页的记录总数）。</para>
             </summary>
         </member>
         <member name="T:CYQ.Data.Tool.DBTool">

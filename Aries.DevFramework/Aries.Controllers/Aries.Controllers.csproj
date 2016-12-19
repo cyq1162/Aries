@@ -43,7 +43,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AriesController\DefaultController.cs" />
     <Compile Include="AriesController\SysAdminController.cs" />
-    <Compile Include="YourController\ArticleController.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Aries.Core\Aries.Core.csproj">
@@ -55,7 +54,9 @@
       <Name>Aries.Logic</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="YourController\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="AriesController\框架目录请不要动它.txt" />
   </ItemGroup>

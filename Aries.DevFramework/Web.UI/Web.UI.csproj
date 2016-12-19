@@ -490,8 +490,6 @@
     <Content Include="Style\JS\jquery-1.7.1.min.js" />
     <Content Include="Style\JS\json2.js" />
     <Content Include="update.txt" />
-    <Content Include="Web\Article\ArticleList.html" />
-    <Content Include="Web\Article\ArticleEidt.html" />
     <Content Include="Web\SysAdmin\ActionList.html" />
     <Content Include="Web\SysAdmin\ConfigGrid.html" />
     <Content Include="Web\SysAdmin\ConfigKeyValue.html" />
@@ -501,7 +499,7 @@
     <Content Include="Web\SysAdmin\MenuEdit.html" />
     <Content Include="Web\SysAdmin\RoleAction.html" />
     <Content Include="Web\SysAdmin\RoleList.html" />
-    <Content Include="Web\SysAdmin\UserEidt.html" />
+    <Content Include="Web\SysAdmin\UserEdit.html" />
     <Content Include="Web\SysAdmin\UserList.html" />
     <Content Include="Web\SysAdmin\DialogView.html" />
   </ItemGroup>

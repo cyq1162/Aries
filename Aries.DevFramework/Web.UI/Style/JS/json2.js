@@ -329,10 +329,3 @@ if (typeof JSON !== 'object') {
     }
 }());
 
-/*解决easyui.min.js 里下拉多选的取消选择问题 By CYQ 2014.12.04*/
-Array.prototype.indexOf = function (e) {
-    for (var i = 0, j; j = this[i]; i++) {
-        if (j == e) { return i; }
-    }
-    return -1;
-}

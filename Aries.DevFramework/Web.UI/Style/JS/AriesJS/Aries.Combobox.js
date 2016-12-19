@@ -1,5 +1,6 @@
 ﻿//AR.Combobox 定义
 (function ($, $Core) {
+    var defaultItem = { text: "请选择", value: "" };
     var comboOption = {
         valueField: 'value',
         textField: 'text',
@@ -43,8 +44,8 @@
         if (key && $Core.Global.Config[key]) {
             var items = $Core.Global.Config[key];//获取数据
             op.data = $Core.Utility.cloneArray(items, true);
-            if (!op.tree && op.defaultItem && (op.data.length == 0 || op.data[0][op.textField] != "请选择")) {
-                op.data.unshift({ text: "请选择", value: "" });
+            if (!op.tree && op.defaultItem && (op.data.length == 0 || op.data[0][op.textField] != defaultItem.text)) {
+                op.data.unshift(defaultItem);
             }
             if (op.multiple) {
                 registerMultiEvent(op);
@@ -62,15 +63,15 @@
             if (comboxData[op.key]) {
                 op.data = $Core.Utility.cloneArray(comboxData[op.key], true);//克隆，避免后续追加的请选择影响原有数据。
             }
-            if (!op.tree && op.defaultItem && (op.data.length == 0 || op.data[0][op.textField] != "请选择")) {
-                op.data.unshift({ text: "请选择", value: "" });
+            if (!op.tree && op.defaultItem && (op.data.length == 0 || op.data[0][op.textField] != defaultItem.text)) {
+                op.data.unshift(defaultItem);
             }
             _cascadeBindCombo($input, op);
         }
     }
     //级联绑定共用函数部分
     function _cascadeBindCombo($input, op) {
-        //判断是否级联模式
+        //判断是否级联模式（存在下级节点）
         var $parent = $("[parent='" + op.key + "']");
         if ($parent && $parent.length > 0) {
             op.onSelect = function ($p, $box, op) {
@@ -87,7 +88,6 @@
                         reBind(pid, $(this), op);
                     });
                     triggerSelect($box);
-
                 }
             }($parent, $input, op);
 
@@ -139,8 +139,14 @@
             registerMultiEvent(op);
         }
         if (op.multiple && $input.hasClass("combobox-f")) {
+            //if (op.parentIsSingle)//清空数据
+            //{
+            //    setCombo($input, "clear");//清空已选中的值
+            //}
             setCombo($input, "loadData", op.data);
-        } else {
+            
+        }
+        else {
             bindCombo($input, op);
         }
     }
@@ -213,9 +219,13 @@
                 isAddDefaultItem = false;
             }
         }
+        else {
+            //增加此属性，用于在_cascadeBindCombo绑定时采用重新绑定，而不是追加数据。
+            op.parentIsSingle = true;
+        }
         op.data = data;
-        if (isAddDefaultItem && !op.tree && op.defaultItem && (op.data.length == 0 || op.data[0][op.textField] != "请选择")) {
-            op.data.unshift({ text: "请选择", value: "" });
+        if (isAddDefaultItem && !op.tree && op.defaultItem && (op.data.length == 0 || op.data[0][op.textField] != defaultItem.text)) {
+            op.data.unshift(defaultItem);
         }
         op.onLoadSuccess = function () {
             setCombo($input, "textbox").removeClass("validatebox-invalid");
@@ -226,8 +236,9 @@
     function triggerSelect($input) {
         $("[parent='" + $input.attr('objname') + "']").each(function () {
             var $box = $(this);
+            setCombo($box, "clear");
             if ($box.attr('onlytext') == 'true') {
-                setCombo($box, "select", "请选择");
+                setCombo($box, "select", defaultItem.text);
             }
             else {
                 setCombo($box, "select", "");

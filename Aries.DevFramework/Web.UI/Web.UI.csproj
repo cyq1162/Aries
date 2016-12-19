@@ -63,11 +63,10 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\SQLCode\Demo\V_ArticleList.sql" />
     <Content Include="App_Data\SQLCode\Sql_Combobox.sql" />
     <Content Include="App_Data\SQLCode\Sql.sql" />
+    <Content Include="App_Data\SQLCode\Sql_Yours.sql" />
     <Content Include="App_Data\SQLCode\V_Test.sql" />
-    <Content Include="App_Data\SQLCode\Sql_Demo.sql" />
     <Content Include="App_Data\SQLCode\命名规范.txt" />
     <Content Include="App_Data\TxtDB\Config_Excel.ts" />
     <Content Include="App_Data\TxtDB\Config_Excel.txt" />

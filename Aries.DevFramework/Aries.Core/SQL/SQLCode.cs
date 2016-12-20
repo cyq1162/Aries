@@ -188,21 +188,21 @@ namespace Aries.Core.Sql
         public static string FormatPara(string sql)
         {
             if (HttpContext.Current == null) { return sql; }//子线程时不处理 
-            if (sql.IndexOf("@UserID") > -1)
+            if (sql.IndexOf("@UserID", StringComparison.OrdinalIgnoreCase) > -1)
             {
-                sql = sql.Replace("@UserID", UserAuth.UserID.ToString());
+                sql = Regex.Replace(sql, "@UserID", UserAuth.UserID.ToString(), RegexOptions.IgnoreCase);
             }
-            if (sql.IndexOf("@UserName") > -1)
+            if (sql.IndexOf("@UserName", StringComparison.OrdinalIgnoreCase) > -1)
             {
-                sql = sql.Replace("@UserName", UserAuth.UserName.ToString());
+                sql = Regex.Replace(sql, "@UserName", UserAuth.UserName, RegexOptions.IgnoreCase);
             }
-            if (sql.IndexOf("@FullName") > -1)
+            if (sql.IndexOf("@FullName", StringComparison.OrdinalIgnoreCase) > -1)
             {
-                sql = sql.Replace("@FullName", UserAuth.FullName);
+                sql = Regex.Replace(sql, "@FullName", UserAuth.FullName, RegexOptions.IgnoreCase);
             }
-            if (sql.IndexOf("@SuperAdminRoleID") > -1)
+            if (sql.IndexOf("@SuperAdminRoleID", StringComparison.OrdinalIgnoreCase) > -1)
             {
-                sql = sql.Replace("@SuperAdminRoleID", UserAuth.IsSuperAdmin ? Guid.Empty.ToString() : UserAuth.SuperAdminRoleID);
+                sql = Regex.Replace(sql, "@SuperAdminRoleID", (UserAuth.IsSuperAdmin ? Guid.Empty.ToString() : UserAuth.SuperAdminRoleID), RegexOptions.IgnoreCase);
             }
             string key = null;
             //自动配置其它属性

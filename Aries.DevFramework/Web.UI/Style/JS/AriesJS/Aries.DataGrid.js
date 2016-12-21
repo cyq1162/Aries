@@ -555,7 +555,7 @@
                             var primary = dg.datagrid("getEditor", { index: index, field: dg.Internal.primarykey });
                             primary && primary.target.attr('disabled', 'disabled');
                         }
-                        this.onBeforeExecute(value, index);
+                        this.onAfterExecute(value, index);
                     };
 
                 }

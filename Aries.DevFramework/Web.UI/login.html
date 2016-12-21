@@ -36,14 +36,11 @@
         <span>Copyright◎2016-2024 Aries Develop Framework All Rights Reserved.</span>
     </div>
     <script>
-        var user = AR.Utility.Cookie.get('aries_user');
-        if (user) {
-            $("#username").val(user);//记住用户名
-        }
         function login() {
             var uid = $("#username").val();
             var pwd = $("#password").val();
-            var data = { "uid": uid, "pwd": pwd };
+            var date = new Date();//避免浏览器私自缓存
+            var data = { "uid": uid, "pwd": pwd, r: date.getSeconds() };
             var result = AR.Utility.Ajax.post("Login", null, data);
             if (result) {
                 if (result.success) {
@@ -60,6 +57,10 @@
                     }
                 }
             }
+        }
+        var user = AR.Utility.Cookie.get('aries_user');
+        if (user) {
+            $("#username").val(user);//记住用户名
         }
     </script>
 </body>

@@ -251,7 +251,7 @@
                         input.attr("objname", objName);
                     }
                     if (dataArray[i].rules) {
-                        this._setInputAttr(input, dataArray[i].rules, "$:");
+                        this._setInputAttr(input, dataArray[i].rules, "$:", label);
                     }
                     if (!input.attr("pattern")) {
                         input.attr("pattern", "=");
@@ -355,7 +355,13 @@
             var sp = rules.split("{")
             var _rules = "{" + sp[sp.length - 1];//取最后一个
             if (_rules && _rules[0] == '{') {
-                _rules = eval("(" + _rules + ")");
+                try {
+                    _rules = eval("(" + _rules + ")");
+                } catch (e) {
+                    alert(e.message + " rules config json error : " + rules);
+                    return;
+                }
+                
                 for (var name in _rules) {
                     var value = _rules[name];
                     switch (name) {

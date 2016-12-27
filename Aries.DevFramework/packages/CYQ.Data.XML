@@ -1987,7 +1987,7 @@
         </member>
         <member name="T:CYQ.Data.DbBase">
             <summary>
-            数据库操作基类
+            数据库操作基类 （模板模式：Template Method）
             </summary>
         </member>
         <member name="F:CYQ.Data.DbBase.debugInfo">
@@ -2636,6 +2636,16 @@
         <member name="M:CYQ.Data.SQL.SqlCreateForSchema.AlterTableSql(System.String,CYQ.Data.Table.MDataColumn,System.String)">
             <summary>
             获取指定的表架构生成的SQL(Alter Table)语句
+            </summary>
+        </member>
+        <member name="T:CYQ.Data.SQL.SqlSyntax">
+            <summary>
+            SQL语法解析规则
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.SQL.SqlSyntax.Analyze(System.String)">
+            <summary>
+            分析语法
             </summary>
         </member>
         <member name="T:CYQ.Data.Table.MDataRow">
@@ -3373,6 +3383,12 @@
             <summary>
             单元格
             </summary>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataCell.#ctor(CYQ.Data.Table.MCellStruct@)">
+            <summary>
+            原型模式（Prototype Method）
+            </summary>
+            <param name="dataStruct"></param>
         </member>
         <member name="M:CYQ.Data.Table.MDataCell.FixValue">
             <summary>
@@ -4134,6 +4150,13 @@
             数据库类型操作类
             </summary>
         </member>
+        <member name="M:CYQ.Data.DalCreate.CreateDal(System.String)">
+            <summary>
+            简单工厂（Factory Method）
+            </summary>
+            <param name="dbConn"></param>
+            <returns></returns>
+        </member>
         <member name="M:CYQ.Data.Error.Throw(System.String)">
             <summary>
             抛出异常
@@ -4246,6 +4269,11 @@
         <member name="F:CYQ.Data.OracleDal.ManagedName">
             <summary>
             区分Oracle11和Oracle12的Dll名称。
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.OracleDal.GetFactory(System.String)">
+            <summary>
+            抽象工厂
             </summary>
         </member>
         <member name="F:CYQ.Data.OracleDal.clientType">

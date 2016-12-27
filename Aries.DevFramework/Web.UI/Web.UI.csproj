@@ -99,6 +99,8 @@
     <Content Include="Demo\combobox.html" />
     <Content Include="Demo\edit.html" />
     <Content Include="Demo\list.html" />
+    <Content Include="Demo\masterslave.html" />
+    <Content Include="Demo\mutillist.html" />
     <Content Include="Demo\rowedit.html" />
     <Content Include="Demo\treegrid.html" />
     <Content Include="Demo\inputDialog.html" />

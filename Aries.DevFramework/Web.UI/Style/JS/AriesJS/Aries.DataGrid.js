@@ -32,8 +32,6 @@
         this.objName = objName;
         //是否显示复选框
         this.isShowCheckBox = true;
-        //是否显示工具区（包括查询区和按钮区）
-        this.isShowToolArea = true;
         //是否启用行内编辑
         this.isEditor = false;
         this.options = {
@@ -128,7 +126,7 @@
             if (this.$target == null) {
                 return;
             }
-            this.datagrid("reload");
+            $Core.Common._Internal.reloadGrid(this);
         }
         /**
         *主键列对象，可对按钮进行操作
@@ -145,7 +143,7 @@
             $target: null,
             Search: this.Search,
             ToolBar: this.ToolBar,
-            isHidden: !this.isShowToolArea
+            isHidden: false
         }
     };
     DataGrid.prototype.bind = function () {
@@ -182,7 +180,6 @@
             }
         }
         var dg = this;
-        var interval;
         $Core.Utility.Ajax.post("GetHeader", dg.objName + "," + dg.tableName, dg.options.queryParams,
             function (dg) {
                 return function (result) {
@@ -236,24 +233,25 @@
         if (_postArray.length > 0) {
             $Core.Combobox.loadComboboxData(_postArray, function (dg) {
                 return function () {
-                    interval = setInterval(function () { bindGrid(dg, interval); }, 5);
+                    dg._interval = setInterval(function () { bindGrid(dg); }, 5);
                 }
             }(dg));
         }
         else {
-            interval = setInterval(function () { bindGrid(dg, interval); }, 5);
+            dg._interval = setInterval(function () { bindGrid(dg); }, 5);
         }
     }
 
-    function bindGrid(dg, interval) {
+    function bindGrid(dg) {
         if (!$Core.Global.Variable.isLoadCompleted) {
             return;
         }
-        clearInterval(interval);
+        clearInterval(dg._interval);
         if (dg.isShowToolArea && !dg.ToolBar.isHidden) {
             //创建工具按钮，需要GetInit完成，有权限验证。
+            console.log('aa');
             dg.ToolBar.onExecute(dg);
-            regToolbarEvents(dg);
+           regToolbarEvents(dg);
         }
         //格式化列头（有Editor时，需要先有Combobox数据。）
         var objColumns = $Core.Common.Formatter.formatHeader(dg);//处理主键列和Formatter列设置
@@ -314,7 +312,7 @@
         };
         if (dg.isTreeGrid) { cfg.pagination = false; }//默认不分页
         var opts = dg.options;
-        var beforeLoad = opts.onBeforeLoad;
+        dg._onBeforeLoad = opts.onBeforeLoad;
         opts.onBeforeLoad = function (param) {
             var mid = function () {
                 var topWin = window;
@@ -330,16 +328,16 @@
                 }(topWin);
             }();
             if (mid) { param.sys_mid = mid; };
-            if (beforeLoad) { return beforeLoad(param) };
+            if (dg._onBeforeLoad) { return dg._onBeforeLoad(param) };
         };
-        var loadSuccess = opts.onLoadSuccess;
+        dg._onLoadSuccess = opts.onLoadSuccess;
         opts.onLoadSuccess = function (dg) {
             return function (data) {
                 dg.Internal.isLoadCompleted = true;
                 if (dg.isTreeGrid) {
                     regKeyDown(dg);
                 }
-                loadSuccess && loadSuccess(data);
+                dg._onLoadSuccess && dg._onLoadSuccess(data);
             }
         }(dg);
 

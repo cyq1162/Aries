@@ -39,52 +39,7 @@
                         this.onAfterExecute = function (searchJsonArray) { };
                         this.onExecute = function (dg, btn_query) {
                             if (!btn_query) { btn_query = this.$target; }
-                            var targetForm = btn_query.parents("form");
-                            var searchJson = $Core.Common._Internal.buildSearchJson(targetForm);
-                            //装载默认where条件，过滤到表单已有的数据。
-                            if (dg.options.defaultWhere && dg.options.defaultWhere.length > 0) {
-                                for (var i = 0; i < dg.options.defaultWhere.length; i++) {
-                                    var isHasData = false;
-                                    var name = dg.options.defaultWhere[i].name;
-                                    for (var j = 0; j < searchJson.length; j++) {
-                                        if (searchJson[j].name == name) {
-                                            isHasData = true;
-                                            break;
-                                        }
-                                    }
-                                    if (!isHasData) {
-                                        searchJson.push(dg.options.defaultWhere[i]);
-                                    }
-                                }
-                            }
-
-                            if (this.onBeforeExecute(searchJson) == false) {
-                                return;
-                            }
-                            if (targetForm.form("validate")) {
-                                dg.isEditor && (dg.PKColumn.Editor.editIndex = undefined);
-                                var jsonString = JSON.stringify(searchJson);
-                                dg.isSearch = true;
-                                if (dg.isTreeGrid) {
-                                    dg.datagrid("options").onBeforeLoad = function (row, param) {
-                                        eval("sys_search = '" + jsonString + "'");
-                                        param.sys_search = sys_search;
-                                    }
-
-                                    dg.datagrid('reload');
-                                }
-                                else {
-                                    var str = jsonString.replace(/\'/g, "!#");
-                                    eval("sys_search = '" + str + "'");
-                                    var data = { sys_search: sys_search.replace(/!#/g, "'") };
-                                    if (dg.datagrid('getRows')) {
-                                        dg.datagrid('clearSelections');
-                                    }
-                                    dg.datagrid("load", data);
-
-                                }
-                                this.onAfterExecute(searchJson);
-                            }
+                            $Core.Common._Internal.reloadGrid(dg, btn_query, this.onBeforeExecute, this.onAfterExecute);
                         }
 
                     }
@@ -273,7 +228,7 @@
                             var ifrme = $("#div_ifrme_export"), form_export = $("#form_data");
                             ifrme && ifrme.remove(); form_export && form_export.remove();
                             var objName = dg.tableName;
-                            var targetForm = $(".function-box").siblings("div").find('form');
+                            var targetForm = $("#" + dg.ToolArea.id).find(".function-box").siblings("div").find('form');
                             var checked_ids = dg.getCheckedId();
                             var jsonString = JSON.stringify($Core.Common._Internal.buildSearchJson(targetForm));
                             if (checked_ids.length > 0) {
@@ -443,6 +398,62 @@
                     }
                 }
                 return json;
+            },
+            reloadGrid:function(dg,btn_query,onBeforeEvent,onAfterEvent)
+            {
+                var searchJson = [];
+                var targetForm;
+                if (btn_query)
+                {
+                    targetForm = btn_query.parents("form");
+                    if (targetForm)
+                    {
+                        searchJson = $Core.Common._Internal.buildSearchJson(targetForm);
+                    }
+
+                }
+                //装载默认where条件，过滤到表单已有的数据。
+                if (dg.options.defaultWhere && dg.options.defaultWhere.length > 0) {
+                    for (var i = 0; i < dg.options.defaultWhere.length; i++) {
+                        var isHasData = false;
+                        var name = dg.options.defaultWhere[i].name;
+                        for (var j = 0; j < searchJson.length; j++) {
+                            if (searchJson[j].name == name) {
+                                isHasData = true;
+                                break;
+                            }
+                        }
+                        if (!isHasData) {
+                            searchJson.push(dg.options.defaultWhere[i]);
+                        }
+                    }
+                }
+
+                if (onBeforeEvent && onBeforeEvent(searchJson) == false) {
+                    return;
+                }
+                if (!targetForm || targetForm.form("validate")) {
+                    dg.isEditor && (dg.PKColumn.Editor.editIndex = undefined);
+                    var jsonString = JSON.stringify(searchJson);
+                    dg.isSearch = true;
+                    if (dg.isTreeGrid) {
+                        dg.datagrid("options").onBeforeLoad = function (row, param) {
+                            eval("sys_search = '" + jsonString + "'");
+                            param.sys_search = sys_search;
+                        }
+                        dg.datagrid('reload');
+                    }
+                    else {
+                        var str = jsonString.replace(/\'/g, "!#");
+                        eval("sys_search = '" + str + "'");
+                        var data = { sys_search: sys_search.replace(/!#/g, "'") };
+                        if (dg.datagrid('getRows')) {
+                            dg.datagrid('clearSelections');
+                        }
+                        dg.datagrid("load", data);
+                    }
+                    onAfterEvent && onAfterEvent(searchJson);
+                }
             },
             //查询区域的下拉触发事件
             onQuery: function (dgid) {
@@ -1048,7 +1059,7 @@
                     item = $Core.Utility.stringFormat('<a><input class=\"{0}\" type=\"button\" onClick=\"{1}(event)\"  value=\"{2}\"/></a>', btnClass, btnClick, title);
                 }
                 item = $(item);
-                var toolbarContainer = $("#" + dg.ToolArea.id).find(".function-box"),
+                var toolbarContainer = dg.ToolBar.$target;//  $("#" + dg.ToolArea.id).find(".function-box"),
                     count = toolbarContainer.children().length;
                 if (count == 0) {
                     toolbarContainer.append(item);

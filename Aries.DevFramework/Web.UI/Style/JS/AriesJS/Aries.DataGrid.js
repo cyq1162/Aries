@@ -247,10 +247,9 @@
             return;
         }
         clearInterval(dg._interval);
-        if (dg.isShowToolArea && !dg.ToolBar.isHidden) {
+        if (!dg.ToolArea.isHidden && !dg.ToolBar.isHidden) {
             //创建工具按钮，需要GetInit完成，有权限验证。
-            console.log('aa');
-            dg.ToolBar.onExecute(dg);
+           dg.ToolBar.onExecute(dg);
            regToolbarEvents(dg);
         }
         //格式化列头（有Editor时，需要先有Combobox数据。）

@@ -540,6 +540,7 @@
                     str = '{0}?sys_method={1}&sys_objName=' + items[0] + '&sys_tableName=' + items[1];
                 }
             }
+            str += "&sys_rnd=" + Math.random();
             url = $Core.Utility.stringFormat(str, url || that.Settings.url, method);
             opts.data = data || that.Settings.data;
             if (parent != null && parent != window) {

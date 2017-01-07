@@ -1,4 +1,4 @@
-{"ExceInfoID":"System.Guid","ExcelID":"System.Guid","ExcelName":"System.String","TableName":"System.String","Field":"System.String","Formatter":"System.String","IsUnique":"System.Boolean","IsForeignkey":"System.Boolean","ForeignTable":"System.String","IsRequired":"System.Boolean","CreateTime":"System.DateTime"},
+,
 {"ExceInfoID":"9d000fed-38e1-4e69-aafb-0822f25783b1","ExcelID":"f8754ebd-b722-0e9d-002f-2510100d07cf","ExcelName":"F8","TableName":"","Field":"","Formatter":"","IsUnique":false,"IsForeignkey":false,"ForeignTable":"","IsRequired":false,"CreateTime":"2016-10-20 14:00:54"},
 {"ExceInfoID":"39f09652-64b4-4e17-bb79-1a08ddfbbb0f","ExcelID":"fb700287-84c2-8118-f8bd-b70f458ac48f","ExcelName":"F3","TableName":"Demo_TestA","Field":"F3","Formatter":"","IsUnique":false,"IsForeignkey":false,"ForeignTable":"","IsRequired":false,"CreateTime":"2016-11-28 21:50:59"},
 {"ExceInfoID":"c3b04f9e-d9e6-4253-a761-25319f3e539a","ExcelID":"a3410cbc-144d-e90e-53ed-897eee8df4e6","ExcelName":"F3","TableName":"Demo_TestA","Field":"F3","Formatter":"","IsUnique":false,"IsForeignkey":false,"ForeignTable":"","IsRequired":false,"CreateTime":"2016-10-16 16:38:36"},

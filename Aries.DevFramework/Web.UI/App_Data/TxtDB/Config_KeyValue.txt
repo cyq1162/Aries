@@ -1,4 +1,4 @@
-{"KeyValueID":"System.Guid","ConfigKey":"System.String","ConfigName":"System.String","ConfigValue":"System.String","Flag":"System.String","Notes":"System.String","OrderNo":"System.Int32","CreateTime":"System.DateTime"},
+,
 {"KeyValueID":"8cc03067-437b-4baf-97df-003dfef000cd","ConfigKey":"异或","ConfigName":"or","ConfigValue":"1","Flag":"","Notes":"","OrderNo":999,"CreateTime":"2016-10-15 02:23:37"},
 {"KeyValueID":"a47d3b60-c568-437b-a644-09c0298e4317","ConfigKey":"对齐方式","ConfigName":"左","ConfigValue":"left","Flag":"","Notes":"","OrderNo":10,"CreateTime":"2016-05-04 10:01:54"},
 {"KeyValueID":"776ec09f-f172-4858-bd84-0e2739651a26","ConfigKey":"性别","ConfigName":"女","ConfigValue":"0","Flag":"","Notes":"","OrderNo":999,"CreateTime":"2014-11-11 11:37:47"},

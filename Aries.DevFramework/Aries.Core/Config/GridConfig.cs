@@ -173,13 +173,19 @@ namespace Aries.Core.Config
                 dt.Rows.Add(row);
             }
         }
+        private static readonly object obj = new object();
         /// <summary>
         /// 创建数据结构行
         /// </summary>
         public static MDataTable Create(string objName, string objCode, MDataTable schema)
         {
-            FillTable(objName, objCode, schema);
-            if (schema.AcceptChanges(AcceptOp.Insert))
+            bool result = false;
+            lock (obj)
+            {
+                FillTable(objName, objCode, schema);
+                result = schema.AcceptChanges(AcceptOp.Auto, null, Config_Grid.ObjName, Config_Grid.Field);
+            }
+            if (result)
             {
                 return GetList(objName, SelectType.All);
             }
@@ -243,7 +249,7 @@ namespace Aries.Core.Config
                         formatter = row.Get<string>(Config_Grid.Formatter);
                         if (formatter == "boolFormatter")
                         {
-                            formatter = "#是否";//对bool型特殊处理。
+                            formatter = "#"+LangConst.IsYesNo;//对bool型特殊处理。
                         }
                         if (!string.IsNullOrEmpty(formatter) && formatter.Length > 2 && formatter[0] == '#') // 需要格式化的项
                         {
@@ -277,7 +283,7 @@ namespace Aries.Core.Config
                     string formatter = gridRow.Get<string>(Config_Grid.Formatter);
                     if (formatter == "boolFormatter")
                     {
-                        formatter = "#是否";//对bool型特殊处理。
+                        formatter = "#"+LangConst.IsYesNo;//对bool型特殊处理。
                     }
                     if (!string.IsNullOrEmpty(formatter) && formatter.Length > 2 && formatter[0] == '#') // 需要格式化的项
                     {

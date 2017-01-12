@@ -193,17 +193,17 @@ namespace Aries.Core.Config
                         string columnName = string.IsNullOrEmpty(cell.Struct.Description) ? cell.Struct.ColumnName : cell.Struct.Description;
                         if (!cell.Struct.IsCanNull && cell.IsNullOrEmpty)
                         {
-                            sb.AppendFormat("[{0}]不允许为空。", columnName);
+                            sb.AppendFormat("[{0}]{1}", columnName, LangConst.CantBeEmpty);
                             cell.State = -1;
                         }
                         else if (cell.Struct.MaxSize != -1 && cell.ToString().Length > cell.Struct.MaxSize && cell.Struct.SqlType != System.Data.SqlDbType.Bit)
                         {
-                            sb.AppendFormat("[{0}]长度超过{1}。", columnName, cell.Struct.MaxSize);
+                            sb.AppendFormat("[{0}]{1}{2}。", columnName, LangConst.SizeOver, cell.Struct.MaxSize);
                             cell.State = -1;
                         }
                         else if (!cell.FixValue())
                         {
-                            sb.AppendFormat("[{0}]数据类型错误。", columnName);
+                            sb.AppendFormat("[{0}]{1}。", columnName, LangConst.DataTypeError);
                             cell.State = -1;
                         }
                     }
@@ -211,7 +211,7 @@ namespace Aries.Core.Config
                 if (sb.Length > 0)
                 {
                     result = false;
-                    row.Set("错误信息", row.Get<string>("错误信息") + sb.ToString());
+                    row.Set(LangConst.ErrorInfo, row.Get<string>(LangConst.ErrorInfo) + sb.ToString());
                 }
 
             }
@@ -313,7 +313,7 @@ namespace Aries.Core.Config
                         {
                             bool isUniqueOr = excelRow.Get<bool>(Config_Excel.WhereType);
                             List<MDataCell> cells = new List<MDataCell>();
-                            string errText = string.Empty;
+                            StringBuilder errText = new StringBuilder();
                             int errorCount = 0;
                             foreach (var item in rowList)
                             {
@@ -323,7 +323,7 @@ namespace Aries.Core.Config
                                     if (cell.IsNullOrEmpty) // 唯一主键是必填写字段
                                     {
                                         errorCount++;
-                                        errText += "[第" + (i + 1) + "行数据]：" + cell.Struct.ColumnName + "[" + cell.Struct.Description + "]不允许为空！\r\n";
+                                        errText.Append("[" + LangConst.The + "" + (i + 1) + LangConst.Row + "]：" + cell.Struct.ColumnName + "[" + cell.Struct.Description + "]" + LangConst.CantBeEmpty + "！\r\n");
                                     }
                                     else
                                     {
@@ -336,7 +336,7 @@ namespace Aries.Core.Config
                                 if (!isUniqueOr || errorCount == rowList.Count)
                                 {
                                     result = false;
-                                    dt.DynamicData = new Exception(errText);
+                                    dt.DynamicData = new Exception(errText.ToString());
                                     goto err;
                                 }
                             }
@@ -372,7 +372,7 @@ namespace Aries.Core.Config
                                     else
                                     {
                                         result = false;
-                                        dt.DynamicData = new Exception("[第" + (i + 1) + "行数据]：" + action.DebugInfo);
+                                        dt.DynamicData = new Exception("[" + LangConst.The + (i + 1) + LangConst.Row + "]：" + action.DebugInfo);
                                         goto err;
                                     }
                                 }
@@ -384,7 +384,7 @@ namespace Aries.Core.Config
                             else if (action.RecordsAffected == -2)//产生错误信息，发生异常
                             {
                                 result = false;
-                                dt.DynamicData = new Exception("[第" + (i + 1) + "行数据]：" + action.DebugInfo);
+                                dt.DynamicData = new Exception("[" + LangConst.The + (i + 1) + LangConst.Row + "]：" + action.DebugInfo);
                                 goto err;
                             }
                         }
@@ -409,7 +409,7 @@ namespace Aries.Core.Config
                             action.RollBack();
                             if (string.IsNullOrEmpty(errMsg))
                             {
-                                errMsg = "[第" + (i + 1) + "行数据]：" + action.DebugInfo;
+                                errMsg = "[" + LangConst.The + (i + 1) + LangConst.Row + "]：" + action.DebugInfo;
                             }
                             dt.DynamicData = new Exception(errMsg);
                             excelConfigExtend.OnInsertError(errMsg, dt);

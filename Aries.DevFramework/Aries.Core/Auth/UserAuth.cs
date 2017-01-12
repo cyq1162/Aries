@@ -7,6 +7,7 @@ using CYQ.Data.Table;
 using Aries.Core.Helper;
 using Aries.Core.DB;
 using Aries.Core.Sql;
+using Aries.Core.Config;
 
 namespace Aries.Core.Auth
 {
@@ -40,7 +41,7 @@ namespace Aries.Core.Auth
                 {
                     if (action.Get<DateTime>(Sys_User.PwdExpiredTime, DateTime.MaxValue) < DateTime.Now)
                     {
-                        errMsg = "账号密码已过期！";
+                        errMsg =LangConst.PwdExpired; 
                     }
                     else
                     {
@@ -69,13 +70,13 @@ namespace Aries.Core.Auth
                         }
                         else
                         {
-                            errMsg = "用户名或密码错误！";
+                            errMsg = LangConst.PwdError;
                         }
                     }
                 }
                 else
                 {
-                    errMsg = "账号不存在！";
+                    errMsg = LangConst.UserNotExists;
                 }
             }
             return token;
@@ -414,7 +415,7 @@ namespace Aries.Core.Auth
                 {
                     using (MAction action = new MAction(TableNames.Sys_Role))
                     {
-                        string where = string.Format("{0}='Admin' or {0}= '普通管理员'", Sys_Role.RoleName);
+                        string where = string.Format("{0}='Admin' or {0}= '{1}'", Sys_Role.RoleName,LangConst.Admin);
                         if (action.Fill(where))
                         {
                             _AdminRoleID = action.Get<string>(Sys_Role.RoleID);
@@ -433,7 +434,7 @@ namespace Aries.Core.Auth
                 {
                     using (MAction action = new MAction(TableNames.Sys_Role))
                     {
-                        string where = string.Format("{0}='SuperAdmin' or {0}= '超级管理员'", Sys_Role.RoleName);
+                        string where = string.Format("{0}='SuperAdmin' or {0}= '{1}'", Sys_Role.RoleName,LangConst.SuperAdmin);
                         if (action.Fill(where))
                         {
                             _SuperAdminRoleID = action.Get<string>(Sys_Role.RoleID);

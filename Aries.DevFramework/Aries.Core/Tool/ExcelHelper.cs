@@ -10,6 +10,7 @@ using System.Text;
 using CYQ.Data;
 using CYQ.Data.Table;
 using Aries.Core.DB;
+using Aries.Core.Config;
 
 namespace Aries.Core.Helper
 {
@@ -285,7 +286,7 @@ namespace Aries.Core.Helper
                                 break;
                             }
                             emptyCellCount++;
-                            columnName = "该列头为空_" + i;
+                            columnName = LangConst.ColumnNameIsEmpty + "_" + i;
                         }
                         else
                         {
@@ -453,7 +454,7 @@ namespace Aries.Core.Helper
         /// </summary>
         public static MemoryStream SetError(MDataTable dt, bool isReturnStream = true)
         {
-            if (dt != null && dt.Columns.Contains("错误信息") && dt.DynamicData != null && dt.DynamicData is ISheet)
+            if (dt != null && dt.Columns.Contains(LangConst.ErrorInfo) && dt.DynamicData != null && dt.DynamicData is ISheet)
             {
                 try
                 {
@@ -490,9 +491,9 @@ namespace Aries.Core.Helper
                         CellRangeAddress cellAddress = new CellRangeAddress(firstRow, dataRowStart - 1, cellCount, cellCount);
                         sheet.AddMergedRegion(cellAddress);
                     }
-                    errorCell.SetCellValue("错误信息");
+                    errorCell.SetCellValue(LangConst.ErrorInfo);
                     bool hasError = false;
-                    int errColumnIndex = dt.Columns.GetIndex("错误信息");
+                    int errColumnIndex = dt.Columns.GetIndex(LangConst.ErrorInfo);
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
                         MDataRow dtRow = dt.Rows[i];
@@ -642,7 +643,7 @@ namespace Aries.Core.Helper
 
                 if (formatter == "boolFormatter")
                 {
-                    formatter = "#是否";//对bool型特殊处理。
+                    formatter = "#"+LangConst.IsYesNo;//对bool型特殊处理。
                 }
                 if (!string.IsNullOrEmpty(formatter) && formatter.StartsWith("#") && validateData != null && formatter.Length > 1)//&& validateData.ContainsKey(formatter)
                 {

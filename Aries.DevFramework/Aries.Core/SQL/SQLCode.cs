@@ -8,6 +8,7 @@ using CYQ.Data;
 using CYQ.Data.Table;
 using Aries.Core.Auth;
 using Aries.Core.Extend;
+using Aries.Core.Config;
 
 namespace Aries.Core.Sql
 {
@@ -46,7 +47,7 @@ namespace Aries.Core.Sql
                             {
                                 if (_FileList.ContainsKey(key))
                                 {
-                                    throw new Exception(key + " 已存在！:" + item);
+                                    throw new Exception(key + " "+LangConst.Exist+":" + item);
                                 }
                                 _FileList.Add(key, item);
                             }
@@ -90,7 +91,7 @@ namespace Aries.Core.Sql
                         sqlValue = text.Substring(index + 1).Trim();
                         if (fileList.ContainsKey(sqlKey))
                         {
-                            throw new Exception(sqlKey + " 已存在！:" + path);
+                            throw new Exception(sqlKey + " "+LangConst.Exist+":" + path);
                         }
                         fileList.Add(sqlKey, sqlValue);
                     }

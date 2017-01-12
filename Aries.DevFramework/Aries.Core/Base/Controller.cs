@@ -501,7 +501,7 @@ namespace Aries.Core
                     {
                         Log.WriteLogToTxt("Add(): " + action.DebugInfo);
                     }
-                    SetError("添加失败！", action.DebugInfo);
+                    SetError(LangConst.AddError, action.DebugInfo);
                 }
             }
         }
@@ -542,7 +542,7 @@ namespace Aries.Core
 
                 if (!string.IsNullOrEmpty(where) && action.Delete(where))
                 {
-                    SetSuccess("删除成功！");
+                    SetSuccess(LangConst.DelSuccess);
                 }
                 else
                 {
@@ -550,7 +550,7 @@ namespace Aries.Core
                     {
                         Log.WriteLogToTxt("Delete(): " + action.DebugInfo);
                     }
-                    SetError("删除失败！", action.DebugInfo);
+                    SetError(LangConst.DelError, action.DebugInfo);
                 }
             }
         }
@@ -565,7 +565,7 @@ namespace Aries.Core
                 SetKeyValue(action.Data);
                 if (action.Update(true))
                 {
-                    SetSuccess("更新成功！");
+                    SetSuccess(LangConst.UpdateSuccess);
                 }
                 else
                 {
@@ -573,7 +573,7 @@ namespace Aries.Core
                     {
                         Log.WriteLogToTxt("Update(): " + action.DebugInfo);
                     }
-                    SetError("更新失败！", action.DebugInfo);
+                    SetError(LangConst.UpdateError, action.DebugInfo);
                 }
             }
 
@@ -684,9 +684,9 @@ namespace Aries.Core
                 Log.WriteLogToTxt(err);//避免其它地方没有升级数据库表脚本。
             }
             MDataTable dt = ExcelHelper.ReadExcel(null, sheetName, index, headCrossRowNum, excelInfo != null);
-            if (!dt.Columns.Contains("错误信息"))
+            if (!dt.Columns.Contains(LangConst.ErrorInfo))
             {
-                dt.Columns.Add("错误信息", System.Data.SqlDbType.NVarChar);
+                dt.Columns.Add(LangConst.ErrorInfo, System.Data.SqlDbType.NVarChar);
             }
             dt.TableName = excelInfo != null ? ObjName : TableName;
             bool result = false;
@@ -709,7 +709,7 @@ namespace Aries.Core
                 if (dt.DynamicData != null && dt.DynamicData is Exception)
                 {
                     msg = ((Exception)dt.DynamicData).Message;
-                    msg += "（PS：可能模板不匹配）";
+                    msg += LangConst.ImportTemplateNotMatch;
                 }
                 if (excelStream == null)
                 {
@@ -717,12 +717,12 @@ namespace Aries.Core
                 }
                 if (string.IsNullOrEmpty(msg))
                 {
-                    msg = "导入失败" + (excelStream != null ? "(请查看输出的Excel错误信息)" : "（请检测是否模板错误）");
+                    msg = LangConst.ImportError + (excelStream != null ?LangConst.ImportCheckErrorInfo : LangConst.ImportCheckTemplateIsRight);
                 }
             }
             else if (string.IsNullOrEmpty(msg))
             {
-                msg = "导入成功";
+                msg = LangConst.ImportSuccess;
             }
             dt.DynamicData = null;
             dt = null;
@@ -750,7 +750,7 @@ namespace Aries.Core
 
             if (result)//验证是否存在有错误信息
             {
-                int index = dt.Columns.GetIndex("错误信息");
+                int index = dt.Columns.GetIndex(LangConst.ErrorInfo);
                 if (index > -1)
                 {
                     foreach (var row in dt.Rows)
@@ -950,7 +950,7 @@ namespace Aries.Core
         {
             string msg;
             bool result = SqlCode.SaveSourceCode(ObjName, Query<string>("sys_code"), out msg);
-            jsonResult = JsonHelper.OutResult(result, result ? "保存成功！" : "保存失败!" + msg);
+            jsonResult = JsonHelper.OutResult(result, result ? LangConst.SaveSuccess : LangConst.SaveError + msg);
         }
 
         [ActionKey("View,Get")]

@@ -45,9 +45,9 @@ namespace Aries.Core.Config
             {
                 using (MAction action = new MAction(TableNames.Config_KeyValue))
                 {
-                    if (!action.Exists("ConfigKey='表名描述' and ConfigName='" + objName + "'"))
+                    if (!action.Exists("ConfigKey='"+LangConst.TableDescription+"' and ConfigName='" + objName + "'"))
                     {
-                        action.Set(Config_KeyValue.ConfigKey, "表名描述");
+                        action.Set(Config_KeyValue.ConfigKey, LangConst.TableDescription);
                         action.Set(Config_KeyValue.ConfigName, objName);
                         action.Set(Config_KeyValue.ConfigValue, description);
                         action.Set(Config_KeyValue.Flag, "sys");
@@ -123,7 +123,7 @@ namespace Aries.Core.Config
         public static string GetTableDescription(string objName, string tableName)
         {
 
-            string description = GetVallue("表名描述", objName);
+            string description = GetVallue(LangConst.TableDescription, objName);
             if (string.IsNullOrEmpty(description))
             {
                 MDataRow row = ExcelConfig.GetExcelRow(objName);
@@ -133,7 +133,7 @@ namespace Aries.Core.Config
                 }
                 if (string.IsNullOrEmpty(description))
                 {
-                    description = GetVallue("表名描述", tableName);
+                    description = GetVallue(LangConst.TableDescription, tableName);
                     if (string.IsNullOrEmpty(description))
                     {
                         description = CrossDb.GetDescription(tableName);
@@ -276,7 +276,7 @@ namespace Aries.Core.Config
                     #region 开始遍历翻译
                     MDataRow keyValueRow = null;
                     int i = 0;
-                    string errorKey = "错误信息";
+                    string errorKey = LangConst.ErrorInfo;
                     bool isAddError = dt.Columns.Contains(errorKey);
                     foreach (MDataRow row in dt.Rows)
                     {
@@ -292,7 +292,7 @@ namespace Aries.Core.Config
                             if (!kvItem.Value.StartsWith("C_"))
                             {
                                 #region #Config_KeyValue的项翻译
-                                if (isValueToName && kvItem.Value == "是否")//处理1，0，true,false不同情况
+                                if (isValueToName && kvItem.Value == LangConst.IsYesNo)//处理1，0，true,false不同情况
                                 {
                                     value = (value == "1" || value.ToLower() == "true") ? "1" : "0";
                                 }
@@ -348,7 +348,7 @@ namespace Aries.Core.Config
                                     keyValueRow = configItems.FindRow(string.Format("ConfigKey='{0}' and {1}='{2}'", kvItem.Value, (isValueToName ? "ConfigName" : "ConfigValue"), value));
                                     if (keyValueRow == null && isAddError)
                                     {
-                                        row.Set(errorKey, row.Get<string>(errorKey) + string.Format("[{0}]找不到对应项。", cell.Struct.Description));
+                                        row.Set(errorKey, row.Get<string>(errorKey) + string.Format("[{0}]{1}。", cell.Struct.Description,LangConst.NoMatchItem));
                                     }
                                 }
                                 #endregion
@@ -394,7 +394,7 @@ namespace Aries.Core.Config
                                     keyValueRow = objNameItems[kvItem.Key].FindRow((isValueToName ? "text" : "value") + "='" + value + "'");
                                     if (keyValueRow == null && isAddError)
                                     {
-                                        row.Set(errorKey, row.Get<string>(errorKey) + string.Format("[{0}]找不到对应项。", cell.Struct.Description));
+                                        row.Set(errorKey, row.Get<string>(errorKey) + string.Format("[{0}]{1}。", cell.Struct.Description,LangConst.NoMatchItem));
                                     }
                                 }
                                 #endregion
@@ -424,7 +424,7 @@ namespace Aries.Core.Config
                 string formatter = row.Get<string>(Config_Grid.Formatter);
                 if (formatter == "boolFormatter")
                 {
-                    formatter = "#是否";//对bool型特殊处理。
+                    formatter = "#"+LangConst.IsYesNo;//对bool型特殊处理。
                 }
                 if (!string.IsNullOrEmpty(formatter) && formatter[0] == '#')
                 {

@@ -1,6 +1,17 @@
-﻿//AR.Combobox 定义
+﻿(function ($Core) {
+    $Core.Lang || ($Core.Lang = {});
+    if ($Core.Lang.langKey == undefined) {
+        $Core.Lang.select = '请选择';
+        $Core.Lang.selectFirst = '请先选中数据';
+        $Core.Lang.selectData = '选择数据';
+        $Core.Lang.cancel = '取消';
+        $Core.Lang.save = '保存';
+    }
+
+})(AR);
+//AR.Combobox 定义
 (function ($, $Core) {
-    var defaultItem = { text: "请选择", value: "" };
+    var defaultItem = { text: $Core.Lang.select, value: "" };
     var comboOption = {
         valueField: 'value',
         textField: 'text',
@@ -348,17 +359,17 @@
         });
     }
     function _showInputDialog($input) {
-        if (!$input || !$input.attr("dialog")) { alert("dialog参数配置错误!"); return; }
+        if (!$input || !$input.attr("dialog")) { alert("dialog setting error!"); return; }
         var href = ($Core.Global.Variable.ui || "") + "/Web/SysAdmin/DialogView.html?objName=" + $input.attr("dialog");
         var html = '<iframe scrolling="yes" frameborder="0"  src="' + href + '" style="width:100%;height:98%;"></iframe>'
         var opts = {
             toolbar: [{
-                text: '保存',
+                text: $Core.Lang.save,
                 iconCls: 'icon-ok',
                 handler: function () {
                     var options = $Core.Global.returnValue;
                     if (!options || options.option.data.length == 0) {
-                        alert('请先选中数据');
+                        alert($Core.Lang.selectFirst);
                         return;
                     }
                     if ($Core.Combobox.onAfterExecute("dialog", $input, options) != false) {
@@ -386,7 +397,7 @@
                     $("#_div_dialog").dialog("close");
                 }
             }, {
-                text: '取消',
+                text: $Core.Lang.cancel,
                 iconCls: 'icon-no',
                 handler: function () { $("#_div_dialog").dialog("close"); }
             }],
@@ -398,7 +409,7 @@
         $Core.Global.inputDialogOpts = opts;
         $Core.Global.inputDialog = $input
         $Core.Global.returnValue = undefined;//清空值。
-        $Core.Utility.Window.dialog("选择数据", html, opts);
+        $Core.Utility.Window.dialog($Core.Lang.selectData, html, opts);
 
     };
     onAfterBind = function (type) { $Core.Combobox.isLoadCompleted = true; };//定义绑定的事件。

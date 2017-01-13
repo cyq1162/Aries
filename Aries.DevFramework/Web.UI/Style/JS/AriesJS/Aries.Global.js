@@ -1,5 +1,20 @@
-﻿//AR.Global 定义
-window.AR = (function ($Core) {
+﻿
+window.AR || (window.AR = {});
+//多语言定义
+(function ($Core) {
+    $Core.Lang || ($Core.Lang = {});
+    if ($Core.Lang.langKey == undefined) {
+        $Core.Lang.edit = '编辑';
+        $Core.Lang.del = '删除';
+        $Core.Lang.detail = '查看详情';
+        $Core.Lang.cancel = '取消';
+        $Core.Lang.save = '保存';
+    }
+
+})(window.AR);
+
+//AR.Global 定义
+(function ($Core) {
     //自定义的健值对数组
     $Core.Dictionary = function () {
         this.length = 0;
@@ -29,11 +44,11 @@ window.AR = (function ($Core) {
             //当前页面DataGrid操作，值为Update，Add
             action: null,
             PKTemplate: {
-                edit: '<a class="bj" title="编辑" op="1"></a>',
-                del: '<a class="sc" title="删除"></a>',
-                detail: '<a class="ckxq" title="查看详情" op="0"></a>',
-                save: '<a class="bc" title="保存"   op="0"></a>',
-                cancel: '<a class="cx" title="撤销"   op="0"></a>'
+                edit: '<a class="bj" title="' + $Core.Lang.edit + '" op="1"></a>',
+                del: '<a class="sc" title="' + $Core.Lang.del + '"></a>',
+                detail: '<a class="ckxq" title="' + $Core.Lang.deltail + '" op="0"></a>',
+                save: '<a class="bc" title="' + $Core.Lang.save + '"   op="0"></a>',
+                cancel: '<a class="cx" title="' + $Core.Lang.cancel + '"   op="0"></a>'
             }
         },
         route: { root: 'ajax.html' },
@@ -94,7 +109,7 @@ window.AR = (function ($Core) {
         this.isHidden = false;
     }
     return $Core;
-})(window.AR || {});
+})(window.AR);
 
 //Jquery 扩展定义
 (function ($) {
@@ -181,8 +196,7 @@ window.AR = (function ($Core) {
             var result = [];
             for (var i = 0; i < this.length; i++) {
                 if (this[i][k]) {
-                    if (v == undefined || this[i][k].toString() == v.toString())
-                    {
+                    if (v == undefined || this[i][k].toString() == v.toString()) {
                         result.push(this[i]);
                     }
                 }

@@ -1,4 +1,27 @@
-﻿
+﻿(function ($Core) {
+    $Core.Lang || ($Core.Lang = {});
+    if ($Core.Lang.langKey == undefined) {
+        $Core.Lang.edit = '编辑';
+        $Core.Lang.add = '添加';
+        $Core.Lang.addSuccess = '添加成功';
+
+        $Core.Lang.isDel = '确认删除操作吗？';
+        $Core.Lang.delSuccess = '删除成功';
+        $Core.Lang.selectDelData = '请选择要删除的数据!';
+
+        $Core.Lang.delError = '删除失败';
+        $Core.Lang.errorInfo = '错误详情';
+        $Core.Lang.msg = '消息提示';  
+        $Core.Lang.importTip = '正在导入数据，请稍候...';
+        $Core.Lang.importError = '数据异常，导入失败！';
+        $Core.Lang.uploadExtendName = '文件扩展名必须是：';
+
+        $Core.Lang.beforePageText = '第';
+        $Core.Lang.afterPageText = '页    共 {pages} 页';
+        $Core.Lang.displayMsg = '当前显示 {from} - {to} 条记录   共 {total} 条记录';
+    }
+
+})(AR);
 +function ($, $Core) {
     /**
    *该文件依赖与AR.Core.Utility.js文件
@@ -365,9 +388,9 @@
         }
         if (options.pagination) {
             var pager = {
-                beforePageText: '第', //页数文本框前显示的汉字  
-                afterPageText: '页    共 {pages} 页',
-                displayMsg: '当前显示 {from} - {to} 条记录   共 {total} 条记录'
+                beforePageText: $Core.Lang.beforePageText, //页数文本框前显示的汉字  
+                afterPageText: $Core.Lang.afterPageText,
+                displayMsg: $Core.Lang.displayMsg
             };
             var pagination = dg.datagrid('getPager');
             $(pagination).pagination(pager);
@@ -427,7 +450,7 @@
             //设置添加按钮的连接
             if (key == 'edit') {
                 dg.ToolBar.BtnAdd.winUrl = url;
-                dg.ToolBar.BtnAdd.winTitle = (winTitle || "").replace('编辑', '新增');
+                dg.ToolBar.BtnAdd.winTitle = (winTitle || "").replace($Core.Lang.edit, $Core.Lang.add);
             }
             url && btn.setAttribute("url", url);
             winTitle && btn.setAttribute("winTitle", winTitle);
@@ -488,7 +511,7 @@
             else {
                 var selRows = dg.getCheckedId();
                 if (selRows.length == 0) {
-                    $Core.Utility.Window.showMsg("请选择要删除的数据!");
+                    $Core.Utility.Window.showMsg($Core.Lang.selectDelData);
                     return false;
                 }
                 ids = selRows;
@@ -497,13 +520,13 @@
                 return false;
             }
 
-            $Core.Utility.Window.confirm('确认删除操作吗？', null, function () {
+            $Core.Utility.Window.confirm($Core.Lang.isDel, null, function () {
                 $Core.Utility.Ajax.post("Delete", dg.tableName, { "id": ids.join(',') }, function (responseData) {
                     if (dg.ToolBar.BtnDelBatch.onAfterExecute(ids, index, responseData) == false) {
                         return;
                     }
                     if (responseData.success != undefined && responseData.success) {
-                        $Core.Utility.Window.showMsg("删除成功");
+                        $Core.Utility.Window.showMsg($Core.Lang.delSuccess);
                         if (dg.options.pagination || !dg.isTreeGrid) {
                             dg.reload();
                         }
@@ -516,7 +539,7 @@
                         }
                         dg.datagrid("clearChecked");//清掉缓存的数据。
                     } else {
-                        $Core.Utility.Window.showMsg("删除失败！错误消息：" + responseData.msg);
+                        $Core.Utility.Window.showMsg($Core.Lang.delError + $Core.Lang.errorInfo + responseData.msg);
                     }
                 });
             });
@@ -575,7 +598,7 @@
                             }
                             dg.datagrid("selectRow", index);
                             if (dg.datagrid("getSelected")[dg.Internal.primarykey]) {
-                                $Core.Utility.Window.confirm("确定删除此条信息吗？", null, function () {
+                                $Core.Utility.Window.confirm($Core.Lang.isDel, null, function () {
                                      $Core.Utility.Ajax.post("Delete", dg.tableName, { id: value }, function (result) {
                                         if (result.success) {
                                             dg.datagrid('deleteRow', index);
@@ -722,12 +745,12 @@
                 return function (file, ext) {
                     if (ext == "xls" || ext == "xlsx") {
                         $.messager.progress({
-                            title: "消息提示",
-                            msg: "正在导入数据，请稍候..."
+                            title: $Core.Lang.msg,
+                            msg: $Core.Lang.importTip
                         });
                     }
                     else {
-                        $Core.Utility.Window.showMsg('文件扩展名必须是：' + exts);
+                        $Core.Utility.Window.showMsg($Core.Lang.uploadExtendName + exts);
                         return false;
                     }
                     var param = {};
@@ -748,7 +771,7 @@
                     }
                     else {
                         data.msg = data.msg.replace(/&/g, '&amp').replace(/\"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace("\"", "'");
-                        var tip = "<div>数据异常，导入失败！<a title=\"" + data.msg + "\" onclick=\"javascript:alert(this.title)\"><font color='red'>查看错误详情</font></a></div>";
+                        var tip = "<div>" + $Core.Lang.importError+ "<a title=\"" + data.msg + "\" onclick=\"javascript:alert(this.title)\"><font color='red'>"+$Core.Lang.errorInfo+"</font></a></div>";
                         $Core.Utility.Window.showMsg(tip, null, null, 8000);//"导入失败！"
                         if (data.sys_down != undefined) {
                             $Core.Utility.download('Down', { 'sys_down': data.sys_down });
@@ -869,7 +892,7 @@
                             if (result.success) {
                                 if (dg.PKColumn.Editor.operator == "Add") {
                                     _change_data[dg.Internal.primarykey] = result.msg;//这里才是将ID写回去的地方。
-                                    result.msg = "添加成功";
+                                    result.msg = $Core.Lang.addSuccess;
                                 }
                                 if (isTreeTrid && index != _change_data[dg.options.idField]) {
                                     //树型节点，修改了idField，则刷新。

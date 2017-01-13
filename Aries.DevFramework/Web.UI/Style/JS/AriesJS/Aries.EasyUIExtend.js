@@ -1,5 +1,28 @@
-﻿//________________________________________________________基础扩展部分begin_____________________________________________________________________________
+﻿(function ($Core) {
+    $Core.Lang || ($Core.Lang = {});
+    if ($Core.Lang.langKey == undefined) {
+        $Core.Lang.root = '根目录';
+        $Core.Lang.isChinese = '请输入汉字';
+        $Core.Lang.isSamePwd = '密码不一致';
+        $Core.Lang.isMobile = '手机号码不正确';
+        $Core.Lang.isTelePhone = '电话号码不正确';
+        $Core.Lang.isUserName = '登录名称只允许汉字、英文字母、数字及下划线。';
+        $Core.Lang.isPwd = '密码由字母和数字组成，至少6位';
+        $Core.Lang.isNumber = '请输入数字';
+        $Core.Lang.isID= '请输入正确的身份证号码';
+        $Core.Lang.isMobileOrTelePhone = '请输入正确的手机或电话号码';
+        $Core.Lang.isDateTime = '输入的日期格式不正确';
+        $Core.Lang.isYear = '请输入有效年份';
+        $Core.Lang.isEmail = '请输入正确Email地址';
+        $Core.Lang.select = '请选择';
+        $Core.Lang.selectData = '请选择下拉值';
+        $Core.Lang.dataExists = '该数据已存在！';
+        $Core.Lang.requestFail = '远程请求失败！';
+        $Core.Lang.ruleError = "验证规则错误";
+        $Core.Lang.isLength = '字符长度必须在{0}~{1}之间.';
+    }
 
+})(AR);
 /**
 * @requires jQuery,EasyUI
 * 
@@ -62,7 +85,7 @@ $.fn.tree.defaults.loadFilter = function (data, parent) {
         } catch (ex) {
             return data;
         }
-        var root = [{ 'text': opt.rootText || '根目录', 'id': opt.rootID || undefined }];
+        var root = [{ 'text': opt.rootText || $Core.Lang.root, 'id': opt.rootID || undefined }];
         root[0].children = data;
         _openFirstNode(root);
         return root;
@@ -209,51 +232,45 @@ $.extend($.fn.validatebox.defaults.rules, {
         validator: function (value, param) {
             return /^[\u0391-\uFFE5]+$/.test(value);
         },
-        message: '请输入汉字'
+        message: $Core.Lang.isChinese
     },
     eqPwd: {
         validator: function (value, param) {
             return value == $(param[0]).val();
         },
-        message: '密码不一致！'
+        message: $Core.Lang.isSamePwd
     },// start ---2013-12-3 lzw 修正验证手机正则和单个电话
     mobile: {
         validator: function (value, param) {
             // return /^((\(\d{2,3}\))|(\d{3}\-))?13\d{9}$/.test(value);
             return /^1[3|4|5|8][0-9]\d{8}$/.test(value);
         },
-        message: '手机号码不正确'
+        message: $Core.Lang.isMobile
     },
     tel: {
         validator: function (value, param) {
             return /^(\(\d{3,4}\)|\d{3,4}-|\s)?\d{8}$/.test(value);
         },
-        message: '电话号码不正确'
+        message: $Core.Lang.isTelePhone
     },// end ---2013-12-3 lzw
     loginName: {
         validator: function (value, param) {
             return /^[\u0391-\uFFE5\w]+$/.test(value);
         },
-        message: '登录名称只允许汉字、英文字母、数字及下划线。'
+        message: $Core.Lang.isUserName
     },
 
-    QQ: {
-        validator: function (value, param) {
-            return /^[1-9]\d{4,10}$/.test(value);
-        },
-        message: 'QQ号码不正确'
-    },
     safepass: {
         validator: function (value, param) {
             return safePassword(value);
         },
-        message: '密码由字母和数字组成，至少6位'
+        message: $Core.Lang.isPwd
     },
     number: {
         validator: function (value, param) {
             return /^\d+(\.\d{1,2})?$/.test(value);
         },
-        message: '请输入数字'
+        message: $Core.Lang.isNumber
     },
     // start ---2013-12-3 lzw
     idcard: {
@@ -267,30 +284,30 @@ $.extend($.fn.validatebox.defaults.rules, {
             return (/^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{4}$/).test(value);
             //  return /^\d{15}(\d{2}[A-Za-z0-9])?$/i.test(value);
         },
-        message: '请输入正确的身份证号码'
+        message: $Core.Lang.isID
     },
     telormobile: {
         validator: function (value, param) {
             return /^((\d{3,4}\s+)?\d{7,8}$|(\d{3,4}-)?\d{7,8}$|1[3|4|5|8][0-9]\d{4,8})$/.test(value);
         },
-        message: '请输入正确的手机或电话号码'
+        message: $Core.Lang.isMobileOrTelePhone
     },
     combobox: {
         validator: function (value, param) {
-            return /^[^请选择|\s]+$/.test(value);
+            return "/^[^" + $Core.Lang.select+ "|\s]+$/".test(value);
         },
-        message: '请选择下拉值'
+        message: $Core.Lang.selectData
     },
     datebox: {
         validator: function (value, param) {
             return /^\d{4}(-|\/)\d{2}(-|\/)\d{2}\s?(\d{2}:\d{2})?(:\d{2})?$/.test(value);
         },
-        message: '输入的日期格式不正确'
+        message: $Core.Lang.isDateTime
     },
     exists: {
         validator: function (value, param) {
             if (!param[0]) {
-                this.message = "验证规则错误！";
+                this.message = $Core.Lang.ruleError;
                 return false;
             }
             var data = {};
@@ -302,13 +319,13 @@ $.extend($.fn.validatebox.defaults.rules, {
             var result = AR.Utility.Ajax.get("Exists", AR.Form.tableName, data);
             if (result) {
                 if (result.success) {
-                    this.message = "该数据已存在！";
+                    this.message = $Core.Lang.dataExists;
                     return false;
                 }
                 return true;
             }
             else {
-                this.messgage = "远程请求失败！";
+                this.messgage = $Core.Lang.requestFail;
                 return false;
             }
         }
@@ -335,7 +352,7 @@ $.extend($.fn.validatebox.defaults.rules, {
     },
     length: {
         validator: function (value, param) {
-            this.message = '字符长度必须在{0}~{1}之间.';
+            this.message = $Core.Lang.isLength;
             var len = $.trim(value).length;
             if (param) {
                 for (var i = 0; i < param.length; i++) {
@@ -345,21 +362,19 @@ $.extend($.fn.validatebox.defaults.rules, {
             }
             return len >= param[0] && len <= param[1];
         },
-        message: '字符长度必须在{0}~{1}之间.'
+        message: $Core.Lang.isLength
     },
     email: {
         validator: function (value, param) {
             return /^(\w)+(\.\w+)*@(\w)+((\.\w{2,3}){1,3})$/.test(value);
         },
-        message: '请输入正确Email地址'
+        message: $Core.Lang.isEmail
     },
     year: {
         validator: function (value, param) {
             return /^19[0-9][0-9]|20[0-9][0-9]$/.test(value);
         },
-        message: '请输入有效年份'
+        message: $Core.Lang.isYear
     }
     //end extends
 });
-
-//________________________________________________________输入框扩展部分end_______________________________________________________________________________

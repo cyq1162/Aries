@@ -407,7 +407,7 @@
         }
         function showLoading(message) {
             if ($("body")[0]) {
-                var msg = message || "正在处理，请稍等......";
+                var msg = message || "Loading......";
                 var paddingtop = parseInt(document.documentElement.clientHeight / 2);
                 var opacity = "opacity:.5;"
                 var nv = navigator.userAgent.toLowerCase();
@@ -438,14 +438,11 @@
         *打开一个新页面
         *@param{string} url 连接
         *@param{string} title 打开后的窗口标题
-        *@param{bool}   update 是否更新标记，默认false
+        *@param{bool}   isUpdate 是否更新标记，默认false
         *param{object}  opts easyui window属性覆盖
         */
-        function open(url, title, update, opts) {
-            if (update != undefined && typeof (update) != "boolean") {
-                throw new TypeError("第三个参数传入的类型必须是布尔类型！");
-            }
-            if (update) {
+        function open(url, title, isUpdate, opts) {
+            if (isUpdate) {
                 AR.Global.DG.action = "Update";
             } else {
                 AR.Global.DG.action = "Add";
@@ -475,7 +472,7 @@
             window.parent.$("#AddWindow").window('close');
         }
         function confirm(msg, title, asyncFun) {
-            $.messager.confirm(title || "温馨提示", msg, function (r) {
+            $.messager.confirm(title || "Title", msg, function (r) {
                 if (r) {
                     if (typeof (asyncFun) == "function") {
                         asyncFun();
@@ -486,7 +483,7 @@
         //注释看Easyui相关API
         function showMsg(msg, title, showType, timeout) {
             $.messager.show({
-                title: title || "温馨提示",
+                title: title || "Title",
                 msg: msg,
                 timeout: timeout || 1500,
                 showType: showType || 'slide'
@@ -584,8 +581,7 @@
                         this.success(d);
                     }
                     catch (e) {
-                        console.log("服务器返回数据出错");
-                        //throw new Error("服务器返回数据出错");
+                        console.log("server return data is error or data is not json");
                     }
                 },
                 beforeSend: function () {

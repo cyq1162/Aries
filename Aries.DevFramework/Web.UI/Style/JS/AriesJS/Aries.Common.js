@@ -1,4 +1,24 @@
-﻿//AR.Common 定义
+﻿(function ($Core) {
+    $Core.Lang || ($Core.Lang = {});
+    if ($Core.Lang.langKey == undefined) {
+        $Core.Lang.select = '请选择';
+        $Core.Lang.config = '配置';
+        $Core.Lang.add = '添加';
+        $Core.Lang.addSaveLevel = '添加同级';
+        $Core.Lang.addChild = '添加子级';
+        $Core.Lang.cancel = '取消';
+        $Core.Lang.save = '保存';
+        $Core.Lang.edit = '编辑';
+        $Core.Lang.del = '删除';
+        $Core.Lang.batchDel = '批量删除';
+        $Core.Lang.opration = '操作';
+        $Core.Lang.empty = '空';
+        $Core.Lang.save = '保存';
+        $Core.Lang.exportTemplate = '导出模板';
+    }
+
+})(AR);
+//AR.Common 定义
 (function ($, $Core) {
     //定义Common对象
     $Core.Common = {
@@ -315,7 +335,7 @@
             },
             HeaderMenu: function () {
                 this.isHidden = false;
-                this.Items = [{ "text": "配置", "onclick": "AR.Common._Internal.onConfigClick", "lv2action": "config" }];
+                this.Items = [{ "text":$Core.Lang.config, "onclick": "AR.Common._Internal.onConfigClick", "lv2action": "config" }];
                 /**
                 *向工具条添加按钮
                 *@param{string} text 按钮显示的文本
@@ -328,10 +348,10 @@
             },
             ContextMenu: function () {
                 this.isHidden = false;
-                this.Items = [{ "text": "添加同级", "onclick": "AR.Common._Internal.onAdd,true", "lv2action": "add" },
-                    { "text": "添加子级", "onclick": "AR.Common._Internal.onAdd", "lv2action": "add" },
-                    { "text": "编辑", "onclick": "AR.Common._Internal.Editor.onEdit", "lv2action": "edit" },
-                    { "text": "删除", "onclick": "AR.Common._Internal.Editor.onDel", "lv2action": "del" }
+                this.Items = [{ "text": $Core.Lang.addSaveLevel, "onclick": "AR.Common._Internal.onAdd,true", "lv2action": "add" },
+                    { "text": $Core.Lang.addChild, "onclick": "AR.Common._Internal.onAdd", "lv2action": "add" },
+                    { "text": $Core.Lang.edit, "onclick": "AR.Common._Internal.Editor.onEdit", "lv2action": "edit" },
+                    { "text": $Core.Lang.del, "onclick": "AR.Common._Internal.Editor.onDel", "lv2action": "del" }
                 ];
                 /**
                 *向工具条添加按钮
@@ -366,7 +386,7 @@
                         }
 
                         value = $box.val();
-                        if (value == '' || value == null || value == '请选择') {
+                        if (value == '' || value == null || value == $Core.Lang.select) {
                             pattern = "like";
                             isDate = false;
                             continue cto;
@@ -490,7 +510,7 @@
                     $Core.Global.DG.operating = dg;
                     $Core.Utility.Window.open(url, "", false);
                 }
-                else { alert("找到不到对象:" + dgid); }
+                else { alert("Can't find the object:" + dgid); }
             }
         },
         Formatter: {
@@ -578,13 +598,13 @@
                         if (dg.PKColumn.Editor.editIndex == null) {
                             if (dg.PKColumn.Editor.BtnEdit.hidden != true && actionKeys.indexOf(",edit,") > -1) {
                                 len++;
-                                var $btn = $($Core.Utility.stringFormat(strTemplate, "bj", "编辑", "onEdit", value, index));
+                                var $btn = $($Core.Utility.stringFormat(strTemplate, "bj", $Core.Lang.edit, "onEdit", value, index));
                                 $div.append($btn);
 
                             }
                             if (dg.PKColumn.Editor.BtnDel.hidden != true && actionKeys.indexOf(",del,") > -1) {
                                 len++;
-                                var $btn = $($Core.Utility.stringFormat(strTemplate, "sc", "删除", "onDel", value, index));
+                                var $btn = $($Core.Utility.stringFormat(strTemplate, "sc", $Core.Lang.del, "onDel", value, index));
                                 obj.set("del", $btn);
                                 $div.append($btn);
                             }
@@ -592,13 +612,13 @@
                         else {
                             if (dg.PKColumn.Editor.BtnCancel.hidden != true && actionKeys.indexOf(",edit,") > -1) {
                                 len++;
-                                var $btn = $($Core.Utility.stringFormat(strTemplate, "cx", "撤销", "onCancel", value, index));
+                                var $btn = $($Core.Utility.stringFormat(strTemplate, "cx", $Core.Lang.cancel, "onCancel", value, index));
                                 obj.set("edit", $btn);
                                 $div.append($btn);
                             }
                             if (dg.PKColumn.Editor.BtnSave.hidden != true && actionKeys.indexOf(",edit,") > -1) {
                                 len++;
-                                var $btn = $($Core.Utility.stringFormat(strTemplate, "bc", "保存", "onSave", value, index));
+                                var $btn = $($Core.Utility.stringFormat(strTemplate, "bc", $Core.Lang.save, "onSave", value, index));
                                 obj.set("edit", $btn);
                                 $div.append($btn);
                             }
@@ -806,9 +826,9 @@
                                 pkColumn.hidden = false;
                                 var title = getConfigValue("SysConfig", "OperatorTitle");
                                 if (!title) {
-                                    title = '操作';
+                                    title = $Core.Lang.opration;
                                 }
-                                pkColumn.title = title == "空" ? '' : title;
+                                pkColumn.title = title == $Core.Lang.empty ? '' : title;
                                 pkColumn.field = 'auto_pk';
                                 frozen.push(pkColumn);
                             }
@@ -995,13 +1015,13 @@
     function _createToolBarHtml(dg) {
         var item; actionKeys = $Core.Global.Variable.actionKeys || "";
         if (actionKeys.indexOf(',add,') > -1 && !dg.ToolBar.BtnAdd.isHidden) {
-            dg.ToolBar.BtnAdd.$target = $('<input class=\"add\" flag=\"btn_add\" type=\"button\" name=\"添加\" value=\"\"/>');
+            dg.ToolBar.BtnAdd.$target = $('<input class=\"add\" flag=\"btn_add\" type=\"button\" name=\"' + $Core.Lang .add+ '\" value=\"\"/>');
             item = $("<a>").append(dg.ToolBar.BtnAdd.$target);
             dg.ToolBar.$target.append(item);
             dg.ToolBar.Items.set("add", dg.ToolBar.BtnAdd);
         }
         if (actionKeys.indexOf(',del,') > -1 && !dg.ToolBar.BtnDelBatch.isHidden && dg.isShowCheckBox) {
-            dg.ToolBar.BtnDelBatch.$target = $('<input  class=\"batch_del\" flag=\"btn_del\" type=\"button\" name=\"批量删除\" value=\"\"/>').attr("dgID", dg.id);
+            dg.ToolBar.BtnDelBatch.$target = $('<input  class=\"batch_del\" flag=\"btn_del\" type=\"button\" name=\"' + $Core.Lang.batchDel+ '\" value=\"\"/>').attr("dgID", dg.id);
             item = $("<a>").append(dg.ToolBar.BtnDelBatch.$target);
             dg.ToolBar.$target.append(item);
             dg.ToolBar.Items.set("del", dg.ToolBar.BtnDelBatch);
@@ -1020,7 +1040,7 @@
                 dg.ToolBar.Items.set("import", dg.ToolBar.BtnImport);
             }
             if (!dg.ToolBar.BtnExportTemplate.isHidden) {
-                dg.ToolBar.BtnExportTemplate.$target = $('<input class=\"btn-sm\" flag=\"btn_export_template\" type=\"button\"  value=\"导出模板\"/>');
+                dg.ToolBar.BtnExportTemplate.$target = $('<input class=\"btn-sm\" flag=\"btn_export_template\" type=\"button\"  value=\"' + $Core.Lang.exportTemplate+ '\"/>');
                 item = $("<a>").append(dg.ToolBar.BtnExportTemplate.$target);
                 dg.ToolBar.$target.append(item);
                 dg.ToolBar.Items.set("exportTemplate", dg.ToolBar.BtnExportTemplate);
@@ -1038,7 +1058,7 @@
     function _createCustomButton(dg) {
         var btnArray = dg.ToolBar._btnArray;
         if (!(btnArray instanceof Array)) {
-            throw TypeError('参数必须是一个数组');
+            throw TypeError('para must be Array!');
         }
         var hiddenCount = 0;
         var actionKeys = $Core.Global.Variable.actionKeys;

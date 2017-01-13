@@ -1,4 +1,13 @@
-﻿//AR.Form 定义
+﻿(function ($Core) {
+    $Core.Lang || ($Core.Lang = {});
+    if ($Core.Lang.langKey == undefined) {
+        $Core.Lang.select = '请选择';
+        $Core.Lang.operationSuccess = '操作成功';
+        $Core.Lang.fillTheBlank = '请填写或选择（*）项';
+    }
+
+})(AR);
+//AR.Form 定义
 (function ($, $Core, $PCore) {
     $(document).on("click", ".arrows", function () {
         $(this).toggleClass("hover");
@@ -96,7 +105,7 @@
                 }
                 var formData = $targetForm.find("[name]:input").serializeArray();
                 for (var i in formData) {
-                    if (formData[i].value == '请选择' || (clearEmptyValue && formData[i].value == '')) {
+                    if (formData[i].value ==  $Core.Lang.select || (clearEmptyValue && formData[i].value == '')) {
                         delete formData[i];
                     }
                 }
@@ -111,7 +120,7 @@
                     else {
                         var msg = obj.msg;
                         if (obj.success != undefined && obj.success) {
-                            msg = "操作成功！";
+                            msg = $Core.Lang.operationSuccess;
                             if ($PCore && $PCore.Global.DG.operating) {
                                 $PCore.Global.DG.operating.datagrid('reload');
                             }
@@ -126,7 +135,7 @@
                     }
                 }
                 else {
-                    $Core.Utility.Window.showMsg("请填写或选择（*）项");
+                    $Core.Utility.Window.showMsg($Core.Lang.fillTheBlank);
                     return false;
                 }
             };

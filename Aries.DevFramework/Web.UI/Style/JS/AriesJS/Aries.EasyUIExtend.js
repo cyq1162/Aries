@@ -22,7 +22,7 @@
         $Core.Lang.isLength = '字符长度必须在{0}~{1}之间.';
     }
 
-})(AR);
+
 /**
 * @requires jQuery,EasyUI
 * 
@@ -378,3 +378,4 @@ $.extend($.fn.validatebox.defaults.rules, {
     }
     //end extends
 });
+})(AR);

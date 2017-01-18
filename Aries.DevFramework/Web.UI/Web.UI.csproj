@@ -553,7 +553,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>4432</DevelopmentServerPort>
+          <DevelopmentServerPort>27532</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:8011/AR</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

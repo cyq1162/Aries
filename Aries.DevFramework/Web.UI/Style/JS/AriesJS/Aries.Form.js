@@ -117,7 +117,8 @@
                     if (callBack && typeof (callBack) == "function") {
                         callBack.call(this, obj);
                     }
-                    else {
+                    else if(obj)
+                    {
                         var msg = obj.msg;
                         if (obj.success != undefined && obj.success) {
                             msg = $Core.Lang.operationSuccess;
@@ -125,16 +126,18 @@
                                 $PCore.Global.DG.operating.datagrid('reload');
                             }
                         }
-                        if ($PCore) {
+                        if ($PCore)
+                        {
                             $PCore.Utility.Window.showMsg(msg);
-                            if (obj.success) {
+                            if (obj.success && parent != null && parent.document.title != document.title) {
                                 $Core.Utility.Window.close();
                             }
                         }
                         this.BtnCommit && this.BtnCommit.onAfterExecute(obj);
                     }
                 }
-                else {
+                else
+                {
                     $Core.Utility.Window.showMsg($Core.Lang.fillTheBlank);
                     return false;
                 }

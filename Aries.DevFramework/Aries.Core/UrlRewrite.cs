@@ -96,7 +96,7 @@ namespace Aries.Core
         private void AuthCheck(bool isIndex)
         {
             SetNoCacheAndSafeKey();//.html不缓存，才能实时检测权限问题。（否则客户端缓存了，后台修改权限，客户端很为难）
-            if (IsCheckToken())
+            if (WebHelper.IsCheckToken())
             {
                 UserAuth.IsExistsToken(true);//检测登陆状态。
                 UserAuth.RefleshToken(); //刷新时间
@@ -106,24 +106,7 @@ namespace Aries.Core
                 }
             }
         }
-        /// <summary>
-        /// 以下包含的路径必须登陆后才能访问
-        /// </summary>
-        /// <param name="uri"></param>
-        /// <returns></returns>
-        private bool IsCheckToken()
-        {
-            string[] items = AppConfig.GetApp("CheckTokenPath", "/web/,/index.html").ToLower().Split(',');//可以扩展多个
-            string lowerPath = context.Request.Url.LocalPath.ToLower();
-            foreach (string item in items)
-            {
-                if (lowerPath.Contains(item))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
+       
         private void SetNoCacheAndSafeKey()
         {
             context.Response.Expires = 0;

@@ -68,6 +68,35 @@ namespace Aries.Core.Helper
         {
             return HttpContext.Current.Request.Url.LocalPath.EndsWith(AriesSuffix);
         }
+        /// <summary>
+        /// 以下包含的路径必须登陆后才能访问
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <returns></returns>
+        public static bool IsCheckToken()
+        {
+            if(!IsNeedCheckToken(HttpContext.Current.Request.Url))
+            {
+                return IsNeedCheckToken(HttpContext.Current.Request.UrlReferrer);
+            }
+            return true;
+        }
+        private static bool IsNeedCheckToken(Uri uri)
+        {
+            if (uri != null)
+            {
+                string lowerPath = uri.LocalPath.ToLower();
+                string[] items = AppConfig.GetApp("CheckTokenPath", "/web/,/index.html").ToLower().Split(',');//可以扩展多个
+                foreach (string item in items)
+                {
+                    if (lowerPath.Contains(item))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
         public static T Query<T>(string key)
         {
             return Query<T>(key, default(T), false);

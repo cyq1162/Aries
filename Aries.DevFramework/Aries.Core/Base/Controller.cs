@@ -50,7 +50,9 @@ namespace Aries.Core
                 }
                 foreach (string item in items)
                 {
-                    if (item.ToLower() == "login" || UserAuth.IsExistsToken(false))
+                    string lowerItem=item.ToLower();
+                    bool isAllow = !WebHelper.IsCheckToken() || UserAuth.IsExistsToken(false);
+                    if (isAllow)
                     {
                         if (p == null)
                         {
@@ -780,7 +782,7 @@ namespace Aries.Core
         /// <summary>
         /// 获取UI、MID、ActionKey的配置值。
         /// </summary>
-        public void GetInitConfig()
+        public virtual void GetInitConfig()
         {
             string ui = string.Empty, actionKeys = string.Empty, menuID = string.Empty;
             if (IsUseUISite)
@@ -803,14 +805,14 @@ namespace Aries.Core
         /// <summary>
         /// 获取Config_KeyValue的配置值。
         /// </summary>
-        public void GetKeyValueConfig()
+        public virtual void GetKeyValueConfig()
         {
             jsonResult = KeyValueConfig.GetJson();
         }
         /// <summary>
         /// 获取表的列头数据（输出EasyUI的列头格式）
         /// </summary>
-        public void GetHeader()
+        public virtual void GetHeader()
         {
             MDataTable dt = GridConfig.GetList(ObjName, GridConfig.SelectType.All);
             if (dt == null || dt.Rows.Count == 0)

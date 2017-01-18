@@ -30,6 +30,10 @@
         $Core.Global.Variable = result.GetInitConfig;
         $Core.Global.Variable.isLoadCompleted = true;
         $Core.Global.Config = result.GetKeyValueConfig;
+        if (result && !result.mid && !result.actionKeys && parent.AR)
+        {
+            $Core.Global.Variable = parent.AR.Global.Variable;
+        }
     });
     //==================================Internal Function Region======================================================
     $Core.DataGrid = DataGrid;

@@ -125,7 +125,7 @@ namespace Aries.Core.Auth
                 {
                     HasMenu(ReuqestUri);
                 }
-                return _menuID;
+                return _menuID ?? string.Empty;
             }
         }
         private string _UrlMenuID;
@@ -144,7 +144,7 @@ namespace Aries.Core.Auth
                         _UrlMenuID = row.Get<string>("MenuID");
                     }
                 }
-                return _UrlMenuID;
+                return _UrlMenuID ?? string.Empty;
             }
         }
         private Uri ReuqestUri
@@ -194,30 +194,33 @@ namespace Aries.Core.Auth
 
         private MDataRow GetMenu(Uri uri)
         {
-            string url = uri.LocalPath;
-            string pathAndQuery = uri.PathAndQuery;
-            if (WebHelper.IsUseUISite)
+            if (UserMenu != null)
             {
-                int start = AppConfig.GetApp("UI").Trim('/').Length + 1;
-                url = url.Remove(0, start);
-                pathAndQuery = pathAndQuery.Remove(0, start);
-            }
-            string where = "MenuUrl='" + pathAndQuery + "' or MenuUrl='" + pathAndQuery.TrimStart('/') + "'";
-            MDataRow menu = UserMenu.FindRow(where);
-            if (menu == null)
-            {
-                where = "MenuUrl='" + url + "' or MenuUrl='" + url.TrimStart('/') + "'";
-                menu = UserMenu.FindRow(where);
-                if (menu == null)//进一步检测是否补充了后续参数问题
+                string url = uri.LocalPath;
+                string pathAndQuery = uri.PathAndQuery;
+                if (WebHelper.IsUseUISite)
                 {
-                    where = "MenuUrl like '" + url + "%' or MenuUrl like '" + url.TrimStart('/') + "%'";
-                    menu = UserMenu.FindRow(where);
+                    int start = AppConfig.GetApp("UI").Trim('/').Length + 1;
+                    url = url.Remove(0, start);
+                    pathAndQuery = pathAndQuery.Remove(0, start);
                 }
-            }
-            //获取当前请求的Url
-            if (menu != null)
-            {
-                return menu;
+                string where = "MenuUrl='" + pathAndQuery + "' or MenuUrl='" + pathAndQuery.TrimStart('/') + "'";
+                MDataRow menu = UserMenu.FindRow(where);
+                if (menu == null)
+                {
+                    where = "MenuUrl='" + url + "' or MenuUrl='" + url.TrimStart('/') + "'";
+                    menu = UserMenu.FindRow(where);
+                    if (menu == null)//进一步检测是否补充了后续参数问题
+                    {
+                        where = "MenuUrl like '" + url + "%' or MenuUrl like '" + url.TrimStart('/') + "%'";
+                        menu = UserMenu.FindRow(where);
+                    }
+                }
+                //获取当前请求的Url
+                if (menu != null)
+                {
+                    return menu;
+                }
             }
             return null;
         }

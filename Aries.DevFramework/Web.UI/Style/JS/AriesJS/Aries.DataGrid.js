@@ -30,7 +30,7 @@
         $Core.Global.Variable = result.GetInitConfig;
         $Core.Global.Variable.isLoadCompleted = true;
         $Core.Global.Config = result.GetKeyValueConfig;
-        if (result && !result.mid && !result.actionKeys && parent.AR)
+        if (result && result.GetInitConfig.mid == "" && result.GetInitConfig.actionKeys == "" && parent.AR)
         {
             $Core.Global.Variable = parent.AR.Global.Variable;
         }

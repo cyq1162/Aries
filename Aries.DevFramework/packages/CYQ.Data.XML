@@ -3638,6 +3638,11 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:CYQ.Data.Table.MDataColumn.Set(System.Object,System.Object)">
+            <summary>
+            为列的所有行设置值
+            </summary>
+        </member>
         <member name="M:CYQ.Data.Table.MDataColumn.Add(System.String)">
             <summary>
             添加列
@@ -5063,6 +5068,11 @@
             映射的表名
             </summary>
         </member>
+        <member name="P:CYQ.Data.Tool.DBTool.ErrorMsg">
+            <summary>
+            获取异常的信息
+            </summary>
+        </member>
         <member name="T:CYQ.Data.Tool.JsonSplit">
             <summary>
             分隔Json字符串为字典集合。
@@ -5214,11 +5224,6 @@
             </summary>
             <param name="threadName">线程名称</param>
             <returns></returns>
-        </member>
-        <member name="M:CYQ.Data.Tool.ThreadBreak.ClearSchema">
-            <summary>
-            清除所有的表架构。
-            </summary>
         </member>
         <member name="M:CYQ.Data.Tool.ThreadBreak.AddGlobalThread(System.Threading.ParameterizedThreadStart)">
             <summary>

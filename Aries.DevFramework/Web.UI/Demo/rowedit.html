@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title></title>
+    <title>行内编辑演示...</title>
     <script src="/Style/JS/Aries.Loader.js"></script>
     <script type="text/javascript">
         $(function () {
@@ -10,29 +10,30 @@
             dg.isEditor = true;
             dg.options = {
                 onClickRow: function (index, row) {
-                    //alert(index);
+                    //alert("onClickRow-" + index + ":" + JSON.stringify(row));
                 },
                 onBeforeEdit: function (index, row) {
-
+                   
                 },
                 onEditing: function (index, row) {
-                    //alert(rowIndex);
+                    
+                    //alert("onEditing-" + index + ":" + JSON.stringify(row));
                     //行内编辑时，修改某单元格的值，引发另一个单元格的值的变化。
-                    var jqCellF3 = dg.datagrid("getEditor", { index: index, field: 'F3' }).target;
+                    var jqCellF3 = dg.datagrid("getEditor", { index: index, field: 'f3' }).target;
                     jqCellF3.keyup(function () {
-                        var jqCellF1 = dg.datagrid("getEditor", { index: index, field: 'F1' }).target;
+                        var jqCellF1 = dg.datagrid("getEditor", { index: index, field: 'f1' }).target;
                         jqCellF1.val(jqCellF3.val());
                     });
 
                 },
                 onLoadSuccess: function () {
                     // alert(dg.PKColumn.Items.length + ":33");
+                },
+                onAfterEdit:function(index, row, changes)
+                {
+                    //alert("onAfterEdit-" + index + ":" + JSON.stringify(row));
+                    //alert(changes);
                 }
-                //onAfterEdit:function(index, row, changes)
-                //{
-                //    row.F1 = "33333";
-                //    alert(changes);
-                //}
             }
             dg.bind();
 

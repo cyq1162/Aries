@@ -50,6 +50,7 @@ window.AR || (window.AR = {});
 	$Core.Lang.beforePageText = 'Page';
 	$Core.Lang.afterPageText = 'of {pages}';
 	$Core.Lang.displayMsg = 'Displaying {from} to {to} of {total} items';
+	$Core.Lang.loadMsg = 'Loading...';
 
 	//Aries.Form.js
 	//$Core.Lang.select = '请选择';

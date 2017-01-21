@@ -346,13 +346,18 @@
                     this.Items.push({ "text": text, "onclick": fname, "lv2action": lv2action });
                 }
             },
-            ContextMenu: function () {
-                this.isHidden = false;
-                this.Items = [{ "text": $Core.Lang.addSaveLevel, "onclick": "AR.Common._Internal.onAdd,true", "lv2action": "add" },
-                    { "text": $Core.Lang.addChild, "onclick": "AR.Common._Internal.onAdd", "lv2action": "add" },
-                    { "text": $Core.Lang.edit, "onclick": "AR.Common._Internal.Editor.onEdit", "lv2action": "edit" },
-                    { "text": $Core.Lang.del, "onclick": "AR.Common._Internal.Editor.onDel", "lv2action": "del" }
-                ];
+            RowMenu: function (isTreeGrid) {
+                this.isHidden = isTreeGrid;
+                if (isTreeGrid) {
+                    this.Items = [{ "text": $Core.Lang.addSaveLevel, "onclick": "AR.Common._Internal.onAdd,true", "lv2action": "add" },
+                        { "text": $Core.Lang.addChild, "onclick": "AR.Common._Internal.onAdd", "lv2action": "add" },
+                        { "text": $Core.Lang.edit, "onclick": "AR.Common._Internal.Editor.onEdit", "lv2action": "edit" },
+                        { "text": $Core.Lang.del, "onclick": "AR.Common._Internal.Editor.onDel", "lv2action": "del" }
+                    ];
+                }
+                else {
+                    this.Items = [];
+                }
                 /**
                 *向工具条添加按钮
                 *@param{string} text 按钮显示的文本

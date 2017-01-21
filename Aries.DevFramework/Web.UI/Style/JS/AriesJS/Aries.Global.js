@@ -49,6 +49,22 @@ window.AR || (window.AR = {});
                 detail: '<a class="ckxq" title="' + $Core.Lang.deltail + '" op="0"></a>',
                 save: '<a class="bc" title="' + $Core.Lang.save + '"   op="0"></a>',
                 cancel: '<a class="cx" title="' + $Core.Lang.cancel + '"   op="0"></a>'
+            },
+            //datagrid或treegrid的默认配置
+            DefaultConfig: {
+                striped: true,
+                nowrap: false,
+                singleSelect: true,
+                checkOnSelect: false,
+                selectOnCheck: false,
+                border: true,
+                pageSize: 15,
+                pageList: [10, 15, 20, 30, 40, 50, 100],
+                fit: true,
+                fitColumns: true,
+                pagination: true,
+                rownumbers: true,
+                autoRowHeight: false
             }
         },
         route: { root: 'ajax.html' },

@@ -12,27 +12,40 @@ namespace Aries.Core.Helper
     /// </summary>
     public static class EncrpytHelper
     {
-        #region
+        private static byte[] GetHash(string key)
+        {
+            using (MD5CryptoServiceProvider hashMD5 = new MD5CryptoServiceProvider())
+            {
+                return hashMD5.ComputeHash(ASCIIEncoding.ASCII.GetBytes(key));
+            }
+        }
+        private static byte[] _DefaultHashKey;
+        private static byte[] DefaultHashKey
+        {
+            get
+            {
+                if (_DefaultHashKey == null)
+                {
+                    _DefaultHashKey = GetHash("!1@2#3$4%5^6");
+                }
+                return _DefaultHashKey;
+            }
+        }
+        /// <summary>
+        /// 预留的二次加密
+        /// </summary>
         private static string EncrpytKey
         {
             get
             {
-                return AppConfig.GetApp("EncrpytKey", "!1@2#3$4%5^6");
+                return AppConfig.GetApp("EncrpytKey", "");
             }
         }
-
-        /// <summary>
-        /// 3des加密字符串
-        /// </summary>
-        /// <param name="text">要加密的字符串</param>
-        /// <returns>加密后并经base64编码的字符串</returns>
-        /// <remarks>静态方法，采用默认ascii编码</remarks>
+        #region
         public static string Encrypt(string text)
         {
             return Encrypt(text, EncrpytKey);
         }
-
-
         /// <summary>
         /// 3des加密字符串
         /// </summary>
@@ -40,21 +53,39 @@ namespace Aries.Core.Helper
         /// <param name="key">密钥</param>
         /// <returns>加密后并经base64编码的字符串</returns>
         /// <remarks>静态方法，采用默认ascii编码</remarks>
-        public static string Encrypt(string text, string key)
+        private static string Encrypt(string text, string key)
         {
-            TripleDESCryptoServiceProvider DES = new
-                TripleDESCryptoServiceProvider();
-            MD5CryptoServiceProvider hashMD5 = new MD5CryptoServiceProvider();
+            string result = string.Empty;
+            using (TripleDESCryptoServiceProvider DES = new TripleDESCryptoServiceProvider())
+            {
+                if (string.IsNullOrEmpty(key))
+                {
+                    DES.Key = DefaultHashKey;
+                }
+                else
+                {
+                    DES.Key = GetHash(key);
+                }
+                DES.Mode = CipherMode.ECB;
+                ICryptoTransform DESEncrypt = DES.CreateEncryptor();
 
-            DES.Key = hashMD5.ComputeHash(ASCIIEncoding.ASCII.GetBytes(key));
-            DES.Mode = CipherMode.ECB;
+                byte[] Buffer = ASCIIEncoding.UTF8.GetBytes(text);
+                string pass = Convert.ToBase64String(DESEncrypt.TransformFinalBlock(Buffer, 0, Buffer.Length));
+                result = pass.Replace('=', '#');
+                if (string.IsNullOrEmpty(key))
+                {
+                    if (EncrpytKey != "")
+                    {
+                        return Encrypt(result, EncrpytKey);//二次加密
+                    }
+                }
+                else
+                {
+                    result = result + "=2";//二次加密的追加后缀
+                }
+            }
 
-            ICryptoTransform DESEncrypt = DES.CreateEncryptor();
-
-            byte[] Buffer = ASCIIEncoding.UTF8.GetBytes(text);
-            string pass= Convert.ToBase64String(DESEncrypt.TransformFinalBlock
-                (Buffer, 0, Buffer.Length));
-            return pass.Replace('=', '#');
+            return result;
         }//end method
 
 
@@ -68,11 +99,17 @@ namespace Aries.Core.Helper
         public static string Decrypt(string text)
         {
             if (string.IsNullOrEmpty(text))
+            {
                 return string.Empty;
+            }
             else
             {
                 text = text.Trim().Replace(' ', '+');//处理Request的+号变空格问题。
-                return Decrypt(text, EncrpytKey);
+                if (EncrpytKey != "" && text.EndsWith("=2"))
+                {
+                    text = Decrypt(text.Substring(0, text.Length - 2), GetHash(EncrpytKey));//先解一次Key
+                }
+                return Decrypt(text, DefaultHashKey);
             }
         }//end method
 
@@ -85,30 +122,26 @@ namespace Aries.Core.Helper
         /// <returns>解密后的字符串</returns>
         /// <exception cref="">密钥错误</exception>
         /// <remarks>静态方法，采用默认ascii编码</remarks>
-        public static string Decrypt(string text, string key)
+        private static string Decrypt(string text, byte[] hashKey)
         {
-            text = text.Replace('#', '=');
-            TripleDESCryptoServiceProvider DES = new
-                TripleDESCryptoServiceProvider();
-            MD5CryptoServiceProvider hashMD5 = new MD5CryptoServiceProvider();
-
-            DES.Key = hashMD5.ComputeHash(ASCIIEncoding.ASCII.GetBytes(key));
-            DES.Mode = CipherMode.ECB;
-
-            ICryptoTransform DESDecrypt = DES.CreateDecryptor();
-
             string result = "";
-            try
+            text = text.Replace('#', '=');
+            using (TripleDESCryptoServiceProvider DES = new TripleDESCryptoServiceProvider())
             {
-                byte[] Buffer = Convert.FromBase64String(text);
-                result = ASCIIEncoding.UTF8.GetString(DESDecrypt.TransformFinalBlock
-                    (Buffer, 0, Buffer.Length));
-            }
-            catch
-            {
-                return text;
-            }
+                DES.Key = hashKey;
+                DES.Mode = CipherMode.ECB;
 
+                ICryptoTransform DESDecrypt = DES.CreateDecryptor();
+                try
+                {
+                    byte[] Buffer = Convert.FromBase64String(text);
+                    result = ASCIIEncoding.UTF8.GetString(DESDecrypt.TransformFinalBlock(Buffer, 0, Buffer.Length));
+                }
+                catch
+                {
+                    return text;
+                }
+            }
             return result;
         }
 

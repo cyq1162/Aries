@@ -47,7 +47,7 @@ namespace Aries.Core.Auth
                     {
 
                         string pwd = action.Get<string>(Sys_User.Password);
-                        if (pwd == EncrpytHelper.Encrypt(password))
+                        if (password == EncrpytHelper.Decrypt(pwd))
                         {
                             string userID = action.Get<string>(Sys_User.UserID);
                             userName = action.Get<string>(Sys_User.UserName);

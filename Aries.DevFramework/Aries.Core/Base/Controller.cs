@@ -50,7 +50,7 @@ namespace Aries.Core
                 }
                 foreach (string item in items)
                 {
-                    string lowerItem=item.ToLower();
+                    string lowerItem = item.ToLower();
                     bool isAllow = !WebHelper.IsCheckToken() || UserAuth.IsExistsToken(false);
                     if (isAllow)
                     {
@@ -531,18 +531,48 @@ namespace Aries.Core
 
             using (MAction action = new MAction(CrossTableName))
             {
-                var primaryKey = action.Data.PrimaryCell.ColumnName;
-                string where = GetID;
-                if (!string.IsNullOrEmpty(where))
+                action.BeginTransation();
+                //dg.foreignKeys="TableA.ColumnNameA,TableB.ColumnNameB";
+                string foreignKeys = Query<string>("foreignKeys");
+                bool result = true;
+                if (!string.IsNullOrEmpty(foreignKeys))//增加了外键删除
                 {
-                    where = GetWhereIn(primaryKey);
+                    string[] items = foreignKeys.Split(',');
+                    foreach (string item in items)
+                    {
+                        string[] kv = item.Split('.');
+                        if (kv.Length == 2)
+                        {
+                            action.ResetTable(CrossDb.GetEnum(kv[0]));
+                            result = action.Delete(GetWhereIn(kv[1]));
+                            if (!result)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    if (result) { action.ResetTable(CrossTableName); }
                 }
-                else
+                if (result)
                 {
-                    where = GetWhere();
+                    var primaryKey = action.Data.PrimaryCell.ColumnName;
+                    string where = GetID;
+                    if (!string.IsNullOrEmpty(where))
+                    {
+                        where = GetWhereIn(primaryKey);
+                    }
+                    else
+                    {
+                        where = GetWhere();
+                    }
+                    result = !string.IsNullOrEmpty(where) && action.Delete(where);
                 }
-
-                if (!string.IsNullOrEmpty(where) && action.Delete(where))
+                if (!result)
+                {
+                    action.RollBack();
+                }
+                action.EndTransation();
+                if (result)
                 {
                     SetSuccess(LangConst.DelSuccess);
                 }
@@ -554,6 +584,7 @@ namespace Aries.Core
                     }
                     SetError(LangConst.DelError, action.DebugInfo);
                 }
+
             }
         }
         /// <summary>
@@ -719,7 +750,7 @@ namespace Aries.Core
                 }
                 if (string.IsNullOrEmpty(msg))
                 {
-                    msg = LangConst.ImportError + (excelStream != null ?LangConst.ImportCheckErrorInfo : LangConst.ImportCheckTemplateIsRight);
+                    msg = LangConst.ImportError + (excelStream != null ? LangConst.ImportCheckErrorInfo : LangConst.ImportCheckTemplateIsRight);
                 }
             }
             else if (string.IsNullOrEmpty(msg))

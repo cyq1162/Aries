@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>多列表</title>
+    <title>主从表（包括主从表删除）</title>
     <script src="/Style/JS/Aries.Loader.js"></script>
 </head>
 <body>
@@ -14,6 +14,7 @@
     </div>
     <script>
         var ta = new AR.DataGrid('Demo_TestA', 'Demo_TestA');
+        ta.foreignKeys = "Demo_TestB.ID";//指定关联删除的外键
         var tb;
         ta.options.onClickRow = function (index, row) {
             var id = row.id.substring(0, 2)

@@ -58,6 +58,8 @@
         this.tableName = tbName || objName;
         //对象（视图）名称
         this.objName = objName;
+        //删除时指定的关联外键,如："TableA.ColumnNameA,TableB.ColumnNameB"
+        this.foreignKeys = "";
         //是否显示复选框
         this.isShowCheckBox = true;
         //是否启用行内编辑
@@ -521,7 +523,7 @@
             }
 
             $Core.Utility.Window.confirm($Core.Lang.isDel, null, function () {
-                $Core.Utility.Ajax.post("Delete", dg.tableName, { "id": ids.join(',') }, function (responseData) {
+                $Core.Utility.Ajax.post("Delete", dg.tableName, { "id": ids.join(','), "foreignKeys": dg.foreignKeys }, function (responseData) {
                     if (dg.ToolBar.BtnDelBatch.onAfterExecute(ids, index, responseData) == false) {
                         return;
                     }
@@ -599,7 +601,7 @@
                             dg.datagrid("selectRow", index);
                             if (dg.datagrid("getSelected")[dg.Internal.primarykey]) {
                                 $Core.Utility.Window.confirm($Core.Lang.isDel, null, function () {
-                                    $Core.Utility.Ajax.post("Delete", dg.tableName, { id: value }, function (result) {
+                                    $Core.Utility.Ajax.post("Delete", dg.tableName, { id: value, "foreignKeys": dg.foreignKeys }, function (result) {
                                         if (result.success) {
                                             dg.datagrid('deleteRow', index);
                                         }
@@ -857,14 +859,13 @@
         var index = dg.datagrid("getRowIndex", row);
         return [index, row];
     }
-    function _editSave(dg, index, dbclick,callBack) {
+    function _editSave(dg, index, dbclick, callBack) {
         var editResult = false;
         var editor = dg.datagrid("getEditors", index);
         if (editor.length > 0 && dg.datagrid('validateRow', index)) {
             var isTreeTrid = dg.isTreeGrid;
             var row = null;
-            if (dbclick)
-            {
+            if (dbclick) {
                 if (isTreeTrid) {
                     row = $.extend(true, {}, dg.datagrid("find", index));
                 }
@@ -874,8 +875,7 @@
                 }
             }
             else { row = $.extend(true, {}, dg.getSelected()); }
-            if (row)
-            {
+            if (row) {
                 var _type = (dg.PKColumn.Editor.operator == "Update") ? 'updated' : 'inserted';
                 try {
                     dg.datagrid("endEdit", index); //结束编辑行，如果TreeGrid改变idField，会有异步。
@@ -893,7 +893,7 @@
                         } else {
                             post_data = getChangeJson(_change_data, row, dg);
                         }
-                        if ($.isEmptyObject(post_data)) { dg.datagrid('cancelEdit', index);}
+                        if ($.isEmptyObject(post_data)) { dg.datagrid('cancelEdit', index); }
                         else
                         {
                             row[dg.Internal.primarykey] && (post_data[dg.Internal.primarykey] = row[dg.Internal.primarykey]);//附加主键的ID值传入后台  

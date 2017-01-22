@@ -129,6 +129,7 @@
                         if ($PCore)
                         {
                             $PCore.Utility.Window.showMsg(msg);
+                            alert(parent.document.title + "," + document.title);
                             if (obj.success && parent != null && parent.document.title != document.title) {
                                 $Core.Utility.Window.close();
                             }

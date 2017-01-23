@@ -355,7 +355,6 @@
             $(this).on("click", function () {
                 _showInputDialog($(this));
             });
-
         });
     }
     function _showInputDialog($input) {
@@ -392,6 +391,12 @@
                         }
                         else {
                             setCombo($input, "select", options.values);
+                        }
+                        var $childInput=$input.next().children(':first');
+                        if (!$childInput.data("events")["dblclick"]) {
+                            $childInput.dblclick(function () {
+                                _showInputDialog($input);//绑定双击事件
+                            });
                         }
                     }
                     $("#_div_dialog").dialog("close");

@@ -2728,7 +2728,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:CYQ.Data.Table.MDataRow.CreateFrom(System.Object,System.Type)">
+        <member name="M:CYQ.Data.Table.MDataRow.CreateFrom(System.Object,System.Type,CYQ.Data.Table.BreakOp)">
             <summary>
             从实体、Json、Xml、IEnumerable接口实现的类、MDataRow
             </summary>
@@ -3229,7 +3229,7 @@
             <param name="sdr"></param>
             <returns></returns>
         </member>
-        <member name="M:CYQ.Data.Table.MDataTable.CreateFrom(System.Object)">
+        <member name="M:CYQ.Data.Table.MDataTable.CreateFrom(System.Object,CYQ.Data.Table.BreakOp)">
             <summary>
             从List列表里加载成MDataTable
             </summary>

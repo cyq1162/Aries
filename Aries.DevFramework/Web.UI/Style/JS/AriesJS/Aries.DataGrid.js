@@ -897,27 +897,30 @@
                         else
                         {
                             row[dg.Internal.primarykey] && (post_data[dg.Internal.primarykey] = row[dg.Internal.primarykey]);//附加主键的ID值传入后台  
-                            if (dg.PKColumn.Editor.BtnSave.onBeforeExecute(row[dg.Internal.primarykey], index, post_data) != false) {
+                            if (dg.PKColumn.Editor.BtnSave.onBeforeExecute(row[dg.Internal.primarykey], index, post_data) != false)
+                            {
+                                editResult = true;
                                 $Core.Utility.Ajax.post(dg.PKColumn.Editor.operator, dg.tableName, post_data, function (result) {
-                                    if (result.success) {
-                                        if (dg.PKColumn.Editor.operator == "Add") {
-                                            _change_data[dg.Internal.primarykey] = result.msg;//这里才是将ID写回去的地方。
-                                            result.msg = $Core.Lang.addSuccess;
+                                    if (result) {
+                                        if (result.success) {
+                                            if (dg.PKColumn.Editor.operator == "Add") {
+                                                _change_data[dg.Internal.primarykey] = result.msg;//这里才是将ID写回去的地方。
+                                                result.msg = $Core.Lang.addSuccess;
+                                            }
+                                            if (isTreeTrid && index != _change_data[dg.options.idField]) {
+                                                //树型节点，修改了idField，则刷新。
+                                                dg.reload();
+                                            }
+                                            dg.datagrid("acceptChanges");
+                                            dg.PKColumn.Editor.BtnSave.onAfterExecute(row[dg.Internal.primarykey], index, post_data, result);
                                         }
-                                        if (isTreeTrid && index != _change_data[dg.options.idField]) {
-                                            //树型节点，修改了idField，则刷新。
-                                            dg.reload();
+                                        else {
+                                            dg.datagrid('cancelEdit', index);
                                         }
-                                        dg.datagrid("acceptChanges");
-                                        dg.PKColumn.Editor.BtnSave.onAfterExecute(row[dg.Internal.primarykey], index, post_data, result);
-                                        editResult = true;
-                                        callBack && callBack(true);
+                                        dg.PKColumn.Editor.operator = undefined;
+                                        callBack && callBack(result.success);//异步的回调处理
+                                        $Core.Utility.Window.showMsg(result.msg);
                                     }
-                                    else {
-                                        dg.datagrid('cancelEdit', index);
-                                    }
-                                    dg.PKColumn.Editor.operator = undefined;
-                                    $Core.Utility.Window.showMsg(result.msg);
                                 });
                             }
                         }
@@ -927,9 +930,9 @@
             }
         }
         if (!editResult) {
-            callBack && callBack(false);
+            dg.PKColumn.Editor.operator = undefined;
+            callBack && callBack(false);//非异步的处理
         }
-        return editResult;
     }
 
     //用于检测值是否被修改了，如果修改了，只提取出修改过的值。

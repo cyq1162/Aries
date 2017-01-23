@@ -41,13 +41,13 @@ namespace Aries.Core.Auth
                 {
                     if (action.Get<DateTime>(Sys_User.PwdExpiredTime, DateTime.MaxValue) < DateTime.Now)
                     {
-                        errMsg =LangConst.PwdExpired; 
+                        errMsg = LangConst.PwdExpired;
                     }
                     else
                     {
 
                         string pwd = action.Get<string>(Sys_User.Password);
-                        if (password == EncrpytHelper.Decrypt(pwd))
+                        if (password == EncrpytHelper.Decrypt(pwd, false))
                         {
                             string userID = action.Get<string>(Sys_User.UserID);
                             userName = action.Get<string>(Sys_User.UserName);
@@ -59,6 +59,10 @@ namespace Aries.Core.Auth
                             else
                             {
                                 action.SetExpression("LoginCount=[#ISNULL](LoginCount,0)+1");
+                            }
+                            if (!pwd.EndsWith("=2") && EncrpytHelper.EncrpytKey != "")
+                            {
+                                action.Set(Sys_User.Password, EncrpytHelper.Encrypt(password));//重新加密密码
                             }
                             action.Set(Sys_User.LastLoginTime, DateTime.Now);
                             action.Set(Sys_User.LastLoginIP, HttpContext.Current.Request.UserHostAddress);
@@ -415,7 +419,7 @@ namespace Aries.Core.Auth
                 {
                     using (MAction action = new MAction(TableNames.Sys_Role))
                     {
-                        string where = string.Format("{0}='Admin' or {0}= '{1}'", Sys_Role.RoleName,LangConst.Admin);
+                        string where = string.Format("{0}='Admin' or {0}= '{1}'", Sys_Role.RoleName, LangConst.Admin);
                         if (action.Fill(where))
                         {
                             _AdminRoleID = action.Get<string>(Sys_Role.RoleID);
@@ -434,7 +438,7 @@ namespace Aries.Core.Auth
                 {
                     using (MAction action = new MAction(TableNames.Sys_Role))
                     {
-                        string where = string.Format("{0}='SuperAdmin' or {0}= '{1}'", Sys_Role.RoleName,LangConst.SuperAdmin);
+                        string where = string.Format("{0}='SuperAdmin' or {0}= '{1}'", Sys_Role.RoleName, LangConst.SuperAdmin);
                         if (action.Fill(where))
                         {
                             _SuperAdminRoleID = action.Get<string>(Sys_Role.RoleID);

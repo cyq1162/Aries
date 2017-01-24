@@ -196,7 +196,7 @@
                     index = row[that.options.idField];
                 }
                 if ($Core.Global.Variable.actionKeys.indexOf(",edit,") > -1) {
-                    _onDbClickRow(index, row, that);//双击事件需要编辑权限。
+                    _click(index, row, that, true);//双击事件需要编辑权限。
                 }
             }
             var click = this.options.onClickRow;
@@ -209,7 +209,7 @@
                     row = index;//默认第1个是row
                     index = row[that.options.idField];
                 }
-                _onClickRow(index, row, that);
+                _click(index, row, that, false);
             }
         }
         var dg = this;
@@ -642,7 +642,7 @@
                         //if (this.onBeforeExecute(value, index) == false) {
                         //    return;
                         //}
-                        _editSave(dg, index, null, function () {
+                        _editSave(dg, index, function () {
                             dg.PKColumn.Editor.editIndex = null;
                             dg.datagrid('refreshRow', index);
                         });
@@ -787,47 +787,24 @@
             new $Core.Upload($btnImport, opts);
         }
     }
-
-    function _onClickRow(index, row, dg) {
+    function _click(index, row, dg, isDbClick) {
         if (dg.PKColumn.Editor.editIndex == null || dg.PKColumn.Editor.editIndex == index) {
+            isDbClick && _beginEditing(index, row, dg);
             return false;
         }
         var editIndex = dg.PKColumn.Editor.editIndex;
         if (dg.datagrid('validateRow', editIndex)) {
-            _editSave(dg, editIndex, true, function (isSuccess) {
+            _editSave(dg, editIndex, function (isSuccess) {
                 if (isSuccess) {
                     dg.PKColumn.Editor.editIndex = null;
                     dg.datagrid('refreshRow', editIndex);
-                    _beginEditing(index, row, dg);
+                    isDbClick && _beginEditing(index, row, dg);
                 }
                 _endEditing(dg);
             });
         }
-        else {
-            _endEditing(dg);
-        }
-    }
-    function _onDbClickRow(index, row, dg) {
-        if (dg.PKColumn.Editor.editIndex == null || dg.PKColumn.Editor.editIndex == index) {
-            _beginEditing(index, row, dg);
-            return false;
-        }
-        var editIndex = dg.PKColumn.Editor.editIndex;
-        if (dg.datagrid('validateRow', editIndex)) {
-            _editSave(dg, editIndex, true, function (isSuccess) {
-                if (isSuccess) {
-                    dg.PKColumn.Editor.editIndex = null;
-                    dg.datagrid('refreshRow', editIndex);
-                    _beginEditing(index, row, dg);
-                }
-                if (_endEditing(dg)) {
-                    _beginEditing(index, row, dg);
-                }
-
-            });
-        }
         else if (_endEditing(dg)) {
-            _beginEditing(index, row, dg);
+            isDbClick && _beginEditing(index, row, dg);
         }
     }
     //作用就是把已经打开的编辑状态给关闭。
@@ -859,13 +836,12 @@
         var index = dg.datagrid("getRowIndex", row);
         return [index, row];
     }
-    function _editSave(dg, index, dbclick, callBack) {
+    function _editSave(dg, index, callBack) {
         var editResult = false;
         var editor = dg.datagrid("getEditors", index);
         if (editor.length > 0 && dg.datagrid('validateRow', index)) {
             var isTreeTrid = dg.isTreeGrid;
             var row = null;
-            if (dbclick) {
                 if (isTreeTrid) {
                     row = $.extend(true, {}, dg.datagrid("find", index));
                 }
@@ -873,8 +849,6 @@
                     //data只存档1级的数据，不适合treegrid
                     row = $.extend(true, {}, $.data(dg.$target[0], "datagrid").data.rows[index]);
                 }
-            }
-            else { row = $.extend(true, {}, dg.getSelected()); }
             if (row) {
                 var _type = (dg.PKColumn.Editor.operator == "Update") ? 'updated' : 'inserted';
                 try {
@@ -897,8 +871,7 @@
                         else
                         {
                             row[dg.Internal.primarykey] && (post_data[dg.Internal.primarykey] = row[dg.Internal.primarykey]);//附加主键的ID值传入后台  
-                            if (dg.PKColumn.Editor.BtnSave.onBeforeExecute(row[dg.Internal.primarykey], index, post_data) != false)
-                            {
+                            if (dg.PKColumn.Editor.BtnSave.onBeforeExecute(row[dg.Internal.primarykey], index, post_data) != false) {
                                 editResult = true;
                                 $Core.Utility.Ajax.post(dg.PKColumn.Editor.operator, dg.tableName, post_data, function (result) {
                                     if (result) {

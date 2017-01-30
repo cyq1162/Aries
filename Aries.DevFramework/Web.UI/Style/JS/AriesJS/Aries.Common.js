@@ -249,11 +249,16 @@
                             ifrme && ifrme.remove(); form_export && form_export.remove();
                             var objName = dg.tableName;
                             var targetForm = $("#" + dg.ToolArea.id).find(".function-box").siblings("div").find('form');
-                            var checked_ids = dg.getCheckedId();
-                            var jsonString = JSON.stringify($Core.Common._Internal.buildSearchJson(targetForm));
-                            if (checked_ids.length > 0) {
-                                var condition = [{ name: dg.Internal.primarykey, pattern: 'in', value: checked_ids.join(',') }];
-                                jsonString = JSON.stringify(condition);
+                            var checked_ids = dg.getCheckIDs();
+                            var jsonString ="";
+                            if (checked_ids.length > 0)
+                            {
+                                jsonString = checked_ids.join(',');
+                                //var condition = [{ name: dg.Internal.primarykey, pattern: 'in', value: checked_ids.join(',') }];
+                                //jsonString = JSON.stringify(condition);
+                            }
+                            else {
+                                jsonString = JSON.stringify($Core.Common._Internal.buildSearchJson(targetForm));
                             }
                             //window.open(ajaxOptions.href + '?objName=' + objName + '&sys_search='+jsonString, '_self');      
                             var iframeName = "framePost";
@@ -587,9 +592,8 @@
             },
             pkFormatter: function (dg) {
                 return function (value, row, index) {
-
                     var btnArray = $Core.Utility.cloneArray(dg.PKColumn._btnArray, false);
-                    value = row[dg.Internal.primarykey];
+                    value = dg.getPrimaryID(row);// row[dg.Internal.primarykey];
                     var result = dg.PKColumn.onBeforeExecute(value, row, index, btnArray);
                     if (result) {
                         return result;
@@ -808,7 +812,7 @@
                     if (i == 0 && (json_data[i].formatter == undefined || json_data[i].formatter == "#" || json_data[i].formatter == "")) {
                         frozen.push({ align: 'center', checkbox: dg.isShowCheckBox, hidden: !dg.isShowCheckBox, field: 'ckb', rowspan: 1, colspan: 1 });
 
-                        dg.Internal.primarykey = json_data[i].field;
+                        //dg.Internal.primarykey = json_data[i].field;
                         if (!dg.PKColumn.isHidden && (dg.PKColumn._btnArray.length > 0 || dg.isEditor)) {
                             //检测操作列，权限过滤后还有没有可呈现的控件。
                             var actionKeys = $Core.Global.Variable.actionKeys;
@@ -839,7 +843,13 @@
                             }
                         }
                     }
-
+                    if (json_data[i].datatype) {
+                        //收集主键
+                        var items = json_data[i].datatype.split(',');
+                        if (items.length > 4 && items[4] == "1") {
+                            dg.Internal.jointPrimary.push(json_data[i].field);
+                        }
+                    }
                     if (json_data[i].hidden) {
                         continue;
                     }
@@ -876,7 +886,6 @@
                                 json_data[i].formatter = format(objName);
                             } else {
                                 if (i == 0) {
-                                    dg.Internal.primarykey = json_data[i].field;
                                     json_data[i].formatter = format(dg);
                                 } else {
                                     json_data[i].formatter = format;
@@ -904,8 +913,9 @@
                     else {
                         cols.push(json_data[i]);
                     }
-                }
-
+                }//循环结束
+                if (dg.Internal.jointPrimary.length == 0) { dg.Internal.jointPrimary.push(json_data[0].field); }
+                dg.Internal.primarykey = dg.Internal.jointPrimary[0];
                 frozen = getColumnGroup(frozen);
                 cols = getColumnGroup(cols);
                 var maxLen = frozen.length > cols.length ? frozen.length : cols.length;

@@ -150,7 +150,8 @@ namespace Aries.Core.Config
                 row.Set(Config_Grid.Edit, i > 0);
                 row.Set(Config_Grid.Frozen, i < 4);
                 row.Set(Config_Grid.Align, "center");
-                row.Set(Config_Grid.DataType, DataType.GetType(cell.SqlType).Name.ToLower() + "," + cell.MaxSize + "," + cell.Scale + "," + (cell.IsCanNull ? 0 : 1));
+                string value = DataType.GetType(cell.SqlType).Name.ToLower() + "," + cell.MaxSize + "," + cell.Scale + (cell.IsCanNull ? ",0" : ",1") + (cell.IsPrimaryKey ? ",1" : ",0");
+                row.Set(Config_Grid.DataType, value);
                 if (i == 0) { row.Set(Config_Grid.Formatter, "#"); }
                 else
                 {
@@ -249,7 +250,7 @@ namespace Aries.Core.Config
                         formatter = row.Get<string>(Config_Grid.Formatter);
                         if (formatter == "boolFormatter")
                         {
-                            formatter = "#"+LangConst.IsYesNo;//对bool型特殊处理。
+                            formatter = "#" + LangConst.IsYesNo;//对bool型特殊处理。
                         }
                         if (!string.IsNullOrEmpty(formatter) && formatter.Length > 2 && formatter[0] == '#') // 需要格式化的项
                         {
@@ -283,7 +284,7 @@ namespace Aries.Core.Config
                     string formatter = gridRow.Get<string>(Config_Grid.Formatter);
                     if (formatter == "boolFormatter")
                     {
-                        formatter = "#"+LangConst.IsYesNo;//对bool型特殊处理。
+                        formatter = "#" + LangConst.IsYesNo;//对bool型特殊处理。
                     }
                     if (!string.IsNullOrEmpty(formatter) && formatter.Length > 2 && formatter[0] == '#') // 需要格式化的项
                     {

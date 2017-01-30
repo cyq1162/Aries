@@ -24,7 +24,7 @@ function getCookie(name) {
 }
 var themeName = getCookie('sys_theme') || 'default';
 var ui = getCookie('sys_ui');
-var vs = "v4.70";
+var vs = "v4.80";
 document.write('<link id="lk_theme" href="' + ui + '/Style/JS/EasyUI-1.3.4/themes/' + themeName + '/easyui.css" rel="stylesheet" type="text/css" />');
 document.write('<link href="' + ui + '/Style/CSS/main.css" rel="stylesheet" />');
 document.write('<link href="' + ui + '/Style/JS/EasyUI-1.3.4/themes/icon.css" rel="stylesheet" type="text/css" />');

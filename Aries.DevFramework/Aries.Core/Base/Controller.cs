@@ -324,7 +324,7 @@ namespace Aries.Core
         /// 取消继续调用事件（可以在重载BeforeInvoke方法内使用）
         /// </summary>
         protected bool CancelInvoke = false;
-        public string GetID
+        public virtual string GetID
         {
             get
             {
@@ -441,7 +441,7 @@ namespace Aries.Core
             using (MAction action = new MAction(CrossObjName))
             {
                 action.SetSelectColumns(GridConfig.GetSelectColumns(ObjName, st));//只查询要显示的列数据。
-                dt = action.Select(PageIndex, PageSize, GetWhere() + GetOrderBy(action.Data.PrimaryCell.ColumnName));
+                dt = action.Select(PageIndex, PageSize, GetWhere() + GetOrderBy(action.Data.JointPrimaryCell.Count > 1 ? null : action.Data.PrimaryCell.ColumnName));
             }
             return dt;
         }
@@ -555,17 +555,7 @@ namespace Aries.Core
                 }
                 if (result)
                 {
-                    var primaryKey = action.Data.PrimaryCell.ColumnName;
-                    string where = GetID;
-                    if (!string.IsNullOrEmpty(where))
-                    {
-                        where = GetWhereIn(primaryKey);
-                    }
-                    else
-                    {
-                        where = GetWhere();
-                    }
-                    result = !string.IsNullOrEmpty(where) && action.Delete(where);
+                    result = action.Delete(GetID);//!string.IsNullOrEmpty(where) &&
                 }
                 if (!result)
                 {

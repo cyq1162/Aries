@@ -24,12 +24,16 @@ namespace Aries.Core.Sql
         public static string Format(string searchList)
         {
             string sql = string.Empty;
-            List<SearchPara> sos = JsonHelper.ToList<SearchPara>(searchList);
-            if (sos != null && sos.Count > 0)
+            if (JsonHelper.IsJson(searchList))
             {
-                sql = BuildSQL(sos);
+                List<SearchPara> sos = JsonHelper.ToList<SearchPara>(searchList);
+                if (sos != null && sos.Count > 0)
+                {
+                    sql = BuildSQL(sos);
+                }
+                return sql;
             }
-            return sql;
+            return searchList;
         }
         private static string BuildSQL(List<SearchPara> sos)
         {

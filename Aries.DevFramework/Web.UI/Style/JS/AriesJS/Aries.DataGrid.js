@@ -139,7 +139,7 @@
             var rows = this.datagrid(type);
             var ids = [];
             for (var i = 0; i < rows.length; i++) {
-                ids.push(this.getPrimaryID(rows[i]));
+                ids.push(this.getPrimaryID(rows[i],key));
             }
             return ids;
         },

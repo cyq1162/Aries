@@ -132,6 +132,7 @@ namespace Aries.Core.Config
             Dictionary<string, string> fieldTitleDic = GridConfig.FieldTitle;
             MDataColumn mdc = DBTool.GetColumns(CrossDb.GetEnum(objCode));
             MCellStruct cell = null;
+            int jointPrimaryCount = mdc.JointPrimary.Count;
             for (int i = 0; i < mdc.Count; i++)
             {
                 cell = mdc[i];
@@ -139,7 +140,7 @@ namespace Aries.Core.Config
                 row.Set(Config_Grid.ObjName, objName);
                 row.Set(Config_Grid.Field, cell.ColumnName);
                 row.Set(Config_Grid.Title, fieldTitleDic.ContainsKey(cell.ColumnName) ? fieldTitleDic[cell.ColumnName] : cell.ColumnName);
-                row.Set(Config_Grid.Hidden, i == 0 && row.JointPrimaryCell.Count < 2);
+                row.Set(Config_Grid.Hidden, i == 0 && jointPrimaryCount < 2);
                 row.Set(Config_Grid.OrderNum, (i + 1) * 10);
                 row.Set(Config_Grid.Width, 100);
                 row.Set(Config_Grid.Sortable, i > 0);
@@ -147,14 +148,14 @@ namespace Aries.Core.Config
                 row.Set(Config_Grid.Export, i > 0);
                 row.Set(Config_Grid.Colspan, 1);
                 row.Set(Config_Grid.Rowspan, 1);
-                row.Set(Config_Grid.Edit, i > 0 || row.JointPrimaryCell.Count > 1);
+                row.Set(Config_Grid.Edit, i > 0 || jointPrimaryCount > 1);
                 row.Set(Config_Grid.Frozen, i < 4);
                 row.Set(Config_Grid.Align, "center");
                 string value = DataType.GetType(cell.SqlType).Name.ToLower() + "," + cell.MaxSize + "," + cell.Scale + (cell.IsCanNull ? ",0" : ",1") + (cell.IsPrimaryKey ? ",1" : ",0");
                 row.Set(Config_Grid.DataType, value);
                 if (i == 0)
                 {
-                    if (row.JointPrimaryCell.Count < 2)
+                    if (jointPrimaryCount < 2)
                     {
                         row.Set(Config_Grid.Formatter, "#");
                     }

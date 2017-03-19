@@ -156,8 +156,8 @@ window.AR || (window.AR = {});
     /**
     *@return {bool}
     */
-    $.isNullOrEmpty = function (obj) {
-        if (obj && obj.trim() != "") {
+    $.isNullOrEmpty = function (value) {
+        if (value && $.trim(value) != "") {
             return false;
         } else {
             return true;

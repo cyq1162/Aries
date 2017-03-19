@@ -294,7 +294,7 @@ $.extend($.fn.validatebox.defaults.rules, {
     },
     combobox: {
         validator: function (value, param) {
-            return value.trim() != $Core.Lang.select
+            return $.trim(value) != $Core.Lang.select
         },
         message: $Core.Lang.selectData
     },

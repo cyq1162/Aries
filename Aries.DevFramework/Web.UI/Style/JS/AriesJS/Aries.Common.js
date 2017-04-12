@@ -250,9 +250,8 @@
                             var objName = dg.tableName;
                             var targetForm = $("#" + dg.ToolArea.id).find(".function-box").siblings("div").find('form');
                             var checked_ids = dg.getCheckIDs();
-                            var jsonString ="";
-                            if (checked_ids.length > 0)
-                            {
+                            var jsonString = "";
+                            if (checked_ids.length > 0) {
                                 jsonString = checked_ids.join(',');
                                 //var condition = [{ name: dg.Internal.primarykey, pattern: 'in', value: checked_ids.join(',') }];
                                 //jsonString = JSON.stringify(condition);
@@ -262,12 +261,13 @@
                             }
                             //window.open(ajaxOptions.href + '?objName=' + objName + '&sys_search='+jsonString, '_self');      
                             var iframeName = "framePost";
+                            var url = $Core.Utility.Ajax.Settings.url + "?sys_objName=" + dg.objName + "&sys_tableName=" + objName + "&sys_method=Export";
                             ifrme = $("<iframe>").attr("id", "div_ifrme_template").attr("name", iframeName).css({ display: 'none' });
-                            form_export = $("<form>").attr("method", "post").attr("action", $Core.Utility.Ajax.Settings.url).attr("target", iframeName).attr("id", "form_data");
+                            form_export = $("<form>").attr("method", "post").attr("action", url).attr("target", iframeName).attr("id", "form_data");
                             var param = {
-                                sys_tableName: objName,
-                                sys_method: "Export",
-                                sys_objName: dg.objName,
+                                //sys_tableName: objName,
+                                // sys_method: "Export",
+                                //sys_objName: dg.objName,
                                 sys_search: jsonString,
                                 sys_mid: $Core.Global.Variable.mid
                             };
@@ -340,7 +340,7 @@
             },
             HeaderMenu: function () {
                 this.isHidden = false;
-                this.Items = [{ "text":$Core.Lang.config, "onclick": "AR.Common._Internal.onConfigClick", "lv2action": "config" }];
+                this.Items = [{ "text": $Core.Lang.config, "onclick": "AR.Common._Internal.onConfigClick", "lv2action": "config" }];
                 /**
                 *向工具条添加按钮
                 *@param{string} text 按钮显示的文本
@@ -429,15 +429,12 @@
                 }
                 return json;
             },
-            reloadGrid:function(dg,btn_query,onBeforeEvent,onAfterEvent)
-            {
+            reloadGrid: function (dg, btn_query, onBeforeEvent, onAfterEvent) {
                 var searchJson = [];
                 var targetForm;
-                if (btn_query)
-                {
+                if (btn_query) {
                     targetForm = btn_query.parents("form");
-                    if (targetForm)
-                    {
+                    if (targetForm) {
                         searchJson = $Core.Common._Internal.buildSearchJson(targetForm);
                     }
 
@@ -1030,13 +1027,13 @@
     function _createToolBarHtml(dg) {
         var item; actionKeys = $Core.Global.Variable.actionKeys || "";
         if (actionKeys.indexOf(',add,') > -1 && !dg.ToolBar.BtnAdd.isHidden) {
-            dg.ToolBar.BtnAdd.$target = $('<input class=\"add\" flag=\"btn_add\" type=\"button\" name=\"' + $Core.Lang .add+ '\" value=\"\"/>');
+            dg.ToolBar.BtnAdd.$target = $('<input class=\"add\" flag=\"btn_add\" type=\"button\" name=\"' + $Core.Lang.add + '\" value=\"\"/>');
             item = $("<a>").append(dg.ToolBar.BtnAdd.$target);
             dg.ToolBar.$target.append(item);
             dg.ToolBar.Items.set("add", dg.ToolBar.BtnAdd);
         }
         if (actionKeys.indexOf(',del,') > -1 && !dg.ToolBar.BtnDelBatch.isHidden && dg.isShowCheckBox) {
-            dg.ToolBar.BtnDelBatch.$target = $('<input  class=\"batch_del\" flag=\"btn_del\" type=\"button\" name=\"' + $Core.Lang.batchDel+ '\" value=\"\"/>').attr("dgID", dg.id);
+            dg.ToolBar.BtnDelBatch.$target = $('<input  class=\"batch_del\" flag=\"btn_del\" type=\"button\" name=\"' + $Core.Lang.batchDel + '\" value=\"\"/>').attr("dgID", dg.id);
             item = $("<a>").append(dg.ToolBar.BtnDelBatch.$target);
             dg.ToolBar.$target.append(item);
             dg.ToolBar.Items.set("del", dg.ToolBar.BtnDelBatch);
@@ -1055,7 +1052,7 @@
                 dg.ToolBar.Items.set("import", dg.ToolBar.BtnImport);
             }
             if (!dg.ToolBar.BtnExportTemplate.isHidden) {
-                dg.ToolBar.BtnExportTemplate.$target = $('<input class=\"btn-sm\" flag=\"btn_export_template\" type=\"button\"  value=\"' + $Core.Lang.exportTemplate+ '\"/>');
+                dg.ToolBar.BtnExportTemplate.$target = $('<input class=\"btn-sm\" flag=\"btn_export_template\" type=\"button\"  value=\"' + $Core.Lang.exportTemplate + '\"/>');
                 item = $("<a>").append(dg.ToolBar.BtnExportTemplate.$target);
                 dg.ToolBar.$target.append(item);
                 dg.ToolBar.Items.set("exportTemplate", dg.ToolBar.BtnExportTemplate);
@@ -1068,6 +1065,10 @@
         //dg.ToolBar.$target = div_fn;
         //dg.ToolArea.$target.append(dg.ToolBar.$target);
         _createCustomButton(dg);
+        //检测有没有工具栏，如果没有，自动隐藏
+        if (dg.ToolBar.Items.length == 0) {
+            dg.ToolBar.$target.hide();
+        }
     }
     //创建自定义工具条。
     function _createCustomButton(dg) {
@@ -1095,7 +1096,7 @@
                 }
                 item = $(item);
                 var toolbarContainer = dg.ToolBar.$target;//  $("#" + dg.ToolArea.id).find(".function-box"),
-                    count = toolbarContainer.children().length;
+                count = toolbarContainer.children().length;
                 if (count == 0) {
                     toolbarContainer.append(item);
                 } else {

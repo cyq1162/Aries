@@ -263,7 +263,7 @@
                             //window.open(ajaxOptions.href + '?objName=' + objName + '&sys_search='+jsonString, '_self');      
                             var iframeName = "framePost";
                             ifrme = $("<iframe>").attr("id", "div_ifrme_template").attr("name", iframeName).css({ display: 'none' });
-                            form_export = $("<form>").attr("action", $Core.Utility.Ajax.Settings.url).attr("target", iframeName).attr("id", "form_data");
+                            form_export = $("<form>").attr("method", "post").attr("action", $Core.Utility.Ajax.Settings.url).attr("target", iframeName).attr("id", "form_data");
                             var param = {
                                 sys_tableName: objName,
                                 sys_method: "Export",

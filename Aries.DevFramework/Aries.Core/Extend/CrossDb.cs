@@ -18,7 +18,7 @@ namespace Aries.Core.Extend
     /// <summary>
     /// 跨库处理
     /// </summary>
-    public static class CrossDb
+    public static partial class CrossDb
     {
         #region 预处理所有表结构缓存
         private static bool isFirstLoad = false;
@@ -187,6 +187,18 @@ namespace Aries.Core.Extend
                     return item.Key;
                 }
             }
+            //找不到时，可能是视图，根据数据库类型匹配第一个可能的数据库
+            foreach (KeyValuePair<string,DalType> item in _DbTypeDic)
+            {
+                switch (item.Value)
+                {
+                    case DalType.Txt:
+                    case DalType.Xml:
+                        continue;
+                    default:
+                        return item.Key;
+                }
+            }
             return "";
         }
         internal static string GetConn(string sqlOrTableName)
@@ -237,7 +249,7 @@ namespace Aries.Core.Extend
         private static string GetTableNameFromSql(string sql)
         {
             //获取原始表名
-            string[] items = sql.Split(' ');
+            string[] items = sql.Replace("\r\n"," ").Split(' ');
             if (items.Length == 1) { return sql; }//单表名
             if (items.Length > 3) // 总是包含空格的select * from xxx
             {
@@ -264,5 +276,10 @@ namespace Aries.Core.Extend
             }
             return sql;
         }
+    }
+
+    public static partial class CrossDb
+    {
+ 
     }
 }

@@ -47,7 +47,7 @@ namespace Aries.Core.Sql
                             {
                                 if (_FileList.ContainsKey(key))
                                 {
-                                    throw new Exception(key + " "+LangConst.Exist+":" + item);
+                                    throw new Exception(key + " " + LangConst.Exist + ":" + item);
                                 }
                                 _FileList.Add(key, item);
                             }
@@ -91,7 +91,7 @@ namespace Aries.Core.Sql
                         sqlValue = text.Substring(index + 1).Trim();
                         if (fileList.ContainsKey(sqlKey))
                         {
-                            throw new Exception(sqlKey + " "+LangConst.Exist+":" + path);
+                            throw new Exception(sqlKey + " " + LangConst.Exist + ":" + path);
                         }
                         fileList.Add(sqlKey, sqlValue);
                     }
@@ -159,9 +159,10 @@ namespace Aries.Core.Sql
                 if (fileList.ContainsKey(key))
                 {
                     string text = fileList[key];
-
+                    string folder = null;
                     if (text.Contains(":\\"))
                     {
+                        folder = text;
                         text = FileExtend.ReadAllText(text);
                         int index = text.LastIndexOf("/*");
                         if (index > -1)//去掉注释
@@ -175,10 +176,19 @@ namespace Aries.Core.Sql
                         text = string.Format(text, stringFormatValues);
                     }
                     text = FormatPara(text.Trim());//去掉空格
-                    //if (key[0] == 'V' && text[0] != '(')//补充语法
-                    //{
-                    //    text = "(" + text + ") " + key;
-                    //}
+                    if (key[0] == 'V' && text[0] != '(' && !string.IsNullOrEmpty(folder))//补充语法
+                    {
+                        //如果文件夹名包含数据库名，则补充数据库前缀。
+                        foreach (string name in CrossDb.DbTables.Keys)
+                        {
+                            if (folder.IndexOf("\\" + name + "\\", StringComparison.OrdinalIgnoreCase) > -1)
+                            {
+                                text = "(" + text + ") " + name + "." + key;//补充数据库前缀。
+                                break;
+                            }
+                        }
+
+                    }
 
                     //参数化格式
                     return text;

@@ -352,6 +352,7 @@ namespace Aries.Logic
                 if (result)
                 {
                     msg = action.Get<string>(action.Data.PrimaryCell.ColumnName);
+                    AddSuperAdminPromission(msg, action.Get<string>("ActionIDs"));
                 }
                 else if (AppConfig.Debug.OpenDebugInfo)
                 {
@@ -360,6 +361,23 @@ namespace Aries.Logic
             }
             return JsonHelper.OutResult(result, result ? msg : "添加失败!");
         }
+        private void AddSuperAdminPromission(string menuID, string actionIDs)
+        {
+            if (!string.IsNullOrEmpty(actionIDs))
+            {
+                MDataTable dt = new MDataTable(TableNames.Sys_RoleAction.ToString());
+                dt.Columns.Add("RoleID");
+                dt.Columns.Add("MenuID");
+                dt.Columns.Add("ActionID");
+                foreach (string actionID in actionIDs.Split(','))
+                {
+                    dt.NewRow(true).Set(0, UserAuth.SuperAdminRoleID)
+                        .Set(1, menuID).Set(2, actionID);
+                }
+                dt.AcceptChanges(AcceptOp.Insert);
+            }
+        }
+
         #endregion
 
 

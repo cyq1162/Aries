@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title></title>
     <script src="/Style/JS/Aries.Loader.js"></script>
 </head>
@@ -25,11 +25,11 @@
                         </div>
                         <div class="line">
                             <label><em>*</em>菜单路径：</label>
-                            <input name="menuurl" id="menuurl" missingmessage="菜单路径格式不正确" validtype="WebAddress" required='true' class='easyui-validatebox' style="width: 300px;" />
+                            <input name="menuurl" id="menuurl" missingmessage="菜单路径不能为空"  required='true' class='easyui-validatebox' style="width: 300px;" />
                         </div>
                         <div class="line">
                             <label><em>*</em>排序号：</label>
-                            <input name="sortorder" id="sortorder" missingmessage="" class='easyui-numberbox' required='true' style="width: 300px;" />
+                            <input name="sortorder" id="sortorder" missingmessage="排序号为数字" class='easyui-numberbox' required='true' style="width: 300px;" />
                         </div>
                         <div class="line">
                             <label><em>*</em>是否显示：</label>
@@ -45,7 +45,7 @@
                             <a>
                                 <input id="btn_submit" class="submit" type="button" name="保存" value="" />
                             </a>
-                        <!--    <a>
+                            <!--    <a>
                                 <input id="btn_cancel" class="return" type="reset" name="重置" value="" />
                             </a>-->
                         </div>
@@ -110,6 +110,30 @@
             AR.Global.DG.action = "Add";
         }
         currNode = node;
+        //初始一些默认值
+        $("#menuurl").val("/web/sysadmin/customview.html?objname=");
+        $('#sortorder').numberbox('setValue', '100');
+        $(':radio[name="isShow"]').eq(0).attr("checked", true);
+        var defaultActionIDs = "";
+        for (var i = 0; i < checkboxData.length; i++) {
+            switch (checkboxData[i].actionrefname) {
+                case "add":
+                case "edit":
+                case "del":
+                case "view":
+                case "import":
+                case "export":
+                case "config":
+                    if (defaultActionIDs == "") { defaultActionIDs = checkboxData[i].actionid; }
+                    else
+                    {
+                        defaultActionIDs = defaultActionIDs + "," + checkboxData[i].actionid;
+                    }
+                    break;
+            }
+        }
+        selectPromisson(defaultActionIDs);
+
     }
     function getTreeNode() {
         var node = $("#ul_menus").tree("getSelected");
@@ -218,8 +242,6 @@
          function (data) {
              $("#form1").form('load', data);
              selectPromisson(data.actionids);
-             //为什么用$("#rdo_yes").attr("checked",true); 不行？
-            // data.isshow == "1" ? document.getElementById("rdo_yes").checked = true : document.getElementById("rdo_no").checked = true;
          });
     }
 
@@ -242,7 +264,7 @@
     var _commit = AR.Form.commit;
     //提交表单
     AR.Form.commit = function (jq) {
-        var action=AR.Global.DG.action;
+        var action = AR.Global.DG.action;
         var node = $("#ul_menus").tree("getSelected");
         var menuLevel = 0;
         if (action == "Add") {
@@ -261,10 +283,8 @@
             }
         }
         _commit(jq, AR.Global.DG.action, "Sys_Menu", null, false, function (data) {
-            if (action == "Add")
-            {
-                if (data.success)
-                {
+            if (action == "Add") {
+                if (data.success) {
                     $("#ul_menus").tree("append", {
                         parent: currNode.target,
                         data: [{
@@ -275,13 +295,11 @@
                     });
                     AR.Utility.Window.showMsg("添加成功！");
                 }
-                else
-                {
+                else {
                     AR.Utility.Window.showMsg(data.msg);
                 }
             }
-            else
-            {
+            else {
                 $("#ul_menus").tree("update", {
                     target: currNode.target,
                     text: $("[name='menuname']").val()

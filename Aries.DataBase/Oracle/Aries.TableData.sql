@@ -322,7 +322,7 @@ insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,A
 insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,Align,Sortable,Formatter,Styler,Editor,Rowspan,Colspan,Search,DataType,Import,Export,Frozen,Edit,MergeIndex,ImportUnique,LastEditTime) 
  values('876e09ba-b754-4f24-bdca-db4e9703129b','Sys_Area','','Code','Code',0,20,100,'center',1,'','','',1,1,0,'string,50,0,0',0,1,1,1,1,0,to_date('2016/5/9 16:34:45','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,Align,Sortable,Formatter,Styler,Editor,Rowspan,Colspan,Search,DataType,Import,Export,Frozen,Edit,MergeIndex,ImportUnique,LastEditTime) 
- values('691b4283-2d5e-489c-988c-dccc8c47734f','V_Test','$:{configkey:''''''''}','F2','F2',0,30,100,'center',1,'#是否','','',1,1,1,'boolean,1,0,0',0,1,1,1,1,0,to_date('2016/5/10 15:47:01','yyyy-mm-dd hh24:mi:ss'));
+ values('691b4283-2d5e-489c-988c-dccc8c47734f','V_Test','','F2','F2',0,30,100,'center',1,'#是否','','',1,1,1,'boolean,1,0,0',0,1,1,1,1,0,to_date('2016/5/10 15:47:01','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,Align,Sortable,Formatter,Styler,Editor,Rowspan,Colspan,Search,DataType,Import,Export,Frozen,Edit,MergeIndex,ImportUnique,LastEditTime) 
  values('727d5700-ba89-4f42-832b-e476a4654452','Sys_Area','','Sort','Sort',0,50,100,'center',1,'','','',1,1,0,'int32,10,0,0',0,1,0,1,1,0,to_date('2016/5/9 16:34:45','yyyy-mm-dd hh24:mi:ss'));
 insert into Config_Grid(GridID,ObjName,Rules,Field,Title,Hidden,OrderNum,Width,Align,Sortable,Formatter,Styler,Editor,Rowspan,Colspan,Search,DataType,Import,Export,Frozen,Edit,MergeIndex,ImportUnique,LastEditTime) 

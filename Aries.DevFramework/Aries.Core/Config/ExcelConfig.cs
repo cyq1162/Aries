@@ -308,7 +308,7 @@ namespace Aries.Core.Config
                         #region //获取唯一联合主键,检测是否重复
 
                         string where = string.Empty;
-                        List<MDataRow> rowList = configTable.FindAll("TableName='" + table + "' and IsUnique=1");
+                        MDataRowCollection rowList = configTable.FindAll("TableName='" + table + "' and IsUnique=1");
                         if (rowList != null && rowList.Count > 0)
                         {
                             bool isUniqueOr = excelRow.Get<bool>(Config_Excel.WhereType);

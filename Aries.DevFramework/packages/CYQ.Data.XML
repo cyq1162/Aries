@@ -2042,6 +2042,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:CYQ.Data.DbBase.WriteError(System.String)">
+            <summary>
+            输出错误（若事务中，回滚事务）
+            </summary>
+            <param name="err"></param>
+        </member>
         <member name="P:CYQ.Data.DbBase.DataBase">
             <summary>
             获得链接的数据库名称
@@ -2716,6 +2722,10 @@
             <param name="state">状态[0:未更改；1:已赋值,值相同[可插入]；2:已赋值,值不同[可更新]]</param>
             <param name="op">状态设置选项</param>
         </member>
+        <member name="M:CYQ.Data.Table.MDataRow.SetState(System.Int32,CYQ.Data.Table.BreakOp,System.String)">
+            <param name="columns"><para>批量指定某些列</para></param>
+            <returns></returns>
+        </member>
         <member name="M:CYQ.Data.Table.MDataRow.Clone">
             <summary>
             复制一行
@@ -2963,6 +2973,12 @@
             <returns></returns>
         </member>
         <member name="M:CYQ.Data.Table.MDataTable.op_Implicit(CYQ.Data.Table.MDataRow)~CYQ.Data.Table.MDataTable">
+            <summary>
+            将一行数据装载成一个表。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataTable.op_Implicit(CYQ.Data.Table.MDataRowCollection)~CYQ.Data.Table.MDataTable">
             <summary>
             将一行数据装载成一个表。
             </summary>
@@ -3390,6 +3406,11 @@
             </summary>
             <param name="dataStruct"></param>
         </member>
+        <member name="M:CYQ.Data.Table.MDataCell.CheckNewValue">
+            <summary>
+            延时检测值的类型
+            </summary>
+        </member>
         <member name="M:CYQ.Data.Table.MDataCell.FixValue">
             <summary>
             数据类型被切换，重新修正值的类型。
@@ -3408,6 +3429,11 @@
             <param name="convertionType">要转换成哪种类型</param>
             <param name="groupID">数据库类型的组号</param>
             <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataCell.Clear">
+            <summary>
+            将值重置为空
+            </summary>
         </member>
         <member name="M:CYQ.Data.Table.MDataCell.SetDefaultValueToValue">
             <summary>
@@ -3428,6 +3454,11 @@
         <member name="M:CYQ.Data.Table.MDataCell.ToRow">
             <summary>
             转成行
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Table.MDataCell.StringValue">
+            <summary>
+            字符串值
             </summary>
         </member>
         <member name="P:CYQ.Data.Table.MDataCell.Value">
@@ -3458,6 +3489,16 @@
         <member name="P:CYQ.Data.Table.MDataCell.State">
             <summary>
             Value的状态:0;未改,1;进行赋值操作[但值相同],2:赋值,值不同改变了
+            </summary>
+        </member>
+        <member name="T:CYQ.Data.Table.MDataCell.MCellValue">
+            <summary>
+            单元结构的值
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Table.MDataCell.MCellValue.State">
+            <summary>
+            状态改变:0;未改,1;进行赋值操作[但值相同],2:赋值,值不同改变了
             </summary>
         </member>
         <member name="T:CYQ.Data.Table.MCellStruct">
@@ -3536,6 +3577,17 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:CYQ.Data.Table.MCellStruct.Set(System.Object)">
+            <summary>
+            为列的所有行设置值
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Table.MCellStruct.GetWhereIn">
+            <summary>
+            返回该列的where In 条件 : Name in("aa","bb")
+            </summary>
+            <returns></returns>
+        </member>
         <member name="P:CYQ.Data.Table.MCellStruct.MDataColumn">
             <summary>
             结构集合
@@ -3554,16 +3606,6 @@
         <member name="P:CYQ.Data.Table.MCellStruct.AlterOp">
             <summary>
             列结构改变状态
-            </summary>
-        </member>
-        <member name="T:CYQ.Data.Table.MCellValue">
-            <summary>
-            单元结构的值
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Table.MCellValue.State">
-            <summary>
-            状态改变:0;未改,1;进行赋值操作[但值相同],2:赋值,值不同改变了
             </summary>
         </member>
         <member name="T:CYQ.Data.Table.MDataColumn">
@@ -3638,11 +3680,6 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:CYQ.Data.Table.MDataColumn.Set(System.Object,System.Object)">
-            <summary>
-            为列的所有行设置值
-            </summary>
-        </member>
         <member name="M:CYQ.Data.Table.MDataColumn.Add(System.String)">
             <summary>
             添加列
@@ -3698,6 +3735,11 @@
             首个唯一键
             </summary>
         </member>
+        <member name="P:CYQ.Data.Table.MDataColumn.Item(System.Int32)">
+            <summary>
+            ReadOnly
+            </summary>
+        </member>
         <member name="T:CYQ.Data.Table.MDataView">
             <summary>
             仅用于Winform的列表绑定。
@@ -3719,6 +3761,31 @@
             </summary>
             <typeparam name="T">转换的目标类型</typeparam>
             <param name="schema">表数据架构</param>
+        </member>
+        <member name="T:CYQ.Data.Table.AlterOp">
+            <summary>
+            列结构修选项
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Table.AlterOp.None">
+            <summary>
+            默认不修改状态
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Table.AlterOp.AddOrModify">
+            <summary>
+            添加或修改状态
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Table.AlterOp.Drop">
+            <summary>
+            删除列状态
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Table.AlterOp.Rename">
+            <summary>
+            重命名列状态
+            </summary>
         </member>
         <member name="T:CYQ.Data.Table.MDataTableJoin">
             <summary>
@@ -4469,31 +4536,6 @@
         <member name="P:CYQ.Data.SQL.SqlCreate.AutoID">
             <summary>
             oracle序列名称
-            </summary>
-        </member>
-        <member name="T:CYQ.Data.Table.AlterOp">
-            <summary>
-            列结构修选项
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Table.AlterOp.None">
-            <summary>
-            默认不修改状态
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Table.AlterOp.AddOrModify">
-            <summary>
-            添加或修改状态
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Table.AlterOp.Drop">
-            <summary>
-            删除列状态
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Table.AlterOp.Rename">
-            <summary>
-            重命名列状态
             </summary>
         </member>
         <member name="T:CYQ.Data.Table.MDataTableBatchAction">

@@ -589,6 +589,7 @@
             },
             pkFormatter: function (dg) {
                 return function (value, row, index) {
+                    //console.log("pkformatter");
                     var btnArray = $Core.Utility.cloneArray(dg.PKColumn._btnArray, false);
                     value = dg.getPrimaryID(row);// row[dg.Internal.primarykey];
                     var result = dg.PKColumn.onBeforeExecute(value, row, index, btnArray);

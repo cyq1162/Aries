@@ -647,13 +647,16 @@
                         }
                         var isAdd = dg.PKColumn.Editor.operator == "Add";
                         _editSave(dg, index, function (isSuccess) {
+                           
                             dg.PKColumn.Editor.editIndex = null;
                             //如果编辑状态则取消操作，删除状态则删除行
-                            if (!isSuccess) {
+                            if (!isSuccess)
+                            {
                                 if (isAdd) {
                                     dg.datagrid('deleteRow', index);
                                 } else {
-                                    dg.datagrid('cancelEdit', index);
+                                    //_editSave中已经endEdit过一次，再cacleEdit无法触发pkFormatter变更图标,reflreshRow能再触发事件
+                                    dg.datagrid('refreshRow', index);
                                 }
                             }
                             else { dg.datagrid('refreshRow', index); }
@@ -674,7 +677,8 @@
                             return;
                         }
                         dg.PKColumn.Editor.editIndex = null;//下面的会变更状态。
-                        if (dg.datagrid("getEditors", index).length > 0) {
+                        if (dg.datagrid("getEditors", index).length > 0)
+                        {
                             //如果编辑状态则取消操作，删除状态则删除行
                             if (dg.PKColumn.Editor.operator == "Add") {
                                 dg.datagrid('deleteRow', index);
@@ -885,8 +889,8 @@
                         } else {
                             post_data = getChangeJson(_change_data, row, dg);
                         }
-                        if ($.isEmptyObject(post_data)) { dg.datagrid('cancelEdit', index); }
-                        else
+                        if (!$.isEmptyObject(post_data)) //{ dg.datagrid('cancelEdit', index); }
+                        //else
                         {
                             for (var i = 0; i < dg.Internal.jointPrimary.length; i++) {
                                 var primary = dg.Internal.jointPrimary[i];

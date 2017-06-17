@@ -106,7 +106,7 @@ namespace Aries.Core
                 }
             }
         }
-       
+
         private void SetNoCacheAndSafeKey()
         {
             context.Response.Expires = 0;
@@ -164,7 +164,7 @@ namespace Aries.Core
             {
                 WriteError("Illegal request!");
             }
-            else if (!IsExistsSafeKey())
+            else if (!IsExistsSafeKey() && WebHelper.IsCheckToken())// 仅检测需要登陆的页面
             {
                 string path = context.Request.UrlReferrer.PathAndQuery;
                 if (path == "/") { path = "/index.html"; }
@@ -188,7 +188,7 @@ namespace Aries.Core
             }
             #endregion
 
-           
+
             try
             {
                 object o = Activator.CreateInstance(t);//实例化

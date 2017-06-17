@@ -1,4 +1,10 @@
-﻿
+﻿(function ($Core) {
+    $Core.Lang || ($Core.Lang = {});
+    if ($Core.Lang.langKey == undefined) {
+        $Core.Lang.configRulesError = '配置表头的（格式规则）配置错误（冒号后面数据转Json失败）';
+    }
+
+})(AR);
 //AR.Utility 定义
 (function ($, $Core) {
     $Core.Utility = {
@@ -358,7 +364,8 @@
                 try {
                     _rules = eval("(" + _rules + ")");
                 } catch (e) {
-                    alert(e.message + " rules config json error : " + rules);
+                    alert($Core.Lang.configRulesError + " :" + rules);
+                   // alert(e.message + " rules config json error : " + rules);
                     return;
                 }
                 

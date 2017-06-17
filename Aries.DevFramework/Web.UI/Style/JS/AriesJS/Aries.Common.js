@@ -4,7 +4,7 @@
         $Core.Lang.select = '请选择';
         $Core.Lang.config = '配置';
         $Core.Lang.add = '添加';
-        $Core.Lang.addSaveLevel = '添加同级';
+        $Core.Lang.addSameLevel = '添加同级';
         $Core.Lang.addChild = '添加子级';
         $Core.Lang.cancel = '取消';
         $Core.Lang.save = '保存';
@@ -354,7 +354,7 @@
             RowMenu: function (isTreeGrid) {
                 this.isHidden = isTreeGrid;
                 if (isTreeGrid) {
-                    this.Items = [{ "text": $Core.Lang.addSaveLevel, "onclick": "AR.Common._Internal.onAdd,true", "lv2action": "add" },
+                    this.Items = [{ "text": $Core.Lang.addSameLevel, "onclick": "AR.Common._Internal.onAdd,true", "lv2action": "add" },
                         { "text": $Core.Lang.addChild, "onclick": "AR.Common._Internal.onAdd", "lv2action": "add" },
                         { "text": $Core.Lang.edit, "onclick": "AR.Common._Internal.Editor.onEdit", "lv2action": "edit" },
                         { "text": $Core.Lang.del, "onclick": "AR.Common._Internal.Editor.onDel", "lv2action": "del" }

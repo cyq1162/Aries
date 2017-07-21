@@ -85,7 +85,8 @@ namespace Aries.Core
                     context.Response.Cookies.Add(cookie);
                 }
             }
-            context.Response.Write(" ");//避免服务器不输出Cookie。
+            //context.Response.Write(" ");//避免服务器不输出Cookie。,会引发：ERR_CONTENT_DECODING_FAILED异常。
+            //cannot decode raw data (NSURLErrorDomain:-1015) 
         }
         #endregion
 

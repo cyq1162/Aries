@@ -44,6 +44,13 @@
         <span>Copyright◎2016-2024 Aries Develop Framework All Rights Reserved.</span>
     </div>
     <script>
+        document.onkeydown = function (e) {
+            var ev = document.all ? window.event : e;
+            if (ev.keyCode == 13) // Enter
+            {
+                login();
+            }
+        }
         function login() {
             var uid = $("#username").val();
             var pwd = $("#password").val();

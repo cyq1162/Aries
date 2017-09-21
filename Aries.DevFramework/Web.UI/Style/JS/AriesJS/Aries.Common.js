@@ -432,6 +432,9 @@
             reloadGrid: function (dg, btn_query, onBeforeEvent, onAfterEvent) {
                 var searchJson = [];
                 var targetForm;
+                if (!btn_query && dg.Search && dg.Search.BtnQuery) {
+                    btn_query = dg.Search.BtnQuery.$target;
+                }
                 if (btn_query) {
                     targetForm = btn_query.parents("form");
                     if (targetForm) {

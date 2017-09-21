@@ -117,6 +117,7 @@
                     case "reload":
                         this.$target.datagrid("unselectAll");
                         this.$target.datagrid("uncheckAll");
+                        this.$target.datagrid("clearChecked"); //清掉缓存的数据。
                         break;
                     case "select":
                         v1 = "selectRow";

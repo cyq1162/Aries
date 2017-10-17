@@ -76,13 +76,18 @@
                                 return false;
                             }
                             else {
-                                // 下拉框的值有缓存，要清。
-                                $form.find("[comboname]").each(function () {
-                                    $Core.Combobox.setCombo($(this), "clear");
-                                });
+                               
                                 //input，要清
                                 $form.find("input:[name]").each(function () {
                                     $(this).val("");
+                                });
+                                 //下拉框的值有缓存，要清。
+                                $form.find("[comboname]").each(function () {
+                                    $Core.Combobox.setCombo($(this), "clear");//取消原有的选择值
+                                    var data = $(this).combobox("getData");
+                                    if (data && data.length > 0 && data[0].value == "") {
+                                        $Core.Combobox.setCombo($(this), "select", "");//重新置为请选择的空值
+                                    }
                                 });
                             }
                             dg.Search.BtnQuery.onExecute(dg, null);
@@ -706,11 +711,11 @@
                             }
                         }
                         var isMultiple = false;//先不支持行内编辑的多选
-                        //if (row.rules && typeof (row.rules) == "string" && row.rules.indexOf("{") > -1) {
-                        //    var sp = row.rules.split("{");
-                        //    sp = eval("({" + sp[sp.length - 1] + ")");
-                        //    isMultiple = sp.multiple && sp.multiple.toString() != "false";
-                        //}
+                        if (row.rules && typeof (row.rules) == "string" && (row.rules.indexOf("$1:{") > -1 || row.rules.indexOf("$2:{") > -1)) {
+                            var sp = row.rules.split("{");
+                            sp = eval("({" + sp[sp.length - 1] + ")");
+                            isMultiple = sp.multiple && sp.multiple.toString() != "false";
+                        }
                         settings.options = {
                             multiple: isMultiple,
                             valueField: 'value',
@@ -1014,7 +1019,7 @@
 
             var divButtons = $('<div class="btn w72">');
             dg.Search.BtnQuery.$target = $('<input class="query" value="" type="button" />');
-            dg.Search.BtnReset.$target = $('<input class="reset" type="reset" value="" />');
+            dg.Search.BtnReset.$target = $('<input class="reset" type="button" value="" />');
             //需要指定按钮对象，如果样式不对将不触发事件
             if (!dg.Search.BtnQuery.isHidden) {
                 divButtons.append($("<a>").append(dg.Search.BtnQuery.$target));

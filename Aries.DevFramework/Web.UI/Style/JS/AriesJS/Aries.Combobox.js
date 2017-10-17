@@ -467,9 +467,10 @@
         var value = $box.attr("defaultValue");//重新赋值。
         if (value && op.data.contains(value, "value")) {
             $box.removeAttr("defaultValue");
+            setCombo($box, "select", value);//-------下面延时再重设一次值、怕网络太慢保险起见-------
             setTimeout(function () {
                 setCombo($box, "select", value);
-            }, 100);
+            }, 5);
         }
         else if (!op.tree && op.data.length > 0) { setCombo($box, "select", op.data[0][op.valueField]); }
     }

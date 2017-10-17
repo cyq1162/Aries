@@ -381,6 +381,7 @@
         var searchJson = [];
         var options = $.extend(cfg, opts);
         if (dg.Search && dg.Search.$target) {
+            //alert('1');
             var tForm = dg.Search.$target.children('form');
             searchJson = $Core.Common._Internal.buildSearchJson(tForm);
         }

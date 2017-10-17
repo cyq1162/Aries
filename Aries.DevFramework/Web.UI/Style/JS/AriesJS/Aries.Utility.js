@@ -358,7 +358,7 @@
         _setInputAttr: function ($input, rules, splitFlag, $label) {
             if (typeof (rules) == "object") { rules = JSON.stringify(rules); }
             if (rules.indexOf('{') == -1) { return; }
-            var sp = rules.split("{")
+            var sp = rules.split("{")//支持$:{} 只对查询的多选 $1:{}
             var _rules = "{" + sp[sp.length - 1];//取最后一个
             if (_rules && _rules[0] == '{') {
                 try {
@@ -382,8 +382,8 @@
                             if ($label) { $label.html(value + "："); }
                             break;
                         case "multiple":
-                            $input.attr(name, value);//多选，没有指定操作符时
-                            if (!_rules["pattern"]) { $input.attr("pattern", "in"); }
+                            $input.attr(name, value);//多选，没有指定操作符时(对于$:只对查询的多选、$1对于行内也多选时，不能用in，用默认的like)
+                            if (!_rules["pattern"]) { $input.attr("pattern", (rules.indexOf("$:")>-1?"in":"like")); }
                             break;
                         default:
                             $input.attr(name, value);

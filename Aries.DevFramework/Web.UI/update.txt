@@ -57,6 +57,25 @@ V4.9 2017-06-18
 1：ACK检测仅对需要登陆的页面处理
 2：对配置表头的规则验证错误的提示默认调整为中文
 
+
+V5.0
 2017-09-21
 1：dg.reload方法内部（修正对查询条件的检测补充和缓存清除）
 2：登陆增加回车事件支持
+
+2017-10-18
+1:配置下面支持defaultValue配置项（如设置某个下拉值为默认查询条件）
+2:配置表 支持外置配置其它业务数据库的配置表
+	配置项示例：
+	ConfigKey:配置约定名称："ExtendConfig"
+	ConfigName:配置表名（如："MyConfig")
+	ConfigValue:配置查询条件（如："order by MyName ASC,MyNum ASC")
+	Flag:配置查询字段名,当字段名不一致时使用（如："MyName as ConfigKey,MyValue as ConfigValue")
+3：查询的重置按钮：下拉修正回请选择（之前是空值）
+4：数据Json转义，CYQ.Data增加JsonEscape配置。
+5：修正文本数据库下的配置项排序问题
+
+追回默认代码块：dg.options = { sortName: "createtime", sortOrder: "desc" };
+
+
+文本数据库，二次order排序问题。

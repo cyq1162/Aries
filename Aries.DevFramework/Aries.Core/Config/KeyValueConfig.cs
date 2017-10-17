@@ -26,10 +26,37 @@ namespace Aries.Core.Config
             {
                 //if (_KeyValueTable == null)
                 //{
+                MDataTable config;
                 using (MAction action = new MAction(TableNames.Config_KeyValue))
                 {
-                    return action.Select("order by ConfigKey ASC,OrderNo ASC");
+                    //MDataTable dt = action.Select("order by orderno asc");//"ConfigKey='账号状态'"
+                    //dt.Rows.Sort("order by ConfigKey DESC");
+                    // MDataTable dt2=dt.Select("
+                    config = action.Select("order by ConfigKey ASC,OrderNo ASC");
                 }
+                MDataRow row = config.FindRow("ConfigKey='ExtendConfig'");
+                if (row != null)
+                {
+                    string tableName = row.Get<string>("ConfigName");
+                    string select = row.Get<string>("ConfigValue");
+                    string where = row.Get<string>("Notes");
+                    if (!string.IsNullOrEmpty(tableName) && !string.IsNullOrEmpty(where))
+                    {
+                        MDataTable config2;
+                        using (MAction action = new MAction(CrossDb.GetEnum("Config")))
+                        {
+                            if (!string.IsNullOrEmpty(select))
+                            {
+                                action.SetSelectColumns(select.Split(','));
+                            }
+                            config2 = action.Select(where);
+                        }
+                        config.Merge(config2);
+                    }
+                }
+               
+
+                return config;
                 //}
                 //return _KeyValueTable;
             }
@@ -45,7 +72,7 @@ namespace Aries.Core.Config
             {
                 using (MAction action = new MAction(TableNames.Config_KeyValue))
                 {
-                    if (!action.Exists("ConfigKey='"+LangConst.TableDescription+"' and ConfigName='" + objName + "'"))
+                    if (!action.Exists("ConfigKey='" + LangConst.TableDescription + "' and ConfigName='" + objName + "'"))
                     {
                         action.Set(Config_KeyValue.ConfigKey, LangConst.TableDescription);
                         action.Set(Config_KeyValue.ConfigName, objName);
@@ -103,9 +130,14 @@ namespace Aries.Core.Config
         }
         private static string GetInnerJson(List<MDataRow> groupList)
         {
+            MDataTable group = groupList;
+            if (AppConfig.DB.DefaultDalType == DalType.Txt)
+            {
+                group.Rows.Sort("OrderNo ASC");//文本需要再次排序（因为不支持查询的时候多重排序）
+            }
             JsonHelper json = new JsonHelper(false, false);
 
-            foreach (MDataRow row in groupList)
+            foreach (MDataRow row in group.Rows)
             {
                 json.Add("text", row.Get<string>("ConfigName"));
                 json.Add("value", row.Get<string>("ConfigValue"));
@@ -348,7 +380,7 @@ namespace Aries.Core.Config
                                     keyValueRow = configItems.FindRow(string.Format("ConfigKey='{0}' and {1}='{2}'", kvItem.Value, (isValueToName ? "ConfigName" : "ConfigValue"), value));
                                     if (keyValueRow == null && isAddError)
                                     {
-                                        row.Set(errorKey, row.Get<string>(errorKey) + string.Format("[{0}]{1}。", cell.Struct.Description,LangConst.NoMatchItem));
+                                        row.Set(errorKey, row.Get<string>(errorKey) + string.Format("[{0}]{1}。", cell.Struct.Description, LangConst.NoMatchItem));
                                     }
                                 }
                                 #endregion
@@ -394,7 +426,7 @@ namespace Aries.Core.Config
                                     keyValueRow = objNameItems[kvItem.Key].FindRow((isValueToName ? "text" : "value") + "='" + value + "'");
                                     if (keyValueRow == null && isAddError)
                                     {
-                                        row.Set(errorKey, row.Get<string>(errorKey) + string.Format("[{0}]{1}。", cell.Struct.Description,LangConst.NoMatchItem));
+                                        row.Set(errorKey, row.Get<string>(errorKey) + string.Format("[{0}]{1}。", cell.Struct.Description, LangConst.NoMatchItem));
                                     }
                                 }
                                 #endregion
@@ -424,7 +456,7 @@ namespace Aries.Core.Config
                 string formatter = row.Get<string>(Config_Grid.Formatter);
                 if (formatter == "boolFormatter")
                 {
-                    formatter = "#"+LangConst.IsYesNo;//对bool型特殊处理。
+                    formatter = "#" + LangConst.IsYesNo;//对bool型特殊处理。
                 }
                 if (!string.IsNullOrEmpty(formatter) && formatter[0] == '#')
                 {

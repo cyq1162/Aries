@@ -13,13 +13,20 @@ namespace Aries.Core.Sql
         #region Build SQL Contents
         private static Dictionary<string, string> sqlDic = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
-            {"like","like"},{"between","between"},
-            {"equal","="},{"greater",">"},{"greaterequal",">="},
-            {"less","<"},{"lessEqual","<="},
-            {"in","in"},{"notequal","<>"},
+            {"like","like"},
+            {"likeor","likeor"},
+            {"between","between"},
+            {"equal","="},
+            {"greater",">"},
+            {"greaterequal",">="},
+            {"less","<"},
+            {"lessEqual","<="},
+            {"in","in"},
+            {"notequal","<>"},
             {"isnull","is null"},
             {"notnull","is not null"},
-            {"and","and"},{"or","or"}
+            {"and","and"},
+            {"or","or"}
         };
         public static string Format(string searchList)
         {
@@ -77,7 +84,7 @@ namespace Aries.Core.Sql
                         obj.Value = "'" + obj.Value.Trim('\'') + "'";
                         break;
                 }
-                if (obj.Pattern.ToLower() == "likeor")
+                if (obj.Pattern.ToLower() == "likeor")//自定义sql
                 {
                     sql.AppendFormat(key1, obj.OrAnd, obj.Value);
                 }

@@ -58,8 +58,18 @@
                         this.onBeforeExecute = function (searchJsonArray) { };
                         this.onAfterExecute = function (searchJsonArray) { };
                         this.onExecute = function (dg, btn_query) {
-                            if (!btn_query) { btn_query = this.$target; }
-                            $Core.Common._Internal.reloadGrid(dg, btn_query, this.onBeforeExecute, this.onAfterExecute);
+                            if (!$Core.Global.Variable.isQueryClicking) {
+                                $Core.Global.Variable.isQueryClicking = true;
+
+                                if (!btn_query) { btn_query = this.$target; }
+                                $Core.Common._Internal.reloadGrid(dg, btn_query, this.onBeforeExecute, this.onAfterExecute);
+
+                                setTimeout(function (obj) {
+                                    return function () {
+                                        $Core.Global.Variable.isQueryClicking = false;//避免下拉框重置和加载引发多次查询
+                                    }
+                                }(this), 500);
+                            }
                         }
 
                     }
@@ -78,15 +88,17 @@
                             else {
                                
                                 //input，要清
-                                $form.find("input:[name]").each(function () {
+                                $form.find("input:[type='text']").each(function () {
                                     $(this).val("");
                                 });
-                                 //下拉框的值有缓存，要清。
+                                //下拉框的值有缓存，要清。
                                 $form.find("[comboname]").each(function () {
                                     $Core.Combobox.setCombo($(this), "clear");//取消原有的选择值
-                                    var data = $(this).combobox("getData");
-                                    if (data && data.length > 0 && data[0].value == "") {
-                                        $Core.Combobox.setCombo($(this), "select", "");//重新置为请选择的空值
+                                    if ($(this).attr("date") != "true") {
+                                        var data = $(this).combobox("getData");
+                                        if (data && data.length > 0 && data[0].value == "") {
+                                            $Core.Combobox.setCombo($(this), "select", "");//重新置为请选择的空值，会引发查询。
+                                        }
                                     }
                                 });
                             }
@@ -492,23 +504,14 @@
             },
             //查询区域的下拉触发事件
             onQuery: function (dgid) {
-                if (!this.isClicking) {
-                    this.isClicking = true;
-                    if ($(this).attr('isquery') == "false") {
-                        return false;
+                if ($(this).attr('isquery') == "false") {
+                    return false;
+                }
+                if (document.readyState == 'complete') {
+                    var dg = $Core.Global.DG.operating;//解决下拉自动事件引发2次查询的问题。
+                    if (!dg || dg.Internal.isLoadCompleted) {
+                        $(this).parents("form").find(".query").click();
                     }
-                    if (document.readyState == 'complete') {
-                        var dg = $Core.Global.DG.operating;//解决下拉自动事件引发2次查询的问题。
-                        if (!dg || dg.Internal.isLoadCompleted) {
-                            $(this).parents("form").find(".query").click();
-                        }
-                    }
-                    setTimeout(function (obj) {
-                        return function () {
-                            obj.isClicking = false;//避免下拉框重置和加载引发多次查询
-                        }
-                    }(this), 100);
-
                 }
             },
             onAdd: function (el, dgid, value, index, isSameLevel) {

@@ -588,7 +588,7 @@
                         this.success(d);
                     }
                     catch (e) {
-                        console.log("server return data is error or data is not json");
+                        console.log("eval json error : " + d.responseText);
                     }
                 },
                 beforeSend: function () {

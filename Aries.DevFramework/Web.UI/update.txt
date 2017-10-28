@@ -75,6 +75,11 @@ V5.0
 4：数据Json转义，CYQ.Data增加JsonEscape配置。
 5：修正文本数据库下的配置项排序问题
 
+V5.0.1
+2017-10-29
+1:增加默认排序，以最后一个date或time结尾
+2：修正下拉框的默认值设置后的查询问题
+
 追回默认代码块：dg.options = { sortName: "createtime", sortOrder: "desc" };
 
 

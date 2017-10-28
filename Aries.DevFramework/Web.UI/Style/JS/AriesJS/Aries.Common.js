@@ -400,7 +400,7 @@
                             continue cto;
                         }
 
-                        value = $box.val();
+                        value = $box.val() || $box.attr("defaultValue");//重新赋值，初始的默认值第一次设置后，是会被清掉的。;
                         if (value == '' || value == null || value == $Core.Lang.select) {
                             pattern = "like";
                             isDate = false;

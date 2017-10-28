@@ -348,6 +348,21 @@
         }
         if (dg.isTreeGrid) { cfg.pagination = false; }//默认不分页
         var opts = dg.options;
+        //检测是否带排序，若无，智能检测带time,date字母的时间为默认排序
+        if (opts["sortName"] == undefined) {
+            //遍历列头字段
+            var hd = dg.Internal.headerData;
+            if (hd && hd.length > 0) {
+                var sortName = hd[0].field;
+                for (var i = 0, len = hd.length; i < len; i++) {
+                    if (hd[i].field.endWith("date") || hd[i].field.endWith("time")) {
+                        sortName = hd[i].field;
+                    }
+                }
+                opts.sortName = sortName;
+                opts.sortOrder = "desc";
+            }
+        }
         dg._onBeforeLoad = opts.onBeforeLoad;
         opts.onBeforeLoad = function (param) {
             var mid = function () {

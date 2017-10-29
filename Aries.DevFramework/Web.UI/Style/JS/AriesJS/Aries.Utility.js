@@ -274,10 +274,11 @@
                         case "date":
                         case "datetime":
                             var type = dataArray[i].formatter == "dateFormatter" ? "date" : dtype[0];
+                            var width = type == "date" ? 95 : 140;
                             cssName = "easyui-" + type + "box";
                             input.attr("name", dataArray[i].field).addClass(cssName).attr("date", dtype[0]).width(150).attr("validType", type + "box");
                             if (fromSearch && dataArray[i].rules) {
-                                input.width(95);
+                                input.width(width);
                                 input.attr("pattern", "<=");
                                 this._setInputAttr(input, dataArray[i].rules, "$:", label);
                                 if (input.attr("clone") != "false") {

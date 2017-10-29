@@ -275,7 +275,7 @@
                         case "datetime":
                             var type = dataArray[i].formatter == "dateFormatter" ? "date" : dtype[0];
                             cssName = "easyui-" + type + "box";
-                            input.attr("name", dataArray[i].field).addClass(cssName).attr("date", true).width(150).attr("validType", type + "box");
+                            input.attr("name", dataArray[i].field).addClass(cssName).attr("date", dtype[0]).width(150).attr("validType", type + "box");
                             if (fromSearch && dataArray[i].rules) {
                                 input.width(95);
                                 input.attr("pattern", "<=");

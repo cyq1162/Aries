@@ -86,7 +86,7 @@
                                 return false;
                             }
                             else {
-                               
+
                                 //input，要清
                                 $form.find("input:[type='text']").each(function () {
                                     $(this).val("");
@@ -94,7 +94,7 @@
                                 //下拉框的值有缓存，要清。
                                 $form.find("[comboname]").each(function () {
                                     $Core.Combobox.setCombo($(this), "clear");//取消原有的选择值
-                                    if ($(this).attr("date") != "true") {
+                                    if ($(this).attr("date") == undefined) {
                                         var data = $(this).combobox("getData");
                                         if (data && data.length > 0 && data[0].value == "") {
                                             $Core.Combobox.setCombo($(this), "select", "");//重新置为请选择的空值，会引发查询。
@@ -429,14 +429,15 @@
                             value = "'" + value + "'";
                         }
                         if (isDate) {
+                            var isTime = $box.attr("date") == "datetime";
                             if (value.length > 10) {
                                 value = "'" + value + "'";
                             }
                             else if (pattern == ">=") {
-                                value = "'" + value + " 00:00:00'";
+                                value = "'" + value + (isTime ? " 00:00:00'" : "'");
                             }
                             else if (pattern == "<=") {
-                                value = value = "'" + value + " 23:59:59'";
+                                value = value = "'" + value + (isTime ? " 23:59:59'" : "'");
                             }
                         }
                         var item = { name: name, value: value, pattern: pattern };
@@ -758,7 +759,8 @@
                             }
                         }
                     } else {
-                        switch (row.datatype.split(',')[0]) {
+                        var dataType = row.datatype.split(',')[0];
+                        switch (dataType) {
                             case "int32":
                             case "int64":
                             case "int16":
@@ -776,9 +778,9 @@
                             case "date":
                             case "datetime":
                                 settings.options = {
-                                    validType: 'datebox'
+                                    validType: dataType + 'box'
                                 }
-                                type = 'datebox';
+                                type = dataType + 'box';
                                 break;
                             case "bool":
                             case "boolean":

@@ -275,6 +275,7 @@
                             }
                             else {
                                 jsonString = JSON.stringify($Core.Common._Internal.buildSearchJson(targetForm));
+
                             }
                             //window.open(ajaxOptions.href + '?objName=' + objName + '&sys_search='+jsonString, '_self');      
                             var iframeName = "framePost";
@@ -288,6 +289,11 @@
                                 sys_search: jsonString,
                                 sys_mid: $Core.Global.Variable.mid
                             };
+                            if (dg.options && dg.options["sortName"] != undefined)// //追加排序条件
+                            {
+                                param.sort = dg.options.sortName;
+                                param.order = dg.options.sortOrder;
+                            }
                             if (this.onBeforeExecute(param) == false) { return; };
                             for (var k in param) {
                                 form_export.append($("<input>").attr("name", k).val(param[k]).attr("type", "hidden"));

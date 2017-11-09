@@ -1088,6 +1088,7 @@
         //检测有没有工具栏，如果没有，自动隐藏
         if (dg.ToolBar.Items.length == 0) {
             dg.ToolBar.$target.hide();
+            dg.ToolBar.$target.attr("style", "height:0px;padding:0 0;border-bottom:0px");
         }
     }
     //创建自定义工具条。

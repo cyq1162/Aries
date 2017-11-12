@@ -1045,6 +1045,7 @@
     };
     //创建工具栏区
     function _createToolBarHtml(dg) {
+        if (!dg.ToolBar || !dg.ToolBar.$target) { return;}
         var item; actionKeys = $Core.Global.Variable.actionKeys || "";
         if (actionKeys.indexOf(',add,') > -1 && !dg.ToolBar.BtnAdd.isHidden) {
             dg.ToolBar.BtnAdd.$target = $('<input class=\"add\" flag=\"btn_add\" type=\"button\" name=\"' + $Core.Lang.add + '\" value=\"\"/>');

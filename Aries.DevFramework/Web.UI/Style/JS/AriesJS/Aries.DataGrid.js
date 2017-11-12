@@ -140,7 +140,7 @@
             var rows = this.datagrid(type);
             var ids = [];
             for (var i = 0; i < rows.length; i++) {
-                ids.push(this.getPrimaryID(rows[i],key));
+                ids.push(this.getPrimaryID(rows[i], key));
             }
             return ids;
         },
@@ -630,7 +630,7 @@
                             if (this.onBeforeExecute(value, index) == false) {
                                 return;
                             }
-  
+
                             $Core.Utility.Window.confirm($Core.Lang.isDel, null, function () {
                                 $Core.Utility.Ajax.post("Delete", dg.tableName, { id: value, "foreignKeys": dg.foreignKeys }, function (result) {
                                     if (result.success) {
@@ -664,11 +664,10 @@
                         }
                         var isAdd = dg.PKColumn.Editor.operator == "Add";
                         _editSave(dg, index, function (isSuccess) {
-                           
+
                             dg.PKColumn.Editor.editIndex = null;
                             //如果编辑状态则取消操作，删除状态则删除行
-                            if (!isSuccess)
-                            {
+                            if (!isSuccess) {
                                 if (isAdd) {
                                     dg.datagrid('deleteRow', index);
                                 } else {
@@ -694,8 +693,7 @@
                             return;
                         }
                         dg.PKColumn.Editor.editIndex = null;//下面的会变更状态。
-                        if (dg.datagrid("getEditors", index).length > 0)
-                        {
+                        if (dg.datagrid("getEditors", index).length > 0) {
                             //如果编辑状态则取消操作，删除状态则删除行
                             if (dg.PKColumn.Editor.operator == "Add") {
                                 dg.datagrid('deleteRow', index);
@@ -729,22 +727,36 @@
     function regSearchButtonEvents(dg) {
         //注册查询事件
         var btn_query = dg.Search.BtnQuery.$target;
-        btn_query && btn_query.click(function () {
-            dg.Search.BtnQuery.onExecute(dg, btn_query);
-        });
+        if (btn_query) {
+            btn_query.click(function () {
+                dg.Search.BtnQuery.onExecute(dg, btn_query);
+            });
+            var $form = btn_query.parents("form");
+            //input，追加回车事件。
+            $form.find("input:[type='text']").each(function () {
+                $(this).keyup(function (e) {
+                    var ev = document.all ? window.event : e;
+                    if (ev.keyCode == 13) // Enter
+                    {
+                        $(this).blur();//先触发光标离开事件（让easyui的值写回hidde域）
+                        dg.Search.BtnQuery.onExecute(dg, btn_query);
+                        $(this).focus();//将光标还原。
+                    }
+                });
 
+            });
+        }
         //重置按钮事件
 
         var btn_reset = dg.Search.BtnReset.$target;
         btn_reset && btn_reset.click(function () {
             dg.Search.BtnReset.onExecute(dg, btn_reset);
         });
-
     }
 
     function regToolbarEvents(dg) {
         var toolbar = dg.ToolBar.$target;
-        if (!toolbar[0]) {
+        if (!toolbar || !toolbar[0]) {
             //throw new ReferenceError("工具条的ID无效,页面未找到该ID值的HTML标签");
             return;
         }
@@ -907,7 +919,7 @@
                             post_data = getChangeJson(_change_data, row, dg);
                         }
                         if (!$.isEmptyObject(post_data)) //{ dg.datagrid('cancelEdit', index); }
-                        //else
+                            //else
                         {
                             for (var i = 0; i < dg.Internal.jointPrimary.length; i++) {
                                 var primary = dg.Internal.jointPrimary[i];
@@ -919,8 +931,7 @@
                                 $Core.Utility.Ajax.post(dg.PKColumn.Editor.operator, dg.tableName, post_data, function (result) {
                                     if (result) {
                                         if (result.success) {
-                                            if (dg.PKColumn.Editor.operator == "Add")
-                                            {
+                                            if (dg.PKColumn.Editor.operator == "Add") {
                                                 _change_data[dg.Internal.primarykey] = result.msg;//这里才是将ID写回去的地方。
                                                 result.msg = $Core.Lang.addSuccess;
                                             }

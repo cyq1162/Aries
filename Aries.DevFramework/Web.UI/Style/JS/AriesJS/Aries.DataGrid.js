@@ -75,15 +75,15 @@
         /*可以事先构建，产生插时行时的默认值*/
         this.defaultInsertData = {};
         //对defaultWhere的操作
-        this.addWhere = function (name, value, pattern, isOr) {
-            if (name && (value || pattern)) {
-                if (!pattern) { pattern = "="; }
+        this.addWhere = function (name, value, operator, isOr) {
+            if (name && (value || operator)) {
+                if (!operator) { operator = "="; }
                 if (!this.options.defaultWhere) {
                     this.options.defaultWhere = [];
                 }
                 isOr = (isOr == true ? "or" : "and");
                 this.removeWhere(name);//若有则移除。
-                this.options.defaultWhere.push({ name: name, value: value, pattern: pattern, OrAnd: isOr });
+                this.options.defaultWhere.push({ name: name, value: value, pattern: operator, OrAnd: isOr });
             }
         }
         this.removeWhere = function (name) {
@@ -733,6 +733,7 @@
             });
             var $form = btn_query.parents("form");
             //input，追加回车事件。
+            $form.submit(function (e) { return false; });// 禁掉自动提交。（当表单只有一个输入框时，有些浏览器会自动触发回车即submit事件）"
             $form.find("input:[type='text']").each(function () {
                 $(this).keyup(function (e) {
                     var ev = document.all ? window.event : e;

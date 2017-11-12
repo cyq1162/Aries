@@ -259,8 +259,8 @@
                     if (dataArray[i].rules) {
                         this._setInputAttr(input, dataArray[i].rules, "$:", label);
                     }
-                    if (!input.attr("pattern")) {
-                        input.attr("pattern", "=");
+                    if (!input.attr("operator")) {
+                        input.attr("operator", "=");
                     }
                     if (fromSearch && !input.attr("multiple")) {
                         input.attr("onchange", "$Core.Common._Internal.onQuery");//("+dg.id+")
@@ -268,7 +268,7 @@
                 }
                 else if (dataArray[i].datatype)//非绑定下拉
                 {
-                    input.attr("pattern", "like");
+                    input.attr("operator", "like");
                     var dtype = dataArray[i].datatype.split(',');
                     switch (dtype[0]) {
                         case "date":
@@ -279,11 +279,11 @@
                             input.attr("name", dataArray[i].field).addClass(cssName).attr("date", dtype[0]).width(150).attr("validType", type + "box");
                             if (fromSearch && dataArray[i].rules) {
                                 input.width(width);
-                                input.attr("pattern", "<=");
+                                input.attr("operator", "<=");
                                 this._setInputAttr(input, dataArray[i].rules, "$:", label);
                                 if (input.attr("clone") != "false") {
                                     input2 = input.clone(true);
-                                    input2.attr("pattern", ">=");
+                                    input2.attr("operator", ">=");
                                     div_item.append(input2).append($("<span>").html("&nbsp;至&nbsp;"));
                                 }
                             }
@@ -305,11 +305,11 @@
                             input.attr("name", dataArray[i].field).addClass(cssName);
                             if (fromSearch && dataArray[i].rules) {
                                 input.width(68);
-                                input.attr("pattern", "<=");
+                                input.attr("operator", "<=");
                                 this._setInputAttr(input, dataArray[i].rules, "$:", label);
                                 if (input.attr("clone") != "false") {
                                     input2 = input.clone(true);
-                                    input2.attr("pattern", ">=");
+                                    input2.attr("operator", ">=");
                                     div_item.append(input2).append($("<span>").html("&nbsp;-&nbsp;").css({ "display": "block", "float": "left" }));
                                 }
                             }
@@ -366,10 +366,10 @@
                     _rules = eval("(" + _rules + ")");
                 } catch (e) {
                     alert($Core.Lang.configRulesError + " :" + rules);
-                   // alert(e.message + " rules config json error : " + rules);
+                    // alert(e.message + " rules config json error : " + rules);
                     return;
                 }
-                
+
                 for (var name in _rules) {
                     var value = _rules[name];
                     switch (name) {
@@ -380,11 +380,15 @@
                             $input.height(value);
                             break;
                         case "title":
+                        case "label":
                             if ($label) { $label.html(value + "："); }
+                            break;
+                        case "pattern":
+                            $input.attr("operator", value);//pattern在某些浏览器上是关键字，所以变更为opeator
                             break;
                         case "multiple":
                             $input.attr(name, value);//多选，没有指定操作符时(对于$:只对查询的多选、$1对于行内也多选时，不能用in，用默认的like)
-                            if (!_rules["pattern"]) { $input.attr("pattern", (rules.indexOf("$:")>-1?"in":"like")); }
+                            if (!_rules["operator"]) { $input.attr("operator", (rules.indexOf("$:") > -1 ? "in" : "like")); }
                             break;
                         default:
                             $input.attr(name, value);

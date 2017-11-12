@@ -270,8 +270,6 @@
                             var jsonString = "";
                             if (checked_ids.length > 0) {
                                 jsonString = checked_ids.join(',');
-                                //var condition = [{ name: dg.Internal.primarykey, pattern: 'in', value: checked_ids.join(',') }];
-                                //jsonString = JSON.stringify(condition);
                             }
                             else {
                                 jsonString = JSON.stringify($Core.Common._Internal.buildSearchJson(targetForm));
@@ -403,14 +401,14 @@
 
                 var $inputs = targetForm.find("input[type!=button][type!='reset']");
                 if ($inputs[0]) {
-                    var pattern = "like", $box, value, isDate = false;
+                    var operator = "like", $box, value, isDate = false;
                     cto: for (var i = 0; i < $inputs.length; i++) {
                         $box = $($inputs[i]);
-                        if ($box.attr("pattern")) {
-                            pattern = $box.attr("pattern")
+                        if ($box.attr("operator")) {
+                            operator = $box.attr("operator")
                         }
-                        else if (pattern == "like" && ($box.attr("configkey") || $box.attr("objname"))) {
-                            pattern = "=";
+                        else if (operator == "like" && ($box.attr("configkey") || $box.attr("objname"))) {
+                            operator = "=";
                         }
                         var name = $box.attr("name");
                         isDate = $box.attr("date") != undefined || isDate;
@@ -420,11 +418,11 @@
 
                         value = $box.val() || $box.attr("defaultValue");//重新赋值，初始的默认值第一次设置后，是会被清掉的。;
                         if (value == '' || value == null || value == $Core.Lang.select) {
-                            pattern = "like";
+                            operator = "like";
                             isDate = false;
                             continue cto;
                         }
-                        if (pattern == "in") {
+                        if (operator == "in") {
                             //找到上一个
                             var firstOne = json.get("name", name);
                             if (firstOne) // 已存在
@@ -439,14 +437,14 @@
                             if (value.length > 10) {
                                 value = "'" + value + "'";
                             }
-                            else if (pattern == ">=") {
+                            else if (operator == ">=") {
                                 value = "'" + value + (isTime ? " 00:00:00'" : "'");
                             }
-                            else if (pattern == "<=") {
+                            else if (operator == "<=") {
                                 value = value = "'" + value + (isTime ? " 23:59:59'" : "'");
                             }
                         }
-                        var item = { name: name, value: value, pattern: pattern };
+                        var item = { name: name, value: value, pattern: operator };
                         json.push(item);
 
                     }

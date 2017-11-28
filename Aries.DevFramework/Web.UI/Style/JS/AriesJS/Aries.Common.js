@@ -1043,52 +1043,52 @@
     };
     //创建工具栏区
     function _createToolBarHtml(dg) {
-        if (!dg.ToolBar || !dg.ToolBar.$target) { return;}
-        var item; actionKeys = $Core.Global.Variable.actionKeys || "";
-        if (actionKeys.indexOf(',add,') > -1 && !dg.ToolBar.BtnAdd.isHidden) {
-            dg.ToolBar.BtnAdd.$target = $('<input class=\"add\" flag=\"btn_add\" type=\"button\" name=\"' + $Core.Lang.add + '\" value=\"\"/>');
-            item = $("<a>").append(dg.ToolBar.BtnAdd.$target);
-            dg.ToolBar.$target.append(item);
-            dg.ToolBar.Items.set("add", dg.ToolBar.BtnAdd);
-        }
-        if (actionKeys.indexOf(',del,') > -1 && !dg.ToolBar.BtnDelBatch.isHidden && dg.isShowCheckBox) {
-            dg.ToolBar.BtnDelBatch.$target = $('<input  class=\"batch_del\" flag=\"btn_del\" type=\"button\" name=\"' + $Core.Lang.batchDel + '\" value=\"\"/>').attr("dgID", dg.id);
-            item = $("<a>").append(dg.ToolBar.BtnDelBatch.$target);
-            dg.ToolBar.$target.append(item);
-            dg.ToolBar.Items.set("del", dg.ToolBar.BtnDelBatch);
-        }
-        if (actionKeys.indexOf(',export,') > -1 && !dg.ToolBar.BtnExport.isHidden) {
-            dg.ToolBar.BtnExport.$target = $('<input class=\"export\" flag=\"btn_export\" type=\"button\"  value=\"\"/>');
-            item = $("<a>").append(dg.ToolBar.BtnExport.$target);
-            dg.ToolBar.$target.append(item);
-            dg.ToolBar.Items.set("export", dg.ToolBar.BtnExport);
-        }
-        if (actionKeys.indexOf(',import,') > -1) {
-            if (!dg.ToolBar.BtnImport.isHidden) {
-                dg.ToolBar.BtnImport.$target = $('<input class=\"import\" flag=\"btn_import\" type=\"button\"  value=\"\"/>');
-                item = $("<a>").append(dg.ToolBar.BtnImport.$target);
+        if (!dg.ToolBar || !dg.ToolBar.$target || dg.ToolBar.$target[0].innerHTML) { return; }
+            var item; actionKeys = $Core.Global.Variable.actionKeys || "";
+            if (actionKeys.indexOf(',add,') > -1 && !dg.ToolBar.BtnAdd.isHidden) {
+                dg.ToolBar.BtnAdd.$target = $('<input class=\"add\" flag=\"btn_add\" type=\"button\" name=\"' + $Core.Lang.add + '\" value=\"\"/>');
+                item = $("<a>").append(dg.ToolBar.BtnAdd.$target);
                 dg.ToolBar.$target.append(item);
-                dg.ToolBar.Items.set("import", dg.ToolBar.BtnImport);
+                dg.ToolBar.Items.set("add", dg.ToolBar.BtnAdd);
             }
-            if (!dg.ToolBar.BtnExportTemplate.isHidden) {
-                dg.ToolBar.BtnExportTemplate.$target = $('<input class=\"btn-sm\" flag=\"btn_export_template\" type=\"button\"  value=\"' + $Core.Lang.exportTemplate + '\"/>');
-                item = $("<a>").append(dg.ToolBar.BtnExportTemplate.$target);
+            if (actionKeys.indexOf(',del,') > -1 && !dg.ToolBar.BtnDelBatch.isHidden && dg.isShowCheckBox) {
+                dg.ToolBar.BtnDelBatch.$target = $('<input  class=\"batch_del\" flag=\"btn_del\" type=\"button\" name=\"' + $Core.Lang.batchDel + '\" value=\"\"/>').attr("dgID", dg.id);
+                item = $("<a>").append(dg.ToolBar.BtnDelBatch.$target);
                 dg.ToolBar.$target.append(item);
-                dg.ToolBar.Items.set("exportTemplate", dg.ToolBar.BtnExportTemplate);
+                dg.ToolBar.Items.set("del", dg.ToolBar.BtnDelBatch);
             }
-        }
-        //}
-        //else {//处理样式问题（如果去掉或隐藏div_fn，或不设置class为function-box，都显示不出分页控件，只有后期改变其属性）
-        //    div_fn.attr("style", "height:0px;padding:0 0;border-bottom:0px");
-        //}
-        //dg.ToolBar.$target = div_fn;
-        //dg.ToolArea.$target.append(dg.ToolBar.$target);
-        _createCustomButton(dg);
-        //检测有没有工具栏，如果没有，自动隐藏
-        if (dg.ToolBar.Items.length == 0) {
-            dg.ToolBar.$target.hide();
-            dg.ToolBar.$target.attr("style", "height:0px;padding:0 0;border-bottom:0px");
-        }
+            if (actionKeys.indexOf(',export,') > -1 && !dg.ToolBar.BtnExport.isHidden) {
+                dg.ToolBar.BtnExport.$target = $('<input class=\"export\" flag=\"btn_export\" type=\"button\"  value=\"\"/>');
+                item = $("<a>").append(dg.ToolBar.BtnExport.$target);
+                dg.ToolBar.$target.append(item);
+                dg.ToolBar.Items.set("export", dg.ToolBar.BtnExport);
+            }
+            if (actionKeys.indexOf(',import,') > -1) {
+                if (!dg.ToolBar.BtnImport.isHidden) {
+                    dg.ToolBar.BtnImport.$target = $('<input class=\"import\" flag=\"btn_import\" type=\"button\"  value=\"\"/>');
+                    item = $("<a>").append(dg.ToolBar.BtnImport.$target);
+                    dg.ToolBar.$target.append(item);
+                    dg.ToolBar.Items.set("import", dg.ToolBar.BtnImport);
+                }
+                if (!dg.ToolBar.BtnExportTemplate.isHidden) {
+                    dg.ToolBar.BtnExportTemplate.$target = $('<input class=\"btn-sm\" flag=\"btn_export_template\" type=\"button\"  value=\"' + $Core.Lang.exportTemplate + '\"/>');
+                    item = $("<a>").append(dg.ToolBar.BtnExportTemplate.$target);
+                    dg.ToolBar.$target.append(item);
+                    dg.ToolBar.Items.set("exportTemplate", dg.ToolBar.BtnExportTemplate);
+                }
+            }
+            //}
+            //else {//处理样式问题（如果去掉或隐藏div_fn，或不设置class为function-box，都显示不出分页控件，只有后期改变其属性）
+            //    div_fn.attr("style", "height:0px;padding:0 0;border-bottom:0px");
+            //}
+            //dg.ToolBar.$target = div_fn;
+            //dg.ToolArea.$target.append(dg.ToolBar.$target);
+            _createCustomButton(dg);
+            //检测有没有工具栏，如果没有，自动隐藏
+            if (dg.ToolBar.Items.length == 0) {
+                dg.ToolBar.$target.hide();
+                dg.ToolBar.$target.attr("style", "height:0px;padding:0 0;border-bottom:0px");
+            }
     }
     //创建自定义工具条。
     function _createCustomButton(dg) {

@@ -255,11 +255,13 @@
                             $Core.Combobox.onInit();//绑定下拉。
                             $.parser.parse('#' + dg.ToolArea.id); //解析成easyui
                         }
+                        var customToolBar = dg.ToolBar.$target;
                         //追加工具条(必须存在function-box样式，不然会影响到分页栏的显示)
                         dg.ToolBar.$target = $('<div class="function-box" id="' + dg.id + '_ToolbarArea">');
                         if (dg.ToolBar.isHidden) {
                             dg.ToolBar.$target.attr("style", "height:0px;padding:0 0;border-bottom:0px");
                         }
+                        else if (customToolBar) { customToolBar.show(); dg.ToolBar.$target.append(customToolBar); }
                         dg.ToolArea.$target.append(dg.ToolBar.$target);
                     }
                 }

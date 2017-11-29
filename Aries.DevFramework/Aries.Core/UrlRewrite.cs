@@ -126,7 +126,7 @@ namespace Aries.Core
             cookie.HttpOnly = true;
             cookie.Domain = AppConfig.XHtml.Domain;
             cookie.Value = EncrpytHelper.Encrypt("aries:" + DateTime.Now.ToString("HHmmss"));
-            cookie.Expires = DateTime.Now.AddHours(1);
+            cookie.Expires = DateTime.Now.AddHours(23);
             context.Response.Cookies.Add(cookie);
         }
         private bool IsExistsSafeKey()

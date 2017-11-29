@@ -373,7 +373,7 @@ namespace Aries.Core.Auth
                 case "GetInitConfig":
                 case "GetKeyValueConfig":
                 case "GetHeader":
-                    if (!CheckSafeKey(20))
+                    if (!CheckSafeKey(30))
                     {
                         return false;
                     }

@@ -119,6 +119,10 @@
                     }
                     else if(obj)
                     {
+                        if (this.BtnCommit && this.BtnCommit.onAfterExecute(obj) == false)
+                        {
+                            return;
+                        }
                         var msg = obj.msg;
                         if (obj.success != undefined && obj.success) {
                             msg = $Core.Lang.operationSuccess;
@@ -133,7 +137,7 @@
                                 $Core.Utility.Window.close();
                             }
                         }
-                        this.BtnCommit && this.BtnCommit.onAfterExecute(obj);
+                        
                     }
                 }
                 else

@@ -285,6 +285,13 @@
                                     input2 = input.clone(true);
                                     input2.attr("operator", ">=");
                                     div_item.append(input2).append($("<span>").html("&nbsp;至&nbsp;"));
+                                    //处理默认值
+                                    var defalutValue = input.val();
+                                    if (defalutValue && defalutValue.indexOf(',') > -1) {
+                                        var items = defalutValue.split(',');
+                                        input.val(items[1]);
+                                        input2.val(items[0]);
+                                    }
                                 }
                             }
                             break;
@@ -311,6 +318,13 @@
                                     input2 = input.clone(true);
                                     input2.attr("operator", ">=");
                                     div_item.append(input2).append($("<span>").html("&nbsp;-&nbsp;").css({ "display": "block", "float": "left" }));
+                                    //处理默认值
+                                    var defalutValue = input.val();
+                                    if (defalutValue && defalutValue.indexOf(',') > -1) {
+                                        var items = defalutValue.split(',');
+                                        input.val(items[1]);
+                                        input2.val(items[0]);
+                                    }
                                 }
                             }
                             break;
@@ -389,6 +403,10 @@
                         case "multiple":
                             $input.attr(name, value);//多选，没有指定操作符时(对于$:只对查询的多选、$1对于行内也多选时，不能用in，用默认的like)
                             if (!_rules["operator"]) { $input.attr("operator", (rules.indexOf("$:") > -1 ? "in" : "like")); }
+                            break;
+                        case "defaultValue":
+                            $input.val(value);
+                            $input.removeAttr("defaultValue");
                             break;
                         default:
                             $input.attr(name, value);

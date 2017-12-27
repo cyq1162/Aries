@@ -88,7 +88,7 @@
                             else {
 
                                 //input，要清
-                                $form.find("input:[type='text']").each(function () {
+                                $form.find("input[type!=button][type!='reset']").each(function () {
                                     $(this).val("");
                                 });
                                 //下拉框的值有缓存，要清。

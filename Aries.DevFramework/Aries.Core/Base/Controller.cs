@@ -451,7 +451,7 @@ namespace Aries.Core
         /// </summary>
         public virtual void GetList()
         {
-            jsonResult = Select(GridConfig.SelectType.Show).ToJson(true, false, true);
+            jsonResult = Select(GridConfig.SelectType.Show).ToJson(true, false,RowOp.None, true);
         }
         /// <summary>
         /// 获取一行数据。
@@ -855,7 +855,7 @@ namespace Aries.Core
                 {
                     dt.Rows[i][Config_Grid.Field].Value = dt.Rows[i].Get<string>(Config_Grid.Field).ToLower();
                 }
-                jsonResult = dt.ToJson(false, false, true);
+                jsonResult = dt.ToJson(false, false, RowOp.None, true);
             }
             else
             {
@@ -942,12 +942,12 @@ namespace Aries.Core
                     }
                     if (dtList.Count == 1 && Query<string>("q", null) != null)
                     {
-                        jsonResult = dtList[0].ToJson(false, false, true);
+                        jsonResult = dtList[0].ToJson(false, false, RowOp.None, true);
                         return;
                     }
                     for (int i = 0; i < dtList.Count; i++)
                     {
-                        json.Add(boxes[i].ObjName, dtList[i].Rows.Count > 0 ? dtList[i].ToJson(false, false, true) : "[]", true);
+                        json.Add(boxes[i].ObjName, dtList[i].Rows.Count > 0 ? dtList[i].ToJson(false, false, RowOp.None, true) : "[]", true);
                     }
                     json.AddBr();
                 }

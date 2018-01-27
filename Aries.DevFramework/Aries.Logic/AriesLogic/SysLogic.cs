@@ -165,7 +165,7 @@ namespace Aries.Logic
                 dt = action.Select("ORDER BY menulevel ASC,sortorder asc");
             }
 
-            return dt.ToJson(false, false, true);//字段转小写，兼容Oracle
+            return dt.ToJson(false, false, RowOp.None, true);//字段转小写，兼容Oracle
         }
         /// <summary>
         /// 获取所有权限
@@ -176,7 +176,7 @@ namespace Aries.Logic
             string result = string.Empty;
             using (MAction action = new MAction(TableNames.Sys_Action))
             {
-                result = action.Select("order by SortOrder asc").ToJson(false, false, true);
+                result = action.Select("order by SortOrder asc").ToJson(false, false, RowOp.None, true);
             }
             return result;
         }

@@ -58,6 +58,12 @@
             设置为true时，可以加快一点性能，但生成的表字段枚举必须和数据库一致。
             </summary>
         </member>
+        <member name="P:CYQ.Data.AppConfig.JsonEscape">
+            <summary>
+            是否ToJson输出时自动转义特殊符号("\ \r \t等)
+            可配置项为（Default、Yes、No)
+            </summary>
+        </member>
         <member name="P:CYQ.Data.AppConfig.Aop">
             <summary>
             Aop 插件配置项 示例配置：[ 完整类名,程序集(dll)名称]&lt;add key="Aop" value="Web.Aop.AopAction,Aop"/>
@@ -242,6 +248,17 @@
             <summary>
             AutoCache开启时，可以设置不受更新影响的列名，用Json格式。
             {talbeName1:'column1,column2',talbeName2:'column1,column2'}
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.AppConfig.Cache.AutoCacheConn">
+            <summary>
+            CYQ.Data.Cache 自动缓存 - 数据库链接配置
+            在多个不同的应用项目里操作同一个数据库时（又不想使用分布式缓存MemCache或Redis），可以开启此项，达到缓存智能清除的效果。
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.AppConfig.Cache.AutoCacheTaskTime">
+            <summary>
+            当AutoCacheConn开启后，定时扫描数据库的任务时间（毫秒）,默认1000
             </summary>
         </member>
         <member name="T:CYQ.Data.AppConfig.Log">
@@ -695,10 +712,19 @@
             <para>参数：SQL语句或存储过程名称</para></param>
         </member>
         <member name="M:CYQ.Data.MProc.ResetProc(System.Object,System.Boolean)">
+            <summary>
             <param name="isClearPara">IsClearParameters
             <para>是否清除参数</para></param>
+            </summary>
         </member>
-        <!-- 对于成员“M:CYQ.Data.MProc.ResetProc(System.Object)”忽略有格式错误的 XML 注释 -->
+        <member name="M:CYQ.Data.MProc.ResetProc(System.Object)">
+            <summary>
+             Toggle tProc Action: To switch between other sql/procedure, use this method
+             <para>切换操作：如需操作其它语句或存储过程，通过此方法切换</para>
+             </summary>
+             <param name="procNameOrSql">Parameters: sql or procedure
+             <para>参数：存储过程名或Sql语句</para></param>
+        </member>
         <member name="M:CYQ.Data.MProc.ExeMDataTable">
             <summary>
             Get MDataTable
@@ -901,12 +927,12 @@
         </member>
         <member name="P:CYQ.Data.Aop.AopInfo.DalType">
             <summary>
-            数据类型
+            数据类型(只读)
             </summary>
         </member>
         <member name="P:CYQ.Data.Aop.AopInfo.DataBase">
             <summary>
-            数据库名称
+            数据库名称(只读)
             </summary>
         </member>
         <member name="P:CYQ.Data.Aop.AopInfo.AopPara">
@@ -1042,6 +1068,11 @@
         <member name="F:CYQ.Data.Cache.AutoCache.cacheKeys">
             <summary>
             单机存档： 表的baseKey:key1,key2,key3...
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Cache.AutoCache.KeyTable.ActionInstance">
+            <summary>
+            使用同一个链接，并且不关闭。
             </summary>
         </member>
         <member name="T:CYQ.Data.Cache.CacheManage">
@@ -1880,6 +1911,21 @@
             RedisCommand
             </summary>
         </member>
+        <member name="F:CYQ.Data.ConnBean.ConfigName">
+            <summary>
+            对应的ConnectionString的Name
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.ConnBean.IsOK">
+            <summary>
+            链接的状态是否正常。
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.ConnBean.ErrorMsg">
+            <summary>
+            链接错误时的异常消息。
+            </summary>
+        </member>
         <member name="P:CYQ.Data.ConnBean.Conn">
             <summary>
             数据库链接
@@ -1985,6 +2031,11 @@
             未切换 - 新数据库名不存在。
             </summary>
         </member>
+        <member name="T:CYQ.Data.AllowConnLevel">
+            <summary>
+            测试链接的级别
+            </summary>
+        </member>
         <member name="T:CYQ.Data.DbBase">
             <summary>
             数据库操作基类 （模板模式：Template Method）
@@ -2003,6 +2054,11 @@
         <member name="F:CYQ.Data.DbBase.connObject">
             <summary>
             数据库链接实体（创建的时候被赋值）;
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.DbBase.useConnBean">
+            <summary>
+            当前使用的链接对象
             </summary>
         </member>
         <member name="M:CYQ.Data.DbBase.ChangeDatabase(System.String)">
@@ -2030,11 +2086,29 @@
             记录执行时间
             </summary>
         </member>
+        <member name="M:CYQ.Data.DbBase.TestConn(CYQ.Data.AllowConnLevel)">
+            <summary>
+            测试链接
+            </summary>
+            <param name="allowLevel">1：只允许当前主链接；2：允许主备链接；3：允许主备从链接</param>
+            <returns></returns>
+        </member>
         <member name="M:CYQ.Data.DbBase.ResetConn(CYQ.Data.ConnBean)">
             <summary>
             切换链接
             </summary>
             <param name="cb"></param>
+        </member>
+        <member name="M:CYQ.Data.DbBase.OpenCon">
+            <summary>
+            打开链接只切主备
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.DbBase.OpenCon(CYQ.Data.ConnBean,CYQ.Data.AllowConnLevel)">
+            <summary>
+            打开链接，允许切从。
+            </summary>
         </member>
         <member name="M:CYQ.Data.DbBase.RollBack">
             <summary>
@@ -2097,6 +2171,36 @@
             <summary>
             insert and select top 1 data to fill row
             <para>使用此项：插入数据后,会根据返回ID进行查询后填充数据行。</para>
+            </summary>
+        </member>
+        <member name="T:CYQ.Data.Orm.LengthAttribute">
+            <summary>
+            列长度
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Orm.LengthAttribute.MaxSize">
+            <summary>
+            长度
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Orm.LengthAttribute.Scale">
+            <summary>
+            精度
+            </summary>
+        </member>
+        <member name="T:CYQ.Data.Orm.KeyAttribute">
+            <summary>
+            主键自增是否允许Null
+            </summary>
+        </member>
+        <member name="T:CYQ.Data.Orm.DefaultValueAttribute">
+            <summary>
+            默认值
+            </summary>
+        </member>
+        <member name="T:CYQ.Data.Orm.DescriptionAttribute">
+            <summary>
+            表名或字段描述
             </summary>
         </member>
         <member name="T:CYQ.Data.Orm.DBFast">
@@ -2738,7 +2842,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:CYQ.Data.Table.MDataRow.CreateFrom(System.Object,System.Type,CYQ.Data.Table.BreakOp)">
+        <member name="M:CYQ.Data.Table.MDataRow.CreateFrom(System.Object,System.Type,CYQ.Data.Table.BreakOp,CYQ.Data.Tool.EscapeOp)">
             <summary>
             从实体、Json、Xml、IEnumerable接口实现的类、MDataRow
             </summary>
@@ -2753,17 +2857,13 @@
             输出行的数据Json
             </summary>
         </member>
-        <member name="M:CYQ.Data.Table.MDataRow.ToJson(CYQ.Data.Table.RowOp,System.Boolean)">
+        <member name="M:CYQ.Data.Table.MDataRow.ToJson(CYQ.Data.Table.RowOp,System.Boolean,CYQ.Data.Tool.EscapeOp)">
             <summary>
             输出Json
             </summary>
             <param name="op">过滤条件</param>
+            <param name="escapeOp">转义选项</param>
             <returns></returns>
-        </member>
-        <member name="M:CYQ.Data.Table.MDataRow.WriteJson(System.String,CYQ.Data.Table.RowOp)">
-            <summary>
-            将json保存到指定文件中
-            </summary>
         </member>
         <member name="M:CYQ.Data.Table.MDataRow.ToEntity``1">
             <summary>
@@ -2820,7 +2920,7 @@
             </summary>
             <param name="values"></param>
         </member>
-        <member name="M:CYQ.Data.Table.MDataRow.LoadFrom(System.String)">
+        <member name="M:CYQ.Data.Table.MDataRow.LoadFrom(System.String,CYQ.Data.Tool.EscapeOp)">
             <summary>
             从json里加载值
             </summary>
@@ -3074,9 +3174,6 @@
             <param name="addHead">输出头部信息[带count、Success、ErrorMsg](默认true)</param>
             <param name="addSchema">首行输出表架构信息,反接收时可还原架构(默认false)</param>
         </member>
-        <member name="M:CYQ.Data.Table.MDataTable.ToJson(System.Boolean,System.Boolean,System.Boolean)">
-            <param name="isConvertNameToLower">是否将名称转为小写</param>
-        </member>
         <member name="M:CYQ.Data.Table.MDataTable.ToJson(System.Boolean,System.Boolean,CYQ.Data.Table.RowOp)">
             <param name="rowOp">过滤选项</param>
         </member>
@@ -3257,7 +3354,7 @@
             从Json或Xml字符串反加载成MDataTable
             </summary>
         </member>
-        <member name="M:CYQ.Data.Table.MDataTable.CreateFrom(System.String,CYQ.Data.Table.MDataColumn)">
+        <member name="M:CYQ.Data.Table.MDataTable.CreateFrom(System.String,CYQ.Data.Table.MDataColumn,CYQ.Data.Tool.EscapeOp)">
             <summary>
             从Json或Xml字符串反加载成MDataTable
             </summary>
@@ -3491,16 +3588,6 @@
             Value的状态:0;未改,1;进行赋值操作[但值相同],2:赋值,值不同改变了
             </summary>
         </member>
-        <member name="T:CYQ.Data.Table.MDataCell.MCellValue">
-            <summary>
-            单元结构的值
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Table.MDataCell.MCellValue.State">
-            <summary>
-            状态改变:0;未改,1;进行赋值操作[但值相同],2:赋值,值不同改变了
-            </summary>
-        </member>
         <member name="T:CYQ.Data.Table.MCellStruct">
             <summary>
             单元结构属性
@@ -3529,11 +3616,6 @@
         <member name="F:CYQ.Data.Table.MCellStruct.Description">
             <summary>
             字段描述
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Table.MCellStruct.DefaultValue">
-            <summary>
-            默认值
             </summary>
         </member>
         <member name="F:CYQ.Data.Table.MCellStruct.IsCanNull">
@@ -3593,6 +3675,11 @@
             结构集合
             </summary>
         </member>
+        <member name="P:CYQ.Data.Table.MCellStruct.DefaultValue">
+            <summary>
+            默认值
+            </summary>
+        </member>
         <member name="P:CYQ.Data.Table.MCellStruct.ColumnName">
             <summary>
             列名
@@ -3606,6 +3693,16 @@
         <member name="P:CYQ.Data.Table.MCellStruct.AlterOp">
             <summary>
             列结构改变状态
+            </summary>
+        </member>
+        <member name="T:CYQ.Data.Table.MCellValue">
+            <summary>
+            单元结构的值
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Table.MCellValue.State">
+            <summary>
+            状态改变:0;未改,1;进行赋值操作[但值相同],2:赋值,值不同改变了
             </summary>
         </member>
         <member name="T:CYQ.Data.Table.MDataColumn">
@@ -4229,6 +4326,17 @@
             <param name="dbConn"></param>
             <returns></returns>
         </member>
+        <member name="F:CYQ.Data.DalCreate.connDicCache">
+            <summary>
+            所有链接的对象集合
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.DalCreate.CheckConnIsOk(System.Object)">
+            <summary>
+            定时检测异常的链接是否恢复。
+            </summary>
+            <param name="threadID"></param>
+        </member>
         <member name="M:CYQ.Data.Error.Throw(System.String)">
             <summary>
             抛出异常
@@ -4473,7 +4581,7 @@
             是否存在表或视图
             </summary>
             <param name="type">"U"或"V"</param>
-            <param name="name">表名或视图名</param>
+            <param name="name">表名或视图名，允许database.tableName</param>
         </member>
         <member name="M:CYQ.Data.SQL.TableSchema.GetTableDescription(System.String,System.String)">
             <summary>
@@ -4709,7 +4817,22 @@
         </member>
         <member name="F:CYQ.Data.Tool.EscapeOp.Default">
             <summary>
-            Web 默认转义，Win不转义
+            过滤ascii小于32的特殊值、并对\n "（双引号）进行转义，对\转义符 （仅\\"或\\n时不转义，其它情况转义）
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Tool.EscapeOp.No">
+            <summary>
+             不进行任何转义，只用于保留原如数据（注意：存在双引号时，[或ascii小于32的值都会破坏json格式]，从而json数据无法被解析）
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Tool.EscapeOp.Yes">
+            <summary>
+             过滤ascii小于32的特殊值、并对 ：\r \n \t "（双引号） \(转义符号) 直接进行转义
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Tool.EscapeOp.Encode">
+            <summary>
+            系统内部使用： ascii小于32（包括\n \t \r）、"(双引号)，\(转义符号) 进行编码（规则为：@#{0}#@ {0}为asciii值，系统转的时候会自动解码）
             </summary>
         </member>
         <member name="T:CYQ.Data.Tool.JsonHelper">
@@ -4785,7 +4908,7 @@
             <param name="errIndex">the index of the error char
             <para>错误的字符索引</para></param>
         </member>
-        <member name="M:CYQ.Data.Tool.JsonHelper.GetValue(System.String,System.String)">
+        <member name="M:CYQ.Data.Tool.JsonHelper.GetValue(System.String,System.String,CYQ.Data.Tool.EscapeOp)">
             <summary>
             Get json value
             <para>获取Json字符串的值</para>
@@ -4815,6 +4938,11 @@
             <para>将Json 数组分隔成多个键值对。</para>
             </summary>
         </member>
+        <member name="M:CYQ.Data.Tool.JsonHelper.UnEscape(System.String,CYQ.Data.Tool.EscapeOp)">
+            <summary>
+            解码替换数据转义符
+            </summary>
+        </member>
         <member name="M:CYQ.Data.Tool.JsonHelper.Fill(CYQ.Data.Table.MDataTable)">
             <summary>
             Fill obj and get json from  ToString() method
@@ -4841,12 +4969,12 @@
             </summary>
             <param name="obj">实体类对象</param>
         </member>
-        <member name="M:CYQ.Data.Tool.JsonHelper.ToMDataTable(System.String,CYQ.Data.Table.MDataColumn)">
+        <member name="M:CYQ.Data.Tool.JsonHelper.ToMDataTable(System.String,CYQ.Data.Table.MDataColumn,CYQ.Data.Tool.EscapeOp)">
             <summary>
             从Json字符串中反加载成数据表
             </summary>
         </member>
-        <member name="M:CYQ.Data.Tool.JsonHelper.ToIEnumerator``1(System.String)">
+        <member name="M:CYQ.Data.Tool.JsonHelper.ToIEnumerator``1(System.String,CYQ.Data.Tool.EscapeOp)">
             <summary>
             将Json转换成集合
             </summary>
@@ -4854,14 +4982,14 @@
             <param name="json">json数据</param>
             <returns></returns>
         </member>
-        <member name="M:CYQ.Data.Tool.JsonHelper.ToEntity``1(System.String)">
+        <member name="M:CYQ.Data.Tool.JsonHelper.ToEntity``1(System.String,CYQ.Data.Tool.EscapeOp)">
             <summary>
             Convert json to Entity
             <para>将Json转换为实体</para>
             </summary>
             <typeparam name="T">Type<para>类型</para></typeparam>
         </member>
-        <member name="M:CYQ.Data.Tool.JsonHelper.ToList``1(System.String)">
+        <member name="M:CYQ.Data.Tool.JsonHelper.ToList``1(System.String,CYQ.Data.Tool.EscapeOp)">
             <summary>
              Convert json to Entity List
              <para>将Json转换为实体列表</para>
@@ -4874,7 +5002,7 @@
             <para>将一个对象（实体，泛型List，字典Dictionary）转成Json</para>
             </summary>
         </member>
-        <member name="M:CYQ.Data.Tool.JsonHelper.ToJson(System.Object,System.Boolean,CYQ.Data.Table.RowOp)">
+        <member name="M:CYQ.Data.Tool.JsonHelper.ToJson(System.Object,System.Boolean,CYQ.Data.Table.RowOp,CYQ.Data.Tool.EscapeOp)">
             <param name="op">default value is RowOp.All
             <para>默认值为RowOp.All</para></param>
         </member>
@@ -4884,7 +5012,7 @@
             <para>将一个Json转成Xml</para>
             </summary>
         </member>
-        <member name="M:CYQ.Data.Tool.JsonHelper.ToXml(System.String,System.Boolean)">
+        <member name="M:CYQ.Data.Tool.JsonHelper.ToXml(System.String,System.Boolean,CYQ.Data.Tool.EscapeOp)">
             <param name="isWithAttr">default value is true
             <para>是否转成属性，默认true</para></param>
         </member>
@@ -5120,6 +5248,14 @@
             分隔Json字符串为字典集合。
             </summary>
         </member>
+        <member name="M:CYQ.Data.Tool.JsonSplit.Split(System.String)">
+            <summary>
+            解析Json
+            </summary>
+            <param name="json"></param>
+            <param name="op">除了NO，其它项都会消掉转义符，默认是：YES</param>
+            <returns></returns>
+        </member>
         <member name="M:CYQ.Data.Tool.JsonSplit.GetValueLength(System.String,System.Boolean,System.Int32@)">
             <summary>
             获取值的长度（当Json值嵌套以"{"或"["开头时）
@@ -5129,6 +5265,13 @@
             <summary>
             设置字符状态(返回true则为关键词，返回false则当为普通字符处理）
             </summary>
+        </member>
+        <member name="M:CYQ.Data.Tool.JsonSplit.SplitEscapeArray(System.String)">
+            <summary>
+            将json数组分成字符串List
+            </summary>
+            <param name="jsonArray">["a,","bbb,,"]</param>
+            <returns></returns>
         </member>
         <member name="M:CYQ.Data.Tool.JsonSplit.GetCharCount(System.String,System.Char)">
             <summary>
@@ -5194,6 +5337,44 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:CYQ.Data.Tool.ConvertTool">
+            <summary>
+            类型转换（支持json转实体）
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Tool.ConvertTool.ChangeType(System.Object,System.Type)">
+            <summary>
+            类型转换(精准强大)
+            </summary>
+            <param name="value">值处理</param>
+            <param name="t">类型</param>
+            <returns></returns>
+        </member>
+        <member name="T:CYQ.Data.Tool.ReflectTool">
+            <summary>
+            反射工具（带缓存）
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Tool.ReflectTool.GetGenericArgumentLength(System.Type@)">
+            <summary>
+            获取泛型参数的长度
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Tool.ReflectTool.GetGenericArgumentLength(System.Type@,System.Type[]@)">
+            <summary>
+            获取泛型参数的长度（和类型）
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Tool.ReflectTool.GetPropertys(System.Type)">
+            <summary>
+            获得反射属性（内部有缓存）
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Tool.ReflectTool.GetSystemType(System.Type@)">
+            <summary>
+            获取系统类型，若是Nullable类型，则转为基础类型。
+             </summary>
+        </member>
         <member name="T:CYQ.Data.Tool.StaticTool">
             <summary>
             静态方法工具类
@@ -5210,6 +5391,11 @@
             </summary>
             <param name="t"></param>
             <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.Tool.StaticTool.GetArgumentLength(System.Type@)">
+            <summary>
+             获取泛型的参数长度（非泛型按默认方法计算）
+            </summary>
         </member>
         <member name="M:CYQ.Data.Tool.StaticTool.GetArgumentLength(System.Type@,System.Type[]@)">
             <summary>
@@ -5236,7 +5422,7 @@
         </member>
         <member name="M:CYQ.Data.Tool.StaticTool.ChangeType(System.Object,System.Type)">
             <summary>
-            类型转换
+            类型转换(精准强大)
             </summary>
             <param name="value">值处理</param>
             <param name="t">类型</param>
@@ -6040,7 +6226,7 @@
             为节点赋值[通常值是在values中赋值]
             </summary>
         </member>
-        <member name="M:CYQ.Data.Xml.XHtmlAction.Set(System.String,System.String)">
+        <member name="M:CYQ.Data.Xml.XHtmlAction.Set(System.Xml.XmlNode,System.String,System.String)">
             <summary>
             对节点赋值（此方法会忽略hidden隐藏域，隐藏节点赋值请用其它重载方法）
             </summary>

@@ -63,7 +63,7 @@ namespace Aries.Core.Helper
             string result = string.Empty;
             using (TripleDESCryptoServiceProvider DES = new TripleDESCryptoServiceProvider())
             {
-                DES.Key = DefaultHashKey;
+                DES.Key = hashKey;
                 DES.Mode = CipherMode.ECB;
                 ICryptoTransform DESEncrypt = DES.CreateEncryptor();
 

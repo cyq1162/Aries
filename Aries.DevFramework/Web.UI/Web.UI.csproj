@@ -63,10 +63,11 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\SQLCode\Sql_Combobox.sql" />
-    <Content Include="App_Data\SQLCode\Sql.sql" />
-    <Content Include="App_Data\SQLCode\Sql_Yours.sql" />
-    <Content Include="App_Data\SQLCode\V_Test.sql" />
+    <Content Include="App_Data\SQLCode\Aries\Sql_Combobox.sql" />
+    <Content Include="App_Data\SQLCode\Aries\Sql.sql" />
+    <Content Include="App_Data\SQLCode\Aries\Sql_Yours.sql" />
+    <Content Include="App_Data\SQLCode\Aries\V_Test.sql" />
+    <Content Include="App_Data\SQLCode\Demo2\V_TestAAA2.sql" />
     <Content Include="App_Data\SQLCode\命名规范.txt" />
     <Content Include="App_Data\TxtDB\Config_Excel.ts" />
     <Content Include="App_Data\TxtDB\Config_Excel.txt" />
@@ -171,6 +172,7 @@
     <Content Include="Style\Images\txtlist-icon.png" />
     <Content Include="Style\Images\wenzi.png" />
     <Content Include="Style\JS\AriesJS\Aries.Combobox.js" />
+    <Content Include="Style\JS\AriesJS\Aries.Lang-en.js" />
     <Content Include="Style\JS\AriesJS\Aries.Upload.js" />
     <Content Include="Style\JS\AriesJS\Aries.Common.js" />
     <Content Include="Style\JS\AriesJS\Aries.DataGrid.js" />
@@ -527,19 +529,13 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\SQLCode\SysAdmin\V_SYS_UserList.sql" />
-    <Content Include="Style\JS\EasyUI-1.3.4\themes\black\images\Thumbs.db" />
-    <Content Include="Style\JS\EasyUI-1.3.4\themes\bootstrap\images\Thumbs.db" />
-    <Content Include="Style\JS\EasyUI-1.3.4\themes\default\images\Thumbs.db" />
-    <Content Include="Style\JS\EasyUI-1.3.4\themes\gray\images\Thumbs.db" />
-    <Content Include="Style\JS\EasyUI-1.3.4\themes\metro\images\Thumbs.db" />
+    <Content Include="App_Data\SQLCode\Aries\SysAdmin\V_SYS_UserList.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\PublishProfiles\Aries_Publish.pubxml" />
-    <Content Include="Resource\Excel\Config_KeyValue.xlsx" />
     <Content Include="Resource\Excel\V_Test.xls" />
-    <Content Include="Resource\Excel\V_Test2.xls" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -553,7 +549,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>27532</DevelopmentServerPort>
+          <DevelopmentServerPort>17741</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:8011/AR</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

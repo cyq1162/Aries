@@ -22,7 +22,7 @@ namespace Aries.Core.Config
         /// </summary>
         public static MDataRow GetExcelRow(string idOrExcelName)
         {
-            using (MAction action = new MAction(TableNames.Config_Excel))
+            using (MAction action = new MAction(U_AriesEnum.Config_Excel))
             {
                 bool isID = idOrExcelName.Length >= 36 && idOrExcelName.Split('-').Length >= 3;
                 string where = (isID ? Config_Excel.ExcelID : Config_Excel.ExcelName).ToString() + "='{0}'";
@@ -40,7 +40,7 @@ namespace Aries.Core.Config
         /// <returns></returns>
         public static MDataTable GetExcelInfo(string excelID)
         {
-            using (MAction action = new MAction(TableNames.Config_ExcelInfo))
+            using (MAction action = new MAction(U_AriesEnum.Config_ExcelInfo))
             {
                 return action.Select(Config_Excel.ExcelID + "='" + excelID + "'");
             }

@@ -33,7 +33,7 @@ namespace Aries.Logic
             bool result = false;
             string pwd = Query<string>("Password");
             string userID = Query<string>("UserID");
-            using (MAction action = new MAction(TableNames.Sys_User))
+            using (MAction action = new MAction(U_AriesEnum.Sys_User))
             {
                 action.BeginTransation();
                 if (!string.IsNullOrEmpty(pwd))
@@ -43,7 +43,7 @@ namespace Aries.Logic
                 result = action.Update(userID, true);
                 if (result)
                 {
-                    action.ResetTable(TableNames.Sys_UserInfo);
+                    action.ResetTable(U_AriesEnum.Sys_UserInfo);
                     if (action.Exists(userID))
                     {
                         if (action.Data.Count > 1)//有自定义列
@@ -78,7 +78,7 @@ namespace Aries.Logic
             bool result = false;
             string userName = Query<string>("userName");
             string pwd = Query<string>("password");
-            using (MAction action = new MAction(TableNames.Sys_User))
+            using (MAction action = new MAction(U_AriesEnum.Sys_User))
             {
                 action.BeginTransation();
                 if (!action.Exists("UserName = '" + userName + "'"))
@@ -88,7 +88,7 @@ namespace Aries.Logic
                     {
                         string userID = action.Get<string>(Sys_User.UserID);
 
-                        action.ResetTable(TableNames.Sys_UserInfo);
+                        action.ResetTable(U_AriesEnum.Sys_UserInfo);
                         action.Set(Sys_UserInfo.UserInfoID, userID);
                         action.AllowInsertID = true;
                         result = action.Insert(true);
@@ -115,13 +115,13 @@ namespace Aries.Logic
         public string DeleteUser()
         {
             bool result = false;
-            using (MAction action = new MAction(TableNames.Sys_User))
+            using (MAction action = new MAction(U_AriesEnum.Sys_User))
             {
                 action.BeginTransation();
                 result = action.Delete(GetID);
                 if (result)
                 {
-                    action.ResetTable(TableNames.Sys_UserInfo);
+                    action.ResetTable(U_AriesEnum.Sys_UserInfo);
                     if (action.Exists(GetID))
                     {
                         result = action.Delete(GetID);
@@ -139,12 +139,12 @@ namespace Aries.Logic
         public MDataTable GetUserList(GridConfig.SelectType st)
         {
             MDataTable dt = null;
-            using (MAction action = new MAction(TableNames.Sys_User))
+            using (MAction action = new MAction(U_AriesEnum.Sys_User))
             {
                 dt = action.Select();
             }
             dt.JoinOnName = Sys_User.UserID.ToString();
-            MDataTable joinDt = dt.Join(TableNames.Sys_UserInfo, Sys_UserInfo.UserInfoID.ToString());
+            MDataTable joinDt = dt.Join(U_AriesEnum.Sys_UserInfo, Sys_UserInfo.UserInfoID.ToString());
             return joinDt.Select(PageIndex, PageSize, GetWhere() + GetOrderBy(Sys_User.UserID.ToString()), GridConfig.GetSelectColumns(ObjName, st));
         }
 
@@ -160,7 +160,7 @@ namespace Aries.Logic
         {
             string result = string.Empty;
             MDataTable dt;
-            using (MAction action = new MAction(TableNames.Sys_Menu))
+            using (MAction action = new MAction(U_AriesEnum.Sys_Menu))
             {
                 dt = action.Select("ORDER BY menulevel ASC,sortorder asc");
             }
@@ -174,7 +174,7 @@ namespace Aries.Logic
         public string GetActions()
         {
             string result = string.Empty;
-            using (MAction action = new MAction(TableNames.Sys_Action))
+            using (MAction action = new MAction(U_AriesEnum.Sys_Action))
             {
                 result = action.Select("order by SortOrder asc").ToJson(false, false, RowOp.None, true);
             }
@@ -189,7 +189,7 @@ namespace Aries.Logic
         {
             string result = string.Empty;
             string id = Query<string>("id");
-            using (MAction action = new MAction(TableNames.Sys_Menu))
+            using (MAction action = new MAction(U_AriesEnum.Sys_Menu))
             {
                 if (action.Fill(id))
                 {
@@ -207,7 +207,7 @@ namespace Aries.Logic
         {
             bool result = false;
             string id = Query<string>("id");
-            using (MAction action = new MAction(TableNames.Sys_Menu))
+            using (MAction action = new MAction(U_AriesEnum.Sys_Menu))
             {
                 action.SetSelectColumns("MenuID", "ParentMenuID");
                 MDataTable dt = action.Select();
@@ -218,7 +218,7 @@ namespace Aries.Logic
                 result = action.Delete(where);
                 if (result)
                 {
-                    action.ResetTable(TableNames.Sys_RoleAction);//删除权限的设置
+                    action.ResetTable(U_AriesEnum.Sys_RoleAction);//删除权限的设置
                     action.Delete(where);
                 }
             }
@@ -233,7 +233,7 @@ namespace Aries.Logic
         {
             bool result = false;
             string MenuID = Query<string>("MenuID");
-            using (MAction action = new MAction(TableNames.Sys_Menu))
+            using (MAction action = new MAction(U_AriesEnum.Sys_Menu))
             {
                 result = action.Exists("ParentMenuID='" + MenuID + "'");
             }
@@ -245,7 +245,7 @@ namespace Aries.Logic
         /// <returns></returns>
         private MDataTable GetTable(string roleID)
         {
-            MDataTable rowAction = new MDataTable(TableNames.Sys_RoleAction.ToString());
+            MDataTable rowAction = new MDataTable(U_AriesEnum.Sys_RoleAction.ToString());
             rowAction.Columns.Add("RoleID", SqlDbType.NVarChar);
             rowAction.Columns.Add("MenuID", SqlDbType.NVarChar);
             rowAction.Columns.Add("ActionID", SqlDbType.NVarChar);
@@ -300,7 +300,7 @@ namespace Aries.Logic
             if (dt != null && dt.Rows.Count > 0)
             {
                 //删除该角色下面所有权限
-                using (MAction action = new MAction(TableNames.Sys_RoleAction))
+                using (MAction action = new MAction(U_AriesEnum.Sys_RoleAction))
                 {
                     action.BeginTransation();
                     action.Delete("RoleID='" + roleID + "'");
@@ -326,7 +326,7 @@ namespace Aries.Logic
         {
             string roleID = Query<String>("RoleID");
             MDataTable raDt = null;
-            using (MAction action = new MAction(TableNames.Sys_RoleAction))
+            using (MAction action = new MAction(U_AriesEnum.Sys_RoleAction))
             {
                 raDt = action.Select("RoleID ='" + roleID + "'");
             }
@@ -365,7 +365,7 @@ namespace Aries.Logic
         {
             if (!string.IsNullOrEmpty(actionIDs))
             {
-                MDataTable dt = new MDataTable(TableNames.Sys_RoleAction.ToString());
+                MDataTable dt = new MDataTable(U_AriesEnum.Sys_RoleAction.ToString());
                 dt.Columns.Add("RoleID");
                 dt.Columns.Add("MenuID");
                 dt.Columns.Add("ActionID");
@@ -465,7 +465,7 @@ namespace Aries.Logic
                         {
                             MDataColumn mdc = DBTool.GetColumns(tableName);
                             #region MyRegion
-                            using (MAction action = new MAction(TableNames.Config_Grid))
+                            using (MAction action = new MAction(U_AriesEnum.Config_Grid))
                             {
                                 for (int i = 0; i < mdc.Count; i++)
                                 {
@@ -496,7 +496,7 @@ namespace Aries.Logic
                             }
                             #endregion
                         }
-                        using (MAction action = new MAction(TableNames.Config_ExcelInfo))
+                        using (MAction action = new MAction(U_AriesEnum.Config_ExcelInfo))
                         {
                             action.AllowInsertID = true;
                             action.BeginTransation();

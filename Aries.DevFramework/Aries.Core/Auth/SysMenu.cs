@@ -22,7 +22,7 @@ namespace Aries.Core.Auth
             {
                 //if (_MenuTable == null)
                 //{
-                using (MAction action = new MAction(TableNames.Sys_Menu))
+                using (MAction action = new MAction(U_AriesEnum.Sys_Menu))
                 {
                     return action.Select("order by MenuLevel ASC,SortOrder ASC");
                 }
@@ -45,7 +45,7 @@ namespace Aries.Core.Auth
             {
                 //if (_ActionTable == null)
                 //{
-                using (MAction action = new MAction(TableNames.Sys_Action))
+                using (MAction action = new MAction(U_AriesEnum.Sys_Action))
                 {
                     return action.Select("order by SortOrder ASC");
                 }
@@ -128,7 +128,7 @@ namespace Aries.Core.Auth
             {
                 roleIDs = "RoleID in ('" + roleIDs.Replace(",", "','") + "')";
                 MDataTable dt;
-                using (MAction action = new MAction(TableNames.Sys_RoleAction))
+                using (MAction action = new MAction(U_AriesEnum.Sys_RoleAction))
                 {
                     action.SetSelectColumns("MenuID", "ActionID");
                     dt = action.Select(roleIDs);

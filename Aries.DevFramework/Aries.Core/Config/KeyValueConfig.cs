@@ -27,7 +27,7 @@ namespace Aries.Core.Config
                 //if (_KeyValueTable == null)
                 //{
                 MDataTable config;
-                using (MAction action = new MAction(TableNames.Config_KeyValue))
+                using (MAction action = new MAction(U_AriesEnum.Config_KeyValue))
                 {
                     //MDataTable dt = action.Select("order by orderno asc");//"ConfigKey='账号状态'"
                     //dt.Rows.Sort("order by ConfigKey DESC");
@@ -70,7 +70,7 @@ namespace Aries.Core.Config
         {
             if (!string.IsNullOrEmpty(description))
             {
-                using (MAction action = new MAction(TableNames.Config_KeyValue))
+                using (MAction action = new MAction(U_AriesEnum.Config_KeyValue))
                 {
                     if (!action.Exists("ConfigKey='" + LangConst.TableDescription + "' and ConfigName='" + objName + "'"))
                     {

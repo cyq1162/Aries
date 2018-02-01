@@ -2,7 +2,10 @@ using System;
 
 namespace Aries.Core.DB
 {
-    public enum TableNames { Config_Grid, Sys_RoleAction, Sys_Role, Sys_Menu, Sys_Action, Config_Excel, Config_KeyValue, Config_ExcelInfo, Sys_UserInfo, Sys_User }
+    /// <summary>
+    /// 使用多数据库枚举，可以空出默认的Conn给其它数据库使用
+    /// </summary>
+    public enum U_AriesEnum { Config_Grid, Sys_RoleAction, Sys_Role, Sys_Menu, Sys_Action, Config_Excel, Config_KeyValue, Config_ExcelInfo, Sys_UserInfo, Sys_User }
 
     #region 枚举
     public enum Config_Grid { GridID, ObjName, Rules, Field, Title, Hidden, OrderNum, Width, Align, Sortable, Formatter, Styler, Editor, Rowspan, Colspan, Search, DataType, Import, Export, Frozen, Edit, MergeIndex, ImportUnique, LastEditTime }

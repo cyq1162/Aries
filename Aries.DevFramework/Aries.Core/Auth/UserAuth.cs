@@ -25,7 +25,7 @@ namespace Aries.Core.Auth
         {
             string token = string.Empty;
             errMsg = string.Empty;
-            using (MAction action = new MAction(TableNames.Sys_User))
+            using (MAction action = new MAction(U_AriesEnum.Sys_User))
             {
                 string where = string.Empty;
                 if (action.DalType == DalType.Txt || action.DalType == DalType.Xml)
@@ -105,7 +105,7 @@ namespace Aries.Core.Auth
 
         public static bool ChangePassword(string password)
         {
-            using (MAction action = new MAction(TableNames.Sys_User))
+            using (MAction action = new MAction(U_AriesEnum.Sys_User))
             {
                 action.Set(Sys_User.Password, EncrpytHelper.Encrypt(password));
                 return action.Update(UserID);
@@ -346,12 +346,12 @@ namespace Aries.Core.Auth
         {
             get
             {
-                using (MAction action = new MAction(TableNames.Sys_User)) //转单表处理，兼容文本数据库演示
+                using (MAction action = new MAction(U_AriesEnum.Sys_User)) //转单表处理，兼容文本数据库演示
                 {
                     if (action.Fill(UserID))
                     {
                         MDataRow row = action.Data.Clone();//克隆，不改变原有的结构。
-                        action.ResetTable(TableNames.Sys_UserInfo);
+                        action.ResetTable(U_AriesEnum.Sys_UserInfo);
                         if (action.Fill(UserID))
                         {
                             row.LoadFrom(action.Data, RowOp.None, true);//追加列
@@ -417,7 +417,7 @@ namespace Aries.Core.Auth
             {
                 if (string.IsNullOrEmpty(_AdminRoleID))
                 {
-                    using (MAction action = new MAction(TableNames.Sys_Role))
+                    using (MAction action = new MAction(U_AriesEnum.Sys_Role))
                     {
                         string where = string.Format("{0}='Admin' or {0}= '{1}'", Sys_Role.RoleName, LangConst.Admin);
                         if (action.Fill(where))
@@ -436,7 +436,7 @@ namespace Aries.Core.Auth
             {
                 if (string.IsNullOrEmpty(_SuperAdminRoleID))
                 {
-                    using (MAction action = new MAction(TableNames.Sys_Role))
+                    using (MAction action = new MAction(U_AriesEnum.Sys_Role))
                     {
                         string where = string.Format("{0}='SuperAdmin' or {0}= '{1}'", Sys_Role.RoleName, LangConst.SuperAdmin);
                         if (action.Fill(where))

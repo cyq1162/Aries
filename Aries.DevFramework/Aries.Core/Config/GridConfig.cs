@@ -120,7 +120,7 @@ namespace Aries.Core.Config
                     break;
             }
             MDataTable dt;
-            using (MAction action = new MAction(TableNames.Config_Grid))
+            using (MAction action = new MAction(U_AriesEnum.Config_Grid))
             {
                 dt = action.Select(string.Format("ObjName='{0}' order by frozen desc,OrderNum asc", objName));
             }

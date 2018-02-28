@@ -952,7 +952,7 @@
         onOpen: function (el, value, thatID, index) {
             var dg = $Core.Global.DG.operating = $Core.Global.DG.Items[thatID]; //赋值当前对象到page属性方便调用
             dg.PKColumn._onOpen(el, value, thatID, index);
-        },
+        }
 
     }
     function setColumnRowspan(cols, maxLen) {
@@ -1040,7 +1040,7 @@
         }
         dg.ToolArea.$target.append(dg.Search.$target);
 
-    };
+    }
     //创建工具栏区
     function _createToolBarHtml(dg) {
         if (!dg.ToolBar || !dg.ToolBar.$target || dg.ToolBar.$target[0].innerHTML) { return; }
@@ -1136,7 +1136,7 @@
     }
     function getObj(objName) {
         return $Core.Global.comboxData[objName];
-    };
+    }
     function getNameByValue(obj, v) {
         var value = v;
         if ($.type(obj) == "object") {
@@ -1161,7 +1161,7 @@
             }
         }
         return value;
-    };
+    }
     function getConfigName(configKey, value) {
         var items = $Core.Global.Config[configKey];
         var itemValue = [];
@@ -1188,7 +1188,7 @@
         } else {
             return '';
         }
-    };
+    }
 
     function getConfigValue(configKey, text) {
         var items = $Core.Global.Config[configKey];
@@ -1205,7 +1205,7 @@
         else {
             return '';
         }
-    };
+    }
     function getDgByKey(key) {
         return $Core.Global.DG.Items[key];
     }

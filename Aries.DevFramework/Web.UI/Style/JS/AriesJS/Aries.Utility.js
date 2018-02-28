@@ -518,7 +518,7 @@
                 timeout: timeout || 1500,
                 showType: showType || 'slide'
             });
-        };
+        }
         function dialog(title, html, options) {
             var _container = $("#_div_dialog");
             _container[0] || (_container = $('<div>').attr('id', '_div_dialog'));
@@ -530,7 +530,7 @@
                 content: html
             }, options);
             _container.dialog(opts)
-        };
+        }
         function closeDialog() {
             var _container = $("#_div_dialog");
             _container.dialog('destroy');

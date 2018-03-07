@@ -272,8 +272,11 @@
                                 jsonString = checked_ids.join(',');
                             }
                             else {
-                                jsonString = JSON.stringify($Core.Common._Internal.buildSearchJson(targetForm));
-
+                                var searchJson = $Core.Common._Internal.buildSearchJson(targetForm);
+                                if (dg.options.defaultWhere && dg.options.defaultWhere.length > 0) {
+                                    searchJson = searchJson.concat(dg.options.defaultWhere);
+                                }
+                                jsonString = JSON.stringify(searchJson);
                             }
                             //window.open(ajaxOptions.href + '?objName=' + objName + '&sys_search='+jsonString, '_self');      
                             var iframeName = "framePost";

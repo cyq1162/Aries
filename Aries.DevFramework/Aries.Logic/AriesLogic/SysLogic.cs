@@ -12,6 +12,7 @@ using Aries.Core.DB;
 using Aries.Core.Helper;
 using Aries.Core.Config;
 using Aries.Core.Auth;
+using Aries.Core.Extend;
 
 namespace Aries.Logic
 {
@@ -374,7 +375,7 @@ namespace Aries.Logic
                     dt.NewRow(true).Set(0, UserAuth.SuperAdminRoleID)
                         .Set(1, menuID).Set(2, actionID);
                 }
-                dt.AcceptChanges(AcceptOp.Insert);
+                dt.AcceptChanges(AcceptOp.Insert, CrossDb.GetConn(U_AriesEnum.Sys_RoleAction.ToString()));
             }
         }
 

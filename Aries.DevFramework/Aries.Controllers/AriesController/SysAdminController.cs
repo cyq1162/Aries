@@ -88,11 +88,12 @@ namespace Aries.Controllers
             switch (ObjName)
             {
                 case "V_SYS_UserList"://重写是为了支持文本数据库
-                    if (AppConfig.DB.DefaultDalType == DalType.Txt)
-                    {
-                        return Select(GridConfig.SelectType.All).FindRow(GetID);
-                    }
-                    break;
+                    return Select(GridConfig.SelectType.All).FindRow(GetID);
+                    //if (AppConfig.DB.DefaultDalType == DalType.Txt)
+                    //{
+                       
+                    //}
+                    //break;
             }
             return base.GetOne();
         }
@@ -111,14 +112,15 @@ namespace Aries.Controllers
                     }
                     break;
                 case "V_SYS_UserList"://重写是为了支持文本数据库
-                    if (AppConfig.DB.DefaultDalType == DalType.Txt)
-                    {
-                        dt = sysLogic.GetUserList(st);
-                    }
-                    else
-                    {
-                        dt = base.Select(st);
-                    }
+                    dt = sysLogic.GetUserList(st);
+                    //if (AppConfig.DB.DefaultDalType == DalType.Txt)
+                    //{
+                        
+                    //}
+                    //else
+                    //{
+                    //    dt = base.Select(st);
+                    //}
 
                     break;
                 default:

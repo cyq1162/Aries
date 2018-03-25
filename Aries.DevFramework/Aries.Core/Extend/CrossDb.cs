@@ -178,7 +178,12 @@ namespace Aries.Core.Extend
             }
         }
 
-        private static string GetDBName(string tableName)
+        /// <summary>
+        /// 获得数据库名称
+        /// </summary>
+        /// <param name="tableName">表名</param>
+        /// <returns></returns>
+        public static string GetDBName(string tableName)
         {
             foreach (KeyValuePair<string, Dictionary<string, string>> item in DbTables)
             {
@@ -201,7 +206,12 @@ namespace Aries.Core.Extend
             }
             return "";
         }
-        internal static string GetConn(string sqlOrTableName)
+        /// <summary>
+        /// 获得数据库链接
+        /// </summary>
+        /// <param name="sqlOrTableName">表名或sql</param>
+        /// <returns></returns>
+        public static string GetConn(string sqlOrTableName)
         {
             string tableName = GetTableNameFromObjName(sqlOrTableName);
             string dbName = GetDBName(tableName);
@@ -211,7 +221,12 @@ namespace Aries.Core.Extend
             }
             return AppConfig.DB.DefaultConn;
         }
-        internal static DalType GetDalType(string tableName)
+        /// <summary>
+        /// 获得数据库类型
+        /// </summary>
+        /// <param name="tableName">表名</param>
+        /// <returns></returns>
+        public static DalType GetDalType(string tableName)
         {
             string dbName = GetDBName(tableName);
             if (!string.IsNullOrEmpty(dbName) && _DbTypeDic.ContainsKey(dbName))

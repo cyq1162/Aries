@@ -24,7 +24,7 @@ function getCookie(name) {
 }
 var themeName = getCookie('sys_theme') || 'default';
 var ui = getCookie('sys_ui');
-var vs = "v5.0.2";
+var vs = "v5.0.3";
 document.write('<link id="lk_theme" href="' + ui + '/Style/JS/EasyUI-1.3.4/themes/' + themeName + '/easyui.css" rel="stylesheet" type="text/css" />');
 document.write('<link href="' + ui + '/Style/CSS/main.css" rel="stylesheet" />');
 document.write('<link href="' + ui + '/Style/JS/EasyUI-1.3.4/themes/icon.css" rel="stylesheet" type="text/css" />');
@@ -37,8 +37,8 @@ document.write('<script src="' + ui + '/Style/JS/AriesJS/Aries.Global.js?v=' + v
 document.write('<script src="' + ui + '/Style/JS/AriesJS/Aries.EasyUIExtend.js?v=' + vs + '"></script>');
 document.write('<script src="' + ui + '/Style/JS/AriesJS/Aries.Utility.js?v=' + vs + '"></script>');
 document.write('<script src="' + ui + '/Style/JS/AriesJS/Aries.Upload.js?v=' + vs + '"></script> ');
-document.write('<script src="' + ui + '/Style/JS/AriesJS/Aries.Common.js?v=' + vs + '"></script>');
 document.write('<script src="' + ui + '/Style/JS/AriesJS/Aries.Combobox.js?v=' + vs + '"></script>');
+document.write('<script src="' + ui + '/Style/JS/AriesJS/Aries.Common.js?v=' + vs + '"></script>');
 document.write('<script src="' + ui + '/Style/JS/AriesJS/Aries.DataGrid.js?v=' + vs + '"></script>');
 document.write('<script src="' + ui + '/Style/JS/AriesJS/Aries.Form.js?v=' + vs + '"></script>');
 

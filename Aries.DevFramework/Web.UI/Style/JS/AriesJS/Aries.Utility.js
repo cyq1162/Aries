@@ -257,7 +257,7 @@
                         input.attr("objname", objName);
                     }
                     if (dataArray[i].rules) {
-                        this._setInputAttr(input, dataArray[i].rules, "$:", label);
+                        this._setInputAttr(input, dataArray[i].rules, "$:", label,true);
                     }
                     if (!input.attr("operator")) {
                         input.attr("operator", "=");
@@ -370,7 +370,7 @@
                 objName = undefined; cssName = undefined; input = undefined; input2 = undefined;
             }
         },
-        _setInputAttr: function ($input, rules, splitFlag, $label) {
+        _setInputAttr: function ($input, rules, splitFlag, $label,isCombobox) {
             if (typeof (rules) == "object") { rules = JSON.stringify(rules); }
             if (rules.indexOf('{') == -1) { return; }
             var sp = rules.split("{")//支持$:{} 只对查询的多选 $1:{}
@@ -405,8 +405,11 @@
                             if (!_rules["operator"]) { $input.attr("operator", (rules.indexOf("$:") > -1 ? "in" : "like")); }
                             break;
                         case "defaultValue":
-                            $input.val(value);
-                            $input.removeAttr("defaultValue");
+                            if (!isCombobox) {
+                                $input.val(value);
+                                $input.removeAttr("defaultValue");
+                            }
+                            else { $input.attr(name, value); }
                             break;
                         default:
                             $input.attr(name, value);

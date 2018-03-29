@@ -35,6 +35,53 @@ window.AR || (window.AR = {});
             }
         }
     };
+    //处理Config_KeyValue的数据。
+    $Core.Config= {
+        data: {},
+        getName: function (configKey, value) {
+            var items = this.data[configKey];
+            var itemValue = [];
+            if (items != undefined && value != undefined && value != null && value.toString() != '') {
+                var valueArray = value.toString().split(',');
+                var isIn = false;
+                for (var i = 0; i < items.length; i++) {
+                    isIn = valueArray.contains(items[i].value);
+                    if (!isIn) {
+                        var iValue = items[i].value.toString();
+                        if (iValue == "1" || iValue == "0") {
+                            isIn = valueArray.contains(iValue == "1" ? true : false);
+                        }
+                        else if (iValue == "true" || iValue == "false") {
+                            isIn = valueArray.contains(iValue == "true" ? 1 : 0);
+                        }
+                    }
+                    if (isIn) {
+                        itemValue.push(items[i].text);
+                    }
+
+                }
+                return itemValue.length == 0 ? value : itemValue.join(',');
+            } else {
+                return '';
+            }
+        },
+        getValue: function (configKey, text) {
+            var items = this.data[configKey];
+            var itemValue = [];
+            if (items != undefined && text != undefined && text != null && text.toString() != '') {
+                var valueArray = text.toString().split(',');
+                for (var i = 0; i < items.length; i++) {
+                    if (valueArray.contains(items[i].text)) {
+                        itemValue.push(items[i].value);
+                    }
+                }
+                return itemValue.length == 0 ? text : itemValue.join(',');
+            }
+            else {
+                return '';
+            }
+        }
+    },
     $Core.Global = {
         DG: {
             //datagrid集合，根据ID取出DataGrid对象，将Json当数组用。
@@ -69,10 +116,6 @@ window.AR || (window.AR = {});
         },
         route: { root: 'ajax.html' },
         themes: ['default', 'black', 'gray', 'metro'],
-        //存档objname下拉数的数据{objnameA:[],objnameB:{}...}。
-        comboxData: {},
-        //存档Config_KeyValue的数据。
-        Config: {},
         /*
         *页面全局变量
         *ui(虚拟应用程序的路径)，actionkeys（页面对应的权限集）,mid（当前菜单ID）

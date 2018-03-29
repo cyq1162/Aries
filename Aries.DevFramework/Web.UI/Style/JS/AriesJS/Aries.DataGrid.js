@@ -31,7 +31,7 @@
     $Core.Utility.Ajax.post("GetInitConfig,GetKeyValueConfig", null, null, function (result) {
         $Core.Global.Variable = result.GetInitConfig;
         $Core.Global.Variable.isLoadCompleted = true;
-        $Core.Global.Config = result.GetKeyValueConfig;
+        $Core.Config.data = result.GetKeyValueConfig;
         if (result && result.GetInitConfig.mid == "" && result.GetInitConfig.actionKeys == "" && parent.AR) {
             $Core.Global.Variable = parent.AR.Global.Variable;
         }
@@ -291,7 +291,7 @@
         }
         //请求下拉框数据,子页面的下拉列表数据绑定
         if (_postArray.length > 0) {
-            $Core.Combobox.loadComboboxData(_postArray, function (dg) {
+            $Core.Combobox.loadData(_postArray, function (dg) {
                 return function () {
                     dg._interval = setInterval(function () { bindGrid(dg); }, 5);
                 }

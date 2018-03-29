@@ -52,8 +52,8 @@
         }
         var op = _getOption($input);
         var key = op.key;
-        if (key && $Core.Global.Config[key]) {
-            var items = $Core.Global.Config[key];//获取数据
+        if (key && $Core.Config.data[key]) {
+            var items = $Core.Config.data[key];//获取数据
             op.data = $Core.Utility.cloneArray(items, true);
             if (!op.tree && op.defaultItem && (op.data.length == 0 || op.data[0][op.textField] != defaultItem.text)) {
                 op.data.unshift(defaultItem);
@@ -66,7 +66,7 @@
     }
     //绑定
     function bindObjName($input) {
-        var comboxData = $Core.Global.comboxData;
+        var comboxData = $Core.Combobox.data;
         if (comboxData) {
             var op = _getOption($input);
             //这里不处理子集下拉框，在后面递归一次性处理
@@ -162,14 +162,14 @@
         }
     }
 
-    function loadComboboxData(item_data, onLoadedEvent) {
+    function loadData(item_data, onLoadedEvent) {
         if (item_data.length > 0) {
             var _post_data = { sys_json: JSON.stringify(item_data) };
             var result = Array();
             //此处变更为异步。
             $Core.Utility.Ajax.post("GetCombobox", null, _post_data, function (result) {
                 if (result) {
-                    var comboxData = $Core.Global.comboxData;
+                    var comboxData = $Core.Combobox.data;
                     for (var objName in result) {
                         if (comboxData[objName]) {
 
@@ -198,7 +198,7 @@
             _reBind(op, $input, parentOp, []);//绑定空数组。
             return;
         }
-        var ds = $Core.Global.comboxData;
+        var ds = $Core.Combobox.data;
         var data = ds[op.key];
         data && (data = data.select("parent", pid));
         if (data && data.length > 0) {
@@ -207,9 +207,9 @@
         else {
             //远程读取
             var json = [{ ObjName: op.key, Parent: pid, Para: op.para }];
-            loadComboboxData(json, function () {
+            loadData(json, function () {
                 return function () {
-                    var d = $Core.Global.comboxData[op.key] || [];
+                    var d = $Core.Combobox.data[op.key] || [];
                     d && (d = d.select("parent", pid) || []);
                     _reBind(op, $input, parentOp, d);
                 }
@@ -339,7 +339,7 @@
         });
         checkData = null;
         if (item_data.length > 0) {
-            loadComboboxData(item_data, function () {
+            loadData(item_data, function () {
                 $("[objname]").each(function () {
                     if (!$(this).attr("parent")) {
                         bindObjName($(this));
@@ -493,12 +493,50 @@
             initObjNameCombobox();//初始化objName配置的项
             initDialogCombobox();//初始化dialog配置的项
         },
+        //存档objname下拉数的数据{objnameA:[],objnameB:{}...}。
+        data: {},
+        //获得objName下拉数据的Json对象
+        getObj: function (objName) {
+            return $Core.Combobox.data[objName];
+        },
+        // 获得objName下拉数据的Json对象的某项名称
+        getName: function (objName, v) {
+            var obj = this.getObj(objName);
+            var value = v;
+            if ($.type(obj) == "object") {
+                obj = [obj];
+            }
+            if (v.toString().indexOf(',') != -1) {
+                var array = v.split(','), result = [];
+                for (var i = 0; i < obj.length; i++) {
+                    if (array.contains(obj[i]['value'])) {
+                        result.push(obj[i]['text']);
+                    }
+                }
+                if (result.length > 0) {
+                    value = result.join(',');
+                }
+            } else {
+                for (var i = 0; i < obj.length; i++) {
+                    if (obj[i]['value'] == v) {
+                        value = obj[i]['text'];
+                        break;
+                    }
+                }
+            }
+            return value;
+        },
         setCombo: setCombo,
+        //setParas({ "C_SYS_Table": tableNames, "C_SYS_Column": tableNames })
         setParas: setParas,
+        //为下拉框设置值，一般在AR.Combobox.onAfterExecute = function (type) {这里写代码。}
         setValues: setValues,
         onAfterExecute: onAfterBind,
-        loadComboboxData: loadComboboxData,
+        //请求加载远程数据
+        loadData: loadData,
+        //设置的值
         values: {},
+        //设置的参数
         paras: {}
     };
 })(jQuery, AR);

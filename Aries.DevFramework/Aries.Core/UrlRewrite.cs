@@ -32,9 +32,36 @@ namespace Aries.Core
             }
 
             context.BeginRequest += new EventHandler(context_BeginRequest);
+            context.PostMapRequestHandler += context_PostMapRequestHandler;
+            context.AcquireRequestState += context_AcquireRequestState;
             context.Error += context_Error;
         }
-
+        void context_PostMapRequestHandler(object sender, EventArgs e)
+        {
+            if (WebHelper.IsAriesSuffix())
+            {
+                string localPath = context.Request.Url.LocalPath;
+                string uriPath = Path.GetFileNameWithoutExtension(localPath).ToLower();
+                if (uriPath == "ajax")
+                {
+                    context.Handler = SessionHandler.Instance;//注册Session
+                }
+            }
+        }
+        HttpContext context;
+        void context_BeginRequest(object sender, EventArgs e)
+        {
+            HttpApplication app = (HttpApplication)sender;
+            context = app.Context;
+            if (context.Request.Url.LocalPath == "/")//设置默认首页
+            {
+                string defaultUrl = WebHelper.GetDefaultUrl();
+                if (!string.IsNullOrEmpty(defaultUrl))
+                {
+                    context.RewritePath(defaultUrl, false);
+                }
+            }
+        }
         void context_Error(object sender, EventArgs e)
         {
             if (WebHelper.IsAriesSuffix())
@@ -43,13 +70,10 @@ namespace Aries.Core
             }
         }
 
-        HttpContext context;
-        void context_BeginRequest(object sender, EventArgs e)
+        void context_AcquireRequestState(object sender, EventArgs e)
         {
             if (WebHelper.IsAriesSuffix())
             {
-                HttpApplication app = (HttpApplication)sender;
-                context = app.Context;
                 string localPath = context.Request.Url.LocalPath;
                 string uriPath = Path.GetFileNameWithoutExtension(localPath).ToLower();
                 switch (uriPath)

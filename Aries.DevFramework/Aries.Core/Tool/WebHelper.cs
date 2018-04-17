@@ -43,6 +43,16 @@ namespace Aries.Core.Helper
             return false;
         }
         #endregion
+
+        /// <summary>
+        /// 默认首页设置
+        /// </summary>
+        /// <returns></returns>
+        public static string GetDefaultUrl()
+        {
+            return AppConfig.GetApp("DefaultUrl", "");
+        }
+
         public static bool IsUseUISite
         {
             get

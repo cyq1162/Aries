@@ -34,9 +34,6 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CYQ.Data">
-      <HintPath>..\packages\CYQ.Data.dll</HintPath>
-    </Reference>
     <Reference Include="NPOI, Version=2.1.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\DLL\NPOI.dll</HintPath>
@@ -67,6 +64,7 @@
     <Compile Include="Base\RouteConfig.cs" />
     <Compile Include="Config\LangConst.cs" />
     <Compile Include="InvokeLogic.cs" />
+    <Compile Include="SessionHandler.cs" />
     <Compile Include="UrlRewrite.cs" />
     <Compile Include="Base\LogicBase.cs" />
     <Compile Include="Config\ExcelConfig.cs" />
@@ -97,6 +95,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\CYQData\trunk\CYQ.Data.csproj">
+      <Project>{bd5ccc87-278f-4feb-ad23-157fcba9ffa1}</Project>
+      <Name>CYQ.Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

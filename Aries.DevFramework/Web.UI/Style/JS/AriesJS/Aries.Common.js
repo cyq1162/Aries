@@ -575,7 +575,7 @@
                     var result = value;
                     if (value != undefined && value.toString() != "") {
                         if (configKey && $Core.Config.data[configKey]) {
-                            result = $Core.Config.getName(configKey, value);
+                            result = $Core.Config.getText(configKey, value);
                         }
                     }
                     result = $Core.Common.Formatter.onAfterExecute(configKey, result, row, index);
@@ -595,7 +595,7 @@
                     var result = value;
                     if (value != undefined && value.toString() != "") {
                         if ($Core.Combobox.data) {
-                            result = $Core.Combobox.getName(objName, value);
+                            result = $Core.Combobox.getText(objName, value);
                         }
                     }
                     result = $Core.Common.Formatter.onAfterExecute(objName, result, row, index);

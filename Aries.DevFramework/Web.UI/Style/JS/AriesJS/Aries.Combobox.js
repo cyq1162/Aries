@@ -500,7 +500,7 @@
             return $Core.Combobox.data[objName];
         },
         // 获得objName下拉数据的Json对象的某项名称
-        getName: function (objName, v) {
+        getText: function (objName, v) {
             var obj = this.getObj(objName);
             var value = v;
             if ($.type(obj) == "object") {

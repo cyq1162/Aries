@@ -38,7 +38,7 @@ window.AR || (window.AR = {});
     //处理Config_KeyValue的数据。
     $Core.Config= {
         data: {},
-        getName: function (configKey, value) {
+        getText: function (configKey, value) {
             var items = this.data[configKey];
             var itemValue = [];
             if (items != undefined && value != undefined && value != null && value.toString() != '') {

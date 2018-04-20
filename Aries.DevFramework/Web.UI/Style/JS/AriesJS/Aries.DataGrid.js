@@ -483,15 +483,15 @@
         this.Items = new $Core.Dictionary();
         this._btnArray = new Array();
         /**
-        *如果设置clickname url&winTitle则无效
+        *如果设置clickName url&winTitle则无效
         *@param{string} key 即指向AR.Global.DG.PKTemplate的属性值
         *@param{string} title 鼠标划过显示的文字
-        *@param{string} clickname 事件名
+        *@param{string} clickName 事件名
         *@param{string} url 打开页面的URL
         *@param{string} winTitle 打开窗口的标题
         *@param{string} lv2action 二级权限名称
         */
-        this.add = function (key, title, clickname, url, winTitle, lv2action) {
+        this.add = function (key, title, clickName, url, winTitle, lv2action) {
             var btn = $(_getBtnTemp(key))[0];
             //设置添加按钮的连接
             if (key == 'edit') {
@@ -501,7 +501,7 @@
             url && btn.setAttribute("url", url);
             winTitle && btn.setAttribute("winTitle", winTitle);
             title && btn.setAttribute("title", title);
-            clickname && btn.setAttribute("click", clickname);
+            clickName && clickName != "null" && btn.setAttribute("onclick", clickName + "(event)");
             btn.key = key;
             btn.lv2action = lv2action || key;
             //var actionKeys = $Core.Global.Variable.actionKeys;//改异步后，这里不能进行权限过滤,内部做权限过滤

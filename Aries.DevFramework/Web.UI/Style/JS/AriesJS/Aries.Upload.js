@@ -183,7 +183,7 @@
     var getUID = (function () {
         var id = 0;
         return function () {
-            return 'ValumsAjaxUpload' + id++;
+            return 'AriesAjaxUpload' + id++;
         };
     })();
 
@@ -288,8 +288,11 @@
         }
 
         if (button.nodeName.toUpperCase() == 'A') {
+            //先移除属性事件
+            button.removeAttribute("onclick");
             // disable link                       
             addEvent(button, 'click', function (e) {
+               
                 if (e && e.preventDefault) {
                     e.preventDefault();
                 } else if (window.event) {
@@ -388,9 +391,8 @@
                 }
                 div.style.filter = "alpha(opacity=0)";
             }
-
+            //选择文件事件。
             addEvent(input, 'change', function () {
-
                 if (!input || input.value === '') {
                     return;
                 }
@@ -453,12 +455,11 @@
             // IE will later display 'access denied' error
             // if you use using self._input.click()
             // other browsers just ignore click()
-
             addEvent(self._button, 'mouseover', function () {
+
                 if (self._disabled) {
                     return;
                 }
-
                 if (!self._input) {
                     self._createInput();
                 }

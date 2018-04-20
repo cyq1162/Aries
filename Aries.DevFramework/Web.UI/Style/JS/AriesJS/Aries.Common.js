@@ -624,42 +624,50 @@
                             if (dg.PKColumn.Editor.BtnEdit.hidden != true && actionKeys.indexOf(",edit,") > -1) {
                                 len++;
                                 var $btn = $($Core.Utility.stringFormat(strTemplate, "bj", $Core.Lang.edit, "onEdit", value, index));
+                                obj.set("edit", { "isCustom": false, $target: $btn });
                                 $div.append($btn);
 
                             }
                             if (dg.PKColumn.Editor.BtnDel.hidden != true && actionKeys.indexOf(",del,") > -1) {
                                 len++;
                                 var $btn = $($Core.Utility.stringFormat(strTemplate, "sc", $Core.Lang.del, "onDel", value, index));
-                                obj.set("del", $btn);
+                                obj.set("del",{ "isCustom": false, $target: $btn });
                                 $div.append($btn);
                             }
                         }
                         else {
+                            //有编辑权限才能进来
                             if (dg.PKColumn.Editor.BtnCancel.hidden != true && actionKeys.indexOf(",edit,") > -1) {
                                 len++;
                                 var $btn = $($Core.Utility.stringFormat(strTemplate, "cx", $Core.Lang.cancel, "onCancel", value, index));
-                                obj.set("edit", $btn);
+                                obj.set("cancel", { "isCustom": false, $target: $btn });
                                 $div.append($btn);
                             }
                             if (dg.PKColumn.Editor.BtnSave.hidden != true && actionKeys.indexOf(",edit,") > -1) {
                                 len++;
                                 var $btn = $($Core.Utility.stringFormat(strTemplate, "bc", $Core.Lang.save, "onSave", value, index));
-                                obj.set("edit", $btn);
+                                obj.set("save", { "isCustom": false, $target: $btn });
                                 $div.append($btn);
                             }
                         }
                     }
-                    for (var i = 0; i < btnArray.length; i++) {
+                    //自定义按钮
+                    for (var i = 0; i < btnArray.length; i++)
+                    {
                         var btn = btnArray[i];
-                        if (!btn.isHidden && actionKeys.indexOf("," + btn.lv2action + ",") > -1) {
-                            if (btn.className != 'sc') {
-                                btn.setAttribute("onClick", "AR.Common.onOpen(this,'" + value + "','" + dg.id + "'," + index + ")");
-                            } else {
-                                btn.setAttribute("onClick", "AR.Common.onDel(this,'" + value + "','" + dg.id + "'," + index + ")");
+                        if (!btn.isHidden && actionKeys.indexOf("," + btn.lv2action + ",") > -1)
+                        {
+                            if (!btn.hasAttribute("onclick")) {
+                                if (btn.className == 'sc') {
+                                    btn.setAttribute("onclick", "AR.Common.onDel(this,'" + value + "','" + dg.id + "'," + index + ")");
+                                }
+                                else {
+                                    btn.setAttribute("onclick", "AR.Common.onOpen(this,'" + value + "','" + dg.id + "'," + index + ")");
+                                }
                             }
                             len++;
                             var $btn = $(btn.outerHTML);
-                            obj.set(btn.key, $btn);
+                            obj.set(btn.key, { "isCustom": true, $target: $btn });
                             $div.append($btn);
                         }
                     }
@@ -1114,7 +1122,9 @@
                     var btnClass = btn.css || "btn-sm";
                     var btnClick = btn.click;
                     var title = btn.title;
-                    item = $Core.Utility.stringFormat('<a><input class=\"{0}\" type=\"button\" onClick=\"{1}(event)\"  value=\"{2}\"/></a>', btnClass, btnClick, title);
+                    var classText = btnClass ? "class=\""+btnClass+"\"" : "";
+                    var clickText = btnClick && btnClass!="null" ? "onclick=\"" + btnClick + "(event)\"" : "";
+                    item = $Core.Utility.stringFormat('<a><input type=\"button\" {0} {1}  value=\"{2}\"/></a>', classText, clickText, title);
                 }
                 item = $(item);
                 var toolbarContainer = dg.ToolBar.$target;//  $("#" + dg.ToolArea.id).find(".function-box"),

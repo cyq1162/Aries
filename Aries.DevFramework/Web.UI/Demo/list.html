@@ -11,14 +11,14 @@
          GitHub 开源：<a href="https://github.com/cyq1162/Aries"  target="_blank">https://github.com/cyq1162/Aries</a>  作者：<a href="http://www.cnblogs.com/cyq1162"  target="_blank">路过秋天</a>
 </pre>
     <hr />
-    <div title="我要把工具条放这里面来" id="toolbar">
+     <div title="我要把工具条放这里面来" id="dg_toolbar"  style="display: none;">
+      aaaaa
     </div>
     <div style="height: 400px;">
         <div id="dg"></div>
     </div>
 
-
-    <div id="dg_toolbar" style="display: none;">
+    <div id="dg_search" style="display: none;" title="我要把查询区放这里面来">
         <div class="line">
             <div class="short">
                 <label>自定义F1：</label><input type="text" class="easyui-validatebox easyui-numberbox"  validtype="length[1,11]"  name="F1">
@@ -28,6 +28,7 @@
             </div>
         </div>
     </div>
+   
     <!-- <input type="number" />
     <input type="range" min="0" max="100" step="5" value="5" onchange="display.value=value" id="r" />
     <output id="display" onload="value=111"></output>
@@ -48,7 +49,8 @@
 
     //自定义工具栏
     if (customToolbar) {
-        grid.Search.$target = $('#dg_toolbar');
+        grid.Search.$target = $('#dg_search');
+        grid.ToolBar.$target = $('#dg_toolbar');
     }
     //grid.options = {
     //    //fit:false,
@@ -71,25 +73,62 @@
     // grid.isShowToolArea = false;
     //grid.ToolBar.isHidden = true;
     //grid.Search.isHidden = true;
-    //grid.Search.$target.find('[name="F1"]').val('test');    
-    grid.ToolBar.add('自定义按钮', 'fn', 10, 'btn-lg', "edit");
+    //grid.Search.$target.find('[name="F1"]').val('test');  
+
+    //自定义按钮-图片上传示例--------------------------------开始--------------------------------------
+    grid.ToolBar.add('自定义按钮-图片上传', null, 10, 'btn-lg', "edit", "btnUpload");
+    grid.ToolBar.add('自定义按钮-图片上传2', null, 10, 'btn-lg', "edit", "btnUpload2");
+    var opts = {};
+    opts.action = '/ajax.html';//提交的地址
+    opts.data = { "test": "aaa" };//提交的参数
+    opts.onSubmit = function (file, ext) {
+        alert("扩展名检测为：" + ext);
+    }
+    opts.onComplete = function (file, data) {
+        alert("返回的数据：" + data);
+    }
+    grid.ToolBar.onAfterExecute = function ()
+    {
+        var $btnUpload = this.Items["btnUpload"].$target;
+        var $btnUpload2 = this.Items["btnUpload2"].$target;
+        new AR.Upload($btnUpload, opts);//为按钮增加上传事件
+        new AR.Upload($btnUpload2, opts);//为按钮增加上传事件
+    }
+    //自定义按钮-图片上传示例---------------------------------结束-------------------------------------
+
     grid.PKColumn.add('edit', '编辑', null, 'edit.html', '编辑Test表');
     grid.PKColumn.add('del');
+   
     grid.PKColumn.add('abc', "hello", null, "aaa.html?uid={ID}", "hello world!");//{XXX}的值会被对应的字段值替换（注意大小写）。
+
+    //表格内-图片上传示例--------------------------------开始--------------------------------------
+    grid.PKColumn.add('detail', '表格内-图片上传示例', "fn", null, null, "edit");
+
     grid.PKColumn.onBeforeExecute = function (v, r, i, btns) {
         //btns[0].isHidden = true;
         //return v + "bd";
+
     };
+    
     grid.PKColumn.onAfterExecute = function (v, r, i, s) {
-        //this.Items[i].edit.hide();
-        //return s.prop("outHTML");
+        var $btnUpload2 = this.Items[i]["detail"].$target;//这里存档的对象的引用，并不是最终显示的对象
+        $btnUpload2.attr("name", "btnUpload");//提前设置好参数。
     };
+    grid.options.onLoadSuccess = function () {
+        var items = document.getElementsByName("btnUpload");
+        for (var i = 0; i < items.length; i++) {
+            items[i].setAttribute("title", "b");
+            new AR.Upload(items[i], opts);//为按钮增加上传事件
+        }
+    }
+    //表格内-图片上传示例--------------------------------结束--------------------------------------
     //grid.options.defaultWhere = [
     //    { name: 'F1', pattern: 'like', value: '1' },
     //    { name: 'F3', pattern: 'like', value: '3' }
     //];
-    grid.addWhere("f1", "3", "like");
-    grid.removeWhere("f1");
+    grid.addWhere("f3", "3", "like");
+   // grid.removeWhere("f1");
+    //grid.addWhere("f1>2", "id>3 or id<2", "likeor");
     grid.Search.onAfterExecute = function () {
         if (!customToolbar && this.Items.length > 0) {
             //  this.Items["f1"] && this.Items["f1"].val('1');
@@ -122,6 +161,21 @@
     function imgFormatter(value, row, index) {
         return "<img src='" + value + "\' />";
     }
-    //AR.Utility.Window.showMsg("hellow", "title");
+
+
+    //创建一个隐藏的上传按钮
+    //var $btnUpload = $('<input type="button"  value="upload" style="width:200;height:200" />');
+    //$('body').append($btnUpload);
+    //var opts = {};
+    //opts.action = '/ajax.html';
+    //opts.onSubmit = function () { }
+    //new AR.Upload($btnUpload, opts);//为按钮增加上传事件
+
+    //function uploadImg(value, row, index)
+    //{
+    //    alert($btnUpload);
+    //    $btnUpload.click();
+    //}
+   
 </script>
 

@@ -22,30 +22,31 @@ namespace Aries.Core
         {
 
         }
-        static bool isFirstLoad = false;
+        static bool isFirstLoad = true;
+        bool isAjax = false;
         public void Init(HttpApplication context)
         {
             if (!isFirstLoad)
             {
-                isFirstLoad = true;
+                isFirstLoad = false;
                 CrossDb.PreLoadAllDBSchemeToCache();
-            }
 
+
+            }
             context.BeginRequest += new EventHandler(context_BeginRequest);
-            context.PostMapRequestHandler += context_PostMapRequestHandler;
-            context.AcquireRequestState += context_AcquireRequestState;
+            //支持Session （VS2013 以上的 IISExpress 浏览器默认会检测文件存在，因此需要做点小事情做兼容）
+            context.PostMapRequestHandler += new EventHandler(context_PostMapRequestHandler);
+            context.AcquireRequestState += new EventHandler(context_AcquireRequestState);
+
             context.Error += context_Error;
+
         }
+
         void context_PostMapRequestHandler(object sender, EventArgs e)
         {
-            if (WebHelper.IsAriesSuffix())
+            if (isAjax)
             {
-                string localPath = context.Request.Url.LocalPath;
-                string uriPath = Path.GetFileNameWithoutExtension(localPath).ToLower();
-                if (uriPath == "ajax")
-                {
-                    context.Handler = SessionHandler.Instance;//注册Session
-                }
+                context.Handler = SessionHandler.Instance;//注册Session
             }
         }
         HttpContext context;
@@ -61,12 +62,22 @@ namespace Aries.Core
                     context.RewritePath(defaultUrl, false);
                 }
             }
-        }
-        void context_Error(object sender, EventArgs e)
-        {
-            if (WebHelper.IsAriesSuffix())
+            else
             {
-                Log.WriteLogToTxt(HttpContext.Current.Error);
+                //VS2013（以上）IISExpress 默认会检测文件存在，导致后续事件无法触发，因此需要做点小事情做兼容）
+                //正常IIS部署，是不需要以前兼容性代码的，（该代码将路径重写到一个已存在的文件，同时在目录下新建了一个ajax.html文件）
+                //简单的地说：以上这段代码，和根目录下的ajax.html文件，是为了兼容VS IISExpress的bug存在的（微软造的孽）。
+                if (WebHelper.IsAriesSuffix())
+                {
+                    string localPath = context.Request.Url.LocalPath;
+                    string uriPath = Path.GetFileNameWithoutExtension(localPath).ToLower();
+                    isAjax = uriPath == "ajax";
+                    if (isAjax)
+                    {
+                        int i = localPath.LastIndexOf('/');
+                        context.RewritePath(localPath.Substring(i), false);//只有重定向到一个存在的文件，兼容微软造的孽
+                    }
+                }
             }
         }
 
@@ -92,6 +103,13 @@ namespace Aries.Core
                         ReplaceOutput();
                         break;
                 }
+            }
+        }
+        void context_Error(object sender, EventArgs e)
+        {
+            if (WebHelper.IsAriesSuffix())
+            {
+                Log.WriteLogToTxt(HttpContext.Current.Error);
             }
         }
 

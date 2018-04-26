@@ -24,6 +24,9 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <Use64BitIISExpress>
+    </Use64BitIISExpress>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -63,6 +66,7 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ajax.html" />
     <Content Include="App_Data\SQLCode\Aries\Sql_Combobox.sql" />
     <Content Include="App_Data\SQLCode\Aries\Sql.sql" />
     <Content Include="App_Data\SQLCode\Aries\Sql_Yours.sql" />

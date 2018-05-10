@@ -1,5 +1,8 @@
 # Aries
 ASP.NET Aries is a Rapid Develop Framework for asp.net
+
+QQ交流群：6033006<br />
+
 关于开源与商用的补充协议说明：<br />
 一：关于开源：<br />
 1：框架会持续保持开源，并不断持续改良优化。<br />

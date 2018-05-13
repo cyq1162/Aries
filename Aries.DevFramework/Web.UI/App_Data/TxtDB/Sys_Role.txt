@@ -1,3 +1,3 @@
-,
+{"RoleID":"System.Guid","RoleName":"System.String","Notes":"System.String"},
 {"RoleID":"53536a66-0d99-4ee8-b4a6-5928129d0ab6","RoleName":"普通管理员","Notes":"运营级别的权限"},
 {"RoleID":"d8e1ae3b-8451-436a-a59b-c7516e711b9c","RoleName":"超级管理员","Notes":"开发级别的权限"}

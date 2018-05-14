@@ -77,7 +77,7 @@
 
     //自定义按钮-图片上传示例--------------------------------开始--------------------------------------
     grid.ToolBar.add('自定义按钮-图片上传', null, 10, 'btn-lg', "edit", "btnUpload");
-    grid.ToolBar.add('自定义按钮-图片上传2', null, 10, 'btn-lg', "edit", "btnUpload2");
+    grid.ToolBar.add('自定义按钮-图片上传2', "upload", 10, 'btn-lg', "edit", "btnUpload2");
     var opts = {};
     opts.action = '/ajax.html';//提交的地址
     opts.data = { "test": "aaa" };//提交的参数
@@ -90,9 +90,15 @@
     grid.ToolBar.onAfterExecute = function ()
     {
         var $btnUpload = this.Items["btnUpload"].$target;
-        var $btnUpload2 = this.Items["btnUpload2"].$target;
+       // var $btnUpload2 = this.Items["btnUpload2"].$target;
         new AR.Upload($btnUpload, opts);//为按钮增加上传事件
-        new AR.Upload($btnUpload2, opts);//为按钮增加上传事件
+      //  new AR.Upload($btnUpload2, opts);//为按钮增加上传事件
+    }
+    function upload(btn,dgid)
+    {
+        new AR.Upload(btn, opts);//为按钮增加上传事件
+        alert("表格ID："+dgid+" 再点一次上传图片");
+
     }
     //自定义按钮-图片上传示例---------------------------------结束-------------------------------------
 

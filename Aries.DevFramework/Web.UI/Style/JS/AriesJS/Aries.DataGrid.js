@@ -501,7 +501,7 @@
             url && btn.setAttribute("url", url);
             winTitle && btn.setAttribute("winTitle", winTitle);
             title && btn.setAttribute("title", title);
-            clickName && clickName != "null" && btn.setAttribute("onclick", clickName + "(event)");
+            clickName && clickName != "null" && btn.setAttribute("click", clickName) && btn.setAttribute("hasClick", "1");
             btn.key = key;
             btn.lv2action = lv2action || key;
             //var actionKeys = $Core.Global.Variable.actionKeys;//改异步后，这里不能进行权限过滤,内部做权限过滤

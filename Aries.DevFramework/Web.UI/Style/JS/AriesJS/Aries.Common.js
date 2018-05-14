@@ -654,10 +654,11 @@
                     //自定义按钮
                     for (var i = 0; i < btnArray.length; i++)
                     {
-                        var btn = btnArray[i];
+                        var btn = btnArray[i]; 
                         if (!btn.isHidden && actionKeys.indexOf("," + btn.lv2action + ",") > -1)
                         {
-                            if (!btn.hasAttribute("onclick")) {
+                           
+                            if (!btn.hasAttribute("hasClick")) {
                                 if (btn.className == 'sc') {
                                     btn.setAttribute("onclick", "AR.Common.onDel(this,'" + value + "','" + dg.id + "'," + index + ")");
                                 }
@@ -1123,7 +1124,7 @@
                     var btnClick = btn.click;
                     var title = btn.title;
                     var classText = btnClass ? "class=\""+btnClass+"\"" : "";
-                    var clickText = btnClick && btnClass!="null" ? "onclick=\"" + btnClick + "(event)\"" : "";
+                    var clickText = btnClick && btnClass!="null" ? "onclick=\"" + btnClick + "(this,'"+dg.id+"')\"" : "";
                     item = $Core.Utility.stringFormat('<a><input type=\"button\" {0} {1}  value=\"{2}\"/></a>', classText, clickText, title);
                 }
                 item = $(item);

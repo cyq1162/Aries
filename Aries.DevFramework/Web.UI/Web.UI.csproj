@@ -115,6 +115,7 @@
     <Content Include="Demo\inputDialog.html" />
     <Content Include="index.html" />
     <Content Include="login.html" />
+    <Content Include="logout.html" />
     <Content Include="Style\CSS\login.css" />
     <Content Include="Style\CSS\main.css" />
     <Content Include="Style\CSS\style.css" />

@@ -52,6 +52,7 @@ namespace Aries.Core
             }
         }
         HttpContext context;
+        static int integralFlag = -1;//集成模式
         void context_BeginRequest(object sender, EventArgs e)
         {
             HttpApplication app = (HttpApplication)sender;
@@ -70,32 +71,35 @@ namespace Aries.Core
                 //正常IIS部署，是不需要以前兼容性代码的，（该代码将路径重写到一个已存在的文件，同时在目录下新建了一个ajax.html文件）
                 //简单的地说：以上这段代码，和根目录下的ajax.html文件，是为了兼容VS IISExpress的bug存在的（微软造的孽）。
 #if DEBUG
-                bool isIntegral = true;//集成模式
-                HttpModulesSection ab = (HttpModulesSection)ConfigurationManager.GetSection("system.web/httpModules");
-                if (ab != null)
+                if (integralFlag == -1)
                 {
-                    foreach (HttpModuleAction item in ab.Modules)
+                    integralFlag = 1;
+                    HttpModulesSection ab = (HttpModulesSection)ConfigurationManager.GetSection("system.web/httpModules");
+                    if (ab != null)
                     {
-                        if (item.Name == "Aries.Core") { isIntegral = false;break; }
+                        foreach (HttpModuleAction item in ab.Modules)
+                        {
+                            if (item.Name == "Aries.Core") { integralFlag = 0; break; }
+                        }
                     }
                 }
                 //VS2012 或以下，可以注释掉以下这段代码。
                 //string iisName=context.Request.ServerVariables["SERVER_SOFTWARE"];
                 //if (!string.IsNullOrEmpty(iisName) && iisName.StartsWith("Microsoft-IIS/1"))
                 //{
-                    //VS2015和VS 2017 Microsoft-IIS/10.0
-                    if (isIntegral && WebHelper.IsAriesSuffix())
+                //VS2015和VS 2017 Microsoft-IIS/10.0
+                if (integralFlag == 1 && WebHelper.IsAriesSuffix())
+                {
+                    string uriPath = Path.GetFileNameWithoutExtension(context.Request.Url.LocalPath).ToLower();
+                    isAjax = uriPath == "ajax";
+                    if (isAjax)
                     {
-                        string uriPath = Path.GetFileNameWithoutExtension(context.Request.Url.LocalPath).ToLower();
-                        isAjax = uriPath == "ajax";
-                        if (isAjax)
-                        {
-                            string localPath = context.Request.Url.PathAndQuery;
-                            int i = localPath.LastIndexOf('/');
-                            context.RewritePath(localPath.Substring(i), true);//只有重定向到一个存在的文件，兼容微软造的孽
-                        }
+                        string localPath = context.Request.Url.PathAndQuery;
+                        int i = localPath.LastIndexOf('/');
+                        context.RewritePath(localPath.Substring(i), true);//只有重定向到一个存在的文件，兼容微软造的孽
                     }
-               // }
+                }
+                // }
 #endif
             }
         }

@@ -13,11 +13,12 @@
 
 <script type="text/javascript">
     var dg = new AR.DataGrid("V_SYS_UserList", "Sys_User", "grid");
-    dg.forkeys = "Sys_UserInfo.UserInfoID";
+    dg.forkeys = "Sys_UserInfo.UserInfoID";//关联删除
     //dg.ToolBar.isHidden = true;
     // dg.options = { sortName: "CreateTime", sortOrder: "desc" };
     //dg.Search.$target = '';
     dg.PKColumn.add("edit", "编辑", null, "userEdit.html", "编辑用户", "edit");
     dg.PKColumn.add("del", "删除", null, null, null, "del");
     dg.bind();
+
 </script>

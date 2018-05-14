@@ -11,12 +11,12 @@
         <a class="arrows hover"></a>
     </div>
     <div class="cont-box-in">
-        <div style="width: 1024px; float: left">
-            <div style="width: 200px; float: left;">
+        <div style="width: 100%; float: left">
+            <div style="width: 20%; float: left;">
                 <ul id="ul_menus"></ul>
 
             </div>
-            <div style="width: 800px; float: left">
+            <div style="width: 80%; float: left">
                 <div class="cont-box-form">
                     <form id="form1">
                         <div class="line">
@@ -139,14 +139,7 @@
         var node = $("#ul_menus").tree("getSelected");
         return node;
     }
-    function getParentNode() {
-        var node = getTreeNode();
-        var parentNode;
-        if (node) {
-            parentNode = $("#ul_menus").tree("getParent", node);
-        }
-        return parentNode;
-    }
+
     //删除菜单
     function delMenu() {
         var node = $("#ul_menus").tree("getSelected");

@@ -80,7 +80,16 @@ V5.0.1
 1:增加默认排序，以最后一个date或time结尾
 2：修正下拉框的默认值设置后的查询问题
 
+V5.0.1
+2017-11-12
+1：查询条件框增加回车查询事件。
+2：将查询条件的pattern改成operator，pattern在h5下有下浏览器当成关键字处理。
+
 追回默认代码块：dg.options = { sortName: "createtime", sortOrder: "desc" };
 
 
 文本数据库，二次order排序问题。
+
+重置、下拉的默认值问题-----------------
+Global.Config => AR.Config.data AR.Config.getText(key,value) AR.Config.getValue(key,text)
+Global.comboxData => 弄到AR.ComboxBox.data

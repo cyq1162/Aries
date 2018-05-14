@@ -41,7 +41,7 @@
     }
     dg.bind();
     function showView() {
-        AR.Utility.Ajax.post("GetSQL", objName, null, function (result) {
+        AR.Utility.Ajax.get("GetSQL", objName, null, function (result) {
             if (result && result.success) {
                 var $arae = $('<textarea>').css({ width: '99%', height: '96%' });
                 $arae.html(result.msg.replace(/<br\/>/g, "\r\n"));

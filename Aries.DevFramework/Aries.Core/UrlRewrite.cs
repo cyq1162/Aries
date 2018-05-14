@@ -67,17 +67,27 @@ namespace Aries.Core
                 //VS2013（以上）IISExpress 默认会检测文件存在，导致后续事件无法触发，因此需要做点小事情做兼容）
                 //正常IIS部署，是不需要以前兼容性代码的，（该代码将路径重写到一个已存在的文件，同时在目录下新建了一个ajax.html文件）
                 //简单的地说：以上这段代码，和根目录下的ajax.html文件，是为了兼容VS IISExpress的bug存在的（微软造的孽）。
-                if (WebHelper.IsAriesSuffix())
+#if DEBUG
+               
+               //if(System.Configuration.ConfigurationManager.
+                //VS2012 或以下，可以注释掉以下这段代码。
+                string iisName=context.Request.ServerVariables["SERVER_SOFTWARE"];
+                if (!string.IsNullOrEmpty(iisName) && iisName.StartsWith("Microsoft-IIS/1"))
                 {
-                    string localPath = context.Request.Url.LocalPath;
-                    string uriPath = Path.GetFileNameWithoutExtension(localPath).ToLower();
-                    isAjax = uriPath == "ajax";
-                    if (isAjax)
+                    //VS2015和VS 2017 Microsoft-IIS/10.0
+                    if (WebHelper.IsAriesSuffix())
                     {
-                        int i = localPath.LastIndexOf('/');
-                        context.RewritePath(localPath.Substring(i), false);//只有重定向到一个存在的文件，兼容微软造的孽
+                        string uriPath = Path.GetFileNameWithoutExtension(context.Request.Url.LocalPath).ToLower();
+                        isAjax = uriPath == "ajax";
+                        if (isAjax)
+                        {
+                            string localPath = context.Request.Url.PathAndQuery;
+                            int i = localPath.LastIndexOf('/');
+                            context.RewritePath(localPath.Substring(i), true);//只有重定向到一个存在的文件，兼容微软造的孽
+                        }
                     }
                 }
+#endif
             }
         }
 

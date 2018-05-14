@@ -18,6 +18,7 @@ namespace Aries.Core.Config
         public static string SuperAdmin = "超级管理员";
 
         //Controller.cs
+        public static string AddSuccess = "添加成功！";
         public static string AddError = "添加失败！";
         public static string DelSuccess = "删除成功！";
         public static string DelError = "删除失败！";
@@ -47,6 +48,7 @@ namespace Aries.Core.Config
 
         //SQLCode.cs
         public static string Exist = "已存在！";
+        public static string HasFiles = "该文件夹下存在文件！";
 
         //ExcelHelper.cs
         public static string ColumnNameIsEmpty = "该列头为空";

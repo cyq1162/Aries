@@ -18,6 +18,7 @@ namespace Aries.Core.Extend
         public static string ReadAllText(string path)
         {
             Byte[] buff = File.ReadAllBytes(path);
+            if (buff.Length == 0) { return ""; }
             if (buff[0] == 239 && buff[1] == 187 && buff[2] == 191)
             {
                 return Encoding.UTF8.GetString(buff, 3, buff.Length - 3);

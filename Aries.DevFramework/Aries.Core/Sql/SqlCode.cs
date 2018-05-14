@@ -15,7 +15,7 @@ namespace Aries.Core.Sql
     /// <summary>
     /// 操作SQL外置文件类
     /// </summary>
-    public partial class SqlCode
+    public static partial class SqlCode
     {
         /// <summary>
         /// SQL文件存档路径
@@ -104,10 +104,17 @@ namespace Aries.Core.Sql
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        internal static string GetSourceCode(string key)
+        public static string Get(string key)
         {
             if (!string.IsNullOrEmpty(key))
             {
+                string file = key.Replace(".sql", "") + ".sql";
+                string[] files = Directory.GetFiles(SqlCode.path, file, SearchOption.AllDirectories);
+                if (files != null && files.Length > 0)
+                {
+                    return FileExtend.ReadAllText(files[0]);
+                }
+
                 if (FileList != null && FileList.ContainsKey(key))
                 {
                     string path = FileList[key];
@@ -121,17 +128,28 @@ namespace Aries.Core.Sql
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        internal static bool SaveSourceCode(string key, string code, out string msg)
+        public static bool Save(string key, string code, out string msg)
         {
             msg = string.Empty;
             if (!string.IsNullOrEmpty(key) && !string.IsNullOrEmpty(code))
             {
-                if (FileList != null && FileList.ContainsKey(key))
+                string savePath = string.Empty;
+                string file = key.Replace(".sql", "") + ".sql";
+                string[] files = Directory.GetFiles(SqlCode.path, file, SearchOption.AllDirectories);
+                if (files != null && files.Length > 0)
                 {
-                    string path = FileList[key];
+                    savePath = files[0];
+                }
+
+                else if (FileList != null && FileList.ContainsKey(key))
+                {
+                    savePath = FileList[key];
+                }
+                if (!string.IsNullOrEmpty(savePath))
+                {
                     try
                     {
-                        File.WriteAllText(path, code, Encoding.Default);
+                        File.WriteAllText(savePath, code, Encoding.Default);
                         return true;
                     }
                     catch (Exception err)
@@ -139,7 +157,6 @@ namespace Aries.Core.Sql
                         msg = err.Message;
                         Log.WriteLogToTxt(err);
                     }
-
                 }
             }
             return false;
@@ -237,6 +254,76 @@ namespace Aries.Core.Sql
                 }
             }
             return sql.Trim();//待写。
+        }
+
+        public static bool Create(string key, string folderPath, out string msg)
+        {
+            msg = "";
+            if (!string.IsNullOrEmpty(key))
+            {
+                string folder = path + folderPath;
+                if (Directory.Exists(folder))
+                {
+                    try
+                    {
+                        if (key.EndsWith(".sql"))
+                        {
+                            File.WriteAllText(folder + key,"//sql for aries",Encoding.Default);
+                        }
+                        else if (!key.Contains("."))
+                        {
+                            Directory.CreateDirectory(folder + key);
+                        }
+                        return true;
+
+                    }
+                    catch (Exception err)
+                    {
+                        msg = err.Message;
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        public static bool Delete(string key, out string msg)
+        {
+            msg = string.Empty;
+            if (!string.IsNullOrEmpty(key))
+            {
+                string[] files = Directory.GetFileSystemEntries(path, key, SearchOption.AllDirectories);
+                if (files != null && files.Length > 0)
+                {
+                    string filePath = files[0];
+                    try
+                    {
+                        if (String.IsNullOrEmpty(Path.GetExtension(filePath)))//文件夹
+                        {
+                            files = Directory.GetFiles(filePath);
+                            if (files != null && files.Length > 0)
+                            {
+                                msg = LangConst.HasFiles;
+                                return false;
+                            }
+                            Directory.Delete(filePath);
+
+                        }
+                        else
+                        {
+                            File.Delete(filePath);
+                        }
+                        return true;
+                    }
+
+                    catch (Exception err)
+                    {
+                        msg = err.Message;
+                        Log.WriteLogToTxt(err);
+                    }
+                }
+            }
+            return false;
         }
     }
 }

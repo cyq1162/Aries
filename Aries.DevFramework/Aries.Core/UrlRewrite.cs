@@ -6,10 +6,12 @@ using CYQ.Data.Cache;
 using CYQ.Data.Tool;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Text;
 using System.Threading;
 using System.Web;
+using System.Web.Configuration;
 
 namespace Aries.Core
 {
@@ -68,14 +70,21 @@ namespace Aries.Core
                 //正常IIS部署，是不需要以前兼容性代码的，（该代码将路径重写到一个已存在的文件，同时在目录下新建了一个ajax.html文件）
                 //简单的地说：以上这段代码，和根目录下的ajax.html文件，是为了兼容VS IISExpress的bug存在的（微软造的孽）。
 #if DEBUG
-               
-               //if(System.Configuration.ConfigurationManager.
-                //VS2012 或以下，可以注释掉以下这段代码。
-                string iisName=context.Request.ServerVariables["SERVER_SOFTWARE"];
-                if (!string.IsNullOrEmpty(iisName) && iisName.StartsWith("Microsoft-IIS/1"))
+                bool isIntegral = true;//集成模式
+                HttpModulesSection ab = (HttpModulesSection)ConfigurationManager.GetSection("system.web/httpModules");
+                if (ab != null)
                 {
+                    foreach (HttpModuleAction item in ab.Modules)
+                    {
+                        if (item.Name == "Aries.Core") { isIntegral = false;break; }
+                    }
+                }
+                //VS2012 或以下，可以注释掉以下这段代码。
+                //string iisName=context.Request.ServerVariables["SERVER_SOFTWARE"];
+                //if (!string.IsNullOrEmpty(iisName) && iisName.StartsWith("Microsoft-IIS/1"))
+                //{
                     //VS2015和VS 2017 Microsoft-IIS/10.0
-                    if (WebHelper.IsAriesSuffix())
+                    if (isIntegral && WebHelper.IsAriesSuffix())
                     {
                         string uriPath = Path.GetFileNameWithoutExtension(context.Request.Url.LocalPath).ToLower();
                         isAjax = uriPath == "ajax";
@@ -86,7 +95,7 @@ namespace Aries.Core
                             context.RewritePath(localPath.Substring(i), true);//只有重定向到一个存在的文件，兼容微软造的孽
                         }
                     }
-                }
+               // }
 #endif
             }
         }

@@ -13,6 +13,7 @@ using Aries.Core.Helper;
 using Aries.Core.Config;
 using Aries.Core.Auth;
 using Aries.Core.Extend;
+using Aries.Core.Sql;
 
 namespace Aries.Logic
 {
@@ -379,9 +380,6 @@ namespace Aries.Logic
             }
         }
 
-        #endregion
-
-
         private void GatherChildrenID(MDataTable dt, string parentID, StringBuilder sb, string parentName = "ParentID")
         {
             if (!string.IsNullOrEmpty(parentID))
@@ -399,7 +397,8 @@ namespace Aries.Logic
                 }
             }
         }
-
+        #endregion
+        /*
         public string GetExcelMapping()
         {
             MDataRow row = ExcelConfig.GetExcelRow(Query<string>("ID"));
@@ -419,6 +418,7 @@ namespace Aries.Logic
             jh.Add("arrTables", MDataTable.CreateFrom(dic).ToJson(false, false));
             return jh.ToString();
         }
+
         private string GetJson(MDataColumn mdc)
         {
             JsonHelper js = new JsonHelper();
@@ -430,6 +430,7 @@ namespace Aries.Logic
             }
             return js.ToString(true);
         }
+        */
     }
 
     public partial class SysLogic
@@ -548,6 +549,37 @@ namespace Aries.Logic
                 }
 
 
+            }
+        }
+
+        public string GetSQLCodeJson()
+        {
+            MDataTable dt = new MDataTable("SqlCodeTable");
+            dt.Columns.Add("ID,ParentID,FileName");
+            SetSqlCodeTable(SqlCode.path, null, ref dt);
+
+            return dt.ToJson(false, false, RowOp.None, true);
+        }
+        private void SetSqlCodeTable(string path, string parentID, ref MDataTable dt)
+        {
+            char a = 'a';
+            int fileID = 0;
+            string pathID = parentID + "a";
+            string[] files = Directory.GetFileSystemEntries(path);
+            foreach (string filePath in files)
+            {
+                string ext = Path.GetExtension(filePath);
+                if (string.IsNullOrEmpty(ext))//文件夹
+                {
+                    dt.NewRow(true).Set("ID", parentID + a).Set("ParentID", parentID).Set("FileName", Path.GetFileName(filePath));
+                    SetSqlCodeTable(filePath, parentID + a, ref dt);
+                    a = (char)((int)a + 1);
+                }
+                else if (ext == ".sql") // 文件
+                {
+                    fileID++;
+                    dt.NewRow(true).Set("ID", parentID + fileID).Set("ParentID", parentID).Set("FileName", Path.GetFileName(filePath));
+                }
             }
         }
     }

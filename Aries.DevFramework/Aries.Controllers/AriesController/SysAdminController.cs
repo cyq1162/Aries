@@ -11,6 +11,7 @@ using Aries.Core.Config;
 using Aries.Core.Helper;
 using Aries.Core.Auth;
 using Aries.Core.DB;
+using Aries.Core.Sql;
 
 namespace Aries.Controllers
 {
@@ -178,7 +179,7 @@ namespace Aries.Controllers
         //}
     }
     /// <summary>
-    /// SysHandler 的摘要说明
+    /// 菜单操作
     /// </summary>
     public partial class SysAdminController
     {
@@ -251,9 +252,62 @@ namespace Aries.Controllers
             jsonResult = sysLogic.AddPromission();
         }
 
-        public void MappingExelInfo()
+        //public void MappingExelInfo()
+        //{
+        //    jsonResult = sysLogic.GetExcelMapping();
+        //}
+
+        /// <summary>
+
+    }
+
+    /// <summary>
+    /// SqlCode操作
+    /// </summary>
+    public partial class SysAdminController
+    {
+        /// [SQLCodeEdit.html]
+        /// </summary>
+        public void GetSqlCode()
         {
-            jsonResult = sysLogic.GetExcelMapping();
+            jsonResult = sysLogic.GetSQLCodeJson();
+        }
+        [ActionKey("View,Get")]
+        /// <summary>
+        /// 获取框架文件对应的SQL语句 By CYQ
+        /// </summary>
+        public void GetSql()
+        {
+            string sql = SqlCode.Get(ObjName);
+            bool result = !string.IsNullOrEmpty(sql);
+            jsonResult = JsonHelper.OutResult(result, sql);
+        }
+        [ActionKey("Edit,Update")]
+        /// <summary>
+        /// 保存框架文件对应的SQL语句 By CYQ
+        /// </summary>
+        public void SaveSql()
+        {
+            string msg;
+            bool result = SqlCode.Save(ObjName, Query<string>("sys_code"), out msg);
+            jsonResult = JsonHelper.OutResult(result, result ? LangConst.SaveSuccess : LangConst.SaveError + msg);
+        }
+        [ActionKey("Add,Insert")]
+        /// <summary>
+        /// 保存框架文件对应的SQL语句 By CYQ
+        /// </summary>
+        public void AddSql()
+        {
+            string msg;
+            bool result = SqlCode.Create(ObjName, Query<string>("sys_path"), out msg);
+            jsonResult = JsonHelper.OutResult(result, result ? LangConst.AddSuccess : LangConst.AddError + msg);
+        }
+        [ActionKey("Del,Delete")]
+        public void DeleteSql()
+        {
+            string msg;
+            bool result = SqlCode.Delete(ObjName, out msg);
+            jsonResult = JsonHelper.OutResult(result, result ? LangConst.DelSuccess : LangConst.DelError + msg);
         }
     }
 }

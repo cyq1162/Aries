@@ -34,8 +34,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CYQ.Data, Version=5.6.7.4, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="CYQ.Data">
       <HintPath>..\packages\CYQ.Data.dll</HintPath>
     </Reference>
     <Reference Include="NPOI">

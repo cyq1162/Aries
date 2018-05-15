@@ -28,7 +28,7 @@ namespace Aries.Core
         bool isAjax = false;
         public void Init(HttpApplication context)
         {
-            if (!isFirstLoad)
+            if (isFirstLoad)
             {
                 isFirstLoad = false;
                 CrossDb.PreLoadAllDBSchemeToCache();
@@ -62,7 +62,7 @@ namespace Aries.Core
                 string defaultUrl = WebHelper.GetDefaultUrl();
                 if (!string.IsNullOrEmpty(defaultUrl))
                 {
-                    context.RewritePath(defaultUrl, false);
+                    context.RewritePath(defaultUrl);
                 }
             }
             else
@@ -74,10 +74,10 @@ namespace Aries.Core
                 if (integralFlag == -1)
                 {
                     integralFlag = 1;
-                    HttpModulesSection ab = (HttpModulesSection)ConfigurationManager.GetSection("system.web/httpModules");
+                    object ab = ConfigurationManager.GetSection("system.web/httpModules");
                     if (ab != null)
                     {
-                        foreach (HttpModuleAction item in ab.Modules)
+                        foreach (HttpModuleAction item in ((HttpModulesSection)ab).Modules)
                         {
                             if (item.Name == "Aries.Core") { integralFlag = 0; break; }
                         }
@@ -96,7 +96,7 @@ namespace Aries.Core
                     {
                         string localPath = context.Request.Url.PathAndQuery;
                         int i = localPath.LastIndexOf('/');
-                        context.RewritePath(localPath.Substring(i), true);//只有重定向到一个存在的文件，兼容微软造的孽
+                        context.RewritePath(localPath.Substring(i));//只有重定向到一个存在的文件，兼容微软造的孽
                     }
                 }
                 // }
@@ -175,9 +175,9 @@ namespace Aries.Core
 
         private void SetNoCacheAndSafeKey()
         {
-            context.Response.Expires = 0;
-            context.Response.Buffer = true;
-            context.Response.ExpiresAbsolute = DateTime.Now.AddYears(-1);
+            //context.Response.Expires = 0;
+            //context.Response.Buffer = true;
+            //context.Response.ExpiresAbsolute = DateTime.Now.AddYears(-1);
             context.Response.CacheControl = "no-cache";
             SetSafeKey();
         }

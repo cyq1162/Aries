@@ -274,6 +274,7 @@ namespace Aries.Core.Sql
                         {
                             Directory.CreateDirectory(folder + key);
                         }
+                        _FileList = null;//清空缓存。
                         return true;
 
                     }

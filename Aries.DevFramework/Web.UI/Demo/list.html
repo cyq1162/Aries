@@ -89,6 +89,7 @@
     }
     grid.ToolBar.onAfterExecute = function ()
     {
+        if (customToolbar) { return;}
         var $btnUpload = this.Items["btnUpload"].$target;
        // var $btnUpload2 = this.Items["btnUpload2"].$target;
         new AR.Upload($btnUpload, opts);//为按钮增加上传事件

@@ -199,9 +199,14 @@ namespace Aries.Core.Extend
                 {
                     case DalType.Txt:
                     case DalType.Xml:
-                        continue;
+                        break;
                     default:
-                        return item.Key;
+                        if (DBTool.GetColumns(item.Key + "." + tableName).Count > 0)
+                        {
+                            DbTables[item.Key].Add(tableName, "");//添加视图或未缓存的表
+                            return item.Key;
+                        }
+                        break;
                 }
             }
             return "";

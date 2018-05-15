@@ -84,10 +84,11 @@
     function getFolderPath(node, name)
     {
         if (node && node.text) {
-            name = node.text + "\\" + name;
+           
             if (node.attributes && node.attributes.parentid) {
                 var parentNode = $("#ul_menus").tree("getParent", node.target);
                 if (parentNode) {
+                    name = node.text + "\\" + name;//有parent 才加（忽略根目录）
                     return getFolderPath(parentNode, name);
                 }
             }

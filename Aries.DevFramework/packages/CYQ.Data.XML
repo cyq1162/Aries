@@ -6236,14 +6236,26 @@
             <param name="idOrName"></param>
             <param name="value"></param>
         </member>
+        <member name="M:CYQ.Data.Xml.XHtmlAction.LoadData(System.Object)">
+            <summary>
+            加载MDataTable的多行数据
+            </summary>
+            <param name="data"></param>
+        </member>
         <member name="M:CYQ.Data.Xml.XHtmlAction.LoadData(CYQ.Data.Table.MDataTable)">
             <summary>
             装载数据行 （一般后续配合SetForeach方法使用）
             </summary>
         </member>
+        <member name="M:CYQ.Data.Xml.XHtmlAction.LoadData(System.Object,System.String)">
+            <summary>
+            加载MDatarow行数据（CMS替换）
+            </summary>
+            <param name="autoSetValuePre">批量赋值的前缀（如："txt#",或空前缀：""）赋值后，将在获取OutXml属性时处理赋值</param>
+        </member>
         <member name="M:CYQ.Data.Xml.XHtmlAction.LoadData(CYQ.Data.Table.MDataRow,System.String)">
             <summary>
-            装载数据行 （一般后续配合SetFor方法使用）
+            装载数据行 （一般后续配合SetFor方法使用或CMS替换）
             </summary>
             <param name="autoSetValuePre">批量赋值的前缀（如："txt#",或空前缀：""）赋值后，将在获取OutXml属性时处理赋值</param>
         </member>

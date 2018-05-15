@@ -66,9 +66,9 @@
                      $("#ul_menus").tree("append", {
                          parent: node.target,
                          data: [{
-                             id: node.id+'a',
+                             id: node.id?node.id:"root"+'a',
                              text: name,
-                             attributes: { "parentid": node.id }
+                             attributes: { "parentid": node.id?node.id:"root" }
                          }]
                      });
                  }
@@ -86,9 +86,9 @@
         if (node && node.text) {
            
             if (node.attributes && node.attributes.parentid) {
+                name = node.text + "\\" + name;//有parent 才加（忽略根目录）
                 var parentNode = $("#ul_menus").tree("getParent", node.target);
                 if (parentNode) {
-                    name = node.text + "\\" + name;//有parent 才加（忽略根目录）
                     return getFolderPath(parentNode, name);
                 }
             }

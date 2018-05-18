@@ -40,10 +40,10 @@ namespace Aries.Core.Config
                     string tableName = row.Get<string>("ConfigName");
                     string select = row.Get<string>("ConfigValue");
                     string where = row.Get<string>("Notes");
-                    if (!string.IsNullOrEmpty(tableName) && !string.IsNullOrEmpty(where))
+                    if (!string.IsNullOrEmpty(tableName))
                     {
                         MDataTable config2;
-                        using (MAction action = new MAction(CrossDb.GetEnum("Config")))
+                        using (MAction action = new MAction(CrossDb.GetEnum(tableName)))
                         {
                             if (!string.IsNullOrEmpty(select))
                             {

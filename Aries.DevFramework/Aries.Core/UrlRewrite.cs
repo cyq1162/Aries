@@ -229,12 +229,14 @@ namespace Aries.Core
             if (context.Request.UrlReferrer == null)
             {
                 WriteError("Illegal request!");
+                return;
             }
             else if (!IsExistsSafeKey() && WebHelper.IsCheckToken())// 仅检测需要登陆的页面
             {
                 string path = context.Request.UrlReferrer.PathAndQuery;
                 if (path == "/") { path = "/index.html"; }
                 WriteError(path);//"Page timeout,please reflesh page!"
+                return;
             }
             //AjaxController是由页面的后两个路径决定了。
             string[] items = context.Request.UrlReferrer.LocalPath.TrimStart('/').Split('/');
@@ -250,6 +252,7 @@ namespace Aries.Core
                 if (t == null)
                 {
                     WriteError("You need to create a controller for coding !");
+                    return;
                 }
             }
             #endregion

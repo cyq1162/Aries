@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using CYQ.Data;
+using CYQ.Data.Cache;
 using CYQ.Data.SQL;
 using CYQ.Data.Table;
 using CYQ.Data.Tool;
@@ -199,39 +200,48 @@ namespace Aries.Core.Config
             }
             return schema;
         }
-        public static MDataTable Check(string objName, string objCode, MDataTable dt)
+        /// <summary>
+        /// 数据结构行刷新
+        /// </summary>
+        /// <param name="objName"></param>
+        /// <param name="objCode"></param>
+        /// <param name="dt">原有数据</param>
+        /// <returns></returns>
+        public static bool Flesh(string objName, string objCode, MDataTable dt,out string msg)
         {
-#if DEBUG
+
+            bool result = false;
+            msg = LangConst.NoNewColumn ;
             MDataTable newDt = dt.GetSchema(false);
+            //移除表结构缓存
+            string tableKey = CacheManage.GetKey(CacheKeyType.Schema, objName, CrossDb.GetDBName(objName),CrossDb.GetDalType(objName));
+            CacheManage.LocalInstance.Remove(tableKey);
             FillTable(objName, objCode, newDt);//重新获取。
 
             MDataTable addTable = dt.GetSchema(false);
-            bool needUpdate = false;
+           // bool needUpdate = false;
             foreach (MDataRow row in newDt.Rows)
             {
                 MDataRow mr = dt.FindRow(string.Format("Field='{0}'", row.Get<string>("Field")));
                 if (mr == null)//找不到，则添加行
                 {
-                    row.Set("Hidden", true);
+                    row.Set(Config_Grid.OrderNum, 255);
+                    row.Set(Config_Grid.Hidden, true);
+                    row.Set(Config_Grid.GridID, Guid.NewGuid());
                     addTable.Rows.Add(row);
-                }
-                else if (mr["Field"].ToString() == mr["Title"].ToString()) // 找到，则试图设置中文名称。
-                {
-                    mr.Set("Title", row.Get<string>("Title"));
-                    needUpdate = true;
                 }
             }
 
             if (addTable.Rows.Count > 0)
             {
-                addTable.AcceptChanges(AcceptOp.Auto, null, "ObjName", "Field");
+                result = addTable.AcceptChanges(AcceptOp.InsertWithID);
+                if (!result)
+                {
+                    msg=Convert.ToString((Exception)addTable.DynamicData);
+                }
             }
-            if (needUpdate)
-            {
-                dt.AcceptChanges(AcceptOp.Update);
-            }
-#endif
-            return dt;
+
+            return result;
         }
         /// <summary>
         /// 返回格式化并设置以下内容：

@@ -39,6 +39,7 @@ namespace Aries.Core.Config
         public static string DataTypeError = "数据类型错误";
         public static string The = "第";
         public static string Row = "行数据";
+        public static string NoNewColumn = "未发现有新增列";
 
         //GridConfig.cs
         public static string IsYesNo = "是否";

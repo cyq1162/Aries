@@ -33,7 +33,8 @@
     };
     dg.ToolBar.add('关闭窗口', 'AR.Utility.Window.close', 4);
     dg.ToolBar.addHtml("<span style='margin-left: 50px; color:gray;'><strong>" + objName + "</strong></span>", 5);
-    dg.ToolBar.addHtml("<span onclick = 'showView()'><b>查看脚本</b></span>", 6);
+    dg.ToolBar.addHtml("<span onclick = 'fleshHeader()'><b>刷新表结构</b></span>", 6);
+    dg.ToolBar.addHtml("<span onclick = 'showView()'><b>编辑SqlCode</b></span>", 7);
     dg.ToolBar.addHtml("<span onclick = 'openConfigExcel()'><b>高级Excel导入配置</b></span>", 8);
     dg.ToolBar.addHtml("<span onclick = 'showFormHtml()'><b>生成表单Html</b></span>", 9);
     dg.PKColumn.Editor.BtnSave.onAfterExecute = function () {
@@ -86,5 +87,17 @@
         $form.append($div_tip);
         $form.append($div_content.append($div));
         AR.Utility.Window.dialog(objName + " Html", $form[0].outerHTML.replace(/</g, '&lt;').replace(/>/g, '&gt;'));
+    }
+
+    function fleshHeader()
+    {
+        AR.Utility.Ajax.get("GetHeader", objName + "," + dg.tableName, { "reflesh": 1 },
+            function (result) {
+                
+                if (result.success) {
+                    window.location.href = window.location.href;
+                }
+                else { alert(result.msg);}
+            });
     }
 </script>

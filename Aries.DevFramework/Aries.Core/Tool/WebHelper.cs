@@ -240,15 +240,16 @@ namespace Aries.Core.Helper
             encoding = encoding ?? Encoding.UTF8;
             if (ms != null && !string.IsNullOrEmpty(fileName))
             {
-                System.Web.HttpResponse response = System.Web.HttpContext.Current.Response;
+                HttpContext context = System.Web.HttpContext.Current;
+                System.Web.HttpResponse response = context.Response;
                 response.Clear();
-                response.AddHeader("Content-Type", "application/octet-stream");
+                response.AppendHeader("Content-Type", "application/octet-stream");
                 response.Charset = encoding.BodyName;// "utf-8";
-                if (!HttpContext.Current.Request.UserAgent.Contains("Firefox") && !HttpContext.Current.Request.UserAgent.Contains("Chrome"))
-                {
+                //if (AppConfig. !context.Request.UserAgent.Contains("Firefox") && !context.Request.UserAgent.Contains("Chrome"))
+                //{
                     fileName = HttpUtility.UrlEncode(fileName, encoding);
-                }
-                response.AddHeader("Content-Disposition", "attachment;filename=" + fileName);
+                //}
+                response.AppendHeader("Content-Disposition", "attachment;filename=" + fileName);
                 response.BinaryWrite(ms.GetBuffer());
                 ms.Close();
                 ms = null;

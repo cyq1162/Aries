@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Web.Security;
 using System.Security.Cryptography;
 using CYQ.Data;
 

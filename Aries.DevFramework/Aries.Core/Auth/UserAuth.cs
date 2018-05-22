@@ -171,6 +171,10 @@ namespace Aries.Core.Auth
                         pcTokenList.Remove(userName);
                     }
                 }
+                catch (Exception err)
+                {
+
+                }
                 finally
                 {
                     Token = null;
@@ -201,12 +205,18 @@ namespace Aries.Core.Auth
         }
         private static void ClearCookie()
         {
-            HttpCookie tokenCookie = new HttpCookie("aries_token");
+            HttpResponse response = HttpContext.Current.Response;
+            //清除token
+            HttpCookie tokenCookie = new HttpCookie("aries_token","");
             // HttpCookie userNameCookie = new HttpCookie("aries_user");//为了保留记住用户名功能，不清用户名Cookie
-            tokenCookie.Expires = DateTime.Now.AddDays(-1);
+            tokenCookie.Expires = DateTime.Now.AddYears(-1);
             //userNameCookie.Expires = DateTime.Now.AddDays(-1);
-            HttpContext.Current.Response.Cookies.Add(tokenCookie);
+            response.Cookies.Add(tokenCookie);
             //HttpContext.Current.Response.Cookies.Add(userNameCookie);
+            //清除aries_self
+            //HttpCookie safekeyCookie = new HttpCookie("aries_safekey", "");
+            //safekeyCookie.Expires = DateTime.Now.AddYears(-1);
+            //response.Cookies.Add(safekeyCookie);
         }
         private static void WriteCookie(string token, string userName)
         {

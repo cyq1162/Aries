@@ -1,7 +1,7 @@
 # Aries
-ASP.NET Aries is a Rapid Develop Framework for asp.net
+ASP.NET Aries is a Rapid Develop Framework for asp.net or asp.net core
 
-QQ交流群：6033006<br />
+QQ交流群：6033006<br /><br />
 Aries 最近录的几集视频教程，放个人微信公众号里了，有需要的在公众号里输入aries就可以看到了<br />
 <img src="https://images2018.cnblogs.com/blog/17408/201805/17408-20180523041027505-1002652922.jpg" width="200" height="200" /><br />
 

@@ -12,7 +12,7 @@ a:hover{text-decoration:underline;}
 img,background{
 	max-width: 100%;
 	height: auto;
-	width:auto\9; /* ie8 */
+	width:auto; /* ie8 */
 	-ms-interpolation-mode:bicubic;/*为了照顾ie图片缩放失真*/
 }
 

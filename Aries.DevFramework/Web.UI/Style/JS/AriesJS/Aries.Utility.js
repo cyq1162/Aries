@@ -551,14 +551,14 @@
                 async: true,
                 callback: null
             },
-            get: function (method, objName, data, callback, isShowProgress) {
-                return ajax.call(this, method, objName, data, false, 'GET', null, callback, isShowProgress);
+            get: function (method, objName, data, callback, isShowProgress, dataType) {
+                return ajax.call(this, method, objName, data, false, 'GET', null, callback, isShowProgress, dataType);
             },
-            post: function (method, objName, data, callback, isShowProgress) {
-                return ajax.call(this, method, objName, data, false, 'POST', null, callback, isShowProgress);
+            post: function (method, objName, data, callback, isShowProgress, dataType) {
+                return ajax.call(this, method, objName, data, false, 'POST', null, callback, isShowProgress, dataType);
             }
         }
-        function ajax(method, objName, data, async, type, url, callback, isShowProgress) {
+        function ajax(method, objName, data, async, type, url, callback, isShowProgress, dataType) {
             var that = this, json = {}, opts = new Object(), mid = $Core.Global.Variable.mid;
             var str = '{0}?sys_method={1}';
             if (objName) {
@@ -583,12 +583,13 @@
                 }
             }
             opts.callback = callback || that.Settings.callback;
+            opts.dataType = dataType || that.Settings.dataType;
             $.ajax({
                 type: type,
                 async: (async == false && !callback) ? false : that.Settings.async,
                 url: url || that.Settings.url,
                 data: opts.data,
-                dataType: that.Settings.dataType || "json",
+                dataType: opts.dataType,
                 success: function (d) {
                     if (opts.callback && typeof (opts.callback) != "function") {
                         throw TypeError("the callback parameter not is a function");

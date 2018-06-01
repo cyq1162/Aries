@@ -241,7 +241,7 @@ namespace Aries.Core.Auth
                 {
                     menu = GetMenu(HttpContext.Current.Request.UrlReferrer);
                 }
-                if (menu == null && !string.IsNullOrEmpty(mid))
+                if (menu == null && !string.IsNullOrEmpty(mid) && !mid.Contains(" "))
                 {
                     bool isContain = parentIDList.ContainsKey(uri.LocalPath);
                     if (isContain)

@@ -241,7 +241,7 @@ namespace Aries.Core.Auth
                 {
                     menu = GetMenu(HttpContext.Current.Request.UrlReferrer);
                 }
-                if (menu == null && !string.IsNullOrEmpty(mid) && !mid.Contains(" "))
+                if (menu == null && !string.IsNullOrEmpty(mid) && mid.IndexOfAny(new char[] { ' ', '%', ',' }) == -1)
                 {
                     bool isContain = parentIDList.ContainsKey(uri.LocalPath);
                     if (isContain)
@@ -291,13 +291,16 @@ namespace Aries.Core.Auth
             //                return true;
             //            }
             //#endif
-            MDataRow menu = UserMenu.FindRow("MenuID='" + menuID + "'");
-            //获取当前请求的Url
-            if (menu != null)
+            if (!string.IsNullOrEmpty(menuID) && menuID.IndexOfAny(new char[] { ' ', '%', ',' }) == -1)
             {
-                this._menuID = menuID;
-                MenuName = menu.Get<string>("MenuName");
-                return true;
+                MDataRow menu = UserMenu.FindRow("MenuID='" + menuID + "'");
+                //获取当前请求的Url
+                if (menu != null)
+                {
+                    this._menuID = menuID;
+                    MenuName = menu.Get<string>("MenuName");
+                    return true;
+                }
             }
             return false;
         }
@@ -340,7 +343,7 @@ namespace Aries.Core.Auth
         /// <returns></returns>
         public string GetFuncKeys(string menuID)
         {
-            if (!string.IsNullOrEmpty(menuID))
+            if (!string.IsNullOrEmpty(menuID) && menuID.IndexOfAny(new char[] { ' ', '%', ',' }) == -1)
             {
                 MDataRow row = UserMenu.FindRow("MenuID='" + menuID + "'");
                 if (row != null)

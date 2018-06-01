@@ -54,6 +54,10 @@ namespace Aries.Core.Sql
             for (int i = 0; i < sos.Count; i++)
             {
                 SearchPara obj = sos[i];
+                if (!CheckSafe(obj))
+                {
+                    return "1=2";
+                }
                 if (i == 0) { obj.OrAnd = ""; }
                 else
                 {
@@ -115,6 +119,27 @@ namespace Aries.Core.Sql
                 }
                 return "=";
             }
+        }
+        private static bool CheckSafe(SearchPara para)
+        {
+            //名称不能包含空格
+            if (string.IsNullOrEmpty(para.Name) || para.Name.Trim().IndexOfAny(new char[] { ' ' }) > -1)
+            {
+                return false;
+            }
+            if (!string.IsNullOrEmpty(para.Pattern) && para.Pattern.ToLower() == "likeor")
+            {
+                string value = Convert.ToString(para.Value).ToLower();
+                if (string.IsNullOrEmpty(value) || value.Contains("--") || (value.Contains("select") && value.Contains("from")))//禁止子查询
+                {
+                    return false;
+                }
+            }
+            else if (string.IsNullOrEmpty(para.Value) || para.Value.Trim().IndexOfAny(new char[] { ' ', '%' }) > -1)
+            {
+                return false;
+            }
+            return true;
         }
         #endregion
     }

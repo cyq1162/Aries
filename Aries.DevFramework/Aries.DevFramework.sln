@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aries.Logic", "Aries.Logic\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aries.Controllers", "Aries.Controllers\Aries.Controllers.csproj", "{B9A50B28-C8E1-421C-83D8-050A489F24BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CYQ.Data", "..\..\..\CYQ.Data-GitHub\trunk\CYQ.Data.csproj", "{BD5CCC87-278F-4FEB-AD23-157FCBA9FFA1}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,10 +31,6 @@ Global
 		{B9A50B28-C8E1-421C-83D8-050A489F24BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B9A50B28-C8E1-421C-83D8-050A489F24BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B9A50B28-C8E1-421C-83D8-050A489F24BF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BD5CCC87-278F-4FEB-AD23-157FCBA9FFA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BD5CCC87-278F-4FEB-AD23-157FCBA9FFA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BD5CCC87-278F-4FEB-AD23-157FCBA9FFA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BD5CCC87-278F-4FEB-AD23-157FCBA9FFA1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -516,10 +516,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\CYQ.Data-GitHub\trunk\CYQ.Data.csproj">
-      <Project>{bd5ccc87-278f-4feb-ad23-157fcba9ffa1}</Project>
-      <Name>CYQ.Data</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Aries.Controllers\Aries.Controllers.csproj">
       <Project>{b9a50b28-c8e1-421c-83d8-050a489f24bf}</Project>
       <Name>Aries.Controllers</Name>

@@ -74,8 +74,6 @@ Aries 最近录的几集视频教程，放个人微信公众号里了，有需�
 <p>&nbsp;3：给用户配好权限、配置好表头显示。</p>
 <p>&nbsp;4：开发完成，就是这么Easy，别问为什么。&nbsp;</p>
 <p><img style="line-height: 1.5;" src="http://images2015.cnblogs.com/blog/17408/201605/17408-20160513002235390-1329017153.jpg" alt="" />&nbsp;</p>
-<h1>Aries开源协议：&nbsp;</h1>
-<p>后续补充于SVN当中，你可以无偿使用于商业或非商业，但不得删除源码里关于原作者的相关信息。</p>
 <h1>源码SVN包含的三个目录：</h1>
 <p>1：<span style="line-height: 1.5;">Aries.DataBase 初始：数据表脚本、数据脚本、数据库设计文档。</span></p>
 <p>2：<span style="line-height: 1.5;">Aries.DevFramework 框架源代码。</span></p>

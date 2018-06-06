@@ -78,3 +78,4 @@ Aries 最近录的几集视频教程，放个人微信公众号里了，有需�
 <p>1：<span style="line-height: 1.5;">Aries.DataBase 初始：数据表脚本、数据脚本、数据库设计文档。</span></p>
 <p>2：<span style="line-height: 1.5;">Aries.DevFramework 框架源代码。</span></p>
 <p>3：<span style="line-height: 1.5;">Aries.Document API文档或帮助类文档。</span></p>
+<p>更多教程：https://www.cnblogs.com/cyq1162/category/828163.html</p>

@@ -44,7 +44,7 @@ namespace Microsoft.AspNetCore.Http
             }
         }
     }
-    public static class TaurusExtensions
+    public static class AriesExtensions
     {
         public static IApplicationBuilder UseAries(this IApplicationBuilder builder, IHostingEnvironment env)
         {

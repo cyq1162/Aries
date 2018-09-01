@@ -257,7 +257,7 @@
                         input.attr("objname", objName);
                     }
                     if (dataArray[i].rules) {
-                        this._setInputAttr(input, dataArray[i].rules, "$:", label,true);
+                        this._setInputAttr(input, dataArray[i].rules, "$:", label, true);
                     }
                     if (!input.attr("operator")) {
                         input.attr("operator", "=");
@@ -370,7 +370,7 @@
                 objName = undefined; cssName = undefined; input = undefined; input2 = undefined;
             }
         },
-        _setInputAttr: function ($input, rules, splitFlag, $label,isCombobox) {
+        _setInputAttr: function ($input, rules, splitFlag, $label, isCombobox) {
             if (typeof (rules) == "object") { rules = JSON.stringify(rules); }
             if (rules.indexOf('{') == -1) { return; }
             var sp = rules.split("{")//支持$:{} 只对查询的多选 $1:{}
@@ -484,7 +484,7 @@
             iframe = $('<iframe src="' + url + '" frameborder="0" style="border:0;width:100%;height:98%;"></iframe>');
             $("#AddWindow")[0] && $("#AddWindow").remove();
             var div = $("<div id='AddWindow' ></div>");
-            var default_options = {
+            var defaultOptions = {
                 title: title,
                 border: false,
                 fit: true,
@@ -496,7 +496,16 @@
                 modal: true,
                 cache: false
             }
-            div.window($.extend(default_options, opts));
+            if (opts) {
+                if (typeof (opts) == "string") {
+                    opts = JSON.parse(opts)
+                }
+                if(opts.width || opts.height)
+                {
+                    defaultOptions.fit = false;
+                }
+            }
+            div.window($.extend(defaultOptions, opts));
         }
         function close() {
             if (this.refresh == true) {

@@ -99,7 +99,7 @@
             *@param{string} url 提交的处理程序路径
             */
             this.commit = function ($target, mthodName, tableName, $validator, clearEmptyValue, callBack, url) {
-                var $targetForm = $validator || $target.parents("form");
+                var $targetForm = $validator || $($target.parents("form")[0]);
                 if ($validator && $validator != "true") {
                     $targetForm = $validator;
                 }

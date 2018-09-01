@@ -490,19 +490,22 @@
         *@param{string} url 打开页面的URL
         *@param{string} winTitle 打开窗口的标题
         *@param{string} lv2action 二级权限名称
+        *@param{json} opts window窗体的参数可以指定宽高等属性
         */
-        this.add = function (key, title, clickName, url, winTitle, lv2action) {
+        this.add = function (key, title, clickName, url, winTitle, lv2action, opts) {
             var btn = $(_getBtnTemp(key))[0];
             //设置添加按钮的连接
             if (key == 'edit') {
                 dg.ToolBar.BtnAdd.winUrl = url;
                 dg.ToolBar.BtnAdd.winTitle = (winTitle || "").replace($Core.Lang.edit, $Core.Lang.add);
+                dg.ToolBar.BtnAdd.opts = opts;
             }
             url && btn.setAttribute("url", url);
             winTitle && btn.setAttribute("winTitle", winTitle);
             title && btn.setAttribute("title", title);
             clickName && clickName != "null" && btn.setAttribute("click", clickName) && btn.setAttribute("hasClick", "1");
             btn.key = key;
+            btn.opts = opts
             btn.lv2action = lv2action || key;
             //var actionKeys = $Core.Global.Variable.actionKeys;//改异步后，这里不能进行权限过滤,内部做权限过滤
             //if ((actionKeys && actionKeys.indexOf(lv2action) != -1) || !lv2action) {
@@ -511,7 +514,7 @@
         };
 
         //打开业务页面
-        this._onOpen = function (el, value, thatID, index) {
+        this._onOpen = function (el, value, thatID, index, opts) {
             var dg = $Core.Global.DG.operating = $Core.Global.DG.Items[thatID]; //赋值当前对象到page属性方便调用
             var $aTarget = $(el);
             var op = $aTarget.attr("op");
@@ -543,7 +546,7 @@
                         }
                     }
                 }
-                $Core.Utility.Window.open(url, (winTitle || " "), op == 1);
+                $Core.Utility.Window.open(url, (winTitle || " "), op == 1, opts);
             }
 
         };
@@ -733,7 +736,7 @@
             btn_query.click(function () {
                 dg.Search.BtnQuery.onExecute(dg, btn_query);
             });
-            var $form = btn_query.parents("form");
+            var $form = $(btn_query.parents("form")[0]);
             //input，追加回车事件。
             $form.submit(function (e) { return false; });// 禁掉自动提交。（当表单只有一个输入框时，有些浏览器会自动触发回车即submit事件）"
             $form.find("input:[type='text']").each(function () {
@@ -803,7 +806,7 @@
                     var param = {};
                     if (dg.ToolBar.BtnImport.onBeforeExecute(param) == false) {
                         return false;
-                    }
+                    } 
                     this.setData(param);
                 }
             }(dg);
@@ -811,7 +814,9 @@
                 return function (file, data) {
                     //file 是文件名,data 是返回的东西
                     $.messager.progress('close');
-                    data = JSON.parse(data);
+                    if (typeof (data) == "string") {
+                        data = JSON.parse(data);
+                    }
                     if (data.success) {
                         $Core.Utility.Window.showMsg(data.msg);
                         dg.reload();

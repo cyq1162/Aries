@@ -244,7 +244,7 @@
             // html and xml are detected automatically.
             // Only useful when you are using json data as a response.
             // Set to "json" in that case. 
-            responseType: false,
+            responseType: 'json',
             // Class applied to button when mouse is hovered
             hoverClass: 'hover',
             // Class applied to button when AU is disabled

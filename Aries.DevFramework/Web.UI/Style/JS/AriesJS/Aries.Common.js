@@ -81,7 +81,7 @@
                         this.onBeforeExecute = function ($form) { };
                         this.onExecute = function (dg, btn_reset) {
                             if (!btn_reset) { btn_reset = this.$target; }
-                            var $form = btn_reset.parents("form");
+                            var $form = $(btn_reset.parents("form")[0]);
                             if (this.onBeforeExecute($form) == false) {
                                 return false;
                             }
@@ -168,6 +168,8 @@
                         this.winTitle = null;
                         //重新设定打开窗体的链接
                         this.winUrl = null;
+                        //重新设定打开窗体的参数
+                        this.opts = null;
                         //dg 是当前datagrid对象
                         this.onBeforeExecute = function (index, isSameLevel) { };
                         this.onExecute = function (dg, index, isSameLevel) {
@@ -225,7 +227,7 @@
                                 var href = location.href;
                                 var splitIndex = href.indexOf('List') == -1 ? href.lastIndexOf('.') : href.lastIndexOf('List');
                                 var viewLink = this.winUrl || href.substring(href.lastIndexOf('/') + 1, splitIndex) + 'Edit.html';
-                                $Core.Utility.Window.open(viewLink, this.winTitle, false);
+                                $Core.Utility.Window.open(viewLink, this.winTitle, false, this.opts);
 
                             }
                             this.onAfterExecute(index, isSameLevel);
@@ -463,7 +465,8 @@
                 if (btn_query) {
                     targetForm = btn_query.parents("form");
                     if (targetForm) {
-                        searchJson = $Core.Common._Internal.buildSearchJson(targetForm);
+                        //处理可能多个form嵌套的问题（取第1个，转为JQ对象）
+                        searchJson = $Core.Common._Internal.buildSearchJson($(targetForm[0]));
                     }
 
                 }
@@ -518,7 +521,10 @@
                 if (document.readyState == 'complete') {
                     var dg = $Core.Global.DG.operating;//解决下拉自动事件引发2次查询的问题。
                     if (!dg || dg.Internal.isLoadCompleted) {
-                        $(this).parents("form").find(".query").click();
+                        var targetForms = $(this).parents("form");
+                        if (targetForms) {
+                            $(targetForms[0]).find(".query").click();
+                        }
                     }
                 }
             },
@@ -631,7 +637,7 @@
                             if (dg.PKColumn.Editor.BtnDel.hidden != true && actionKeys.indexOf(",del,") > -1) {
                                 len++;
                                 var $btn = $($Core.Utility.stringFormat(strTemplate, "sc", $Core.Lang.del, "onDel", value, index));
-                                obj.set("del",{ "isCustom": false, $target: $btn });
+                                obj.set("del", { "isCustom": false, $target: $btn });
                                 $div.append($btn);
                             }
                         }
@@ -652,18 +658,20 @@
                         }
                     }
                     //自定义按钮
-                    for (var i = 0; i < btnArray.length; i++)
-                    {
-                        var btn = btnArray[i]; 
-                        if (!btn.isHidden && actionKeys.indexOf("," + btn.lv2action + ",") > -1)
-                        {
-                           
+                    for (var i = 0; i < btnArray.length; i++) {
+                        var btn = btnArray[i];
+                        if (!btn.isHidden && actionKeys.indexOf("," + btn.lv2action + ",") > -1) {
+
                             if (!btn.hasAttribute("hasClick")) {
                                 if (btn.className == 'sc') {
                                     btn.setAttribute("onclick", "AR.Common.onDel(this,'" + value + "','" + dg.id + "'," + index + ")");
                                 }
                                 else {
-                                    btn.setAttribute("onclick", "AR.Common.onOpen(this,'" + value + "','" + dg.id + "'," + index + ")");
+                                    var opts = "";;
+                                    if (btn.opts) {
+                                        opts = JSON.stringify(btn.opts);
+                                    }
+                                    btn.setAttribute("onclick", "AR.Common.onOpen(this,'" + value + "','" + dg.id + "'," + index + ",'" + opts + "')");
                                 }
                             }
                             len++;
@@ -703,7 +711,7 @@
                         };
                     }
                 } else {
-                    var isRelaction = false;
+                    // var isRelaction = false;
                     var type = 'validatebox', settings = {};
                     if (row.formatter && row.formatter.indexOf('#') != -1) {
                         type = 'combobox';
@@ -717,7 +725,7 @@
                                 var _obj_array = objName.split('=>');
                                 objName = _obj_array[0];
                                 parentObjName = _obj_array[1];
-                                isRelaction = true;
+                                //isRelaction = true;
                             }
                         }
                         if (configKey) {
@@ -730,20 +738,25 @@
                             }
                         }
                         var isMultiple = false;//先不支持行内编辑的多选
-                        if (row.rules && typeof (row.rules) == "string" && (row.rules.indexOf("$1:{") > -1 || row.rules.indexOf("$2:{") > -1)) {
+                        var cascade = true;//是否允许引发级联
+                        if (row.rules && typeof (row.rules) == "string" && row.rules.indexOf("$") > -1 && row.rules.indexOf(":{") > -1) {
                             var sp = row.rules.split("{");
                             sp = eval("({" + sp[sp.length - 1] + ")");
                             isMultiple = sp.multiple && sp.multiple.toString() != "false";
+                            cascade = sp.cascade && sp.cascade.toString() != "false";
                         }
                         settings.options = {
                             multiple: isMultiple,
+                            cascade: cascade,
                             valueField: 'value',
                             textField: 'text',
                             objName: objName,
                             parentObjName: parentObjName,
                             OriginalData: data,
-                            data: data,
-                            onSelect: function (record) {
+                            data: data
+                        }
+                        if (cascade) {
+                            settings.options.onSelect = function (record) {
                                 var currentEditor = dg.datagrid("getEditor", { index: dg.PKColumn.Editor.editIndex, field: row.field });
                                 var rowEditors = dg.datagrid("getEditors", dg.PKColumn.Editor.editIndex);
                                 for (var i = 0, len = rowEditors.length; i < len; i++) {
@@ -960,9 +973,9 @@
             如果没有别的业务需求不建议重写
         */
         //打开业务页面
-        onOpen: function (el, value, thatID, index) {
+        onOpen: function (el, value, thatID, index, opts) {
             var dg = $Core.Global.DG.operating = $Core.Global.DG.Items[thatID]; //赋值当前对象到page属性方便调用
-            dg.PKColumn._onOpen(el, value, thatID, index);
+            dg.PKColumn._onOpen(el, value, thatID, index, opts);
         }
 
     }
@@ -1055,51 +1068,51 @@
     //创建工具栏区
     function _createToolBarHtml(dg) {
         if (!dg.ToolBar || !dg.ToolBar.$target || dg.ToolBar.$target[0].innerHTML) { return; }
-            var item; actionKeys = $Core.Global.Variable.actionKeys || "";
-            if (actionKeys.indexOf(',add,') > -1 && !dg.ToolBar.BtnAdd.isHidden) {
-                dg.ToolBar.BtnAdd.$target = $('<input class=\"add\" flag=\"btn_add\" type=\"button\" name=\"' + $Core.Lang.add + '\" value=\"\"/>');
-                item = $("<a>").append(dg.ToolBar.BtnAdd.$target);
+        var item; actionKeys = $Core.Global.Variable.actionKeys || "";
+        if (actionKeys.indexOf(',add,') > -1 && !dg.ToolBar.BtnAdd.isHidden) {
+            dg.ToolBar.BtnAdd.$target = $('<input class=\"add\" flag=\"btn_add\" type=\"button\" name=\"' + $Core.Lang.add + '\" value=\"\"/>');
+            item = $("<a>").append(dg.ToolBar.BtnAdd.$target);
+            dg.ToolBar.$target.append(item);
+            dg.ToolBar.Items.set("add", dg.ToolBar.BtnAdd);
+        }
+        if (actionKeys.indexOf(',del,') > -1 && !dg.ToolBar.BtnDelBatch.isHidden && dg.isShowCheckBox) {
+            dg.ToolBar.BtnDelBatch.$target = $('<input  class=\"batch_del\" flag=\"btn_del\" type=\"button\" name=\"' + $Core.Lang.batchDel + '\" value=\"\"/>').attr("dgID", dg.id);
+            item = $("<a>").append(dg.ToolBar.BtnDelBatch.$target);
+            dg.ToolBar.$target.append(item);
+            dg.ToolBar.Items.set("del", dg.ToolBar.BtnDelBatch);
+        }
+        if (actionKeys.indexOf(',export,') > -1 && !dg.ToolBar.BtnExport.isHidden) {
+            dg.ToolBar.BtnExport.$target = $('<input class=\"export\" flag=\"btn_export\" type=\"button\"  value=\"\"/>');
+            item = $("<a>").append(dg.ToolBar.BtnExport.$target);
+            dg.ToolBar.$target.append(item);
+            dg.ToolBar.Items.set("export", dg.ToolBar.BtnExport);
+        }
+        if (actionKeys.indexOf(',import,') > -1) {
+            if (!dg.ToolBar.BtnImport.isHidden) {
+                dg.ToolBar.BtnImport.$target = $('<input class=\"import\" flag=\"btn_import\" type=\"button\"  value=\"\"/>');
+                item = $("<a>").append(dg.ToolBar.BtnImport.$target);
                 dg.ToolBar.$target.append(item);
-                dg.ToolBar.Items.set("add", dg.ToolBar.BtnAdd);
+                dg.ToolBar.Items.set("import", dg.ToolBar.BtnImport);
             }
-            if (actionKeys.indexOf(',del,') > -1 && !dg.ToolBar.BtnDelBatch.isHidden && dg.isShowCheckBox) {
-                dg.ToolBar.BtnDelBatch.$target = $('<input  class=\"batch_del\" flag=\"btn_del\" type=\"button\" name=\"' + $Core.Lang.batchDel + '\" value=\"\"/>').attr("dgID", dg.id);
-                item = $("<a>").append(dg.ToolBar.BtnDelBatch.$target);
+            if (!dg.ToolBar.BtnExportTemplate.isHidden) {
+                dg.ToolBar.BtnExportTemplate.$target = $('<input class=\"btn-sm\" flag=\"btn_export_template\" type=\"button\"  value=\"' + $Core.Lang.exportTemplate + '\"/>');
+                item = $("<a>").append(dg.ToolBar.BtnExportTemplate.$target);
                 dg.ToolBar.$target.append(item);
-                dg.ToolBar.Items.set("del", dg.ToolBar.BtnDelBatch);
+                dg.ToolBar.Items.set("exportTemplate", dg.ToolBar.BtnExportTemplate);
             }
-            if (actionKeys.indexOf(',export,') > -1 && !dg.ToolBar.BtnExport.isHidden) {
-                dg.ToolBar.BtnExport.$target = $('<input class=\"export\" flag=\"btn_export\" type=\"button\"  value=\"\"/>');
-                item = $("<a>").append(dg.ToolBar.BtnExport.$target);
-                dg.ToolBar.$target.append(item);
-                dg.ToolBar.Items.set("export", dg.ToolBar.BtnExport);
-            }
-            if (actionKeys.indexOf(',import,') > -1) {
-                if (!dg.ToolBar.BtnImport.isHidden) {
-                    dg.ToolBar.BtnImport.$target = $('<input class=\"import\" flag=\"btn_import\" type=\"button\"  value=\"\"/>');
-                    item = $("<a>").append(dg.ToolBar.BtnImport.$target);
-                    dg.ToolBar.$target.append(item);
-                    dg.ToolBar.Items.set("import", dg.ToolBar.BtnImport);
-                }
-                if (!dg.ToolBar.BtnExportTemplate.isHidden) {
-                    dg.ToolBar.BtnExportTemplate.$target = $('<input class=\"btn-sm\" flag=\"btn_export_template\" type=\"button\"  value=\"' + $Core.Lang.exportTemplate + '\"/>');
-                    item = $("<a>").append(dg.ToolBar.BtnExportTemplate.$target);
-                    dg.ToolBar.$target.append(item);
-                    dg.ToolBar.Items.set("exportTemplate", dg.ToolBar.BtnExportTemplate);
-                }
-            }
-            //}
-            //else {//处理样式问题（如果去掉或隐藏div_fn，或不设置class为function-box，都显示不出分页控件，只有后期改变其属性）
-            //    div_fn.attr("style", "height:0px;padding:0 0;border-bottom:0px");
-            //}
-            //dg.ToolBar.$target = div_fn;
-            //dg.ToolArea.$target.append(dg.ToolBar.$target);
-            _createCustomButton(dg);
-            //检测有没有工具栏，如果没有，自动隐藏
-            if (dg.ToolBar.Items.length == 0) {
-                dg.ToolBar.$target.hide();
-                dg.ToolBar.$target.attr("style", "height:0px;padding:0 0;border-bottom:0px");
-            }
+        }
+        //}
+        //else {//处理样式问题（如果去掉或隐藏div_fn，或不设置class为function-box，都显示不出分页控件，只有后期改变其属性）
+        //    div_fn.attr("style", "height:0px;padding:0 0;border-bottom:0px");
+        //}
+        //dg.ToolBar.$target = div_fn;
+        //dg.ToolArea.$target.append(dg.ToolBar.$target);
+        _createCustomButton(dg);
+        //检测有没有工具栏，如果没有，自动隐藏
+        if (dg.ToolBar.Items.length == 0) {
+            dg.ToolBar.$target.hide();
+            dg.ToolBar.$target.attr("style", "height:0px;padding:0 0;border-bottom:0px");
+        }
     }
     //创建自定义工具条。
     function _createCustomButton(dg) {
@@ -1123,8 +1136,8 @@
                     var btnClass = btn.css || "btn-sm";
                     var btnClick = btn.click;
                     var title = btn.title;
-                    var classText = btnClass ? "class=\""+btnClass+"\"" : "";
-                    var clickText = btnClick && btnClass!="null" ? "onclick=\"" + btnClick + "(this,'"+dg.id+"')\"" : "";
+                    var classText = btnClass ? "class=\"" + btnClass + "\"" : "";
+                    var clickText = btnClick && btnClass != "null" ? "onclick=\"" + btnClick + "(this,'" + dg.id + "')\"" : "";
                     item = $Core.Utility.stringFormat('<a><input type=\"button\" {0} {1}  value=\"{2}\"/></a>', classText, clickText, title);
                 }
                 item = $(item);
@@ -1147,8 +1160,8 @@
             }
         }
     }
-   
-   
+
+
     function getDgByKey(key) {
         return $Core.Global.DG.Items[key];
     }

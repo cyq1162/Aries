@@ -43,6 +43,7 @@
                 op.onSelect = eval(selFun);
             }
         }
+        op.cascade = $input.attr("cascade") != "false";//是否能引发级联
         return op;
     }
     function bindConfigKey($input) {
@@ -82,9 +83,10 @@
     }
     //级联绑定共用函数部分
     function _cascadeBindCombo($input, op) {
+        //if (!op.cascade) { return;}
         //判断是否级联模式（存在下级节点）
         var $parent = $("[parent='" + op.key + "']");
-        if ($parent && $parent.length > 0) {
+        if (op.cascade && $parent && $parent.length > 0) {
             op.onSelect = function ($p, $box, op) {
                 return function (record) {
                     var pid = record[op.valueField];

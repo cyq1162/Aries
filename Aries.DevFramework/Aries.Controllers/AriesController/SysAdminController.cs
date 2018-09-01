@@ -90,11 +90,11 @@ namespace Aries.Controllers
             {
                 case "V_SYS_UserList"://重写是为了支持文本数据库
                     return Select(GridConfig.SelectType.All).FindRow(GetID);
-                    //if (AppConfig.DB.DefaultDalType == DalType.Txt)
-                    //{
-                       
-                    //}
-                    //break;
+                //if (AppConfig.DB.DefaultDalType == DalType.Txt)
+                //{
+
+                //}
+                //break;
             }
             return base.GetOne();
         }
@@ -107,16 +107,21 @@ namespace Aries.Controllers
                     dt = base.Select(st);
                     if (dt == null || dt.Rows.Count == 0)
                     {
-                        sysLogic.InitExcelColumn();
-                        //从Excel读取列写入
-                        dt = base.Select(st);
+                        string where = GetWhere();
+                        if (!where.Contains(" and "))//包含其它查询条件时
+                        {
+                            sysLogic.InitExcelColumn();
+
+                            //从Excel读取列写入
+                            dt = base.Select(st);
+                        }
                     }
                     break;
                 case "V_SYS_UserList"://重写是为了支持文本数据库
                     dt = sysLogic.GetUserList(st);
                     //if (AppConfig.DB.DefaultDalType == DalType.Txt)
                     //{
-                        
+
                     //}
                     //else
                     //{

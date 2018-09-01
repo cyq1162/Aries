@@ -9,6 +9,7 @@ using Aries.Core.DB;
 using Aries.Core.Sql;
 using CYQ.Data.Aop;
 using CYQ.Data.Tool;
+using Aries.Core.Extend;
 
 namespace Aries.Core.Config
 {
@@ -161,7 +162,7 @@ namespace Aries.Core.Config
             bool isOK = false;
             foreach (var table in tables)//重置列头。
             {
-                MDataColumn mdc = DBTool.GetColumns(table);
+                MDataColumn mdc = DBTool.GetColumns(CrossDb.GetEnum(table));
                 foreach (var cs in dt.Columns)
                 {
                     string[] items = cs.ColumnName.Split('.');
@@ -237,7 +238,7 @@ namespace Aries.Core.Config
                         names[i] = dtImportUnique.Rows[i].Get<string>(Config_Grid.Field);
                     }
                 }
-                return dt.AcceptChanges(AcceptOp.Auto, null, names);
+                return dt.AcceptChanges(AcceptOp.Auto, CrossDb.GetConn(dt.TableName), names);
             }
             bool result = true;
             //获取相关配置
@@ -278,7 +279,7 @@ namespace Aries.Core.Config
                         {
                             foreach (var foreignRow in foreignTable.Rows)
                             {
-                                string formatter = foreignRow.Get<string>("Formatter");
+                                string formatter = foreignRow.Get<string>("Formatter", "").Trim('.');
                                 string fTableName = foreignRow.Get<string>("ForeignTable");
                                 if (string.IsNullOrEmpty(formatter))
                                 {

@@ -242,9 +242,11 @@ namespace Aries.Core.Config
                                     switch (defaultValue.ToLower())
                                     {
                                         case "now()":
+                                        case "getdate()":
                                             row[i].Value = DateTime.Now;
                                             break;
                                         case "newid()":
+                                        case "uuid()":
                                             row[i].Value = Guid.NewGuid();
                                             break;
                                         default:

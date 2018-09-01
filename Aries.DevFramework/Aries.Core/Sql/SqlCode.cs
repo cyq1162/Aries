@@ -230,7 +230,7 @@ namespace Aries.Core.Sql
             }
             if (sql.IndexOf("@SuperAdminRoleID", StringComparison.OrdinalIgnoreCase) > -1)
             {
-                sql = Regex.Replace(sql, "@SuperAdminRoleID", (UserAuth.IsSuperAdmin ? Guid.Empty.ToString() : UserAuth.SuperAdminRoleID), RegexOptions.IgnoreCase);
+                sql = Regex.Replace(sql, "@SuperAdminRoleID", (UserAuth.IsSuperAdmin ? UserAuth.SuperAdminRoleID : Guid.Empty.ToString()), RegexOptions.IgnoreCase);
             }
             string key = null;
             //自动配置其它属性
@@ -268,7 +268,7 @@ namespace Aries.Core.Sql
                     {
                         if (key.EndsWith(".sql"))
                         {
-                            File.WriteAllText(folder + key,"//sql for aries",Encoding.Default);
+                            File.WriteAllText(folder + key, "//sql for aries", Encoding.Default);
                         }
                         else if (!key.Contains("."))
                         {

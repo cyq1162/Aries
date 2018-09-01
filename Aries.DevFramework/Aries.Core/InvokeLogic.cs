@@ -17,37 +17,46 @@ namespace Aries.Core
         internal const string AriesController = "Aries.Core.Controller";
 
         #region GetAssembly
-        private static string _DllName;
-        public static string DllName
+        private static string _DllNames;
+        /// <summary>
+        /// Dll名称，多个则用，号分隔
+        /// </summary>
+        public static string DllNames
         {
             get
             {
-                if (string.IsNullOrEmpty(_DllName))
+                if (string.IsNullOrEmpty(_DllNames))
                 {
-                    _DllName = AppConfig.GetApp("Aries.Controllers", "Aries.Controllers");
+                    _DllNames = AppConfig.GetApp("Aries.Controllers", "Aries.Controllers");
                 }
-                return _DllName;
+                return _DllNames;
             }
         }
-        private static Assembly _Assembly;
-        public static Assembly GetAssembly()
+        private static List<Assembly> _Assemblys;
+        public static List<Assembly> GetAssemblys()
         {
-            if (_Assembly == null)
+            if (_Assemblys == null)
             {
-                try
+                string[] dllItems = DllNames.Split(',');
+                _Assemblys = new List<Assembly>(dllItems.Length);
+                foreach (string item in dllItems)
                 {
-                    _Assembly = Assembly.Load(DllName);
+                    _Assemblys.Add(Assembly.Load(item)); // 可直接抛异常。
                 }
-                catch (Exception err)
-                {
-                    Log.WriteLogToTxt(err);
-                }
+                //try
+                //{
+                //_Assemblys = 
+                //}
+                //catch (Exception err)
+                //{
+                //    Log.WriteLogToTxt(err);
+                //}
             }
-            return _Assembly;
+            return _Assemblys;
         }
         public static string GetClassFullName(string className)
         {
-            return DllName + "." + className;
+            return DllNames + "." + className;
         }
         #endregion
 
@@ -57,7 +66,7 @@ namespace Aries.Core
         /// <summary>
         /// 获取控制器
         /// </summary>
-        private static Dictionary<string, Type> GetControllers()
+        public static Dictionary<string, Type> GetControllers()
         {
             if (_AriesControllers.Count == 0)
             {
@@ -65,28 +74,35 @@ namespace Aries.Core
                 {
                     if (_AriesControllers.Count == 0)
                     {
-                        Assembly ass = GetAssembly();
-                        Type[] typeList = ass.GetExportedTypes();
-                        foreach (Type type in typeList)
+                        List<Assembly> assList = GetAssemblys();
+                        if (assList == null)
                         {
-                            if (type.BaseType != null && type.BaseType.FullName == AriesController)
+                            throw new Exception("Please make sure web.config'appSetting <add key=\"Aries.Controllers\" value=\"YourControllerProjectName\") is right!");
+                        }
+                        foreach (Assembly ass in assList)
+                        {
+                            Type[] typeList = ass.GetExportedTypes();
+                            foreach (Type type in typeList)
                             {
-                                #region Aries
-                                if (type.Name == DefaultController)
+                                if (type.BaseType != null && (type.BaseType.FullName == AriesController || (type.BaseType.BaseType != null && type.BaseType.BaseType.FullName == AriesController)))
                                 {
-                                    _AriesControllers.Add(DefaultController, type);
-                                }
-                                else
-                                {
-                                    string[] names = type.FullName.ToLower().Split('.'); //Aa.SystemController
-                                    if (names.Length > 1)
+                                    #region Aries
+                                    if (type.Name == DefaultController)
                                     {
-                                        string className = names[names.Length - 1];
-                                        className = className.Replace(Controller.ToLower(), "");
-                                        _AriesControllers.Add(names[names.Length - 2] + "." + className, type);
+                                        _AriesControllers.Add(DefaultController, type);
                                     }
+                                    else
+                                    {
+                                        string[] names = type.FullName.ToLower().Split('.'); //Aa.SystemController
+                                        if (names.Length > 1)
+                                        {
+                                            string className = names[names.Length - 1];
+                                            className = className.Replace(Controller.ToLower(), "");
+                                            _AriesControllers.Add(names[names.Length - 2] + "." + className, type);
+                                        }
+                                    }
+                                    #endregion
                                 }
-                                #endregion
                             }
                         }
                     }
@@ -155,7 +171,7 @@ namespace Aries.Core
         #region GetMethods
         static Dictionary<string, Dictionary<string, MethodInfo>> typeMethods = new Dictionary<string, Dictionary<string, MethodInfo>>();
         static readonly object objlockMethod = new object();
-        internal static MethodInfo GetMethod(Type t, string methodName)
+        public static MethodInfo GetMethod(Type t, string methodName)
         {
             string key = t.FullName;
             Dictionary<string, MethodInfo> dic = null;

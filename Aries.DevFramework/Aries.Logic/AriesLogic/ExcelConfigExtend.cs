@@ -15,6 +15,14 @@ namespace Aries.Logic
     /// </summary>
     public class ExcelConfigExtend : IExcelConfig
     {
+        /// <summary>
+        /// 是否启用此类（如果启用，则改成返回true）
+        /// </summary>
+        public bool IsUse
+        {
+            get { return false; }
+        }
+
         private MAction _MAction;
         /// <summary>
         /// 获取新的MAction对象(因为在子事务中，所以需要设置事务级别，怕开发人员不懂事务机制，所以提供这个方法）
@@ -88,6 +96,7 @@ namespace Aries.Logic
         {
             return ExcelResult.Default;
         }
+
 
 
     }

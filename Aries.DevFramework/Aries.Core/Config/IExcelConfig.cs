@@ -6,6 +6,10 @@ namespace Aries.Core.Config
 
     public interface IExcelConfig : IDisposable
     {
+        /// <summary>
+        /// 启用标识
+        /// </summary>
+        bool IsUse { get; }
         ExcelResult BeforeUpdate(MDataRow actionRow, MDataRow sourceRow);
         ExcelResult BeforeInsert(MDataRow actionRow, MDataRow sourceRow, out string errMsg);
         void AfterInsert(MDataRow actionRow, MDataRow sourceRow, bool isEnd);
@@ -55,17 +59,22 @@ namespace Aries.Core.Config
 
         public void AfterInsert(MDataRow actionRow, MDataRow sourceRow, bool isEnd)
         {
-            
+
         }
 
         public void OnInsertError(string errMsg, MDataTable dt)
         {
-           
+
         }
 
         public void Dispose()
         {
-           
+
+        }
+
+        public bool IsUse
+        {
+            get { return true; }
         }
     }
 

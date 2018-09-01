@@ -171,7 +171,14 @@ namespace Aries.Core
                 case "Get":
                     if (!p.Exists(ObjName))
                     {
-                        if (WebHelper.IsKeyInHtml(ObjName))
+                        bool isOK = false;
+                        Uri uri = context.Request.UrlReferrer;
+                        if (uri != null && Path.GetFileNameWithoutExtension(uri.LocalPath).ToLower() == "customview")
+                        {
+                            isOK = uri.Query.IndexOf("objName=" + ObjName, StringComparison.OrdinalIgnoreCase) > -1 ||
+                                uri.Query.IndexOf("tableName=" + ObjName, StringComparison.OrdinalIgnoreCase) > -1;
+                        }
+                        if (isOK || WebHelper.IsKeyInHtml(ObjName))
                         {
                             p.Set(ObjName, null);
                             return true;
@@ -337,17 +344,20 @@ namespace Aries.Core
             get
             {
                 string id = Query<string>("id");
-                if (string.IsNullOrEmpty(id) && HttpContext.Current.Request.QueryString.Keys.Count > 0)
+                if (string.IsNullOrEmpty(id))
                 {
-                    for (int i = 0; i < HttpContext.Current.Request.QueryString.Keys.Count; i++)
+                    if (HttpContext.Current.Request.QueryString.Keys.Count > 0)
                     {
-                        if (HttpContext.Current.Request.QueryString.Keys[i].ToLower().EndsWith("id"))
+                        for (int i = 0; i < HttpContext.Current.Request.QueryString.Keys.Count; i++)
                         {
-                            return Query<string>(HttpContext.Current.Request.QueryString.Keys[i], string.Empty);
+                            if (HttpContext.Current.Request.QueryString.Keys[i].ToLower().EndsWith("id"))
+                            {
+                                return Query<string>(HttpContext.Current.Request.QueryString.Keys[i], string.Empty);
+                            }
                         }
                     }
                 }
-                if (id.IndexOf(',') == -1)
+                else if (id.IndexOf(',') == -1)
                 {
                     id = id.Trim('\'');//单个值，去掉批量时带来的引号
                 }
@@ -459,7 +469,7 @@ namespace Aries.Core
         /// </summary>
         public virtual void GetList()
         {
-            jsonResult = Select(GridConfig.SelectType.Show).ToJson(true, false,RowOp.None, true);
+            jsonResult = Select(GridConfig.SelectType.Show).ToJson(true, false, RowOp.None, true);
         }
         /// <summary>
         /// 获取一行数据。

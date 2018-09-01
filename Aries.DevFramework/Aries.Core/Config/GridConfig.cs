@@ -141,7 +141,7 @@ namespace Aries.Core.Config
                 row.Set(Config_Grid.ObjName, objName);
                 row.Set(Config_Grid.Field, cell.ColumnName);
                 row.Set(Config_Grid.Title, fieldTitleDic.ContainsKey(cell.ColumnName) ? fieldTitleDic[cell.ColumnName] : cell.ColumnName);
-                row.Set(Config_Grid.Hidden, i == 0 && jointPrimaryCount < 2);
+                row.Set(Config_Grid.Hidden, (i == 0 && jointPrimaryCount < 2) || i > 25);//超过25个字段，后面的都先隐藏。
                 row.Set(Config_Grid.OrderNum, (i + 1) * 10);
                 row.Set(Config_Grid.Width, 100);
                 row.Set(Config_Grid.Sortable, i > 0);
@@ -207,19 +207,19 @@ namespace Aries.Core.Config
         /// <param name="objCode"></param>
         /// <param name="dt">原有数据</param>
         /// <returns></returns>
-        public static bool Flesh(string objName, string objCode, MDataTable dt,out string msg)
+        public static bool Flesh(string objName, string objCode, MDataTable dt, out string msg)
         {
 
             bool result = false;
-            msg = LangConst.NoNewColumn ;
+            msg = LangConst.NoNewColumn;
             MDataTable newDt = dt.GetSchema(false);
             //移除表结构缓存
-            string tableKey = CacheManage.GetKey(CacheKeyType.Schema, objName, CrossDb.GetDBName(objName),CrossDb.GetDalType(objName));
+            string tableKey = CacheManage.GetKey(CacheKeyType.Schema, objName, CrossDb.GetDBName(objName), CrossDb.GetDalType(objName));
             CacheManage.LocalInstance.Remove(tableKey);
             FillTable(objName, objCode, newDt);//重新获取。
 
             MDataTable addTable = dt.GetSchema(false);
-           // bool needUpdate = false;
+            // bool needUpdate = false;
             foreach (MDataRow row in newDt.Rows)
             {
                 MDataRow mr = dt.FindRow(string.Format("Field='{0}'", row.Get<string>("Field")));
@@ -237,7 +237,7 @@ namespace Aries.Core.Config
                 result = addTable.AcceptChanges(AcceptOp.InsertWithID);
                 if (!result)
                 {
-                    msg=Convert.ToString((Exception)addTable.DynamicData);
+                    msg = Convert.ToString((Exception)addTable.DynamicData);
                 }
             }
 

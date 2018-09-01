@@ -1,4 +1,0 @@
-,
-{"ExcelID":"f8754ebd-b722-0e9d-002f-2510100d07cf","ExcelName":"V_Test2","Description":"V_Test2222","TableNames":"Demo_TestA,Demo_TestB","StartIndex":0,"HeadCrossRowNum":0,"WhereType":0,"AcceptType":0,"CreateTime":"2016-10-20 00:00:00"},
-{"ExcelID":"a3410cbc-144d-e90e-53ed-897eee8df4e6","ExcelName":"V_Test","Description":"V_Test333","TableNames":"Demo_TestA,Demo_TestB","StartIndex":0,"HeadCrossRowNum":0,"WhereType":0,"AcceptType":1,"CreateTime":"2016-05-09 09:18:26"},
-{"ExcelID":"fb700287-84c2-8118-f8bd-b70f458ac48f","ExcelName":"V_Test3","Description":"’‚ «≤‚ ‘µƒ3333434","TableNames":"Demo_TestA,Demo_TestB","StartIndex":0,"HeadCrossRowNum":0,"WhereType":0,"AcceptType":0,"CreateTime":"2016-11-28 00:00:00"}

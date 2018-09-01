@@ -3,7 +3,7 @@
 --说明：注意命名规范:C_模块名_业务名 and PCode in (@parent)
 --说明： 框架的，请勿修改，业务的，请将Sql_Yours.sql改名，并写在Sql_Yours.sql中
 
-C_SYS_Role=	 SELECT RoleID AS value, RoleName AS text FROM Sys_Role where RoleID<>'@SuperAdminRoleID'
+C_SYS_Role=	 SELECT RoleID AS value, RoleName AS text FROM Sys_Role --where RoleID<>'@SuperAdminRoleID'
 C_SYS_Department=SELECT ID AS value, DepartmentName AS text,ParentID as TopComID FROM System_Department  where DepartmentName like '%@para%'
 --区域表
 

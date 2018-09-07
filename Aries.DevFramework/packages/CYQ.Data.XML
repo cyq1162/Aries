@@ -194,7 +194,7 @@
         </member>
         <member name="P:CYQ.Data.AppConfig.DB.MasterSlaveTime">
             <summary>
-            读写分离时用户对主数据库操作持续时间，默认值10秒（单位：秒）
+            读写分离时用户对主数据库操作持续时间，默认值10秒s（单位：秒s）
             </summary>
         </member>
         <member name="T:CYQ.Data.AppConfig.Cache">
@@ -215,6 +215,7 @@
         <member name="P:CYQ.Data.AppConfig.Cache.RedisServers">
             <summary>
             Redis分布式缓存的服务器配置，多个用逗号（,）分隔
+            格式：ip:port - password
             </summary>
         </member>
         <member name="P:CYQ.Data.AppConfig.Cache.RedisUseDBCount">
@@ -229,7 +230,8 @@
         </member>
         <member name="P:CYQ.Data.AppConfig.Cache.RedisServersBak">
             <summary>
-            Redis  备份服务器（当主服务器挂了后，请求会转向备用机）
+            Redis  备份服务器（当主服务器挂了后，请求会转向备用机），多个用逗号（,）分隔
+            格式：ip:port - password
             </summary>
         </member>
         <member name="P:CYQ.Data.AppConfig.Cache.DefaultCacheTime">
@@ -308,6 +310,11 @@
             <summary>
             开启信息调试记录：开启后MAction.DebugInfo可输出执行日志。
             同时AppDebug若要使用，也需要开启此项。
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.AppConfig.UI.AutoPrefixs">
+            <summary>
+            UI取值的默认前缀（ddl,chb,txt)，多个用逗号（,）分隔
             </summary>
         </member>
         <member name="T:CYQ.Data.AppConst">
@@ -1679,7 +1686,7 @@
             备份的Socket池，如果某主机挂了，在配置了备份的情况下，会由备份Socket池提供服务。
             </summary>
         </member>
-        <member name="M:CYQ.Data.Cache.ServerPool.#ctor(System.String[])">
+        <member name="M:CYQ.Data.Cache.ServerPool.#ctor(System.String[],CYQ.Data.Cache.CacheType)">
             <summary>
             Internal constructor. This method takes the array of hosts and sets up an internal list of socketpools.
             </summary>
@@ -1705,6 +1712,11 @@
             <summary>
             The SocketPool encapsulates the list of PooledSockets against one specific host, and contains methods for 
             acquiring or returning PooledSockets.
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Cache.SocketPool.password">
+            <summary>
+            扩展属性：如果链接后需要验证密码（如Redis可设置密码）
             </summary>
         </member>
         <member name="F:CYQ.Data.Cache.SocketPool.socketPoolBak">
@@ -1922,6 +1934,11 @@
         <member name="F:CYQ.Data.ConnBean.IsOK">
             <summary>
             链接的状态是否正常。
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.ConnBean.IsSlave">
+            <summary>
+            是否从库
             </summary>
         </member>
         <member name="F:CYQ.Data.ConnBean.ErrorMsg">
@@ -3156,7 +3173,7 @@
             输出Xml文档
             </summary>
         </member>
-        <member name="M:CYQ.Data.Table.MDataTable.ToXml(System.Boolean)">
+        <member name="M:CYQ.Data.Table.MDataTable.ToXml(System.Boolean,System.Boolean,System.Boolean)">
             <summary>
             输出Xml文档
             </summary>
@@ -4770,7 +4787,7 @@
             MDataTable查询过滤器
             </summary>
         </member>
-        <member name="M:CYQ.Data.Table.MDataTableFilter.GetTFilter(System.Object,CYQ.Data.Table.MDataColumn)">
+        <member name="M:CYQ.Data.Table.MDataTableFilter.GetTFilter(System.Object,CYQ.Data.Table.MDataColumn,System.Collections.Generic.List{CYQ.Data.Table.TFilter}@)">
             <summary>
             多个条件
             </summary>
@@ -4811,6 +4828,69 @@
             先自动识别UTF8，否则归到Default编码读取
             </summary>
             <returns></returns>
+        </member>
+        <member name="T:CYQ.Data.Tool.TextEncodingDetect">
+            <summary>
+            字节文本编码检测
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Tool.TextEncodingDetect.IsChinese">
+            <summary>
+            是否中文
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Tool.TextEncodingDetect.DetectWithoutBom(System.Byte[],System.Int32)">
+            <summary>
+                Automatically detects the Encoding type of a given byte buffer.
+            </summary>
+            <param name="buffer">The byte buffer.</param>
+            <param name="size">The size of the byte buffer.</param>
+            <returns>The Encoding type or Encoding.None if unknown.</returns>
+        </member>
+        <member name="M:CYQ.Data.Tool.TextEncodingDetect.CheckByNewLineChar(System.Byte[],System.Int32)">
+            <summary>
+                Checks if a buffer contains text that looks like utf16 by scanning for
+                newline chars that would be present even in non-english text.
+                以检测换行符标识来判断。
+            </summary>
+            <param name="buffer">The byte buffer.</param>
+            <param name="size">The size of the byte buffer.</param>
+            <returns>Encoding.none, Encoding.Utf16LeNoBom or Encoding.Utf16BeNoBom.</returns>
+        </member>
+        <member name="M:CYQ.Data.Tool.TextEncodingDetect.ContainsZero(System.Byte[],System.Int32)">
+            <summary>
+            Checks if a buffer contains any nulls. Used to check for binary vs text data.
+            </summary>
+            <param name="buffer">The byte buffer.</param>
+            <param name="size">The size of the byte buffer.</param>
+        </member>
+        <member name="M:CYQ.Data.Tool.TextEncodingDetect.CheckByZeroNumPercent(System.Byte[],System.Int32)">
+            <summary>
+                Checks if a buffer contains text that looks like utf16. This is done based
+                on the use of nulls which in ASCII/script like text can be useful to identify.
+                按照一定的空0数的概率来预测。
+            </summary>
+            <param name="buffer">The byte buffer.</param>
+            <param name="size">The size of the byte buffer.</param>
+            <returns>Encoding.none, Encoding.Utf16LeNoBom or Encoding.Utf16BeNoBom.</returns>
+        </member>
+        <member name="M:CYQ.Data.Tool.TextEncodingDetect.CheckUtf8(System.Byte[],System.Int32)">
+            <summary>
+                Checks if a buffer contains valid utf8.
+                以UTF8 的字节范围来检测。
+            </summary>
+            <param name="buffer">The byte buffer.</param>
+            <param name="size">The size of the byte buffer.</param>
+            <returns>
+                Encoding type of Encoding.None (invalid UTF8), Encoding.Utf8NoBom (valid utf8 multibyte strings) or
+                Encoding.ASCII (data in 0.127 range).
+            </returns>
+            <returns>2</returns>
+        </member>
+        <member name="M:CYQ.Data.Tool.TextEncodingDetect.CheckChinese(System.Byte[],System.Int32)">
+            <summary>
+            是否中文编码（GB2312、GBK、Big5）
+            </summary>
         </member>
         <member name="T:CYQ.Data.Tool.EscapeOp">
             <summary>

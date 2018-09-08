@@ -1638,6 +1638,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:CYQ.Data.Cache.MSocket.ReadBytes(System.Int32)">
+            <summary>
+            读一行的数据
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:CYQ.Data.Cache.MSocket.ReadResponse">
             <summary>
             Reads a response line from the socket, checks for general memcached errors, and returns the line.

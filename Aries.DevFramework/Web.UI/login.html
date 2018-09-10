@@ -1,14 +1,10 @@
 ﻿<!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+    <title></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Aries.DevFramework V5.1.1
-    </title>
-    <link href="/Style/CSS/login.css" rel="stylesheet" type="text/css" />
-    <script src="/Style/JS/jquery-1.7.1.min.js"></script>
-    <script src="/Style/JS/AriesJS/Aries.Global.js"></script>
-    <script src="/Style/JS/AriesJS/Aries.Utility.js"></script>
-    <script>if (parent != null && parent != this) { parent.location = location.href; }</script>
+    <script src="/Style/JS/Aries.Loader.js"></script>
+    <script>document.title = "Aries.DevFramework " + sys_vs; if (parent != null && parent != this) { parent.location = location.href; }</script>
 </head>
 <body>
 
@@ -21,15 +17,15 @@
                     <td class="login"></td>
                     <td>
                         <div class="login_r">
-                            <label>用户名</label><br />
+                            <label>${userName}</label><br />
                             <input type="text" value="admin" id="username" class="user a" required="true" />
 
-                            <label>密码</label><br />
+                            <label>${password}</label><br />
                             <input type="password" id="password" value="111111" required="true" />
                             <br />
 
                             <div class="btn">
-                                <input type="button" name="btnLogin" value="登录" onclick="login()" />
+                                <input type="button" name="btnLogin" value="${login}" onclick="login()" />
                                 <span id="lbTip"></span>
                             </div>
                         </div>

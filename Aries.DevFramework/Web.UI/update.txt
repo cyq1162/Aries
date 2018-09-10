@@ -88,8 +88,30 @@ V5.0.1
 追回默认代码块：dg.options = { sortName: "createtime", sortOrder: "desc" };
 
 
+V5.2.0 2018/9/2 框架内部代码大调整。
+1、优化Excel导入模块。
+2、解决表单嵌套问题。
+3、支持行内编辑的下拉多选
+4、子父结构删除时自动删除所有子级
+5、修正权型表格列表的bug
+6、增加多语言机制（前端通过Html.Lang.zh_CN.js控制、后端可通过CS.Lang.zh_CN.js控制），开关在配置维护里设置：SysConfig的Language项。
+7、增加样式插件机制（所有样式移到/StyleTheme/下，新增样式，然后在配置维护里设置开头SysConfig的Theme项）
+8、验证规则Exists支持多个字段: (<inpt validType="exists['字段1,字段2']" .....)。
+
 文本数据库，二次order排序问题。
 
 重置、下拉的默认值问题-----------------
 Global.Config => AR.Config.data AR.Config.getText(key,value) AR.Config.getValue(key,text)
 Global.comboxData => 弄到AR.ComboxBox.data
+
+导入时，关系表的字段（除了主键，可以指定其它字段）
+格式的验证，可以指定正则
+
+支持行内
+liketree 查询。
+
+//easyui 源码修改备注：
+解决行内编辑，快速按down或up时，产生的验证错误问题。
+5602：var opts = (_3f9 && _3f9.options) || {novalidate:true};
+解决easyui 1.3.4之后版本 页面加载后 validatebox默认校验
+5692：  //_3f7(this);//页面加载后，validatebox会自己遍历验证一遍，将该方法注释掉

@@ -13,11 +13,11 @@
                     //alert("onClickRow-" + index + ":" + JSON.stringify(row));
                 },
                 onBeforeEdit: function (index, row) {
-                   
+                    
                 },
                 onEditing: function (index, row) {
                     
-                    //alert("onEditing-" + index + ":" + JSON.stringify(row));
+                    AR.Utility.Window.showMsg("onEditing-" + index + ":" + JSON.stringify(row));
                     //行内编辑时，修改某单元格的值，引发另一个单元格的值的变化。
                     var jqCellF3 = dg.datagrid("getEditor", { index: index, field: 'f3' }).target;
                     jqCellF3.keyup(function () {
@@ -58,8 +58,6 @@
     </script>
 </head>
 <body>
-    <div style="height: 300px;">
         <div id="dg"></div>
-    </div>
 </body>
 </html>

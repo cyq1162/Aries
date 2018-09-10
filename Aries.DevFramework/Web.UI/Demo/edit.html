@@ -5,20 +5,19 @@
     <title></title>
 
     <script src="/Style/JS/Aries.Loader.js"></script>
-    <link href="/Style/CSS/style.css" rel="stylesheet" />
 </head>
 <body>
-    <form>
+    <form enctype="multipart/form-data">
         作者比较懒，后台没写方法处理两个表，所以将随机更新A表或B表。<br />
         具体可以看用户表的操作。
         <hr />
         <div class="cont-box">
-            <div class="cont-box-tit">
+            <div class="page-title">
                 <h3>Demo_TestA</h3>
                 <a class="arrows hover"></a>
             </div>
-            <div class="cont-box-in">
-                <div class="cont-box-form">
+            <div class="page-content">
+                <div class="page-form">
                     <div class="line">
                         <div class="short">
                             <label><em>*</em>F1：</label>
@@ -43,12 +42,12 @@
                 </div>
             </div>
 
-            <div class="cont-box-tit">
+            <div class="page-title">
                 <h3>Demo_TestB</h3>
                 <a class="arrows hover"></a>
             </div>
-            <div class="cont-box-in">
-                <div class="cont-box-form">
+            <div class="page-content">
+                <div class="page-form">
                     <div class="line">
 
                         <div class="short">
@@ -105,12 +104,8 @@
                     <input type="text" class="normal">
                 </div>
                 <div class="inputWrap">
-                    <span>分类系统类型:</span>
-                    <select>
-                        <option>选项一</option>
-                        <option>选项二</option>
-                        <option>选项三</option>
-                    </select>
+                    <span>文件上传:</span>
+                    <input id="file" type="file" name="file" />
                 </div>
                 <div class="inputWrap">
                     <span>单选:</span>
@@ -129,7 +124,7 @@
             </div>
         </div>
 
-        <div class="cont-box-form">
+        <div class="page-form">
             <div class="btn">
                 <a>
                     <input class="submit" type="submit" name="保存" value="" />

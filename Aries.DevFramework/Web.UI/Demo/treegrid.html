@@ -10,9 +10,7 @@
         <table id="tg"></table>
     </div>
     <hr />-->
-    <div style="height: 440px;">
         <table id="grid"></table>
-    </div>
     <script type="text/javascript">
         var tg = new AR.DataGrid('Demo_Area', null, "grid", true);
         tg.HeaderMenu.add("自定义配置", 'fn', 'config');
@@ -26,14 +24,14 @@
             parentField: "pcode",
             pagination: true,
             onEditing: function (index, row) {
-                alert("onEditing-" + index + ":" + JSON.stringify(row));
+                //alert("onEditing-" + index + ":" + JSON.stringify(row));
             }
         }
         // dg.addWhere("lvl", "(3)", "in");
         tg.addWhere("id", "3000", ">");
         
         tg.ToolBar.BtnAdd.onBeforeExecute = function (index, isSameLevel) {
-            tg.defaultInsertData[tg.options.idField] = "ag";//自定义主键
+            tg.defaultInsertData[tg.options.idField] =AR.Utility.guid() ;//主键不能重复
         }
         tg.bind();
 

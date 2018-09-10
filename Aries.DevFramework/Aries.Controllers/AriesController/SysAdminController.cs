@@ -66,6 +66,13 @@ namespace Aries.Controllers
                     break;
                 default:
                     base.Update();
+                    if (TableName == "Config_KeyValue")
+                    {
+                        if (KeyValueConfig.IsChangeLangConfig(GetID))
+                        {
+                            LangConst.InitKeyValue();//重新始始化多语言
+                        }
+                    }
                     break;
             }
         }
@@ -312,7 +319,7 @@ namespace Aries.Controllers
         {
             string msg;
             bool result = SqlCode.Delete(ObjName, out msg);
-            jsonResult = JsonHelper.OutResult(result, result ? LangConst.DelSuccess : LangConst.DelError + msg);
+            jsonResult = JsonHelper.OutResult(result, result ? LangConst.DeleteSuccess : LangConst.DeleteError + msg);
         }
     }
 }

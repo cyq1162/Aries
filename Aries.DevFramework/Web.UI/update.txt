@@ -91,12 +91,19 @@ V5.0.1
 V5.2.0 2018/9/2 框架内部代码大调整。
 1、优化Excel导入模块。
 2、解决表单嵌套问题。
-3、支持行内编辑的下拉多选
-4、子父结构删除时自动删除所有子级
-5、修正权型表格列表的bug
-6、增加多语言机制（前端通过Html.Lang.zh_CN.js控制、后端可通过CS.Lang.zh_CN.js控制），开关在配置维护里设置：SysConfig的Language项。
-7、增加样式插件机制（所有样式移到/StyleTheme/下，新增样式，然后在配置维护里设置开头SysConfig的Theme项）
+3、支持行内编辑的下拉多选。
+4、子父结构删除时自动删除所有子级。
+5、解决表单页面刚加载就触发验证的问题。
+6、优化多语言机制：（前端通过Html.Lang.zh_CN.js控制、后端可通过CS.Lang.zh_CN.js控制），开关在配置维护里设置：SysConfig的Language项。
+7、增加：样式插件机制（所有样式移到/StyleTheme/下，新增样式，然后在配置维护里设置开头SysConfig的Theme项）
 8、验证规则Exists支持多个字段: (<inpt validType="exists['字段1,字段2']" .....)。
+9、代码重构、细节重写、代码大量优化。
+
+本版本升级注意事项：
+1、addWhere条件的likeor变更为custom
+2、新增加了一个组织部门表：Sys_Organization
+2、用户表增加多一个字段：OrgIDs
+
 
 文本数据库，二次order排序问题。
 

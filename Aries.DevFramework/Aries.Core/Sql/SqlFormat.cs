@@ -13,6 +13,7 @@ namespace Aries.Core.Sql
         #region Build SQL Contents
         private static Dictionary<string, string> sqlDic = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
+            {"custom","custom"},
             {"like","like"},
             {"likeor","likeor"},
             {"between","between"},
@@ -63,7 +64,7 @@ namespace Aries.Core.Sql
                 {
                     obj.OrAnd = (obj.OrAnd == "or" ? "or" : "and");
                 }
-                string pattern = GetOperate(obj.Pattern);
+                string pattern = GetOperate(obj.Pattern).ToLower();
                 switch (pattern)
                 {
                     case "in":
@@ -74,6 +75,7 @@ namespace Aries.Core.Sql
                     case ">=":
                     case "<":
                     case "<=":
+                    case "custom":
                     case "likeor":
                         break;
                     case "is null":
@@ -88,9 +90,23 @@ namespace Aries.Core.Sql
                         obj.Value = "'" + obj.Value.Trim('\'') + "'";
                         break;
                 }
-                if (obj.Pattern.ToLower() == "likeor")//自定义sql
+                if (pattern == "custom")//自定义sql
                 {
                     sql.AppendFormat(key1, obj.OrAnd, obj.Value);
+                }
+                else if (pattern == "likeor")
+                {
+                    string[] items = obj.Value.Split(',');
+                    StringBuilder sb = new StringBuilder();
+                    for (int j = 0; j < items.Length; j++)
+                    {
+                        sb.Append(obj.Name + " like '%" + items[j] + "%'");
+                        if (j < items.Length - 1)
+                        {
+                            sb.Append(" or ");
+                        }
+                    }
+                    sql.AppendFormat(key1, obj.OrAnd, sb.ToString());
                 }
                 else
                 {

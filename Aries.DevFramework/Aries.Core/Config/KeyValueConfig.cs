@@ -54,7 +54,7 @@ namespace Aries.Core.Config
                         config.Merge(config2);
                     }
                 }
-               
+
 
                 return config;
                 //}
@@ -85,6 +85,21 @@ namespace Aries.Core.Config
                     }
                 }
             }
+        }
+        /// <summary>
+        /// 是否修改的是语言相关的配置
+        /// </summary>
+        public static bool IsChangeLangConfig(string where)
+        {
+            using (MAction action = new MAction(U_AriesEnum.Config_KeyValue))
+            {
+                if (action.Fill(where) && action.Get<string>(Config_KeyValue.ConfigKey) == "SysConfig")
+                {
+                    string name = action.Get<string>(Config_KeyValue.ConfigName);
+                    return name == "Theme" || name == "Language";
+                }
+            }
+            return false;
         }
 
         /// <summary>
@@ -179,30 +194,7 @@ namespace Aries.Core.Config
             return description;
         }
 
-        /// <summary>
-        /// 根据配置Key和Value获取对应的名称。
-        /// </summary>
-        public static string GetName(string configKey, string configValue)
-        {
-            MDataRow row = KeyValueTable.FindRow("ConfigKey='" + configKey + "' and ConfigValue='" + configValue + "'");
-            if (row != null)
-            {
-                return row.Get<string>("ConfigName");
-            }
-            return configValue;
-        }
-        /// <summary>
-        /// 根据配置Key和Name获取对应的名称。
-        /// </summary>
-        public static string GetVallue(string configKey, string configName)
-        {
-            MDataRow row = KeyValueTable.FindRow("ConfigKey='" + configKey + "' and ConfigName='" + configName + "'");
-            if (row != null)
-            {
-                return row.Get<string>("ConfigValue");
-            }
-            return configName;
-        }
+
     }
     public static partial class KeyValueConfig
     {
@@ -604,6 +596,59 @@ namespace Aries.Core.Config
                         }
                     }
                 }
+            }
+        }
+    }
+
+    /// <summary>
+    /// 单行的基础操作
+    /// </summary>
+    public static partial class KeyValueConfig
+    {
+        /// <summary>
+        /// 根据配置Key和Value获取对应的名称。
+        /// </summary>
+        public static string GetName(string configKey, string configValue)
+        {
+            MDataRow row = KeyValueTable.FindRow("ConfigKey='" + configKey + "' and ConfigValue='" + configValue + "'");
+            if (row != null)
+            {
+                return row.Get<string>("ConfigName");
+            }
+            return configValue;
+        }
+        /// <summary>
+        /// 根据配置Key和Name获取对应的名称。
+        /// </summary>
+        public static string GetVallue(string configKey, string configName)
+        {
+            MDataRow row = KeyValueTable.FindRow("ConfigKey='" + configKey + "' and ConfigName='" + configName + "'");
+            if (row != null)
+            {
+                return row.Get<string>("ConfigValue");
+            }
+            return configName;
+        }
+        /// <summary>
+        /// 根据配置Key和Value设置对应的名称。
+        /// </summary>
+        public static bool SetName(string configKey, string configName, string configValue)
+        {
+            using (MAction action = new MAction(U_AriesEnum.Config_KeyValue))
+            {
+                action.Set("ConfigName", configName);
+                return action.Update("ConfigKey='" + configKey + "' and ConfigValue='" + configValue + "'");
+            }
+        }
+        /// <summary>
+        /// 根据配置Key和Name设置对应的名称。
+        /// </summary>
+        public static bool SetVallue(string configKey, string configName, string configValue)
+        {
+            using (MAction action = new MAction(U_AriesEnum.Config_KeyValue))
+            {
+                action.Set("ConfigValue", configValue);
+                return action.Update("ConfigKey='" + configKey + "' and ConfigName='" + configName + "'");
             }
         }
     }

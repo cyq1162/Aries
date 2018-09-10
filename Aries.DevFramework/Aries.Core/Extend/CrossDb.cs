@@ -33,7 +33,11 @@ namespace Aries.Core.Extend
                 {
                     if (isFirstLoad)
                     {
-                        //DealUpdateSql();
+                        //处理视图文件
+                        fyw.EnableRaisingEvents = true;
+                        fyw.IncludeSubdirectories = true;
+                        fyw.Changed += fyw_Changed;
+
                         //处理单表
                         foreach (ConnectionStringSettings item in ConfigurationManager.ConnectionStrings)
                         {
@@ -48,13 +52,11 @@ namespace Aries.Core.Extend
                                 {
 
                                 }
-                               
+
                             }
                         }
                         ThreadBreak.AddGlobalThread(new ParameterizedThreadStart(LoadViewSchema));
-                        //处理视图文件
-                        fyw.EnableRaisingEvents = true;
-                        fyw.Changed += fyw_Changed;
+                        
                     }
                 }
             }
@@ -158,8 +160,12 @@ namespace Aries.Core.Extend
                                     {
                                         string dbName = string.Empty;
                                         Dictionary<string, string> dic = DBTool.GetTables(name, out dbName);
-                                        if (dic != null && dic.Count > 0 && !_DbTablesDic.ContainsKey(dbName))
+                                        if (dic != null && dic.Count > 0)
                                         {
+                                            if (_DbTablesDic.ContainsKey(dbName))
+                                            {
+                                                dbName = item.Name;//存在同名数据库，则存档配置项名
+                                            }
                                             _DbTablesDic.Add(dbName, dic);
                                             _DbTypeDic.Add(dbName, DBTool.GetDalType(name));
                                             _ConnDic.Add(dbName, name);
@@ -193,7 +199,7 @@ namespace Aries.Core.Extend
                 }
             }
             //找不到时，可能是视图，根据数据库类型匹配第一个可能的数据库
-            foreach (KeyValuePair<string,DalType> item in _DbTypeDic)
+            foreach (KeyValuePair<string, DalType> item in _DbTypeDic)
             {
                 switch (item.Value)
                 {
@@ -203,7 +209,10 @@ namespace Aries.Core.Extend
                     default:
                         if (DBTool.GetColumns(item.Key + "." + tableName).Count > 0)
                         {
-                            DbTables[item.Key].Add(tableName, "");//添加视图或未缓存的表
+                            if (!DbTables[item.Key].ContainsKey(tableName))
+                            {
+                                DbTables[item.Key].Add(tableName, "");//添加视图或未缓存的表
+                            }
                             return item.Key;
                         }
                         break;
@@ -269,7 +278,7 @@ namespace Aries.Core.Extend
         private static string GetTableNameFromSql(string sql)
         {
             //获取原始表名
-            string[] items = sql.Replace("\r\n"," ").Split(' ');
+            string[] items = sql.Replace("\r\n", " ").Split(' ');
             if (items.Length == 1) { return sql; }//单表名
             if (items.Length > 3) // 总是包含空格的select * from xxx
             {
@@ -300,6 +309,6 @@ namespace Aries.Core.Extend
 
     public static partial class CrossDb
     {
- 
+
     }
 }

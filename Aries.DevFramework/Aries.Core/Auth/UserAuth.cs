@@ -41,7 +41,7 @@ namespace Aries.Core.Auth
                 {
                     if (action.Get<DateTime>(Sys_User.PwdExpiredTime, DateTime.MaxValue) < DateTime.Now)
                     {
-                        errMsg = LangConst.PwdExpired;
+                        errMsg = LangConst.PasswordExpired;
                     }
                     else
                     {
@@ -74,7 +74,7 @@ namespace Aries.Core.Auth
                         }
                         else
                         {
-                            errMsg = LangConst.PwdError;
+                            errMsg = LangConst.PasswordError;
                         }
                     }
                 }
@@ -429,7 +429,7 @@ namespace Aries.Core.Auth
                 {
                     using (MAction action = new MAction(U_AriesEnum.Sys_Role))
                     {
-                        string where = string.Format("{0}='Admin' or {0}= '{1}'", Sys_Role.RoleName, LangConst.Admin);
+                        string where = string.Format("{0} in ('Admin','普通管理员')", Sys_Role.RoleName);
                         if (action.Fill(where))
                         {
                             _AdminRoleID = action.Get<string>(Sys_Role.RoleID);
@@ -448,7 +448,7 @@ namespace Aries.Core.Auth
                 {
                     using (MAction action = new MAction(U_AriesEnum.Sys_Role))
                     {
-                        string where = string.Format("{0}='SuperAdmin' or {0}= '{1}'", Sys_Role.RoleName, LangConst.SuperAdmin);
+                        string where = string.Format("{0} in ('SuperAdmin','超级管理员'", Sys_Role.RoleName);
                         if (action.Fill(where))
                         {
                             _SuperAdminRoleID = action.Get<string>(Sys_Role.RoleID);

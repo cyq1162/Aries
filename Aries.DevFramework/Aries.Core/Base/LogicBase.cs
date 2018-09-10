@@ -92,9 +92,9 @@ namespace Aries.Core
         {
             _IBase.SetKeyValue(key, value);
         }
-        public string GetWhereIn(string primaryKey, string requestKey = null)
+        public string GetWhereIn(string primaryKey, string requestKey = null, string[] values = null)
         {
-            return _IBase.GetWhereIn(primaryKey, requestKey);
+            return _IBase.GetWhereIn(primaryKey, requestKey, values);
         }
 
         public object CrossTableName
@@ -137,6 +137,6 @@ namespace Aries.Core
         }
 
 
-       
+
     }
 }

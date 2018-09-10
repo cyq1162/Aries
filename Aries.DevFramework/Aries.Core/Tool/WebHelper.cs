@@ -52,7 +52,9 @@ namespace Aries.Core.Helper
         {
             return AppConfig.GetApp("DefaultUrl", "");
         }
-
+        /// <summary>
+        /// 是否部署成子目录（虚拟目录）
+        /// </summary>
         public static bool IsUseUISite
         {
             get
@@ -74,6 +76,10 @@ namespace Aries.Core.Helper
                 return AppConfig.GetApp("Aries.Suffix", ".html");
             }
         }
+        /// <summary>
+        /// 默认是否.html结尾
+        /// </summary>
+        /// <returns></returns>
         public static bool IsAriesSuffix()
         {
             return HttpContext.Current.Request.Url.LocalPath.EndsWith(AriesSuffix);
@@ -198,29 +204,7 @@ namespace Aries.Core.Helper
                 return Convert.ChangeType(value, t);
             }
         }
-        internal static string ReplacePara(string sql, string key, string value)
-        {
-            if (!string.IsNullOrEmpty(sql) && !string.IsNullOrEmpty(key))
-            {
-                //格式化请求参数
-                int index = sql.IndexOf(key);
-                if (index > -1)
-                {
-                    if (string.IsNullOrEmpty(value) && sql.IndexOf('=', index - 5, 5) > -1)//处理成1=1，同时有=号
-                    {
-                        int end = index + key.Length + 1;//可能参数后面有'@parnet'
-                        string temp = sql.Substring(0, index - 5);
-                        int start = temp.LastIndexOf(' ');
-                        sql = sql.Replace(sql.Substring(start + 1, end - start - 1), "1=1 ");
-                    }
-                    else
-                    {
-                        sql = sql.Replace(key, value);
-                    }
-                }
-            }
-            return sql;
-        }
+        
         #region 下载文件
 
         public static void SendFile(string fileName, string saveText)

@@ -14,6 +14,6 @@ namespace Aries.Core
         string TableName { get; }
         string GetWhere();
         string GetOrderBy(string defaultSort);
-        string GetWhereIn(string primaryKey, string requestKey = null);
+        string GetWhereIn(string primaryKey, string requestKey = null, string[] values = null);
     }
 }

@@ -117,6 +117,7 @@ namespace Aries.Core
                         break;
                     case "login":
                         LoginView();
+                        ReplaceOutput();
                         break;
                     case "ajax":
                         InvokeClass();
@@ -212,9 +213,10 @@ namespace Aries.Core
         #region ReplaceOutput 替换输出，仅对子目录部署时有效
         void ReplaceOutput()
         {
-            if (WebHelper.IsUseUISite)
+            //如果项目需要部署成子应用程序，则开启，否则不需要开启（可注释掉下面一行代码）
+            //要处理自定义语言标签
+            if (WebHelper.IsAriesSuffix())
             {
-                //如果项目需要部署成子应用程序，则开启，否则不需要开启（可注释掉下面一行代码）
                 context.Response.Filter = new HttpResponseFilter(context.Response.Filter);
             }
         }

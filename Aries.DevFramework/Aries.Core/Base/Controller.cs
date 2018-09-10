@@ -251,8 +251,23 @@ namespace Aries.Core
             }
             context.Response.Write(result);
         }
-        public string GetWhereIn(string primaryKey, string requestKey = null)
+        private string GetWhereByValues(string primaryKey, string[] values)
         {
+            StringBuilder sb = new StringBuilder();
+            foreach (var item in values)
+            {
+                sb.Append("'" + item.Trim('\'') + "',");
+
+            }
+            string where = sb.ToString().TrimEnd(',');
+            return string.Format("{0} in ({1})", primaryKey, where);//避免删除不了GUID为主键的数据 
+        }
+        public string GetWhereIn(string primaryKey, string requestKey = null, string[] values = null)
+        {
+            if (values != null)
+            {
+                return GetWhereByValues(primaryKey, values);
+            }
             string where = string.Empty;
             if (!string.IsNullOrEmpty(requestKey))
             {
@@ -264,13 +279,7 @@ namespace Aries.Core
             }
             if (!string.IsNullOrEmpty(where))
             {
-                string[] items = where.Split(',');
-                where = string.Empty;
-                foreach (var item in items)
-                {
-                    where += "'" + item.Trim('\'') + "',";
-                }
-                where = string.Format("{0} in ({1})", primaryKey, where.TrimEnd(','));//避免删除不了GUID为主键的数据
+                return GetWhereByValues(primaryKey, where.Split(','));
             }
             return where;
         }
@@ -355,6 +364,14 @@ namespace Aries.Core
                                 return Query<string>(HttpContext.Current.Request.QueryString.Keys[i], string.Empty);
                             }
                         }
+                        for (int i = 0; i < HttpContext.Current.Request.Form.Keys.Count; i++)
+                        {
+                            if (HttpContext.Current.Request.Form.Keys[i].ToLower().EndsWith("id"))
+                            {
+                                return Query<string>(HttpContext.Current.Request.Form.Keys[i], string.Empty);
+                            }
+                        }
+
                     }
                 }
                 else if (id.IndexOf(',') == -1)
@@ -540,16 +557,25 @@ namespace Aries.Core
                 }
             }
         }
+
         /// <summary>
         /// 删除数据（传ID则一条，也可以构造where条件删除）
         /// </summary>
         [ActionKey("Del,Delete")]
         public virtual void Delete()
         {
-
+            string ids = GetID;
+            string[] values = null;
+            string where = string.Empty;
+            string parentField = Query<string>("parentField");
+            string idField = Query<string>("idField");
+            MDataTable dt = null;
             using (MAction action = new MAction(CrossTableName))
             {
                 action.BeginTransation();
+
+            delChild://删除子节点循环处。
+
                 //dg.foreignKeys="TableA.ColumnNameA,TableB.ColumnNameB";
                 string foreignKeys = Query<string>("foreignKeys");
                 bool result = true;
@@ -562,7 +588,7 @@ namespace Aries.Core
                         if (kv.Length == 2)
                         {
                             action.ResetTable(CrossDb.GetEnum(kv[0]));
-                            result = action.Delete(GetWhereIn(kv[1]));
+                            result = action.Delete(GetWhereIn(kv[1], null, values));
                             if (!result)
                             {
                                 break;
@@ -573,16 +599,41 @@ namespace Aries.Core
                 }
                 if (result)
                 {
-                    result = action.Delete(GetID);//!string.IsNullOrEmpty(where) &&
+                    //第一次，需要将ID转为idField指定的上级关联字段。
+                    string pkName = action.Data.Columns.FirstPrimary.ColumnName;
+                    if (string.IsNullOrEmpty(idField)) { idField = pkName; }
+                    where = values == null ? ids : GetWhereIn(idField, null, values);
+
+                    if (values == null && !string.IsNullOrEmpty(idField) && pkName.ToLower() != idField.ToLower())
+                    {
+                        action.SetSelectColumns(idField);
+                        dt = action.Select(where);
+                        if (dt.Rows.Count > 0)
+                        {
+                            values = dt.GetColumnItems<string>(0).ToArray();
+                        }
+                    }
+
+                    result = action.Delete(where);
                 }
                 if (!result)
                 {
                     action.RollBack();
                 }
+                else if (!string.IsNullOrEmpty(parentField) && !string.IsNullOrEmpty(idField))
+                {
+                    action.SetSelectColumns(idField);
+                    dt = action.Select(GetWhereIn(parentField, null, values));
+                    if (dt.Rows.Count > 0)
+                    {
+                        values = dt.GetColumnItems<string>(0).ToArray();
+                        goto delChild;
+                    }
+                }
                 action.EndTransation();
                 if (result)
                 {
-                    SetSuccess(LangConst.DelSuccess);
+                    SetSuccess(LangConst.DeleteSuccess);
                 }
                 else
                 {
@@ -590,11 +641,12 @@ namespace Aries.Core
                     {
                         Log.WriteLogToTxt("Delete(): " + action.DebugInfo);
                     }
-                    SetError(LangConst.DelError, action.DebugInfo);
+                    SetError(LangConst.DeleteError, action.DebugInfo);
                 }
 
             }
         }
+
         /// <summary>
         /// 更新一条数据
         /// </summary>
@@ -885,7 +937,7 @@ namespace Aries.Core
         /// <summary>
         /// 下拉框统一处理参数对象
         /// </summary>
-        internal class ComboboxItem
+        internal class ComboItem
         {
             public string ObjName { get; set; }
             public string Parent { get; set; }
@@ -901,7 +953,7 @@ namespace Aries.Core
             string itemJson = Query<string>("sys_json");
             if (!string.IsNullOrEmpty(itemJson))
             {
-                List<ComboboxItem> boxes = JsonHelper.ToList<ComboboxItem>(itemJson);
+                List<ComboItem> boxes = JsonHelper.ToList<ComboItem>(itemJson);
                 JsonHelper json = new JsonHelper();
                 if (boxes.Count > 0)
                 {
@@ -909,14 +961,14 @@ namespace Aries.Core
                     StringBuilder sb = new StringBuilder();
                     for (int i = 0; i < boxes.Count; i++)
                     {
-                        ComboboxItem item = boxes[i];
+                        ComboItem item = boxes[i];
                         string code = SqlCode.GetCode(item.ObjName);
                         if (code != item.ObjName)
                         {
                             #region 核心处理
                             var sql = SqlCode.GetCode(item.ObjName);//已经处理过系统参数和Post参数
-                            sql = WebHelper.ReplacePara(sql, "@para", item.Para);
-                            sql = WebHelper.ReplacePara(sql, "@parent", item.Parent);
+                            sql = ReplacePara(sql, "@para", item.Para);
+                            sql = ReplacePara(sql, "@parent", item.Parent);
 
                             sb.Append(sql + ";");
                             #endregion
@@ -981,13 +1033,28 @@ namespace Aries.Core
         /// </summary>
         public void Exists()
         {
-            string value = Query<string>("v", "");
             string name = Query<string>("n", "");
+            string value = Query<string>("v", "");
+
+            string name2 = Query<string>("n2", "");
+            string value2 = Query<string>("v2", "");
+
+            string name3 = Query<string>("n3", "");
+            string value3 = Query<string>("v3", "");//支持到三个，可以了
+
             bool result = false;
             using (MAction action = new MAction(CrossObjName))
             {
                 string id = GetID;
                 string where = string.Format("{0}='{1}'", name, value);
+                if (name2 != "" && value2 != "")
+                {
+                    where += string.Format(" and {0}='{1}'", name2, value2);
+                }
+                if (name3 != "" && value3 != "")
+                {
+                    where += string.Format(" and {0}='{1}'", name3, value3);
+                }
                 if (!string.IsNullOrEmpty(id))
                 {
                     where += string.Format(" and {0}<>'{1}'", action.Data.PrimaryCell.ColumnName, id);
@@ -1084,6 +1151,34 @@ namespace Aries.Core
         public bool IsHttpPost
         {
             get { return Context.Request.HttpMethod == "POST"; }
+        }
+    }
+
+    public abstract partial class Controller
+    {
+        //私有方法，参数替换
+        private static string ReplacePara(string sql, string key, string value)
+        {
+            if (!string.IsNullOrEmpty(sql) && !string.IsNullOrEmpty(key))
+            {
+                //格式化请求参数
+                int index = sql.IndexOf(key);
+                if (index > -1)
+                {
+                    if (string.IsNullOrEmpty(value) && sql.IndexOf('=', index - 5, 5) > -1)//处理成1=1，同时有=号
+                    {
+                        int end = index + key.Length + 1;//可能参数后面有'@parnet'
+                        string temp = sql.Substring(0, index - 5);
+                        int start = temp.LastIndexOf(' ');
+                        sql = sql.Replace(sql.Substring(start + 1, end - start - 1), "1=1 ");
+                    }
+                    else
+                    {
+                        sql = sql.Replace(key, value);
+                    }
+                }
+            }
+            return sql;
         }
     }
     /// <summary>

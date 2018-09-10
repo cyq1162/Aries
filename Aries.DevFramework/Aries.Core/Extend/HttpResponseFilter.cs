@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using CYQ.Data;
 using Aries.Core.Helper;
+using Aries.Core.Config;
 
 namespace Aries.Core.Extend
 {
@@ -79,7 +80,7 @@ namespace Aries.Core.Extend
         public override void Write(byte[] buffer, int offset, int count)
         {
             var ct = HttpContext.Current.Response.ContentType;
-            if (ct.IndexOf("image", StringComparison.OrdinalIgnoreCase) != -1)
+            if (ct.IndexOf("image", StringComparison.OrdinalIgnoreCase) != -1)//图片类型
             {
                 filterStream.Write(buffer, offset, count);
                 return;
@@ -105,8 +106,17 @@ namespace Aries.Core.Extend
             if (WebHelper.IsUseUISite)
             {
                 string ui = AppConfig.GetApp("UI", string.Empty).ToLower();
-                html = html.Replace(" src=\"/", " src=\"" + ui + "/").Replace(" src = \"/", " src = \"" + ui + "/").Replace(" src = '/", " src = '/" + ui + "/").Replace(" src='/", " src ='/" + ui + "/"); ;
-                html = html.Replace(" href=\"/", " href=\"" + ui + "/").Replace(" href = \"/", " href = \"" + ui + "/").Replace(" href='/", " href='" + ui + "/").Replace(" href = '/", " href = '" + ui + "/");
+                if (!string.IsNullOrEmpty(ui))
+                {
+                    html = html.Replace(" src=\"/", " src=\"" + ui + "/").Replace(" src = \"/", " src = \"" + ui + "/").Replace(" src = '/", " src = '/" + ui + "/").Replace(" src='/", " src ='/" + ui + "/"); ;
+                    html = html.Replace(" href=\"/", " href=\"" + ui + "/").Replace(" href = \"/", " href = \"" + ui + "/").Replace(" href='/", " href='" + ui + "/").Replace(" href = '/", " href = '" + ui + "/");
+
+                }
+            }
+            //替换标签
+            if (html.IndexOf("${") > -1)
+            {
+                html = LangConst.ReplateHtmlLanguage(html);
             }
             return html;
         }

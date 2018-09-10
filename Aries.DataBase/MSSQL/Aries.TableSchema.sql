@@ -269,6 +269,7 @@ CREATE TABLE [Sys_User]
     [LastLoginTime] datetime NULL,
     [LastLoginIP] nvarchar(50) NULL,
     [RoleIDs] nvarchar(500) NULL,
+	[OrgIDs] nvarchar(500) NULL,
     [CreateTime] datetime Default getdate() NULL,
     PRIMARY KEY ([UserID]) 
 )
@@ -285,7 +286,7 @@ exec sp_addextendedproperty N'MS_Description', N'状态 1 启用 2禁用 3已删
 exec sp_addextendedproperty N'MS_Description', N'登录次数', N'user', N'dbo', N'table', N'Sys_User', N'column', N'LoginCount';
 exec sp_addextendedproperty N'MS_Description', N'最后登录时间', N'user', N'dbo', N'table', N'Sys_User', N'column', N'LastLoginTime';
 exec sp_addextendedproperty N'MS_Description', N'公司ID', N'user', N'dbo', N'table', N'Sys_User', N'column', N'LastLoginIP';
-exec sp_addextendedproperty N'MS_Description', N'角色ID（可以多个）', N'user', N'dbo', N'table', N'Sys_User', N'column', N'RoleIDs';
+exec sp_addextendedproperty N'MS_Description', N'角色ID（可以多个）', N'user', N'dbo', N'table', N'Sys_User', N'column', N'RoleIDs';exec sp_addextendedproperty N'MS_Description', N'组织部门ID（可以多个）', N'user', N'dbo', N'table', N'Sys_User', N'column', N'OrgIDs';
 exec sp_addextendedproperty N'MS_Description', N'创建日期', N'user', N'dbo', N'table', N'Sys_User', N'column', N'CreateTime';
 exec sp_addextendedproperty N'MS_Description', N'', N'user', N'dbo', N'table', N'Sys_User';
 
@@ -302,5 +303,15 @@ exec sp_addextendedproperty N'MS_Description', N'用户ID', N'user', N'dbo', N't
 exec sp_addextendedproperty N'MS_Description', N'公司ID（未用到）', N'user', N'dbo', N'table', N'Sys_UserInfo', N'column', N'CompanyID';
 exec sp_addextendedproperty N'MS_Description', N'用户备注', N'user', N'dbo', N'table', N'Sys_UserInfo', N'column', N'Memo';
 exec sp_addextendedproperty N'MS_Description', N'区域ID（未用到）', N'user', N'dbo', N'table', N'Sys_UserInfo', N'column', N'AreaID';
-exec sp_addextendedproperty N'MS_Description', N'', N'user', N'dbo', N'table', N'Sys_UserInfo';
+exec sp_addextendedproperty N'MS_Description', N'', N'user', N'dbo', N'table', N'Sys_UserInfo';CREATE TABLE [Sys_Organization] 
+(
+    [OrgID] uniqueidentifier Default (newid()) NOT NULL,
+    [OrgName] nvarchar(100) NOT NULL,
+    [OrgFullName] nvarchar(100) NOT NULL,
+    [OrgCode] nvarchar(300) NOT NULL,
+    [OrgLevel] int NULL,
+    [ParentOrg] nvarchar(50) NULL,
+    [CreateTime] datetime Default getdate() NULL,
+    PRIMARY KEY ([OrgID]) 
+)
 

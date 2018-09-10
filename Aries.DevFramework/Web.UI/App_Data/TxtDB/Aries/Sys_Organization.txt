@@ -1,0 +1,7 @@
+{"OrgID":"System.Guid","OrgName":"System.String","OrgFullName":"System.String","OrgCode":"System.String","OrgLevel":"System.Int32","ParentOrg":"System.String","CreateTime":"System.DateTime"},
+{"OrgID":"e4412d10-e3ff-4e97-8ba9-7e8846c0e491","OrgName":"研发部","OrgFullName":"研发部2","OrgCode":"001","OrgLevel":1,"ParentOrg":"","CreateTime":"2018-09-06 19:15:19"},
+{"OrgID":"6f233f52-98eb-4379-a49a-e100c3a3427b","OrgName":"技术支持部","OrgFullName":"技术支持部","OrgCode":"002","OrgLevel":1,"ParentOrg":"","CreateTime":"2018-09-06 19:16:56"},
+{"OrgID":"6a77bc50-ad90-6265-bc5a-e0979ebf0701","OrgName":"研发一组","OrgFullName":"一组","OrgCode":"001-1","OrgLevel":2,"ParentOrg":"e4412d10-e3ff-4e97-8ba9-7e8846c0e491","CreateTime":"2018-09-06 19:25:46"},
+{"OrgID":"df4bb148-aa64-da5a-ef95-8122860ca567","OrgName":"研发二组","OrgFullName":"二组","OrgCode":"001-2","OrgLevel":2,"ParentOrg":"e4412d10-e3ff-4e97-8ba9-7e8846c0e491","CreateTime":"2018-09-06 19:26:34"},
+{"OrgID":"2c7a5e91-a447-b87a-0b8b-9e735252d05f","OrgName":"技术A组","OrgFullName":"A","OrgCode":"002-1","OrgLevel":2,"ParentOrg":"6f233f52-98eb-4379-a49a-e100c3a3427b","CreateTime":"2018-09-06 19:29:31"},
+{"OrgID":"77585eb0-1458-ec70-6471-d7961eac28fc","OrgName":"技术B组","OrgFullName":"B","OrgCode":"002-2","OrgLevel":2,"ParentOrg":"6f233f52-98eb-4379-a49a-e100c3a3427b","CreateTime":"2018-09-06 22:28:14"}

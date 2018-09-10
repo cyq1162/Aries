@@ -1,0 +1,6 @@
+{"ID":"System.String","F1":"System.String","F2":"System.Boolean","F3":"System.Decimal","F4":"System.Int32","CreateTime":"System.DateTime"},
+{"ID":"2c2b6b19-2b8e-4961-b6f0-ebca921d657b","F1":"311","F2":true,"F3":31.00,"F4":311,"CreateTime":null},
+{"ID":"2ff92056-d3aa-497b-96a9-554b9be39fbb","F1":"666.30","F2":true,"F3":666.30,"F4":31,"CreateTime":null},
+{"ID":"478ce6f1-d2a3-483e-8419-e7954f0bc2b5","F1":"666.00","F2":true,"F3":666.00,"F4":31,"CreateTime":null},
+{"ID":"51cfdb37-c91a-41a7-966d-37cb9134f71f","F1":"31.00","F2":false,"F3":31.00,"F4":31,"CreateTime":null},
+{"ID":"","F1":"2212.00","F2":true,"F3":2212.00,"F4":222,"CreateTime":null}

@@ -1,3 +1,0 @@
-{"ID":"System.Int32","TableName":"System.String","KeyID":"System.String","Content":"System.String","UserID":"System.String","EditTime":"System.DateTime"},
-{"ID":1,"TableName":"Sys_RoleAction","KeyID":"","Content":"数据被删除,删除条件为：RoleID='d8e1ae3b-8451-436a-a59b-c7516e711b9c'","UserID":"d8e1ae3b-8451-436a-a59b-c7516e711b9c","EditTime":"2016-09-05 01:49:46"},
-{"ID":2,"TableName":"Sys_RoleAction","KeyID":"","Content":"数据被删除,删除条件为：RoleID='d8e1ae3b-8451-436a-a59b-c7516e711b9c'","UserID":"d8e1ae3b-8451-436a-a59b-c7516e711b9c","EditTime":"2016-09-05 02:13:48"}

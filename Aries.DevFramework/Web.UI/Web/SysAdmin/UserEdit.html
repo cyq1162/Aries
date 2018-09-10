@@ -7,41 +7,41 @@
 </head>
 <body>
     <div class="cont-box">
-        <div class="cont-box-tit">
-            <h3>用户信息</h3>
+        <div class="page-title">
+            <h3>${userInfo}</h3>
             <a class="arrows hover"></a>
         </div>
-        <div class="cont-box-in">
-            <div class="cont-box-form">
-                <form>                    
+        <div class="page-content">
+            <div class="page-form">
+                <form class="easyui-form" data-options="required:true,novalidate:true">                    
                     <div class="line">
 
                         <div class="short">
-                            <label><em>*</em>姓名：</label>
+                            <label><em>*</em>${fullName}：</label>
                             <input name="FullName" id="FullName" missingmessage="" class='easyui-validatebox'
                                    data-options="required:true" validtype='length[2,30]' />
                         </div>
                         <div class="short">
-                            <label><em>*</em>性别：</label>
+                            <label><em>*</em>${sex}：</label>
                             <input name="Sex" configkey="性别" editable="false" defaultitem="false" />
                         </div>
                         <div class="short">
-                            <label><em>*</em>角色：</label>
-                            <input name="RoleIDs"  objname="C_SYS_Role" validtype="combobox" class="easyui-combobox" multiple="true" editable="true" defaultitem="false" required="required"  />
+                            <label><em>*</em>${role}：</label>
+                            <input name="RoleIDs"  objname="C_SYS_Role" validtype="combobox"  multiple="true" editable="true" defaultitem="false" required="required"  />
                         </div>
                     </div>
                     <div class="line">
                         <div class="short">
-                            <label><em>*</em>登录账号：</label>
+                            <label><em>*</em>${userName}：</label>
                             <input name="UserName" id="UserName" missingmessage="" class='easyui-validatebox' validtype="exists['UserName']"  required="required" />
                         </div>
                         <div class="short">
-                            <label><em>*</em>登录密码：</label>
+                            <label><em>*</em>${password}：</label>
                             <input name="Password" id="Password" type="password" missingmessage="" class='easyui-validatebox' required='true' validtype='length[6,18]' />
                         </div>
 
                         <div class="short">
-                            <label><em>*</em>密码过期时间：</label>
+                            <label><em>*</em>${expireTime}：</label>
                             <input name="PwdExpiredTime" id="PwdExpiredTime" class="easyui-datetimebox" style="width: 150px;" required="true" editable="false" />
                         </div>
                     </div>
@@ -58,17 +58,17 @@
 
                     <div class="line">
                         <div class="short">
-                            <label>工作电话：</label>
+                            <label>${phone}：</label>
                             <input name="Phone" id="WorkPhone" missingmessage="" class='easyui-validatebox' validtype='telormobile' />
                         </div>
                         <div class="short">
-                            <label><em>*</em>电子邮箱：</label>
+                            <label><em>*</em>${emai}：</label>
                             <input name="Email" id="Email" missingmessage="" required='true' class='easyui-validatebox' validtype='email' />
                         </div>
-                      <!--  <div class="short">
-                            <label><em>*</em>部门名称：</label>
-                            <input name="DepartmentIDs" />
-                        </div>-->
+                        <div class="short">
+                            <label><em>*</em>${org}：</label>
+                           <input name="OrgIDs"  objname="C_SYS_Org" validtype="combobox" class="easyui-combobox"  multiple="true" editable="true" tree="true"  cascadeCheck="false" />
+                        </div>
                     </div>
 
                     <div class="line">
@@ -77,20 +77,21 @@
                             <input name="CellPhone" missingmessage="" class='easyui-validatebox' validtype='telormobile' />
                         </div>-->
                         <div class="short">
-                            <label><em>*</em>账号状态：</label>
+                            <label><em>*</em>${status}：</label>
                             <input name="Status" configkey="账号状态" defaultitem="false"  />
                         </div>
                         <div class="short">
-                            <label>备注：</label>
+                            <label>${memo}：</label>
                             <input name="Memo" class='easyui-validatebox' />
                         </div>
                     </div>
+                    <div class="line"></div>
                     <div class="btn">
                         <a>
-                            <input class="submit" type="button" name="保存" value="" />
+                            <input class="submit" type="button" name="${save}" value="" />
                         </a>
                         <a>
-                            <input class="return" type="button" name="取消" value="" />
+                            <input class="return" type="button" name="${cancel}" value="" />
                         </a>
                     </div>
                     <input type="hidden" name="UserID" value="" />

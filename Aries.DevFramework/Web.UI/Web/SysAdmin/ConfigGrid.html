@@ -22,7 +22,8 @@
     dg.ToolBar.BtnImport.isHidden = true;
     dg.ToolBar.BtnExportTemplate.isHidden = true;
     dg.options = {
-        pagination: false,
+        pageSize: 30,
+        fitColumns: false,
         sortName: 'Frozen desc,OrderNum',
         sortOrder: 'asc',
         defaultWhere: [{ name: 'ObjName', pattern: '=', value: objName }]
@@ -31,14 +32,29 @@
     dg.defaultInsertData = {
         objname: objName, align: 'center', width: 100, ordernum: 100, rowspan: 1, colspan: 1, mergeIndex: 1, datatype: 'string,50,0,0'
     };
-    dg.ToolBar.add('关闭窗口', 'AR.Utility.Window.close', 4);
-    dg.ToolBar.addHtml("<span style='margin-left: 50px; color:gray;'><strong>" + objName + "</strong></span>", 5);
-    dg.ToolBar.addHtml("<span onclick = 'fleshHeader()'><b>刷新表结构</b></span>", 6);
-    dg.ToolBar.addHtml("<span onclick = 'showView()'><b>编辑SqlCode</b></span>", 7);
-    dg.ToolBar.addHtml("<span onclick = 'openConfigExcel()'><b>高级Excel导入配置</b></span>", 8);
-    dg.ToolBar.addHtml("<span onclick = 'showFormHtml()'><b>生成表单Html</b></span>", 9);
+    dg.ToolBar.add('${close}', 'AR.Utility.Window.close', 4);
+    dg.ToolBar.addHtml("<span style='margin-left: 20px; color:gray;'><strong>" + objName + "</strong></span>", 5);
+    dg.ToolBar.addHtml("<span onclick = 'fleshHeader()'><b>${fleshHeader}</b></span>", 6);
+    dg.ToolBar.addHtml("<span onclick = 'showView()'><b>${edit}SqlCode</b></span>", 7);
+    dg.ToolBar.addHtml("<span onclick = 'openConfigExcel()'><b>${senior}${import}${config}</b></span>", 8);
+    dg.ToolBar.addHtml("<span onclick = 'showFormHtml()'><b>${form}Html</b></span>", 9);
     dg.PKColumn.Editor.BtnSave.onAfterExecute = function () {
         AR.Utility.Window.refresh = true;
+    }
+    dg.ToolArea.Search.onBeforeExecute = function ()
+    {
+        if(dg.Internal.headerData)
+        {
+            for (var i = 0; i < dg.Internal.headerData.length; i++) {
+                if(dg.Internal.headerData[i].field=="objname")
+                {
+                    dg.Internal.headerData[i].hidden = true;
+                    dg.Internal.headerData[i].search = false;
+                    break;
+                }
+            }
+        }
+      
     }
     dg.bind();
     function showView() {
@@ -63,22 +79,22 @@
     }
 
     function openConfigExcel() {
-        AR.Utility.Window.open('ConfigExcel.html?ExcelName=' + objName, 'Excel导入配置');
+        AR.Utility.Window.open('ConfigExcel.html?ExcelName=' + objName, 'Excel${import}${config}');
     }
     function showFormHtml() {
         var dg = parent.AR.Global.DG.operating;
         var headData = dg.Internal.headerData;
         var $form = $('<form>');
-        var $div_tip = $('<div class="cont-box">')
+        var $div_tip = $('<div class="page-body">')
             .append(
-                $('<div class="cont-box-tit">')
+                $('<div class="page-title">')
                 .append($('<h3>').html(objName)
                 .append($('<a class="arrows hover">'))
                 )
             );
-        var $div_content = $('<div class="cont-box-in">');
-        var $div = $('<div class="cont-box-form">');
-        AR.Utility.createInputHtml($div, headData.slice(1), dg, false);
+        var $div_content = $('<div class="page-content">');
+        var $div = $('<div class="page-form">');
+        AR.Common.Html.createInput($div, headData.slice(1), dg, false);
         var $btn = $('<div class="btn">');
         $btn.append($('<a>').append($('<input>').addClass('submit')));
         $btn.append($('<a>').append($('<input>').addClass('return')));

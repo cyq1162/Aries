@@ -10,23 +10,28 @@
 </body>
 </html>
 <script>
-    var oName=AR.Utility.queryString("objName");
+    var oName = AR.Utility.queryString("objName");
     var tName = AR.Utility.queryString("tableName");
-    var isTree = AR.Utility.queryString("isTree");
-    var isEditor = AR.Utility.queryString("isEditor");
-    var options = AR.Utility.queryString("options");
+    var isTree = AR.Utility.queryString("tree");
+    isTree = isTree == "true" || isTree == "1";
+    var isEditor = AR.Utility.queryString("editor");
+    var options = AR.Utility.queryString("opt");
     if (oName) {
-        var dg = new AR.DataGrid(oName, tName, "dg", isTree=="true");
-        dg.isEditor = isEditor != "false";
+        var dg = new AR.DataGrid(oName, tName, "dg", isTree);
+        if (isEditor == undefined) {
+            dg.isEditor = !dg.isTreeGrid;
+        }
+        else {
+            dg.isEditor = isEditor == "true" || isEditor == "1";
+        }
         if (options) {
-            try
-            {
+            try {
                 var opt = JSON.parse(options);
-                dg.options=opt;
+                dg.options = opt;
             }
-            catch(e){}
+            catch (e) { }
         }
         dg.bind();
     }
-    else { alert('对象名不对为空');}
+    else { alert("objName can not empty"); }
 </script>

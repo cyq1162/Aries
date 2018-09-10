@@ -26,10 +26,10 @@
         }()
     };
     dg.options = ops;
-    dg.PKColumn.add('detail', '字段映射', "eidtMaping", null, null, 'edit');
-    dg.ToolBar.add('关闭窗口', 'AR.Utility.Window.close', 4);
+    dg.PKColumn.add('detail', '${columnMapping}', "eidtMaping", null, null, 'edit');
+    dg.ToolBar.add('${close}', 'AR.Utility.Window.close', 4);
     dg.bind();
     function eidtMaping(v, r, i) {
-        AR.Utility.Window.open('ConfigExcelInfo.html?id=' + v + "&tablenames=" + r.tablenames, '字段映射');
+        AR.Utility.Window.open('ConfigExcelInfo.html?id=' + v + "&tablenames=" + r.tablenames, '${columnMapping}');
     }
 </script>

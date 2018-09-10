@@ -30,13 +30,14 @@
             comboboxOption.editable = $input.attr("editable") == "true";
             dg.isShowCheckBox = multiple == "true" || multiple == "multiple";
             comboboxOption.multiple = dg.isShowCheckBox;
-            var id, title;
+            var id = $input.attr("valueField");
+            var title = $input.attr("textField");
             var options = {
                 pageSize: 10,
                 //fit: false,
                 onLoadSuccess: function () {
-                    title = dg.Internal.headerData[1].field;
-                    id = (onlytext ? title : dg.Internal.primarykey);
+                    title || (title = dg.Internal.headerData[1].field);
+                    id || (id = (onlytext ? title : dg.Internal.primarykey));
                 },
                 onSelect: function (rowIndex, rowData) {
                     if (!dg.isShowCheckBox) {
@@ -44,8 +45,9 @@
                         d.text = rowData[title];
                         d.value = rowData[id];
                         comboboxOption.data[0] = d;
-                        returnValue.values = d.value;
-                        returnValue.datas = rowData;
+                        returnValue.text = d.text;
+                        returnValue.value = d.value;
+                        returnValue.data = rowData;
                         parent.AR.Global.returnValue = returnValue;
                     }
                 },
@@ -82,7 +84,7 @@
             dg.options = options;
             dg.bind();
         }
-        else { alert("dialog='this objName' can't be empty!"); }
+        else { alert("dialog ： 'this objName' can't be empty!"); }
         function onCheck() {
             var rows = dg.getChecked();
             if (rows && rows.length > 0) {
@@ -93,8 +95,9 @@
                     d.value = rows[i][id];
                     comboboxOption.data.push(d);
                 }
-                returnValue.values = dg.getCheckIDs(id);
-                returnValue.datas = rows;
+                returnValue.text = dg.getCheckIDs(title);
+                returnValue.value = dg.getCheckIDs(id);
+                returnValue.data = rows;
                 parent.AR.Global.returnValue = returnValue;
             }
             else {

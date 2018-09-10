@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>用户管理列表</title>
+    <title>${user}${manage}${list}</title>
     <script src="/Style/JS/Aries.Loader.js"></script>
 </head>
 <body>
@@ -15,10 +15,10 @@
     var dg = new AR.DataGrid("V_SYS_UserList", "Sys_User", "grid");
     dg.forkeys = "Sys_UserInfo.UserInfoID";//关联删除
     //dg.ToolBar.isHidden = true;
-    // dg.options = { sortName: "CreateTime", sortOrder: "desc" };
+    //dg.options = { sortName: "CreateTime", sortOrder: "desc" };
     //dg.Search.$target = '';
-    dg.PKColumn.add("edit", "编辑", "dialog", "userEdit.html", "编辑用户", "edit");
-    dg.PKColumn.add("del", "删除", null, null, null, "del");
+    dg.PKColumn.add("edit", "${edit}", "dialog", "userEdit.html", "${edit}${user}", "edit");
+    dg.PKColumn.add("del", "${del}", null, null, null, "del");
     dg.bind();
-
+    //function dialog() { alert('di');}
 </script>

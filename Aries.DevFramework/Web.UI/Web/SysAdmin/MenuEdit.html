@@ -6,44 +6,44 @@
     <script src="/Style/JS/Aries.Loader.js"></script>
 </head>
 <body>
-    <div class="cont-box-tit">
-        <h3>右键配置菜单</h3>
+    <div class="page-title">
+        <h3>${rightKey}${config}${menu}</h3>
         <a class="arrows hover"></a>
     </div>
-    <div class="cont-box-in">
+    <div class="page-content">
         <div style="width: 100%; float: left">
             <div style="width: 20%; float: left;">
                 <ul id="ul_menus"></ul>
 
             </div>
             <div style="width: 80%; float: left">
-                <div class="cont-box-form">
+                <div class="page-form">
                     <form id="form1">
                         <div class="line">
-                            <label><em>*</em>菜单名称：</label>
-                            <input name="menuname" id="menuname" missingmessage="菜单名称不能为空" required='true' class='easyui-validatebox' style="width: 300px;" />
+                            <label><em>*</em>${name}：</label>
+                            <input name="menuname" id="menuname" data-options="required:true" class='easyui-validatebox' style="width: 250px;" />
                         </div>
                         <div class="line">
-                            <label><em>*</em>菜单路径：</label>
-                            <input name="menuurl" id="menuurl" missingmessage="菜单路径不能为空"  required='true' class='easyui-validatebox' style="width: 300px;" />
+                            <label><em>*</em>${url}：</label>
+                            <input name="menuurl" id="menuurl" data-options="required:true" class='easyui-validatebox' style="width: 250px;" />
                         </div>
                         <div class="line">
-                            <label><em>*</em>排序号：</label>
-                            <input name="sortorder" id="sortorder" missingmessage="排序号为数字" class='easyui-numberbox' required='true' style="width: 300px;" />
+                            <label><em>*</em>${sortOrder}：</label>
+                            <input name="sortorder" id="sortorder" data-options="required:true" class='easyui-numberbox' style="width: 250px;" />
                         </div>
                         <div class="line">
-                            <label><em>*</em>是否显示：</label>
+                            <label><em>*</em>${isShow}：</label>
                             <div class="formRad">
-                                <input type="radio" name="isShow" id="rdo_yes" value="1" /><span>是</span><input type="radio" name="isShow" id="rdo_no" checked="checked" value="0" /><span>否</span>
+                                <input type="radio" name="isShow" id="rdo_yes" value="1" /><span>${yes}</span><input type="radio" name="isShow" id="rdo_no" checked="checked" value="0" /><span>${no}</span>
                             </div>
                         </div>
                         <div class="line">
-                            <label><em>*</em>菜单功能：</label>
-                            <div class="formRad promisson" id="promisson"></div>
+                            <label><em>*</em>${permission}：</label>
+                            <div class="formRad" id="permission"></div>
                         </div>
                         <div class="btn">
                             <a>
-                                <input id="btn_submit" class="submit" type="button" name="保存" value="" />
+                                <input class="submit" type="button" name="${save}" value="" />
                             </a>
                             <!--    <a>
                                 <input id="btn_cancel" class="return" type="reset" name="重置" value="" />
@@ -60,247 +60,262 @@
     </div>
     <div style="clear: both;">
         <div id="mm" class="easyui-menu" style="width: 120px;">
-            <div data-options="iconCls:'icon-add'" id="cmbtn_add">新增页面</div>
-            <div data-options="iconCls:'icon-remove'" id="cmbtn_del">删除节点</div>
+            <div data-options="iconCls:'icon-add'" id="btnAdd">${add}${page}</div>
+            <div data-options="iconCls:'icon-remove'" id="btnDelete">${delete}${page}</div>
         </div>
         <div id="win"></div>
     </div>
 </body>
 </html>
 <script>
-    var currNode;
-    $(document).ready(function () {
-        initMenu();
-        createPromisson();
-        $("#cmbtn_add").click(function () { addPage() });
-        $("#cmbtn_del").click(function () { delMenu() });
-
-    });
-
-    var checkboxData;
-    //加载权限
-    function createPromisson() {
-        AR.Utility.Ajax.post("GetActions", "Sys_Action", {}, function (data) {
-            checkboxData = data;
-            createCheck();
-        });
-    }
-    function createCheck() {
-        if (checkboxData != undefined) {
-            //清除权限模块
-            $("#promisson").html("");
-            $.each(checkboxData, function (i, dom) {
-                $("#promisson").append('<input type="checkbox"  ref="' + dom.actionrefname + '" value="' + dom.actionid + '"/>' + dom.actionname + '');
-            });
-        }
-        //每次选中之后帮隐藏表单赋值
-        $("#promisson :checkbox").bind("click", function () {
-            setActionIDs();
-        });
-    }
-    //新增页面
-    function addPage() {
-        $("#form1").form("clear");
-        var node = getTreeNode();
-        if (node) {
-            //帮隐藏表单菜单ID赋值
-            $("#parentmenuid").val(node.id);
-            //给actionids赋值
-            setActionIDs();
-            AR.Global.DG.action = "Add";
-        }
-        currNode = node;
-        //初始一些默认值
-        $("#menuurl").val("/web/sysadmin/customview.html?objname=");
-        $('#sortorder').numberbox('setValue', '100');
-        $(':radio[name="isShow"]').eq(0).attr("checked", true);
-        var defaultActionIDs = "";
-        for (var i = 0; i < checkboxData.length; i++) {
-            switch (checkboxData[i].actionrefname) {
-                case "add":
-                case "edit":
-                case "del":
-                case "view":
-                case "import":
-                case "export":
-                case "config":
-                    if (defaultActionIDs == "") { defaultActionIDs = checkboxData[i].actionid; }
-                    else
-                    {
-                        defaultActionIDs = defaultActionIDs + "," + checkboxData[i].actionid;
-                    }
-                    break;
-            }
-        }
-        selectPromisson(defaultActionIDs);
-
-    }
-    function getTreeNode() {
-        var node = $("#ul_menus").tree("getSelected");
-        return node;
-    }
-
-    //删除菜单
-    function delMenu() {
-        var node = $("#ul_menus").tree("getSelected");
-        if (node != undefined) {
-            var msg = "确认删除？";
-            var hasChild = checkHasChild(node.id);
-            if (hasChild) {
-                msg = "该节点下包含子节点，确认删除？";
-            }
-            AR.Utility.Window.confirm(msg, "提示", function () {
-                AR.Utility.Ajax.post("DeleteMenu", "Sys_Menu", { id: node.id },
-                function (data) {
-                    if (data.success) {
-                        $("#ul_menus").tree("remove", node.target);
-                    }
-                    AR.Utility.Window.showMsg(data.msg);
-
-                });
-            });
-        } else {
-            AR.Utility.Window.showMsg("请选择一行数据");
-        }
-    }
-    function checkHasChild(id) {
-        var result = false;
-        AR.Utility.Ajax.post("ValidMenuHasChild", "Sys_Menu", { menuid: id },
-      function (data) {
-          result = data.success
-      });
-        return result;
-    }
-    //初始化菜单
-    function initMenu() {
-        AR.Utility.Ajax.post("GetMenu", "Sys_Menu", {},
-          function (data) {
-              $("#ul_menus").tree({
-                  idField: "menuid",
-                  textField: "menuname",
-                  rootText: "菜单根目录",
-                  //rootID: undefined,
-                  parentField: "parentmenuid",
-                  data: data,
-                  onContextMenu: function (e, node) {
-                      e.preventDefault();
-                      $(this).tree('select', node.target);
-                      $('#mm').menu('show', {
-                          left: e.pageX,
-                          top: e.pageY
+    (function (Menu) {
+        Menu.Tree = {
+            $target: $("#ul_menus"),
+            //当前点击的节点
+            clickNode: undefined,
+            //添加的菜单层级
+            level: 0,
+            getSelected: function () { return Menu.Tree.$target.tree("getSelected"); },
+            //初始化菜单
+            onInit: function () {
+                var that = this;
+                AR.Utility.Ajax.post("GetMenu", "Sys_Menu", {},
+                  function (data) {
+                      $("#ul_menus").tree({
+                          idField: "menuid",
+                          textField: "menuname",
+                          rootText: "${root}",
+                          //rootID: undefined,
+                          parentField: "parentmenuid",
+                          data: data,
+                          onContextMenu: function (e, node) {
+                              e.preventDefault();
+                              $(this).tree('select', node.target);
+                              $('#mm').menu('show', {
+                                  left: e.pageX,
+                                  top: e.pageY
+                              });
+                          },
+                          onClick: that.onClick
                       });
-                  },
-                  onClick: treeNodeClick
-              });
 
-          });
-    }
+                  });
+                this.regEvent();
+            },
+            //树节点单击
+            onClick: function (node) {
+                if (node == undefined) {
+                    node = Menu.Tree.getSelected();
+                }
 
-    //树节点单击
-    function treeNodeClick(node) {
-        var node = $("#ul_menus").tree("getSelected");
-
-        setMenuID();
-        currNode = node;
-        AR.Global.DG.action = "Update";
-    }
-
-    //获取选中菜单ID
-    function setMenuID() {
-        var node = $("#ul_menus").tree("getSelected");
-        if (node != undefined && node.id != null) {
-            $("#menuid").val(node.id);
-            initEdit(node.id);
-        } else {
-            $("#form1").form("clear");
-        }
-        return null;
-    }
-
-    //获取选中的权限ID
-    function setActionIDs() {
-        $("#actionids").val("");
-        var ids = [];
-        $("#promisson [type='checkbox']:checked").each(function (i, dom) {
-            ids.push($(this).val());
-        });
-        if (ids.length > 0) {
-            $("#actionids").val(ids.join(','));
-        }
-    }
-    //加载编辑框
-    function initEdit(menuid) {
-        $("#form1").form("clear");
-        AR.Utility.Ajax.post("GetMenuDetails", "Sys_Menu", { id: menuid },
-         function (data) {
-             $("#form1").form('load', data);
-             selectPromisson(data.actionids);
-         });
-    }
-
-    //设置权限选中
-    function selectPromisson(actionIDs) {
-        createCheck();
-        if (actionIDs != null && actionIDs != undefined) {
-            var arr = actionIDs.toLocaleLowerCase().split(',');
-            for (var i = 0; i < arr.length; i++) {
-                $("#promisson :checkbox").each(function (k, dom) {
-                    if (arr[i] == $(this).val()) {
-                        $(this).attr("checked", "checked");
-                    }
-                });
-            }
-            //编辑页加载 设置选中之后帮隐藏表单赋值
-            $("#actionids").val(actionIDs);
-        }
-    }
-    var _commit = AR.Form.commit;
-    //提交表单
-    AR.Form.commit = function (jq) {
-        var action = AR.Global.DG.action;
-        var node = $("#ul_menus").tree("getSelected");
-        var menuLevel = 0;
-        if (action == "Add") {
-            if (currNode.attributes == null) {
-                $("#menulevel").val(1);
-                menuLevel = 1;
-            }
-            else {
-                $("#menulevel").val(currNode.attributes.menulevel + 1);
-                menuLevel = currNode.attributes.menulevel + 1;
-            }
-        } else {
-            if (node == null || node.id == null) {
-                AR.Utility.Window.showMsg("根节点不允许修改！");
-                return;
-            }
-        }
-        _commit(jq, AR.Global.DG.action, "Sys_Menu", null, false, function (data) {
-            if (action == "Add") {
-                if (data.success) {
-                    $("#ul_menus").tree("append", {
-                        parent: currNode.target,
-                        data: [{
-                            id: data.msg,
-                            text: $("[name='menuname']").val(),
-                            attributes: { menulevel: menuLevel }
-                        }]
-                    });
-                    AR.Utility.Window.showMsg("添加成功！");
+                if (node != undefined && node.id != null) {
+                    $("#menuid").val(node.id);
+                    Menu.Form.fill(node.id);
                 }
                 else {
-                    AR.Utility.Window.showMsg(data.msg);
+                    $("#form1").form("clear");
+                }
+
+                Menu.Tree.clickNode = node;
+                AR.Global.DG.action = "Update";
+            },
+            regEvent: function () {
+                var that = this;
+                //注册右键菜单事件
+                $("#btnAdd").click(function () { that.ContextMenu.onAdd(); });
+                $("#btnDelete").click(function () { that.ContextMenu.onDel(); });
+            },
+            ContextMenu: {
+                //新增页面
+                onAdd: function () {
+                    Menu.Form.fill();
+                },
+                //删除菜单
+                onDel: function () {
+                    var that = this;
+                    var node = Menu.Tree.getSelected();
+                    if (node != undefined) {
+                        var msg = "${confirm}${delete}?";
+                        var isLeaf = Menu.Tree.$target.tree("isLeaf", node.target);
+                        if (!isLeaf) {
+                            msg = "${confirmAgain}";
+                        }
+                        AR.Utility.Window.confirm(msg, "${prompt}", function () {
+                            AR.Utility.Ajax.post("DeleteMenu", "Sys_Menu", { id: node.id },
+                            function (data) {
+                                if (data.success) {
+                                    Menu.Tree.$target.tree("remove", node.target);
+                                }
+                                AR.Utility.Window.showMsg(data.msg);
+
+                            });
+                        });
+                    } else {
+                        AR.Utility.Window.showMsg("${selectOne}");
+                    }
                 }
             }
-            else {
-                $("#ul_menus").tree("update", {
-                    target: currNode.target,
-                    text: $("[name='menuname']").val()
+        };
+        Menu.Form = {
+            //功能权限数据
+            actionData: undefined,
+
+            //加载权限
+            onInit: function () {
+                var that = this;
+                AR.Utility.Ajax.post("GetActions", "Sys_Action", {}, function (data) {
+                    that.actionData = data;
+                    that.createCheckbox();
                 });
-                AR.Utility.Window.showMsg(data.msg);
+                this.regEvent();
+            },
+            createCheckbox: function () {
+                var that = this;
+                if (this.actionData != undefined) {
+                    //清除权限模块
+                    $("#permission").html("");
+                    $.each(this.actionData, function (i, dom) {
+                        $("#permission").append('<input type="checkbox"  ref="' + dom.actionrefname + '" value="' + dom.actionid + '"/>' + dom.actionname + '');
+                    });
+                }
+                //每次选中之后帮隐藏表单赋值
+                $("#permission :checkbox").bind("click", function () {
+                    that.onClickCheckbox();
+                });
+            },
+            //获取选中的权限ID
+            onClickCheckbox: function () {
+                $("#actionids").val("");
+                var ids = [];
+                $("#permission [type='checkbox']:checked").each(function (i, dom) {
+                    ids.push($(this).val());
+                });
+                if (ids.length > 0) {
+                    $("#actionids").val(ids.join(','));
+                }
+            },
+            //加载编辑框
+            fill: function (menuid) {
+                var that = this;
+                if (menuid != undefined) {
+                    $("#form1").form("clear");
+                    AR.Utility.Ajax.post("GetMenuDetails", "Sys_Menu", { id: menuid },
+                     function (data) {
+                         $("#form1").form('load', data);
+                         that.setAction(data.actionids);
+                     });
+                }
+                else {
+                    var node = Menu.Tree.getSelected();;
+                    if (node) {
+                        //帮隐藏表单菜单ID赋值
+                        $("#parentmenuid").val(node.id);
+                        AR.Global.DG.action = "Add";
+                    }
+                    Menu.Tree.clickNode = node;
+                    //初始一些默认值
+                    $("#menuname").val("");
+                    $("#menuurl").val("/web/sysadmin/customview.html?objname=");
+                    $('#sortorder').numberbox('setValue', '100');
+                    $(':radio[name="isShow"]').eq(0).attr("checked", true);
+                    var defaultActionIDs = "";
+                    for (var i = 0; i < this.actionData.length; i++) {
+                        switch (this.actionData[i].actionrefname) {
+                            case "add":
+                            case "edit":
+                            case "del":
+                            case "view":
+                            case "import":
+                            case "export":
+                            case "config":
+                                if (defaultActionIDs == "") { defaultActionIDs = this.actionData[i].actionid; }
+                                else
+                                {
+                                    defaultActionIDs = defaultActionIDs + "," + this.actionData[i].actionid;
+                                }
+                                break;
+                        }
+                    }
+                    that.setAction(defaultActionIDs);
+                }
+
+            },
+            //设置权限选中
+            setAction: function (actionIDs) {
+                this.createCheckbox();//重新创建，等于重置状态
+                if (actionIDs != null && actionIDs != undefined) {
+                    var arr = actionIDs.toLocaleLowerCase().split(',');
+                    for (var i = 0; i < arr.length; i++) {
+                        $("#permission :checkbox").each(function (k, dom) {
+                            if (arr[i] == $(this).val()) {
+                                $(this).attr("checked", "checked");
+                            }
+                        });
+                    }
+                    //编辑页加载 设置选中之后帮隐藏表单赋值
+                    $("#actionids").val(actionIDs);
+                }
+            },
+            regEvent: function () {
+                var that = this;
+                AR.Form.BtnCommit.onBeforeExecute = function () {
+                    var action = AR.Global.DG.action;
+                    AR.Form.action = action;
+                    AR.Form.objName = "Sys_Menu";
+
+                    var node = Menu.Tree.getSelected();;
+                    Menu.Tree.level = 0;
+                    if (action == "Add") {
+                        if (Menu.Tree.clickNode.attributes == null) {
+                            $("#menulevel").val(1);
+                            Menu.Tree.level = 1;
+                        }
+                        else {
+                            $("#menulevel").val(Menu.Tree.clickNode.attributes.menulevel + 1);
+                            Menu.Tree.level = Menu.Tree.clickNode.attributes.menulevel + 1;
+                        }
+                    }
+                    else {
+                        if (node == null || node.id == null) {
+                            AR.Utility.Window.showMsg("${root}${notAllow}${update}！");
+                            return false;
+                        }
+                    }
+                };
+                AR.Form.BtnCommit.onAfterExecute = function (data) {
+                    var action = AR.Global.DG.action
+                    if (action == "Add") {
+                        if (data.success) {
+                            Menu.Tree.$target.tree("append", {
+                                parent: Menu.Tree.clickNode.target,
+                                data: [{
+                                    id: data.msg,
+                                    text: $("[name='menuname']").val(),
+                                    attributes: { menulevel: Menu.Tree.level }
+                                }]
+                            });
+                            AR.Utility.Window.showMsg("${add}${success}！");
+                            AR.Global.DG.action = "Update";//避免重复添加
+                        }
+                        else {
+                            AR.Utility.Window.showMsg(data.msg);
+                        }
+                    }
+                    else {
+                        Menu.Tree.$target.tree("update", {
+                            target: Menu.Tree.clickNode.target,
+                            text: $("[name='menuname']").val()
+                        });
+                        AR.Utility.Window.showMsg(data.msg);
+                    }
+                }
+
             }
-        });
+        };
 
-    }
+        Menu.Tree.onInit();
+        Menu.Form.onInit();
 
+
+    })(window);
 </script>

@@ -6,28 +6,28 @@
     <script src="/Style/JS/Aries.Loader.js"></script>
 </head>
 <body>
-    <div class="cont-box-tit">
-        <h3>右键配置菜单</h3>
+    <div class="page-title">
+        <h3>${rightKey}${config}${menu}</h3>
         <a class="arrows hover"></a>
     </div>
-    <div class="cont-box-in">
+    <div class="page-content">
         <div style="width: 100%; float: left">
             <div style="width: 20%; float: left;">
                 <ul id="ul_menus"></ul>
 
             </div>
             <div style="width: 80%; float: left">
-                <div class="cont-box-form">
+                <div class="page-form">
                     <form id="form1">
                         <div class="line">
                             <label><em>*</em>Sql：</label>
-                            <textarea name="sys_code" id="sys_code" missingmessage="不能为空" required='true' class='easyui-validatebox'
+                            <textarea name="sys_code" id="sys_code" data-option="required:true" class='easyui-validatebox'
                                  style="width: 84%;height:400px" ></textarea>
                         </div>
                         
                         <div class="btn">
                             <a>
-                                <input id="btn_submit" class="submit" type="button" name="保存" value="" />
+                                <input  class="submit" type="button" name="${save}" value="" />
                             </a>
                         </div>
                         <input type="hidden" name="objName" id="objName" value="" />
@@ -38,8 +38,8 @@
     </div>
     <div style="clear: both;">
         <div id="mm" class="easyui-menu" style="width: 120px;">
-            <div data-options="iconCls:'icon-add'" id="cmbtn_add">新增节点</div>
-            <div data-options="iconCls:'icon-remove'" id="cmbtn_del">删除节点</div>
+            <div data-options="iconCls:'icon-add'" id="cmbtn_add">${add}${node}</div>
+            <div data-options="iconCls:'icon-remove'" id="cmbtn_del">${delete}${node}</div>
         </div>
         <div id="win"></div>
     </div>
@@ -57,7 +57,7 @@
     //新增页面
     function addPage() {
         var node = getTreeNode();
-        var name=prompt("请输入文件名（包含.sql）或文件夹名称","*.sql")
+        var name = prompt("${promptInputName}", "*.sql")
         if (name!=null && name!="")
         {
             AR.Utility.Ajax.post("AddSql", name, { "sys_path": getFolderPath(node,"") },
@@ -101,10 +101,10 @@
         if (node != undefined) {
            var isLeaf=$("#ul_menus").tree('isLeaf', node.target);
            if (!isLeaf) {
-                alert("该节点下包含子节点，无法删除!");
+               alert("${promptCantDelete}");
                 return;
             }
-            AR.Utility.Window.confirm("确认删除:（"+node.text+"）？", "提示", function () {
+            AR.Utility.Window.confirm("${confirm}${delete}:（"+node.text+"）？", "${prompt}", function () {
                 AR.Utility.Ajax.post("DeleteSql", node.text, null,
                 function (data) {
                     if (data.success) {
@@ -124,7 +124,7 @@
               $("#ul_menus").tree({
                   idField: "id",
                   textField: "filename",
-                  rootText: "SqlCode根目录",
+                  rootText: "SqlCode${root}",
                   parentField: "parentid",
                   data: data,
                   onContextMenu: function (e, node) {

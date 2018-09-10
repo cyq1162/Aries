@@ -12,10 +12,10 @@
 <script type="text/javascript">
     var dg = new AR.DataGrid("Sys_Role");
     dg.isEditor = true;
-    dg.PKColumn.add("detail", "权限分配", 'roleAction', null, "权限分配", "auth");
+    dg.PKColumn.add("detail", "${permission}${setting}", 'roleAction', null, "${permission}${setting}", "auth");
     dg.bind();
     function roleAction(v, r, i) {
         var rname = r.rolename;
-        AR.Utility.Window.open('RoleAction.html?id=' + v, '当前角色（' + rname + '）');
+        AR.Utility.Window.open('RoleAction.html?id=' + v, '${current}${role}（' + rname + '）');
     }
 </script>

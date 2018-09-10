@@ -1,17 +1,17 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title></title>
     <script src="/Style/JS/Aries.Loader.js"></script>
 </head>
 <body>
     <div class="content">
         <a>
-            <input class="btn-lg" type="button" name="" id="btn_save" value="保存" />
+            <input class="btn-lg" type="button" id="btn_save" value="${save}" />
         </a>
         <a>
-            <input class="btn-lg" type="button" name="" id="btn_cancel" value="关闭" />
+            <input class="btn-lg" type="button" id="btnReturn" value="${close}" />
         </a>
     </div>
     <ul id="tree"></ul>
@@ -22,7 +22,7 @@
     var roleID = AR.Utility.queryString("id");
     $(function () {
         $("#btn_save").click(function () {
-            $.messager.progress({ title: "温馨提示" });
+            $.messager.progress({ title: "${prompt}" });
             var postData = { RoleID: roleID };
             if ($('#tree').tree('getRoot').checked) {
                 postData.all = 1;
@@ -51,7 +51,7 @@
                     arr.push(item);
                 }
                 postData.data = JSON.stringify(arr);
-            }            
+            }
 
             AR.Utility.Ajax.post("AddPromission", "Sys_Menu", postData,
                     function (data) {
@@ -61,13 +61,13 @@
 
         })
 
-        
+
         AR.Utility.Ajax.post("GetMenuAndAction", "Sys_Menu", { RoleID: roleID },
          function (data) {
              $("#tree").tree({
                  idField: "menuid",
                  textField: "menuname",
-                 rootText: "菜单根目录",
+                 rootText: "${menu}${root}",
                  rootID: undefined,
                  checkbox: true,
                  parentField: "parentmenuid",

@@ -9,7 +9,7 @@
 /// <reference path="/Style/JS/AriesJS/Aries.DataGrid.js" />
 /// <reference path="/Style/JS/AriesJS/Aries.Form.js" />
 
-function getCookie(name) {
+function sys_getCookie(name) {
     var c = document.cookie;
     var start = c.indexOf(name);
     if (start > -1) {
@@ -22,25 +22,50 @@ function getCookie(name) {
     }
     return "";
 }
-var themeName = getCookie('sys_theme') || 'default';
-var ui = getCookie('sys_ui');
-var vs = "v5.1.1";
-document.write('<link id="lk_theme" href="' + ui + '/Style/JS/EasyUI-1.3.4/themes/' + themeName + '/easyui.css" rel="stylesheet" type="text/css" />');
-document.write('<link href="' + ui + '/Style/CSS/main.css" rel="stylesheet" />');
-document.write('<link href="' + ui + '/Style/JS/EasyUI-1.3.4/themes/icon.css" rel="stylesheet" type="text/css" />');
-document.write('<script src="' + ui + '/Style/JS/jquery-1.7.1.min.js"></script>');
-document.write('<script src="' + ui + '/Style/JS/json2.js" ></script>');
-document.write('<script src="' + ui + '/Style/JS/EasyUI-1.3.4/jquery.easyui.min.js?"></script>');
-document.write('<script src="' + ui + '/Style/JS/EasyUI-1.3.4/locale/easyui-lang-zh_CN.js"></script>');
-//document.write('<script src="' + ui + '/Style/JS/AriesJS/Aries.Lang-en.js?v=' + vs + '"></script>');
-document.write('<script src="' + ui + '/Style/JS/AriesJS/Aries.Global.js?v=' + vs + '"></script>');
-document.write('<script src="' + ui + '/Style/JS/AriesJS/Aries.EasyUIExtend.js?v=' + vs + '"></script>');
-document.write('<script src="' + ui + '/Style/JS/AriesJS/Aries.Utility.js?v=' + vs + '"></script>');
-document.write('<script src="' + ui + '/Style/JS/AriesJS/Aries.Upload.js?v=' + vs + '"></script> ');
-document.write('<script src="' + ui + '/Style/JS/AriesJS/Aries.Combobox.js?v=' + vs + '"></script>');
-document.write('<script src="' + ui + '/Style/JS/AriesJS/Aries.Common.js?v=' + vs + '"></script>');
-document.write('<script src="' + ui + '/Style/JS/AriesJS/Aries.DataGrid.js?v=' + vs + '"></script>');
-document.write('<script src="' + ui + '/Style/JS/AriesJS/Aries.Form.js?v=' + vs + '"></script>');
+function sys_getCss() {
+    var url = location.href;
+    if (url.indexOf("/login.") > -1) {
+        return "login";
+    }
+    if (url.indexOf("/index.") > -1) {
+        return "index";
+    }
+    return "main";
+
+}
+
+var sys_theme = sys_getCookie('sys_theme') || 'default';
+var easyui_theme = sys_getCookie('easyui_theme') || 'default';
+var sys_ui = sys_getCookie('sys_ui');
+var sys_lang = sys_getCookie('sys_lang') || 'zh_CN';
+var sys_css = sys_getCss();
+var sys_vs = "v5.2.0";//系统版本号
+
+//样式
+document.write('<link href="' + sys_ui + '/Style/Theme/EasyUI/'+easyui_theme+'/easyui.css" rel="stylesheet" type="text/css" />');
+document.write('<link href="' + sys_ui + '/Style/Theme/EasyUI/icon.css" rel="stylesheet" type="text/css" />');
+document.write('<link href="' + sys_ui + '/Style/Theme/Aries/' + sys_theme + '/' + sys_css + '.css" rel="stylesheet" />');
+
+//页面的多语言
+//document.write('<script src="' + sys_ui + '/Style/Theme/' + sys_theme + '/locale/Html.Lang-' + sys_lang + '.js?v=' + sys_vs + '"></script>');
+
+//jq+easyui
+document.write('<script src="' + sys_ui + '/Style/JS/jquery-1.7.1.min.js"></script>');
+document.write('<script src="' + sys_ui + '/Style/JS/json2.js" ></script>');
+document.write('<script src="' + sys_ui + '/Style/JS/EasyUI-1.3.4/jquery.easyui.min.js?"></script>');
+document.write('<script src="' + sys_ui + '/Style/JS/EasyUI-1.3.4/locale/easyui-lang-' + sys_lang + '.js"></script>');
+//Aries
+document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/locale/Aries.Lang-' + sys_lang + '.js?v=' + sys_vs + '"></script>');
+document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/Aries.Global.js?v=' + sys_vs + '"></script>');
+document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/Aries.EasyUIExtend.js?v=' + sys_vs + '"></script>');
+document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/Aries.Utility.js?v=' + sys_vs + '"></script>');
+document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/Aries.Upload.js?v=' + sys_vs + '"></script> ');
+document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/Aries.Combobox.js?v=' + sys_vs + '"></script>');
+document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/Aries.Common.js?v=' + sys_vs + '"></script>');
+document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/Aries.DataGrid.js?v=' + sys_vs + '"></script>');
+document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/Aries.Form.js?v=' + sys_vs + '"></script>');
+
+
 
 
 

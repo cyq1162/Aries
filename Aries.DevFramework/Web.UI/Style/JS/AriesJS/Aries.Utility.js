@@ -1,12 +1,8 @@
-﻿(function ($Core) {
-    $Core.Lang || ($Core.Lang = {});
-    if ($Core.Lang.langKey == undefined) {
-        $Core.Lang.configRulesError = '配置表头的（格式规则）配置错误（冒号后面数据转Json失败）';
-    }
-
-})(AR);
+﻿
 //AR.Utility 定义
 (function ($, $Core) {
+    $Core.Lang || ($Core.Lang = {});
+    /*工具类，包含：窗体操作、Ajax请求、Cookie、以及其它常用方法*/
     $Core.Utility = {
 
         //深度克隆对象
@@ -217,207 +213,8 @@
                 })(topWin);
             }
             return mid;
-        },
-        //生成表单下拉框。
-        createInputHtml: function ($container, dataArray, dg, fromSearch) {
-            var line, configKey, objName, cssName;
-            for (var i = 0, len = dataArray.length; i < len; i++) {
-                if (i % 3 == 0) {
-                    line = $("<div class=\"line\">");
-                    $container.append(line);
-                }
-                var div_item = $("<div class=\"short\">");
-                var label = $("<label>").html(dataArray[i].title + "：");
-                div_item.append(label);
-                var input = $("<input type=\"text\"/>");
-                var input2;//日期时的第二个框
-                //如果是下拉框模式执行以下代码
-                var formatter = dataArray[i].formatter;
-                if (formatter && formatter.length > 1 && formatter.indexOf('#') != -1) {
-                    if (/C_+/.test(formatter)) {
-                        objName = formatter.split('#')[1];
-                    } else {
-                        configKey = formatter.split('#')[1];
-                    }
-                }
-
-                if (configKey || objName)//绑定下拉
-                {
-                    input.attr("name", dataArray[i].field);
-                    if (configKey) {
-                        input.attr("configkey", configKey)
-                        configKey = undefined;
-                    }
-                    else {
-                        if (objName.indexOf('=>')) {
-                            var arrayObjname = objName.split('=>');
-                            objName = arrayObjname[0];
-                            input.attr("parent", arrayObjname[1]);
-                        }
-                        input.attr("objname", objName);
-                    }
-                    if (dataArray[i].rules) {
-                        this._setInputAttr(input, dataArray[i].rules, "$:", label, true);
-                    }
-                    if (!input.attr("operator")) {
-                        input.attr("operator", "=");
-                    }
-                    if (fromSearch && !input.attr("multiple")) {
-                        input.attr("onchange", "$Core.Common._Internal.onQuery");//("+dg.id+")
-                    }
-                }
-                else if (dataArray[i].datatype)//非绑定下拉
-                {
-                    input.attr("operator", "like");
-                    var dtype = dataArray[i].datatype.split(',');
-                    switch (dtype[0]) {
-                        case "date":
-                        case "datetime":
-                            var type = dataArray[i].formatter == "dateFormatter" ? "date" : dtype[0];
-                            var width = type == "date" ? 95 : 140;
-                            cssName = "easyui-" + type + "box";
-                            input.attr("name", dataArray[i].field).addClass(cssName).attr("date", dtype[0]).width(150).attr("validType", type + "box");
-                            if (fromSearch && dataArray[i].rules) {
-                                input.width(width);
-                                input.attr("operator", "<=");
-                                this._setInputAttr(input, dataArray[i].rules, "$:", label);
-                                if (input.attr("clone") != "false") {
-                                    input2 = input.clone(true);
-                                    input2.attr("operator", ">=");
-                                    div_item.append(input2).append($("<span>").html("&nbsp;至&nbsp;"));
-                                    //处理默认值
-                                    var defalutValue = input.val();
-                                    if (defalutValue && defalutValue.indexOf(',') > -1) {
-                                        var items = defalutValue.split(',');
-                                        input.val(items[1]);
-                                        input2.val(items[0]);
-                                    }
-                                }
-                            }
-                            break;
-                        case "int32":
-                        case "int64":
-                        case "int16":
-                        case "byte":
-                        case "double":
-                        case "single":
-                        case "decimal":
-                            cssName = "easyui-numberbox";
-                            if (dtype[2]) {
-                                switch (dtype[0]) {
-                                    case "single": case "double": case "decimal":
-                                        input.attr("precision", dtype[2]); break;
-                                }
-                            }
-                            input.attr("name", dataArray[i].field).addClass(cssName);
-                            if (fromSearch && dataArray[i].rules) {
-                                input.width(68);
-                                input.attr("operator", "<=");
-                                this._setInputAttr(input, dataArray[i].rules, "$:", label);
-                                if (input.attr("clone") != "false") {
-                                    input2 = input.clone(true);
-                                    input2.attr("operator", ">=");
-                                    div_item.append(input2).append($("<span>").html("&nbsp;-&nbsp;").css({ "display": "block", "float": "left" }));
-                                    //处理默认值
-                                    var defalutValue = input.val();
-                                    if (defalutValue && defalutValue.indexOf(',') > -1) {
-                                        var items = defalutValue.split(',');
-                                        input.val(items[1]);
-                                        input2.val(items[0]);
-                                    }
-                                }
-                            }
-                            break;
-                        default:
-                            if (dtype[0] == "string") { cssName = ""; }
-                            input.attr("name", dataArray[i].field).addClass(cssName);
-                            if (fromSearch && dataArray[i].rules) {
-                                this._setInputAttr(input, dataArray[i].rules, "$:", label);
-                            }
-                            break;
-                    }
-                    if (dtype[1]) {
-                        var size = parseInt(dtype[1]);
-                        var scale = dtype[2];
-                        if (scale && scale != 0) //带符点数
-                        {
-                            size = size + parseInt(scale) + 1; //重置长度,+1是加上.的占位符
-                        }
-                        input.addClass("easyui-validatebox");
-                        if (!input.attr("validType")) {
-                            input.attr("validType", "length[1," + size + "]");
-                        }
-                        if (input2) {
-                            input2.addClass("easyui-validatebox");
-                            if (!input2.attr("validType")) {
-                                input2.attr("validType", "length[1," + size + "]");
-                            }
-                        }
-                    }
-
-                }
-
-                if (dg && dg.Search) {
-                    if (input2) {
-                        dg.Search.Items.set(dataArray[i].field, [input, input2]);
-                    }
-                    else {
-                        dg.Search.Items.set(dataArray[i].field, input);
-                    }
-                }
-                div_item.append(input);
-                line.append(div_item);
-                objName = undefined; cssName = undefined; input = undefined; input2 = undefined;
-            }
-        },
-        _setInputAttr: function ($input, rules, splitFlag, $label, isCombobox) {
-            if (typeof (rules) == "object") { rules = JSON.stringify(rules); }
-            if (rules.indexOf('{') == -1) { return; }
-            var sp = rules.split("{")//支持$:{} 只对查询的多选 $1:{}
-            var _rules = "{" + sp[sp.length - 1];//取最后一个
-            if (_rules && _rules[0] == '{') {
-                try {
-                    _rules = eval("(" + _rules + ")");
-                } catch (e) {
-                    alert($Core.Lang.configRulesError + " :" + rules);
-                    // alert(e.message + " rules config json error : " + rules);
-                    return;
-                }
-
-                for (var name in _rules) {
-                    var value = _rules[name];
-                    switch (name) {
-                        case "width":
-                            $input.width(value);
-                            break;
-                        case "height":
-                            $input.height(value);
-                            break;
-                        case "title":
-                        case "label":
-                            if ($label) { $label.html(value + "："); }
-                            break;
-                        case "pattern":
-                            $input.attr("operator", value);//pattern在某些浏览器上是关键字，所以变更为opeator
-                            break;
-                        case "multiple":
-                            $input.attr(name, value);//多选，没有指定操作符时(对于$:只对查询的多选、$1对于行内也多选时，不能用in，用默认的like)
-                            if (!_rules["operator"]) { $input.attr("operator", (rules.indexOf("$:") > -1 ? "in" : "like")); }
-                            break;
-                        case "defaultValue":
-                            if (!isCombobox) {
-                                $input.val(value);
-                                $input.removeAttr("defaultValue");
-                            }
-                            else { $input.attr(name, value); }
-                            break;
-                        default:
-                            $input.attr(name, value);
-                            break;
-                    }
-                }
-            }
         }
+
 
     };
     //Window对象域
@@ -500,8 +297,7 @@
                 if (typeof (opts) == "string") {
                     opts = JSON.parse(opts)
                 }
-                if(opts.width || opts.height)
-                {
+                if (opts.width || opts.height) {
                     defaultOptions.fit = false;
                 }
             }
@@ -513,25 +309,26 @@
             }
             window.parent.$("#AddWindow").window('close');
         }
-        function confirm(msg, title, asyncFun) {
-            $.messager.confirm(title || "Title", msg, function (r) {
-                if (r) {
-                    if (typeof (asyncFun) == "function") {
-                        asyncFun();
-                    }
+        function confirm(msg, title, okEvent,cancelEvent) {
+            $.messager.confirm(title || $Core.Lang.prompt, msg, function (isOK) {
+                if (isOK) {
+                    okEvent && okEvent();
+                }
+                else {
+                    cancelEvent && cancelEvent();;
                 }
             });
         }
         //注释看Easyui相关API
-        function showMsg(msg, title, showType, timeout) {
-            $.messager.show({
-                title: title || "Title",
+        function showMsg(msg, title, showType, timeout, opts) {
+            $.messager.show($.extend({
+                title: title || $Core.Lang.msg,
                 msg: msg,
                 timeout: timeout || 1500,
                 showType: showType || 'slide'
-            });
+            }, opts));
         }
-        function dialog(title, html, options) {
+        function dialog(title, html, opts) {
             var _container = $("#_div_dialog");
             _container[0] || (_container = $('<div>').attr('id', '_div_dialog'));
             opts = $.extend({
@@ -540,7 +337,7 @@
                 height: 450,
                 modal: true,
                 content: html
-            }, options);
+            }, opts);
             _container.dialog(opts)
         }
         function closeDialog() {
@@ -572,8 +369,8 @@
             var str = '{0}?sys_method={1}';
             if (objName) {
                 var items = objName.split(',');
-                if (objName.indexOf(',') == -1 || !items[1]) {
-                    str = '{0}?sys_method={1}&sys_objName=' + objName;
+                if (objName.indexOf(',') == -1 || !items[1] || items[1] == "null") {
+                    str = '{0}?sys_method={1}&sys_objName=' + items[0];
                 }
                 else {
                     str = '{0}?sys_method={1}&sys_objName=' + items[0] + '&sys_tableName=' + items[1];

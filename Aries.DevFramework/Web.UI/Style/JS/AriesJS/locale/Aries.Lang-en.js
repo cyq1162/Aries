@@ -12,9 +12,9 @@ window.AR || (window.AR = {});
 	$Core.Lang.save = 'Save';
 
 	//Aries.Combobox.js
-	$Core.Lang.select = 'please';// '请选择';
-	$Core.Lang.selectFirst = 'select one please';// '请先选中数据';
-	$Core.Lang.selectData = 'select data please';// '选择数据';
+	$Core.Lang.select = 'Please';// '请选择';
+	$Core.Lang.selectFirst = 'Select one please';// '请先选中数据';
+	$Core.Lang.selectData = 'Select data please';// '选择数据';
 	//$Core.Lang.cancel = '取消';
 	//$Core.Lang.save = '保存';
 	
@@ -43,7 +43,7 @@ window.AR || (window.AR = {});
 	$Core.Lang.selectDelData = 'select data please';// '请选择要删除的数据!';
 	$Core.Lang.delError = 'Delete Fail';//'删除失败';
 	$Core.Lang.errorInfo = 'Error Detail';// '错误详情';
-	$Core.Lang.msg = 'Message Tip';// '消息提示';
+	$Core.Lang.msg = 'Message';// '消息提示';
 	$Core.Lang.importTip = 'Waiting for importing data...';// '正在导入数据，请稍候...';
 	$Core.Lang.importError = 'Import Error';// '数据异常，导入失败！';
 	$Core.Lang.uploadExtendName = 'file extend name eroor';//'文件扩展名必须是：';

@@ -1,20 +1,9 @@
 ﻿
 window.AR || (window.AR = {});
-//多语言定义
-(function ($Core) {
-    $Core.Lang || ($Core.Lang = {});
-    if ($Core.Lang.langKey == undefined) {
-        $Core.Lang.edit = '编辑';
-        $Core.Lang.del = '删除';
-        $Core.Lang.detail = '查看详情';
-        $Core.Lang.cancel = '取消';
-        $Core.Lang.save = '保存';
-    }
-
-})(window.AR);
 
 //AR.Global 定义
 (function ($Core) {
+    $Core.Lang || ($Core.Lang = {});
     //自定义的健值对数组
     $Core.Dictionary = function () {
         this.length = 0;
@@ -36,7 +25,7 @@ window.AR || (window.AR = {});
         }
     };
     //处理Config_KeyValue的数据。
-    $Core.Config= {
+    $Core.Config = {
         data: {},
         getText: function (configKey, value) {
             var items = this.data[configKey];
@@ -91,11 +80,12 @@ window.AR || (window.AR = {});
             //当前页面DataGrid操作，值为Update，Add
             action: null,
             PKTemplate: {
-                edit: '<a class="bj" title="' + $Core.Lang.edit + '" op="1"></a>',
-                del: '<a class="sc" title="' + $Core.Lang.del + '"></a>',
-                detail: '<a class="ckxq" title="' + $Core.Lang.deltail + '" op="0"></a>',
-                save: '<a class="bc" title="' + $Core.Lang.save + '"   op="0"></a>',
-                cancel: '<a class="cx" title="' + $Core.Lang.cancel + '"   op="0"></a>'
+                //op=1 指定 open 时的动作为更新
+                edit: '<a class="edit" title="' + $Core.Lang.edit + '" op="1"></a>',
+                del: '<a class="del" title="' + $Core.Lang.del + '"></a>',
+                detail: '<a class="detail" title="' + $Core.Lang.deltail + '"></a>',
+                save: '<a class="save" title="' + $Core.Lang.save + '" ></a>',
+                cancel: '<a class="cancel" title="' + $Core.Lang.cancel + '" ></a>'
             },
             //datagrid或treegrid的默认配置
             DefaultConfig: {
@@ -107,7 +97,9 @@ window.AR || (window.AR = {});
                 border: true,
                 pageSize: 15,
                 pageList: [10, 15, 20, 30, 40, 50, 100],
+                //设置为true时，面版的大小将铺满它所在的容器（浏览器）。
                 fit: true,
+                //系统会自动判断该属性，如果字段显示的数量>10，则为false,显示滚动条。
                 fitColumns: true,
                 pagination: true,
                 rownumbers: true,
@@ -171,30 +163,46 @@ window.AR || (window.AR = {});
 })(window.AR);
 
 //Jquery 扩展定义
-(function ($) {
+(function ($, $Core) {
 
     //转换input变成lable形式
-    $.fn.toView = function () {
-        $(this).find(":input[type!='button'][type!='rest']").each(function () {
-            var $jqueryItem = jQuery(this);
-            if ($jqueryItem.css("display") == "none" || $jqueryItem.attr("type") == "hidden") {
-            } else {
-                var width = $jqueryItem.width();
-                var value = $jqueryItem.val();
-                var $span = jQuery("<span class='viewTitle' title=" + value + " style='display:inline-block; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;padding-left:3px;'>" + value + "</span>");
-                $span.css({ height: $jqueryItem.height(), width: width });
-                $jqueryItem.wrap($span);
+    $.fn.toView = function ($input) {
+        if ($input == undefined && this[0].tagName == "INPUT") {
+            $input = this;
+        }
+        if ($input) {
+            if ($input.css("display") != "none") {
+                var width = $input.width();
+                var value = $input.val();
+                var cName = $input.attr("class");
+                if (cName && cName.startWith("combo")) {
+                    $input.parent().replaceWith($input);
+                    if (cName.startWith("combo") && value == $Core.Lang.select) { value = ""; }
+                }
+                var $span = $("<span class='textvalue' title=" + value + ">" + value + "</span>");
+                $span.css({ height: $input.height(), width: width });
+                $input.wrap($span);
             }
-            $jqueryItem.remove();
-
-        });
-        var viewClass = "view";
-        $(".combo,.datebox").each(function () {
-            var className = jQuery(this).attr("class");
-            $(this).removeClass(className);
-            $(this).addClass(viewClass);
-            $(".viewTitle", $(this)).siblings().remove();
-        })
+            else {
+                //移除easyui下拉产生的隐藏域项
+                var name = $input.attr("name") || $input.attr("comboname");
+                if (name) {
+                    var $form = this.parents("form")[0] || $(document);
+                    $form.find(":input[type='hidden'][name='" + name + "']").each(function () {
+                        $(this).remove();
+                    });
+                }
+            }
+            $input.remove();
+        }
+        else {
+            this.find(":input[type!='button'][type!='rest'][type!='hidden']").each(function () {
+                $.fn.toView($(this));
+            });
+            //$(".combo,.datebox").each(function () {
+            //    $(this).replaceWith($(".textvalue", $(this)));
+            //})
+        }
     }
     /**
     *@return {bool}
@@ -206,7 +214,7 @@ window.AR || (window.AR = {});
             return true;
         }
     }
-})(jQuery);
+})(jQuery, window.AR);
 
 
 // Javascript对象属性扩展定义

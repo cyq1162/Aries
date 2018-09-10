@@ -1,14 +1,7 @@
-﻿(function ($Core) {
-    $Core.Lang || ($Core.Lang = {});
-    if ($Core.Lang.langKey == undefined) {
-        $Core.Lang.select = '请选择';
-        $Core.Lang.operationSuccess = '操作成功';
-        $Core.Lang.fillTheBlank = '请填写或选择（*）项';
-    }
-
-})(AR);
+﻿
 //AR.Form 定义
 (function ($, $Core, $PCore) {
+    $Core.Lang || ($Core.Lang = {});
     $(document).on("click", ".arrows", function () {
         $(this).toggleClass("hover");
         $(this).parent().next().toggle();
@@ -27,7 +20,7 @@
             this.action = $PCore && $PCore.Global.DG.action;
             this.url = $Core.Global.route.root;
             /**
-            * 获取了数据，准备回填表单前（参数：data）
+            * 获取了数据，准备回填表单前（参数：data json格式）
             * 可格式化表单的数据,可格式化日期时间，字符显示的处理。
             *@param{object} data 表单数据对象
             */
@@ -51,18 +44,10 @@
             };
             this.onInit = function () {
                 this.$target = $("form:eq(0)");
-                this.BtnCommit.$target = $("#btn_submit").length == 0 ? $(".submit") : $("#btn_submit");
-                this.BtnCancel.$target = $("#btn_cancel").length == 0 ? $(".return") : $("#btn_cancel");
-                var that = this;
-                this.BtnCommit.$target.click(function () {
-                    that.BtnCommit.onExecute();
-                });
-                //注册保存跟取消按钮事件
-                this.BtnCancel.$target.click(function () {
-                    that.BtnCancel.onExecute();
-                });
-
-            }
+                this.BtnCommit.$target = $($(".submit")[0] || $("#btnSubmit")[0]);
+                this.BtnCancel.$target = $($(".return")[0] || $("#btnReturn")[0]);
+                this.regEvent();
+            };
 
             this.BtnCommit = function () {
                 function Fn() {
@@ -81,7 +66,7 @@
                     this.onExecute = function () {
                         if (this.onBeforeExecute() === false) {
                             return;
-                        }
+                        } 
                         $Core.Utility.Window.close();
                     };
                     //执行前事件（无参数）
@@ -105,92 +90,78 @@
                 }
                 var formData = $targetForm.find("[name]:input").serializeArray();
                 for (var i in formData) {
-                    if (formData[i].value ==  $Core.Lang.select || (clearEmptyValue && formData[i].value == '')) {
+                    if (formData[i].value == $Core.Lang.select || (clearEmptyValue && formData[i].value == '')) {
                         delete formData[i];
                     }
                 }
                 if (this.BtnCommit && this.BtnCommit.onBeforeExecute(formData) == false) { return; }
-                if ($targetForm.form("validate")) {
-                    var tName = tableName || this.tableName;
-                    var oName = this.objName || tName;
-                    var obj = $Core.Utility.Ajax.post(mthodName || ((this.method.toLowerCase() != 'get') && this.method) || this.action, oName + "," + tName, formData);
-                    if (callBack && typeof (callBack) == "function") {
-                        callBack.call(this, obj);
-                    }
-                    else if(obj)
-                    {
-                        if (this.BtnCommit && this.BtnCommit.onAfterExecute(obj) == false)
-                        {
-                            return;
-                        }
-                        var msg = obj.msg;
-                        if (obj.success != undefined && obj.success) {
-                            msg = $Core.Lang.operationSuccess;
-                            if ($PCore && $PCore.Global.DG.operating) {
-                                $PCore.Global.DG.operating.datagrid('reload');
-                            }
-                        }
-                        if ($PCore)
-                        {
-                            $PCore.Utility.Window.showMsg(msg);
-                            if (obj.success && parent != null && parent.document.title != document.title) {
-                                $Core.Utility.Window.close();
-                            }
-                        }
-                        
-                    }
-                }
-                else
-                {
+                if (!$targetForm.form("validate")) {
                     $Core.Utility.Window.showMsg($Core.Lang.fillTheBlank);
                     return false;
                 }
+                var tName = tableName || this.tableName;
+                var oName = this.objName || tName;
+                var obj = $Core.Utility.Ajax.post(mthodName || ((this.method.toLowerCase() != 'get') && this.method) || this.action, oName + "," + tName, formData);
+                if (callBack && typeof (callBack) == "function") {
+                    callBack.call(this, obj);
+                }
+                else if (obj) {
+                    if (this.BtnCommit && this.BtnCommit.onAfterExecute(obj) == false) {
+                        return;
+                    }
+                    var msg = obj.msg;
+                    if (obj.success != undefined && obj.success) {
+                        msg = $Core.Lang.operationSuccess;
+                        if ($PCore && $PCore.Global.DG.operating) {
+                            $PCore.Global.DG.operating.datagrid('reload');
+                        }
+                    }
+                    if ($PCore) {
+                        $PCore.Utility.Window.showMsg(msg);
+                        if (obj.success && parent != null && parent.document.title != document.title) {
+                            $Core.Utility.Window.close();
+                        }
+                    }
+
+                }
+
+            };
+            this.regEvent = function () {
+                if (this.$target && this.BtnCommit.$target) {
+                    var that = this;
+                    this.BtnCommit.$target.click(function () {
+                        that.BtnCommit.onExecute();
+                    });
+                    //注册保存跟取消按钮事件
+                    this.BtnCancel.$target.click(function () {
+                        that.BtnCancel.onExecute();
+                    });
+                    //input，追加回车事件。
+                    this.$target.submit(function (e) { return false; });// 禁掉自动提交。（当表单只有一个输入框时，有些浏览器会自动触发回车即submit事件）"
+                    this.$target.find("input:[type='text']").each(function () {
+                        $(this).keyup(function (e) {
+                            var ev = document.all ? window.event : e;
+                            if (ev.keyCode == 13) // Enter
+                            {
+                                $(this).blur();//先触发光标离开事件（让easyui的值写回hidde域）
+                                that.BtnCommit.onExecute();
+                                $(this).focus();//将光标还原。
+                            }
+                        });
+
+                    });
+                }
+
             };
         }
         return new Obj();
     }();
 })(jQuery, AR, parent.AR);
 
-
 (function ($, $Core, $PCore) {
-    //回车事件注册
-    function event_keydown() {
-        var btn_query = $(".query");
-        var btn_submit = $("#btn_submit").length == 0 ? $(".submit") : $("#btn_submit");
-        btn_query[0] && registKeydown(btn_query);
-        btn_submit[0] && registKeydown(btn_submit);
-    }
-
-    //需要注册新事件流，把事件写在此方法前面
-    /**
-    *方法接收多个参数,以字符串为标准如，调用方式如：registEvent("reset", "keydown");
-    *reset 重置按钮事件
-    *cancel 取消按钮事件
-    *keydown 回车事件
-    */
-    function registEvent() {
-        for (var i = 0; i < arguments.length; i++) {
-            try {
-                eval("event_" + arguments[i])();
-            } catch (e) {
-                //console.log(arguments[i]);
-            }
-        }
-    }
-    //注册回车事件
-    function registKeydown(el) {
-        window.onkeydown = function (e) {
-            var ev = document.all ? window.event : e;
-            if (ev.keyCode == 13) {
-                el.click();
-                return false;
-            }
-        }
-    }
     $(function () {
         $Core.Combobox.onInit();
         $Core.Form.onInit();
-        registEvent("keydown");
         $Core.Form.onExecute();
     });
 })(jQuery, AR, parent.AR);

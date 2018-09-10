@@ -253,6 +253,7 @@ CREATE TABLE Sys_User
     LastLoginTime date NULL,
     LastLoginIP nvarchar2(50) NULL,
     RoleIDs nvarchar2(500) NULL,
+    OrgIDs nvarchar2(500) NULL,
     CreateTime date Default sysdate NULL,
     PRIMARY KEY (UserID) 
 )
@@ -269,7 +270,7 @@ comment on column SYS_USER.STATUS  is '状态 1 启用 2禁用 3已删';
 comment on column SYS_USER.LOGINCOUNT  is '登录次数';
 comment on column SYS_USER.LASTLOGINTIME  is '最后登录时间';
 comment on column SYS_USER.LASTLOGINIP  is '公司ID';
-comment on column SYS_USER.ROLEIDS  is '角色ID（可以多个）';
+comment on column SYS_USER.ROLEIDS  is '角色ID（可以多个）';comment on column SYS_USER.ORGIDS  is '组织部门ID（可以多个）';
 comment on column SYS_USER.CREATETIME  is '创建日期';
 
 CREATE TABLE Sys_UserInfo 
@@ -286,3 +287,14 @@ comment on column SYS_USERINFO.COMPANYID  is '公司ID（未用到）';
 comment on column SYS_USERINFO.MEMO  is '用户备注';
 comment on column SYS_USERINFO.AREAID  is '区域ID（未用到）';
 
+CREATE TABLE Sys_Organization 
+(
+    OrgID char(36) Default (SYS_GUID()) NOT NULL,
+    OrgName nvarchar2(100) NOT NULL,
+    OrgFullName nvarchar2(100) NOT NULL,
+    OrgCode nvarchar2(300) NOT NULL,
+    OrgLevel NUMBER(10) NULL,
+    ParentOrg nvarchar2(50) NULL,
+    CreateTime date Default sysdate NULL,
+    PRIMARY KEY (OrgID) 
+)

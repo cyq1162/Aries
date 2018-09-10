@@ -171,6 +171,7 @@ CREATE TABLE `Sys_User`
     `LastLoginTime` datetime NULL COMMENT '最后登录时间',
     `LastLoginIP` varchar(50) NULL COMMENT '公司ID',
     `RoleIDs` varchar(500) NULL COMMENT '角色ID（可以多个）',
+    `OrgIDs` varchar(500) NULL COMMENT '组织部门ID（可以多个）',
     `CreateTime` datetime NULL COMMENT '创建日期',
     PRIMARY KEY (`UserID`) 
 );
@@ -184,3 +185,14 @@ CREATE TABLE `Sys_UserInfo`
     PRIMARY KEY (`UserInfoID`) 
 );
 
+CREATE TABLE `Sys_Organization` 
+(
+    `OrgID` char(36) NOT NULL,
+    `OrgName` varchar(100) NOT NULL,
+    `OrgFullName` varchar(100) NOT NULL,
+    `OrgCode` varchar(300) NOT NULL,
+    `OrgLevel` int NULL,
+    `ParentOrg` varchar(50) NULL,
+    `CreateTime` datetime NULL,
+    PRIMARY KEY (`OrgID`) 
+);

@@ -124,7 +124,6 @@
     <Content Include="Style\Theme\Aries\default\login.css" />
     <Content Include="Style\Theme\Aries\default\main.css" />
     <Content Include="Style\Theme\Aries\default\Images\add.png" />
-    <Content Include="Style\Theme\Aries\default\Images\ae86.png" />
     <Content Include="Style\Theme\Aries\default\Images\anniu.png" />
     <Content Include="Style\Theme\Aries\default\Images\arr_d.jpg" />
     <Content Include="Style\Theme\Aries\default\Images\bianji.png" />
@@ -414,6 +413,7 @@
     <None Include="Properties\PublishProfiles\Aries_Publish.pubxml" />
     <Content Include="Resource\Excel\V_Test.xls" />
     <Content Include="Resource\Excel\V_SYS_UserList.xls" />
+    <None Include="Properties\PublishProfiles\pub.pubxml" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

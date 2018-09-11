@@ -1626,6 +1626,7 @@
 
         dg._onBeforeLoad = opts.onBeforeLoad;
         opts.onBeforeLoad = function (param) {
+            param || (param = {});
             var mid = function () {
                 var topWin = window;
                 return function (win) {

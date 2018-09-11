@@ -12,7 +12,7 @@ using CYQ.Data.Cache;
 
 namespace Aries.Core.Helper
 {
-    internal static partial class WebHelper
+    public static partial class WebHelper
     {
 
         #region 安全Key检测

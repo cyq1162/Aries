@@ -14,6 +14,7 @@ using Aries.Core.Helper;
 using Aries.Core.Sql;
 using Aries.Core.Extend;
 using Aries.Core.DB;
+using System.Collections.Specialized;
 
 
 namespace Aries.Core
@@ -357,23 +358,27 @@ namespace Aries.Core
                 string id = Query<string>("id");
                 if (string.IsNullOrEmpty(id))
                 {
-                    if (HttpContext.Current.Request.QueryString.Keys.Count > 0)
+                    NameValueCollection keyValues = HttpContext.Current.Request.QueryString;
+                    string key = "";
+                    if (keyValues.Keys.Count > 0)
                     {
-                        for (int i = 0; i < HttpContext.Current.Request.QueryString.Keys.Count; i++)
+                        for (int i = 0; i < keyValues.Keys.Count; i++)
                         {
-                            if (HttpContext.Current.Request.QueryString.Keys[i].ToLower().EndsWith("id"))
+                            key = keyValues.Keys[i].ToLower();
+                            if (key.EndsWith("id") && key != "sys_mid")
                             {
-                                return Query<string>(HttpContext.Current.Request.QueryString.Keys[i], string.Empty);
+                                return Query<string>(key, string.Empty);
                             }
                         }
-                        for (int i = 0; i < HttpContext.Current.Request.Form.Keys.Count; i++)
+                    }
+                    keyValues = HttpContext.Current.Request.Form;
+                    for (int i = 0; i < keyValues.Keys.Count; i++)
+                    {
+                        key = keyValues.Keys[i].ToLower();
+                        if (key.EndsWith("id") && key != "sys_mid")
                         {
-                            if (HttpContext.Current.Request.Form.Keys[i].ToLower().EndsWith("id"))
-                            {
-                                return Query<string>(HttpContext.Current.Request.Form.Keys[i], string.Empty);
-                            }
+                            return Query<string>(key, string.Empty);
                         }
-
                     }
                 }
                 else if (id.IndexOf(',') == -1)

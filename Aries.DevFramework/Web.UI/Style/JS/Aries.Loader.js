@@ -34,10 +34,10 @@ function sys_getCss() {
 
 }
 
-var sys_theme = sys_getCookie('sys_theme') || 'default';
+var sys_theme = sys_getCookie('aries_theme') || 'default';
 var easyui_theme = sys_getCookie('easyui_theme') || 'default';
-var sys_ui = sys_getCookie('sys_ui');
-var sys_lang = sys_getCookie('sys_lang') || 'zh_CN';
+var sys_ui = sys_getCookie('aries_ui');
+var sys_lang = sys_getCookie('aries_language') || 'zh_CN';
 var sys_css = sys_getCss();
 var sys_vs = "v5.2.0";//系统版本号
 

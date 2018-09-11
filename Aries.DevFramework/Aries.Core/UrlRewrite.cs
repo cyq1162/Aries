@@ -143,10 +143,10 @@ namespace Aries.Core
             SetSafeKey();
             if (WebHelper.IsUseUISite)
             {
-                HttpCookie cookie = context.Request.Cookies["sys_ui"];
+                HttpCookie cookie = context.Request.Cookies["aries_ui"];
                 if (cookie == null)
                 {
-                    cookie = new HttpCookie("sys_ui", "/" + AppConfig.GetApp("UI").Trim('/'));
+                    cookie = new HttpCookie("aries_ui", "/" + AppConfig.GetApp("UI").Trim('/'));
                     cookie.Domain = AppConfig.XHtml.Domain;
                     context.Response.Cookies.Add(cookie);
                 }

@@ -207,7 +207,7 @@ namespace Aries.Core.Auth
         {
             HttpResponse response = HttpContext.Current.Response;
             //清除token
-            HttpCookie tokenCookie = new HttpCookie("aries_token","");
+            HttpCookie tokenCookie = new HttpCookie("aries_token", "");
             // HttpCookie userNameCookie = new HttpCookie("aries_user");//为了保留记住用户名功能，不清用户名Cookie
             tokenCookie.Expires = DateTime.Now.AddYears(-1);
             //userNameCookie.Expires = DateTime.Now.AddDays(-1);
@@ -220,14 +220,15 @@ namespace Aries.Core.Auth
         }
         private static void WriteCookie(string token, string userName)
         {
-            HttpCookie tokenCookie = new HttpCookie("aries_token", token);// { HttpOnly = !local };
-            HttpCookie userNameCookie = new HttpCookie("aries_user", userName);
-            tokenCookie.Domain = AppConfig.XHtml.Domain;
-            userNameCookie.Domain = AppConfig.XHtml.Domain;
-            tokenCookie.Expires = DateTime.Now.AddHours(8);
-            userNameCookie.Expires = DateTime.Now.AddMonths(1);//记住用户名时（1个月）
-            HttpContext.Current.Response.Cookies.Add(tokenCookie);
-            HttpContext.Current.Response.Cookies.Add(userNameCookie);
+            SetCookie("token", token, 24);
+            SetCookie("user", userName, 24 * 7);
+        }
+        internal static void SetCookie(string name, string value, int hours)
+        {
+            HttpCookie cookie = new HttpCookie("aries_" + name, value);// { HttpOnly = !local };
+            cookie.Domain = AppConfig.XHtml.Domain;
+            cookie.Expires = DateTime.Now.AddHours(hours);
+            HttpContext.Current.Response.Cookies.Add(cookie);
         }
         private static string GetCookieValue(string name)
         {

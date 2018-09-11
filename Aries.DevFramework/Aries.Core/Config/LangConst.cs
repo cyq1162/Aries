@@ -1,4 +1,5 @@
-﻿using CYQ.Data;
+﻿using Aries.Core.Auth;
+using CYQ.Data;
 using CYQ.Data.Table;
 using System;
 using System.Collections.Generic;
@@ -106,6 +107,9 @@ namespace Aries.Core.Config
                 language = "zh_CN";
                 KeyValueConfig.SetVallue("SysConfig", "Language", language);
             }
+            //SetCookie
+            UserAuth.SetCookie("theme", theme, 48);
+            UserAuth.SetCookie("language", language, 48);
         }
         /// <summary>
         /// 初始化多语言

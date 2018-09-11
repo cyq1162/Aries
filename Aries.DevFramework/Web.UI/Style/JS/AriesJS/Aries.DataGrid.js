@@ -1262,16 +1262,6 @@
         if (result && result.GetInitConfig.mid == "" && result.GetInitConfig.actionKeys == "" && parent.AR) {
             $Core.Global.Variable = parent.AR.Global.Variable;
         }
-        //将语言和主题写入Cookie
-        var theme = $Core.Config.getValue("SysConfig", "Theme");
-        if (theme && theme != sys_theme) {
-            $Core.Utility.Cookie.set("sys_theme", theme);
-        }
-        var language = $Core.Config.getValue("SysConfig", "Language");
-        if (language && language != sys_lang) {
-            $Core.Utility.Cookie.set("sys_lang", language);
-
-        }
     });
     //==================================Internal Function Region======================================================
     $Core.DataGrid = DataGrid;

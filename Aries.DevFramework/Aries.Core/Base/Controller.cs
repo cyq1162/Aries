@@ -109,8 +109,9 @@ namespace Aries.Core
             }
             else
             {
+                string msg;
                 //权限检测
-                if (p.IsCanInvokeMethod(method) && PreBeforeInvoke(method.Name))//同时检测菜单对应的操作方式。
+                if (p.IsCanInvokeMethod(method, out msg) && PreBeforeInvoke(method.Name, out msg))//同时检测菜单对应的操作方式。
                 {
                     try
                     {
@@ -139,7 +140,7 @@ namespace Aries.Core
                 }
                 else
                 {
-                    SetError("Permission denied！");
+                    SetError(msg);
                     return;
                 }
             }
@@ -155,8 +156,9 @@ namespace Aries.Core
         /// <summary>
         /// 增加这一步做进一步的权限验证
         /// </summary>
-        protected bool PreBeforeInvoke(string methodName)
+        protected bool PreBeforeInvoke(string methodName, out string msg)
         {
+            msg = "Permission denied on objName : " + ObjName;
             switch (methodName)
             {
                 case "GetHeader":

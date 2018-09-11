@@ -18,9 +18,17 @@ namespace Aries.Core.Helper
         #region 安全Key检测
         public static bool IsKeyInHtml(string objName)
         {
+            string path = HttpContext.Current.Server.MapPath(HttpContext.Current.Request.UrlReferrer.LocalPath).ToLower();
+            bool result = IsObjInHtml(objName, path);
+            if (!result && path.EndsWith("edit.html"))
+            {
+                result = IsObjInHtml(objName, path.Replace("edit.html", "list.html"));
+            }
+            return result;
+        }
+        private static bool IsObjInHtml(string objName, string path)
+        {
             CacheManage cache = CacheManage.LocalInstance;
-
-            string path = HttpContext.Current.Server.MapPath(HttpContext.Current.Request.UrlReferrer.LocalPath);
             string has = path.GetHashCode().ToString();
             string html = string.Empty;
             if (cache.Contains(has))
@@ -40,6 +48,7 @@ namespace Aries.Core.Helper
                     return true;
                 }
             }
+
             return false;
         }
         #endregion
@@ -91,7 +100,7 @@ namespace Aries.Core.Helper
         /// <returns></returns>
         public static bool IsCheckToken()
         {
-            if(!IsNeedCheckToken(HttpContext.Current.Request.Url))
+            if (!IsNeedCheckToken(HttpContext.Current.Request.Url))
             {
                 return IsNeedCheckToken(HttpContext.Current.Request.UrlReferrer);
             }
@@ -204,7 +213,7 @@ namespace Aries.Core.Helper
                 return Convert.ChangeType(value, t);
             }
         }
-        
+
         #region 下载文件
 
         public static void SendFile(string fileName, string saveText)
@@ -231,7 +240,7 @@ namespace Aries.Core.Helper
                 response.Charset = encoding.BodyName;// "utf-8";
                 //if (AppConfig. !context.Request.UserAgent.Contains("Firefox") && !context.Request.UserAgent.Contains("Chrome"))
                 //{
-                    fileName = HttpUtility.UrlEncode(fileName, encoding);
+                fileName = HttpUtility.UrlEncode(fileName, encoding);
                 //}
                 response.AppendHeader("Content-Disposition", "attachment;filename=" + fileName);
                 response.BinaryWrite(ms.GetBuffer());

@@ -369,8 +369,9 @@ namespace Aries.Core.Auth
             }
         }
 
-        internal bool IsCanInvokeMethod(MethodInfo mi)
+        internal bool IsCanInvokeMethod(MethodInfo mi, out string msg)
         {
+            msg = "Permission denied on safekey！";
             switch (mi.Name)//只需要登陆权限的方法。
             {
                 case "GetInitConfig":

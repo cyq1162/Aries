@@ -396,6 +396,9 @@
                 url: url || that.Settings.url,
                 data: opts.data,
                 dataType: opts.dataType,
+                //headers: {
+                //    "Referer":location.href
+                //},
                 success: function (d) {
                     if (opts.callback && typeof (opts.callback) != "function") {
                         throw TypeError("the callback parameter not is a function");

@@ -52,7 +52,6 @@
                         <input type="hidden" name="menuid" id="menuid" value="" />
                         <input type="hidden" name="actionids" id="actionids" value="" />
                         <input type="hidden" name="parentmenuid" id="parentmenuid" value="" />
-                        <input type="hidden" name="menulevel" id="menulevel" value="" />
                     </form>
                 </div>
             </div>
@@ -258,7 +257,7 @@
             },
             regEvent: function () {
                 var that = this;
-                AR.Form.BtnCommit.onBeforeExecute = function () {
+                AR.Form.BtnCommit.onBeforeExecute = function (para) {
                     var action = AR.Global.DG.action;
                     AR.Form.action = action;
                     AR.Form.objName = "Sys_Menu";
@@ -267,12 +266,13 @@
                     Menu.Tree.level = 0;
                     if (action == "Add") {
                         if (Menu.Tree.clickNode.attributes == null) {
-                            $("#menulevel").val(1);
                             Menu.Tree.level = 1;
+                            para.push({ name: "menulevel", value: 1 });
                         }
                         else {
-                            $("#menulevel").val(Menu.Tree.clickNode.attributes.menulevel + 1);
-                            Menu.Tree.level = Menu.Tree.clickNode.attributes.menulevel + 1;
+                            var level = Menu.Tree.clickNode.attributes.menulevel || 0;
+                            Menu.Tree.level = level + 1;
+                            para.push({ name: "menulevel", value: level + 1 });
                         }
                     }
                     else {
@@ -282,7 +282,7 @@
                         }
                     }
                 };
-                AR.Form.BtnCommit.onAfterExecute = function (data) {
+                AR.Form.BtnCommit.onAfterExecute = function (data, formData) {
                     var action = AR.Global.DG.action
                     if (action == "Add") {
                         if (data.success) {

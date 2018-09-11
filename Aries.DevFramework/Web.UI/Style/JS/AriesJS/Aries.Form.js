@@ -66,7 +66,7 @@
                     this.onExecute = function () {
                         if (this.onBeforeExecute() === false) {
                             return;
-                        } 
+                        }
                         $Core.Utility.Window.close();
                     };
                     //执行前事件（无参数）
@@ -103,10 +103,10 @@
                 var oName = this.objName || tName;
                 var obj = $Core.Utility.Ajax.post(mthodName || ((this.method.toLowerCase() != 'get') && this.method) || this.action, oName + "," + tName, formData);
                 if (callBack && typeof (callBack) == "function") {
-                    callBack.call(this, obj);
+                    callBack.call(this, obj, formData);
                 }
                 else if (obj) {
-                    if (this.BtnCommit && this.BtnCommit.onAfterExecute(obj) == false) {
+                    if (this.BtnCommit && this.BtnCommit.onAfterExecute(obj, formData) == false) {
                         return;
                     }
                     var msg = obj.msg;

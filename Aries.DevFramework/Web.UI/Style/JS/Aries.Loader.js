@@ -22,12 +22,14 @@ function sys_getCookie(name) {
     }
     return "";
 }
+var sys_ui = sys_getCookie('aries_ui');
+
 function sys_getCss() {
-    var url = location.href;
-    if (url.indexOf("/login.") > -1) {
+    var path = location.pathname;
+    if (path.indexOf("/login.") > -1 || path == "/" || (sys_ui && path.indexOf(sys_ui) > -1 && path.length <= sys_ui.length + 2)) {
         return "login";
     }
-    if (url.indexOf("/index.") > -1) {
+    if (path.indexOf("/index.") > -1) {
         return "index";
     }
     return "main";
@@ -36,13 +38,13 @@ function sys_getCss() {
 
 var sys_theme = sys_getCookie('aries_theme') || 'default';
 var easyui_theme = sys_getCookie('easyui_theme') || 'default';
-var sys_ui = sys_getCookie('aries_ui');
+
 var sys_lang = sys_getCookie('aries_language') || 'zh_CN';
 var sys_css = sys_getCss();
 var sys_vs = "v5.2.0";//系统版本号
 
 //样式
-document.write('<link href="' + sys_ui + '/Style/Theme/EasyUI/'+easyui_theme+'/easyui.css" rel="stylesheet" type="text/css" />');
+document.write('<link href="' + sys_ui + '/Style/Theme/EasyUI/' + easyui_theme + '/easyui.css" rel="stylesheet" type="text/css" />');
 document.write('<link href="' + sys_ui + '/Style/Theme/EasyUI/icon.css" rel="stylesheet" type="text/css" />');
 document.write('<link href="' + sys_ui + '/Style/Theme/Aries/' + sys_theme + '/' + sys_css + '.css" rel="stylesheet" />');
 

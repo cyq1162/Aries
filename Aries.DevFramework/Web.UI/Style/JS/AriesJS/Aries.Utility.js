@@ -309,7 +309,7 @@
             }
             window.parent.$("#AddWindow").window('close');
         }
-        function confirm(msg, title, okEvent,cancelEvent) {
+        function confirm(msg, title, okEvent, cancelEvent) {
             $.messager.confirm(title || $Core.Lang.prompt, msg, function (isOK) {
                 if (isOK) {
                     okEvent && okEvent();
@@ -390,7 +390,8 @@
             }
             opts.callback = callback || that.Settings.callback;
             opts.dataType = dataType || that.Settings.dataType;
-            $.ajax({
+            var ajaxOpts =
+            {
                 type: type,
                 async: (async == false && !callback) ? false : that.Settings.async,
                 url: url || that.Settings.url,
@@ -437,7 +438,14 @@
                         $Core.Utility.Window.closeLoading();
                     }
                 }
-            });
+            };
+            //检测是否文件上传
+            if (opts.data instanceof FormData)
+            {
+                ajaxOpts.processData = false;
+                ajaxOpts.contentType = false;
+            }
+            $.ajax(ajaxOpts);
             return json;
         }
     })();

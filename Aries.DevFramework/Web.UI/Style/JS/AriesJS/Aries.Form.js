@@ -89,9 +89,26 @@
                     $targetForm = $validator;
                 }
                 var formData = $targetForm.find("[name]:input").serializeArray();
-                for (var i in formData) {
-                    if (formData[i].value == $Core.Lang.select || (clearEmptyValue && formData[i].value == '')) {
-                        delete formData[i];
+                if (formData) {
+                    for (var i = 0; i < formData.length; i++) {
+                        if (formData[i].value == $Core.Lang.select || (clearEmptyValue && formData[i].value == '')) {
+                            delete formData[i];
+                        }
+                    }
+                }
+
+                //检测是否包含文件上传
+                if ($targetForm.attr("enctype") == "multipart/form-data") {
+                    var $files = $targetForm.find("input:[type='file']");
+                    if ($files && $files.length > 0) {
+                        var fileform = new FormData();
+                        $files.each(function () {
+                            fileform.append(this.name, this.files[0]);
+                        });
+                        for (var i = 0; i < formData.length; i++) {
+                            fileform.append(formData[i].name, formData[i].value);
+                        }
+                        formData = fileform;
                     }
                 }
                 if (this.BtnCommit && this.BtnCommit.onBeforeExecute(formData) == false) { return; }

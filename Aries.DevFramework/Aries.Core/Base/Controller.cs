@@ -15,6 +15,7 @@ using Aries.Core.Sql;
 using Aries.Core.Extend;
 using Aries.Core.DB;
 using System.Collections.Specialized;
+using System.Threading;
 
 
 namespace Aries.Core
@@ -85,6 +86,10 @@ namespace Aries.Core
                 {
                     Write(js.ToString());
                 }
+            }
+            catch (ThreadAbortException e)
+            {
+                //ASP.NET 的机制就是通过异常退出线程（不要觉的奇怪）
             }
             catch (Exception err)
             {

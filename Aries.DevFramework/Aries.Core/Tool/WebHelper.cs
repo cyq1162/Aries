@@ -218,9 +218,13 @@ namespace Aries.Core.Helper
 
         public static void SendFile(string fileName, string saveText)
         {
-            byte[] bs2 = System.Text.Encoding.GetEncoding("GB2312").GetBytes(saveText);
-            MemoryStream ms2 = new MemoryStream(bs2, 0, bs2.Length, true, true);
-            SendFile(fileName, ms2, System.Text.Encoding.UTF8);
+            byte[] textBytes = System.Text.Encoding.UTF8.GetBytes(saveText);
+            //buff[0] == 239 && buff[1] == 187 && buff[2] == 191
+            byte[] uft8Header = new byte[] { 239, 187, 191 };
+            MemoryStream sendStream = new MemoryStream(textBytes.Length + 3);
+            sendStream.Write(uft8Header, 0, uft8Header.Length);
+            sendStream.Write(textBytes, 0, textBytes.Length);
+            SendFile(fileName, sendStream, System.Text.Encoding.UTF8);
         }
         /// <summary>
         /// 把内存流（文件）发送到客户端

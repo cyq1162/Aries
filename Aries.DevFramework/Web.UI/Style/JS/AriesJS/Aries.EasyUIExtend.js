@@ -206,8 +206,11 @@
         datetimebox: {
             init: function (container, options) {
                 var editor = $('<input/>').appendTo(container);
-                options.editable = false;
-                editor.datetimebox(options);
+                if (!options) { options = {};}
+                if (options) {
+                    options.editable = false;
+                    editor.datetimebox(options);
+                }
                 return editor;
             },
             getValue: function (target, value) {

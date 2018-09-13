@@ -56,7 +56,7 @@ namespace Aries.Core.Extend
                             }
                         }
                         ThreadBreak.AddGlobalThread(new ParameterizedThreadStart(LoadViewSchema));
-                        
+
                     }
                 }
             }
@@ -207,7 +207,8 @@ namespace Aries.Core.Extend
                     case DalType.Xml:
                         break;
                     default:
-                        if (DBTool.GetColumns(item.Key + "." + tableName).Count > 0)
+                        MDataColumn mdc = DBTool.GetColumns(item.Key + "." + tableName);
+                        if (mdc != null && mdc.Count > 0)
                         {
                             if (!DbTables[item.Key].ContainsKey(tableName))
                             {

@@ -982,7 +982,7 @@ namespace Aries.Core
                             sql = ReplacePara(sql, "@para", item.Para);
                             sql = ReplacePara(sql, "@parent", item.Parent);
 
-                            sb.Append(sql + ";");
+                            sb.Append(sql + " ; ");
                             #endregion
                         }
                         else
@@ -1005,7 +1005,7 @@ namespace Aries.Core
                     }
                     if (sb.Length > 0)
                     {
-                        string sql = sb.ToString().TrimEnd(';');
+                        string sql = sb.ToString().TrimEnd(';', ' ');
                         using (MProc proc = new MProc(null, CrossDb.GetConn(sql)))
                         {
                             if (proc.DalType == DalType.MsSql)

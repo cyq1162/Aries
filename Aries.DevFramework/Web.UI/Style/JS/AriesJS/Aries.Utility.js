@@ -172,7 +172,7 @@
             }
         },
         download: function (method, data, url) {
-            var url = url || $Core.Global.route.root, frame_id = "f_id", frame_name = "f_name";
+            var url = url || $Core.Global.route, frame_id = "f_id", frame_name = "f_name";
             data || (data = {}), $form = $("<form>");
             $("#" + frame_id).remove();
             $ifrme = $("<iframe>").attr("id", frame_id).attr("name", frame_name).css({ display: 'none' });
@@ -350,7 +350,7 @@
         /***/
         $Core.Utility.Ajax = {
             Settings: {
-                url: $Core.Global.route.root,
+                url: $Core.Global.route,
                 method: 'GetList',
                 data: {},
                 dataType: 'json',

@@ -429,7 +429,7 @@
                         this.onAfterExecute = function (data) { },
                         this.onExecute = function (dg) {
                             var opts = {};
-                            var url = $Core.Utility.stringFormat($Core.Global.route.root + '?sys_method=Import&sys_objName={0}&sys_tableName={1}&sys_mid={2}', dg.objName, dg.tableName, $Core.Global.Variable.mid);
+                            var url = $Core.Utility.stringFormat($Core.Global.route + '?sys_method=Import&sys_objName={0}&sys_tableName={1}&sys_mid={2}', dg.objName, dg.tableName, $Core.Global.Variable.mid);
                             opts.action = url;
                             opts.onSubmit = function (dg) {
                                 return function (file, ext) {
@@ -548,7 +548,7 @@
                             //window.open(ajaxOptions.href + '?objName=' + objName + '&sys_search='+jsonString, '_self');
                             var iframeName = "framePost";
                             ifrme = $("<iframe>").attr("id", "div_ifrme_template").attr("name", iframeName).css({ display: 'none' });
-                            form_export = $("<form>").attr("action", $Core.Global.route.root).attr("target", iframeName).attr("id", "form_template");
+                            form_export = $("<form>").attr("action", $Core.Global.route).attr("target", iframeName).attr("id", "form_template");
                             var param = {
                                 sys_objName: dg.objName,
                                 sys_tableName: objName,
@@ -1659,7 +1659,7 @@
 
 
         //请求URL地址设置
-        options.url = $Core.Global.route.root + "?sys_method=GetList&sys_objName=" + dg.objName + "&sys_tableName=" + dg.tableName;
+        options.url = $Core.Global.route + "?sys_method=GetList&sys_objName=" + dg.objName + "&sys_tableName=" + dg.tableName;
         if (dg.isTreeGrid) {
             dg.$target = $("#" + dg.id).treegrid(options);
         }

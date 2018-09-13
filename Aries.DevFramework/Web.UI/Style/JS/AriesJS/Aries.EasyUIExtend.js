@@ -190,11 +190,9 @@
     }
     //重写 下拉框，当文本和值相同时，允许后端不传值，前端补
     $.fn.combobox.defaults.loadFilter = function (data) {
-        if (data && data.length > 0)
-        {
+        if (data && data.length > 0) {
             for (var i = 0; i < data.length; i++) {
-                if (data[i].value == undefined)
-                {
+                if (data[i].value == undefined) {
                     data[i].value = data[i].text;
                 }
             }
@@ -206,7 +204,7 @@
         datetimebox: {
             init: function (container, options) {
                 var editor = $('<input/>').appendTo(container);
-                if (!options) { options = {};}
+                if (!options) { options = {}; }
                 if (options) {
                     options.editable = false;
                     editor.datetimebox(options);
@@ -224,6 +222,63 @@
             },
             destroy: function (target) {
                 $(target).datetimebox('destroy');
+            }
+        },
+
+        window: {
+            init: function (container, options) {
+                var width = options.width || 500;
+                var height = options.height || 400;
+                var url = options.url
+                var otherParm = options.otherParm;
+                var title = options.title || '';
+                var input = Object.toStringFormat("<input _width='{0}' _height='{1}' _url='{2}' _otherParm='{3}' _title='{4}' />", width, height, url, otherParm, title);
+                var editor = $(input).appendTo(container);
+                editor.enableEdit = false;
+                return editor;
+            },
+            getValue: function (target) {
+                return $(target).val();
+            },
+            setValue: function (target, value) {
+                $(target).val(value);
+                var width = $(target).attr("_width");
+                var height = $(target).attr("_height");
+                var url = $(target).attr("_url");
+                var otherParm = $(target).attr("_otherParm");
+                var title = $(target).attr("_title");
+                var obj = new Object();
+                obj.value = value;
+                obj.title = title;
+                obj.otherParm = otherParm;
+                ////2015年新版本的谷歌以及火狐浏览器不支持模态窗口
+                //var resultValue=Object.to
+                (url, width, height, obj);
+
+                var wiframe;
+                wiframe = $('<iframe src="' + url + '" frameborder="0" style="border:0;width:100%;height:97%;"></iframe>');
+                $("#WorkflowAddWindow")[0] && $("#WorkflowAddWindow").remove();
+                var div = $("<div id='WorkflowAddWindow' ></div>");
+                window.targetWindowObj = target;
+                window.dialogInArguments = obj;
+                window.targetWindow = div;
+                div.window({
+                    title: '',
+                    width: width,
+                    height: height,
+                    closed: false,
+                    cache: false,
+                    modal: true,
+                    content: wiframe
+                });
+
+                //window.targetWindowValue="";
+                //wiframe.contentWindow.dialogArguments=obj;
+
+            },
+            resize: function (target, width) {
+            },
+            destroy: function (target) {
             }
         }
     });

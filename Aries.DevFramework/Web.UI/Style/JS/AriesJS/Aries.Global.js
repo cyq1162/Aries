@@ -71,6 +71,7 @@ window.AR || (window.AR = {});
             }
         }
     },
+    //全局变量对象（用于存档全局使用的数据）
     $Core.Global = {
         DG: {
             //datagrid集合，根据ID取出DataGrid对象，将Json当数组用。
@@ -106,15 +107,15 @@ window.AR || (window.AR = {});
                 autoRowHeight: false
             }
         },
-        route: { root: 'ajax.html' },
-        themes: ['default', 'black', 'gray', 'metro'],
+        route: 'ajax.html',
+        //themes: ['default', 'black', 'gray', 'metro'],
         /*
         *页面全局变量
         *ui(虚拟应用程序的路径)，actionkeys（页面对应的权限集）,mid（当前菜单ID）
         */
         Variable: {},
-        //存档用户信息
-        _User: undefined,
+        ////存档用户信息
+        //_User: undefined,
         /*
        *获取当前登陆用户的信息
        */
@@ -140,6 +141,15 @@ window.AR || (window.AR = {});
             else {
                 return this._User;
             }
+        },
+        //存档对话框的相关变量
+        Dialog: {
+            //目标的JQ对象
+            $target: undefined,
+            //传递的参数
+            options: {},
+            //返回值
+            returnValue: undefined
         }
     };
     //AR.BtnBase 基类的定义
@@ -167,7 +177,7 @@ window.AR || (window.AR = {});
 
     //转换input变成lable形式
     $.fn.toView = function ($input) {
-        if ($input == undefined && this[0].tagName == "INPUT") {
+        if ($input == undefined && this.length > 0 && this[0].tagName == "INPUT") {
             $input = this;
         }
         if ($input) {

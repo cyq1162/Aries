@@ -18,7 +18,7 @@
             this.tableName = $PCore && $PCore.Global.DG.operating && $PCore.Global.DG.operating.tableName;
             //动作：Add 或 Update
             this.action = $PCore && $PCore.Global.DG.action;
-            this.url = $Core.Global.route.root;
+            this.url = $Core.Global.route;
             /**
             * 获取了数据，准备回填表单前（参数：data json格式）
             * 可格式化表单的数据,可格式化日期时间，字符显示的处理。
@@ -123,7 +123,7 @@
 
                 var that = this;
                 if ($files && $files.length > 0) {
-                    var url = $Core.Utility.stringFormat($Core.Global.route.root + '?sys_method={0}&sys_objName={1}&sys_tableName={2}&sys_mid={3}', method, oName, tName, $Core.Utility.getSysmid());
+                    var url = $Core.Utility.stringFormat($Core.Global.route + '?sys_method={0}&sys_objName={1}&sys_tableName={2}&sys_mid={3}', method, oName, tName, $Core.Utility.getSysmid());
                     var opts = {
                         action: url,
                         data: formJson,

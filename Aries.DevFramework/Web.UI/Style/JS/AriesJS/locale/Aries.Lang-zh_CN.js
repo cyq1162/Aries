@@ -16,7 +16,7 @@ window.AR || (window.AR = {});
 	$Core.Lang.selectFirst = '请先选中数据';
 	$Core.Lang.selectData = '选择数据';
 	//$Core.Lang.cancel = '取消';
-	//$Core.Lang.save = '保存';
+	$Core.Lang.ok = '确定';
 	
     //Aries.Common.js
 	//$Core.Lang.select = '请选择';
@@ -31,7 +31,7 @@ window.AR || (window.AR = {});
 	$Core.Lang.batchDel = '批量删除';
 	$Core.Lang.opration = '操作';
 	$Core.Lang.empty = '空';
-	$Core.Lang.save = '保存';
+	//$Core.Lang.save = '保存';
 	$Core.Lang.exportTemplate = '导出模板';
 
 

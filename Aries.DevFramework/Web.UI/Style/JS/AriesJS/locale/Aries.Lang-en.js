@@ -16,7 +16,7 @@ window.AR || (window.AR = {});
 	$Core.Lang.selectFirst = 'Select one please';// '请先选中数据';
 	$Core.Lang.selectData = 'Select data please';// '选择数据';
 	//$Core.Lang.cancel = '取消';
-	//$Core.Lang.save = '保存';
+	$Core.Lang.ok = 'OK';
 	
 	//Aries.Common.js
 	//$Core.Lang.select = '请选择';

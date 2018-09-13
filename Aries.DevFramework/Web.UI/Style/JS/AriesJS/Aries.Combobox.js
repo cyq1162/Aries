@@ -373,21 +373,25 @@
     };
     initDialogCombobox = function () {
         $("[dialog]").each(function () {
-            $(this).on("click", function () {
-                _showInputDialog($(this));
-            });
+            bindDialog($(this));
         });
     }
-    function _showInputDialog($input) {
+    function bindDialog($input)
+    {
+        $input.on("click", function () {
+            showDialog($input);
+        });
+    }
+    function showDialog($input) {
         if (!$input || !$input.attr("dialog")) { alert("dialog setting error!"); return; }
         var href = ($Core.Global.Variable.ui || "") + "/Web/SysAdmin/DialogView.html?objName=" + $input.attr("dialog");
         var html = '<iframe scrolling="yes" frameborder="0"  src="' + href + '" style="width:100%;height:98%;"></iframe>'
         var opts = {
             toolbar: [{
-                text: $Core.Lang.save,
+                text: $Core.Lang.ok,
                 iconCls: 'icon-ok',
                 handler: function () {
-                    var options = $Core.Global.returnValue;
+                    var options = $Core.Global.Dialog.returnValue;
                     if (!options || options.option.data.length == 0) {
                         alert($Core.Lang.selectFirst);
                         return;
@@ -396,13 +400,13 @@
                         if ($input.attr("multiple")) {
                             options.option.onUnselect = function (record) {
                                 if (setAttr($(this), "getValues").length == 0) {
-                                    _showInputDialog($(this));//对多选生效
+                                    showDialog($(this));//对多选生效
                                 }
                             };
                         }
                         else {
                             options.option.onSelect = function (record) {
-                                _showInputDialog($(this));//对单选生效
+                                showDialog($(this));//对单选生效
                             };
                         }
 
@@ -416,7 +420,7 @@
                         var $childInput = $input.next().children(':first');
                         if (!$childInput.data("events")["dblclick"]) {
                             $childInput.dblclick(function () {
-                                _showInputDialog($input);//绑定双击事件
+                                showDialog($input);//绑定双击事件
                             });
                         }
                     }
@@ -432,9 +436,9 @@
         if ($input.attr("options")) {
             opts = $.extend(opts, eval('(' + $input.attr("options") + ')'));
         }
-        $Core.Global.inputDialogOpts = opts;
-        $Core.Global.inputDialog = $input
-        $Core.Global.returnValue = undefined;//清空值。
+        $Core.Global.Dialog.options = opts;
+        $Core.Global.Dialog.$target = $input
+        $Core.Global.Dialog.returnValue = undefined;//清空值。
         $Core.Utility.Window.dialog($Core.Lang.selectData, html, opts);
 
     };
@@ -540,6 +544,10 @@
         }
         else if ($input.attr("objname") || $input.attr("objName")) {
             bindObjName($input);
+        }
+        else if ($input.attr("dialog"))
+        {
+            showDialog($input);
         }
     }
     /*下拉框操作*/

@@ -81,7 +81,6 @@
     <Compile Include="Config\ExcelConfigFactory.cs" />
     <Compile Include="Extend\Combobox.cs" />
     <Compile Include="Extend\CrossDb.cs" />
-    <Compile Include="Extend\FileExtend.cs" />
     <Compile Include="Extend\HttpResponseFilter.cs" />
     <Compile Include="Config\IExcelConfig.cs" />
     <Compile Include="Config\GridConfig.cs" />

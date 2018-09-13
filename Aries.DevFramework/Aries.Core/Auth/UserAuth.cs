@@ -228,7 +228,10 @@ namespace Aries.Core.Auth
             HttpCookie cookie = new HttpCookie("aries_" + name, value);// { HttpOnly = !local };
             cookie.Domain = AppConfig.XHtml.Domain;
             cookie.Expires = DateTime.Now.AddHours(hours);
-            HttpContext.Current.Response.Cookies.Add(cookie);
+            if (HttpContext.Current != null)
+            {
+                HttpContext.Current.Response.Cookies.Add(cookie);
+            }
         }
         private static string GetCookieValue(string name)
         {

@@ -1627,19 +1627,7 @@
         dg._onBeforeLoad = opts.onBeforeLoad;
         opts.onBeforeLoad = function (param) {
             param || (param = {});
-            var mid = function () {
-                var topWin = window;
-                return function (win) {
-                    var ar = win.AR;
-                    if (ar.Global.Variable.mid && win != topWin) {
-                        return ar.Global.Variable.mid;
-                    }
-                    if (win == win.top) {
-                        return null;
-                    }
-                    return arguments.callee(win.parent.window);
-                }(topWin);
-            }();
+            var mid = $Core.Utility.getSysmid();
             if (mid) { param.sys_mid = mid; };
             if (dg._onBeforeLoad) { return dg._onBeforeLoad(param) };
         };

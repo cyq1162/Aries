@@ -53,7 +53,7 @@
                 function Fn() {
                     $Core.BtnBase.call(this);
                     this.onExecute = function () {
-                        return $Core.Form.commit(this.$target);
+                        return $Core.Form.onCommit(this.$target);
                     }
                     //执行前事件（参数为表单数组：Array data）
                     this.onBeforeExecute = function (arrayData) { };
@@ -83,51 +83,74 @@
             *@param{function} callBack(result) 回调函数，result返回的json数据结果
             *@param{string} url 提交的处理程序路径
             */
-            this.commit = function ($target, mthodName, tableName, $validator, clearEmptyValue, callBack, url) {
+            this.onCommit = function ($target, mthodName, tableName, $validator, clearEmptyValue, callBack, url) {
                 var $targetForm = $validator || $($target.parents("form")[0]);
                 if ($validator && $validator != "true") {
                     $targetForm = $validator;
                 }
-                var formData = $targetForm.find("[name]:input").serializeArray();
-                if (formData) {
-                    for (var i = 0; i < formData.length; i++) {
-                        if (formData[i].value == $Core.Lang.select || (clearEmptyValue && formData[i].value == '')) {
-                            delete formData[i];
-                        }
-                    }
-                }
+                var formJson = {};
+                var formArray = $targetForm.find("[name]:input").serializeArray();
 
-                //检测是否包含文件上传
-                if ($targetForm.attr("enctype") == "multipart/form-data") {
-                    var $files = $targetForm.find("input:[type='file']");
-                    if ($files && $files.length > 0) {
-                        var fileform = new FormData();
-                        $files.each(function () {
-                            fileform.append(this.name, this.files[0]);
-                        });
-                        for (var i = 0; i < formData.length; i++) {
-                            fileform.append(formData[i].name, formData[i].value);
+                if (formArray) {
+                    for (var i = 0; i < formArray.length; i++) {
+                        var name = formArray[i].name;
+                        var value = formArray[i].value;
+                        if (value != $Core.Lang.select && (!clearEmptyValue || value != '')) {
+                            if (formJson[name] == undefined) {
+                                formJson[name] = value;
+                            }
+                            else {
+                                formJson[name] += "," + value;
+                            }
                         }
-                        formData = fileform;
                     }
+                    formArray = null;
                 }
-                if (this.BtnCommit && this.BtnCommit.onBeforeExecute(formData) == false) { return; }
+                if (this.BtnCommit && this.BtnCommit.onBeforeExecute(formJson) == false) { return; }
                 if (!$targetForm.form("validate")) {
                     $Core.Utility.Window.showMsg($Core.Lang.fillTheBlank);
                     return false;
                 }
+
                 var tName = tableName || this.tableName;
                 var oName = this.objName || tName;
-                var obj = $Core.Utility.Ajax.post(mthodName || ((this.method.toLowerCase() != 'get') && this.method) || this.action, oName + "," + tName, formData);
-                if (callBack && typeof (callBack) == "function") {
-                    callBack.call(this, obj, formData);
+                var method = mthodName || ((this.method.toLowerCase() != 'get') && this.method) || this.action;
+
+                var $files;
+
+                //检测是否包含文件上传
+                $targetForm.attr("enctype") == "multipart/form-data" && ($files = $targetForm.find("input:[type='file']"));
+
+                var that = this;
+                if ($files && $files.length > 0) {
+                    var url = $Core.Utility.stringFormat($Core.Global.route.root + '?sys_method={0}&sys_objName={1}&sys_tableName={2}&sys_mid={3}', method, oName, tName, $Core.Utility.getSysmid());
+                    var opts = {
+                        action: url,
+                        data: formJson,
+                        onComplete: function ($files, result) {
+                            that.onAfterCommit(result, formJson, callBack);
+                        }
+                    };
+                    new $Core.Upload(null, opts).upload($files);
                 }
-                else if (obj) {
-                    if (this.BtnCommit && this.BtnCommit.onAfterExecute(obj, formData) == false) {
+                else {
+
+                    $Core.Utility.Ajax.post(method, oName + "," + tName, formJson, function (result) {
+                        that.onAfterCommit(result, formJson, callBack);
+                    });
+
+                }
+            };
+            this.onAfterCommit = function (result, formData, callBack) {
+                if (callBack && typeof (callBack) == "function") {
+                    callBack.call(this, result, formData);
+                }
+                else if (result) {
+                    if (this.BtnCommit && this.BtnCommit.onAfterExecute(result, formData) == false) {
                         return;
                     }
-                    var msg = obj.msg;
-                    if (obj.success != undefined && obj.success) {
+                    var msg = result.msg;
+                    if (result.success != undefined && result.success) {
                         msg = $Core.Lang.operationSuccess;
                         if ($PCore && $PCore.Global.DG.operating) {
                             $PCore.Global.DG.operating.datagrid('reload');
@@ -135,13 +158,11 @@
                     }
                     if ($PCore) {
                         $PCore.Utility.Window.showMsg(msg);
-                        if (obj.success && parent != null && parent.document.title != document.title) {
+                        if (result.success && parent != null && parent.document.title != document.title) {
                             $Core.Utility.Window.close();
                         }
                     }
-
                 }
-
             };
             this.regEvent = function () {
                 if (this.$target && this.BtnCommit.$target) {

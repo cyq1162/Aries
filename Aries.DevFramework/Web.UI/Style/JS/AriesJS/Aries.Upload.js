@@ -4,7 +4,7 @@
 * Licensed under the MIT license ( http://valums.com/mit-license/ )
 * Thanks to Gary Haran, David Mark, Corey Burns and others for contributions 
 */
-(function ($,$Core) {
+(function ($, $Core) {
     /* global window */
     /* jslint browser: true, devel: true, undef: true, nomen: true, bitwise: true, regexp: true, newcap: true, immed: true */
 
@@ -269,6 +269,7 @@
                 this._settings[i] = options[i];
             }
         }
+        if (!button) { return; }
 
         // button isn't necessary a dom element
         if (button.jquery) {
@@ -292,7 +293,7 @@
             button.removeAttribute("onclick");
             // disable link                       
             addEvent(button, 'click', function (e) {
-               
+
                 if (e && e.preventDefault) {
                     e.preventDefault();
                 } else if (window.event) {
@@ -556,7 +557,7 @@
 
                 if (// For Safari 
                     iframe.src == "javascript:'%3Chtml%3E%3C/html%3E';" ||
-                // For FF, IE
+                    // For FF, IE
                     iframe.src == "javascript:'<html></html>';") {
                     // First time around, do not delete.
                     // We reload to blank page, so that reloading main page
@@ -670,6 +671,18 @@
 
             // get ready for next request            
             this._createInput();
+        },
+        //可以提交多个文件
+        upload: function ($inputs) {
+            // sending request    
+            var iframe = this._createIframe();
+            var form = this._createForm(iframe);
+            $inputs.each(function () {
+                $(this).after($(this).clone());
+                form.appendChild($(this)[0]);
+            });
+            form.submit();
+            this._getResponse(iframe, $inputs);
         }
     };
-})(jQuery,AR);
+})(jQuery, AR);

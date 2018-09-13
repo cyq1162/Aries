@@ -439,12 +439,11 @@
                     }
                 }
             };
-            //检测是否文件上传
-            if (opts.data instanceof FormData)
-            {
-                ajaxOpts.processData = false;
-                ajaxOpts.contentType = false;
-            }
+            ////检测是否文件上传,FormData 不支持IE 10以下，所以重写AjaxUpload，并使用它来上传
+            //if (FormData != null && opts.data instanceof FormData) {
+            //    ajaxOpts.processData = false;
+            //    ajaxOpts.contentType = false;
+            //}
             $.ajax(ajaxOpts);
             return json;
         }

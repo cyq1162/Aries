@@ -505,11 +505,13 @@
             <param name="where">Sql statement where the conditions: 88, "id = 88"
             <para>sql语句的where条件：88、"id=88"</para></param>
         </member>
-        <member name="M:CYQ.Data.MAction.Exists(System.Object)">
+        <member name="M:CYQ.Data.MAction.Exists">
             <summary>
             Whether or not the specified condition exists
             <para>是否存在指定条件的数据</para>
             </summary>
+        </member>
+        <member name="M:CYQ.Data.MAction.Exists(System.Object)">
             <param name="where">Sql statement where the conditions: 88, "id = 88"
             <para>sql语句的where条件：88、"id=88"</para></param>
         </member>
@@ -2947,6 +2949,11 @@
             <param name="values"></param>
         </member>
         <member name="M:CYQ.Data.Table.MDataRow.LoadFrom(System.String,CYQ.Data.Tool.EscapeOp)">
+            <summary>
+            从json里加载值
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataRow.LoadFrom(System.String,CYQ.Data.Tool.EscapeOp,CYQ.Data.Table.BreakOp)">
             <summary>
             从json里加载值
             </summary>

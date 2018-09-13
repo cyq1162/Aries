@@ -76,15 +76,28 @@ namespace Aries.Core.Extend
         {
             filterStream.SetLength(value);
         }
-
+        public override void Close()
+        {
+            filterStream.Close();
+        }
         public override void Write(byte[] buffer, int offset, int count)
         {
+            if (buffer.Length == 0) { return; }
             var ct = HttpContext.Current.Response.ContentType;
             if (ct.IndexOf("image", StringComparison.OrdinalIgnoreCase) != -1)//图片类型
             {
                 filterStream.Write(buffer, offset, count);
                 return;
             }
+            byte[] newBytes = ReplaceText.Replace(buffer, offset, count);
+
+            filterStream.Write(newBytes, 0, newBytes.Length);
+        }
+    }
+    internal class ReplaceText
+    {
+        internal static byte[] Replace(byte[] buffer, int offset, int count)
+        {
             //读出写的文字
             byte[] data = new byte[count];
 
@@ -92,16 +105,12 @@ namespace Aries.Core.Extend
 
             string html = Encoding.UTF8.GetString(data);
             //开始替换
-            html = ReplaceText.Replace(html);
+            html = ReplaceHtml(html);
 
             //将替换后的写入response
-            byte[] newdata = Encoding.UTF8.GetBytes(html);
-            filterStream.Write(newdata, 0, newdata.Length);
+            return Encoding.UTF8.GetBytes(html);
         }
-    }
-    class ReplaceText
-    {
-        internal static string Replace(string html)
+        private static string ReplaceHtml(string html)
         {
             if (WebHelper.IsUseUISite)
             {

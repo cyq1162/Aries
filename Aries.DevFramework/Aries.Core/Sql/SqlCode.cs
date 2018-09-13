@@ -9,6 +9,7 @@ using CYQ.Data.Table;
 using Aries.Core.Auth;
 using Aries.Core.Extend;
 using Aries.Core.Config;
+using CYQ.Data.Tool;
 
 namespace Aries.Core.Sql
 {
@@ -112,13 +113,13 @@ namespace Aries.Core.Sql
                 string[] files = Directory.GetFiles(SqlCode.path, file, SearchOption.AllDirectories);
                 if (files != null && files.Length > 0)
                 {
-                    return FileExtend.ReadAllText(files[0]);
+                    return IOHelper.ReadAllText(files[0]);
                 }
 
                 if (FileList != null && FileList.ContainsKey(key))
                 {
                     string path = FileList[key];
-                    return FileExtend.ReadAllText(path);
+                    return IOHelper.ReadAllText(path);
                 }
             }
             return string.Empty;
@@ -149,7 +150,7 @@ namespace Aries.Core.Sql
                 {
                     try
                     {
-                        File.WriteAllText(savePath, code, Encoding.Default);
+                        IOHelper.Write(savePath, code);
                         return true;
                     }
                     catch (Exception err)
@@ -180,7 +181,7 @@ namespace Aries.Core.Sql
                     if (text.Contains(":\\"))
                     {
                         folder = text;
-                        text = FileExtend.ReadAllText(text);
+                        text = IOHelper.ReadAllText(text);
                         int index = text.LastIndexOf("/*");
                         if (index > -1)//去掉注释
                         {

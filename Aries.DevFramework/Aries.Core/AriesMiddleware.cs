@@ -27,8 +27,7 @@ namespace Microsoft.AspNetCore.Http
             try
             {
                 System.Web.HttpApplication.Instance.ExecuteEventHandler();
-                if (context.Response.HasStarted || 
-                    (context.Response.Body!=null && context.Response.Body.CanRead))//
+                if (context.Response.HasStarted)  // || Body是只写流  (context.Response.Body != null && context.Response.Body.CanRead
                 {
                     await context.Response.WriteAsync("");
                 }

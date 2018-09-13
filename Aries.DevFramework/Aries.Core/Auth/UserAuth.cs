@@ -452,7 +452,7 @@ namespace Aries.Core.Auth
                 {
                     using (MAction action = new MAction(U_AriesEnum.Sys_Role))
                     {
-                        string where = string.Format("{0} in ('SuperAdmin','超级管理员'", Sys_Role.RoleName);
+                        string where = string.Format("{0} in ('SuperAdmin','超级管理员')", Sys_Role.RoleName);
                         if (action.Fill(where))
                         {
                             _SuperAdminRoleID = action.Get<string>(Sys_Role.RoleID);

@@ -70,7 +70,7 @@ namespace Aries.Core
                 //VS2013（以上）IISExpress 默认会检测文件存在，导致后续事件无法触发，因此需要做点小事情做兼容）
                 //正常IIS部署，是不需要以前兼容性代码的，（该代码将路径重写到一个已存在的文件，同时在目录下新建了一个ajax.html文件）
                 //简单的地说：以上这段代码，和根目录下的ajax.html文件，是为了兼容VS IISExpress的bug存在的（微软造的孽）。
-//#if DEBUG
+                //#if DEBUG
                 if (integralFlag == -1)
                 {
                     integralFlag = 1;
@@ -100,7 +100,7 @@ namespace Aries.Core
                     }
                 }
                 // }
-//#endif
+                //#endif
             }
         }
 
@@ -217,7 +217,25 @@ namespace Aries.Core
             //要处理自定义语言标签
             if (WebHelper.IsAriesSuffix())
             {
-                context.Response.Filter = new HttpResponseFilter(context.Response.Filter);
+                if (AppConfig.IsAspNetCore)
+                {
+                    string path = AppConfig.WebRootPath + HttpContext.Current.Request.Url.LocalPath;
+                    if (File.Exists(path))
+                    {
+                        byte[] data = File.ReadAllBytes(path);
+                        if (data != null && data.Length > 0)
+                        {
+                            byte[] newData = ReplaceText.Replace(data, 0, data.Length);
+                            context.Response.ContentType = "text/html";
+                            context.Response.BinaryWrite(newData);
+                        }
+
+                    }
+                }
+                else
+                {
+                    context.Response.Filter = new HttpResponseFilter(context.Response.Filter);
+                }
             }
         }
         #endregion

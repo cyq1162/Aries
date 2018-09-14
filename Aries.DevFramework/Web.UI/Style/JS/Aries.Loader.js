@@ -2,8 +2,8 @@
 /// <reference path="/Style/JS/json2.js" />
 /// <reference path="/Style/JS/EasyUI-1.3.4/jquery.easyui.min.js" />
 /// <reference path="/Style/JS/AriesJS/Aries.Global.js" />
-/// <reference path="/Style/JS/AriesJS/Aries.Utility.js" />
 /// <reference path="/Style/JS/AriesJS/Aries.Upload.js" />
+/// <reference path="/Style/JS/AriesJS/Aries.Utility.js" />
 /// <reference path="/Style/JS/AriesJS/Aries.Common.js" />
 /// <reference path="/Style/JS/AriesJS/Aries.Combobox.js" />
 /// <reference path="/Style/JS/AriesJS/Aries.DataGrid.js" />
@@ -60,8 +60,8 @@ document.write('<script src="' + sys_ui + '/Style/JS/EasyUI-1.3.4/locale/easyui-
 document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/locale/Aries.Lang-' + sys_lang + '.js?v=' + sys_vs + '"></script>');
 document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/Aries.Global.js?v=' + sys_vs + '"></script>');
 document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/Aries.EasyUIExtend.js?v=' + sys_vs + '"></script>');
-document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/Aries.Utility.js?v=' + sys_vs + '"></script>');
 document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/Aries.Upload.js?v=' + sys_vs + '"></script> ');
+document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/Aries.Utility.js?v=' + sys_vs + '"></script>');
 document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/Aries.Combobox.js?v=' + sys_vs + '"></script>');
 document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/Aries.Common.js?v=' + sys_vs + '"></script>');
 document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/Aries.DataGrid.js?v=' + sys_vs + '"></script>');

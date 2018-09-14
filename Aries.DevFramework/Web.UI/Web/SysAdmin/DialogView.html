@@ -10,7 +10,7 @@
         <table id="dg"></table>
     </div>
     <script>
-        var $input = parent.AR.Global.inputDialog;
+        var $input = parent.AR.Global.Dialog.$target;
         var comboboxOption = {
             valueField: 'value',
             textField: 'text',
@@ -48,12 +48,12 @@
                         returnValue.text = d.text;
                         returnValue.value = d.value;
                         returnValue.data = rowData;
-                        parent.AR.Global.returnValue = returnValue;
+                        parent.AR.Global.Dialog.returnValue = returnValue;
                     }
                 },
                 onDblClickRow: function (rowIndex, rowData) {
                     if (!dg.isShowCheckBox) {
-                        var opts = parent.AR.Global.inputDialogOpts;
+                        var opts = parent.AR.Global.Dialog.options;
                         opts.toolbar[0].handler();//自动触发确定按钮事件
                     }
                     else {
@@ -98,10 +98,10 @@
                 returnValue.text = dg.getCheckIDs(title);
                 returnValue.value = dg.getCheckIDs(id);
                 returnValue.data = rows;
-                parent.AR.Global.returnValue = returnValue;
+                parent.AR.Global.Dialog.returnValue = returnValue;
             }
             else {
-                parent.AR.Global.returnValue = undefined;
+                parent.AR.Global.Dialog.returnValue = undefined;
             }
         }
     </script>

@@ -227,13 +227,8 @@
 
         window: {
             init: function (container, options) {
-                var width = options.width || 500;
-                var height = options.height || 400;
-                var url = options.url
-                var otherParm = options.otherParm;
-                var title = options.title || '';
-                var input = Object.toStringFormat("<input _width='{0}' _height='{1}' _url='{2}' _otherParm='{3}' _title='{4}' />", width, height, url, otherParm, title);
-                var editor = $(input).appendTo(container);
+                var editor = $('<input/>').appendTo(container);
+                editor.attr("options",JSON.stringify(options));
                 editor.enableEdit = false;
                 return editor;
             },
@@ -242,39 +237,11 @@
             },
             setValue: function (target, value) {
                 $(target).val(value);
-                var width = $(target).attr("_width");
-                var height = $(target).attr("_height");
-                var url = $(target).attr("_url");
-                var otherParm = $(target).attr("_otherParm");
-                var title = $(target).attr("_title");
-                var obj = new Object();
-                obj.value = value;
-                obj.title = title;
-                obj.otherParm = otherParm;
-                ////2015年新版本的谷歌以及火狐浏览器不支持模态窗口
-                //var resultValue=Object.to
-                (url, width, height, obj);
-
-                var wiframe;
-                wiframe = $('<iframe src="' + url + '" frameborder="0" style="border:0;width:100%;height:97%;"></iframe>');
-                $("#WorkflowAddWindow")[0] && $("#WorkflowAddWindow").remove();
-                var div = $("<div id='WorkflowAddWindow' ></div>");
-                window.targetWindowObj = target;
-                window.dialogInArguments = obj;
-                window.targetWindow = div;
-                div.window({
-                    title: '',
-                    width: width,
-                    height: height,
-                    closed: false,
-                    cache: false,
-                    modal: true,
-                    content: wiframe
-                });
-
-                //window.targetWindowValue="";
-                //wiframe.contentWindow.dialogArguments=obj;
-
+                var opts = JSON.parse($(target).attr("options"));
+                AR.Global.Dialog.$target = $(target);
+                AR.Global.Dialog.options = opts;
+                //url, title, isUpdate, opts
+                AR.Utility.Window.open(opts.url, opts.title, false, opts);
             },
             resize: function (target, width) {
             },

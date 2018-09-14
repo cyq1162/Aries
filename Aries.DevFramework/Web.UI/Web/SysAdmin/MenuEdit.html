@@ -267,12 +267,14 @@
                     if (action == "Add") {
                         if (Menu.Tree.clickNode.attributes == null) {
                             Menu.Tree.level = 1;
-                            para.push({ name: "menulevel", value: 1 });
+                            para.menulevel = 1;
+                           
                         }
                         else {
                             var level = Menu.Tree.clickNode.attributes.menulevel || 0;
                             Menu.Tree.level = level + 1;
-                            para.push({ name: "menulevel", value: level + 1 });
+                            para.menulevel = level+1;
+                           
                         }
                     }
                     else {
@@ -295,6 +297,7 @@
                                 }]
                             });
                             AR.Utility.Window.showMsg("${add}${success}！");
+                            $("#menuid").val(data.msg);
                             AR.Global.DG.action = "Update";//避免重复添加
                         }
                         else {
@@ -302,8 +305,9 @@
                         }
                     }
                     else {
+                        var node = Menu.Tree.$target.tree('find', $("#menuid").val());
                         Menu.Tree.$target.tree("update", {
-                            target: Menu.Tree.clickNode.target,
+                            target: node.target,
                             text: $("[name='menuname']").val()
                         });
                         AR.Utility.Window.showMsg(data.msg);

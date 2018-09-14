@@ -344,7 +344,7 @@ namespace Aries.Logic
 
             bool result = false;
             string msg = string.Empty;
-            using (MAction action = new MAction(ObjName))
+            using (MAction action = new MAction(U_AriesEnum.Sys_Menu))
             {
                 if (Query<int>("MenuLevel") == 1)
                 {

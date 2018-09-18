@@ -327,11 +327,11 @@
                                 pkColumn.rowspan = 1;
                                 pkColumn.width = len * 32;
                                 pkColumn.hidden = false;
-                                var title = $Core.Config.getValue("SysConfig", "OperatorTitle");
-                                if (!title) {
-                                    title = $Core.Lang.opration;
-                                }
-                                pkColumn.title = title == $Core.Lang.empty ? '' : title;
+                                //var title = $Core.Config.getValue("SysConfig", "OperatorTitle");
+                                //if (!title) {
+                                //    title = $Core.Lang.opration;
+                                //}
+                                pkColumn.title = $Core.Lang.pkTitle;// title == $Core.Lang.empty ? '' : title;
                                 pkColumn.field = 'auto_pk';
                                 frozen.push(pkColumn);
                             }

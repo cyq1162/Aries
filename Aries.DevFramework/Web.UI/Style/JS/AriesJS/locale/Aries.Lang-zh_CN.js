@@ -37,7 +37,7 @@ window.AR || (window.AR = {});
 
     //Aries.DataGrid.js
 	//$Core.Lang.edit = '编辑';
-	//$Core.Lang.add = '添加';
+	$Core.Lang.pkTitle = '操作';
 	$Core.Lang.addSuccess = '添加成功';
 
 	$Core.Lang.isDel = '确认删除操作吗？';

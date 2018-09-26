@@ -156,7 +156,7 @@
 
                             }
                             if (dg.PKColumn.Editor.BtnDel.hidden != true && actionKeys.indexOf(",del,") > -1) {
-                                len++; alert($Core.Lang.del);
+                                len++; 
                                 var $btn = $($Core.Utility.stringFormat(strTemplate, "del", $Core.Lang.del, "onDel", value, index));
                                 obj.set("del", { "isCustom": false, $target: $btn });
                                 $div.append($btn);

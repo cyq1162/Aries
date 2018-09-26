@@ -156,7 +156,7 @@
 
                             }
                             if (dg.PKColumn.Editor.BtnDel.hidden != true && actionKeys.indexOf(",del,") > -1) {
-                                len++;
+                                len++; alert($Core.Lang.del);
                                 var $btn = $($Core.Utility.stringFormat(strTemplate, "del", $Core.Lang.del, "onDel", value, index));
                                 obj.set("del", { "isCustom": false, $target: $btn });
                                 $div.append($btn);
@@ -184,7 +184,7 @@
                         if (!btn.isHidden && actionKeys.indexOf("," + btn.lv2action + ",") > -1) {
 
                             if (!btn.hasAttribute("hasClick")) {
-                                if (btn.className == 'sc') {
+                                if (btn.className == 'del') {
                                     btn.setAttribute("onclick", "AR.Common.Event.onDel(this,'" + dg.id + "','" + value + "'," + index + ")");
                                 }
                                 else {

@@ -248,7 +248,7 @@ namespace Aries.Core.Config
             Dictionary<string, string> rowPrimaryValue = new Dictionary<string, string>();//存档每个表每行的主键值。
             Dictionary<string, string> wherePrimaryValue = new Dictionary<string, string>();//存档where条件对应的主键值。
             int acceptType = excelRow.Get<int>(Config_Excel.AcceptType);
-            using (MAction action = new MAction(tables[0]))
+            using (MAction action = new MAction(CrossDb.GetEnum(tables[0])))
             {
                 action.SetAopState(AopOp.CloseAll);
                 action.BeginTransation();

@@ -265,6 +265,7 @@
                     var node = Menu.Tree.getSelected();;
                     Menu.Tree.level = 0;
                     if (action == "Add") {
+                        $("#menuid").val("");
                         if (Menu.Tree.clickNode.attributes == null) {
                             Menu.Tree.level = 1;
                             para.menulevel = 1;

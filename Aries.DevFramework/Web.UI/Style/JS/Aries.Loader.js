@@ -41,7 +41,7 @@ var easyui_theme = sys_getCookie('easyui_theme') || 'default';
 
 var sys_lang = sys_getCookie('aries_language') || 'zh_CN';
 var sys_css = sys_getCss();
-var sys_vs = "v5.2.1";//系统版本号
+var sys_vs = "v5.2.2";//系统版本号
 
 //样式
 document.write('<link href="' + sys_ui + '/Style/Theme/EasyUI/' + easyui_theme + '/easyui.css" rel="stylesheet" type="text/css" />');

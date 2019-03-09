@@ -102,6 +102,11 @@
         if (!op.tree && $input.hasClass("combobox-f")) {
             resetEvent($input, op);
             setAttr($input, "loadData", op.data);
+            var value = $input.attr("defaultValue");//重新赋值(处理上级设置了默认值，之后二次赋值的情况）。
+            if (value != undefined) {
+                $input.removeAttr("defaultValue");
+                setAttr($input, "select", value);
+            }
         }
         else {
             parseToCombo($input, op);
@@ -112,7 +117,7 @@
             return function (record, checked) {
                 var event = eval($box.attr("onchange"));
                 if (typeof (eval(event)) == "function") {
-                    if (record.id != undefined) { record.value = record.id; } 
+                    if (record.id != undefined) { record.value = record.id; }
                     if (op.multiple) {
                         record.values = setAttr($box, "getValues");
                         record.texts = setAttr($box, "getText");
@@ -251,6 +256,7 @@
     //将下级重置为请选择(递归触发事件)
     function resetChildBox($input) {
         var childInputs = getChildInputs($input);
+        if (childInputs.length == 0) { return;}
         $.each(childInputs, function (index, $box) {
             setAttr($box, "clear");
             if ($box.attr('onlytext') == 'true') {
@@ -339,6 +345,7 @@
         });
         $Core.Combobox.onAfterExecute("configkey");
         setValuesToCombobox();
+        $Core.Combobox.onAfterInit("configkey");
     }
 
     initObjNameCombobox = function () {
@@ -368,6 +375,7 @@
                 });
                 $Core.Combobox.onAfterExecute("objname");
                 setValuesToCombobox();
+                $Core.Combobox.onAfterInit("objname");
             });
         }
     };
@@ -376,8 +384,7 @@
             bindDialog($(this));
         });
     }
-    function bindDialog($input)
-    {
+    function bindDialog($input) {
         $input.on("click", function () {
             showDialog($input);
         });
@@ -442,25 +449,35 @@
         $Core.Utility.Window.dialog($Core.Lang.selectData, html, opts);
 
     };
-    onAfterBind = function (type) { $Core.Combobox.isLoadCompleted = true; };//定义绑定的事件。
+    onAfterBind = function (type, isEnd) { $Core.Combobox.isLoadCompleted = true; };//定义绑定的事件。
     //设置Easyui下拉框的值
     function setValuesToCombobox() {
-        var data = $Core.Combobox.values;
-        if (data) {
+        var data = $Core.Utility.cloneObject($Core.Combobox.values);
+        $Core.Combobox.values = {};
+        if (data && JSON.stringify(data) != "{}") {
             var reg_date = /^\d{4}(-|\/)\d{2}(-|\/)\d{2}\s?.*$/;
             for (var k in data) {
                 var value = data[k];
+                if (k == "toString") { break; }
                 if (value != undefined && !reg_date.test(value)) {
-                    $("[comboname='" + k + "']").each(function () {
-                        setComboValue($(this), value);
-                    });
+                    var $input = $("[comboname='" + k + "']");
+                    if ($input.length > 0) {
+                        $input.each(function () {
+                            setComboValue($(this), value);
+                        });
+                    }
+                    else {
+                        $input = $("[name='" + k + "']");
+                        $input.attr("defaultValue", value);
+                    }
                 }
             }
         }
     }
     function setComboValue($box, value) {
+
         setAttr($box, "clear");
-        if (value == undefined) { return;}
+        if (value == undefined) { return; }
         if (value.toString().indexOf(',') != -1 && value.toString().split(',').length > 1) {
             value = value.split(',');
 
@@ -473,18 +490,25 @@
             setAttr($box, "select", value.toString());
         }
 
-        if ($box.attr("parent") && !$box.attr("defaultValue")) {
+        // var hasDefaultValue = $box.attr("defaultValue") != undefined;
+        if ($box.attr("parent") != undefined && $box.attr("defaultValue") == undefined) {
+            // alert(1);
+            // if (!hasDefaultValue) {
+
             var opData = setAttr($box, "getData");// 级联和设值（不知道谁先执行的，所以检测是否绑定了数据，如果还未绑定，先把值设置为默认值）
             if (opData.length <= 1) {
                 $box.attr("defaultValue", value);
+
             }
+            // }
         }
+        $box.attr("hasSetValues", 1);
     }
     function setValues(data) {
         $Core.Combobox.values = $.extend($Core.Combobox.values, data);
     }
     function setParas(data) {
-        $Core.Combobox.paras = $.extend($Core.Combobox.paras, data);;
+        $Core.Combobox.paras = $.extend($Core.Combobox.paras, data);
     }
     function parseToCombo($box, op) {
         if (op.tree) {
@@ -494,12 +518,19 @@
         else {
             $box.combobox(op);
         }
+
         var value = $box.attr("defaultValue");//重新赋值。
         if (value && op.data.contains(value, "value")) {
             $box.removeAttr("defaultValue");
             setAttr($box, "select", value);//-------下面延时再重设一次值、怕网络太慢保险起见-------
             setTimeout(function () {
-                setAttr($box, "select", value);
+                var hasSetValue = $box.attr("hasSetValues", 1);
+                if (hasSetValue) {
+                    $box.removeAttr("hasSetValues");
+                }
+                else {
+                    setAttr($box, "select", value);
+                }
             }, 5);
         }
         else if (!op.tree && op.data.length > 0) { setAttr($box, "select", op.data[0][op.valueField]); }
@@ -513,28 +544,30 @@
                 case "getData":
                     return undefined;
             }
-            if (value == undefined) {
-                try {
+            try {
+                if (value == undefined) {
                     return $box.combotree(key);
-                } catch (e) {
-                    return undefined;
                 }
-
-
+                else {
+                    return $box.combotree(key, value);
+                }
+            } catch (e) {
+                return undefined;
             }
-            else
-                return $box.combotree(key, value);
         }
         else {
-            if (value == undefined) {
-                try {
+            try {
+                if (value == undefined) {
+
                     return $box.combobox(key);
-                } catch (e) {
-                    return undefined;
+
                 }
+                else {
+                    return $box.combobox(key, value);
+                }
+            } catch (e) {
+                return undefined;
             }
-            else
-                return $box.combobox(key, value);
         }
     }
 
@@ -545,10 +578,53 @@
         else if ($input.attr("objname") || $input.attr("objName")) {
             bindObjName($input);
         }
-        else if ($input.attr("dialog"))
-        {
+        else if ($input.attr("dialog")) {
             showDialog($input);
         }
+    }
+    //获取下拉某个项的值或文本，type为0，取value，type为1,取text
+    function _getObjKeyOrValue(objName, v, type) {
+        var obj = $Core.Combobox.getObj(objName);
+        if (obj == undefined) { return undefined; }
+        var value = v;
+        if ($.type(obj) == "object") {
+            obj = [obj];
+        }
+        var value = "value", text = "text";
+        if (type == 1) { value = "text", text = "value"; }
+        if (v.toString().indexOf(',') != -1) {
+            var array = v.split(','), result = [];
+            for (var i = 0; i < obj.length; i++) {
+                if (array.contains(obj[i][text])) {
+                    result.push(obj[i][value]);
+                }
+            }
+            if (result.length > 0) {
+                value = result.join(',');
+            }
+        } else {
+            for (var i = 0; i < obj.length; i++) {
+                if (obj[i][text] == v) {
+                    value = obj[i][value];
+                    break;
+                }
+            }
+        }
+        return value;
+    }
+    function _getInput(idOrNameOrJq) {
+        if (!idOrNameOrJq) { return undefined; }
+        var $input = idOrNameOrJq;
+        if (typeof idOrNameOrJq == "string") {
+            $input = $("#" + idOrNameOrJq);
+            if (!$input || !$input[0]) {
+                $input = $("input[comboname='" + idOrNameOrJq + "']") || $("input[name='" + idOrNameOrJq + "']");
+            }
+        }
+        else if ($input[0] == undefined) {
+            $input = $($input);
+        }
+        return $input;
     }
     /*下拉框操作*/
     $Core.Combobox = {
@@ -557,38 +633,54 @@
             initObjNameCombobox();//初始化objName配置的项
             initDialogCombobox();//初始化dialog配置的项
         },
+        //在设置完下拉值后触发：AR.Combobox.onAfterInit = function (type) {type为：configkey,objname,dialog三者之一}
+        onAfterInit: {
+        },
         //存档objname下拉数的数据{objnameA:[],objnameB:{}...}。
         data: {},
         //获得objName下拉数据的Json对象
         getObj: function (objName) {
             return $Core.Combobox.data[objName];
         },
-        // 获得objName下拉数据的Json对象的某项名称
-        getText: function (objName, v) {
-            var obj = this.getObj(objName);
-            var value = v;
-            if ($.type(obj) == "object") {
-                obj = [obj];
+        /*
+       重载一：获取下拉翻译的文本：参数为objName,value
+       重载二：获取下拉值当前文本，仅传一个参数时为：id or name or $input，第二参数忽略
+       */
+        getText: function (objName, value) {
+            if (!objName) { return ""; }
+            if (value != undefined) {
+                var result = _getObjKeyOrValue(objName, value, 1);
+                if (result == undefined) {
+                    result = $Core.Config.getText(objName, value);
+                }
+                return result;
             }
-            if (v.toString().indexOf(',') != -1) {
-                var array = v.split(','), result = [];
-                for (var i = 0; i < obj.length; i++) {
-                    if (array.contains(obj[i]['value'])) {
-                        result.push(obj[i]['text']);
-                    }
-                }
-                if (result.length > 0) {
-                    value = result.join(',');
-                }
-            } else {
-                for (var i = 0; i < obj.length; i++) {
-                    if (obj[i]['value'] == v) {
-                        value = obj[i]['text'];
-                        break;
-                    }
-                }
+            var $input = _getInput(objName);
+            var v = this.getValue($input);
+            objName = $input.attr("objName") || $input.attr("configKey");
+            if (v != undefined) {
+                return this.getText(objName, v);
             }
-            return value;
+            return "";
+        },
+        /*
+        重载一：获取下拉翻译值：参数为objName,text
+        重载二：获取下拉值当前值，仅传一个参数时为：id or name or $input，第二参数忽略
+        */
+        getValue: function (objName, text) {
+            if (!objName) { return ""; }
+            if (text != undefined) {
+                var result = _getObjKeyOrValue(objName, text, 0);
+                if (result == undefined) {
+                    result = $Core.Config.getValue(objName, text);
+                }
+                return result;
+            }
+            var $input = _getInput(objName);
+            if ($input) {
+                return $input.attr("comboname") == undefined ? $input.val() : setAttr($input, "getValues");
+            }
+            return "";
         },
         // 为下拉框设置属性事件等属性：参数：$box, key, value, isTree
         setAttr: setAttr,
@@ -596,7 +688,7 @@
         setParas: setParas,
         //为下拉框设置值，一般在AR.Combobox.onAfterExecute = function (type) {这里写代码。}
         setValues: setValues,
-        //下拉绑定后触发的事件：AR.Combobox.onAfterExecute = function (type) {type为：configkey,objname,dialog三者之一}
+        //下拉绑定后触发的事件：AR.Combobox.onAfterExecute = function (type) {type为：configkey,objname 二者之一}
         onAfterExecute: onAfterBind,
         /*
         objNames    ： 对象名数组:[{ObjName:xxx,Para:xxx},{ObjName:xxx2,Para:xxx2}...]

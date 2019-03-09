@@ -12,10 +12,12 @@
         <label>ObjName：</label><input type="text" objname="C_PB_Province" />
         <hr />
         <h3>属性配置</h3>
-        <label>defaultvalue=1：（默认值..）</label><input type="text" configkey="性别" name="gender" defaultvalue="1" /><br />
+        <label>defaultvalue=1：（默认值..）</label><input type="text" id="gender7" configkey="性别" name="gender2" defaultvalue="0" />
+        -
+        <input type="text" configkey="性别" name="gender3" defaultvalue="1" /><br />
         <label>onlytext=true：（值也显示文本..）</label><input type="text" objname="C_PB_Province" onlytext="true" name="onlytext" onchange="singleSelect" /><br />
         <label>defaultitem=false：（不显示请选择..）</label><input type="text" objname="C_PB_Province" defaultitem="false" name="abc" onchange="singleSelect" /><br />
-        <label>multiple=true：（多选..............）</label><input type="text" objname="C_PB_Province" multiple="true" onchange="singleSelect" /><br />
+        <label>multiple=true：（多选..............）</label><input type="text" objname="C_PB_Province" multiple="true" onchange="multipleSelect" /><br />
         <label>onchange=onchange：（事件...........）</label><input type="text" objname="C_PB_Province" onchange="singleSelect" />
         <hr />
         <h3>单选级联</h3>
@@ -46,26 +48,39 @@
     function singleSelect(record) {
 
         if (record.value) {
-            AR.Utility.Window.showMsg([record.value, record.text].join(','));
+           // AR.Utility.Window.showMsg([record.value, record.text].join(','));
         }
         // else { alert("1");}
     }
 
     function multipleSelect(record, checked) {
         if (record.value) {
-            AR.Utility.Window.showMsg(record.text + "[" + record.value + "]" + " - check[" + checked + "] -- " + record.texts + "[" + record.values + "]");
+            //AR.Utility.Window.showMsg(record.text + "[" + record.value + "]" + " - check[" + checked + "] -- " + record.texts + "[" + record.values + "]");
         }
 
     }
-    AR.Combobox.onAfterExecute = function (type) {
+    var box = AR.Combobox;
+    box.onAfterExecute = function (type) {
         if (type == "configkey") {
-            AR.Combobox.setValues({ gender: 0 });
+            box.setValues({ gender: 1 });
+            var val = box.getValue("gender3");
+            var text = box.getText("gender3");
+           // AR.Utility.Window.showMsg("hehe:" + val + "," + text);
         }
-        else {
-            AR.Combobox.setValues({ onlytext: "河东区" });
-            AR.Combobox.setValues({ prov: "200000000", city: "200100000" });
+        else if (type == "objname") {
+            box.setValues({ onlytext: "河东区" });
+            box.setValues({ prov: "200000000", city: "200100000" });
+        }
+        else if (type == "dialog") {
+
+        }
+
+    }
+    box.onAfterInit = function (type) {
+        if (type == "objname") {
+            var val = box.getValue("prov");
+            var text = box.getText("prov");
+            AR.Utility.Window.showMsg("prov:" + val + "," + text);
         }
     }
-
-
 </script>

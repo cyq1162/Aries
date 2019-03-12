@@ -96,7 +96,7 @@ namespace Aries.Core.Config
 
             }
             //检测样式主题是否存在：
-            if (!Directory.Exists(AppConfig.WebRootPath + "Style\\Theme\\Aries\\" + theme))
+            if (!Directory.Exists(AppConfig.WebRootPath + "Style/Theme/Aries/" + theme))
             {
                 theme = "default";
                 //更新配置设置回Aries默认样式
@@ -120,7 +120,7 @@ namespace Aries.Core.Config
             string theme, language;
             getConfig(out theme, out language);
 
-            string pathTemp = AppConfig.WebRootPath + "Style\\Theme\\Aries\\{0}\\locale\\{1}.Lang-{2}.js";
+            string pathTemp = AppConfig.WebRootPath + "Style/Theme/Aries/{0}/locale/{1}.Lang-{2}.js";
 
             //---处理前端
             string path = string.Format(pathTemp, theme, "Html", language);
@@ -172,7 +172,7 @@ namespace Aries.Core.Config
 
 
 
-            fyw.Path = AppConfig.WebRootPath + "Style\\Theme\\Aries\\" + theme + "\\locale";
+            fyw.Path = AppConfig.WebRootPath + "Style/Theme/Aries/" + theme + "/locale";
             fyw.EnableRaisingEvents = true;
         }
         private static void InitLangDic(Dictionary<string, string> dic, string path, string replaceKey)

@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\CYQ.Data-GitHub\trunk\CYQ.Data_Core_VS2017.csproj" />
+    <ProjectReference Include="..\..\..\..\CYQ.Data-GitHub\trunk\CYQ.Data_NetCore.csproj" />
   </ItemGroup>
 
 </Project>

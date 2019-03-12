@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>多列表</title>
+    <script src="/Style/JS/Aries.Loader.js"></script>
+</head>
+<body>
+    <form>
+     <div style="height: 300px;">
+        <div id="dg"></div>
+    </div>
+     <div style="height: 300px;">
+        <div id="grid"></div>
+    </div>
+        </form>
+    <script>
+        var ta = new AR.DataGrid('Demo_TestA', 'Demo_TestA');
+       // ta.options.onLoadSuccess = function () { alert('a');}
+        ta.bind();
+        var tb = new AR.DataGrid('Demo_TestB', 'Demo_TestB', "grid");
+       // tb.options.onLoadSuccess = function () { alert('b'); }
+        tb.bind();
+    </script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Input 对话框</title>
+
+    <script src="/Style/JS/Aries.Loader.js"></script>
+</head>
+<body>
+
+    <div class="page-body">
+        <div class="page-title">
+            <h3>Demo_TestA(增加了双击可以重选事件)</h3>
+            <a class="arrows hover"></a>
+        </div>
+        <div class="page-content">
+            <div class="page-form">
+                <div class="line">
+                    <div class="short">
+                        <label><em>*</em>（单选）F6：</label>
+                        <input id="F6" name="F6" dialog="Demo_TestA" />
+                    </div>
+                    <div class="short">
+                        <label><em>*</em>（多选）F7：</label>
+                        <input name="F7" dialog="Demo_TestA" multiple="true" onlytext="true" />
+                    </div>
+                    <div class="short">
+                        <label><em>*</em>（可编辑）F8：</label>
+                        <input name="F8" dialog="Demo_TestA" multiple="true" editable="true" />
+                    </div>
+                </div>
+                <form>
+                    <div class="line">
+                        <div class="short">
+                            <label><em>*</em>（填充）F1：</label>
+                            <input name="F1" />
+                        </div>
+                        <div class="short">
+                            <label><em>*</em>F3：</label>
+                            <input name="F3" /><!--<span name="F3"></span>-->
+                        </div>
+                        <div class="short">
+                            <label><em>*</em>F4：</label>
+                            <input name="F4" /><!--<label name="F4"></label>-->
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div title="Demo说明" style="clear: both">
+                <hr />
+                <p>1、dialog属性指向同一个（objName）表名，若需要不同配置时，可以利用"_"下标，如"A","_A","__A"会有3种配置，但都指向同一个表A</p>
+                <p>
+                    2、通过指定Input属性，可以为dialog追加各种属性：<br />
+                    multiple：是否多选。<br />
+                    editable：是否可编辑。<br />
+                    onlytext：文件的值和文本显示一致。<br />
+                    textField、valueField：可以指定表格的返回的值字段（默认textField取第一个显示的字段，valueField取主键）。<br />
+                    options：可以向表格追加属性<br />
+
+                </p>
+                <p> 3、需要回调参数时，通过：AR.Combobox.onAfterExecute = function (type, $input, backPara) {}<br />
+                    type的参数有“configkey","objname"和"dialog"<br />
+                    backpara的参数为：{text:string,value,string,data:jsonOrArray}
+                </p>
+            </div>
+        </div>
+        <script>
+            //追加固定的过滤条件。
+            $("input[name = 'F6']").attr("options", "{defaultWhere: [{ name: 'F1', pattern: 'like', value: '1' }]}");
+            //选择之后事件。
+            AR.Combobox.onAfterExecute = function (type, $input, backPara) {
+                if (type == "dialog") {
+                    if (!$input.attr("mutiple")) //单选时
+                    {
+                        AR.Form.$target.form("load", backPara.data);
+                        $("input[name = 'F4']").toView();
+                        
+                    }
+                    AR.Utility.Window.showMsg("text : " + backPara.text + "<br>value : " + backPara.value);
+                   
+                }
+               
+            }
+
+        </script>
+</body>
+</html>

@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+
+    <script src="/Style/JS/Aries.Loader.js"></script>
+</head>
+<body>
+    <form enctype="multipart/form-data">
+        作者比较懒，后台没写方法处理两个表，所以将随机更新A表或B表。<br />
+        具体可以看用户表的操作。
+        <hr />
+        <div class="cont-box">
+            <div class="page-title">
+                <h3>Demo_TestA</h3>
+                <a class="arrows hover"></a>
+            </div>
+            <div class="page-content">
+                <div class="page-form">
+                    <div class="line">
+                        <div class="short">
+                            <label><em>*</em>F1：</label>
+                            <input name="F1" />
+                        </div>
+                        <div class="short">
+                            <label><em>*</em>F2：</label>
+                            <input name="F2" configkey="是否" />
+                        </div>
+                        <div class="short">
+                            <label><em>*</em>F3：</label>
+                            <input name="F3" />
+                        </div>
+
+                    </div>
+                    <div class="line">
+                        <div class="short">
+                            <label><em>*</em>F4：</label>
+                            <input name="F4" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page-title">
+                <h3>Demo_TestB</h3>
+                <a class="arrows hover"></a>
+            </div>
+            <div class="page-content">
+                <div class="page-form">
+                    <div class="line">
+
+                        <div class="short">
+                            <label><em>*</em>F5：</label>
+                            <input name="F5" />
+                        </div>
+                        <div class="short">
+                            <label><em>*</em>F6：</label>
+                            <input name="F6" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <input type="hidden" name="ID" />
+        <div style="clear: both;"></div>
+
+
+        <div class="list">
+            <div>
+                <div class="inputWrap">
+                    <span>分类系统类型:</span>
+                    <input type="text" class="normal">
+                </div>
+                <div class="inputWrap">
+                    <span>分类系统类型:</span>
+                    <select>
+                        <option>选项一</option>
+                        <option>选项二</option>
+                        <option>选项三</option>
+                    </select>
+                </div>
+                <div class="inputWrap">
+                    <span>单选:</span>
+                    <div class="radioWrap">
+                        <input type="radio" name="sex" id="male"><label for="male">男</label>
+                        <input type="radio" name="sex" id="female"><label for="female">女</label>
+                    </div>
+                </div>
+                <div class="inputWrap">
+                    <span>多选:</span>
+                    <div class="radioWrap">
+                        <input type="checkbox" id="checkbox1"><label for="checkbox1">选项一</label>
+                        <input type="checkbox" id="checkbox2"><label for="checkbox2">选项二</label>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="inputWrap">
+                    <span>分类系统类型:</span>
+                    <input type="text" class="normal">
+                </div>
+                <div class="inputWrap">
+                    <span>文件上传:</span>
+                    <input id="file" type="file" name="file" />
+                </div>
+                <div class="inputWrap">
+                    <span>单选:</span>
+                    <div class="radioWrap">
+                        <input type="radio" name="sex" id="male"><label for="male">男</label>
+                        <input type="radio" name="sex" id="female"><label for="female">女</label>
+                    </div>
+                </div>
+                <div class="inputWrap">
+                    <span>多选:</span>
+                    <div class="radioWrap">
+                        <input type="checkbox" id="checkbox1"><label for="checkbox1">选项一</label>
+                        <input type="checkbox" id="checkbox2"><label for="checkbox2">选项二</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-form">
+            <div class="btn">
+                <a>
+                    <input class="submit" type="submit" name="保存" value="" />
+                </a>
+                <a>
+                    <input class="return" type="submit" name="取消" value="" />
+                </a>
+            </div>
+        </div>
+
+        <script>
+            AR.Form.onBeforeExecute = function () {
+                if (parent && parent.AR.Global.DG.action == "Update") {
+                    this.objName = parent.AR.Global.DG.operating.objName;
+                }
+            }
+            AR.Form.onAfterExecute = function () {
+                //this.method = "后台方法名";
+                //this.objName = "自己的参数名称";
+
+            }
+
+            AR.Form.BtnCommit.onBeforeExecute = function () {
+
+                AR.Form.objName = "Demo_TestA";
+                alert("操作的是:" + AR.Form.objName);
+            }
+        </script>
+    </form>
+</body>
+</html>

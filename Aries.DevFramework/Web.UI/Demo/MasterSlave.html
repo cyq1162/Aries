@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>主从表（包括主从表删除）</title>
+    <script src="/Style/JS/Aries.Loader.js"></script>
+</head>
+<body>
+     <div style="height: 300px;">
+        <div id="dg"></div>
+    </div>
+     <div style="height: 300px;">
+        <div id="grid"></div>
+    </div>
+    <script>
+        var ta = new AR.DataGrid('Demo_TestA');
+       // ta.options.view = detailview;
+        ta.foreignKeys = "Demo_TestB.ID";//指定关联删除的外键
+        var tb;
+        ta.options.onClickRow = function (index, row) {
+            var id = row.id.substring(0, 2)
+            if (!tb)
+            {
+                tb = new AR.DataGrid('Demo_TestB', 'Demo_TestB', "grid");
+                tb.ToolArea.isHidden = true;
+                tb.addWhere("ID", id, "like");
+                tb.bind();
+            }
+            else
+            {
+                tb.addWhere("ID", id, "like");
+                tb.reload();
+            }
+                
+        }
+        ta.bind();
+    </script>
+</body>
+</html>

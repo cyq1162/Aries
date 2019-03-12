@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="/Style/JS/Aries.Loader.js"></script>
+    <title>TreeGrid演示</title>
+</head>
+<body>
+    <!--   <div style="height: 440px;">
+        <table id="tg"></table>
+    </div>
+    <hr />-->
+        <table id="grid"></table>
+    <script type="text/javascript">
+        var tg = new AR.DataGrid('Demo_Area', null, "grid", true);
+        tg.HeaderMenu.add("自定义配置", 'fn', 'config');
+        function fn(el, dgid, value, index)
+        {
+            alert(value);
+        }
+        tg.options = {
+            idField: "code",
+            treeField: "name",
+            parentField: "pcode",
+            pagination: true,
+            onEditing: function (index, row) {
+                //alert("onEditing-" + index + ":" + JSON.stringify(row));
+            }
+        }
+        // dg.addWhere("lvl", "(3)", "in");
+        tg.addWhere("id", "3000", ">");
+        
+        tg.ToolBar.BtnAdd.onBeforeExecute = function (index, isSameLevel) {
+            tg.defaultInsertData[tg.options.idField] =AR.Utility.guid() ;//主键不能重复
+        }
+        tg.bind();
+
+        function ttt(a, b, c) {
+            alert('onttt');
+            alert([a, b, c, 'ttt']);
+        }
+        //var tg = new AR.TreeGrid('tg', 'Demo_Area', 'Demo_Area', 'Code', 'Name', 'PCode', undefined);
+        //tg.bind();    
+    </script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+﻿<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="/Style/JS/Aries.Loader.js"></script>
+    <script>document.title = "Aries.DevFramework " + sys_vs; if (parent != null && parent != this) { parent.location = location.href; }</script>
+</head>
+<body>
+
+    <div class="all">
+        <div class="box_top"></div>
+        <div class="box">
+            <h2>Aries Develop Framework</h2>
+            <table border="0" style="text-align: left;width:80%">
+                <tr>
+                    <td class="login"></td>
+                    <td>
+                        <div class="login_r">
+                            <label>${userName}</label><br />
+                            <input type="text" value="admin" id="username" class="user a" required="true" />
+
+                            <label>${password}</label><br />
+                            <input type="password" id="password" value="111111" required="true" />
+                            <br />
+
+                            <div class="btn">
+                                <input type="button" name="btnLogin" value="${login}" onclick="login()" />
+                                <span id="lbTip"></span>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+
+        </div>
+    </div>
+    <div class="login-foot">
+        <span>Copyright◎2016-2024 Powered By <a href="https://github.com/cyq1162/Aries" target="_blank">Aries Develop Framework</a> All Rights Reserved.</span>
+    </div>
+    <script>
+        document.onkeydown = function (e) {
+            var ev = document.all ? window.event : e;
+            if (ev.keyCode == 13) // Enter
+            {
+                login();
+            }
+        }
+        function login() {
+            var uid = $("#username").val();
+            var pwd = $("#password").val();
+            var date = new Date();//避免浏览器私自缓存
+            var data = { "uid": uid, "pwd": pwd, r: date.getSeconds() };
+            var result = AR.Utility.Ajax.post("Login", null, data);
+            if (result) {
+                if (result.success) {
+                    location.href = "index.html";
+                }
+                else {
+                    if (result.msg) {
+                        alert(result.msg);
+                    }
+                    else {
+                        var msg = JSON.stringify(result);
+                        if (msg == "{}") { msg = "please check web.config's httpmoudle!"; }
+                        alert(msg);
+                    }
+                }
+            }
+        }
+        var user = AR.Utility.Cookie.get('aries_user');
+        if (user) {
+            $("#username").val(user);//记住用户名
+        }
+    </script>
+</body>
+</html>

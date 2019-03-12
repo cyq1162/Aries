@@ -1,0 +1,14 @@
+将Web.UI 项目的文件目录Copy一份过来即可，这里就不重复提交维护两份了。
+
+包括以下目录：
+App_Data
+Demo
+Resource
+Style
+Web
+
+以及html文件：
+ajax.html
+index.html
+login.html
+logout.html

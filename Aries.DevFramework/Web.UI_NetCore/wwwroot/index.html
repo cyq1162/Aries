@@ -1,0 +1,409 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+    <title></title>
+    <script src="/Style/JS/Aries.Loader.js"></script>
+    <script>document.title = "Aries.DevFramework " + sys_vs;</script>
+
+    <!--[if IE]>
+        <style type="text/css">
+            #menu2 {padding-top:40px;}
+        </style>
+    <![endif]-->
+</head>
+<body>
+
+    <div class="easyui-layout" style="width: 100%;" data-options="fit:true" id="layout_container">
+        <div data-options="region:'north'" title="" style="height: 125px; overflow-y: no-display;">
+            <div class="panel-top">
+                <div class="panel-logo"><a href="#"></a></div>
+                <div class="panel-login">
+                    <!-- <span class="area" id="set_theme">皮肤设置</span>-->
+                    <a id="btnChangePassword" class="ico1">${changePassword}</a>
+                    <a id="lbUserName" class="ico3"></a>
+                    <a href="/logout.html" id="btn_exit" class="ico2">${logout}</a>
+                </div>
+                <div class="panel-nav">
+                    <ul id="menu1">
+                    </ul>
+                </div>
+                <div class="panel-sub-nav" id="menu2">
+                </div>
+            </div>
+        </div>
+
+
+        <div data-options="region:'west',title:'${menu}${function}',split:true" style="width: 188px;">
+            <ul id="menu3" class="sidebar-nav">
+            </ul>
+        </div>
+        <!-- <div data-options="region:'east',title:'右侧：功能菜单',split:true" style="width: 188px;">
+           
+        </div>-->
+        <div data-options="region:'center',iconCls:'icon-ok'" style="width: 100%" title="">
+            <div id="tabs" class="easyui-tabs" data-options="fit:true,border:false,cache:false">
+            </div>
+        </div>
+
+        <div id="mm" class="easyui-menu" style="width: 150px; display: none" title="">
+            <div id="mm-tabclose">${close}</div>
+            <div id="mm-tabcloseall">${closeAll}</div>
+            <div id="mm-tabcloseother">${closeOther}</div>
+            <div class="menu-sep"></div>
+            <div id="mm-tabcloseright">${closeRight}</div>
+            <div id="mm-tabcloseleft">${closeLeft}</div>
+        </div>
+
+    </div>
+
+
+</body>
+<script>
+    (function (Index) {
+        Index.Func = {
+            regEvent: function () {
+                $('#btnChangePassword').click(function () {
+                    var $div = $('<div id="pwdForm">').addClass('wrap');
+                    var $lbl1 = $('<label>').html('${newPassword}：');
+                    var $lbl2 = $('<label>').html('${confirmPassword}：');
+                    var $pwd1 = $('<input type="password" class="easyui-validatebox" data-options="required:true" validtype="isPwd" />').attr('id', 'pwd1');
+                    var $pwd2 = $('<input type="password" class="easyui-validatebox" data-options="required:true" validtype="eqPwd[pwd1]">').attr('id', 'pwd2');
+                    var $btnSave = $('<a>').addClass('btn red').html('${save}');
+                    var $btnClose = $('<a>').addClass('btn blue').html('${close}');
+
+                    $div.append($('<p>').append($lbl1).append($pwd1)).append($('<p>').append($lbl2).append($pwd2)).append($btnSave).append($btnClose);
+                    AR.Utility.Window.dialog('${changePassword}', $div, { width: 480, height: 250 });
+
+                    $btnSave.click(function () {
+                        var pwd1 = $pwd1.val();
+                        var pwd2 = $pwd2.val();
+                        if ($("#pwdForm").form("validate")) {
+
+                            AR.Utility.Ajax.post('ChangePassword', null, { pwd: pwd2 }, function (result) {
+                                if (result.success) {
+                                    AR.Utility.Window.closeDialog();
+                                }
+                                AR.Utility.Window.showMsg(result.msg, "${prompt}");
+                            });
+                        }
+                    });
+                    $btnClose.click(function () {
+                        AR.Utility.Window.closeDialog();
+                    });
+                });
+            },
+            loadUserInfo: function () {
+                AR.Global.GetUser(function (data) {
+                    $("#lbUserName").html('【' + data.fullname + '】');
+                });
+            },
+            onInit: function () {
+                this.regEvent();
+                this.loadUserInfo();
+            }
+        };
+        Index.Tab = {
+            //允许打开最多的窗口数
+            max:8,
+            //是否直接打开一个tab
+            open: function (url, text, isAddBackUrl) {
+                if (typeof (url) == 'string') {
+                    if (url.length > 4) {
+                        var tab = this.add(url, text, isAddBackUrl);
+                        this.createContextMenu(tab);
+                        return false;
+                    }
+                }
+                return true;
+            },
+
+            //传入tab添加关闭功能
+            createContextMenu: function (tab) {
+                var span = tab.panel('options').tab.find('.tabs-inner');
+                span.unbind("dblclick").dblclick(function () {
+                    var subtitle = $(this).children("span").text();
+                    $('#tabs').tabs('close', subtitle);
+                });
+
+                span.unbind('contextmenu').bind('contextmenu', function (e) {
+                    var mm = $('#mm');
+                    mm.menu('show', {
+                        left: e.pageX,
+                        top: e.pageY
+                    });
+                    var subtitle = $(this).children("span").text();
+                    mm.data("currtab", subtitle);
+                    return false;
+                });
+            },
+            //添加选项卡方法，根据iframe模式
+            add: function (url, title, isAddHistory) {
+                var that = this;
+                var h = 42;
+                var $tabs = $("#tabs");
+                var iframe = $("<iframe frameborder='0' />");
+                iframe.attr({ "src": url, "id": "f_center" }).css({ width: "100%", height: $tabs.height() - h });
+                //判断选项卡不存在则新增一个选项卡
+                var tab = null;
+                if (!$tabs.tabs("exists", title)) {
+                    tab = $tabs.tabs('add', {
+                        title: title,
+                        content: iframe,
+                        closable: true,
+                        tools: [{
+                            iconCls: 'icon-mini-refresh',
+                            handler: function () {
+                                var tab = $("#tabs").tabs("getTab", title);
+                                tab.panel('refresh');//ie8下没反应
+                                //this.iframe[0].src = url;
+                            }
+                        }]
+                    });
+                } else {
+                    tab = $tabs.tabs("getTab", title);
+                    var oldSrc = tab.panel().panel('body').find('#f_center').attr('src');
+                    if (isAddHistory == true) {
+                        if (typeof (tab.historyUrl) == 'undefined')
+                            tab.historyUrl = new Array();
+                        tab.historyUrl.push(oldSrc);
+                    }
+                    tab.panel("options").content = iframe;
+                    $tabs.tabs("select", title);
+                    //$tabs.tabs('update', { tab: tab, options: { content: iframe } });
+                    // tab.panel('refresh');
+                }
+                if ($tabs.tabs("tabs").length > that.max) {
+                    $tabs.tabs("close", 0);
+                }
+                return $tabs.tabs('getTab', title);
+            },
+            //绑定右键菜单事件
+            regContextMenuEvent: function () {
+                //关闭当前
+                $('#mm-tabclose').click(function () {
+                    var currtab_title = $('#mm').data("currtab");
+                    $('#tabs').tabs('close', currtab_title);
+                })
+                //全部关闭
+                $('#mm-tabcloseall').click(function () {
+                    $('.tabs-inner span').each(function (i, n) {
+                        var t = $(n).text();
+                        $('#tabs').tabs('close', t);
+                    });
+                });
+                //关闭除当前之外的TAB
+                $('#mm-tabcloseother').click(function () {
+                    var currtab_title = $('#mm').data("currtab");
+                    $('.tabs-inner span').each(function (i, n) {
+                        var t = $(n).text();
+                        if (t != currtab_title)
+                            $('#tabs').tabs('close', t);
+                    });
+                });
+                //关闭当前右侧的TAB
+                $('#mm-tabcloseright').click(function () {
+                    var nextall = $('.tabs-selected').nextAll();
+                    if (nextall.length == 0) {
+                        return false;
+                    }
+                    nextall.each(function (i, n) {
+                        var t = $('a:eq(0) span', $(n)).text();
+                        $('#tabs').tabs('close', t);
+                    });
+                    return false;
+                });
+                //关闭当前左侧的TAB
+                $('#mm-tabcloseleft').click(function () {
+                    var prevall = $('.tabs-selected').prevAll();
+                    if (prevall.length == 0) {
+                        return false;
+                    }
+                    prevall.each(function (i, n) {
+                        var t = $('a:eq(0) span', $(n)).text();
+                        $('#tabs').tabs('close', t);
+                    });
+                    return false;
+                });
+            },
+            onInit: function () {
+                this.regContextMenuEvent();
+            }
+        };
+
+        Index.Menu = {
+            //用于标记判断是否是快捷菜单点击后的触发
+            clickByShortcut: false,
+            //是否开启隐藏二级空菜单
+            hidenLevel2DivWhenLevelLess3: true,
+            //使用递归遍历得到最后一层节点
+            getFirstNode: function (jsonItem) {
+                if (jsonItem.children.length > 0) {
+                    return this.getFirstNode(jsonItem.children[0]);
+                } else {
+                    return jsonItem.id;
+                }
+            },
+            //初始化当前根节点下所有子菜单
+            createMenu: function (json, $ul, templateType) {
+                var innnerhtml = "";
+                var template = {
+                    1: "<li><a linkurl='{2}'  selfID='{0}'>{1}</a></li>",
+                    2: "<a linkurl='{2}' selfID='{0}' >{1}</a><em>|</em>"
+                };
+                for (var i = 0; i < json.length; i++) {
+                    if (json[i].attributes.isshow == 1) {
+                        var menuID = json[i].id;
+                        var menuName = json[i].text;
+                        var menuUrl = json[i].attributes.menuurl;
+                        var formatTemplate = template[templateType];
+                        innnerhtml = innnerhtml + AR.Utility.stringFormat(formatTemplate, menuID, menuName, menuUrl);
+                    }
+                }
+                $ul.html(innnerhtml);
+                //先注册完事件，再触发
+                setTimeout(function () {
+                    $ul.children().eq(0).addClass("hover").click();
+                }, 100);
+
+            },
+
+            //将数据格式化成easyui的格式
+            formatTreeJson: function (nodesdatas, idField, textField, parentField, rootID) {
+                return function (parentid) {
+                    var cn = new Array();
+                    for (var i = 0; i < nodesdatas.length; i++) {
+                        var n = {}, attrs = {};
+                        if (nodesdatas[i].isshow == 0) { continue; };
+                        each: for (var j in nodesdatas[i]) {
+                            if (j == idField || j == textField) {
+                                continue each;
+                            }
+                            attrs[j] = nodesdatas[i][j];
+                        }
+                        if (!n.attributes) {
+                            n.attributes = attrs;
+                        }
+                        n.id = nodesdatas[i][idField], n.text = nodesdatas[i][textField], n.state = 'open';
+                        var pid = nodesdatas[i][parentField] == '' ? undefined : nodesdatas[i][parentField];
+                        if (pid == parentid) {
+                            var id = nodesdatas[i][idField];
+                            n.children = arguments.callee(id);
+                            cn.push(n);
+
+                        }
+                    }
+                    return cn;
+                }(rootID);
+
+            },
+            regEvent: function (json) {
+                var that = this;
+                //一级菜单栏点击事件
+                $("#menu1>li").bind("click", function () {
+                    $(this).siblings().removeClass("hover");
+                    $(this).addClass("hover");
+
+                    $("#menu2").html("");
+                    var selfID = $(this).children("a").attr("selfid");
+
+                    var jsonData = that.formatTreeJson(json, 'menuid', 'menuname', 'parentmenuid', selfID);
+                    if (jsonData.length == 0) {
+                        //没有子级
+                        var url = $(this).children("a").attr("linkurl");
+                        if (url != '#') {
+                            var text = $(this).children("a").html();
+                            Index.Tab.open(url, text);
+                        }
+                        return false;
+                    }
+                    if (JSON.stringify(jsonData).indexOf('"menulevel":3') == -1) {
+                        if (that.hidenLevel2DivWhenLevelLess3) {
+                            $("#menu2").hide();
+                            $('#layout_container').layout('panel', 'north').panel("resize", { height: 82 });
+                            $('#layout_container').layout("resize");
+                        }
+                        $("#menu3").html("").removeClass("easyui-tree").addClass("sidebar-nav"); //获取到菜单容器,并清空HTML
+                        that.createMenu(jsonData, $("#menu3"), 1);
+                    }
+                    else {
+                        if (that.hidenLevel2DivWhenLevelLess3) {
+                            $("#menu2").show();
+                            $('#layout_container').layout('panel', 'north').panel("resize", { height: 125 });
+                            $('#layout_container').layout("resize");
+                        }
+                        that.createMenu(jsonData, $("#menu2"), 2);
+                    }
+
+                });
+                //二级菜单点击事件
+                $(document).on("click", "#menu2 > a", function () {
+                    $(this).siblings().removeClass("hover");
+                    $(this).addClass("hover");
+                    var menu3 = $("#menu3");
+                    menu3.html("");
+                    var selfID = $(this).attr("selfID");
+                    var jsonData = that.formatTreeJson(json, 'menuid', 'menuname', 'parentmenuid', selfID);
+                    if (JSON.stringify(jsonData).indexOf('"menulevel":4') == -1) {
+                        //不存在四级菜单
+                        menu3.removeClass("easyui-tree").addClass("sidebar-nav");
+                        that.createMenu(jsonData, menu3, 1);
+                    }
+                    else {
+                        menu3.tree({
+                            data: jsonData,
+                            loadFilter: function (data) { return data },
+                            onClick: function (node) {
+                                Index.Tab.open(node.attributes.menuurl, node.text);
+                            },
+                            onLoadSuccess: function () {
+                                //重置图片URL地址
+                                $(".tree-node").each(function () {
+                                    var tnode = $("#ul_tree").tree("getNode", this);
+                                    if (tnode.attributes && typeof (tnode.attributes.iconURL) != 'undefined') {
+                                        var style = "background:url('" + tnode.attributes.iconURL + "') no-repeat center center;";
+                                        $(this).find(".tree-icon").first().attr("style", style);
+                                    }
+                                })
+                            }
+                        }).removeClass("sidebar-nav").addClass("easyui-tree");
+                        if (!that.clickByShortcut) {
+                            //触发第一项默认选中   
+                            var id = that.getFirstNode(jsonData[0]);
+                            var node = $('#menu3').tree('find', id);
+                            $('#menu3').tree('select', node.target);
+                            $('[node-id="' + node.id + '"]').click();
+
+                        }
+                    }
+                });
+                //绑定三级菜单栏单击事件处理
+                $(document).on("click", "#menu3 > li", function () {
+                    $("#menu3> li").removeClass("hover");
+                    $(this).addClass("hover");
+                    var text = $(this).children("a").html();
+                    var url = $(this).children("a").attr("linkurl");
+                    if (url != '#') {
+                        Index.Tab.open(url, text);
+                    }
+                });
+            },
+            onInit: function () {
+                var that = this;
+                AR.Utility.Ajax.get("GetUserMenu", null, null, function (result) {
+                    var json = that.formatTreeJson(result, 'menuid', 'menuname', 'parentmenuid');
+                    var menu2 = $("#menu2");
+                    var menu3 = $("#menu3");
+                    var ul = $("#menu1");
+                    that.createMenu(json, ul, 1);//创建一级菜单，并延时触发点击一级菜单事件
+                    that.regEvent(result);//绑定一级菜单的点击事件
+                });
+            }
+        };
+        //初始化事件
+        Index.Func.onInit();
+        Index.Tab.onInit();
+        Index.Menu.onInit();
+    })(window);
+</script>
+</html>

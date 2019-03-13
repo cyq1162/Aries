@@ -634,7 +634,7 @@
             initDialogCombobox();//初始化dialog配置的项
         },
         //在设置完下拉值后触发：AR.Combobox.onAfterInit = function (type) {type为：configkey,objname,dialog三者之一}
-        onAfterInit: {
+        onAfterInit: function(){
         },
         //存档objname下拉数的数据{objnameA:[],objnameB:{}...}。
         data: {},

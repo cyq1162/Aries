@@ -18,11 +18,18 @@ namespace Aries.Core.Helper
         #region 安全Key检测
         public static bool IsKeyInHtml(string objName)
         {
-            string path = HttpContext.Current.Server.MapPath(HttpContext.Current.Request.UrlReferrer.LocalPath).ToLower();
+            string path = HttpContext.Current.Server.MapPath(HttpContext.Current.Request.UrlReferrer.LocalPath);
             bool result = IsObjInHtml(objName, path);
-            if (!result && path.EndsWith("edit.html"))
+            if (!result)
             {
-                result = IsObjInHtml(objName, path.Replace("edit.html", "list.html"));
+                if (path.EndsWith("edit.html"))
+                {
+                    result = IsObjInHtml(objName, path.Replace("edit.html", "list.html"));
+                }
+                else if(path.EndsWith("Edit.html"))//Linux区分大小写。
+                {
+                    result = IsObjInHtml(objName, path.Replace("Edit.html", "List.html"));
+                }
             }
             return result;
         }

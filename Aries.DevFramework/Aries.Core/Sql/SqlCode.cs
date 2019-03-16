@@ -32,7 +32,7 @@ namespace Aries.Core.Sql
             {
                 if (_FileList == null)
                 {
-                    _FileList = new Dictionary<string, string>();
+                    _FileList = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
                     string[] files = Directory.GetFiles(path, "*.sql", SearchOption.AllDirectories);
                     if (files != null && files.Length > 0)
                     {
@@ -178,7 +178,7 @@ namespace Aries.Core.Sql
                 {
                     string text = fileList[key];
                     string folder = null;
-                    if (text.Contains(":\\"))
+                    if (text.Contains(":\\") || text.StartsWith("/"))
                     {
                         folder = text;
                         text = IOHelper.ReadAllText(text);
@@ -196,6 +196,7 @@ namespace Aries.Core.Sql
                     text = FormatPara(text.Trim());//去掉空格
                     if (key[0] == 'V' && text[0] != '(' && !string.IsNullOrEmpty(folder))//补充语法
                     {
+                        folder = folder.Replace("/", "\\");//统一格式。
                         //如果文件夹名包含数据库名，则补充数据库前缀。
                         foreach (string name in CrossDb.DbTables.Keys)
                         {

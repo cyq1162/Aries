@@ -109,7 +109,7 @@ namespace Aries.Core.Extend
                 return objName;
             }
             int index = objName.LastIndexOf(')');
-            if (index == -1)//单表。
+            if (index == -1 && objName.IndexOf(' ') == -1)//单表。
             {
                 if (objName.IndexOf('.') > -1) { return objName; }
                 string dbName = GetDBName(objName);

@@ -37,4 +37,5 @@
 {"KeyValueID":"89c357dd-a6f7-442b-b5db-e3032c1b68fc","ConfigKey":"表名描述","ConfigName":"MyTestExtend","ConfigValue":"aa","Flag":"sys","Notes":"","OrderNo":null,"CreateTime":"2017-11-16 21:44:11"},
 {"KeyValueID":"a35c437f-7812-4dae-a4c7-9677e6154f3a","ConfigKey":"SysConfig","ConfigName":"Language","ConfigValue":"zh_CN","Flag":"aries","Notes":"中文：zh_CN，英文：en","OrderNo":999,"CreateTime":"2018-09-05 23:13:10"},
 {"KeyValueID":"8be330f5-8f2e-4403-82a4-e331e4fdaf5f","ConfigKey":"SysConfig","ConfigName":"Theme","ConfigValue":"default","Flag":"aries","Notes":"default：默认Aries样式","OrderNo":999,"CreateTime":"2018-09-05 23:13:44"},
-{"KeyValueID":"15bc5a25-e17e-4b52-ad86-c4d4c6c6f091","ConfigKey":"表名描述","ConfigName":"Sys_Organization","ConfigValue":"组织管理","Flag":"sys","Notes":"sys：仅框架后端使用，不输出到前端","OrderNo":999,"CreateTime":"2018-09-06 19:12:19"}
+{"KeyValueID":"15bc5a25-e17e-4b52-ad86-c4d4c6c6f091","ConfigKey":"表名描述","ConfigName":"Sys_Organization","ConfigValue":"组织管理","Flag":"sys","Notes":"sys：仅框架后端使用，不输出到前端","OrderNo":999,"CreateTime":"2018-09-06 19:12:19"},
+{"KeyValueID":"0ac668ff-870b-4a8e-bdd7-e5ea2f1737cb","ConfigKey":"表名描述","ConfigName":"V_aa","ConfigValue":"Vaa","Flag":"sys","Notes":null,"OrderNo":999,"CreateTime":"2019-03-16 16:32:59"}

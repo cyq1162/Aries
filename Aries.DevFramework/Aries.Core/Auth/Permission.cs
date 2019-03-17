@@ -406,7 +406,7 @@ namespace Aries.Core.Auth
             HttpCookie cookie = HttpContext.Current.Request.Cookies["aries_safekey"];
             if (cookie != null)
             {
-                string value = EncrpytHelper.Decrypt(cookie.Value);
+                string value = EncryptHelper.Decrypt(cookie.Value);
                 if (value.StartsWith("aries:"))
                 {
                     if (second == 0) { return true; }

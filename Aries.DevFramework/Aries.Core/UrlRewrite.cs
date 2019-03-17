@@ -24,7 +24,7 @@ namespace Aries.Core
         {
 
         }
-        static bool isFirstLoad = true;
+        static bool isFirstLoad = true, isFirstAuthCheck = true;
         bool isAjax = false;
         public void Init(HttpApplication context)
         {
@@ -172,6 +172,11 @@ namespace Aries.Core
                     new Permission(UserAuth.UserName, true);//是否有访问该页面的权限。（100-500ms）【第一次500ms左右】，【第二次数据已缓存，100ms左右】（再优化就是缓存用户与菜单，可以减少到接近0，但无法保证实时性）
                 }
             }
+            if (isFirstAuthCheck)
+            {
+                isFirstAuthCheck = false;
+                WebHelper.AuthCheck();
+            }
         }
 
         private void SetNoCacheAndSafeKey()
@@ -191,7 +196,7 @@ namespace Aries.Core
             }
             cookie.HttpOnly = true;
             cookie.Domain = AppConfig.XHtml.Domain;
-            cookie.Value = EncrpytHelper.Encrypt("aries:" + DateTime.Now.ToString("HHmmss"));
+            cookie.Value = EncryptHelper.Encrypt("aries:" + DateTime.Now.ToString("HHmmss"));
             cookie.Expires = DateTime.Now.AddHours(23);
             context.Response.Cookies.Add(cookie);
         }
@@ -200,7 +205,7 @@ namespace Aries.Core
             HttpCookie cookie = context.Request.Cookies["aries_safekey"];
             if (cookie != null)
             {
-                string value = EncrpytHelper.Decrypt(cookie.Value);
+                string value = EncryptHelper.Decrypt(cookie.Value);
                 if (value.StartsWith("aries:"))
                 {
                     return true;

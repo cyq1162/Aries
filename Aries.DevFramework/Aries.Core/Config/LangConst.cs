@@ -60,6 +60,9 @@ namespace Aries.Core.Config
 
         //ExcelHelper.cs
         public static string ColumnNameIsEmpty = "该列头为空";
+
+        //WebHelper.cs
+        public static string KeyB = "Aries.lic.result";
     }
 
     public static partial class LangConst

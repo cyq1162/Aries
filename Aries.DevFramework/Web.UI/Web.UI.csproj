@@ -73,6 +73,7 @@
     <Content Include="App_Data\SqlCode\Aries\Sql.sql" />
     <Content Include="App_Data\SqlCode\Demo\Sql_Yours.sql" />
     <Content Include="App_Data\SqlCode\Demo\V_Test.sql" />
+    <Content Include="App_Data\SqlCode\Test\V_Aa.sql" />
     <Content Include="App_Data\SqlCode\命名规范.txt" />
     <Content Include="App_Data\TxtDB\Aries\Config_Excel.ts" />
     <Content Include="App_Data\TxtDB\Aries\Config_Excel.txt" />

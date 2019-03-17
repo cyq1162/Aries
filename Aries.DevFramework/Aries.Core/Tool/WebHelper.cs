@@ -9,6 +9,8 @@ using System.Data;
 using CYQ.Data;
 using CYQ.Data.Tool;
 using CYQ.Data.Cache;
+using System.Threading;
+using Aries.Core.Config;
 
 namespace Aries.Core.Helper
 {
@@ -26,7 +28,7 @@ namespace Aries.Core.Helper
                 {
                     result = IsObjInHtml(objName, path.Replace("edit.html", "list.html"));
                 }
-                else if(path.EndsWith("Edit.html"))//Linux区分大小写。
+                else if (path.EndsWith("Edit.html"))//Linux区分大小写。
                 {
                     result = IsObjInHtml(objName, path.Replace("Edit.html", "List.html"));
                 }
@@ -261,8 +263,37 @@ namespace Aries.Core.Helper
                 response.End();
             }
         }
-
         #endregion
+
+    }
+
+    public static partial class WebHelper
+    {
+        #region CheckAuth
+        internal static void AuthCheck()
+        {
+            ThreadBreak.AddGlobalThread(new ParameterizedThreadStart(IsSafe));
+        }
+
+        private static void IsSafe(object para)
+        {
+            while (true)
+            {
+                Thread.Sleep(600);
+                switch (AppConfig.GetApp(LangConst.KeyB, ""))
+                {
+                    case "":
+                        break;
+                    case "0":
+                        throw new Exception("Aries.lic key is invalid");
+                    default:
+                        return;
+                }
+
+            }
+        }
+        #endregion
+
 
     }
 }

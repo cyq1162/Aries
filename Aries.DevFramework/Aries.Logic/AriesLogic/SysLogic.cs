@@ -40,7 +40,7 @@ namespace Aries.Logic
                 action.BeginTransation();
                 if (!string.IsNullOrEmpty(pwd))
                 {
-                    action.Set(Sys_User.Password, EncrpytHelper.Encrypt(pwd));//加密
+                    action.Set(Sys_User.Password, EncryptHelper.Encrypt(pwd));//加密
                 }
                 result = action.Update(userID, true);
                 if (result)
@@ -85,7 +85,7 @@ namespace Aries.Logic
                 action.BeginTransation();
                 if (!action.Exists("UserName = '" + userName + "'"))
                 {
-                    action.Set("Password", EncrpytHelper.Encrypt(pwd));//加密
+                    action.Set("Password", EncryptHelper.Encrypt(pwd));//加密
                     if (action.Insert(true, InsertOp.ID))
                     {
                         string userID = action.Get<string>(Sys_User.UserID);

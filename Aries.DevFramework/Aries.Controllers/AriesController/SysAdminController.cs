@@ -31,7 +31,7 @@ namespace Aries.Controllers
                     MDataRow row = GetOne();
                     if (row != null)
                     {
-                        row.Set("Password", EncrpytHelper.Decrypt(row.Get<string>("Password")));
+                        row.Set("Password", EncryptHelper.Decrypt(row.Get<string>("Password")));
                         jsonResult = row.ToJson();
                     }
                     break;

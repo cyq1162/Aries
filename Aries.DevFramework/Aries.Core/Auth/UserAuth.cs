@@ -8,6 +8,7 @@ using Aries.Core.Helper;
 using Aries.Core.DB;
 using Aries.Core.Sql;
 using Aries.Core.Config;
+using CYQ.Data.Tool;
 
 namespace Aries.Core.Auth
 {
@@ -47,7 +48,7 @@ namespace Aries.Core.Auth
                     {
 
                         string pwd = action.Get<string>(Sys_User.Password);
-                        if (password == EncrpytHelper.Decrypt(pwd, false))
+                        if (password == EncryptHelper.Decrypt(pwd))
                         {
                             string userID = action.Get<string>(Sys_User.UserID);
                             userName = action.Get<string>(Sys_User.UserName);
@@ -60,9 +61,9 @@ namespace Aries.Core.Auth
                             {
                                 action.SetExpression("LoginCount=[#ISNULL](LoginCount,0)+1");
                             }
-                            if (!pwd.EndsWith("=2") && EncrpytHelper.EncrpytKey != "")
+                            if (!pwd.EndsWith("=2") && AppConfig.EncryptKey != "")
                             {
-                                action.Set(Sys_User.Password, EncrpytHelper.Encrypt(password));//重新加密密码
+                                action.Set(Sys_User.Password, EncryptHelper.Encrypt(password));//重新加密密码
                             }
                             action.Set(Sys_User.LastLoginTime, DateTime.Now);
                             action.Set(Sys_User.LastLoginIP, HttpContext.Current.Request.UserHostAddress);
@@ -70,7 +71,7 @@ namespace Aries.Core.Auth
                             action.Update(where);//更新信息。
                             //获取角色名称
                             string roleIDs = action.Get<string>(Sys_User.RoleIDs);
-                            token = EncrpytHelper.Encrypt(DateTime.Now.Day + "," + userID + "," + userName + "," + fullName + "," + roleIDs);
+                            token = EncryptHelper.Encrypt(DateTime.Now.Day + "," + userID + "," + userName + "," + fullName + "," + roleIDs);
                         }
                         else
                         {
@@ -107,7 +108,7 @@ namespace Aries.Core.Auth
         {
             using (MAction action = new MAction(U_AriesEnum.Sys_User))
             {
-                action.Set(Sys_User.Password, EncrpytHelper.Encrypt(password));
+                action.Set(Sys_User.Password, EncryptHelper.Encrypt(password));
                 return action.Update(UserID);
             }
         }
@@ -247,7 +248,7 @@ namespace Aries.Core.Auth
             string token = Token;
             if (!string.IsNullOrEmpty(token))
             {
-                string text = EncrpytHelper.Decrypt(token);
+                string text = EncryptHelper.Decrypt(token);
                 if (!string.IsNullOrEmpty(text))
                 {
                     string[] items = text.Split(',');

@@ -67,7 +67,7 @@ namespace Aries.Logic
                 action.EndTransation();
 
             }
-            return JsonHelper.OutResult(result, result ? "更新成功!" : "更新失败!");
+            return JsonHelper.OutResult(result, result ? LangConst.UpdateSuccess : LangConst.UpdateError);
         }
 
         /// <summary>
@@ -100,13 +100,13 @@ namespace Aries.Logic
                         }
                         else
                         {
-                            jsonResult = JsonHelper.OutResult(result, result ? "添加用户成功!" : "添加用户失败!");
+                            jsonResult = JsonHelper.OutResult(result, result ? LangConst.AddSuccess : LangConst.AddError);
                         }
                     }
                 }
                 else
                 {
-                    jsonResult = JsonHelper.OutResult(false, "帐号已存在,请重新输入");
+                    jsonResult = JsonHelper.OutResult(false, userName + " " + LangConst.Exist);
                 }
                 action.EndTransation();
             }
@@ -135,7 +135,7 @@ namespace Aries.Logic
                 }
                 action.EndTransation();
             }
-            return JsonHelper.OutResult(result, result ? "删除成功!" : "删除失败!");
+            return JsonHelper.OutResult(result, result ? LangConst.DeleteSuccess : LangConst.DeleteError);
         }
 
         public MDataTable GetUserList(GridConfig.SelectType st)
@@ -224,7 +224,7 @@ namespace Aries.Logic
                     action.Delete(where);
                 }
             }
-            return JsonHelper.OutResult(result, result ? "删除成功" : "删除失败");
+            return JsonHelper.OutResult(result, result ? LangConst.DeleteSuccess : LangConst.DeleteError);
         }
         /// <summary>
         /// 验证菜单是否有子节点
@@ -317,7 +317,7 @@ namespace Aries.Logic
                 }
             }
 
-            return JsonHelper.OutResult(result, result ? "添加成功！" : "添加失败！");
+            return JsonHelper.OutResult(result, result ? LangConst.AddSuccess : LangConst.AddError);
         }
         public string GetMenuAndAction()
         {

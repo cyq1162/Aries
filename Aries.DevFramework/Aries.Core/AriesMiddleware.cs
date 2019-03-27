@@ -26,15 +26,23 @@ namespace Microsoft.AspNetCore.Http
         {
             try
             {
-                System.Web.HttpApplication.Instance.ExecuteEventHandler();
-                if (context.Response.HasStarted)  // || Body是只写流  (context.Response.Body != null && context.Response.Body.CanRead
+                if (context.Request.Path.Value.IndexOf("/App_Data/", StringComparison.OrdinalIgnoreCase) > -1)//兼容受保护的目录
                 {
-                    await context.Response.WriteAsync("");
+                    context.Response.StatusCode = 403;
+                    await context.Response.WriteAsync("403 Forbidden");
                 }
-                //处理信息
                 else
                 {
-                    await next(context);
+                    System.Web.HttpApplication.Instance.ExecuteEventHandler();
+                    if (context.Response.HasStarted)  // || Body是只写流  (context.Response.Body != null && context.Response.Body.CanRead
+                    {
+                        await context.Response.WriteAsync("");
+                    }
+                    //处理信息
+                    else
+                    {
+                        await next(context);
+                    }
                 }
             }
             catch (Exception ex)
@@ -47,7 +55,7 @@ namespace Microsoft.AspNetCore.Http
     {
         public static IApplicationBuilder UseAries(this IApplicationBuilder builder, IHostingEnvironment env)
         {
-           // builder.
+            // builder.
 
             AppConfig.WebRootPath = env.WebRootPath;//设置根目录地址，ASPNETCore的根目录和其它应用不一样。
             //执行一次，用于注册事件

@@ -416,8 +416,15 @@
                                 showDialog($(this));//对单选生效
                             };
                         }
-
-                        setAttr($input, options.option);
+                        if($input.attr("width"))
+                        {
+                            options.option.width = $input.attr("width");
+                        }
+                        else if ($input.css("width"))
+                        {
+                            options.option.width = $input.css("width");
+                        }
+                        setAttr($input, options.option);//生成下拉框架
                         if ($input.attr("multiple")) {
                             setAttr($input, "setValues", options.value);
                         }

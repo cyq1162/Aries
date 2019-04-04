@@ -586,7 +586,7 @@
             bindObjName($input);
         }
         else if ($input.attr("dialog")) {
-            showDialog($input);
+            bindDialog($input);
         }
     }
     //获取下拉某个项的值或文本，type为0，取value，type为1,取text

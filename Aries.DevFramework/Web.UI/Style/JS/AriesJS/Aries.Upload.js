@@ -180,7 +180,7 @@
     * Function generates unique id
     * @return unique id 
     */
-    var getUID = (function () {
+    var getUid = (function () {
         var id = 0;
         return function () {
             return 'AriesAjaxUpload' + id++;
@@ -277,11 +277,11 @@
             button = button[0];
         } else if (typeof button == "string") {
             if (/^#.*/.test(button)) {
-                // If jQuery user passes #elementId don't break it					
+                // If jQuery user passes #elementid don't break it					
                 button = button.slice(1);
             }
 
-            button = document.getElementById(button);
+            button = document.getElementByid(button);
         }
 
         if (!button || button.nodeType !== 1) {
@@ -492,7 +492,7 @@
         _createIframe: function () {
             // We can't use getTime, because it sometimes return
             // same value in safari :(
-            var id = getUID();
+            var id = getUid();
 
             // We can't use following code as the name attribute
             // won't be properly registered in IE6, and new window

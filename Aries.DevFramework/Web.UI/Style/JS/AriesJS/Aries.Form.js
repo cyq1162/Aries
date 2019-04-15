@@ -9,7 +9,7 @@
     $Core.Form = function () {
         function Obj() {
             $Core.ExecuteEvent.call(this);
-            //编辑页根据主键请求回来的数据。
+            //编辑页根据主键请求回来的数据，默认是个数组。
             this.data = [];
             //用于获取数据的函数指向，默认值Get
             this.method = "Get";
@@ -19,6 +19,10 @@
             //动作：Add 或 Update
             this.action = $PCore && $PCore.Global.DG.action;
             this.url = $Core.Global.route;
+            //用于追加的请求参数
+            this.para = {};
+            //当前form的JQ对象
+            this.$target = null;
             /**
             * 获取了数据，准备回填表单前（参数：data json格式）
             * 可格式化表单的数据,可格式化日期时间，字符显示的处理。
@@ -34,8 +38,8 @@
                     return;
                 }
                 var id = $Core.Utility.queryString("id");
-                if (id && this.action == "Update" && this.objName) {
-                    this.data = $Core.Utility.Ajax.post(this.method, this.objName, { "id": id });
+                if ((id && this.action == "Update" && this.objName) || this.method != "Get") {
+                    this.data = $Core.Utility.Ajax.post(this.method, this.objName, $.extend({ "id": id }, this.para));
                     if (this.onBeforeFillForm(this.data) == false) { return; }
                     this.$target.form("load", this.data);
                     $Core.Combobox.setValues(this.data);
@@ -76,37 +80,21 @@
             }();
             /**
             *提交数据事
-            *@param{jquery} $target 需要提交的容器的表单
+            *@param{jquery} $target 需要提交的容器的表单，传null即为当前表单
             *@param{string} mthodName 提交的函数名
             *@param{string} tableName 提交的表名
-            *@param{jquery} $validator 是否只验证当前的容器
+            *@param{jquery} $validator 指定要验证的表单，设置为true即为当前表单
             *@param{function} callBack(result) 回调函数，result返回的json数据结果
             *@param{string} url 提交的处理程序路径
             */
             this.onCommit = function ($target, mthodName, tableName, $validator, clearEmptyValue, callBack, url) {
-                var $targetForm = $validator || $($target.parents("form")[0]);
+                var $targetForm = $validator || ($($target && $target.parents("form")[0]));
+                if (!$targetForm[0]) { $targetForm = this.$target; }
                 if ($validator && $validator != "true") {
                     $targetForm = $validator;
                 }
-                var formJson = {};
-                var formArray = $targetForm.find("[name]:input").serializeArray();
-
-                if (formArray) {
-                    for (var i = 0; i < formArray.length; i++) {
-                        var name = formArray[i].name;
-                        var value = formArray[i].value;
-                        if (value != $Core.Lang.select && (!clearEmptyValue || value != '')) {
-                            if (formJson[name] == undefined) {
-                                formJson[name] = value;
-                            }
-                            else {
-                                formJson[name] += "," + value;
-                            }
-                        }
-                    }
-                    formArray = null;
-                }
-                if (this.BtnCommit && this.BtnCommit.onBeforeExecute(formJson) == false) { return; }
+                var formJson = this.getSerializeJson($targetForm, clearEmptyValue);
+                if (this.onBeforeCommit(formJson) == false) { return; }
                 if (!$targetForm.form("validate")) {
                     $Core.Utility.Window.showMsg($Core.Lang.fillTheBlank);
                     return false;
@@ -141,6 +129,12 @@
 
                 }
             };
+            this.onBeforeCommit = function (formJson) {
+                if (this.BtnCommit && this.BtnCommit.onBeforeExecute(formJson) == false) {
+                    return false;
+                }
+                return true;
+            };
             this.onAfterCommit = function (result, formData, callBack) {
                 if (callBack && typeof (callBack) == "function") {
                     callBack.call(this, result, formData);
@@ -163,6 +157,29 @@
                         }
                     }
                 }
+            };
+            //获取表单序列化值。
+            this.getSerializeJson = function ($targetForm, clearEmptyValue) {
+                var formJson={};
+                $targetForm || ($targetForm=this.$target);
+                var formArray = $targetForm.find("[name]:input").serializeArray();
+
+                if (formArray) {
+                    for (var i = 0; i < formArray.length; i++) {
+                        var name = formArray[i].name;
+                        var value = formArray[i].value;
+                        if (value != $Core.Lang.select && (!clearEmptyValue || value != '')) {
+                            if (formJson[name] == undefined) {
+                                formJson[name] = value;
+                            }
+                            else {
+                                formJson[name] += "," + value;
+                            }
+                        }
+                    }
+                    formArray = null;
+                }
+                return formJson;
             };
             this.regEvent = function () {
                 if (this.$target && this.BtnCommit.$target) {

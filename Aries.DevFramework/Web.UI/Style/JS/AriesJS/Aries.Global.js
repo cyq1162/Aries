@@ -74,7 +74,7 @@ window.AR || (window.AR = {});
     //全局变量对象（用于存档全局使用的数据）
     $Core.Global = {
         DG: {
-            //datagrid集合，根据ID取出DataGrid对象，将Json当数组用。
+            //datagrid集合，根据id取出DataGrid对象，将Json当数组用。
             Items: new $Core.Dictionary(),
             //当前操作的datagrid对象
             operating: null,
@@ -111,7 +111,7 @@ window.AR || (window.AR = {});
         //themes: ['default', 'black', 'gray', 'metro'],
         /*
         *页面全局变量
-        *ui(虚拟应用程序的路径)，actionkeys（页面对应的权限集）,mid（当前菜单ID）
+        *ui(虚拟应用程序的路径)，actionkeys（页面对应的权限集）,mid（当前菜单id）
         */
         Variable: {},
         ////存档用户信息
@@ -184,13 +184,16 @@ window.AR || (window.AR = {});
             if ($input.css("display") != "none") {
                 var width = $input.width();
                 var value = $input.val();
+                if ($input[0].tagName == "SELECT") {
+                    value = $input.find("option:selected").text();
+                }
                 var cName = $input.attr("class");
                 if (cName && cName.startWith("combo")) {
                     $input.parent().replaceWith($input);
                     if (cName.startWith("combo") && value == $Core.Lang.select) { value = ""; }
                 }
                 var $span = $("<span class='textvalue' title=" + value + ">" + value + "</span>");
-                $span.css({ height: $input.height(), width: width });
+                $span.css({ height: $input.height() + 5, width: width });
                 $input.wrap($span);
             }
             else {
@@ -206,6 +209,9 @@ window.AR || (window.AR = {});
             $input.remove();
         }
         else {
+            this.find("select").each(function () {
+                $.fn.toView($(this));
+            });
             this.find(":input[type!='button'][type!='rest'][type!='hidden']").each(function () {
                 $.fn.toView($(this));
             });
@@ -330,5 +336,16 @@ window.AR || (window.AR = {});
         else
             return false;
         return true;
+    };
+    String.prototype.trim = function (char, type) {
+        if (char) {
+            if (type == 'left') {
+                return this.replace(new RegExp('^\\' + char + '+', 'g'), '');
+            } else if (type == 'right') {
+                return this.replace(new RegExp('\\' + char + '+$', 'g'), '');
+            }
+            return this.replace(new RegExp('^\\' + char + '+|\\' + char + '+$', 'g'), '');
+        }
+        return this.replace(/^\s+|\s+$/g, '');
     };
 })();

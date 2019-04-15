@@ -49,28 +49,28 @@
         if (parent) {
             //新增（直接返回）
             return data;
-        } else {
+        }
+        else {
             var opt = $(this).data().tree.options;
             if (data.rows) {
                 data = data.rows;
             }
             try {
-                //for (var i = 0; i < length; i++) {
-
-                //}
-                var data = _getTreeData(data, opt.idField || 'id', opt.textField || 'text', opt.parentField || '_parentId', opt.rootID);
-            } catch (ex) {
+                var data = _getTreeData(data, opt.idField || 'id', opt.textField || 'text', opt.parentField || '_parentid', opt.rootid);
+            }
+            catch (ex) {
                 return data;
             }
-            var root = [{ 'text': opt.rootText || $Core.Lang.root, 'id': opt.rootID || undefined }];
+            var root = [{ 'text': opt.rootText || $Core.Lang.root, 'id': opt.rootid || undefined }];
             root[0].children = data;
-            _openFirstNode(root);
+            //_openFirstNode(root);
             return root;
         }
     };
-    _getTreeData = function (nodes, idField, textField, parentField, rootID) {
+    _getTreeData = function (nodes, idField, textField, parentField, rootid) {
         return function (parentid) {
             var cn = new Array();
+            var isFirstOpen = false;
             for (var i = 0; i < nodes.length; i++) {
                 var n = {}, attrs = {};
                 each: for (var j in nodes[i]) {
@@ -85,21 +85,26 @@
                 n.id = nodes[i][idField], n.text = nodes[i][textField];
                 if (nodes[i][parentField] == parentid) {
                     n.children = arguments.callee(nodes[i][idField]);
-                    if (!n.children.length == 0) {
-                        n.state = 'closed';
+                    if (n.children.length > 0) {
+                        if (!isFirstOpen) {
+                            isFirstOpen = true;
+                        }
+                        else {
+                            n.state = 'closed';
+                        }
                     }
                     cn.push(n);
                 }
             }
             return cn;
-        }(rootID);
+        }(rootid);
     }
-    _openFirstNode = function (data) {
-        if (data[0].children && data[0].children.length > 0) {
-            data[0].state = 'open';
-            arguments.callee(data[0].children);
-        }
-    }
+    //_openFirstNode = function (data) {
+    //    if (data[0].children && data[0].children.length > 0) {
+    //        data[0].state = 'open';
+    //        arguments.callee(data[0].children);
+    //    }
+    //}
     /*
    * 将后端的列表数据，解析成treegrid格式的数据。
    */
@@ -124,9 +129,16 @@
                 if (tmpMap[data[i][pid]] && data[i][id] != data[i][pid]) {
                     tmpMap[data[i][pid]]['children'] || (tmpMap[data[i][pid]]['children'] = []);
                     tmpMap[data[i][pid]]['children'].push(data[i]);
+                    tmpMap[data[i][pid]].state = 'closed';
                 }
                 else {
                     treeData.push(data[i]);
+                }
+            }
+            for (var i = 0; i < treeData.length; i++) {
+                if (treeData[i]['children'] && treeData[i]['children'].length > 0) {
+                    treeData[i].state = 'open';
+                    break;
                 }
             }
             data = null;
@@ -175,8 +187,8 @@
                 $(this).attr("checked", _value);
             }
         });
-        $("span[name],label[name]").each(function () {
-            var value = param[$(this).attr('name')];
+        $("span[name],label[name],span[id],label[id]").each(function () {
+            var value = param[$(this).attr('name') || $(this).attr('id')];
             if (value != undefined) {
                 $(this).html(value);
             }
@@ -228,7 +240,7 @@
         window: {
             init: function (container, options) {
                 var editor = $('<input/>').appendTo(container);
-                editor.attr("options",JSON.stringify(options));
+                editor.attr("options", JSON.stringify(options));
                 editor.enableEdit = false;
                 return editor;
             },
@@ -307,7 +319,7 @@
                 return (/^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{4}$/).test(value);
                 //  return /^\d{15}(\d{2}[A-Za-z0-9])?$/i.test(value);
             },
-            message: $Core.Lang.isID
+            message: $Core.Lang.isid
         },
         telormobile: {
             validator: function (value, param) {

@@ -20,46 +20,46 @@
                 }
             },
             //添加一行
-            onAdd: function (el, gridID, value, index, isSameLevel) {
-                var dg = $Core.Global.DG.Items[gridID];
+            onAdd: function (el, gridid, value, index, isSameLevel) {
+                var dg = $Core.Global.DG.Items[gridid];
                 if (dg) {
                     dg.ToolBar.BtnAdd.onExecute(dg, value, index, isSameLevel);
                 }
 
             },
             //右键点击配置表头事件
-            onConfigClick: function (el, gridID, value, index) {
-                var dg = $Core.Global.DG.Items[gridID];
+            onConfigClick: function (el, gridid, value, index) {
+                var dg = $Core.Global.DG.Items[gridid];
                 if (dg) {
                     var url = $Core.Utility.stringFormat("{0}?objName={1}", $Core.Global.Variable.ui + '/Web/SysAdmin/ConfigGrid.html', dg.objName);
                     $Core.Global.DG.operating = dg;
                     $Core.Utility.Window.open(url, "", false);
                 }
-                else { alert("Can't find the object:" + gridID); }
+                else { alert("Can't find the object:" + gridid); }
             },
-            onEdit: function (el, gridID, value, index) {
-                var dg = $Core.Global.DG.Items[gridID];
+            onEdit: function (el, gridid, value, index) {
+                var dg = $Core.Global.DG.Items[gridid];
                 if (!dg.isTreeGrid && typeof (index) == "string") { index = parseInt(index); }
                 dg.PKColumn.Editor.BtnEdit.onExecute(dg, value, index);
             },
-            onDel: function (el, gridID, value, index) {
-                var dg = $Core.Global.DG.Items[gridID];
+            onDel: function (el, gridid, value, index) {
+                var dg = $Core.Global.DG.Items[gridid];
                 dg.PKColumn.Editor.BtnDel.onExecute(dg, value, index);
             },
-            onSave: function (el, gridID, value, index) {
-                var dg = $Core.Global.DG.Items[gridID];
+            onSave: function (el, gridid, value, index) {
+                var dg = $Core.Global.DG.Items[gridid];
                 if (!dg.isTreeGrid && typeof (index) == "string") { index = parseInt(index); }
                 dg.PKColumn.Editor.BtnSave.onExecute(dg, value, index);
             },
-            onCancel: function (el, gridID, value, index) {
-                var dg = $Core.Global.DG.Items[gridID];
+            onCancel: function (el, gridid, value, index) {
+                var dg = $Core.Global.DG.Items[gridid];
                 if (!dg.isTreeGrid && typeof (index) == "string") { index = parseInt(index); }
                 dg.PKColumn.Editor.BtnCancel.onExecute(dg, value, index);
             },
             //打开业务页面
-            onOpen: function (el, gridID, value, index, opts) {
-                var dg = $Core.Global.DG.Items[gridID];
-                dg.PKColumn.open(el, gridID, value, index, opts);
+            onOpen: function (el, gridid, value, index, opts) {
+                var dg = $Core.Global.DG.Items[gridid];
+                dg.PKColumn.open(el, gridid, value, index, opts);
             }
         },
 
@@ -136,7 +136,7 @@
                         value || (value = index);
                     }
                     var btnArray = $Core.Utility.cloneArray(dg.PKColumn._btnArray, false);
-                    value = dg.getPrimaryID(row);// row[dg.Internal.primarykey];
+                    value = dg.getPrimaryid(row);// row[dg.Internal.primarykey];
                     var result = dg.PKColumn.onBeforeExecute(value, row, index, btnArray);
                     if (result) {
                         return result;

@@ -149,13 +149,14 @@
                         dg.datagrid("options").onBeforeLoad = function (row, param) {
                             eval("sys_search = '" + jsonString + "'");
                             param.sys_search = sys_search;
+                            param.sys_mid = $Core.Utility.getSysmid();
                         }
                         dg.datagrid('reload');
                     }
                     else {
                         var str = jsonString.replace(/\'/g, "!#");
                         eval("sys_search = '" + str + "'");
-                        var data = { sys_search: sys_search.replace(/!#/g, "'") };
+                        var data = { sys_search: sys_search.replace(/!#/g, "'"), sys_mid: $Core.Utility.getSysmid() };
                         if (dg.datagrid('getRows')) {
                             dg.datagrid('clearSelections');
                         }
@@ -377,7 +378,7 @@
                             ids.push(value);//"'" + id + "'"
                         }
                         else {
-                            var selRows = dg.getCheckIDs();
+                            var selRows = dg.getCheckids();
                             if (selRows.length == 0) {
                                 $Core.Utility.Window.showMsg($Core.Lang.selectDelData);
                                 return false;
@@ -405,7 +406,7 @@
                                         dg.reload();
                                     }
                                     else {//不分页，时，只移除当前节点，避免树型节点太大。
-                                        var rows = dg.getCheckIDs(dg.options.idField);
+                                        var rows = dg.getCheckids(dg.options.idField);
                                         for (var i = rows.length - 1; i >= 0; i--) {
                                             dg.datagrid("deleteRow", rows[i]);
                                         }
@@ -492,7 +493,7 @@
                         ifrme && ifrme.remove(); form_export && form_export.remove();
                         var objName = dg.tableName;
                         // var targetForm = $("#" + dg.ToolArea.id).find(".grid-toolbar").siblings("div").find('form');
-                        var checked_ids = dg.getCheckIDs();
+                        var checked_ids = dg.getCheckids();
                         var jsonString = "";
                         if (checked_ids.length > 0) {
                             jsonString = checked_ids.join(',');
@@ -581,7 +582,7 @@
             that.regEvent = function (dg) {
                 var toolbar = dg.ToolBar.$target;
                 if (!toolbar || !toolbar[0]) {
-                    //throw new ReferenceError("工具条的ID无效,页面未找到该ID值的HTML标签");
+                    //throw new ReferenceError("工具条的id无效,页面未找到该id值的HTML标签");
                     return;
                 }
 
@@ -689,18 +690,18 @@
                     if (actionKeys.indexOf(',' + menu.lv2action + ',') != -1) {
                         $menu.hasMenu = true;
                         if (typeof (menu.onclick) == "string") {
-                            menu.onclick = function (el, gridID, items) {
+                            menu.onclick = function (el, gridid, items) {
                                 try {
                                     var _fntt = eval(items[0]);
                                 } catch (e) { }
                                 var para = items.length > 1 ? items[1] : undefined;//isSameLevel
                                 return function () {
-                                    var dg = $Core.Global.DG.Items[gridID];
+                                    var dg = $Core.Global.DG.Items[gridid];
                                     var row = dg.datagrid("getSelected");
                                     if (row) {
-                                        _fntt(el, gridID, row[dg.Internal.primarykey], row[dg.options.idField], para);
+                                        _fntt(el, gridid, row[dg.Internal.primarykey], row[dg.options.idField], para);
                                     } else {
-                                        _fntt(el, gridID, para);
+                                        _fntt(el, gridid, para);
                                     }
                                 };
                             }(this, dg.id, menu.onclick.split(','));
@@ -754,8 +755,8 @@
             };
 
             //打开业务页面
-            that.open = function (el, gridID, pkValue, index, opts) {
-                var dg = $Core.Global.DG.operating = $Core.Global.DG.Items[gridID]; //赋值当前对象到page属性方便调用
+            that.open = function (el, gridid, pkValue, index, opts) {
+                var dg = $Core.Global.DG.operating = $Core.Global.DG.Items[gridid]; //赋值当前对象到page属性方便调用
                 var $aTarget = $(el);
                 var op = $aTarget.attr("op");
                 var splitIndex = location.href.indexOf('List') == -1 ? location.href.indexOf('.') : location.href.indexOf('List');
@@ -962,9 +963,9 @@
                 if (dg.isTreeGrid) {
                     var data;
                     //先找父节点
-                    var parentID = dg.datagrid("find", editIndex)[dg.options.parentField];
-                    if (parentID != undefined && parentID != "" && parentID != null) {
-                        var row = dg.datagrid("find", parentID);
+                    var parentid = dg.datagrid("find", editIndex)[dg.options.parentField];
+                    if (parentid != undefined && parentid != "" && parentid != null) {
+                        var row = dg.datagrid("find", parentid);
                         data = row && row.children;
                     }
                     if (!data) {
@@ -999,9 +1000,9 @@
                 if (dg.isTreeGrid) {
                     var data;
                     //先找父节点
-                    var parentID = dg.datagrid("find", editIndex)[dg.options.parentField];
-                    if (parentID) {
-                        var row = dg.datagrid("find", parentID);
+                    var parentid = dg.datagrid("find", editIndex)[dg.options.parentField];
+                    if (parentid) {
+                        var row = dg.datagrid("find", parentid);
                         data = row && row.children;
                     }
                     if (!data) {
@@ -1131,7 +1132,7 @@
                             }
                             $input.attr("width", $input.parent().width());
                             $input.attr("isEditor", true);
-                            $input.attr("gridID", dg.id);
+                            $input.attr("gridid", dg.id);
 
                             items.push($input);
                         }
@@ -1188,16 +1189,16 @@
                                 {
                                     for (var i = 0; i < dg.Internal.jointPrimary.length; i++) {
                                         var primary = dg.Internal.jointPrimary[i];
-                                        row[primary] && (post_data[primary] = row[primary]);//附加主键的ID值传入后台 
+                                        row[primary] && (post_data[primary] = row[primary]);//附加主键的id值传入后台 
                                     }
-                                    var value = dg.getPrimaryID(row);
+                                    var value = dg.getPrimaryid(row);
                                     if (dg.PKColumn.Editor.BtnSave.onBeforeExecute(value, index, post_data) != false) {
                                         editResult = true;
                                         $Core.Utility.Ajax.post(dg.PKColumn.Editor.action, dg.tableName, post_data, function (result) {
                                             if (result) {
                                                 if (result.success) {
                                                     if (dg.PKColumn.Editor.action == "Add") {
-                                                        _change_data[dg.Internal.primarykey] = result.msg;//这里才是将ID写回去的地方。
+                                                        _change_data[dg.Internal.primarykey] = result.msg;//这里才是将id写回去的地方。
                                                         result.msg = $Core.Lang.addSuccess;
                                                     }
                                                     if (isTreeTrid && index != _change_data[dg.options.idField]) {
@@ -1310,11 +1311,17 @@
                 this.removeWhere(name);//若有则移除。
                 this.options.defaultWhere.push({ name: name, value: value, pattern: operator, OrAnd: isOr });
             }
+            return this;
         }
         this.removeWhere = function (name) {
             if (name && this.options.defaultWhere && this.options.defaultWhere.length > 0) {
                 this.options.defaultWhere.remove(name, "name");
             }
+            return this;
+        }
+        this.orderBy = function (orderBy)
+        {
+            this.options.sortName = orderBy;
         }
         this.$target = null;
         this.datagrid = function (v1, v2) {
@@ -1361,19 +1368,19 @@
             }
             return this.datagrid("getChecked");
         };
-        this._GetIDs = function (type, key) {
+        this._Getids = function (type, key) {
             if (this.$target == null) {
                 return [];
             }
             var rows = this.datagrid(type);
             var ids = [];
             for (var i = 0; i < rows.length; i++) {
-                ids.push(this.getPrimaryID(rows[i], key));
+                ids.push(this.getPrimaryid(rows[i], key));
             }
             return ids;
         },
-        //获得主键的ID数据
-        this.getPrimaryID = function (row, key) {
+        //获得主键的id数据
+        this.getPrimaryid = function (row, key) {
             var id = "";
             if (!key && this.Internal.jointPrimary.length > 1) {
                 for (var j = 0; j < this.Internal.jointPrimary.length; j++) {
@@ -1388,13 +1395,13 @@
             }
             return id;
         }
-        //获取列表的选中项，返回ID数组
-        this.getCheckIDs = function (key) {
-            return this._GetIDs("getChecked", key);
+        //获取列表的选中项，返回id数组
+        this.getCheckids = function (key) {
+            return this._Getids("getChecked", key);
         };
-        //获取列表的选中项，返回ID数组
-        this.getSelectIDs = function (key) {
-            return this._GetIDs("getSelections", key);
+        //获取列表的选中项，返回id数组
+        this.getSelectids = function (key) {
+            return this._Getids("getSelections", key);
         };
         this.getSelected = function () {
             if (this.$target == null) {
@@ -1452,7 +1459,7 @@
                     row = index;//默认第1个是row
                     index = row[that.options.idField];
                 }
-                if ($Core.Global.Variable.actionKeys.indexOf(",edit,") > -1) {
+                if ($Core.Global.Variable.actionKeys.indexOf(",edit,") > -1 && dg.isEditor) {
                     $Core.Private.Grid.Event.exeClick(index, row, that, true);//双击事件需要编辑权限。
                 }
             }
@@ -1495,7 +1502,7 @@
                     _LoadComboxData(dg, result);
                     //创建表单，需要Header
                     if (!dg.ToolArea.isHidden) {
-                        dg.ToolArea.$target = $('<div>').attr("id", dg.ToolArea.id); //创建并设置工具栏的ID  
+                        dg.ToolArea.$target = $('<div>').attr("id", dg.ToolArea.id); //创建并设置工具栏的id  
                         $("body").append(dg.ToolArea.$target); //加到页面中  
                         if (!dg.Search.isHidden) {
                             dg.Search.onExecute(dg);

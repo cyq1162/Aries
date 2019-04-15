@@ -59,12 +59,21 @@
             return function (pid) {
                 pid || (pid = ''); //undefined,null,都转''处理
                 var cn = new Array();
+                var isfirstOpen = false;
                 for (var i = 0; i < nodes.length; i++) {
                     var n = nodes[i];
                     n.parent || (n.parent = '')
                     if (n.parent == pid) {
                         n.id = n.value;
                         n.children = arguments.callee(n.id);
+                        if (n.children.length > 0) {
+                            if (!isfirstOpen) {
+                                isfirstOpen = true;
+                            }
+                            else {
+                                n.state = 'closed';//第一个保持打开
+                            }
+                        }
                         cn.push(n);
                     }
                 }
@@ -78,7 +87,7 @@
             */
         queryString: function (key) {
             var svalue = location.search.match(new RegExp("[\?\&]" + key + "=([^\&]*)(\&?)", "i"));
-            return svalue ? svalue[1] : svalue;
+            return svalue ? svalue[1] : "";
         },
         /**
             *模拟.NET的String.Format函数，调用方式String.Format("a={0}",'a')
@@ -215,7 +224,6 @@
             return mid;
         }
 
-
     };
     //Window对象域
     (function () {
@@ -230,7 +238,7 @@
             close: close,
             showMsg: showMsg,
             confirm: confirm,
-            openLoading: showLoading,
+            showLoading: showLoading,
             closeLoading: closeLoading,
             dialog: dialog,
             closeDialog: closeDialog
@@ -267,11 +275,16 @@
         /**
         *打开一个新页面
         *@param{string} url 连接
-        *@param{string} title 打开后的窗口标题
+        *@param{string} title 窗口标题(设置为：_blank 为新开窗口)
         *@param{bool}   isUpdate 是否更新标记，默认false
         *param{object}  opts easyui window属性覆盖
         */
         function open(url, title, isUpdate, opts) {
+            if (title == '_blank') //处理新开窗口
+            {
+                $("<a href='" + url + "' target='" + title + "'></a>")[0].click();
+                return;
+            }
             if (isUpdate) {
                 AR.Global.DG.action = "Update";
             } else {
@@ -279,8 +292,8 @@
             }
             var iframe;
             iframe = $('<iframe src="' + url + '" frameborder="0" style="border:0;width:100%;height:98%;"></iframe>');
-            $("#AddWindow")[0] && $("#AddWindow").remove();
-            var div = $("<div id='AddWindow' ></div>");
+            $("#_div_window")[0] && $("#_div_window").remove();
+            var div = $("<div id='_div_window' ></div>");
             var defaultOptions = {
                 title: title,
                 border: false,
@@ -307,7 +320,10 @@
             if (this.refresh == true) {
                 parent.location.reload();
             }
-            window.parent.$("#AddWindow").window('close');
+            if (!closeDialog())//如果有对话框，则关闭。
+            {
+                window.parent.$("#_div_window").window('close');
+            }
         }
         function confirm(msg, title, okEvent, cancelEvent) {
             $.messager.confirm(title || $Core.Lang.prompt, msg, function (isOK) {
@@ -328,9 +344,16 @@
                 showType: showType || 'slide'
             }, opts));
         }
-        function dialog(title, html, opts) {
+        function dialog(title, html, opts, onClose) {
             var _container = $("#_div_dialog");
             _container[0] || (_container = $('<div>').attr('id', '_div_dialog'));
+            if (html.startWith("http://") || html.startWith("https://") || html.startWith("/") || html.startWith("../")
+                || (html.length < 255 && html.indexOf(".html") > -1 && html.indexOf(" ") == -1)) {
+                html = '<iframe scrolling="yes" frameborder="0"  src="' + html + '" style="width:100%;height:98%;"></iframe>';
+            }
+            if (onClose) {
+                document.onClose = onClose;
+            }
             opts = $.extend({
                 title: title,
                 width: 800,
@@ -338,11 +361,24 @@
                 modal: true,
                 content: html
             }, opts);
-            _container.dialog(opts)
+            if ($(window).width() < opts.width) { opts.width = $(window).width(); }
+            if ($(window).height() < opts.height) { opts.height = $(window).height(); }
+            _container.dialog(opts);
         }
         function closeDialog() {
-            var _container = $("#_div_dialog");
-            _container.dialog('destroy');
+            var onClose = document.onClose || parent.document.onClose;
+            if (onClose) {
+                onClose($Core.Global.Dialog.returnValue);
+            }
+            var _container = $("#_div_dialog");//没有iframe时的对话框。
+            if (!_container[0]) {
+                _container = parent.$("#_div_dialog");
+            }
+            if (_container[0]) {
+                _container.dialog('destroy');//
+                return true;
+            }
+            return false;
         }
     })();
     //Ajax对象域
@@ -430,7 +466,7 @@
                 },
                 beforeSend: function () {
                     if (isShowProgress) {
-                        $Core.Utility.Window.openLoading();
+                        $Core.Utility.Window.showLoading();
                     }
                 },
                 complete: function () {

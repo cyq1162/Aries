@@ -32,7 +32,7 @@
         op.cascade = $input.attr("cascade") != "false";//是否能引发级联
         //行内编辑使用
         op.isEditor = $input.attr("isEditor");
-        op.gridID = $input.attr("gridID");
+        op.gridid = $input.attr("gridid");
         return op;
     }
     function bindConfigKey($input) {
@@ -72,9 +72,9 @@
     function getChildInputs($input) {
         var $childInputs = [];
         var op = _getOption($input);
-        if (op.isEditor && op.gridID) {
+        if (op.isEditor && op.gridid) {
             //如果是行内编辑的下拉
-            var dg = $Core.Global.DG.Items[op.gridID];
+            var dg = $Core.Global.DG.Items[op.gridid];
             if (dg) {
                 var rowEditors = dg.datagrid("getEditors", dg.PKColumn.Editor.editIndex);
                 for (var i = 0, len = rowEditors.length; i < len; i++) {
@@ -256,7 +256,7 @@
     //将下级重置为请选择(递归触发事件)
     function resetChildBox($input) {
         var childInputs = getChildInputs($input);
-        if (childInputs.length == 0) { return;}
+        if (childInputs.length == 0) { return; }
         $.each(childInputs, function (index, $box) {
             setAttr($box, "clear");
             if ($box.attr('onlytext') == 'true') {
@@ -407,43 +407,54 @@
                         if ($input.attr("multiple")) {
                             options.option.onUnselect = function (record) {
                                 if (setAttr($(this), "getValues").length == 0) {
-                                    showDialog($(this));//对多选生效
+                                    if (!$input.attr("for")) {
+                                        showDialog($input);//对多选生效
+                                    }
                                 }
                             };
                         }
                         else {
                             options.option.onSelect = function (record) {
-                                showDialog($(this));//对单选生效
+                                if (!$input.attr("for")) {
+                                    showDialog($input);//对单选生效
+                                }
                             };
                         }
-                        if($input.attr("width"))
-                        {
-                            options.option.width = $input.attr("width");
+                        //按钮点击，结果绑定到指到的文本框。
+                        var id = $input.attr("for");
+                        var $targetInput;
+                        if (id) {
+                            $targetInput = $("#" + id);
+                            if (!$targetInput[0]) $targetInput = $($("input[name='" + id + "']")[0]);
+                            if (!$targetInput[0]) $targetInput = $($("." + id)[0]);
                         }
-                        else if ($input.css("width"))
-                        {
-                            options.option.width = $input.css("width");
+                        if (!$targetInput[0]) $targetInput = $input;
+                        if ($targetInput.attr("width")) {
+                            options.option.width = $targetInput.attr("width");
                         }
-                        setAttr($input, options.option);//生成下拉框架
+                        else if ($targetInput.css("width")) {
+                            options.option.width = $targetInput.css("width");
+                        }
+                        setAttr($targetInput, options.option);//生成下拉框架
                         if ($input.attr("multiple")) {
-                            setAttr($input, "setValues", options.value);
+                            setAttr($targetInput, "setValues", options.value);
                         }
                         else {
-                            setAttr($input, "select", options.value);
+                            setAttr($targetInput, "select", options.value);
                         }
-                        var $childInput = $input.next().children(':first');
+                        var $childInput = $targetInput.next().children(':first');
                         if (!$childInput.data("events")["dblclick"]) {
                             $childInput.dblclick(function () {
                                 showDialog($input);//绑定双击事件
                             });
                         }
                     }
-                    $("#_div_dialog").dialog("close");
+                    $("#_div_dialog").dialog("destroy");
                 }
             }, {
                 text: $Core.Lang.cancel,
                 iconCls: 'icon-no',
-                handler: function () { $("#_div_dialog").dialog("close"); }
+                handler: function () { $("#_div_dialog").dialog("destroy"); }
             }],
             closable: false
         };
@@ -451,7 +462,7 @@
             opts = $.extend(opts, eval('(' + $input.attr("options") + ')'));
         }
         $Core.Global.Dialog.options = opts;
-        $Core.Global.Dialog.$target = $input
+        $Core.Global.Dialog.$target = $input;
         $Core.Global.Dialog.returnValue = undefined;//清空值。
         $Core.Utility.Window.dialog($Core.Lang.selectData, html, opts);
 
@@ -641,7 +652,7 @@
             initDialogCombobox();//初始化dialog配置的项
         },
         //在设置完下拉值后触发：AR.Combobox.onAfterInit = function (type) {type为：configkey,objname,dialog三者之一}
-        onAfterInit: function(){
+        onAfterInit: function () {
         },
         //存档objname下拉数的数据{objnameA:[],objnameB:{}...}。
         data: {},

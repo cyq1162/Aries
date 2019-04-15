@@ -24,12 +24,19 @@ function sys_getCookie(name) {
 }
 var sys_ui = sys_getCookie('aries_ui');
 
-function sys_getCss() {
+function isLoginPath() {
     var path = location.pathname;
     if (path.indexOf("/login.") > -1 || path == "/" || (sys_ui && path.indexOf(sys_ui) > -1 && path.length <= sys_ui.length + 2)) {
+        return true;
+    }
+    return false;
+}
+function isIndexPath() { return location.pathname.indexOf("/index.") > -1; }
+function sys_getCss() {
+    if (isLoginPath()) {
         return "login";
     }
-    if (path.indexOf("/index.") > -1) {
+    if (isIndexPath()) {
         return "index";
     }
     return "main";
@@ -41,7 +48,7 @@ var easyui_theme = sys_getCookie('easyui_theme') || 'default';
 
 var sys_lang = sys_getCookie('aries_language') || 'zh_CN';
 var sys_css = sys_getCss();
-var sys_vs = "v5.2.2";//系统版本号
+var sys_vs = "v5.3.0";//系统版本号
 
 //样式
 document.write('<link href="' + sys_ui + '/Style/Theme/EasyUI/' + easyui_theme + '/easyui.css" rel="stylesheet" type="text/css" />');
@@ -53,6 +60,7 @@ document.write('<link href="' + sys_ui + '/Style/Theme/Aries/' + sys_theme + '/'
 
 //jq+easyui
 document.write('<script src="' + sys_ui + '/Style/JS/jquery-1.7.1.min.js"></script>');
+
 document.write('<script src="' + sys_ui + '/Style/JS/json2.js" ></script>');
 document.write('<script src="' + sys_ui + '/Style/JS/EasyUI-1.3.4/jquery.easyui.min.js?"></script>');
 document.write('<script src="' + sys_ui + '/Style/JS/EasyUI-1.3.4/locale/easyui-lang-' + sys_lang + '.js"></script>');
@@ -60,12 +68,14 @@ document.write('<script src="' + sys_ui + '/Style/JS/EasyUI-1.3.4/locale/easyui-
 document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/locale/Aries.Lang-' + sys_lang + '.js?v=' + sys_vs + '"></script>');
 document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/Aries.Global.js?v=' + sys_vs + '"></script>');
 document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/Aries.EasyUIExtend.js?v=' + sys_vs + '"></script>');
-document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/Aries.Upload.js?v=' + sys_vs + '"></script> ');
 document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/Aries.Utility.js?v=' + sys_vs + '"></script>');
-document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/Aries.Combobox.js?v=' + sys_vs + '"></script>');
-document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/Aries.Common.js?v=' + sys_vs + '"></script>');
-document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/Aries.DataGrid.js?v=' + sys_vs + '"></script>');
-document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/Aries.Form.js?v=' + sys_vs + '"></script>');
+if (!isLoginPath()) {
+    document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/Aries.Upload.js?v=' + sys_vs + '"></script> ');
+    document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/Aries.Combobox.js?v=' + sys_vs + '"></script>');
+    document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/Aries.Common.js?v=' + sys_vs + '"></script>');
+    document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/Aries.DataGrid.js?v=' + sys_vs + '"></script>');
+    document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/Aries.Form.js?v=' + sys_vs + '"></script>');
+}
 
 
 

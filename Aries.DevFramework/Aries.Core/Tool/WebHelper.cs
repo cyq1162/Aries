@@ -37,6 +37,11 @@ namespace Aries.Core.Helper
         }
         private static bool IsObjInHtml(string objName, string path)
         {
+            if (string.IsNullOrEmpty(objName))
+            {
+                return false;
+            } 
+            objName = objName.Trim('_', ' ');
             CacheManage cache = CacheManage.LocalInstance;
             string has = path.GetHashCode().ToString();
             string html = string.Empty;
@@ -52,7 +57,7 @@ namespace Aries.Core.Helper
             if (!string.IsNullOrEmpty(html))
             {
                 //检测文件中是否有对应的关键字：
-                if (html.Contains("\"" + objName + "\"") || html.Contains("'" + objName + "'"))
+                if (html.Contains(objName + "\"") || html.Contains(objName + "'"))
                 {
                     return true;
                 }

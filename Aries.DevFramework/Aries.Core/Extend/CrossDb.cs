@@ -20,7 +20,7 @@ namespace Aries.Core.Extend
     /// </summary>
     public static partial class CrossDb
     {
-       
+
 
         public static object GetEnum(string objName)
         {
@@ -38,7 +38,7 @@ namespace Aries.Core.Extend
                     return dbName + "." + objName;
                 }
             }
-            else // 自定义视图语句
+            else if (index > -1) // 自定义视图语句
             {
                 string tName = GetTableNameFromObjName(objName);
                 if (tName != "")
@@ -118,27 +118,27 @@ namespace Aries.Core.Extend
                     return item.Key;
                 }
             }
-            //找不到时，可能是视图，根据数据库类型匹配第一个可能的数据库
-            foreach (KeyValuePair<string, DalType> item in _DbTypeDic)
-            {
-                switch (item.Value)
-                {
-                    case DalType.Txt:
-                    case DalType.Xml:
-                        break;
-                    default:
-                        MDataColumn mdc = DBTool.GetColumns(item.Key + "." + tableName);
-                        if (mdc != null && mdc.Count > 0)
-                        {
-                            if (!DbTables[item.Key].ContainsKey(tableName))
-                            {
-                                DbTables[item.Key].Add(tableName, "");//添加视图或未缓存的表
-                            }
-                            return item.Key;
-                        }
-                        break;
-                }
-            }
+            //找不到时，可能是视图，根据数据库类型匹配第一个可能的数据库，后续交给CYQ.Data处理。
+            //foreach (KeyValuePair<string, DalType> item in _DbTypeDic)
+            //{
+            //    switch (item.Value)
+            //    {
+            //        case DalType.Txt:
+            //        case DalType.Xml:
+            //            break;
+            //        default:
+            //            MDataColumn mdc = DBTool.GetColumns(item.Key + "." + tableName);
+            //            if (mdc != null && mdc.Count > 0)
+            //            {
+            //                if (!DbTables[item.Key].ContainsKey(tableName))
+            //                {
+            //                    DbTables[item.Key].Add(tableName, "");//添加视图或未缓存的表
+            //                }
+            //                return item.Key;
+            //            }
+            //            break;
+            //    }
+            //}
             return "";
         }
         /// <summary>
@@ -243,30 +243,12 @@ namespace Aries.Core.Extend
                 {
                     if (isFirstLoad)
                     {
+                        //CacheManage.PreLoadDBSchemaToCache(false, true);
                         //处理视图文件
                         fyw.EnableRaisingEvents = true;
                         fyw.IncludeSubdirectories = true;
                         fyw.Changed += fyw_Changed;
-
-                        //处理单表
-                        foreach (ConnectionStringSettings item in ConfigurationManager.ConnectionStrings)
-                        {
-                            string name = item.Name.ToLower();
-                            if (!string.IsNullOrEmpty(name) && name.EndsWith("conn"))
-                            {
-                                try
-                                {
-                                    CacheManage.PreLoadDBSchemaToCache(name, true);
-                                }
-                                catch
-                                {
-
-                                }
-
-                            }
-                        }
-                        ThreadBreak.AddGlobalThread(new ParameterizedThreadStart(LoadViewSchema));
-                        
+                        //ThreadPool.QueueUserWorkItem(new WaitCallback(LoadViewSchema));
                     }
                 }
             }
@@ -310,7 +292,7 @@ namespace Aries.Core.Extend
 
             }
         }
-        
+
         #endregion
     }
 }

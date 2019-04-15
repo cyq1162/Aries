@@ -118,6 +118,7 @@ namespace Aries.Core.Sql
 
         private static string GetOperate(string key)
         {
+            if (string.IsNullOrEmpty(key)) { return "="; }
             if (sqlDic.ContainsKey(key))
             {
                 return sqlDic[key];

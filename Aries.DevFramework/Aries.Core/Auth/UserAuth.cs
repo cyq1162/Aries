@@ -17,7 +17,7 @@ namespace Aries.Core.Auth
     /// </summary>
     public static partial class UserAuth
     {
-        private static Dictionary<string, string> pcTokenList = new Dictionary<string, string>();//loginID,token
+        private static Dictionary<string, string> pcTokenList = new Dictionary<string, string>();//loginid,token
 
         /// <summary>
         /// 获取授权Token（手机APP登陆调用此方法获取Token为登陆凭证）
@@ -50,7 +50,7 @@ namespace Aries.Core.Auth
                         string pwd = action.Get<string>(Sys_User.Password);
                         if (password == EncryptHelper.Decrypt(pwd))
                         {
-                            string userID = action.Get<string>(Sys_User.UserID);
+                            string userid = action.Get<string>(Sys_User.UserID);
                             userName = action.Get<string>(Sys_User.UserName);
                             string fullName = action.Get<string>(Sys_User.FullName, userName);
                             if (action.DalType == DalType.Txt || action.DalType == DalType.Xml)
@@ -70,8 +70,8 @@ namespace Aries.Core.Auth
                             //action.SetPara("UserName", userName, System.Data.DbType.String);
                             action.Update(where);//更新信息。
                             //获取角色名称
-                            string roleIDs = action.Get<string>(Sys_User.RoleIDs);
-                            token = EncryptHelper.Encrypt(DateTime.Now.Day + "," + userID + "," + userName + "," + fullName + "," + roleIDs);
+                            string roleids = action.Get<string>(Sys_User.Roleids);
+                            token = EncryptHelper.Encrypt(DateTime.Now.Day + "," + userid + "," + userName + "," + fullName + "," + roleids);
                         }
                         else
                         {
@@ -223,6 +223,7 @@ namespace Aries.Core.Auth
         {
             SetCookie("token", token, 24);
             SetCookie("user", userName, 24 * 7);
+            SetCookie("sessionID", userName, 24 * 7);
         }
         internal static void SetCookie(string name, string value, int hours)
         {
@@ -280,18 +281,18 @@ namespace Aries.Core.Auth
             }
         }
         /// <summary>
-        /// 获取当前登陆账号的登陆ID
+        /// 获取当前登陆账号的登陆id
         /// </summary>
         public static string UserName
         {
             get
             {
-                string loginID = GetTokenValue(2);
-                if (string.IsNullOrEmpty(loginID))
+                string loginid = GetTokenValue(2);
+                if (string.IsNullOrEmpty(loginid))
                 {
-                    loginID = GetCookieValue("aries_user");
+                    loginid = GetCookieValue("aries_user");
                 }
-                return loginID;
+                return loginid;
             }
         }
         /// <summary>
@@ -305,9 +306,9 @@ namespace Aries.Core.Auth
             }
         }
         /// <summary>
-        /// 用户的角色IDs
+        /// 用户的角色ids
         /// </summary>
-        public static string RoleIDs
+        public static string Roleids
         {
             get
             {
@@ -321,11 +322,11 @@ namespace Aries.Core.Auth
         {
             get
             {
-                if (string.IsNullOrEmpty(AdminRoleID))
+                if (string.IsNullOrEmpty(AdminRoleid))
                 {
                     return false;
                 }
-                return RoleIDs.Contains(AdminRoleID);
+                return Roleids.Contains(AdminRoleid);
             }
         }
         /// <summary>
@@ -335,11 +336,11 @@ namespace Aries.Core.Auth
         {
             get
             {
-                if (string.IsNullOrEmpty(SuperAdminRoleID))
+                if (string.IsNullOrEmpty(SuperAdminRoleid))
                 {
                     return false;
                 }
-                return RoleIDs.Contains(SuperAdminRoleID);
+                return Roleids.Contains(SuperAdminRoleid);
             }
         }
 
@@ -425,42 +426,42 @@ namespace Aries.Core.Auth
 
     public static partial class UserAuth
     {
-        private static string _AdminRoleID;
-        public static string AdminRoleID
+        private static string _AdminRoleid;
+        public static string AdminRoleid
         {
             get
             {
-                if (string.IsNullOrEmpty(_AdminRoleID))
+                if (string.IsNullOrEmpty(_AdminRoleid))
                 {
                     using (MAction action = new MAction(U_AriesEnum.Sys_Role))
                     {
                         string where = string.Format("{0} in ('Admin','普通管理员')", Sys_Role.RoleName);
                         if (action.Fill(where))
                         {
-                            _AdminRoleID = action.Get<string>(Sys_Role.RoleID);
+                            _AdminRoleid = action.Get<string>(Sys_Role.Roleid);
                         }
                     }
                 }
-                return _AdminRoleID;
+                return _AdminRoleid;
             }
         }
-        private static string _SuperAdminRoleID;
-        public static string SuperAdminRoleID
+        private static string _SuperAdminRoleid;
+        public static string SuperAdminRoleid
         {
             get
             {
-                if (string.IsNullOrEmpty(_SuperAdminRoleID))
+                if (string.IsNullOrEmpty(_SuperAdminRoleid))
                 {
                     using (MAction action = new MAction(U_AriesEnum.Sys_Role))
                     {
                         string where = string.Format("{0} in ('SuperAdmin','超级管理员')", Sys_Role.RoleName);
                         if (action.Fill(where))
                         {
-                            _SuperAdminRoleID = action.Get<string>(Sys_Role.RoleID);
+                            _SuperAdminRoleid = action.Get<string>(Sys_Role.Roleid);
                         }
                     }
                 }
-                return _SuperAdminRoleID;
+                return _SuperAdminRoleid;
             }
         }
     }

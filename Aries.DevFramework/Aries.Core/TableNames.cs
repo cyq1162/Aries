@@ -9,15 +9,15 @@ namespace Aries.Core.DB
 
     #region Ã¶¾Ù
     public enum Config_Grid { GridID, ObjName, Rules, Field, Title, Hidden, OrderNum, Width, Align, Sortable, Formatter, Styler, Editor, Rowspan, Colspan, Search, DataType, Import, Export, Frozen, Edit, MergeIndex, ImportUnique, LastEditTime }
-    public enum Sys_RoleAction { RoleActionID, RoleID, MenuID, ActionID }
-    public enum Sys_Role { RoleID, RoleName, Notes }
-    public enum Sys_Menu { MenuID, ParentMenuID, MenuName, MenuUrl, MenuLevel, SortOrder, MenuIcon, BigMenuIcon, IsShortcut, IsShow, ActionIDs }
-    public enum Sys_Action { ActionID, ActionName, ActionRefName, IsEnabled, IsSys, SortOrder }
-    public enum Config_Excel { ExcelID, ExcelName, Description, TableNames, StartIndex, HeadCrossRowNum, WhereType, AcceptType, CreateTime }
-    public enum Config_KeyValue { KeyValueID, ConfigKey, ConfigName, ConfigValue, Flag, Notes, OrderNo, CreateTime }
-    public enum Config_ExcelInfo { ExceInfoID, ExcelID, ExcelName, TableName, Field, Formatter, IsUnique, IsForeignkey, ForeignTable, IsRequired, CreateTime }
+    public enum Sys_RoleAction { RoleActionid, Roleid, Menuid, Actionid }
+    public enum Sys_Role { Roleid, RoleName, Notes }
+    public enum Sys_Menu { Menuid, ParentMenuid, MenuName, MenuUrl, MenuLevel, SortOrder, MenuIcon, BigMenuIcon, IsShortcut, IsShow, Actionids }
+    public enum Sys_Action { Actionid, ActionName, ActionRefName, IsEnabled, IsSys, SortOrder }
+    public enum Config_Excel { Excelid, ExcelName, Description, TableNames, StartIndex, HeadCrossRowNum, WhereType, AcceptType, CreateTime }
+    public enum Config_KeyValue { KeyValueid, ConfigKey, ConfigName, ConfigValue, Flag, Notes, OrderNo, CreateTime }
+    public enum Config_ExcelInfo { ExceInfoid, Excelid, ExcelName, TableName, Field, Formatter, IsUnique, IsForeignkey, ForeignTable, IsRequired, CreateTime }
     public enum Sys_UserInfo { UserInfoID }
-    public enum Sys_User { UserID, UserName, FullName, Password, PwdExpiredTime, Sex, Phone, Email, Status, LoginCount, LastLoginTime, LastLoginIP, RoleIDs,OrgIDs, CreateTime }
+    public enum Sys_User { UserID, UserName, FullName, Password, PwdExpiredTime, Sex, Phone, Email, Status, LoginCount, LastLoginTime, LastLoginIP, Roleids,OrgIDs, CreateTime }
     public enum Sys_Organization { OrgID, OrgName, OrgFullName, OrgCode, OrgLevel, ParentOrg, CreateTime }
     #endregion
 }

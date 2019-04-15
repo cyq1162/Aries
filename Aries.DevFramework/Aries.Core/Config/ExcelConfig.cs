@@ -25,8 +25,8 @@ namespace Aries.Core.Config
         {
             using (MAction action = new MAction(U_AriesEnum.Config_Excel))
             {
-                bool isID = idOrExcelName.Length >= 36 && idOrExcelName.Split('-').Length >= 3;
-                string where = (isID ? Config_Excel.ExcelID : Config_Excel.ExcelName).ToString() + "='{0}'";
+                bool isid = idOrExcelName.Length >= 36 && idOrExcelName.Split('-').Length >= 3;
+                string where = (isid ? Config_Excel.Excelid : Config_Excel.ExcelName).ToString() + "='{0}'";
                 if (action.Fill(string.Format(where, idOrExcelName)))
                 {
                     return action.Data;
@@ -37,13 +37,13 @@ namespace Aries.Core.Config
         /// <summary>
         /// 获取具体列配置信息。
         /// </summary>
-        /// <param name="excelID"></param>
+        /// <param name="excelid"></param>
         /// <returns></returns>
-        public static MDataTable GetExcelInfo(string excelID)
+        public static MDataTable GetExcelInfo(string excelid)
         {
             using (MAction action = new MAction(U_AriesEnum.Config_ExcelInfo))
             {
-                return action.Select(Config_Excel.ExcelID + "='" + excelID + "'");
+                return action.Select(Config_Excel.Excelid + "='" + excelid + "'");
             }
         }
 
@@ -243,7 +243,7 @@ namespace Aries.Core.Config
             bool result = true;
             //获取相关配置
             string[] tables = excelRow.Get<string>(Config_Excel.TableNames).Split(',');
-            MDataTable configTable = GetExcelInfo(excelRow.Get<string>(Config_Excel.ExcelID));
+            MDataTable configTable = GetExcelInfo(excelRow.Get<string>(Config_Excel.Excelid));
 
             Dictionary<string, string> rowPrimaryValue = new Dictionary<string, string>();//存档每个表每行的主键值。
             Dictionary<string, string> wherePrimaryValue = new Dictionary<string, string>();//存档where条件对应的主键值。
@@ -351,7 +351,7 @@ namespace Aries.Core.Config
                         {
                             MDataRow data = action.Data.Clone();
                             action.SetSelectColumns(action.Data.PrimaryCell.ColumnName);
-                            if (action.Fill(where))//根据条件查出主键ID (数据被清空)
+                            if (action.Fill(where))//根据条件查出主键id (数据被清空)
                             {
                                 string key = table + where;
                                 if (wherePrimaryValue.ContainsKey(key))

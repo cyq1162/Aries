@@ -165,6 +165,7 @@ namespace Aries.Core
         protected bool PreBeforeInvoke(string methodName, out string msg)
         {
             msg = "Permission denied on objName : " + ObjName;
+            if (ObjName == null) { return true; }
             switch (methodName)
             {
                 case "GetHeader":
@@ -283,7 +284,7 @@ namespace Aries.Core
             }
             else
             {
-                where = GetID;
+                where = Getid;
             }
             if (!string.IsNullOrEmpty(where))
             {
@@ -356,7 +357,7 @@ namespace Aries.Core
         /// 取消继续调用事件（可以在重载BeforeInvoke方法内使用）
         /// </summary>
         protected bool CancelInvoke = false;
-        public virtual string GetID
+        public virtual string Getid
         {
             get
             {
@@ -507,7 +508,7 @@ namespace Aries.Core
         {
             using (MAction action = new MAction(CrossObjName))
             {
-                string where = string.IsNullOrWhiteSpace(GetID) ? GetWhere() : GetID.ToString();
+                string where = string.IsNullOrWhiteSpace(Getid) ? GetWhere() : Getid.ToString();
                 if (action.Fill(where))
                 {
                     return action.Data;
@@ -571,12 +572,12 @@ namespace Aries.Core
         }
 
         /// <summary>
-        /// 删除数据（传ID则一条，也可以构造where条件删除）
+        /// 删除数据（传id则一条，也可以构造where条件删除）
         /// </summary>
         [ActionKey("Del,Delete")]
         public virtual void Delete()
         {
-            string ids = GetID;
+            string ids = Getid;
             string[] values = null;
             string where = string.Empty;
             string parentField = Query<string>("parentField");
@@ -611,7 +612,7 @@ namespace Aries.Core
                 }
                 if (result)
                 {
-                    //第一次，需要将ID转为idField指定的上级关联字段。
+                    //第一次，需要将id转为idField指定的上级关联字段。
                     string pkName = action.Data.Columns.FirstPrimary.ColumnName;
                     if (string.IsNullOrEmpty(idField)) { idField = pkName; }
                     where = values == null ? ids : GetWhereIn(idField, null, values);
@@ -883,11 +884,11 @@ namespace Aries.Core
 
         #region 初始数据获取
         /// <summary>
-        /// 获取UI、MID、ActionKey的配置值。
+        /// 获取UI、Mid、ActionKey的配置值。
         /// </summary>
         public virtual void GetInitConfig()
         {
-            string ui = string.Empty, actionKeys = string.Empty, menuID = string.Empty;
+            string ui = string.Empty, actionKeys = string.Empty, menuid = string.Empty;
             if (IsUseUISite)
             {
                 ui = "/" + AppConfig.GetApp("UI").Trim('/');
@@ -898,11 +899,11 @@ namespace Aries.Core
                 actionKeys = "," + actionKeys.ToLower() + ",";
             }
 
-            menuID = p.UrlMenuID;
+            menuid = p.UrlMenuid;
             JsonHelper js = new JsonHelper(false, false);
             js.Add("ui", ui);
             js.Add("actionKeys", actionKeys);
-            js.Add("mid", menuID);
+            js.Add("mid", menuid);
             jsonResult = js.ToString();
         }
         /// <summary>
@@ -921,7 +922,7 @@ namespace Aries.Core
             if (dt == null || dt.Rows.Count == 0)
             {
                 dt = GridConfig.Create(ObjName, ObjCode, dt.GetSchema(false));
-                if (p.UrlMenuID != string.Empty)//仅处理配置了菜单的数据。
+                if (p.UrlMenuid != string.Empty && dt.Rows.Count > 0)//仅处理配置了菜单的数据。
                 {
                     //顺带处理视图语句与菜单名称的绑定
                     KeyValueConfig.SetTableDescription(ObjName, p.MenuName);
@@ -943,7 +944,8 @@ namespace Aries.Core
             }
             else
             {
-                jsonResult = JsonHelper.OutResult(false, "Init Column Header Fail!");
+                string err = dt.DynamicData != null ? dt.DynamicData.ToString() : "Init Column Header Fail!";
+                jsonResult = JsonHelper.OutResult(false, err);
             }
         }
         /// <summary>
@@ -1057,7 +1059,7 @@ namespace Aries.Core
             bool result = false;
             using (MAction action = new MAction(CrossObjName))
             {
-                string id = GetID;
+                string id = Getid;
                 string where = string.Format("{0}='{1}'", name, value);
                 if (name2 != "" && value2 != "")
                 {

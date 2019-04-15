@@ -1,6 +1,7 @@
 ﻿using CYQ.Data;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Text;
 
@@ -27,7 +28,19 @@ namespace Aries.Core
             {
                 if (string.IsNullOrEmpty(_DllNames))
                 {
-                    _DllNames = AppConfig.GetApp("Aries.Controllers", "Aries.Controllers");
+                    _DllNames = AppConfig.GetApp("Aries.Controllers", "");
+                    if (string.IsNullOrEmpty(_DllNames))
+                    {
+                        string[] files = Directory.GetFiles(AppConfig.AssemblyPath, "*Controllers.dll", SearchOption.TopDirectoryOnly);
+                        if (files != null)
+                        {
+                            foreach (string file in files)
+                            {
+                                _DllNames += Path.GetFileNameWithoutExtension(file) + ",";
+                            }
+                            _DllNames = _DllNames.TrimEnd(',');
+                        }
+                    }
                 }
                 return _DllNames;
             }
@@ -84,7 +97,13 @@ namespace Aries.Core
                             Type[] typeList = ass.GetExportedTypes();
                             foreach (Type type in typeList)
                             {
-                                if (type.BaseType != null && (type.BaseType.FullName == AriesController || (type.BaseType.BaseType != null && type.BaseType.BaseType.FullName == AriesController)))
+                                if (type.BaseType != null && (type.BaseType.FullName == AriesController
+                                    || (type.BaseType.BaseType != null && (type.BaseType.BaseType.FullName == AriesController
+                                    || (type.BaseType.BaseType.BaseType != null && (type.BaseType.BaseType.BaseType.FullName == AriesController
+                                    || (type.BaseType.BaseType.BaseType.BaseType != null && type.BaseType.BaseType.BaseType.BaseType.FullName == AriesController)
+                                    ))
+                                    ))
+                                    ))
                                 {
                                     #region Aries
                                     if (type.Name == DefaultController)

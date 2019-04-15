@@ -83,23 +83,23 @@ namespace Aries.Core.Auth
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     var row = dt.Rows[i];
-                    string menuID = row.Get<string>("MenuID");
-                    string actionIDs = row.Get<string>("ActionIDs");
-                    if (!string.IsNullOrEmpty(actionIDs))
+                    string menuid = row.Get<string>("Menuid");
+                    string actionids = row.Get<string>("Actionids");
+                    if (!string.IsNullOrEmpty(actionids))
                     {
-                        string[] ids = actionIDs.Split(',');
+                        string[] ids = actionids.Split(',');
                         string refNames = string.Empty, actionNames = string.Empty;
 
                         foreach (string id in ids)
                         {
-                            var aRow = action.FindRow("ActionID='" + id + "'");
+                            var aRow = action.FindRow("Actionid='" + id + "'");
                             if (aRow != null)
                             {
                                 var dr = dt.NewRow(true);
-                                dr.Set("MenuID", id);
-                                dr.Set("ParentMenuID", menuID);
+                                dr.Set("Menuid", id);
+                                dr.Set("ParentMenuid", menuid);
                                 dr.Set("MenuName", aRow.Get<string>("ActionName"));
-                                dr.Set("ActionIDs", "");
+                                dr.Set("Actionids", "");
                                 dr.Set("menuIcon", "icon-save");
                                 // dt.Rows.Add(dr);
                             }
@@ -121,34 +121,34 @@ namespace Aries.Core.Auth
             }
         }
 
-        public static MDataTable GetUserMenu(bool onlyID)
+        public static MDataTable GetUserMenu(bool onlyid)
         {
-            string roleIDs = UserAuth.RoleIDs;
-            if (!string.IsNullOrEmpty(roleIDs))
+            string roleids = UserAuth.Roleids;
+            if (!string.IsNullOrEmpty(roleids))
             {
-                roleIDs = "RoleID in ('" + roleIDs.Replace(",", "','") + "')";
+                roleids = "Roleid in ('" + roleids.Replace(",", "','") + "')";
                 MDataTable dt;
                 using (MAction action = new MAction(U_AriesEnum.Sys_RoleAction))
                 {
-                    action.SetSelectColumns("MenuID", "ActionID");
-                    dt = action.Select(roleIDs);
+                    action.SetSelectColumns("Menuid", "Actionid");
+                    dt = action.Select(roleids);
                 }
                 if (dt.Rows.Count > 0)
                 {
-                    Dictionary<string, string> dic = RoleActionToDic(dt, onlyID);
+                    Dictionary<string, string> dic = RoleActionToDic(dt, onlyid);
                     MDataTable menuDt = MenuTable;
                     #region 组合有权限的菜单
-                    if (!onlyID)
+                    if (!onlyid)
                     {
                         menuDt.Columns.Add("ActionRefNames", System.Data.SqlDbType.NVarChar);
                     }
                     for (int i = 0; i < menuDt.Rows.Count; i++)
                     {
                         MDataRow row = menuDt.Rows[i];
-                        string menuID = row.Get<string>("MenuID");
-                        if (!dic.ContainsKey(menuID))
+                        string menuid = row.Get<string>("Menuid");
+                        if (!dic.ContainsKey(menuid))
                         {
-                            if (!HasChild(menuID, MenuTable, dic))
+                            if (!HasChild(menuid, MenuTable, dic))
                             {
                                 menuDt.Rows.RemoveAt(i);
                                 i--;
@@ -156,13 +156,13 @@ namespace Aries.Core.Auth
                         }
                         else
                         {
-                            if (onlyID)
+                            if (onlyid)
                             {
-                                row.Set("ActionIDs", dic[menuID]);
+                                row.Set("Actionids", dic[menuid]);
                             }
                             else
                             {
-                                row.Set("ActionRefNames", dic[menuID]);
+                                row.Set("ActionRefNames", dic[menuid]);
                             }
                         }
                     }
@@ -177,9 +177,9 @@ namespace Aries.Core.Auth
         /// <summary>
         /// 角色权限表转字典
         /// </summary>
-        /// <param name="onlyID">默认需要引用名，true时引用ID</param>
+        /// <param name="onlyid">默认需要引用名，true时引用id</param>
         /// <returns></returns>
-        public static Dictionary<string, string> RoleActionToDic(MDataTable dt, bool onlyID = false)
+        public static Dictionary<string, string> RoleActionToDic(MDataTable dt, bool onlyid = false)
         {
             Dictionary<string, string> dic = new Dictionary<string, string>();
             if (dt.Rows.Count > 0)
@@ -192,25 +192,25 @@ namespace Aries.Core.Auth
                 string mid = "";
                 foreach (MDataRow row in dt.Rows)
                 {
-                    string menuID = row.Get<string>(Sys_RoleAction.MenuID);
-                    if (menuID != mid)
+                    string menuid = row.Get<string>(Sys_RoleAction.Menuid);
+                    if (menuid != mid)
                     {
-                        mid = menuID;
+                        mid = menuid;
                         menuRow = menus.FindRow(mid);
                     }
                     if (menuRow != null)
                     {
-                        string actionID = row.Get<string>(Sys_RoleAction.ActionID);
-                        MDataRow aRow = actions.FindRow(Sys_Action.ActionID + "='" + actionID + "'");
-                        if (aRow != null && aRow.Get<bool>(Sys_Action.IsEnabled, true) && menuRow.Get<string>(Sys_Menu.ActionIDs).IndexOf(actionID) > -1)
+                        string actionid = row.Get<string>(Sys_RoleAction.Actionid);
+                        MDataRow aRow = actions.FindRow(Sys_Action.Actionid + "='" + actionid + "'");
+                        if (aRow != null && aRow.Get<bool>(Sys_Action.IsEnabled, true) && menuRow.Get<string>(Sys_Menu.Actionids).IndexOf(actionid) > -1)
                         {
-                            if (dic.ContainsKey(menuID))
+                            if (dic.ContainsKey(menuid))
                             {
-                                dic[menuID] = dic[menuID] + "," + (onlyID ? actionID : aRow.Get<string>(Sys_Action.ActionRefName).Trim());
+                                dic[menuid] = dic[menuid] + "," + (onlyid ? actionid : aRow.Get<string>(Sys_Action.ActionRefName).Trim());
                             }
                             else
                             {
-                                dic.Add(menuID, (onlyID ? actionID : aRow.Get<string>(Sys_Action.ActionRefName).Trim()));
+                                dic.Add(menuid, (onlyid ? actionid : aRow.Get<string>(Sys_Action.ActionRefName).Trim()));
                             }
                         }
                     }
@@ -221,23 +221,23 @@ namespace Aries.Core.Auth
         /// <summary>
         /// 是否拥有下级的菜单权限
         /// </summary>
-        /// <param name="menuID">当前菜单ID</param>
+        /// <param name="menuid">当前菜单id</param>
         /// <param name="menuDt">整个菜单表</param>
         /// <param name="dic">当前用户拥有权限的的菜单</param>
         /// <returns></returns>
-        private static bool HasChild(string menuID, MDataTable menuDt, Dictionary<string, string> dic)
+        private static bool HasChild(string menuid, MDataTable menuDt, Dictionary<string, string> dic)
         {
-            MDataRowCollection childs = menuDt.FindAll("ParentMenuID='" + menuID + "'");
+            MDataRowCollection childs = menuDt.FindAll("ParentMenuid='" + menuid + "'");
             if (childs != null && childs.Count > 0)
             {
                 bool result = false;
                 foreach (MDataRow row in childs)
                 {
-                    menuID = row.Get<string>("MenuID");
-                    result = dic.ContainsKey(menuID);
+                    menuid = row.Get<string>("Menuid");
+                    result = dic.ContainsKey(menuid);
                     if (!result)
                     {
-                        result = HasChild(menuID, menuDt, dic);
+                        result = HasChild(menuid, menuDt, dic);
                     }
                     if (result)
                     {

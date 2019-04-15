@@ -193,20 +193,21 @@ namespace Aries.Core.Sql
                     {
                         text = string.Format(text, stringFormatValues);
                     }
-                    text = FormatPara(text.Trim());//去掉空格
+                    text = FormatPara(text.Replace("\r\n", " ").Trim());//去掉空格
                     if (key[0] == 'V' && text[0] != '(' && !string.IsNullOrEmpty(folder))//补充语法
                     {
+                        text = "(" + text + ") ";
                         folder = folder.Replace("/", "\\");//统一格式。
                         //如果文件夹名包含数据库名，则补充数据库前缀。
                         foreach (string name in CrossDb.DbTables.Keys)
                         {
                             if (folder.IndexOf("\\" + name + "\\", StringComparison.OrdinalIgnoreCase) > -1)
                             {
-                                text = "(" + text + ") " + name + "." + key;//补充数据库前缀。
+                                key = name + "." + key;//补充数据库前缀。
                                 break;
                             }
                         }
-
+                        text = text + key;
                     }
 
                     //参数化格式
@@ -230,9 +231,9 @@ namespace Aries.Core.Sql
             {
                 sql = Regex.Replace(sql, "@FullName", UserAuth.FullName, RegexOptions.IgnoreCase);
             }
-            if (sql.IndexOf("@SuperAdminRoleID", StringComparison.OrdinalIgnoreCase) > -1)
+            if (sql.IndexOf("@SuperAdminRoleid", StringComparison.OrdinalIgnoreCase) > -1)
             {
-                sql = Regex.Replace(sql, "@SuperAdminRoleID", (UserAuth.IsSuperAdmin ? UserAuth.SuperAdminRoleID : Guid.Empty.ToString()), RegexOptions.IgnoreCase);
+                sql = Regex.Replace(sql, "@SuperAdminRoleid", (UserAuth.IsSuperAdmin ? UserAuth.SuperAdminRoleid : Guid.Empty.ToString()), RegexOptions.IgnoreCase);
             }
             string key = null;
             //自动配置其它属性

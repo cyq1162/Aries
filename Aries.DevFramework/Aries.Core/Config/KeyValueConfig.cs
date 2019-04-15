@@ -554,12 +554,12 @@ namespace Aries.Core.Config
                 allDataText.Add(item.Key, item.Value.GetColumnItems<string>("text").ToArray());
             }
 
-            List<string> ParentIds = new List<string>();//所有父节点ID
+            List<string> Parentids = new List<string>();//所有父节点id
             foreach (var pk in ParentKeys)
             {
-                ParentIds = objNameItems[pk].GetColumnItems<string>("value");
+                Parentids = objNameItems[pk].GetColumnItems<string>("value");
                 //
-                foreach (var id in ParentIds)
+                foreach (var id in Parentids)
                 {
                     MDataTable table = null;
                     MDataRow row = null;

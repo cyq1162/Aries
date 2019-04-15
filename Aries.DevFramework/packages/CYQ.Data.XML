@@ -158,11 +158,6 @@
             默认数据库类型（只读）
             </summary>
         </member>
-        <member name="P:CYQ.Data.AppConfig.DB.PagerBySelectBase">
-            <summary>
-            MSSQL是否启用分页存储过程SelectBase，默认false
-            </summary>
-        </member>
         <member name="P:CYQ.Data.AppConfig.DB.FilterSqlInjection">
             <summary>
             MAction所有操作中的where条件，默认有超强的过滤单词，来过滤Sql注入关键字，如果语句包含指定的过滤词，则会返回错误信息，并记录日志。
@@ -171,7 +166,7 @@
         </member>
         <member name="P:CYQ.Data.AppConfig.DB.AutoID">
             <summary>
-            MAction 操作 Oracle 时自增加int类型ID所需要配置的序列ID，Guid为ID则不用。
+            MAction 操作 Oracle 时自增加int类型id所需要配置的序列id，Guid为id则不用。
             如果需要为每个表都配置一个序列号，可以使用：SEQ_{0} 其中{0}会自动配对成表名，如果没有{0}，则为整个数据库共用一个序列。
             默认参数值：SEQ_{0}
             </summary>
@@ -395,14 +390,14 @@
             原始传进来的表名/视图名，未经过[多数据库转换处理]格式化。
             </summary>
         </member>
-        <member name="M:CYQ.Data.MAction.SetIdentityInsertOn">
+        <member name="M:CYQ.Data.MAction.SetidentityInsertOn">
             <summary>
-            MSSQL插入标识ID时开启此选项[事务开启时有效]
+            MSSQL插入标识id时开启此选项[事务开启时有效]
             </summary>
         </member>
-        <member name="M:CYQ.Data.MAction.SetIdentityInsertOff">
+        <member name="M:CYQ.Data.MAction.SetidentityInsertOff">
             <summary>
-            MSSQL插入标识ID后关闭此选项[事务开启时有效]
+            MSSQL插入标识id后关闭此选项[事务开启时有效]
             </summary>;
         </member>
         <member name="F:CYQ.Data.MAction.IsIgnoreDeleteField">
@@ -705,13 +700,19 @@
         </member>
         <member name="P:CYQ.Data.MAction.AllowInsertID">
              <summary>
-             Whether to allow manual insertion of IDs for self-incrementing primary key identification
-            <para>自增主键标识的，是否允许手动插入ID</para> 
+             Whether to allow manual insertion of ids for self-incrementing primary key identification
+            <para>自增主键标识的，是否允许手动插入id</para> 
              </summary>
         </member>
         <member name="P:CYQ.Data.MAction.UI">
             <summary>
             Manipulate UI
+            <para>UI操作</para>
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.MAction.Sql">
+            <summary>
+            for build where sql easyer
             <para>UI操作</para>
             </summary>
         </member>
@@ -934,9 +935,9 @@
             </summary>
             <param name="isNeedToReloadTable"></param>
         </member>
-        <member name="P:CYQ.Data.NoSqlAction.NextID">
+        <member name="P:CYQ.Data.NoSqlAction.Nextid">
             <summary>
-            下一个自增加ID
+            下一个自增加id
             </summary>
         </member>
         <member name="T:CYQ.Data.Aop.AopInfo">
@@ -957,6 +958,11 @@
         <member name="P:CYQ.Data.Aop.AopInfo.DataBase">
             <summary>
             数据库名称(只读)
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Aop.AopInfo.ConnectionString">
+            <summary>
+            数据库链接（只读）
             </summary>
         </member>
         <member name="P:CYQ.Data.Aop.AopInfo.AopPara">
@@ -1143,22 +1149,10 @@
             获取系统内部缓存Key
             </summary>
         </member>
-        <member name="M:CYQ.Data.Cache.CacheManage.GetKey(CYQ.Data.Cache.CacheKeyType,System.String,System.String,CYQ.Data.DalType)">
+        <member name="M:CYQ.Data.Cache.CacheManage.GetKey(CYQ.Data.Cache.CacheKeyType,System.String,System.String)">
             <summary>
             获取系统内部缓存Key
             </summary>
-        </member>
-        <member name="M:CYQ.Data.Cache.CacheManage.PreLoadDBSchemaToCache">
-            <summary>
-            通过该方法可以预先加载整个数据库的表结构缓存
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Cache.CacheManage.PreLoadDBSchemaToCache(System.String,System.Boolean)">
-            <summary>
-            通过该方法可以预先加载整个数据库的表结构缓存(异常会抛，外层Try Catch)
-            </summary>
-            <param name="conn">指定数据链接</param>
-            <param name="isUseThread">是否开启线程</param>
         </member>
         <member name="P:CYQ.Data.Cache.CacheManage.Instance">
             <summary>
@@ -1858,7 +1852,7 @@
             <summary>
             定时检测异常的链接是否恢复。
             </summary>
-            <param name="threadID"></param>
+            <param name="threadid"></param>
         </member>
         <member name="T:CYQ.Data.DalType">
             <summary>
@@ -1925,27 +1919,27 @@
              MSSQL 用户定义表类型
             </summary>
         </member>
-        <member name="T:CYQ.Data.DbResetResult">
+        <member name="T:CYQ.Data.DBResetResult">
             <summary>
             重置数据库的结果
             </summary>
         </member>
-        <member name="F:CYQ.Data.DbResetResult.Yes">
+        <member name="F:CYQ.Data.DBResetResult.Yes">
             <summary>
              成功切换 数据库链接
             </summary>
         </member>
-        <member name="F:CYQ.Data.DbResetResult.No_SaveDbName">
+        <member name="F:CYQ.Data.DBResetResult.No_SaveDbName">
             <summary>
             未切换 - 相同数据库名。
             </summary>
         </member>
-        <member name="F:CYQ.Data.DbResetResult.No_Transationing">
+        <member name="F:CYQ.Data.DBResetResult.No_Transationing">
             <summary>
             未切换 - 事务中。
             </summary>
         </member>
-        <member name="F:CYQ.Data.DbResetResult.No_DBNoExists">
+        <member name="F:CYQ.Data.DBResetResult.No_DBNoExists">
             <summary>
             未切换 - 新数据库名不存在。
             </summary>
@@ -1955,7 +1949,7 @@
             测试链接的级别
             </summary>
         </member>
-        <member name="T:CYQ.Data.DbBase">
+        <member name="T:CYQ.Data.DalBase">
             <summary>
             数据库操作基类 （模板模式：Template Method）
             属性管理
@@ -1967,124 +1961,124 @@
             链接管理
             </summary>
         </member>
-        <member name="F:CYQ.Data.DbBase.DebugInfo">
+        <member name="F:CYQ.Data.DalBase.DebugInfo">
             <summary>
             记录SQL语句信息
             </summary>
         </member>
-        <member name="F:CYQ.Data.DbBase.RecordsAffected">
+        <member name="F:CYQ.Data.DalBase.RecordsAffected">
             <summary>
             执行命令时所受影响的行数（-2为发生异常）。
             </summary>
         </member>
-        <member name="F:CYQ.Data.DbBase.IsOpenTrans">
+        <member name="F:CYQ.Data.DalBase.IsOpenTrans">
             <summary>
             当前是否开启事务
             </summary>
         </member>
-        <member name="F:CYQ.Data.DbBase.ConnObj">
+        <member name="F:CYQ.Data.DalBase.ConnObj">
             <summary>
             数据库主从备链接管理对象;
             </summary>
         </member>
-        <member name="F:CYQ.Data.DbBase.UsingConnBean">
+        <member name="F:CYQ.Data.DalBase.UsingConnBean">
             <summary>
             当前使用中的链接对象
             </summary>
         </member>
-        <member name="F:CYQ.Data.DbBase.IsWriteLogOnError">
+        <member name="F:CYQ.Data.DalBase.IsWriteLogOnError">
             <summary>
             是否允许进入写日志中模块(默认true)
             </summary>
         </member>
-        <member name="M:CYQ.Data.DbBase.ChangeDatabase(System.String)">
+        <member name="M:CYQ.Data.DalBase.ChangeDatabase(System.String)">
             <summary>
             切换数据库（修改数据库链接）
             </summary>
         </member>
-        <member name="M:CYQ.Data.DbBase.IsOwnerOtherDb(System.String)">
+        <member name="M:CYQ.Data.DalBase.IsOwnerOtherDb(System.String)">
             <summary>
             是否数据库名称变化了
             </summary>
             <param name="dbTableName"></param>
             <returns></returns>
         </member>
-        <member name="M:CYQ.Data.DbBase.AddReturnPara">
+        <member name="M:CYQ.Data.DalBase.AddReturnPara">
             <summary>
             处理内置的MSSQL和Oracle两种存储过程分页
             </summary>
         </member>
-        <member name="M:CYQ.Data.DbBase.WriteTime">
+        <member name="M:CYQ.Data.DalBase.WriteTime">
             <summary>
             记录执行时间
             </summary>
         </member>
-        <member name="M:CYQ.Data.DbBase.RollBack">
+        <member name="M:CYQ.Data.DalBase.RollBack">
             <summary>
             事务（有则）回滚
             </summary>
             <returns></returns>
         </member>
-        <member name="M:CYQ.Data.DbBase.WriteError(System.String)">
+        <member name="M:CYQ.Data.DalBase.WriteError(System.String)">
             <summary>
             输出错误（若事务中，回滚事务）
             </summary>
             <param name="err"></param>
         </member>
-        <member name="M:CYQ.Data.DbBase.TestConn(CYQ.Data.AllowConnLevel)">
+        <member name="M:CYQ.Data.DalBase.TestConn(CYQ.Data.AllowConnLevel)">
             <summary>
             测试链接
             </summary>
             <param name="allowLevel">1：只允许当前主链接；2：允许主备链接；3：允许主备从链接</param>
             <returns></returns>
         </member>
-        <member name="M:CYQ.Data.DbBase.ResetConn(CYQ.Data.ConnBean)">
+        <member name="M:CYQ.Data.DalBase.ResetConn(CYQ.Data.ConnBean)">
             <summary>
             切换链接
             </summary>
         </member>
-        <member name="M:CYQ.Data.DbBase.OpenCon">
+        <member name="M:CYQ.Data.DalBase.OpenCon">
             <summary>
             打开链接，只切主备(同时有N秒的主库定位)
             </summary>
             <returns></returns>
         </member>
-        <member name="M:CYQ.Data.DbBase.OpenCon(CYQ.Data.ConnBean,CYQ.Data.AllowConnLevel)">
+        <member name="M:CYQ.Data.DalBase.OpenCon(CYQ.Data.ConnBean,CYQ.Data.AllowConnLevel)">
             <summary>
             打开链接，允许切从。
             </summary>
         </member>
-        <member name="P:CYQ.Data.DbBase.ConnName">
+        <member name="P:CYQ.Data.DalBase.ConnName">
             <summary>
             原生态传进来的配置名（或链接）
             </summary>
         </member>
-        <member name="P:CYQ.Data.DbBase.DataBase">
+        <member name="P:CYQ.Data.DalBase.DataBase">
             <summary>
             获得链接的数据库名称
             </summary>
         </member>
-        <member name="P:CYQ.Data.DbBase.Version">
+        <member name="P:CYQ.Data.DalBase.Version">
             <summary>
             数据库的版本号
             </summary>
         </member>
-        <member name="P:CYQ.Data.DbBase.DataBaseType">
+        <member name="P:CYQ.Data.DalBase.DataBaseType">
             <summary>
             当前操作的数据库类型
             </summary>
         </member>
-        <member name="P:CYQ.Data.DbBase.IsRecordDebugInfo">
+        <member name="P:CYQ.Data.DalBase.IsRecordDebugInfo">
             <summary>
             是否允许记录SQL语句 (内部操作会关掉此值为False）
             </summary>
         </member>
-        <member name="P:CYQ.Data.DbBase.ReturnValue">
+        <member name="P:CYQ.Data.DalBase.ReturnValue">
             <summary>
             存储过程返回值。
             </summary>
         </member>
-        <member name="P:CYQ.Data.DbBase.OutPutValue">
+        <member name="P:CYQ.Data.DalBase.OutPutValue">
             <summary>
             存储过程OutPut输出参数值。
             如果只有一个输出，则为值；
@@ -2100,19 +2094,19 @@
         <member name="F:CYQ.Data.InsertOp.None">
             <summary>
             only insert,no return autoIncrement id
-            <para>使用此项：插入数据后[MSSQL会返回ID,其它数据库则不会返回ID]</para>
+            <para>使用此项：插入数据后[MSSQL会返回id,其它数据库则不会返回id]</para>
             </summary>
         </member>
         <member name="F:CYQ.Data.InsertOp.ID">
             <summary>
             insert and return autoincrement id (default option)
-            <para>使用此项：插入数据后会返回ID[默认选项]。</para>
+            <para>使用此项：插入数据后会返回id[默认选项]。</para>
             </summary>
         </member>
         <member name="F:CYQ.Data.InsertOp.Fill">
             <summary>
             insert and select top 1 data to fill row
-            <para>使用此项：插入数据后,会根据返回ID进行查询后填充数据行。</para>
+            <para>使用此项：插入数据后,会根据返回id进行查询后填充数据行。</para>
             </summary>
         </member>
         <member name="T:CYQ.Data.LocalEnvironment">
@@ -2189,6 +2183,21 @@
         <member name="F:CYQ.Data.LogType.Cache">
             <summary>
             Cache
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.LogType.Aries">
+            <summary>
+            Aries Dev Framework
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.LogType.Taurus">
+            <summary>
+            Taurus Dev Framework
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.LogType.Gemini">
+            <summary>
+            Gemini Workflow Dev Framework
             </summary>
         </member>
         <member name="T:CYQ.Data.LogWorker">
@@ -2274,7 +2283,7 @@
             <summary>
              插入数据
             </summary>
-            <param name="insertID">插入主键</param>
+            <param name="insertid">插入主键</param>
         </member>
         <member name="M:CYQ.Data.Orm.SimpleOrmBase.Insert(System.Boolean,CYQ.Data.InsertOp,System.Boolean)">
             <summary>
@@ -2282,7 +2291,7 @@
             </summary>
             <param name="autoSetValue">自动从控制获取值</param>
             <param name="option">插入选项</param>
-            <param name="insertID">插入主键</param>
+            <param name="insertid">插入主键</param>
         </member>
         <member name="M:CYQ.Data.Orm.SimpleOrmBase.Update">
             <summary>
@@ -2568,13 +2577,13 @@
         </member>
         <member name="M:CYQ.Data.Orm.OrmBase.Set(System.Object,System.Object)">
             <summary>
-            设置值,例如:[action.Set(TableName.ID,10);]
+            设置值,例如:[action.Set(TableName.id,10);]
             </summary>
-            <param name="key">字段名称,可用枚举如:[TableName.ID]</param>
+            <param name="key">字段名称,可用枚举如:[TableName.id]</param>
             <param name="value">要设置给字段的值</param>
             <example><code>
             set示例：action.Set(Users.UserName,"路过秋天");
-            get示例：int id=action.Get&lt;int&gt;(Users.ID);
+            get示例：int id=action.Get&lt;int&gt;(Users.id);
             </code></example>
         </member>
         <member name="M:CYQ.Data.Orm.OrmBase.Insert">
@@ -2729,7 +2738,7 @@
         </member>
         <member name="P:CYQ.Data.Orm.OrmBase.AllowInsertID">
             <summary>
-            是否允许插入自增ID
+            是否允许插入自增id
             </summary>
         </member>
         <member name="P:CYQ.Data.Orm.OrmBase.TableName">
@@ -2817,6 +2826,67 @@
             <summary>
               查找 System.Byte[] 类型的本地化资源。
             </summary>
+        </member>
+        <member name="F:CYQ.Data.SQL.ColumnSchema._ColumnCache">
+            <summary>
+            全局缓存实体类的表结构（仅会对Type读取的结构）
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.SQL.ColumnSchema.FixTableSchemaType(System.Data.Common.DbDataReader,System.Data.DataTable)">
+            <summary>
+            DbDataReader的GetSchema拿到的DataType、Size、Scale很不靠谱
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.SQL.ColumnSchema.GetSchemaKey(System.String,System.String)">
+            <summary>
+            缓存表架构Key
+            </summary>
+        </member>
+        <member name="T:CYQ.Data.SQL.CrossDB">
+            <summary>
+            处理跨库访问
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.SQL.CrossDB.GetConn(System.String,System.String@)">
+            <summary>
+            获得链接的配置或语句。
+            </summary>
+            <param name="nameOrSql">表名、视图名、存储过程名</param>
+            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.SQL.CrossDB.GetDBName(System.String)">
+            <summary>
+            获得数据库名称。
+            </summary>
+            <param name="formatName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.SQL.CrossDB.GetTableInfoByName(System.String,System.String)">
+            <summary>
+            获得数据库表相关信息
+            </summary>
+            <param name="conn">指定时优先寻找。</param>
+            <param name="name">表名</param>
+            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.SQL.CrossDB.Exists(System.String,System.String,System.String)">
+            <summary>
+            是否存在指定的表名、视图名、存储过程名
+            </summary>
+            <param name="name"></param>
+            <param name="conn"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.SQL.DBSchema.GetSchema(System.String)">
+            <summary>
+            获取数据库的“表、视图、存储过程”名称列表。
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.SQL.DBSchema.InitDBSchemasForCache(System.Object)">
+            <summary>
+            预先把结构缓存起来。
+            </summary>
+            <param name="para"></param>
         </member>
         <member name="T:CYQ.Data.SQL.SqlCreateForSchema">
             <summary>
@@ -3070,6 +3140,11 @@
             原始表名[未经过多数据库兼容处理]
             </summary>
         </member>
+        <member name="P:CYQ.Data.Table.MDataRow.DynamicData">
+            <summary>
+            动态存储数据
+            </summary>
+        </member>
         <member name="P:CYQ.Data.Table.MDataRow.Item(System.Object)">
             <summary>
             输入枚举型数据
@@ -3296,7 +3371,7 @@
             将数据表绑定到列表控件
             </summary>
             <param name="control">列表控件[包括Repeater/DataList/GridView/DataGrid等]</param>
-            <param name="nodeID">当Control为XHtmlAction对象时，需要指定绑定的节点ID</param>
+            <param name="nodeid">当Control为XHtmlAction对象时，需要指定绑定的节点id</param>
         </member>
         <member name="M:CYQ.Data.Table.MDataTable.Merge(CYQ.Data.Table.MDataTable)">
             <summary>
@@ -3887,7 +3962,7 @@
             <param name="SqlType">列的数据类型</param>
         </member>
         <member name="M:CYQ.Data.Table.MDataColumn.Add(System.String,System.Data.SqlDbType,System.Boolean)">
-            <param name="isAutoIncrement">是否自增ID列</param>
+            <param name="isAutoIncrement">是否自增id列</param>
         </member>
         <member name="M:CYQ.Data.Table.MDataColumn.Add(System.String,System.Data.SqlDbType,System.Boolean,System.Boolean,System.Int32,System.Boolean,System.Object)">
             <param name="defaultValue">默认值[日期类型请传入SqlValue.GetDate]</param>
@@ -3915,6 +3990,11 @@
         <member name="P:CYQ.Data.Table.MDataColumn.Description">
             <summary>
             表名描述
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.Table.MDataColumn.TableName">
+            <summary>
+            表名
             </summary>
         </member>
         <member name="P:CYQ.Data.Table.MDataColumn.JointPrimary">
@@ -3996,13 +4076,13 @@
         </member>
         <member name="F:CYQ.Data.Table.AcceptOp.Insert">
             <summary>
-            批量插入（由系统产生自增加ID）
+            批量插入（由系统产生自增加id）
             该执行会开启事务。
             </summary>
         </member>
         <member name="F:CYQ.Data.Table.AcceptOp.InsertWithID">
             <summary>
-            批量插入（由用户指定ID插入）
+            批量插入（由用户指定id插入）
             该执行会开启事务。
             </summary>
         </member>
@@ -4174,7 +4254,7 @@
         </member>
         <member name="P:CYQ.Data.UI.IUIValue.MID">
             <summary>
-            控件的名称（Name）或ID
+            控件的名称（Name）或id
             </summary>
         </member>
         <member name="T:CYQ.Data.UI.RegisterUI">
@@ -4193,60 +4273,6 @@
             <summary>
             清除UI注册
             </summary>
-        </member>
-        <member name="T:CYQ.Data.SQL.SqlCreateForPager">
-            <summary>
-            分页存储过程语句类
-            </summary>
-            <summary>
-            Sql分页语句类
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.SQL.SqlCreateForPager.top1Pager">
-            <summary>
-            首页查询
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.SQL.SqlCreateForPager.top2Pager">
-            <summary>
-            最后一页查询
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.SQL.SqlCreateForPager.top3Pager">
-            <summary>
-            前半段分页查询
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.SQL.SqlCreateForPager.top4Pager">
-            <summary>
-            后半段分页查询（即倒过来查询）
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.SQL.SqlCreateForPager.rowNumberPager">
-            <summary>
-            MSSQL、Oracle的行号分页
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.SQL.SqlCreateForPager.tempTablePager">
-            <summary>
-            临时表分页（不带自增加序列）
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.SQL.SqlCreateForPager.tempTablePagerWithIdentity">
-            <summary>
-            临时表分页（带自增加序列）
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.SQL.SqlCreateForPager.GetSelectBaseForSql2005">
-            <summary>
-            获取sql2005分页存储过程[输出带"br换行标签"]
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.SQL.SqlCreateForPager.GetOrderBy(System.String,System.Boolean,System.String)">
-            <summary>
-            获取order by 语句
-            </summary>
-            <param name="reverse">排序是否反转</param>
         </member>
         <member name="T:CYQ.Data.SQL.SqlCompatible">
             <summary>
@@ -4409,7 +4435,7 @@
             数据库函数 Case 分支语句，其它Case 一起的关键字也需要包含。
             <example>
             <code>
-            示例： [#CASE] [#WHEN] languageID={1} [#THEN] {2} [#ELSE] 0 [#END]
+            示例： [#CASE] [#WHEN] languageid={1} [#THEN] {2} [#ELSE] 0 [#END]
             </code>
             </example>
             </summary>
@@ -4419,7 +4445,7 @@
             数据库函数 Case When 分支语句，其它Case 一起的关键字也需要包含。
             <example>
             <code>
-            示例： [#CASE#WHEN] languageID={0} [#THEN] 1000000 [#ELSE] 0 [#END]
+            示例： [#CASE#WHEN] languageid={0} [#THEN] 1000000 [#ELSE] 0 [#END]
             </code>
             </example>
             </summary>
@@ -4468,8 +4494,6 @@
             <summary>
             简单工厂（Factory Method）
             </summary>
-            <param name="dbConn"></param>
-            <returns></returns>
         </member>
         <member name="T:CYQ.Data.Log">
             <summary>
@@ -4611,42 +4635,92 @@
             <param name="sqlDbType"></param>
             <returns></returns>
         </member>
+        <member name="T:CYQ.Data.SQL.SqlCreateForPager">
+            <summary>
+            Sql分页语句类
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.SQL.SqlCreateForPager.top1Pager">
+            <summary>
+            首页查询
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.SQL.SqlCreateForPager.top2Pager">
+            <summary>
+            最后一页查询
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.SQL.SqlCreateForPager.top3Pager">
+            <summary>
+            前半段分页查询
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.SQL.SqlCreateForPager.top4Pager">
+            <summary>
+            后半段分页查询（即倒过来查询）
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.SQL.SqlCreateForPager.rowNumberPager">
+            <summary>
+            MSSQL、Oracle的行号分页
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.SQL.SqlCreateForPager.tempTablePager">
+            <summary>
+            临时表分页（不带自增加序列）
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.SQL.SqlCreateForPager.tempTablePagerWithidentity">
+            <summary>
+            临时表分页（带自增加序列）
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.SQL.SqlCreateForPager.GetOrderBy(System.String,System.Boolean,System.String)">
+            <summary>
+            获取order by 语句
+            </summary>
+            <param name="reverse">排序是否反转</param>
+        </member>
         <member name="T:CYQ.Data.SQL.TableSchema">
             <summary>
             表结构类
             </summary>
         </member>
-        <member name="F:CYQ.Data.SQL.TableSchema.tableCache">
+        <member name="F:CYQ.Data.SQL.TableSchema._TableCache">
             <summary>
             全局表名缓存（只缓存表名和表名的描述）
             </summary>
         </member>
-        <member name="F:CYQ.Data.SQL.TableSchema.columnCache">
+        <member name="F:CYQ.Data.SQL.TableSchema._ViewCache">
             <summary>
-            全局缓存实体类的表结构（仅会对Type读取的结构）
+            全局表名缓存（只缓存视图名和表名的描述）
             </summary>
         </member>
-        <member name="M:CYQ.Data.SQL.TableSchema.FixTableSchemaType(System.Data.Common.DbDataReader,System.Data.DataTable)">
+        <member name="F:CYQ.Data.SQL.TableSchema._ProcCache">
             <summary>
-            DbDataReader的GetSchema拿到的DataType、Size、Scale很不靠谱
+            全局表名缓存（只缓存存储过程名和表名的描述）
             </summary>
         </member>
-        <member name="M:CYQ.Data.SQL.TableSchema.GetTables(CYQ.Data.DbBase@)">
-            <summary>
-            获取表（带缓存）
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.SQL.TableSchema.GetSchemaKey(System.String,System.String,CYQ.Data.DalType)">
-            <summary>
-            缓存表架构Key
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.SQL.TableSchema.Exists(System.String,System.String,CYQ.Data.DbBase@)">
+        <member name="M:CYQ.Data.SQL.TableSchema.Exists(System.String,System.String,System.String)">
             <summary>
             是否存在表或视图
             </summary>
-            <param name="type">"U"或"V"</param>
+            <param name="type">"U"或"V"或"P"</param>
             <param name="name">表名或视图名，允许database.tableName</param>
+        </member>
+        <member name="M:CYQ.Data.SQL.TableSchema.Remove(System.String,System.String,System.String)">
+            <summary>
+            移除表的缓存。
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.SQL.TableSchema.Add(System.String,System.String,System.String)">
+            <summary>
+            把表添加到缓存中。
+            </summary>
+            <param name="name"></param>
+            <param name="type"></param>
+            <param name="conn"></param>
+            <returns></returns>
         </member>
         <member name="M:CYQ.Data.SQL.TableSchema.GetTableDescription(System.String,System.String)">
             <summary>
@@ -4677,7 +4751,7 @@
             <summary>
             返回插入的字符串
             </summary>
-            <returns>结果如:insert into tableName(ID,Name,Value) values(@ID,@Name,@Value)</returns>
+            <returns>结果如:insert into tableName(id,Name,Value) values(@id,@Name,@Value)</returns>
         </member>
         <member name="M:CYQ.Data.SQL.SqlCreate.GetUpdateSql(System.Object)">
             <summary>
@@ -4702,7 +4776,7 @@
             获得批量导入的列名。
             </summary>
             <param name="mdc"></param>
-            <param name="keepID"></param>
+            <param name="keepid"></param>
             <param name="dalType"></param>
             <returns></returns>
         </member>
@@ -5131,6 +5205,16 @@
             解码替换数据转义符
             </summary>
         </member>
+        <member name="F:CYQ.Data.Tool.JsonHelper.Level">
+            <summary>
+            用于控制自循环的层级判断。
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Tool.JsonHelper.LoopCheckList">
+            <summary>
+            用于自循环检测列表。
+            </summary>
+        </member>
         <member name="M:CYQ.Data.Tool.JsonHelper.Fill(CYQ.Data.Table.MDataTable)">
             <summary>
             Fill obj and get json from  ToString() method
@@ -5427,11 +5511,6 @@
             <param name="flag">[0:转成标准值],[1:转成各数据库值]</param>
             <returns></returns>
         </member>
-        <member name="M:CYQ.Data.Tool.DBTool.GetMapTableName(System.String,System.String)">
-            <summary>
-            映射的表名
-            </summary>
-        </member>
         <member name="P:CYQ.Data.Tool.DBTool.ErrorMsg">
             <summary>
             获取异常的信息
@@ -5612,13 +5691,6 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:CYQ.Data.Tool.StaticTool.GetDbName(System.Object@)">
-            <summary>
-            获取约定枚举的数据库名称
-            </summary>
-            <param name="tableNamesEnum">表枚举或表名</param>
-            <returns></returns>
-        </member>
         <member name="M:CYQ.Data.Tool.StaticTool.ChangeType(System.Object,System.Type)">
             <summary>
             类型转换(精准强大)
@@ -5720,9 +5792,9 @@
             绑定下拉等列表,控件需要继承自：ListControl。
             </summary>
             <param name="control">DropDown/CheckBoxList/RadioButtonList等</param>
-            <param name="where">对表的数据进行过滤如:"ID>15 and Url='cyqdata.com'"</param>
-            <param name="text">绑定时显示的字段名[默认字段名取自控件的ID(去掉前三个字母前缀)]</param>
-            <param name="value">绑定时显示字段对应的值[默认值的字段名为:ID]</param>
+            <param name="where">对表的数据进行过滤如:"id>15 and Url='cyqdata.com'"</param>
+            <param name="text">绑定时显示的字段名[默认字段名取自控件的id(去掉前三个字母前缀)]</param>
+            <param name="value">绑定时显示字段对应的值[默认值的字段名为:id]</param>
         </member>
         <member name="M:CYQ.Data.UI.MActionUI.SetAutoPrefix(System.String,System.String[])">
             <summary>
@@ -5794,20 +5866,20 @@
             <summary>
             获取多语言节点值
             </summary>
-            <param name="lanID">Xml节点ID</param>
+            <param name="lanID">Xml节点id</param>
         </member>
         <member name="M:CYQ.Data.Xml.MutilLanguage.Get(System.Object,System.Int32)">
             <summary>
             获取多语言节点值
             </summary>
-            <param name="lanID">Xml节点ID</param>
+            <param name="lanID">Xml节点id</param>
             <param name="lanKeyID">LanguageKey对应的数字</param>
         </member>
         <member name="M:CYQ.Data.Xml.MutilLanguage.Get(System.Object,CYQ.Data.Xml.LanguageKey)">
             <summary>
             获取多语言节点值
             </summary>
-            <param name="lanID">Xml节点ID</param>
+            <param name="lanID">Xml节点id</param>
             <param name="lanEnum">获取的语言</param>
             <returns></returns>
         </member>
@@ -6345,7 +6417,7 @@
             <summary>
             移除子节点
             </summary>
-            <param name="id">节点的ID</param>
+            <param name="id">节点的id</param>
             <param name="start">从第几个子节点开始删除[索引从0开始]</param>
         </member>
         <member name="M:CYQ.Data.Xml.XHtmlAction.RemoveChild(System.Xml.XmlNode,System.Int32)">
@@ -6461,7 +6533,7 @@
             <summary>
             为节点设置值，通常在LoadData后使用。
             </summary>
-            <param name="id">节点的ID</param>
+            <param name="id">节点的id</param>
         </member>
         <member name="M:CYQ.Data.Xml.XHtmlAction.SetFor(System.String,CYQ.Data.Xml.SetType)">
             <summary>

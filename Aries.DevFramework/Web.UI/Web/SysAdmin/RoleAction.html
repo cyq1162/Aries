@@ -19,11 +19,11 @@
 </html>
 
 <script type="text/javascript">
-    var roleID = AR.Utility.queryString("id");
+    var roleid = AR.Utility.queryString("id");
     $(function () {
         $("#btn_save").click(function () {
             $.messager.progress({ title: "${prompt}" });
-            var postData = { RoleID: roleID };
+            var postData = { Roleid: roleid };
             if ($('#tree').tree('getRoot').checked) {
                 postData.all = 1;
             } else {
@@ -47,7 +47,7 @@
                     }
                 }
                 for (var k in actions) {
-                    var item = { MenuID: k, ActionIDs: actions[k].join(',') };
+                    var item = { Menuid: k, Actionids: actions[k].join(',') };
                     arr.push(item);
                 }
                 postData.data = JSON.stringify(arr);
@@ -62,19 +62,19 @@
         })
 
 
-        AR.Utility.Ajax.post("GetMenuAndAction", "Sys_Menu", { RoleID: roleID },
+        AR.Utility.Ajax.post("GetMenuAndAction", "Sys_Menu", { Roleid: roleid },
          function (data) {
              $("#tree").tree({
                  idField: "menuid",
                  textField: "menuname",
                  rootText: "${menu}${root}",
-                 rootID: undefined,
+                 rootid: undefined,
                  checkbox: true,
                  parentField: "parentmenuid",
                  iconCls: 'icon-mini-add',
                  data: data,
                  onLoadSuccess: function (data) {
-                     getActionIds();
+                     getActionids();
                  }
 
              });
@@ -83,18 +83,18 @@
 
     })
 
-    function getActionIds() {
-        AR.Utility.Ajax.post("GetMenuIDsandActionIds", "", { RoleID: roleID },
+    function getActionids() {
+        AR.Utility.Ajax.post("GetMenuidsandActionids", "", { Roleid: roleid },
          function (data) {
              for (var i in data) {
                  var node = $("#tree").tree("find", i);
                  if (node != null) {
                      var action = data[i].toLocaleLowerCase().split(',');
-                     var parentId = node.id;
+                     var parentid = node.id;
                      var childen = $("#tree").tree("getChildren", node.target);
                      for (var n = 0; n < action.length; n++) {
                          for (var j = 0; j < childen.length; j++) {
-                             if (childen[j].attributes.parentmenuid.toString().toLocaleLowerCase() == parentId.toString()) {
+                             if (childen[j].attributes.parentmenuid.toString().toLocaleLowerCase() == parentid.toString()) {
                                  if (childen[j].id.toString().toLocaleLowerCase() == action[n].toString())
                                      $("#tree").tree("check", childen[j].target)
                              }

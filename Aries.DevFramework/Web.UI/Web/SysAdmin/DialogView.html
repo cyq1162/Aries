@@ -21,8 +21,12 @@
         }
         var returnValue = { option: comboboxOption };
         var oName = AR.Utility.queryString("objName");
+        var isTree = AR.Utility.queryString("tree") || $input.attr("tree");
+        isTree = isTree == "true" || isTree == "1";
+
         if (oName) {
-            var dg = new AR.DataGrid("_" + oName);
+            var dg = new AR.DataGrid("_" + oName, oName.trim('_'), "dg", isTree);
+            dg.isEditor = false;
             dg.ToolBar.isHidden = true;
             dg.Search.BtnReset.isHidden = true;
             var multiple = $input.attr("multiple");//这个字段是JQ字段，特殊，赋值后会被变更为相同的文本
@@ -36,6 +40,15 @@
                 pageSize: 10,
                 //fit: false,
                 onLoadSuccess: function () {
+                    if (!title) {
+                        for (var i = 1; i < dg.Internal.headerData.length; i++) {
+                            if (!dg.Internal.headerData[i].hidden && dg.Internal.headerData[i].datatype.startWith("string"))
+                            {
+                                title = dg.Internal.headerData[i].field;
+                                break;
+                            }
+                        }
+                    }
                     title || (title = dg.Internal.headerData[1].field);
                     id || (id = (onlytext ? title : dg.Internal.primarykey));
                 },
@@ -57,6 +70,9 @@
                         opts.toolbar[0].handler();//自动触发确定按钮事件
                     }
                     else {
+                        if (dg.isTreeGrid) {
+                            rowIndex = rowIndex[dg.Internal.primarykey];
+                        }
                         dg.datagrid("checkRow", rowIndex);
                     }
                 },
@@ -64,13 +80,21 @@
                     onCheck();
                 },
                 onCheckAll: function (rows) {
-                    onCheck();
+                    if (isTree) {
+                        rows = treeRows(rows, []);
+                    }
+                    onCheck(rows);
                 },
                 onUncheckAll: function (rows) {
+                    // dg.datagrid("uncheckAll");
                     onCheck();
                 }
             }
+            options.queryParams = { "refUrl": parent.document.location.href };
+            if (isTree) {
+                options = $.extend(options, { cascadeCheck: false, onlyLeafCheck: true });
 
+            }
             try {
                 var op = $input.attr("options");
                 if (op) { op = eval("(" + op + ")"); }
@@ -85,24 +109,39 @@
             dg.bind();
         }
         else { alert("dialog ： 'this objName' can't be empty!"); }
-        function onCheck() {
-            var rows = dg.getChecked();
+        function onCheck(checkAllRows) {
+            var rows = checkAllRows || dg.getChecked();
             if (rows && rows.length > 0) {
                 comboboxOption.data = [];
+                var texts = [];
+                var values = [];
                 for (var i = 0; i < rows.length; i++) {
                     var d = {};
                     d.text = rows[i][title];
                     d.value = rows[i][id];
+                    texts.push(d.text);
+                    values.push(d.value);
                     comboboxOption.data.push(d);
                 }
-                returnValue.text = dg.getCheckIDs(title);
-                returnValue.value = dg.getCheckIDs(id);
+                returnValue.text = texts;// dg.getCheckids(title);
+                returnValue.value = values;// dg.getCheckids(id);
                 returnValue.data = rows;
                 parent.AR.Global.Dialog.returnValue = returnValue;
             }
             else {
                 parent.AR.Global.Dialog.returnValue = undefined;
             }
+        }
+        function treeRows(rows, newRows) {
+            if (rows && rows.length > 0) {
+                for (var i = 0; i < rows.length; i++) {
+                    newRows.push(rows[i]);
+                    if (rows[i]['children'] && rows[i]['children'].length > 0) {
+                        treeRows(rows[i]['children'], newRows);
+                    }
+                }
+            }
+            return newRows;
         }
     </script>
 </body>

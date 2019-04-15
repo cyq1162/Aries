@@ -84,7 +84,7 @@
                           idField: "menuid",
                           textField: "menuname",
                           rootText: "${root}",
-                          //rootID: undefined,
+                          //rootid: undefined,
                           parentField: "parentmenuid",
                           data: data,
                           onContextMenu: function (e, node) {
@@ -182,7 +182,7 @@
                     that.onClickCheckbox();
                 });
             },
-            //获取选中的权限ID
+            //获取选中的权限id
             onClickCheckbox: function () {
                 $("#actionids").val("");
                 var ids = [];
@@ -207,7 +207,7 @@
                 else {
                     var node = Menu.Tree.getSelected();;
                     if (node) {
-                        //帮隐藏表单菜单ID赋值
+                        //帮隐藏表单菜单id赋值
                         $("#parentmenuid").val(node.id);
                         AR.Global.DG.action = "Add";
                     }
@@ -217,7 +217,7 @@
                     $("#menuurl").val("/Web/SysAdmin/CustomView.html?objname=");
                     $('#sortorder').numberbox('setValue', '100');
                     $(':radio[name="isShow"]').eq(0).attr("checked", true);
-                    var defaultActionIDs = "";
+                    var defaultActionids = "";
                     for (var i = 0; i < this.actionData.length; i++) {
                         switch (this.actionData[i].actionrefname) {
                             case "add":
@@ -227,23 +227,23 @@
                             case "import":
                             case "export":
                             case "config":
-                                if (defaultActionIDs == "") { defaultActionIDs = this.actionData[i].actionid; }
+                                if (defaultActionids == "") { defaultActionids = this.actionData[i].actionid; }
                                 else
                                 {
-                                    defaultActionIDs = defaultActionIDs + "," + this.actionData[i].actionid;
+                                    defaultActionids = defaultActionids + "," + this.actionData[i].actionid;
                                 }
                                 break;
                         }
                     }
-                    that.setAction(defaultActionIDs);
+                    that.setAction(defaultActionids);
                 }
 
             },
             //设置权限选中
-            setAction: function (actionIDs) {
+            setAction: function (actionids) {
                 this.createCheckbox();//重新创建，等于重置状态
-                if (actionIDs != null && actionIDs != undefined) {
-                    var arr = actionIDs.toLocaleLowerCase().split(',');
+                if (actionids != null && actionids != undefined) {
+                    var arr = actionids.toLocaleLowerCase().split(',');
                     for (var i = 0; i < arr.length; i++) {
                         $("#permission :checkbox").each(function (k, dom) {
                             if (arr[i] == $(this).val()) {
@@ -252,7 +252,7 @@
                         });
                     }
                     //编辑页加载 设置选中之后帮隐藏表单赋值
-                    $("#actionids").val(actionIDs);
+                    $("#actionids").val(actionids);
                 }
             },
             regEvent: function () {

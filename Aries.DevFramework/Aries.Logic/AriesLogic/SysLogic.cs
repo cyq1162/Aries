@@ -34,7 +34,7 @@ namespace Aries.Logic
         {
             bool result = false;
             string pwd = Query<string>("Password");
-            string userID = Query<string>("UserID");
+            string userid = Query<string>("UserID");
             using (MAction action = new MAction(U_AriesEnum.Sys_User))
             {
                 action.BeginTransation();
@@ -42,20 +42,20 @@ namespace Aries.Logic
                 {
                     action.Set(Sys_User.Password, EncryptHelper.Encrypt(pwd));//加密
                 }
-                result = action.Update(userID, true);
+                result = action.Update(userid, true);
                 if (result)
                 {
                     action.ResetTable(U_AriesEnum.Sys_UserInfo);
-                    if (action.Exists(userID))
+                    if (action.Exists(userid))
                     {
                         if (action.Data.Count > 1)//有自定义列
                         {
-                            result = action.Update(userID, true);
+                            result = action.Update(userid, true);
                         }
                     }
                     else
                     {
-                        action.Set(Sys_UserInfo.UserInfoID, userID);
+                        action.Set(Sys_UserInfo.UserInfoID, userid);
                         action.AllowInsertID = true;
                         result = action.Insert(true);
                     }
@@ -88,10 +88,10 @@ namespace Aries.Logic
                     action.Set("Password", EncryptHelper.Encrypt(pwd));//加密
                     if (action.Insert(true, InsertOp.ID))
                     {
-                        string userID = action.Get<string>(Sys_User.UserID);
+                        string userid = action.Get<string>(Sys_User.UserID);
 
                         action.ResetTable(U_AriesEnum.Sys_UserInfo);
-                        action.Set(Sys_UserInfo.UserInfoID, userID);
+                        action.Set(Sys_UserInfo.UserInfoID, userid);
                         action.AllowInsertID = true;
                         result = action.Insert(true);
                         if (!result)
@@ -120,13 +120,13 @@ namespace Aries.Logic
             using (MAction action = new MAction(U_AriesEnum.Sys_User))
             {
                 action.BeginTransation();
-                result = action.Delete(GetID);
+                result = action.Delete(Getid);
                 if (result)
                 {
                     action.ResetTable(U_AriesEnum.Sys_UserInfo);
-                    if (action.Exists(GetID))
+                    if (action.Exists(Getid))
                     {
-                        result = action.Delete(GetID);
+                        result = action.Delete(Getid);
                     }
                 }
                 if (!result)
@@ -211,12 +211,12 @@ namespace Aries.Logic
             string id = Query<string>("id");
             using (MAction action = new MAction(U_AriesEnum.Sys_Menu))
             {
-                action.SetSelectColumns("MenuID", "ParentMenuID");
+                action.SetSelectColumns("Menuid", "ParentMenuid");
                 MDataTable dt = action.Select();
                 StringBuilder sb = new StringBuilder();
                 sb.Append("'" + id + "',");
-                GatherChildrenID(dt, id, sb, "ParentMenuID");
-                string where = "MenuID in (" + sb.ToString().TrimEnd(',') + ")";
+                GatherChildrenid(dt, id, sb, "ParentMenuid");
+                string where = "Menuid in (" + sb.ToString().TrimEnd(',') + ")";
                 result = action.Delete(where);
                 if (result)
                 {
@@ -234,10 +234,10 @@ namespace Aries.Logic
         public string ValidMenuHasChild()
         {
             bool result = false;
-            string MenuID = Query<string>("MenuID");
+            string Menuid = Query<string>("Menuid");
             using (MAction action = new MAction(U_AriesEnum.Sys_Menu))
             {
-                result = action.Exists("ParentMenuID='" + MenuID + "'");
+                result = action.Exists("ParentMenuid='" + Menuid + "'");
             }
             return JsonHelper.OutResult(result, "");
         }
@@ -245,12 +245,12 @@ namespace Aries.Logic
         /// 接收Post过来的Json权限
         /// </summary>
         /// <returns></returns>
-        private MDataTable GetTable(string roleID)
+        private MDataTable GetTable(string roleid)
         {
             MDataTable rowAction = new MDataTable(U_AriesEnum.Sys_RoleAction.ToString());
-            rowAction.Columns.Add("RoleID", SqlDbType.NVarChar);
-            rowAction.Columns.Add("MenuID", SqlDbType.NVarChar);
-            rowAction.Columns.Add("ActionID", SqlDbType.NVarChar);
+            rowAction.Columns.Add("Roleid", SqlDbType.NVarChar);
+            rowAction.Columns.Add("Menuid", SqlDbType.NVarChar);
+            rowAction.Columns.Add("Actionid", SqlDbType.NVarChar);
             MDataTable dt;
             if (Query<string>("all") == "1")
             {
@@ -269,18 +269,18 @@ namespace Aries.Logic
             }
             if (dt != null && dt.Rows.Count > 0)
             {
-                string menuID = string.Empty;
+                string menuid = string.Empty;
                 foreach (MDataRow row in dt.Rows)
                 {
-                    menuID = row.Get<string>("MenuID");
-                    if (!string.IsNullOrEmpty(menuID))
+                    menuid = row.Get<string>("Menuid");
+                    if (!string.IsNullOrEmpty(menuid))
                     {
-                        string[] ActionIDs = row.Get<string>("ActionIDs", "").Split(',');
-                        foreach (string actionID in ActionIDs)
+                        string[] Actionids = row.Get<string>("Actionids", "").Split(',');
+                        foreach (string actionid in Actionids)
                         {
-                            if (!string.IsNullOrEmpty(actionID))
+                            if (!string.IsNullOrEmpty(actionid))
                             {
-                                rowAction.NewRow(true).Set(0, roleID).Set(1, menuID).Set(2, actionID);
+                                rowAction.NewRow(true).Set(0, roleid).Set(1, menuid).Set(2, actionid);
                             }
                         }
                     }
@@ -295,9 +295,9 @@ namespace Aries.Logic
         public string AddPromission()
         {
 
-            string roleID = Query<string>("RoleID");
+            string roleid = Query<string>("Roleid");
             bool result = false;
-            MDataTable dt = GetTable(roleID);// MDataTable.CreateFrom(strArr, mdc);
+            MDataTable dt = GetTable(roleid);// MDataTable.CreateFrom(strArr, mdc);
 
             if (dt != null && dt.Rows.Count > 0)
             {
@@ -305,7 +305,7 @@ namespace Aries.Logic
                 using (MAction action = new MAction(U_AriesEnum.Sys_RoleAction))
                 {
                     action.BeginTransation();
-                    action.Delete("RoleID='" + roleID + "'");
+                    action.Delete("Roleid='" + roleid + "'");
                     dt.DynamicData = action;
                     dt.SetState(1);
                     result = dt.AcceptChanges(AcceptOp.Insert);
@@ -324,19 +324,19 @@ namespace Aries.Logic
             return SysMenu.SysMenuAction.ToJson(true, false, RowOp.IgnoreNull, true);
         }
 
-        public string GetMenuIDsandActionIds()
+        public string GetMenuidsandActionids()
         {
-            string roleID = Query<String>("RoleID");
+            string roleid = Query<String>("Roleid");
             MDataTable raDt = null;
             using (MAction action = new MAction(U_AriesEnum.Sys_RoleAction))
             {
-                raDt = action.Select("RoleID ='" + roleID + "'");
+                raDt = action.Select("Roleid ='" + roleid + "'");
             }
             Dictionary<string, string> dic = SysMenu.RoleActionToDic(raDt, true);
             return JsonHelper.ToJson(dic);
         }
         /// <summary>
-        /// 新增菜单(重写 返回个ID)
+        /// 新增菜单(重写 返回个id)
         /// </summary>
         /// <returns></returns>
         public string AddMenu()
@@ -348,13 +348,13 @@ namespace Aries.Logic
             {
                 if (Query<int>("MenuLevel") == 1)
                 {
-                    action.Set("ParentMenuID", DBNull.Value);
+                    action.Set("ParentMenuid", DBNull.Value);
                 }
                 result = action.Insert(true, InsertOp.ID);
                 if (result)
                 {
                     msg = action.Get<string>(action.Data.PrimaryCell.ColumnName);
-                    AddSuperAdminPromission(msg, action.Get<string>("ActionIDs"));
+                    AddSuperAdminPromission(msg, action.Get<string>("Actionids"));
                 }
                 else if (AppConfig.Debug.OpenDebugInfo)
                 {
@@ -363,28 +363,28 @@ namespace Aries.Logic
             }
             return JsonHelper.OutResult(result, result ? msg : "添加失败!");
         }
-        private void AddSuperAdminPromission(string menuID, string actionIDs)
+        private void AddSuperAdminPromission(string menuid, string actionids)
         {
-            if (!string.IsNullOrEmpty(actionIDs))
+            if (!string.IsNullOrEmpty(actionids))
             {
                 MDataTable dt = new MDataTable(U_AriesEnum.Sys_RoleAction.ToString());
-                dt.Columns.Add("RoleID");
-                dt.Columns.Add("MenuID");
-                dt.Columns.Add("ActionID");
-                foreach (string actionID in actionIDs.Split(','))
+                dt.Columns.Add("Roleid");
+                dt.Columns.Add("Menuid");
+                dt.Columns.Add("Actionid");
+                foreach (string actionid in actionids.Split(','))
                 {
-                    dt.NewRow(true).Set(0, UserAuth.SuperAdminRoleID)
-                        .Set(1, menuID).Set(2, actionID);
+                    dt.NewRow(true).Set(0, UserAuth.SuperAdminRoleid)
+                        .Set(1, menuid).Set(2, actionid);
                 }
                 dt.AcceptChanges(AcceptOp.Insert, CrossDb.GetConn(U_AriesEnum.Sys_RoleAction.ToString()));
             }
         }
 
-        private void GatherChildrenID(MDataTable dt, string parentID, StringBuilder sb, string parentName = "ParentID")
+        private void GatherChildrenid(MDataTable dt, string parentid, StringBuilder sb, string parentName = "Parentid")
         {
-            if (!string.IsNullOrEmpty(parentID))
+            if (!string.IsNullOrEmpty(parentid))
             {
-                MDataRowCollection rows = dt.FindAll(parentName + "='" + parentID + "'");
+                MDataRowCollection rows = dt.FindAll(parentName + "='" + parentid + "'");
                 if (rows != null)
                 {
                     string id = string.Empty;
@@ -392,7 +392,7 @@ namespace Aries.Logic
                     {
                         id = row.Get<string>(0);
                         sb.Append("'" + id + "',");
-                        GatherChildrenID(dt, id, sb, parentName);
+                        GatherChildrenid(dt, id, sb, parentName);
                     }
                 }
             }
@@ -401,7 +401,7 @@ namespace Aries.Logic
         /*
         public string GetExcelMapping()
         {
-            MDataRow row = ExcelConfig.GetExcelRow(Query<string>("ID"));
+            MDataRow row = ExcelConfig.GetExcelRow(Query<string>("id"));
             string objName = row.Get<string>(Config_Excel.ExcelName);
             string[] TableNames = row.Get<string>(Config_Excel.TableNames).Split(',');
             Dictionary<string, string> dic = new Dictionary<string, string>();
@@ -440,8 +440,8 @@ namespace Aries.Logic
         /// </summary>
         public void InitExcelColumn()
         {
-            string excelID = Query<string>("ExcelID");
-            MDataRow row = ExcelConfig.GetExcelRow(excelID);
+            string excelid = Query<string>("Excelid");
+            MDataRow row = ExcelConfig.GetExcelRow(excelid);
             if (row != null)
             {
                 string excelName = row.Get<string>(Config_Excel.ExcelName);
@@ -505,8 +505,8 @@ namespace Aries.Logic
                             foreach (MCellStruct st in table.Columns)
                             {
                                 action.Data.Clear();
-                                action.Set(Config_ExcelInfo.ExceInfoID, Guid.NewGuid());
-                                action.Set(Config_ExcelInfo.ExcelID, excelID);
+                                action.Set(Config_ExcelInfo.ExceInfoid, Guid.NewGuid());
+                                action.Set(Config_ExcelInfo.Excelid, excelid);
                                 action.Set(Config_ExcelInfo.ExcelName, st.ColumnName);
                                 action.Set(Config_ExcelInfo.IsForeignkey, false);
                                 action.Set(Config_ExcelInfo.IsRequired, false);
@@ -555,30 +555,30 @@ namespace Aries.Logic
         public string GetSQLCodeJson()
         {
             MDataTable dt = new MDataTable("SqlCodeTable");
-            dt.Columns.Add("ID,ParentID,FileName");
+            dt.Columns.Add("id,Parentid,FileName");
             SetSqlCodeTable(SqlCode.path, null, ref dt);
 
             return dt.ToJson(false, false, RowOp.None, true);
         }
-        private void SetSqlCodeTable(string path, string parentID, ref MDataTable dt)
+        private void SetSqlCodeTable(string path, string parentid, ref MDataTable dt)
         {
             char a = 'a';
-            int fileID = 0;
-            string pathID = parentID + "a";
+            int fileid = 0;
+            string pathid = parentid + "a";
             string[] files = Directory.GetFileSystemEntries(path);
             foreach (string filePath in files)
             {
                 string ext = Path.GetExtension(filePath);
                 if (string.IsNullOrEmpty(ext))//文件夹
                 {
-                    dt.NewRow(true).Set("ID", parentID + a).Set("ParentID", parentID).Set("FileName", Path.GetFileName(filePath));
-                    SetSqlCodeTable(filePath, parentID + a, ref dt);
+                    dt.NewRow(true).Set("id", parentid + a).Set("Parentid", parentid).Set("FileName", Path.GetFileName(filePath));
+                    SetSqlCodeTable(filePath, parentid + a, ref dt);
                     a = (char)((int)a + 1);
                 }
                 else if (ext == ".sql") // 文件
                 {
-                    fileID++;
-                    dt.NewRow(true).Set("ID", parentID + fileID).Set("ParentID", parentID).Set("FileName", Path.GetFileName(filePath));
+                    fileid++;
+                    dt.NewRow(true).Set("id", parentid + fileid).Set("Parentid", parentid).Set("FileName", Path.GetFileName(filePath));
                 }
             }
         }

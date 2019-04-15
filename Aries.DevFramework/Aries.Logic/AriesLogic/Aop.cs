@@ -73,7 +73,7 @@ namespace Aries.Logic
         {
             base.SetInit(this, "Sys_EditLog", AppConfig.DB.DefaultConn, AopOp.CloseAll);
         }
-        public int ID { get; set; }
+        public int id { get; set; }
         public string TableName { get; set; }
         public string KeyID { get; set; }
         public string Content { get; set; }

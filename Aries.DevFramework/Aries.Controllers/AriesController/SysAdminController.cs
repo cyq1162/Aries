@@ -68,7 +68,7 @@ namespace Aries.Controllers
                     base.Update();
                     if (TableName == "Config_KeyValue")
                     {
-                        if (KeyValueConfig.IsChangeLangConfig(GetID))
+                        if (KeyValueConfig.IsChangeLangConfig(Getid))
                         {
                             LangConst.InitKeyValue();//重新始始化多语言
                         }
@@ -96,7 +96,7 @@ namespace Aries.Controllers
             switch (ObjName)
             {
                 case "V_SYS_UserList"://重写是为了支持文本数据库
-                    return Select(GridConfig.SelectType.All).FindRow(GetID);
+                    return Select(GridConfig.SelectType.All).FindRow(Getid);
                 //if (AppConfig.DB.DefaultDalType == DalType.Txt)
                 //{
 
@@ -150,7 +150,7 @@ namespace Aries.Controllers
                 switch (ObjName)
                 {
                     case "Sys_Role":
-                        string w = "RoleID<>'" + UserAuth.SuperAdminRoleID + "'";
+                        string w = "Roleid<>'" + UserAuth.SuperAdminRoleid + "'";
                         if (string.IsNullOrEmpty(where))
                         {
                             where = w;
@@ -161,7 +161,7 @@ namespace Aries.Controllers
                         }
                         break;
                     case "V_SYS_UserList":
-                        w = "RoleIDs not like '%" + UserAuth.SuperAdminRoleID + "%'";
+                        w = "Roleids not like '%" + UserAuth.SuperAdminRoleid + "%'";
                         if (string.IsNullOrEmpty(where))
                         {
                             where = w;
@@ -251,9 +251,9 @@ namespace Aries.Controllers
         /// <summary>
         /// [RoleAction.html]
         /// </summary>
-        public void GetMenuIDsandActionIds()
+        public void GetMenuidsandActionids()
         {
-            jsonResult = sysLogic.GetMenuIDsandActionIds();
+            jsonResult = sysLogic.GetMenuidsandActionids();
         }
 
         /// <summary>

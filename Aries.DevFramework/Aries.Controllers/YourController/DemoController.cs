@@ -33,9 +33,9 @@ namespace Aries.Controllers
                     {
                         dt = action.Select();
                     }
-                    dt.JoinOnName = "ID";
-                    MDataTable joinDt = dt.Join("Demo_TestB", "ID");
-                    return joinDt.Select(PageIndex, PageSize, GetWhere() + GetOrderBy("ID"), GridConfig.GetSelectColumns(ObjName, st));
+                    dt.JoinOnName = "id";
+                    MDataTable joinDt = dt.Join("Demo_TestB", "id");
+                    return joinDt.Select(PageIndex, PageSize, GetWhere() + GetOrderBy("id"), GridConfig.GetSelectColumns(ObjName, st));
             }
             return base.Select(st);
         }

@@ -120,13 +120,13 @@ namespace Aries.Logic
             using (MAction action = new MAction(U_AriesEnum.Sys_User))
             {
                 action.BeginTransation();
-                result = action.Delete(Getid);
+                result = action.Delete(GetID);
                 if (result)
                 {
                     action.ResetTable(U_AriesEnum.Sys_UserInfo);
-                    if (action.Exists(Getid))
+                    if (action.Exists(GetID))
                     {
-                        result = action.Delete(Getid);
+                        result = action.Delete(GetID);
                     }
                 }
                 if (!result)

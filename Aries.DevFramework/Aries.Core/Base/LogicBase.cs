@@ -71,9 +71,9 @@ namespace Aries.Core
 
         #endregion
 
-        public string Getid
+        public string GetID
         {
-            get { return _IBase.Getid; }
+            get { return _IBase.GetID; }
         }
 
         public string ObjCode

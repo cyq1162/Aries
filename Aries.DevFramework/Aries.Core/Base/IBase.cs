@@ -4,7 +4,7 @@ namespace Aries.Core
     public interface IBase : ICommon
     {
         bool IsUseUISite { get; }
-        string Getid { get; }
+        string GetID { get; }
         string ObjCode { get; }
         object CrossObjName { get; }
         object CrossTableName { get; }

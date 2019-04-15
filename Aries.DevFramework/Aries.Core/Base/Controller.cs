@@ -284,7 +284,7 @@ namespace Aries.Core
             }
             else
             {
-                where = Getid;
+                where = GetID;
             }
             if (!string.IsNullOrEmpty(where))
             {
@@ -357,7 +357,7 @@ namespace Aries.Core
         /// 取消继续调用事件（可以在重载BeforeInvoke方法内使用）
         /// </summary>
         protected bool CancelInvoke = false;
-        public virtual string Getid
+        public virtual string GetID
         {
             get
             {
@@ -508,7 +508,7 @@ namespace Aries.Core
         {
             using (MAction action = new MAction(CrossObjName))
             {
-                string where = string.IsNullOrWhiteSpace(Getid) ? GetWhere() : Getid.ToString();
+                string where = string.IsNullOrWhiteSpace(GetID) ? GetWhere() : GetID.ToString();
                 if (action.Fill(where))
                 {
                     return action.Data;
@@ -577,7 +577,7 @@ namespace Aries.Core
         [ActionKey("Del,Delete")]
         public virtual void Delete()
         {
-            string ids = Getid;
+            string ids = GetID;
             string[] values = null;
             string where = string.Empty;
             string parentField = Query<string>("parentField");
@@ -1059,7 +1059,7 @@ namespace Aries.Core
             bool result = false;
             using (MAction action = new MAction(CrossObjName))
             {
-                string id = Getid;
+                string id = GetID;
                 string where = string.Format("{0}='{1}'", name, value);
                 if (name2 != "" && value2 != "")
                 {

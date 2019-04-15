@@ -68,7 +68,7 @@ namespace Aries.Controllers
                     base.Update();
                     if (TableName == "Config_KeyValue")
                     {
-                        if (KeyValueConfig.IsChangeLangConfig(Getid))
+                        if (KeyValueConfig.IsChangeLangConfig(GetID))
                         {
                             LangConst.InitKeyValue();//重新始始化多语言
                         }
@@ -96,7 +96,7 @@ namespace Aries.Controllers
             switch (ObjName)
             {
                 case "V_SYS_UserList"://重写是为了支持文本数据库
-                    return Select(GridConfig.SelectType.All).FindRow(Getid);
+                    return Select(GridConfig.SelectType.All).FindRow(GetID);
                 //if (AppConfig.DB.DefaultDalType == DalType.Txt)
                 //{
 

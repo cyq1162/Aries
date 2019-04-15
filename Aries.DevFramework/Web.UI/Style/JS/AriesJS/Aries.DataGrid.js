@@ -1368,7 +1368,7 @@
             }
             return this.datagrid("getChecked");
         };
-        this._Getids = function (type, key) {
+        this._GetIDs = function (type, key) {
             if (this.$target == null) {
                 return [];
             }
@@ -1397,11 +1397,11 @@
         }
         //获取列表的选中项，返回id数组
         this.getCheckids = function (key) {
-            return this._Getids("getChecked", key);
+            return this._GetIDs("getChecked", key);
         };
         //获取列表的选中项，返回id数组
         this.getSelectids = function (key) {
-            return this._Getids("getSelections", key);
+            return this._GetIDs("getSelections", key);
         };
         this.getSelected = function () {
             if (this.$target == null) {

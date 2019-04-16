@@ -83,8 +83,8 @@ namespace Aries.Core.Auth
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                     var row = dt.Rows[i];
-                    string menuid = row.Get<string>("Menuid");
-                    string actionids = row.Get<string>("Actionids");
+                    string menuid = row.Get<string>("MenuID");
+                    string actionids = row.Get<string>("ActionIDs");
                     if (!string.IsNullOrEmpty(actionids))
                     {
                         string[] ids = actionids.Split(',');
@@ -92,14 +92,14 @@ namespace Aries.Core.Auth
 
                         foreach (string id in ids)
                         {
-                            var aRow = action.FindRow("Actionid='" + id + "'");
+                            var aRow = action.FindRow("ActionID='" + id + "'");
                             if (aRow != null)
                             {
                                 var dr = dt.NewRow(true);
-                                dr.Set("Menuid", id);
-                                dr.Set("ParentMenuid", menuid);
+                                dr.Set("MenuID", id);
+                                dr.Set("ParentMenuID", menuid);
                                 dr.Set("MenuName", aRow.Get<string>("ActionName"));
-                                dr.Set("Actionids", "");
+                                dr.Set("ActionIDs", "");
                                 dr.Set("menuIcon", "icon-save");
                                 // dt.Rows.Add(dr);
                             }
@@ -123,14 +123,14 @@ namespace Aries.Core.Auth
 
         public static MDataTable GetUserMenu(bool onlyid)
         {
-            string roleids = UserAuth.Roleids;
+            string roleids = UserAuth.RoleIDs;
             if (!string.IsNullOrEmpty(roleids))
             {
-                roleids = "Roleid in ('" + roleids.Replace(",", "','") + "')";
+                roleids = "RoleID in ('" + roleids.Replace(",", "','") + "')";
                 MDataTable dt;
                 using (MAction action = new MAction(U_AriesEnum.Sys_RoleAction))
                 {
-                    action.SetSelectColumns("Menuid", "Actionid");
+                    action.SetSelectColumns("MenuID", "ActionID");
                     dt = action.Select(roleids);
                 }
                 if (dt.Rows.Count > 0)
@@ -145,7 +145,7 @@ namespace Aries.Core.Auth
                     for (int i = 0; i < menuDt.Rows.Count; i++)
                     {
                         MDataRow row = menuDt.Rows[i];
-                        string menuid = row.Get<string>("Menuid");
+                        string menuid = row.Get<string>("MenuID");
                         if (!dic.ContainsKey(menuid))
                         {
                             if (!HasChild(menuid, MenuTable, dic))
@@ -158,7 +158,7 @@ namespace Aries.Core.Auth
                         {
                             if (onlyid)
                             {
-                                row.Set("Actionids", dic[menuid]);
+                                row.Set("ActionIDs", dic[menuid]);
                             }
                             else
                             {
@@ -192,7 +192,7 @@ namespace Aries.Core.Auth
                 string mid = "";
                 foreach (MDataRow row in dt.Rows)
                 {
-                    string menuid = row.Get<string>(Sys_RoleAction.Menuid);
+                    string menuid = row.Get<string>(Sys_RoleAction.MenuID);
                     if (menuid != mid)
                     {
                         mid = menuid;
@@ -200,9 +200,9 @@ namespace Aries.Core.Auth
                     }
                     if (menuRow != null)
                     {
-                        string actionid = row.Get<string>(Sys_RoleAction.Actionid);
-                        MDataRow aRow = actions.FindRow(Sys_Action.Actionid + "='" + actionid + "'");
-                        if (aRow != null && aRow.Get<bool>(Sys_Action.IsEnabled, true) && menuRow.Get<string>(Sys_Menu.Actionids).IndexOf(actionid) > -1)
+                        string actionid = row.Get<string>(Sys_RoleAction.ActionID);
+                        MDataRow aRow = actions.FindRow(Sys_Action.ActionID + "='" + actionid + "'");
+                        if (aRow != null && aRow.Get<bool>(Sys_Action.IsEnabled, true) && menuRow.Get<string>(Sys_Menu.ActionIDs).IndexOf(actionid) > -1)
                         {
                             if (dic.ContainsKey(menuid))
                             {
@@ -227,13 +227,13 @@ namespace Aries.Core.Auth
         /// <returns></returns>
         private static bool HasChild(string menuid, MDataTable menuDt, Dictionary<string, string> dic)
         {
-            MDataRowCollection childs = menuDt.FindAll("ParentMenuid='" + menuid + "'");
+            MDataRowCollection childs = menuDt.FindAll("ParentMenuID='" + menuid + "'");
             if (childs != null && childs.Count > 0)
             {
                 bool result = false;
                 foreach (MDataRow row in childs)
                 {
-                    menuid = row.Get<string>("Menuid");
+                    menuid = row.Get<string>("MenuID");
                     result = dic.ContainsKey(menuid);
                     if (!result)
                     {

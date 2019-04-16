@@ -70,7 +70,7 @@ namespace Aries.Core.Auth
                             //action.SetPara("UserName", userName, System.Data.DbType.String);
                             action.Update(where);//更新信息。
                             //获取角色名称
-                            string roleids = action.Get<string>(Sys_User.Roleids);
+                            string roleids = action.Get<string>(Sys_User.RoleIDs);
                             token = EncryptHelper.Encrypt(DateTime.Now.Day + "," + userid + "," + userName + "," + fullName + "," + roleids);
                         }
                         else
@@ -308,7 +308,7 @@ namespace Aries.Core.Auth
         /// <summary>
         /// 用户的角色ids
         /// </summary>
-        public static string Roleids
+        public static string RoleIDs
         {
             get
             {
@@ -322,11 +322,11 @@ namespace Aries.Core.Auth
         {
             get
             {
-                if (string.IsNullOrEmpty(AdminRoleid))
+                if (string.IsNullOrEmpty(AdminRoleID))
                 {
                     return false;
                 }
-                return Roleids.Contains(AdminRoleid);
+                return RoleIDs.Contains(AdminRoleID);
             }
         }
         /// <summary>
@@ -336,11 +336,11 @@ namespace Aries.Core.Auth
         {
             get
             {
-                if (string.IsNullOrEmpty(SuperAdminRoleid))
+                if (string.IsNullOrEmpty(SuperAdminRoleID))
                 {
                     return false;
                 }
-                return Roleids.Contains(SuperAdminRoleid);
+                return RoleIDs.Contains(SuperAdminRoleID);
             }
         }
 
@@ -426,42 +426,42 @@ namespace Aries.Core.Auth
 
     public static partial class UserAuth
     {
-        private static string _AdminRoleid;
-        public static string AdminRoleid
+        private static string _AdminRoleID;
+        public static string AdminRoleID
         {
             get
             {
-                if (string.IsNullOrEmpty(_AdminRoleid))
+                if (string.IsNullOrEmpty(_AdminRoleID))
                 {
                     using (MAction action = new MAction(U_AriesEnum.Sys_Role))
                     {
                         string where = string.Format("{0} in ('Admin','普通管理员')", Sys_Role.RoleName);
                         if (action.Fill(where))
                         {
-                            _AdminRoleid = action.Get<string>(Sys_Role.Roleid);
+                            _AdminRoleID = action.Get<string>(Sys_Role.RoleID);
                         }
                     }
                 }
-                return _AdminRoleid;
+                return _AdminRoleID;
             }
         }
-        private static string _SuperAdminRoleid;
-        public static string SuperAdminRoleid
+        private static string _SuperAdminRoleID;
+        public static string SuperAdminRoleID
         {
             get
             {
-                if (string.IsNullOrEmpty(_SuperAdminRoleid))
+                if (string.IsNullOrEmpty(_SuperAdminRoleID))
                 {
                     using (MAction action = new MAction(U_AriesEnum.Sys_Role))
                     {
                         string where = string.Format("{0} in ('SuperAdmin','超级管理员')", Sys_Role.RoleName);
                         if (action.Fill(where))
                         {
-                            _SuperAdminRoleid = action.Get<string>(Sys_Role.Roleid);
+                            _SuperAdminRoleID = action.Get<string>(Sys_Role.RoleID);
                         }
                     }
                 }
-                return _SuperAdminRoleid;
+                return _SuperAdminRoleID;
             }
         }
     }

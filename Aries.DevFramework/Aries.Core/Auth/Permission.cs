@@ -75,10 +75,10 @@ namespace Aries.Core.Auth
         public void Set(string objName, string tableName)
         {
             if (string.IsNullOrEmpty(objName)) { return; }
-            if (midTableNameList.ContainsKey(Menuid))
+            if (midTableNameList.ContainsKey(MenuID))
             {
                 objName = objName.Trim('_', ' ');
-                string value = midTableNameList[Menuid];
+                string value = midTableNameList[MenuID];
                 if (value.IndexOf(objName) == -1)
                 {
                     value += "," + objName;
@@ -87,7 +87,7 @@ namespace Aries.Core.Auth
                 {
                     value += "," + tableName;
                 }
-                midTableNameList[Menuid] = value;
+                midTableNameList[MenuID] = value;
             }
             else
             {
@@ -96,14 +96,14 @@ namespace Aries.Core.Auth
                 {
                     value += "," + tableName;
                 }
-                midTableNameList.Add(Menuid, value);
+                midTableNameList.Add(MenuID, value);
             }
         }
         public bool Exists(string objName)
         {
-            if (!string.IsNullOrEmpty(objName) && midTableNameList.ContainsKey(Menuid))
+            if (!string.IsNullOrEmpty(objName) && midTableNameList.ContainsKey(MenuID))
             {
-                return midTableNameList[Menuid].IndexOf(objName.Trim('_', ' ')) > -1;
+                return midTableNameList[MenuID].IndexOf(objName.Trim('_', ' ')) > -1;
             }
             return false;
         }
@@ -118,7 +118,7 @@ namespace Aries.Core.Auth
         /// <summary>
         /// 菜单id（可能是上级菜单id，不一定针对当前请求页面)
         /// </summary>
-        public string Menuid
+        public string MenuID
         {
             get
             {
@@ -129,23 +129,23 @@ namespace Aries.Core.Auth
                 return _menuid ?? string.Empty;
             }
         }
-        private string _UrlMenuid;
+        private string _UrlMenuID;
         /// <summary>
         /// 针对Url当前请求获取的菜单id
         /// </summary>
-        public string UrlMenuid
+        public string UrlMenuID
         {
             get
             {
-                if (string.IsNullOrEmpty(_UrlMenuid))
+                if (string.IsNullOrEmpty(_UrlMenuID))
                 {
                     MDataRow row = GetMenu(ReuqestUri);
                     if (row != null)
                     {
-                        _UrlMenuid = row.Get<string>("Menuid");
+                        _UrlMenuID = row.Get<string>("MenuID");
                     }
                 }
-                return _UrlMenuid ?? string.Empty;
+                return _UrlMenuID ?? string.Empty;
             }
         }
         private Uri ReuqestUri
@@ -249,7 +249,7 @@ namespace Aries.Core.Auth
                     {
                         mid = parentidList[uri.LocalPath];//如果已经存在，则取存在过的。
                     }
-                    menu = UserMenu.FindRow("Menuid='" + mid + "'");
+                    menu = UserMenu.FindRow("MenuID='" + mid + "'");
                     if (menu != null && !isContain)
                     {
                         switch (Path.GetFileNameWithoutExtension(HttpContext.Current.Request.UrlReferrer.LocalPath).ToLower())
@@ -268,7 +268,7 @@ namespace Aries.Core.Auth
             if (menu != null)
             {
                 CacheManage.LocalInstance.Set(key, menu, 0.5);//存档30秒。
-                _menuid = menu.Get<string>("Menuid");
+                _menuid = menu.Get<string>("MenuID");
                 MenuName = menu.Get<string>("MenuName");
             }
             return menu != null;
@@ -278,7 +278,7 @@ namespace Aries.Core.Auth
         /// </summary>
         public bool HasMenu()
         {
-            return HasMenu(Menuid);
+            return HasMenu(MenuID);
         }
         /// <summary>
         /// 是否拥有菜单的权限
@@ -294,7 +294,7 @@ namespace Aries.Core.Auth
             //#endif
             if (!string.IsNullOrEmpty(menuid) && menuid.IndexOfAny(new char[] { ' ', '%', ',' }) == -1)
             {
-                MDataRow menu = UserMenu.FindRow("Menuid='" + menuid + "'");
+                MDataRow menu = UserMenu.FindRow("MenuID='" + menuid + "'");
                 //获取当前请求的Url
                 if (menu != null)
                 {
@@ -311,7 +311,7 @@ namespace Aries.Core.Auth
         /// </summary>
         public bool HasFunc(string key)
         {
-            return HasFunc(key, Menuid);
+            return HasFunc(key, MenuID);
         }
         public bool HasFunc(string key, string menuid)
         {
@@ -336,7 +336,7 @@ namespace Aries.Core.Auth
         /// <returns></returns>
         public string GetFuncKeys()
         {
-            return GetFuncKeys(Menuid);
+            return GetFuncKeys(MenuID);
         }
         /// <summary>
         /// 获取指定菜单下的FuncKeys
@@ -346,7 +346,7 @@ namespace Aries.Core.Auth
         {
             if (!string.IsNullOrEmpty(menuid) && menuid.IndexOfAny(new char[] { ' ', '%', ',' }) == -1)
             {
-                MDataRow row = UserMenu.FindRow("Menuid='" + menuid + "'");
+                MDataRow row = UserMenu.FindRow("MenuID='" + menuid + "'");
                 if (row != null)
                 {
                     return row.Get<string>("ActionRefNames", "").ToLower();

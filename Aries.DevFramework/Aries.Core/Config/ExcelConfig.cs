@@ -26,7 +26,7 @@ namespace Aries.Core.Config
             using (MAction action = new MAction(U_AriesEnum.Config_Excel))
             {
                 bool isid = idOrExcelName.Length >= 36 && idOrExcelName.Split('-').Length >= 3;
-                string where = (isid ? Config_Excel.Excelid : Config_Excel.ExcelName).ToString() + "='{0}'";
+                string where = (isid ? Config_Excel.ExcelID : Config_Excel.ExcelName).ToString() + "='{0}'";
                 if (action.Fill(string.Format(where, idOrExcelName)))
                 {
                     return action.Data;
@@ -43,7 +43,7 @@ namespace Aries.Core.Config
         {
             using (MAction action = new MAction(U_AriesEnum.Config_ExcelInfo))
             {
-                return action.Select(Config_Excel.Excelid + "='" + excelid + "'");
+                return action.Select(Config_Excel.ExcelID + "='" + excelid + "'");
             }
         }
 
@@ -243,7 +243,7 @@ namespace Aries.Core.Config
             bool result = true;
             //获取相关配置
             string[] tables = excelRow.Get<string>(Config_Excel.TableNames).Split(',');
-            MDataTable configTable = GetExcelInfo(excelRow.Get<string>(Config_Excel.Excelid));
+            MDataTable configTable = GetExcelInfo(excelRow.Get<string>(Config_Excel.ExcelID));
 
             Dictionary<string, string> rowPrimaryValue = new Dictionary<string, string>();//存档每个表每行的主键值。
             Dictionary<string, string> wherePrimaryValue = new Dictionary<string, string>();//存档where条件对应的主键值。

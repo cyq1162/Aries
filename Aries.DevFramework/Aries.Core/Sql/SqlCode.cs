@@ -231,9 +231,9 @@ namespace Aries.Core.Sql
             {
                 sql = Regex.Replace(sql, "@FullName", UserAuth.FullName, RegexOptions.IgnoreCase);
             }
-            if (sql.IndexOf("@SuperAdminRoleid", StringComparison.OrdinalIgnoreCase) > -1)
+            if (sql.IndexOf("@SuperAdminRoleID", StringComparison.OrdinalIgnoreCase) > -1)
             {
-                sql = Regex.Replace(sql, "@SuperAdminRoleid", (UserAuth.IsSuperAdmin ? UserAuth.SuperAdminRoleid : Guid.Empty.ToString()), RegexOptions.IgnoreCase);
+                sql = Regex.Replace(sql, "@SuperAdminRoleID", (UserAuth.IsSuperAdmin ? UserAuth.SuperAdminRoleID : Guid.Empty.ToString()), RegexOptions.IgnoreCase);
             }
             string key = null;
             //自动配置其它属性

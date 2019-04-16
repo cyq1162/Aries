@@ -899,7 +899,7 @@ namespace Aries.Core
                 actionKeys = "," + actionKeys.ToLower() + ",";
             }
 
-            menuid = p.UrlMenuid;
+            menuid = p.UrlMenuID;
             JsonHelper js = new JsonHelper(false, false);
             js.Add("ui", ui);
             js.Add("actionKeys", actionKeys);
@@ -922,7 +922,7 @@ namespace Aries.Core
             if (dt == null || dt.Rows.Count == 0)
             {
                 dt = GridConfig.Create(ObjName, ObjCode, dt.GetSchema(false));
-                if (p.UrlMenuid != string.Empty && dt.Rows.Count > 0)//仅处理配置了菜单的数据。
+                if (p.UrlMenuID != string.Empty && dt.Rows.Count > 0)//仅处理配置了菜单的数据。
                 {
                     //顺带处理视图语句与菜单名称的绑定
                     KeyValueConfig.SetTableDescription(ObjName, p.MenuName);

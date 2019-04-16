@@ -150,7 +150,7 @@ namespace Aries.Controllers
                 switch (ObjName)
                 {
                     case "Sys_Role":
-                        string w = "Roleid<>'" + UserAuth.SuperAdminRoleid + "'";
+                        string w = "RoleID<>'" + UserAuth.SuperAdminRoleID + "'";
                         if (string.IsNullOrEmpty(where))
                         {
                             where = w;
@@ -161,7 +161,7 @@ namespace Aries.Controllers
                         }
                         break;
                     case "V_SYS_UserList":
-                        w = "Roleids not like '%" + UserAuth.SuperAdminRoleid + "%'";
+                        w = "RoleIDs not like '%" + UserAuth.SuperAdminRoleID + "%'";
                         if (string.IsNullOrEmpty(where))
                         {
                             where = w;
@@ -251,9 +251,9 @@ namespace Aries.Controllers
         /// <summary>
         /// [RoleAction.html]
         /// </summary>
-        public void GetMenuidsandActionids()
+        public void GetMenuIDsandActionIDs()
         {
-            jsonResult = sysLogic.GetMenuidsandActionids();
+            jsonResult = sysLogic.GetMenuIDsandActionIDs();
         }
 
         /// <summary>

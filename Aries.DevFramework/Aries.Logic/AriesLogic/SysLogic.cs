@@ -211,12 +211,12 @@ namespace Aries.Logic
             string id = Query<string>("id");
             using (MAction action = new MAction(U_AriesEnum.Sys_Menu))
             {
-                action.SetSelectColumns("Menuid", "ParentMenuid");
+                action.SetSelectColumns("MenuID", "ParentMenuID");
                 MDataTable dt = action.Select();
                 StringBuilder sb = new StringBuilder();
                 sb.Append("'" + id + "',");
-                GatherChildrenid(dt, id, sb, "ParentMenuid");
-                string where = "Menuid in (" + sb.ToString().TrimEnd(',') + ")";
+                GatherChildrenid(dt, id, sb, "ParentMenuID");
+                string where = "MenuID in (" + sb.ToString().TrimEnd(',') + ")";
                 result = action.Delete(where);
                 if (result)
                 {
@@ -234,10 +234,10 @@ namespace Aries.Logic
         public string ValidMenuHasChild()
         {
             bool result = false;
-            string Menuid = Query<string>("Menuid");
+            string MenuID = Query<string>("MenuID");
             using (MAction action = new MAction(U_AriesEnum.Sys_Menu))
             {
-                result = action.Exists("ParentMenuid='" + Menuid + "'");
+                result = action.Exists("ParentMenuID='" + MenuID + "'");
             }
             return JsonHelper.OutResult(result, "");
         }
@@ -248,9 +248,9 @@ namespace Aries.Logic
         private MDataTable GetTable(string roleid)
         {
             MDataTable rowAction = new MDataTable(U_AriesEnum.Sys_RoleAction.ToString());
-            rowAction.Columns.Add("Roleid", SqlDbType.NVarChar);
-            rowAction.Columns.Add("Menuid", SqlDbType.NVarChar);
-            rowAction.Columns.Add("Actionid", SqlDbType.NVarChar);
+            rowAction.Columns.Add("RoleID", SqlDbType.NVarChar);
+            rowAction.Columns.Add("MenuID", SqlDbType.NVarChar);
+            rowAction.Columns.Add("ActionID", SqlDbType.NVarChar);
             MDataTable dt;
             if (Query<string>("all") == "1")
             {
@@ -272,11 +272,11 @@ namespace Aries.Logic
                 string menuid = string.Empty;
                 foreach (MDataRow row in dt.Rows)
                 {
-                    menuid = row.Get<string>("Menuid");
+                    menuid = row.Get<string>("MenuID");
                     if (!string.IsNullOrEmpty(menuid))
                     {
-                        string[] Actionids = row.Get<string>("Actionids", "").Split(',');
-                        foreach (string actionid in Actionids)
+                        string[] ActionIDs = row.Get<string>("ActionIDs", "").Split(',');
+                        foreach (string actionid in ActionIDs)
                         {
                             if (!string.IsNullOrEmpty(actionid))
                             {
@@ -295,7 +295,7 @@ namespace Aries.Logic
         public string AddPromission()
         {
 
-            string roleid = Query<string>("Roleid");
+            string roleid = Query<string>("RoleID");
             bool result = false;
             MDataTable dt = GetTable(roleid);// MDataTable.CreateFrom(strArr, mdc);
 
@@ -305,7 +305,7 @@ namespace Aries.Logic
                 using (MAction action = new MAction(U_AriesEnum.Sys_RoleAction))
                 {
                     action.BeginTransation();
-                    action.Delete("Roleid='" + roleid + "'");
+                    action.Delete("RoleID='" + roleid + "'");
                     dt.DynamicData = action;
                     dt.SetState(1);
                     result = dt.AcceptChanges(AcceptOp.Insert);
@@ -324,13 +324,13 @@ namespace Aries.Logic
             return SysMenu.SysMenuAction.ToJson(true, false, RowOp.IgnoreNull, true);
         }
 
-        public string GetMenuidsandActionids()
+        public string GetMenuIDsandActionIDs()
         {
-            string roleid = Query<String>("Roleid");
+            string roleid = Query<String>("RoleID");
             MDataTable raDt = null;
             using (MAction action = new MAction(U_AriesEnum.Sys_RoleAction))
             {
-                raDt = action.Select("Roleid ='" + roleid + "'");
+                raDt = action.Select("RoleID ='" + roleid + "'");
             }
             Dictionary<string, string> dic = SysMenu.RoleActionToDic(raDt, true);
             return JsonHelper.ToJson(dic);
@@ -348,13 +348,13 @@ namespace Aries.Logic
             {
                 if (Query<int>("MenuLevel") == 1)
                 {
-                    action.Set("ParentMenuid", DBNull.Value);
+                    action.Set("ParentMenuID", DBNull.Value);
                 }
                 result = action.Insert(true, InsertOp.ID);
                 if (result)
                 {
                     msg = action.Get<string>(action.Data.PrimaryCell.ColumnName);
-                    AddSuperAdminPromission(msg, action.Get<string>("Actionids"));
+                    AddSuperAdminPromission(msg, action.Get<string>("ActionIDs"));
                 }
                 else if (AppConfig.Debug.OpenDebugInfo)
                 {
@@ -368,12 +368,12 @@ namespace Aries.Logic
             if (!string.IsNullOrEmpty(actionids))
             {
                 MDataTable dt = new MDataTable(U_AriesEnum.Sys_RoleAction.ToString());
-                dt.Columns.Add("Roleid");
-                dt.Columns.Add("Menuid");
-                dt.Columns.Add("Actionid");
+                dt.Columns.Add("RoleID");
+                dt.Columns.Add("MenuID");
+                dt.Columns.Add("ActionID");
                 foreach (string actionid in actionids.Split(','))
                 {
-                    dt.NewRow(true).Set(0, UserAuth.SuperAdminRoleid)
+                    dt.NewRow(true).Set(0, UserAuth.SuperAdminRoleID)
                         .Set(1, menuid).Set(2, actionid);
                 }
                 dt.AcceptChanges(AcceptOp.Insert, CrossDb.GetConn(U_AriesEnum.Sys_RoleAction.ToString()));
@@ -440,7 +440,7 @@ namespace Aries.Logic
         /// </summary>
         public void InitExcelColumn()
         {
-            string excelid = Query<string>("Excelid");
+            string excelid = Query<string>("ExcelID");
             MDataRow row = ExcelConfig.GetExcelRow(excelid);
             if (row != null)
             {
@@ -505,8 +505,8 @@ namespace Aries.Logic
                             foreach (MCellStruct st in table.Columns)
                             {
                                 action.Data.Clear();
-                                action.Set(Config_ExcelInfo.ExceInfoid, Guid.NewGuid());
-                                action.Set(Config_ExcelInfo.Excelid, excelid);
+                                action.Set(Config_ExcelInfo.ExceInfoID, Guid.NewGuid());
+                                action.Set(Config_ExcelInfo.ExcelID, excelid);
                                 action.Set(Config_ExcelInfo.ExcelName, st.ColumnName);
                                 action.Set(Config_ExcelInfo.IsForeignkey, false);
                                 action.Set(Config_ExcelInfo.IsRequired, false);

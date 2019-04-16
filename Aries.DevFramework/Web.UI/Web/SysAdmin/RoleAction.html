@@ -23,7 +23,7 @@
     $(function () {
         $("#btn_save").click(function () {
             $.messager.progress({ title: "${prompt}" });
-            var postData = { Roleid: roleid };
+            var postData = { RoleID: roleid };
             if ($('#tree').tree('getRoot').checked) {
                 postData.all = 1;
             } else {
@@ -47,7 +47,7 @@
                     }
                 }
                 for (var k in actions) {
-                    var item = { Menuid: k, Actionids: actions[k].join(',') };
+                    var item = { MenuID: k, ActionIDs: actions[k].join(',') };
                     arr.push(item);
                 }
                 postData.data = JSON.stringify(arr);
@@ -62,7 +62,7 @@
         })
 
 
-        AR.Utility.Ajax.post("GetMenuAndAction", "Sys_Menu", { Roleid: roleid },
+        AR.Utility.Ajax.post("GetMenuAndAction", "Sys_Menu", { RoleID: roleid },
          function (data) {
              $("#tree").tree({
                  idField: "menuid",
@@ -74,7 +74,7 @@
                  iconCls: 'icon-mini-add',
                  data: data,
                  onLoadSuccess: function (data) {
-                     getActionids();
+                     getActionIDs();
                  }
 
              });
@@ -83,8 +83,8 @@
 
     })
 
-    function getActionids() {
-        AR.Utility.Ajax.post("GetMenuidsandActionids", "", { Roleid: roleid },
+    function getActionIDs() {
+        AR.Utility.Ajax.post("GetMenuIDsandActionIDs", "", { RoleID: roleid },
          function (data) {
              for (var i in data) {
                  var node = $("#tree").tree("find", i);

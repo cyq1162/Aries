@@ -217,7 +217,7 @@
                     $("#menuurl").val("/Web/SysAdmin/CustomView.html?objname=");
                     $('#sortorder').numberbox('setValue', '100');
                     $(':radio[name="isShow"]').eq(0).attr("checked", true);
-                    var defaultActionids = "";
+                    var defaultActionIDs = "";
                     for (var i = 0; i < this.actionData.length; i++) {
                         switch (this.actionData[i].actionrefname) {
                             case "add":
@@ -227,15 +227,15 @@
                             case "import":
                             case "export":
                             case "config":
-                                if (defaultActionids == "") { defaultActionids = this.actionData[i].actionid; }
+                                if (defaultActionIDs == "") { defaultActionIDs = this.actionData[i].actionid; }
                                 else
                                 {
-                                    defaultActionids = defaultActionids + "," + this.actionData[i].actionid;
+                                    defaultActionIDs = defaultActionIDs + "," + this.actionData[i].actionid;
                                 }
                                 break;
                         }
                     }
-                    that.setAction(defaultActionids);
+                    that.setAction(defaultActionIDs);
                 }
 
             },

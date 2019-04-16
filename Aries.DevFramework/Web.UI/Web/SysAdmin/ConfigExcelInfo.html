@@ -17,7 +17,7 @@
 </body>
 </html>
 <script type="text/javascript">
-    var excelid = AR.Utility.queryString('id');
+    var excelID = AR.Utility.queryString('id');
     var tableNames = AR.Utility.queryString('tableNames');
     var mid = AR.Utility.getSysmid();
     AR.Combobox.setParas({ "C_SYS_Table": tableNames, "C_SYS_Column": tableNames })
@@ -25,13 +25,13 @@
     dg.options = {
         sortName: "tablename", sortOrder: "asc",
         onBeforeLoad: function (param) {
-            param.Excelid = excelid;
+            param.ExcelID = excelID;
             param.sys_mid = mid;
         },
-        defaultWhere: [{ name: 'Excelid', pattern: 'equal', value: excelid }]
+        defaultWhere: [{ name: 'ExcelID', pattern: 'equal', value: excelID }]
     }
     dg.defaultInsertData = {
-        excelid: excelid, createtime: function () {
+        excelID: excelID, createtime: function () {
             return new Date().format("yyyy-MM-dd");
         }()
     };

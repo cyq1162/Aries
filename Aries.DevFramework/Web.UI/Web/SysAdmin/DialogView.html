@@ -20,12 +20,12 @@
             editable: false
         }
         var returnValue = { option: comboboxOption };
-        var oName = AR.Utility.queryString("objName");
+        var oName = AR.Utility.queryString("objName").trim('_');
         var isTree = AR.Utility.queryString("tree") || $input.attr("tree");
         isTree = isTree == "true" || isTree == "1";
 
         if (oName) {
-            var dg = new AR.DataGrid("_" + oName, oName.trim('_'), "dg", isTree);
+            var dg = new AR.DataGrid("_" + oName, oName, "dg", isTree);
             dg.isEditor = false;
             dg.ToolBar.isHidden = true;
             dg.Search.BtnReset.isHidden = true;
@@ -42,8 +42,7 @@
                 onLoadSuccess: function () {
                     if (!title) {
                         for (var i = 1; i < dg.Internal.headerData.length; i++) {
-                            if (!dg.Internal.headerData[i].hidden && dg.Internal.headerData[i].datatype.startWith("string"))
-                            {
+                            if (!dg.Internal.headerData[i].hidden && dg.Internal.headerData[i].datatype.startWith("string")) {
                                 title = dg.Internal.headerData[i].field;
                                 break;
                             }

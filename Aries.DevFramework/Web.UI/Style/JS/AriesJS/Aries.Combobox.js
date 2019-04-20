@@ -428,7 +428,7 @@
                             if (!$targetInput[0]) $targetInput = $($("input[name='" + id + "']")[0]);
                             if (!$targetInput[0]) $targetInput = $($("." + id)[0]);
                         }
-                        if (!$targetInput[0]) $targetInput = $input;
+                        if (!$targetInput || !$targetInput[0]) $targetInput = $input;
                         if ($targetInput.attr("width")) {
                             options.option.width = $targetInput.attr("width");
                         }

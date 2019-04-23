@@ -2283,7 +2283,7 @@
             <summary>
              插入数据
             </summary>
-            <param name="insertid">插入主键</param>
+            <param name="insertID">插入主键</param>
         </member>
         <member name="M:CYQ.Data.Orm.SimpleOrmBase.Insert(System.Boolean,CYQ.Data.InsertOp,System.Boolean)">
             <summary>
@@ -2291,7 +2291,7 @@
             </summary>
             <param name="autoSetValue">自动从控制获取值</param>
             <param name="option">插入选项</param>
-            <param name="insertid">插入主键</param>
+            <param name="insertID">插入主键</param>
         </member>
         <member name="M:CYQ.Data.Orm.SimpleOrmBase.Update">
             <summary>
@@ -2304,7 +2304,11 @@
             </summary>
             <param name="where">where条件,可直接传id的值如:[88],或传完整where条件如:[id=88 and name='路过秋天']</param>
         </member>
-        <member name="M:CYQ.Data.Orm.SimpleOrmBase.Update(System.Object,System.Boolean)">
+        <member name="M:CYQ.Data.Orm.SimpleOrmBase.Update(System.Object,System.String)">
+            <param name="onlyUpdateColumns">指定仅更新的列名，多个用逗号分隔</param>
+            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.Orm.SimpleOrmBase.Update(System.Object,System.Boolean,System.String)">
             <summary>
              更新数据
             </summary>
@@ -2331,6 +2335,13 @@
             <summary>
             查询1条数据
             </summary>
+        </member>
+        <member name="M:CYQ.Data.Orm.SimpleOrmBase.Get``1(System.Object)">
+            <summary>
+            查询一条数据并返回一个新的实例
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
         </member>
         <member name="M:CYQ.Data.Orm.SimpleOrmBase.Select``1">
             <summary>
@@ -2465,6 +2476,16 @@
         <member name="T:CYQ.Data.Orm.DescriptionAttribute">
             <summary>
             表名或字段描述
+            </summary>
+        </member>
+        <member name="T:CYQ.Data.Orm.ColumnNameAttribute">
+            <summary>
+            数据库：字段名称
+            </summary>
+        </member>
+        <member name="T:CYQ.Data.Orm.TableNameAttribute">
+            <summary>
+            数据库：表名
             </summary>
         </member>
         <member name="T:CYQ.Data.Orm.DBFast">
@@ -2650,6 +2671,11 @@
             查询1条数据
             </summary>
         </member>
+        <member name="M:CYQ.Data.Orm.OrmBase.Get(System.Object)">
+            <summary>
+            查询1条数据并返回新的一行
+            </summary>
+        </member>
         <member name="M:CYQ.Data.Orm.OrmBase.Select">
             <summary>
             列表查询
@@ -2789,6 +2815,11 @@
         <member name="F:CYQ.Data.Orm.FieldSource.BothOfAll">
             <summary>
             综合以上两者
+            </summary>
+        </member>
+        <member name="T:CYQ.Data.Orm.SimpleOrmBase`1">
+            <summary>
+            简单ORM基类（纯数据交互功能）
             </summary>
         </member>
         <member name="T:CYQ.Data.Properties.Resources">
@@ -4202,6 +4233,38 @@
             <exception cref="!:">密钥错误</exception>
             <remarks>静态方法，采用默认ascii编码</remarks>
         </member>
+        <member name="T:CYQ.Data.Tool.ReflectTool">
+            <summary>
+            反射工具（带缓存）
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Tool.ReflectTool.GetGenericArgumentLength(System.Type@)">
+            <summary>
+            获取泛型参数的长度
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Tool.ReflectTool.GetGenericArgumentLength(System.Type@,System.Type[]@)">
+            <summary>
+            获取泛型参数的长度（和类型）
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Tool.ReflectTool.GetPropertys(System.Type)">
+            <summary>
+            获得反射属性（内部有缓存）
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Tool.ReflectTool.GetSystemType(System.Type@)">
+            <summary>
+            获取系统类型，若是Nullable类型，则转为基础类型。
+             </summary>
+        </member>
+        <member name="M:CYQ.Data.Tool.ReflectTool.GetAttributes(System.Type,System.Type)">
+            <summary>
+            获得反射的特性列表
+            </summary>
+            <param name="t"></param>
+            <returns></returns>
+        </member>
         <member name="T:CYQ.Data.Tool.SysType">
             <summary>
             转实体所用参数
@@ -4467,7 +4530,7 @@
         </member>
         <member name="T:CYQ.Data.Extension.IField">
             <summary>
-            实现此接口，来扩展自定义IField语法
+            实现此接口，来扩展自定义IField语法(已过期)
             </summary>
         </member>
         <member name="P:CYQ.Data.Extension.IField.Sql">
@@ -5623,31 +5686,6 @@
             <param name="t">类型</param>
             <returns></returns>
         </member>
-        <member name="T:CYQ.Data.Tool.ReflectTool">
-            <summary>
-            反射工具（带缓存）
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Tool.ReflectTool.GetGenericArgumentLength(System.Type@)">
-            <summary>
-            获取泛型参数的长度
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Tool.ReflectTool.GetGenericArgumentLength(System.Type@,System.Type[]@)">
-            <summary>
-            获取泛型参数的长度（和类型）
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Tool.ReflectTool.GetPropertys(System.Type)">
-            <summary>
-            获得反射属性（内部有缓存）
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Tool.ReflectTool.GetSystemType(System.Type@)">
-            <summary>
-            获取系统类型，若是Nullable类型，则转为基础类型。
-             </summary>
-        </member>
         <member name="T:CYQ.Data.Tool.StaticTool">
             <summary>
             静态方法工具类
@@ -5678,6 +5716,11 @@
         <member name="M:CYQ.Data.Tool.StaticTool.GetArgumentLength(System.Type@,System.Type[]@)">
             <summary>
             获取泛型的参数长度，同时类型修改为普通类型（非泛型按默认方法计算）
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Tool.StaticTool.GetAttributes(System.Type,System.Type)">
+            <summary>
+            获取特性列表
             </summary>
         </member>
         <member name="M:CYQ.Data.Tool.StaticTool.GetSystemType(System.Type@)">

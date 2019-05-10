@@ -7,7 +7,7 @@ a：Controllers添加Taurus.Core.dll引用。
 b：Controllers添加的名称空间必须是Taurus.Core开头。
 c：Web.UI项目添加Views目录（按Taurus流程走）
 
-菜单ID为空时
+菜单id为空时
 
 V3版本之后：
 1：支持Oracle（表头和数据转小写到前端页面）。
@@ -122,3 +122,12 @@ liketree 查询。
 5602：var opts = (_3f9 && _3f9.options) || {novalidate:true};
 解决easyui 1.3.4之后版本 页面加载后 validatebox默认校验
 5692：  //_3f7(this);//页面加载后，validatebox会自己遍历验证一遍，将该方法注释掉
+
+V5.4 2019.4 -2019.5 框架大调整、同时新增 Gemini.Workflow 支持
+1、跨库功能由 CYQ.Data 集成、并去掉了Aries自带的跨库功能。
+2、变量提升等级：
+AR.Global.Dialog => AR.Dialog
+AR.Utility.Window => AR.Window
+AR.Utility.Cookie => AR.Cookie
+AR.Utiltity.Ajax => AR.Ajax
+3、内部细节和性能优化（其它大体调用方式没变）

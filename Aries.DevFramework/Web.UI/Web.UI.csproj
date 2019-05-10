@@ -50,6 +50,14 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Gemini.Controllers, Version=5.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLL\Gemini.Controllers.dll</HintPath>
+    </Reference>
+    <Reference Include="Gemini.Workflow, Version=5.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLL\Gemini.Workflow.dll</HintPath>
+    </Reference>
     <Reference Include="MySql.Data">
       <HintPath>..\DLL\MySql.Data.dll</HintPath>
     </Reference>
@@ -63,6 +71,7 @@
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Xml.Linq" />
@@ -73,7 +82,7 @@
     <Content Include="App_Data\SqlCode\Aries\Sql.sql" />
     <Content Include="App_Data\SqlCode\Demo\Sql_Yours.sql" />
     <Content Include="App_Data\SqlCode\Demo\V_Test.sql" />
-    <Content Include="App_Data\SqlCode\Test\V_Aa.sql" />
+    <Content Include="App_Data\SqlCode\Workflow\V_WF_Task.sql" />
     <Content Include="App_Data\SqlCode\命名规范.txt" />
     <Content Include="App_Data\TxtDB\Aries\Config_Excel.ts" />
     <Content Include="App_Data\TxtDB\Aries\Config_Excel.txt" />
@@ -107,6 +116,7 @@
     <Content Include="App_Data\TxtDB\Demo\Demo_Tree.txt" />
     <Content Include="Demo\combobox.html" />
     <Content Include="Demo\edit.html" />
+    <Content Include="Demo\inputDialog.html" />
     <Content Include="Demo\jointPrimary.html" />
     <Content Include="Demo\jointPrimaryEdit.html" />
     <Content Include="Demo\list.html" />
@@ -114,7 +124,6 @@
     <Content Include="Demo\mutillist.html" />
     <Content Include="Demo\rowedit.html" />
     <Content Include="Demo\treegrid.html" />
-    <Content Include="Demo\inputDialog.html" />
     <Content Include="index.html" />
     <Content Include="login.html" />
     <Content Include="logout.html" />
@@ -384,6 +393,100 @@
     <Content Include="Web\SysAdmin\UserEdit.html" />
     <Content Include="Web\SysAdmin\UserList.html" />
     <Content Include="Web\SysAdmin\DialogView.html" />
+    <Content Include="WF\Designer\ActorParamterEdit.html" />
+    <Content Include="WF\Definition\DefinitionEdit.html" />
+    <Content Include="WF\Definition\DefinitionImport.html" />
+    <Content Include="WF\Definition\DefinitionList.html" />
+    <Content Include="WF\Designer\Designer.html" />
+    <Content Include="WF\Definition\InstanceList.html" />
+    <Content Include="Demo\WorkflowForm.html" />
+    <Content Include="WF\Style\Css\blue.css" />
+    <Content Include="WF\Style\Css\custom.css" />
+    <Content Include="WF\Style\Css\designer.css" />
+    <Content Include="WF\Style\Css\actorSelect.css" />
+    <Content Include="WF\Style\Icons\all_icons.png" />
+    <Content Include="WF\Style\Icons\dataBaseSQL.png" />
+    <Content Include="WF\Style\Icons\edit.gif" />
+    <Content Include="WF\Style\Icons\edit_add2.gif" />
+    <Content Include="WF\Style\Icons\ico_del.gif" />
+    <Content Include="WF\Style\Icons\pencil.png" />
+    <Content Include="WF\Style\Icons\reset.png" />
+    <Content Include="WF\Style\Icons\search.png" />
+    <Content Include="WF\Style\Images\a.png" />
+    <Content Include="WF\Style\Images\ajax-loader.gif" />
+    <Content Include="WF\Style\Images\all-button.png" />
+    <Content Include="WF\Style\Images\all_icons.png" />
+    <Content Include="WF\Style\Images\b.png" />
+    <Content Include="WF\Style\Images\barbg.jpg" />
+    <Content Include="WF\Style\Images\button-img.gif" />
+    <Content Include="WF\Style\Images\button-img.png" />
+    <Content Include="WF\Style\Images\c.png" />
+    <Content Include="WF\Style\Images\d.png" />
+    <Content Include="WF\Style\Images\drap_down.png" />
+    <Content Include="WF\Style\Images\e.png" />
+    <Content Include="WF\Style\Images\f.png" />
+    <Content Include="WF\Style\Images\Framefoot.jpg" />
+    <Content Include="WF\Style\Images\g.png" />
+    <Content Include="WF\Style\Images\h.png" />
+    <Content Include="WF\Style\Images\i.png" />
+    <Content Include="WF\Style\Images\icon-boxtit.png" />
+    <Content Include="WF\Style\Images\icon-qingkong.png" />
+    <Content Include="WF\Style\Images\icon_execute_remoting.png" />
+    <Content Include="WF\Style\Images\Designer\geflow_bg.png" />
+    <Content Include="WF\Style\Images\Designer\geflow_blank.gif" />
+    <Content Include="WF\Style\Images\Designer\geflow_btn_bg.png" />
+    <Content Include="WF\Style\Images\Designer\geflow_bullet.png" />
+    <Content Include="WF\Style\Images\Designer\geflow_icon.png" />
+    <Content Include="WF\Style\Images\Designer\geFlow_line_oper.png" />
+    <Content Include="WF\Style\Images\Designer\geflow_tip.png" />
+    <Content Include="WF\Style\Images\j.png" />
+    <Content Include="WF\Style\Images\k.png" />
+    <Content Include="WF\Style\Images\l.png" />
+    <Content Include="WF\Style\Images\layout_arrows.png" />
+    <Content Include="WF\Style\Images\logo.png" />
+    <Content Include="WF\Style\Images\m.png" />
+    <Content Include="WF\Style\Images\mask_loading.gif" />
+    <Content Include="WF\Style\Images\n.png" />
+    <Content Include="WF\Style\Images\o.png" />
+    <Content Include="WF\Style\Images\operation-blue-icon.png" />
+    <Content Include="WF\Style\Images\operation-icon.png" />
+    <Content Include="WF\Style\Images\p.png" />
+    <Content Include="WF\Style\Images\panel-top-bg.png" />
+    <Content Include="WF\Style\Images\panel-top-bg_blue.png" />
+    <Content Include="WF\Style\Images\panel-top-img.png" />
+    <Content Include="WF\Style\Images\panel-top-img_blue.png" />
+    <Content Include="WF\Style\Images\progressBar_s.gif" />
+    <Content Include="WF\Style\Images\q.png" />
+    <Content Include="WF\Style\Images\r.png" />
+    <Content Include="WF\Style\Images\s.png" />
+    <Content Include="WF\Style\Images\sidenav-bg.png" />
+    <Content Include="WF\Style\Images\sidenav-icon-a.png" />
+    <Content Include="WF\Style\Images\sidenav-icon.png" />
+    <Content Include="WF\Style\Images\stat_001.png" />
+    <Content Include="WF\Style\Images\t.png" />
+    <Content Include="WF\Style\Images\u.png" />
+    <Content Include="WF\Style\Images\v.png" />
+    <Content Include="WF\Style\Images\w.png" />
+    <Content Include="WF\Style\Images\wf-menu-icon.png" />
+    <Content Include="WF\Style\Images\x.png" />
+    <Content Include="WF\Style\Images\y.png" />
+    <Content Include="WF\Style\Images\z.png" />
+    <Content Include="WF\Style\JS\Gemini.Actor.js" />
+    <Content Include="WF\Style\JS\Gemini.Designer.js" />
+    <Content Include="WF\Style\JS\Gemini.Map.js" />
+    <Content Include="WF\Style\JS\Gemini.Grid.js" />
+    <Content Include="WF\Style\JS\Gemini.Workflow.js" />
+    <Content Include="WF\Style\JS\Gemini.Event.js" />
+    <Content Include="WF\Work\Start.html" />
+    <Content Include="WF\Work\ToDo.html" />
+    <Content Include="WF\Work\Done.html" />
+    <Content Include="WF\Work\Draft.html" />
+    <Content Include="WF\Work\Cancel.html" />
+    <Content Include="WF\Work\MyWorks.html" />
+    <Content Include="WF\Work\Circulate.html" />
+    <Content Include="WF\Work\MyCirculates.html" />
+    <Content Include="WF\Definition\AppEdit.html" />
+    <Content Include="WF\Definition\AppList.html" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -415,8 +518,12 @@
     <Content Include="Resource\Excel\V_Test.xls" />
     <Content Include="Resource\Excel\V_SYS_UserList.xls" />
     <None Include="Properties\PublishProfiles\pub.pubxml" />
+    <Content Include="WF\WorkForm.html" />
+    <Content Include="WF\Work\Circulated.html" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="App_Data\TxtDB\Gemini\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -430,9 +537,10 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>5230</DevelopmentServerPort>
+          <DevelopmentServerPort>63984</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:8011/AR</IISUrl>
+          <IISUrl>
+          </IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

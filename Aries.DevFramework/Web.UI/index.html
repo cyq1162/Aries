@@ -73,23 +73,23 @@
                     var $btnClose = $('<a>').addClass('btn blue').html('${close}');
 
                     $div.append($('<p>').append($lbl1).append($pwd1)).append($('<p>').append($lbl2).append($pwd2)).append($btnSave).append($btnClose);
-                    AR.Utility.Window.dialog('${changePassword}', $div, { width: 480, height: 250 });
+                    AR.Window.dialog('${changePassword}', $div, { width: 480, height: 250 });
 
                     $btnSave.click(function () {
                         var pwd1 = $pwd1.val();
                         var pwd2 = $pwd2.val();
                         if ($("#pwdForm").form("validate")) {
 
-                            AR.Utility.Ajax.post('ChangePassword', null, { pwd: pwd2 }, function (result) {
+                            AR.Ajax.post('ChangePassword', null, { pwd: pwd2 }, function (result) {
                                 if (result.success) {
-                                    AR.Utility.Window.closeDialog();
+                                    AR.Window.closeDialog();
                                 }
-                                AR.Utility.Window.showMsg(result.msg, "${prompt}");
+                                AR.Window.showMsg(result.msg, "${prompt}");
                             });
                         }
                     });
                     $btnClose.click(function () {
-                        AR.Utility.Window.closeDialog();
+                        AR.Window.closeDialog();
                     });
                 });
             },
@@ -248,16 +248,16 @@
             createMenu: function (json, $ul, templateType) {
                 var innnerhtml = "";
                 var template = {
-                    1: "<li><a linkurl='{2}'  selfID='{0}'>{1}</a></li>",
-                    2: "<a linkurl='{2}' selfID='{0}' >{1}</a><em>|</em>"
+                    1: "<li><a linkurl='{2}'  selfid='{0}'>{1}</a></li>",
+                    2: "<a linkurl='{2}' selfid='{0}' >{1}</a><em>|</em>"
                 };
                 for (var i = 0; i < json.length; i++) {
                     if (json[i].attributes.isshow == 1) {
-                        var menuID = json[i].id;
+                        var menuid = json[i].id;
                         var menuName = json[i].text;
                         var menuUrl = json[i].attributes.menuurl;
                         var formatTemplate = template[templateType];
-                        innnerhtml = innnerhtml + AR.Utility.stringFormat(formatTemplate, menuID, menuName, menuUrl);
+                        innnerhtml = innnerhtml + AR.Utility.stringFormat(formatTemplate, menuid, menuName, menuUrl);
                     }
                 }
                 $ul.html(innnerhtml);
@@ -269,7 +269,7 @@
             },
 
             //将数据格式化成easyui的格式
-            formatTreeJson: function (nodesdatas, idField, textField, parentField, rootID) {
+            formatTreeJson: function (nodesdatas, idField, textField, parentField, rootid) {
                 return function (parentid) {
                     var cn = new Array();
                     for (var i = 0; i < nodesdatas.length; i++) {
@@ -294,7 +294,7 @@
                         }
                     }
                     return cn;
-                }(rootID);
+                }(rootid);
 
             },
             regEvent: function (json) {
@@ -305,9 +305,9 @@
                     $(this).addClass("hover");
 
                     $("#menu2").html("");
-                    var selfID = $(this).children("a").attr("selfid");
+                    var selfid = $(this).children("a").attr("selfid");
 
-                    var jsonData = that.formatTreeJson(json, 'menuid', 'menuname', 'parentmenuid', selfID);
+                    var jsonData = that.formatTreeJson(json, 'menuid', 'menuname', 'parentmenuid', selfid);
                     if (jsonData.length == 0) {
                         //没有子级
                         var url = $(this).children("a").attr("linkurl");
@@ -342,8 +342,8 @@
                     $(this).addClass("hover");
                     var menu3 = $("#menu3");
                     menu3.html("");
-                    var selfID = $(this).attr("selfID");
-                    var jsonData = that.formatTreeJson(json, 'menuid', 'menuname', 'parentmenuid', selfID);
+                    var selfid = $(this).attr("selfid");
+                    var jsonData = that.formatTreeJson(json, 'menuid', 'menuname', 'parentmenuid', selfid);
                     if (JSON.stringify(jsonData).indexOf('"menulevel":4') == -1) {
                         //不存在四级菜单
                         menu3.removeClass("easyui-tree").addClass("sidebar-nav");
@@ -390,7 +390,7 @@
             },
             onInit: function () {
                 var that = this;
-                AR.Utility.Ajax.get("GetUserMenu", null, null, function (result) {
+                AR.Ajax.get("GetUserMenu", null, null, function (result) {
                     var json = that.formatTreeJson(result, 'menuid', 'menuname', 'parentmenuid');
                     var menu2 = $("#menu2");
                     var menu3 = $("#menu3");

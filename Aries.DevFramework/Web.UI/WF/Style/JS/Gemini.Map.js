@@ -519,7 +519,7 @@
             height: 700,
             toolBtns: ["start", "end", "normal", "split", "join", "innersubworkflow", "outersubworkflow", "loopself"],
             haveHead: true,
-            headBtns: ["save", "undo", "redo", "reload"],//如果haveHead=true，则定义HEAD区的按钮 "open","new", 
+            headBtns: ["save","reload"],//如果haveHead=true，则定义HEAD区的按钮 "open","new", 
             haveTool: true,
             haveGroup: true,
             //是否开启动撤消操作
@@ -536,8 +536,7 @@
             join: "聚合结束",
             split: "发散开始",
             loopself: "自循环步骤",
-            group: "分组",
-            save: "新建流程"
+            group: "分组"
 
         },
         onInit: function () {

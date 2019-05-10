@@ -60,7 +60,7 @@
         var name = prompt("${promptInputName}", "*.sql")
         if (name!=null && name!="")
         {
-            AR.Utility.Ajax.post("AddSql", name, { "sys_path": getFolderPath(node,"") },
+            AR.Ajax.post("AddSql", name, { "sys_path": getFolderPath(node,"") },
              function (data) {
                  if (data.success) {
                      $("#ul_menus").tree("append", {
@@ -72,7 +72,7 @@
                          }]
                      });
                  }
-                 AR.Utility.Window.showMsg(data.msg);
+                 AR.Window.showMsg(data.msg);
 
              });
         }
@@ -104,13 +104,13 @@
                alert("${promptCantDelete}");
                 return;
             }
-            AR.Utility.Window.confirm("${confirm}${delete}:（"+node.text+"）？", "${prompt}", function () {
-                AR.Utility.Ajax.post("DeleteSql", node.text, null,
+            AR.Window.confirm("${confirm}${delete}:（"+node.text+"）？", "${prompt}", function () {
+                AR.Ajax.post("DeleteSql", node.text, null,
                 function (data) {
                     if (data.success) {
                         $("#ul_menus").tree("remove", node.target);
                     }
-                    AR.Utility.Window.showMsg(data.msg);
+                    AR.Window.showMsg(data.msg);
 
                 });
             });
@@ -119,7 +119,7 @@
 
     //初始化菜单
     function initMenu() {
-        AR.Utility.Ajax.post("GetSQLCode", null, {},
+        AR.Ajax.post("GetSQLCode", null, {},
           function (data) {
               $("#ul_menus").tree({
                   idField: "id",
@@ -150,7 +150,7 @@
         var node = $("#ul_menus").tree("getSelected"); //alert(JSON.stringify( node));
         //$("#objName").val();
         if (node.text.endWith(".sql")) {
-            AR.Utility.Ajax.get("GetSQL", node.text.replace(".sql",""), null, function (result) {
+            AR.Ajax.get("GetSQL", node.text.replace(".sql",""), null, function (result) {
                 if (result && result.success) {
                     $("#sys_code").val(result.msg.replace(/<br\/>/g, "\r\n"));
                     $("#sys_code").focus();

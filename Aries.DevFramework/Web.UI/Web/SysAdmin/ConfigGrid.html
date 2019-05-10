@@ -22,7 +22,7 @@
     dg.ToolBar.BtnImport.isHidden = true;
     dg.ToolBar.BtnExportTemplate.isHidden = true;
     dg.options = {
-        pageSize: 30,
+        pageSize: 20,
         fitColumns: false,
         sortName: 'Frozen desc,OrderNum',
         sortOrder: 'asc',
@@ -32,14 +32,14 @@
     dg.defaultInsertData = {
         objname: objName, align: 'center', width: 100, ordernum: 100, rowspan: 1, colspan: 1, mergeIndex: 1, datatype: 'string,50,0,0'
     };
-    dg.ToolBar.add('${close}', 'AR.Utility.Window.close', 4);
+    dg.ToolBar.add('${close}', 'AR.Window.close', 4);
     dg.ToolBar.addHtml("<span style='margin-left: 20px; color:gray;'><strong>" + objName + "</strong></span>", 5);
     dg.ToolBar.addHtml("<span onclick = 'fleshHeader()'><b>${fleshHeader}</b></span>", 6);
     dg.ToolBar.addHtml("<span onclick = 'showView()'><b>${edit}SqlCode</b></span>", 7);
     dg.ToolBar.addHtml("<span onclick = 'openConfigExcel()'><b>${senior}${import}${config}</b></span>", 8);
     dg.ToolBar.addHtml("<span onclick = 'showFormHtml()'><b>${form}Html</b></span>", 9);
     dg.PKColumn.Editor.BtnSave.onAfterExecute = function () {
-        AR.Utility.Window.refresh = true;
+        AR.Window.refresh = true;
     }
     dg.ToolArea.Search.onBeforeExecute = function ()
     {
@@ -58,18 +58,18 @@
     }
     dg.bind();
     function showView() {
-        AR.Utility.Ajax.get("GetSQL", objName, null, function (result) {
+        AR.Ajax.get("GetSQL", objName, null, function (result) {
             if (result && result.success) {
                 var $arae = $('<textarea>').css({ width: '99%', height: '96%' });
                 $arae.html(result.msg.replace(/<br\/>/g, "\r\n"));
-                AR.Utility.Window.dialog(objName, $arae, {
+                AR.Window.dialog(objName, $arae, {
                     toolbar: [{
                         text: '保存',
                         iconCls: 'icon-save',
                         handler: function () {
-                            result = AR.Utility.Ajax.post("SaveSQL", objName, { "sys_code": $arae.val() });
+                            result = AR.Ajax.post("SaveSQL", objName, { "sys_code": $arae.val() });
                             if (result && result.msg) {
-                                AR.Utility.Window.showMsg(result.msg, "消息提示");
+                                AR.Window.showMsg(result.msg, "消息提示");
                             }
                         }
                     }]
@@ -79,7 +79,7 @@
     }
 
     function openConfigExcel() {
-        AR.Utility.Window.open('ConfigExcel.html?ExcelName=' + objName, 'Excel${import}${config}');
+        AR.Window.open('ConfigExcel.html?ExcelName=' + objName, 'Excel${import}${config}');
     }
     function showFormHtml() {
         var dg = parent.AR.Global.DG.operating;
@@ -102,12 +102,12 @@
         $div.append($btn);
         $form.append($div_tip);
         $form.append($div_content.append($div));
-        AR.Utility.Window.dialog(objName + " Html", $form[0].outerHTML.replace(/</g, '&lt;').replace(/>/g, '&gt;'));
+        AR.Window.dialog(objName + " Html", $form[0].outerHTML.replace(/</g, '&lt;').replace(/>/g, '&gt;'));
     }
 
     function fleshHeader()
     {
-        AR.Utility.Ajax.get("GetHeader", objName + "," + dg.tableName, { "reflesh": 1 },
+        AR.Ajax.get("GetHeader", objName + "," + dg.tableName, { "reflesh": 1 },
             function (result) {
                 
                 if (result.success) {

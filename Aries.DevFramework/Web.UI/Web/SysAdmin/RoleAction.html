@@ -53,16 +53,16 @@
                 postData.data = JSON.stringify(arr);
             }
 
-            AR.Utility.Ajax.post("AddPromission", "Sys_Menu", postData,
+            AR.Ajax.post("AddPromission", "Sys_Menu", postData,
                     function (data) {
                         $.messager.progress('close');
-                        AR.Utility.Window.showMsg(data.msg);
+                        AR.Window.showMsg(data.msg);
                     });
 
         })
 
 
-        AR.Utility.Ajax.post("GetMenuAndAction", "Sys_Menu", { RoleID: roleid },
+        AR.Ajax.post("GetMenuAndAction", "Sys_Menu", { RoleID: roleid },
          function (data) {
              $("#tree").tree({
                  idField: "menuid",
@@ -84,7 +84,7 @@
     })
 
     function getActionIDs() {
-        AR.Utility.Ajax.post("GetMenuIDsandActionIDs", "", { RoleID: roleid },
+        AR.Ajax.post("GetMenuIDsandActionIDs", "", { RoleID: roleid },
          function (data) {
              for (var i in data) {
                  var node = $("#tree").tree("find", i);

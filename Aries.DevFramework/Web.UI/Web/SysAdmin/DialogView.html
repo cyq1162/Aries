@@ -10,7 +10,7 @@
         <table id="dg"></table>
     </div>
     <script>
-        var $input = parent.AR.Global.Dialog.$target;
+        var $input = parent.AR.Dialog.$target;
         var comboboxOption = {
             valueField: 'value',
             textField: 'text',
@@ -41,6 +41,7 @@
                 //fit: false,
                 onLoadSuccess: function () {
                     if (!title) {
+                        //如果没有设置，则从第二个字段开始，取第一个类型为字符串的字段。
                         for (var i = 1; i < dg.Internal.headerData.length; i++) {
                             if (!dg.Internal.headerData[i].hidden && dg.Internal.headerData[i].datatype.startWith("string")) {
                                 title = dg.Internal.headerData[i].field;
@@ -49,23 +50,23 @@
                         }
                     }
                     title || (title = dg.Internal.headerData[1].field);
-                    id || (id = (onlytext ? title : dg.Internal.primarykey));
+                    id || (id = dg.Internal.primarykey);
                 },
                 onSelect: function (rowIndex, rowData) {
                     if (!dg.isShowCheckBox) {
                         var d = {};
                         d.text = rowData[title];
-                        d.value = rowData[id];
+                        d.value = onlytext ? d.text : rowData[id];
                         comboboxOption.data[0] = d;
                         returnValue.text = d.text;
-                        returnValue.value = d.value;
+                        returnValue.value = rowData[id];
                         returnValue.data = rowData;
-                        parent.AR.Global.Dialog.returnValue = returnValue;
+                        parent.AR.Dialog = $.extend(true, parent.AR.Dialog, returnValue);
                     }
                 },
                 onDblClickRow: function (rowIndex, rowData) {
                     if (!dg.isShowCheckBox) {
-                        var opts = parent.AR.Global.Dialog.options;
+                        var opts = parent.AR.Dialog.options;
                         opts.toolbar[0].handler();//自动触发确定按钮事件
                     }
                     else {
@@ -95,7 +96,7 @@
 
             }
             try {
-                var op = $input.attr("options");
+                var op = $input.attr("options") || $input.attr("opts");
                 if (op) { op = eval("(" + op + ")"); }
                 if (op) {
                     options = $.extend(options, op);
@@ -117,18 +118,19 @@
                 for (var i = 0; i < rows.length; i++) {
                     var d = {};
                     d.text = rows[i][title];
-                    d.value = rows[i][id];
-                    texts.push(d.text);
-                    values.push(d.value);
+                    d.value = onlytext ? d.text : rows[i][id];
                     comboboxOption.data.push(d);
+                    texts.push(d.text);
+                    values.push(rows[i][id]);
+
                 }
-                returnValue.text = texts;// dg.getCheckids(title);
-                returnValue.value = values;// dg.getCheckids(id);
+                returnValue.text = texts.join(',');// dg.getCheckIDs(title);
+                returnValue.value = values.join(',');// dg.getCheckIDs(id);
                 returnValue.data = rows;
-                parent.AR.Global.Dialog.returnValue = returnValue;
+                parent.AR.Dialog = $.extend(true, parent.AR.Dialog, returnValue);
             }
             else {
-                parent.AR.Global.Dialog.returnValue = undefined;
+                parent.AR.Dialog.clearReturnValue();
             }
         }
         function treeRows(rows, newRows) {

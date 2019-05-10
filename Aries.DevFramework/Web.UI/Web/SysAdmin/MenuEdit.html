@@ -78,7 +78,7 @@
             //初始化菜单
             onInit: function () {
                 var that = this;
-                AR.Utility.Ajax.post("GetMenu", "Sys_Menu", {},
+                AR.Ajax.post("GetMenu", "Sys_Menu", {},
                   function (data) {
                       $("#ul_menus").tree({
                           idField: "menuid",
@@ -137,20 +137,20 @@
                         var msg = "${confirm}${delete}?";
                         var isLeaf = Menu.Tree.$target.tree("isLeaf", node.target);
                         if (!isLeaf) {
-                            msg = "${confirmAgain}";
+                            msg = node.text + " ${confirmAgain}";
                         }
-                        AR.Utility.Window.confirm(msg, "${prompt}", function () {
-                            AR.Utility.Ajax.post("DeleteMenu", "Sys_Menu", { id: node.id },
+                        AR.Window.confirm(msg, "${prompt}", function () {
+                            AR.Ajax.post("DeleteMenu", "Sys_Menu", { id: node.id },
                             function (data) {
                                 if (data.success) {
                                     Menu.Tree.$target.tree("remove", node.target);
                                 }
-                                AR.Utility.Window.showMsg(data.msg);
+                                AR.Window.showMsg(data.msg);
 
                             });
                         });
                     } else {
-                        AR.Utility.Window.showMsg("${selectOne}");
+                        AR.Window.showMsg("${selectOne}");
                     }
                 }
             }
@@ -162,7 +162,7 @@
             //加载权限
             onInit: function () {
                 var that = this;
-                AR.Utility.Ajax.post("GetActions", "Sys_Action", {}, function (data) {
+                AR.Ajax.post("GetActions", "Sys_Action", {}, function (data) {
                     that.actionData = data;
                     that.createCheckbox();
                 });
@@ -198,7 +198,7 @@
                 var that = this;
                 if (menuid != undefined) {
                     $("#form1").form("clear");
-                    AR.Utility.Ajax.post("GetMenuDetails", "Sys_Menu", { id: menuid },
+                    AR.Ajax.post("GetMenuDetails", "Sys_Menu", { id: menuid },
                      function (data) {
                          $("#form1").form('load', data);
                          that.setAction(data.actionids);
@@ -280,34 +280,32 @@
                     }
                     else {
                         if (node == null || node.id == null) {
-                            AR.Utility.Window.showMsg("${root}${notAllow}${update}！");
+                            AR.Window.showMsg("${root}${notAllow}${update}！");
                             return false;
                         }
-                        if (para.parentmenuid == "")
-                        {
+                        if (para.parentmenuid == "") {
                             delete para.parentmenuid;
                         }
                     }
                 };
-                AR.Form.BtnCommit.onAfterExecute = function (data, formData) {
+                AR.Form.BtnCommit.onAfterExecute = function (result, formData) {
+                    if (!result.success) {
+                        AR.Window.alert(result.msg);
+                        return false;
+                    }
                     var action = AR.Global.DG.action
                     if (action == "Add") {
-                        if (data.success) {
-                            Menu.Tree.$target.tree("append", {
-                                parent: Menu.Tree.clickNode.target,
-                                data: [{
-                                    id: data.msg,
-                                    text: $("[name='menuname']").val(),
-                                    attributes: { menulevel: Menu.Tree.level }
-                                }]
-                            });
-                            //AR.Utility.Window.showMsg("${add}${success}！");
-                            $("#menuid").val(data.msg);
-                            AR.Global.DG.action = "Update";//避免重复添加
-                        }
-                        else {
-                            AR.Utility.Window.showMsg(data.msg);
-                        }
+                        Menu.Tree.$target.tree("append", {
+                            parent: Menu.Tree.clickNode.target,
+                            data: [{
+                                id: result.msg,
+                                text: $("[name='menuname']").val(),
+                                attributes: { menulevel: Menu.Tree.level }
+                            }]
+                        });
+                        $("#menuid").val(result.msg);
+                        AR.Global.DG.action = "Update";//避免重复添加
+
                     }
                     else {
                         var node = Menu.Tree.$target.tree('find', $("#menuid").val());
@@ -315,8 +313,8 @@
                             target: node.target,
                             text: $("[name='menuname']").val()
                         });
-                        //AR.Utility.Window.showMsg(data.msg);
                     }
+                    AR.Window.showMsg(result.msg);
                 }
 
             }

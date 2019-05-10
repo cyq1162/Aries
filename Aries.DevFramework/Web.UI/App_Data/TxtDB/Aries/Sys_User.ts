@@ -1,3 +1,4 @@
+{"TableName":"Sys_User","Description":"用户表","Columns":[
 {"ColumnName":"UserID","SqlType":"System.Guid","IsAutoIncrement":false,"IsCanNull":false,"MaxSize":36,"Scale":0,"IsPrimaryKey":true,"DefaultValue":[#GUID],"Description":"主键","TableName":"Sys_User","IsUniqueKey":false,"IsForeignKey":false,"FKTableName":""},
 {"ColumnName":"UserName","SqlType":"System.String","IsAutoIncrement":false,"IsCanNull":false,"MaxSize":100,"Scale":0,"IsPrimaryKey":false,"DefaultValue":"","Description":"登录ID","TableName":"Sys_User","IsUniqueKey":false,"IsForeignKey":false,"FKTableName":""},
 {"ColumnName":"FullName","SqlType":"System.String","IsAutoIncrement":false,"IsCanNull":false,"MaxSize":100,"Scale":0,"IsPrimaryKey":false,"DefaultValue":"","Description":"用户真实姓名","TableName":"Sys_User","IsUniqueKey":false,"IsForeignKey":false,"FKTableName":""},
@@ -13,3 +14,4 @@
 {"ColumnName":"RoleIDs","SqlType":"System.String","IsAutoIncrement":false,"IsCanNull":true,"MaxSize":500,"Scale":0,"IsPrimaryKey":false,"DefaultValue":"","Description":"角色ID（可以多个）","TableName":"Sys_User","IsUniqueKey":false,"IsForeignKey":false,"FKTableName":""},
 {"ColumnName":"OrgIDs","SqlType":"System.String","IsAutoIncrement":false,"IsCanNull":true,"MaxSize":500,"Scale":0,"IsPrimaryKey":false,"DefaultValue":"","Description":"组织ID（可以多个）","TableName":"Sys_User","IsUniqueKey":false,"IsForeignKey":false,"FKTableName":""},
 {"ColumnName":"CreateTime","SqlType":"System.DateTime","IsAutoIncrement":false,"IsCanNull":true,"MaxSize":23,"Scale":3,"IsPrimaryKey":false,"DefaultValue":[#GETDATE],"Description":"创建日期","TableName":"Sys_User","IsUniqueKey":false,"IsForeignKey":false,"FKTableName":""}
+]}

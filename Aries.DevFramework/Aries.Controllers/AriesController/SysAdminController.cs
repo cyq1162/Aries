@@ -32,7 +32,7 @@ namespace Aries.Controllers
                     if (row != null)
                     {
                         row.Set("Password", EncryptHelper.Decrypt(row.Get<string>("Password")));
-                        jsonResult = row.ToJson();
+                        jsonResult = JsonHelper.OutResult(true, row.ToJson());
                     }
                     break;
                 default:

@@ -71,7 +71,7 @@ namespace Aries.Logic
     {
         public EditLog()
         {
-            base.SetInit(this, "Sys_EditLog", AppConfig.DB.DefaultConn, AopOp.CloseAll);
+            base.SetInit(this, "Sys_EditLog", AppConfig.DB.DefaultConn);
         }
         public int id { get; set; }
         public string TableName { get; set; }

@@ -15,7 +15,7 @@ namespace Aries.Controllers
             switch (ObjName)
             {
                 case "V_Test"://处理Demo中文本数据库
-                    if (AppConfig.DB.DefaultDalType == DalType.Txt)
+                    if (AppConfig.DB.DefaultDataBaseType == DataBaseType.Txt)
                     {
                         return Select(GridConfig.SelectType.Show).Rows[0];
                     }
@@ -29,7 +29,7 @@ namespace Aries.Controllers
             {
                 case "V_Test"://处理Demo中文本数据库
                     MDataTable dt = null;
-                    using (MAction action = new MAction(CrossDb.GetEnum("Demo_TestA")))
+                    using (MAction action = new MAction("Demo_TestA"))
                     {
                         dt = action.Select();
                     }

@@ -14,6 +14,7 @@ using Aries.Core.Config;
 using Aries.Core.Auth;
 using Aries.Core.Extend;
 using Aries.Core.Sql;
+using CYQ.Data.Aop;
 
 namespace Aries.Logic
 {
@@ -164,6 +165,7 @@ namespace Aries.Logic
             MDataTable dt;
             using (MAction action = new MAction(U_AriesEnum.Sys_Menu))
             {
+                action.SetAopState(AopOp.OpenAll);
                 dt = action.Select("ORDER BY menulevel ASC,sortorder asc");
             }
 
@@ -178,6 +180,7 @@ namespace Aries.Logic
             string result = string.Empty;
             using (MAction action = new MAction(U_AriesEnum.Sys_Action))
             {
+                action.SetAopState(AopOp.OpenAll);
                 result = action.Select("order by SortOrder asc").ToJson(false, false, RowOp.None, true);
             }
             return result;
@@ -376,7 +379,7 @@ namespace Aries.Logic
                     dt.NewRow(true).Set(0, UserAuth.SuperAdminRoleID)
                         .Set(1, menuid).Set(2, actionid);
                 }
-                dt.AcceptChanges(AcceptOp.Insert, CrossDb.GetConn(U_AriesEnum.Sys_RoleAction.ToString()));
+                dt.AcceptChanges(AcceptOp.Insert);
             }
         }
 

@@ -1,4 +1,4 @@
-﻿
+﻿/// <reference path="/Style/JS/Aries.Loader.js" />
 //AR.Form 定义
 (function ($, $Core, $PCore) {
     $Core.Lang || ($Core.Lang = {});
@@ -9,8 +9,8 @@
     $Core.Form = function () {
         function Obj() {
             $Core.ExecuteEvent.call(this);
-            //编辑页根据主键请求回来的数据，默认是个数组。
-            this.data = [];
+            //编辑页根据主键请求回来的数据，默认是个Json。
+            this.data = {};
             //用于获取数据的函数指向，默认值Get
             this.method = "Get";
             //用于拦截form表单的请求数据对象名，可以表名，视图名
@@ -39,13 +39,30 @@
                 }
                 var id = $Core.Utility.queryString("id");
                 if ((id && this.action == "Update" && this.objName) || this.method != "Get") {
-                    this.data = $Core.Utility.Ajax.post(this.method, this.objName, $.extend({ "id": id }, this.para));
-                    if (this.onBeforeFillForm(this.data) == false) { return; }
-                    this.$target.form("load", this.data);
-                    $Core.Combobox.setValues(this.data);
+                    var that = this;
+                    $Core.Ajax.post(this.method, this.objName, $.extend({ "id": id }, this.para), function (result) {
+                        if (result.success) {
+                            that.data = result.msg;
+                        }
+                        if (that.onBeforeFillForm(result) == false) { return; }
+                        if (result.success) {
+                            that.load(that.data);
+                            $Core.Combobox.setValues(that.data);
+                        }
+                        that.onAfterExecute(result);
+                    });
+
                 }
-                this.onAfterExecute(this.data);
+                else {
+                    this.onAfterExecute();
+                }
             };
+            this.load = function (data) {
+                data = $.extend(true, this.data, data);
+                if (this.$target) {
+                    this.$target.form("load", data);
+                }
+            }
             this.onInit = function () {
                 this.$target = $("form:eq(0)");
                 this.BtnCommit.$target = $($(".submit")[0] || $("#btnSubmit")[0]);
@@ -71,7 +88,7 @@
                         if (this.onBeforeExecute() === false) {
                             return;
                         }
-                        $Core.Utility.Window.close();
+                        $Core.Window.close();
                     };
                     //执行前事件（无参数）
                     this.onBeforeExecute = function () { };
@@ -96,7 +113,7 @@
                 var formJson = this.getSerializeJson($targetForm, clearEmptyValue);
                 if (this.onBeforeCommit(formJson) == false) { return; }
                 if (!$targetForm.form("validate")) {
-                    $Core.Utility.Window.showMsg($Core.Lang.fillTheBlank);
+                    $Core.Window.showMsg($Core.Lang.fillTheBlank);
                     return false;
                 }
 
@@ -123,7 +140,7 @@
                 }
                 else {
 
-                    $Core.Utility.Ajax.post(method, oName + "," + tName, formJson, function (result) {
+                    $Core.Ajax.post(method, oName + "," + tName, formJson, function (result) {
                         that.onAfterCommit(result, formJson, callBack);
                     });
 
@@ -151,17 +168,17 @@
                         }
                     }
                     if ($PCore) {
-                        $PCore.Utility.Window.showMsg(msg);
+                        $PCore.Window.showMsg(msg);
                         if (result.success && parent != null && parent.document.title != document.title) {
-                            $Core.Utility.Window.close();
+                            $Core.Window.close();
                         }
                     }
                 }
             };
             //获取表单序列化值。
             this.getSerializeJson = function ($targetForm, clearEmptyValue) {
-                var formJson={};
-                $targetForm || ($targetForm=this.$target);
+                var formJson = {};
+                $targetForm || ($targetForm = this.$target);
                 var formArray = $targetForm.find("[name]:input").serializeArray();
 
                 if (formArray) {
@@ -179,6 +196,10 @@
                     }
                     formArray = null;
                 }
+                //补充checkbox未选中的值。
+                $("input[type='checkbox']:not(:checked)").each(function () {
+                    formJson[$(this).attr("name")] = false;
+                });
                 return formJson;
             };
             this.regEvent = function () {

@@ -1,4 +1,4 @@
-﻿
+﻿/// <reference path="/Style/JS/Aries.Loader.js" />
 //AR.Common 定义
 (function ($, $Core) {
     $Core.Lang || ($Core.Lang = {});
@@ -33,7 +33,7 @@
                 if (dg) {
                     var url = $Core.Utility.stringFormat("{0}?objName={1}", $Core.Global.Variable.ui + '/Web/SysAdmin/ConfigGrid.html', dg.objName);
                     $Core.Global.DG.operating = dg;
-                    $Core.Utility.Window.open(url, "", false);
+                    $Core.Window.open(url, "", false);
                 }
                 else { alert("Can't find the object:" + gridid); }
             },
@@ -136,7 +136,7 @@
                         value || (value = index);
                     }
                     var btnArray = $Core.Utility.cloneArray(dg.PKColumn._btnArray, false);
-                    value = dg.getPrimaryid(row);// row[dg.Internal.primarykey];
+                    value = dg.getPrimaryID(row);// row[dg.Internal.primarykey];
                     var result = dg.PKColumn.onBeforeExecute(value, row, index, btnArray);
                     if (result) {
                         return result;
@@ -505,6 +505,7 @@
                 $Core.Common.Html.createCustomButton(dg);
                 //检测有没有工具栏，如果没有，自动隐藏
                 if (dg.ToolBar.Items.length == 0) {
+                    dg.isShowCheckBox = false;
                     dg.ToolBar.$target.hide();
                     dg.ToolBar.$target.attr("style", "height:0px;padding:0 0;border-bottom:0px");
                 }
@@ -796,7 +797,7 @@
                         var sp = rules.split("{")//支持$:{} 只对查询的多选 $1:{}
                         var rulesOpts = eval("({" + sp[sp.length - 1] + ")");
                         attrs = $.extend(attrs, rulesOpts);
-                    } catch (e) { alert($Core.Lang.configRulesError + " :" + rules); }
+                    } catch (e) { console.info($Core.Lang.configRulesError + " :" + rules); }
                 }
                 if (formatter) {
                     if (/#C_/.test(formatter)) {

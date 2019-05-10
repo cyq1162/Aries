@@ -43,8 +43,8 @@ _4.onCancelEdit.call(_2,row);
 _4.onSelect.call(_2,_41(_2,_10));
 },onUnselect:function(_11){
 _4.onUnselect.call(_2,_41(_2,_11));
-},onSelectAll:function(){
-_4.onSelectAll.call(_2,$.data(_2,"treegrid").data);
+},onSelect:function(){
+_4.onSelect.call(_2,$.data(_2,"treegrid").data);
 },onUnselectAll:function(){
 _4.onUnselectAll.call(_2,$.data(_2,"treegrid").data);
 },onCheck:function(_12){

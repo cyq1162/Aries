@@ -1,4 +1,4 @@
-﻿
+﻿/// <reference path="/Style/JS/Aries.Loader.js" />
 //AR.Utility 定义
 (function ($, $Core) {
     $Core.Lang || ($Core.Lang = {});
@@ -50,38 +50,6 @@
         },
 
         /**
-         *将普通数组转成树形数组，根据数组内对象的id跟parent属性过滤
-         *@nodes {array} nodes
-         *@return {array} 树形数组
-        */
-        //获取下拉树形递归,nodes参数是一个对象数组，根据对象的id跟parent属性过滤
-        getTree: function (nodes) {
-            return function (pid) {
-                pid || (pid = ''); //undefined,null,都转''处理
-                var cn = new Array();
-                var isfirstOpen = false;
-                for (var i = 0; i < nodes.length; i++) {
-                    var n = nodes[i];
-                    n.parent || (n.parent = '')
-                    if (n.parent == pid) {
-                        n.id = n.value;
-                        n.children = arguments.callee(n.id);
-                        if (n.children.length > 0) {
-                            if (!isfirstOpen) {
-                                isfirstOpen = true;
-                            }
-                            else {
-                                n.state = 'closed';//第一个保持打开
-                            }
-                        }
-                        cn.push(n);
-                    }
-                }
-                return cn;
-            }(undefined);
-        },
-
-        /**
             *模拟.NET的Request对象
             *@param {string} key
             */
@@ -110,51 +78,45 @@
             };
             return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
         },
-        /**
-        *@param {int|double} s:传入的float数字 
-        *@param{int} n:希望返回小数点几位
-        */
-        fmoney: function (s, n) {
-            n = n > 0 && n <= 20 ? n : 2;
-            s = parseFloat((s + "").replace(/[^\d\.-]/g, "")).toFixed(n) + "";
-            var l = s.split(".")[0].split("").reverse(),
-            r = s.split(".")[1];
-            t = "";
-            for (i = 0; i < l.length; i++) {
-                t += l[i] + ((i + 1) % 3 == 0 && (i + 1) != l.length ? "," : "");
-            }
-            return t.split("").reverse().join("") + "." + r;
-        },
 
-        loadJs: function (url, callback) {
-            var done = false;
-            var script = document.createElement('script');
-            script.type = 'text/javascript';
-            script.language = 'javascript';
-            script.src = url;
-            script.onload = script.onreadystatechange = function () {
-                if (!done && (!script.readyState || script.readyState == 'loaded' || script.readyState == 'complete')) {
-                    done = true;
-                    script.onload = script.onreadystatechange = null;
-                    if (callback) {
-                        callback.call(script);
+        download: function (method, data, url) {
+            var url = url || $Core.Global.route, frame_id = "f_id", frame_name = "f_name";
+            data || (data = {}), $form = $("<form>");
+            $("#" + frame_id).remove();
+            $ifrme = $("<iframe>").attr("id", frame_id).attr("name", frame_name).css({ display: 'none' });
+            $form.attr("action", url).attr("target", frame_name)
+                .append($("<input>").attr("name", "sys_method").val(method));
+            if (parent != null && parent != window) {
+                $form.append($("<input>").attr("name", "sys_mid").val($Core.Utility.getSysmid()));
+            }
+            if (data) { for (var i in data) { $form.append($("<input>").attr("name", i).val(data[i])); } };
+            $("body").append($ifrme).append($form);
+            $form[0].submit();
+            $ifrme.on('load', function () {
+                var doc = this.contentDocument || this.contentWindow.document;
+                var result = JSON.parse(doc.body.innerHTML);
+                $Core.Window.showMsg(result.msg);
+                $form.remove();
+            });
+        },
+        getSysmid: function () {
+            var topWin = window, mid = $Core.Global.Variable.mid;
+            if (!mid) {
+                mid = (function (win) {
+                    var ar = win.AR;
+                    if (ar.Global.Variable.mid || win == win.top) {
+                        return ar.Global.Variable.mid;
                     }
-                }
+                    return arguments.callee(win.parent.window);
+                })(topWin);
             }
-            document.getElementsByTagName("head")[0].appendChild(script);
-        },
-        loadCss: function (url, callback) {
-            var link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.type = 'text/css';
-            link.media = 'screen';
-            link.href = url;
-            document.getElementsByTagName('head')[0].appendChild(link);
-            if (callback) {
-                callback.call(link);
-            }
-        },
-        Cookie: {
+            return mid;
+        }
+
+    };
+    //Cookie对象域
+    (function () {
+        $Core.Cookie = {
             get: function (name) {
                 var c = document.cookie;
                 var start = c.indexOf(name);
@@ -179,55 +141,11 @@
                 var cval = this.get(name);
                 if (cval != null) { document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString(); }
             }
-        },
-        download: function (method, data, url) {
-            var url = url || $Core.Global.route, frame_id = "f_id", frame_name = "f_name";
-            data || (data = {}), $form = $("<form>");
-            $("#" + frame_id).remove();
-            $ifrme = $("<iframe>").attr("id", frame_id).attr("name", frame_name).css({ display: 'none' });
-            $form.attr("action", url).attr("target", frame_name)
-                .append($("<input>").attr("name", "sys_method").val(method));
-            if (parent != null && parent != window) {
-                $form.append($("<input>").attr("name", "sys_mid").val($Core.Utility.getSysmid()));
-            }
-            if (data) { for (var i in data) { $form.append($("<input>").attr("name", i).val(data[i])); } };
-            $("body").append($ifrme).append($form);
-            $form[0].submit();
-            $ifrme.on('load', function () {
-                var doc = this.contentDocument || this.contentWindow.document;
-                var result = JSON.parse(doc.body.innerHTML);
-                $Core.Utility.Window.showMsg(result.msg);
-                $form.remove();
-            });
-        },
-        getPageWindow: function () {
-            var win = (function (win) {
-                var ar = win.AR;
-                if (ar.Global.Variable.mid || win == win.top) {
-                    return win;
-                }
-                return arguments.callee(win.parent.window);
-            })(window);
-            return win;
-        },
-        getSysmid: function () {
-            var topWin = window, mid = $Core.Global.Variable.mid;
-            if (!mid) {
-                mid = (function (win) {
-                    var ar = win.AR;
-                    if (ar.Global.Variable.mid || win == win.top) {
-                        return ar.Global.Variable.mid;
-                    }
-                    return arguments.callee(win.parent.window);
-                })(topWin);
-            }
-            return mid;
         }
-
-    };
+    })();
     //Window对象域
     (function () {
-        $Core.Utility.Window = {
+        $Core.Window = {
             refresh: false,
             /*打开一个窗口,
             * update 默认false既添加，如更新传递true,调用此函数会触发更新AR.Global.DG.action的值
@@ -238,6 +156,7 @@
             close: close,
             showMsg: showMsg,
             confirm: confirm,
+            alert: alert,
             showLoading: showLoading,
             closeLoading: closeLoading,
             dialog: dialog,
@@ -297,7 +216,7 @@
             var defaultOptions = {
                 title: title,
                 border: false,
-                fit: true,
+                //fit: true,
                 resizable: true,
                 content: iframe,
                 maximizable: false,
@@ -306,14 +225,19 @@
                 modal: true,
                 cache: false
             }
+            defaultOptions.width = $(window).width();
+            defaultOptions.height = $(window).height();
             if (opts) {
                 if (typeof (opts) == "string") {
                     opts = JSON.parse(opts)
                 }
-                if (opts.width || opts.height) {
-                    defaultOptions.fit = false;
-                }
+                if (opts.width && $(window).width() < opts.width) { opts.width = $(window).width(); }
+                if (opts.height && $(window).height() < opts.height) { opts.height = $(window).height(); }
+                //if (opts.width || opts.height) {
+                //    defaultOptions.fit = false;
+                //}
             }
+
             div.window($.extend(defaultOptions, opts));
         }
         function close() {
@@ -336,7 +260,27 @@
             });
         }
         //注释看Easyui相关API
+        function alert(msg, title, callBack) {
+            $.messager.alert(title || $Core.Lang.msg, msg, 'info', callBack);
+        }
+        //注释看Easyui相关API
         function showMsg(msg, title, showType, timeout, opts) {
+            opts = opts || { width: 250, height: 100 };
+            if (msg) {
+                var num = msg.length / 60;
+                if (num > 1) {
+                    if (num < 3) {
+                        opts.height = opts.height * num;
+                    }
+                    else if (num < 5) {
+                        opts.width = opts.width * 1.5;
+                        opts.height = opts.height * 2;
+                    } else {
+                        opts.width = opts.width * 2;
+                        opts.height = opts.height * 3;
+                    }
+                }
+            }
             $.messager.show($.extend({
                 title: title || $Core.Lang.msg,
                 msg: msg,
@@ -363,12 +307,13 @@
             }, opts);
             if ($(window).width() < opts.width) { opts.width = $(window).width(); }
             if ($(window).height() < opts.height) { opts.height = $(window).height(); }
+            $Core.Dialog.options = opts;
             _container.dialog(opts);
         }
         function closeDialog() {
             var onClose = document.onClose || parent.document.onClose;
             if (onClose) {
-                onClose($Core.Global.Dialog.returnValue);
+                onClose($Core.Dialog.returnValue);
             }
             var _container = $("#_div_dialog");//没有iframe时的对话框。
             if (!_container[0]) {
@@ -384,7 +329,7 @@
     //Ajax对象域
     (function () {
         /***/
-        $Core.Utility.Ajax = {
+        $Core.Ajax = {
             Settings: {
                 url: $Core.Global.route,
                 method: 'GetList',
@@ -444,7 +389,7 @@
                         location.href = d.msg;//跳转到登陆。
                     }
                     else if (d.success == false && d.msg && !opts.callback && $.messager) {
-                        $Core.Utility.Window.showMsg(d.msg);//需要引用easyui，而其它页面可能没有
+                        $Core.Window.showMsg(d.msg);//需要引用easyui，而其它页面可能没有
                         json = null;
                     }
                     else {
@@ -466,12 +411,12 @@
                 },
                 beforeSend: function () {
                     if (isShowProgress) {
-                        $Core.Utility.Window.showLoading();
+                        $Core.Window.showLoading();
                     }
                 },
                 complete: function () {
                     if (isShowProgress) {
-                        $Core.Utility.Window.closeLoading();
+                        $Core.Window.closeLoading();
                     }
                 }
             };

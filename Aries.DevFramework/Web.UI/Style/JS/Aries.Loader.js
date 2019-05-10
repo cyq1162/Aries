@@ -9,6 +9,8 @@
 /// <reference path="/Style/JS/AriesJS/Aries.DataGrid.js" />
 /// <reference path="/Style/JS/AriesJS/Aries.Form.js" />
 
+var sys_vs = "v5.4.1.3";//系统版本号
+
 function sys_getCookie(name) {
     var c = document.cookie;
     var start = c.indexOf(name);
@@ -48,23 +50,23 @@ var easyui_theme = sys_getCookie('easyui_theme') || 'default';
 
 var sys_lang = sys_getCookie('aries_language') || 'zh_CN';
 var sys_css = sys_getCss();
-var sys_vs = "v5.3.0";//系统版本号
+
 
 //样式
 document.write('<link href="' + sys_ui + '/Style/Theme/EasyUI/' + easyui_theme + '/easyui.css" rel="stylesheet" type="text/css" />');
 document.write('<link href="' + sys_ui + '/Style/Theme/EasyUI/icon.css" rel="stylesheet" type="text/css" />');
 document.write('<link href="' + sys_ui + '/Style/Theme/Aries/' + sys_theme + '/' + sys_css + '.css" rel="stylesheet" />');
 
-//页面的多语言
-//document.write('<script src="' + sys_ui + '/Style/Theme/' + sys_theme + '/locale/Html.Lang-' + sys_lang + '.js?v=' + sys_vs + '"></script>');
-
 //jq+easyui
+
 document.write('<script src="' + sys_ui + '/Style/JS/jquery-1.7.1.min.js"></script>');
 
 document.write('<script src="' + sys_ui + '/Style/JS/json2.js" ></script>');
+
 document.write('<script src="' + sys_ui + '/Style/JS/EasyUI-1.3.4/jquery.easyui.min.js?"></script>');
 document.write('<script src="' + sys_ui + '/Style/JS/EasyUI-1.3.4/locale/easyui-lang-' + sys_lang + '.js"></script>');
 //Aries
+
 document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/locale/Aries.Lang-' + sys_lang + '.js?v=' + sys_vs + '"></script>');
 document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/Aries.Global.js?v=' + sys_vs + '"></script>');
 document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/Aries.EasyUIExtend.js?v=' + sys_vs + '"></script>');
@@ -76,7 +78,6 @@ if (!isLoginPath()) {
     document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/Aries.DataGrid.js?v=' + sys_vs + '"></script>');
     document.write('<script src="' + sys_ui + '/Style/JS/AriesJS/Aries.Form.js?v=' + sys_vs + '"></script>');
 }
-
 
 
 

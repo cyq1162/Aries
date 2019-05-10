@@ -160,11 +160,13 @@
     * 重写 Jquery-Easyui form的load事件，不区分大小写
     */
     var _formload = $.fn.form.methods.load;
-    $.fn.form.methods.load = function (jq, param) {
+    $.fn.form.methods.load = function (jq, paras) {
+        var param = $.extend(true, {}, paras);//复制一份，不改变原有数据。
         for (var i in param) {/*处理下拉绑定Boolean类型的数据还原。*/
             if (typeof (param[i]) == "boolean") {
                 param[i] = param[i] == true ? 1 : 0;
             }
+            param[i.toLowerCase()] = param[i];//追加一份小写的数据。
         }
         //兼容Oracle，不区分大小写
         var _name, _lowerName;
@@ -182,15 +184,21 @@
         });
         _formload(jq, param);
         $(":checkbox").each(function () {
-            var _value = param[$(this).attr('name')];
-            if (_value == 1 || $.type(_value) == "boolean") {
-                $(this).attr("checked", _value);
+            var key = $(this).attr('name') || $(this).attr('id');
+            if (key) {
+                var _value = param[key.toLowerCase()];
+                if (_value == 1 || $.type(_value) == "boolean") {
+                    $(this).attr("checked", _value);
+                }
             }
         });
         $("span[name],label[name],span[id],label[id]").each(function () {
-            var value = param[$(this).attr('name') || $(this).attr('id')];
-            if (value != undefined) {
-                $(this).html(value);
+            var key = $(this).attr('name') || $(this).attr('id');
+            if (key) {
+                var value = param[key.toLowerCase()];
+                if (value != undefined) {
+                    $(this).html(value);
+                }
             }
         });
     }
@@ -250,10 +258,10 @@
             setValue: function (target, value) {
                 $(target).val(value);
                 var opts = JSON.parse($(target).attr("options"));
-                AR.Global.Dialog.$target = $(target);
-                AR.Global.Dialog.options = opts;
+                AR.Dialog.$target = $(target);
+                AR.Dialog.options = opts;
                 //url, title, isUpdate, opts
-                AR.Utility.Window.open(opts.url, opts.title, false, opts);
+                AR.Window.open(opts.url, opts.title, false, opts);
             },
             resize: function (target, width) {
             },
@@ -370,7 +378,7 @@
                 var id = param[1] || AR.Utility.queryString('id');
                 if (id) data.id = id;
                 //method, objName, data, async, url, callback, isShowProgress
-                var result = AR.Utility.Ajax.get("Exists", AR.Form.tableName, data);
+                var result = AR.Ajax.get("Exists", AR.Form.tableName, data);
                 if (result) {
                     if (result.success) {
                         this.message = $Core.Lang.dataExists;

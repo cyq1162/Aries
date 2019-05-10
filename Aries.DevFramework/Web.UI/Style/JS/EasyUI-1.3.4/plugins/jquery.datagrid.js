@@ -1096,7 +1096,7 @@ for(var _103=0;_103<rows.length;_103++){
 _7(_101,opts.idField,rows[_103]);
 }
 }
-opts.onSelectAll.call(_fe,rows);
+opts.onSelect.call(_fe,rows);
 };
 function _f3(_104,_105){
 var _106=$.data(_104,"datagrid");
@@ -2243,7 +2243,7 @@ return $.data(_229,"datagrid").data.rows[parseInt(_22a)];
 },onResizeColumn:function(_237,_238){
 },onSelect:function(_239,_23a){
 },onUnselect:function(_23b,_23c){
-},onSelectAll:function(rows){
+},onSelect:function(rows){
 },onUnselectAll:function(rows){
 },onCheck:function(_23d,_23e){
 },onUncheck:function(_23f,_240){

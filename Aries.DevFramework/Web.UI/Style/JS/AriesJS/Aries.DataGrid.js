@@ -1,4 +1,4 @@
-﻿
+﻿/// <reference path="/Style/JS/Aries.Loader.js" />
 +function ($, $Core) {
     $Core.Lang || ($Core.Lang = {});
     $Core.Private || ($Core.Private = {});
@@ -360,7 +360,7 @@
                             para.winTitle = this.winTitle;
                             para.opts = this.opts;
                             if (this.onBeforeExecute(para) == false) { return; };
-                            $Core.Utility.Window.open(para.url, para.winTitle, false, para.opts);
+                            $Core.Window.open(para.url, para.winTitle, false, para.opts);
 
                         }
                     };
@@ -378,9 +378,9 @@
                             ids.push(value);//"'" + id + "'"
                         }
                         else {
-                            var selRows = dg.getCheckids();
+                            var selRows = dg.getCheckIDs();
                             if (selRows.length == 0) {
-                                $Core.Utility.Window.showMsg($Core.Lang.selectDelData);
+                                $Core.Window.showMsg($Core.Lang.selectDelData);
                                 return false;
                             }
                             ids = selRows;
@@ -392,8 +392,8 @@
                             return false;
                         }
 
-                        $Core.Utility.Window.confirm($Core.Lang.isDel, null, function () {
-                            $Core.Utility.Ajax.post("Delete", dg.tableName, { "id": ids.join(','), "foreignKeys": dg.foreignKeys, "idField": dg.options.idField, "parentField": dg.options.parentField }, function (result) {
+                        $Core.Window.confirm($Core.Lang.isDel, null, function () {
+                            $Core.Ajax.post("Delete", dg.tableName, { "id": ids.join(','), "foreignKeys": dg.foreignKeys, "idField": dg.options.idField, "parentField": dg.options.parentField }, function (result) {
                                 if (onAfterEvent) {
                                     if (onAfterEvent(ids, result) == false) { return false; }
                                 }
@@ -401,12 +401,12 @@
                                     return;
                                 }
                                 if (result.success != undefined && result.success) {
-                                    $Core.Utility.Window.showMsg($Core.Lang.delSuccess);
+                                    $Core.Window.showMsg($Core.Lang.delSuccess);
                                     if (dg.options.pagination || !dg.isTreeGrid) {
                                         dg.reload();
                                     }
                                     else {//不分页，时，只移除当前节点，避免树型节点太大。
-                                        var rows = dg.getCheckids(dg.options.idField);
+                                        var rows = dg.getCheckIDs(dg.options.idField);
                                         for (var i = rows.length - 1; i >= 0; i--) {
                                             dg.datagrid("deleteRow", rows[i]);
                                         }
@@ -414,7 +414,7 @@
                                     }
                                     dg.datagrid("clearChecked");//清掉缓存的数据。
                                 } else {
-                                    $Core.Utility.Window.showMsg($Core.Lang.delError + $Core.Lang.errorInfo + result.msg);
+                                    $Core.Window.showMsg($Core.Lang.delError + $Core.Lang.errorInfo + result.msg);
                                 }
                             });
                         });
@@ -442,7 +442,7 @@
                                     });
                                 }
                                 else {
-                                    $Core.Utility.Window.showMsg($Core.Lang.uploadExtendName + exts);
+                                    $Core.Window.showMsg($Core.Lang.uploadExtendName + exts);
                                     return false;
                                 }
                                 var param = {};
@@ -460,13 +460,13 @@
                                     data = JSON.parse(data);
                                 }
                                 if (data.success) {
-                                    $Core.Utility.Window.showMsg(data.msg);
+                                    $Core.Window.showMsg(data.msg);
                                     dg.reload();
                                 }
                                 else {
                                     data.msg = data.msg.replace(/&/g, '&amp').replace(/\"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace("\"", "'");
                                     var tip = "<div>" + $Core.Lang.importError + "<a title=\"" + data.msg + "\" onclick=\"javascript:alert(this.title)\"><font color='red'>" + $Core.Lang.errorInfo + "</font></a></div>";
-                                    $Core.Utility.Window.showMsg(tip, null, null, 8000);//"导入失败！"
+                                    $Core.Window.showMsg(tip, null, null, 8000);//"导入失败！"
                                     if (data.sys_down != undefined) {
                                         $Core.Utility.download('Down', { 'sys_down': data.sys_down });
                                     }
@@ -493,7 +493,7 @@
                         ifrme && ifrme.remove(); form_export && form_export.remove();
                         var objName = dg.tableName;
                         // var targetForm = $("#" + dg.ToolArea.id).find(".grid-toolbar").siblings("div").find('form');
-                        var checked_ids = dg.getCheckids();
+                        var checked_ids = dg.getCheckIDs();
                         var jsonString = "";
                         if (checked_ids.length > 0) {
                             jsonString = checked_ids.join(',');
@@ -507,7 +507,7 @@
                         }
                         //window.open(ajaxOptions.href + '?objName=' + objName + '&sys_search='+jsonString, '_self');      
                         var iframeName = "framePost";
-                        var url = $Core.Utility.Ajax.Settings.url + "?sys_objName=" + dg.objName + "&sys_tableName=" + objName + "&sys_method=Export";
+                        var url = $Core.Ajax.Settings.url + "?sys_objName=" + dg.objName + "&sys_tableName=" + objName + "&sys_method=Export";
                         ifrme = $("<iframe>").attr("id", "div_ifrme_template").attr("name", iframeName).css({ display: 'none' });
                         form_export = $("<form>").attr("method", "post").attr("action", url).attr("target", iframeName).attr("id", "form_data");
                         var param = {
@@ -787,10 +787,11 @@
                             }
                         }
                     }
-                    $Core.Utility.Window.open(url, (winTitle || " "), op == 1, opts);
+                    $Core.Window.open(url, (winTitle || " "), op == 1, opts);
                 }
 
             };
+            //行内编辑工具栏（编辑、删除、保存、取消）
             that.Editor = function () {
                 var Obj = new Object();
                 this.editIndex = null;
@@ -841,12 +842,12 @@
                                 //    return;
                                 //}
 
-                                //$Core.Utility.Window.confirm($Core.Lang.isDel, null, function () {
-                                //    $Core.Utility.Ajax.post("Delete", dg.tableName, { id: value, "foreignKeys": dg.foreignKeys, "idField": dg.options.idField, "parentField": dg.options.parentField }, function (result) {
+                                //$Core.Window.confirm($Core.Lang.isDel, null, function () {
+                                //    $Core.Ajax.post("Delete", dg.tableName, { id: value, "foreignKeys": dg.foreignKeys, "idField": dg.options.idField, "parentField": dg.options.parentField }, function (result) {
                                 //        if (result.success) {
                                 //            dg.datagrid('deleteRow', index);
                                 //        }
-                                //        $Core.Utility.Window.showMsg(result.msg);
+                                //        $Core.Window.showMsg(result.msg);
                                 //        dg.PKColumn.Editor.BtnDel.onAfterExecute(value, index, result);//回调中不能用this
                                 //    });
 
@@ -1130,6 +1131,15 @@
                             for (var key in attrs) {
                                 $input.attr(key, attrs[key]);
                             }
+                            //判断是否必填：
+                            var col = dg.Internal.headerData.get("field", field);
+                            if (col && col.datatype)
+                            {
+                                var values = col.datatype.split(',');
+                                if (values.length >= 4 && values[3] == "1") {
+                                    $input.attr("defaultItem", false);
+                                }
+                            }
                             $input.attr("width", $input.parent().width());
                             $input.attr("isEditor", true);
                             $input.attr("gridid", dg.id);
@@ -1191,10 +1201,10 @@
                                         var primary = dg.Internal.jointPrimary[i];
                                         row[primary] && (post_data[primary] = row[primary]);//附加主键的id值传入后台 
                                     }
-                                    var value = dg.getPrimaryid(row);
+                                    var value = dg.getPrimaryID(row);
                                     if (dg.PKColumn.Editor.BtnSave.onBeforeExecute(value, index, post_data) != false) {
                                         editResult = true;
-                                        $Core.Utility.Ajax.post(dg.PKColumn.Editor.action, dg.tableName, post_data, function (result) {
+                                        $Core.Ajax.post(dg.PKColumn.Editor.action, dg.tableName, post_data, function (result) {
                                             if (result) {
                                                 if (result.success) {
                                                     if (dg.PKColumn.Editor.action == "Add") {
@@ -1213,7 +1223,7 @@
                                                 }
                                                 dg.PKColumn.Editor.action = undefined;
                                                 callBack && callBack(result.success);//异步的回调处理
-                                                $Core.Utility.Window.showMsg(result.msg);
+                                                $Core.Window.showMsg(result.msg);
                                             }
                                         });
                                     }
@@ -1251,34 +1261,48 @@
 }(jQuery, AR);
 
 +function ($, $Core) {
+    var method = "GetInitConfig";
+    if (parent.AR && parent.AR.Config.data) {
+        $Core.Config.data = parent.AR.Config.data;
+    }
+    else {
+        method += ",GetKeyValueConfig";
+    }
     /**
    *该文件依赖与AR.Core.Utility.js文件
    */
-    $Core.Utility.Ajax.post("GetInitConfig,GetKeyValueConfig", null, null, function (result) {
-        $Core.Global.Variable = result.GetInitConfig;
-        $Core.Global.Variable.isLoadCompleted = true;
-        $Core.Config.data = result.GetKeyValueConfig;
-        if (result && result.GetInitConfig.mid == "" && result.GetInitConfig.actionKeys == "" && parent.AR) {
-            $Core.Global.Variable = parent.AR.Global.Variable;
+    $Core.Ajax.post(method, null, null, function (result) {
+        if (result) {
+            if (result.GetKeyValueConfig) {
+                $Core.Global.Variable = result.GetInitConfig;
+                $Core.Config.data = result.GetKeyValueConfig;
+            }
+            else {
+                $Core.Global.Variable = result;
+            }
+            if ($Core.Global.Variable.mid == "" && $Core.Global.Variable.actionKeys == "" && parent.AR) {
+                $Core.Global.Variable = parent.AR.Global.Variable;
+            }
+            $Core.Global.Variable.isLoadCompleted = true;
         }
     });
     //==================================Internal Function Region======================================================
-    $Core.DataGrid = DataGrid;
-    /**
+    /** new AR.DataGrid(...);
         *objName：视图名，表名，或者sql文件指定的路径
         *tbName:指定的操作主表名称
         *id 默认值 dg      
         *isTreeGrid 默认false(datagrid)，可设值为true(treegrid) 
         */
-    function DataGrid(objName, tbName, id, isTreeGrid) {
+    $Core.DataGrid = function (objName, tbName, id, isTreeGrid) {
         //内部变量
         this.Internal = {
             //第一个主键
             primarykey: null,
-            //联合主键
+            //数组：联合主键
             jointPrimary: [],
+            //数组：请求头数据
             headerData: new Array(),
-            //contextData:null,
+            //DataGrid是否已加载完成
             isLoadCompleted: false
         }
         this.id = id || 'dg';
@@ -1293,16 +1317,16 @@
         this.isShowCheckBox = true;
         //是否启用行内编辑
         this.isEditor = false;
-        this.options = {
-            //需要追求的请求数据(GetHeader也会追加）。
-            queryParams: {},
-            defaultWhere: []
-        };
+        this.options = $Core.Global.DG.DefaultConfig;//事先设置是为了有提示。
+        //Json：需要追求的请求数据(GetHeader也会追加）。
+        this.options.queryParams = {},
+        //数组：可通过addWhere方法操作。
+        this.options.defaultWhere = [],
         /*可以事先构建，产生插时行时的默认值*/
         this.defaultInsertData = {};
         //对defaultWhere的操作
         this.addWhere = function (name, value, operator, isOr) {
-            if (name && (value || operator)) {
+            if (name && (value != undefined || operator != undefined)) {
                 if (!operator) { operator = "="; }
                 if (!this.options.defaultWhere) {
                     this.options.defaultWhere = [];
@@ -1319,11 +1343,12 @@
             }
             return this;
         }
-        this.orderBy = function (orderBy)
-        {
+        //增加排序条件，如："xx1 desc,xx2 asc"
+        this.orderBy = function (orderBy) {
             this.options.sortName = orderBy;
         }
         this.$target = null;
+        //easyui 的原生 datagrid 操作。
         this.datagrid = function (v1, v2) {
             if (this.isTreeGrid) {
                 switch (v1) {
@@ -1361,7 +1386,7 @@
                 return v2 != undefined ? this.$target.datagrid(v1, v2) : this.$target.datagrid(v1);
             }
         }
-        //获取列表的选中项，返回数组
+        //数组：获取列表的选中项
         this.getChecked = function () {
             if (this.$target == null) {
                 return [];
@@ -1375,12 +1400,12 @@
             var rows = this.datagrid(type);
             var ids = [];
             for (var i = 0; i < rows.length; i++) {
-                ids.push(this.getPrimaryid(rows[i], key));
+                ids.push(this.getPrimaryID(rows[i], key));
             }
             return ids;
         },
-        //获得主键的id数据
-        this.getPrimaryid = function (row, key) {
+        //string ：获得主键的id
+        this.getPrimaryID = function (row, key) {
             var id = "";
             if (!key && this.Internal.jointPrimary.length > 1) {
                 for (var j = 0; j < this.Internal.jointPrimary.length; j++) {
@@ -1395,26 +1420,29 @@
             }
             return id;
         }
-        //获取列表的选中项，返回id数组
-        this.getCheckids = function (key) {
+        //数组：获取列表的选中项，返回ids
+        this.getCheckIDs = function (key) {
             return this._GetIDs("getChecked", key);
         };
-        //获取列表的选中项，返回id数组
-        this.getSelectids = function (key) {
+        //数组：获取列表的选中项，返回ids
+        this.getSelectIDs = function (key) {
             return this._GetIDs("getSelections", key);
         };
+        //数组：返回当前选中的行
         this.getSelected = function () {
             if (this.$target == null) {
                 return [];
             }
             return this.datagrid("getSelected");
         }
+        //数组：返回当前绑定的数据行
         this.getData = function () {
             if (this.$target == null) {
                 return [];
             }
             return this.datagrid("getData");
         }
+        //重新加载绑定项
         this.reload = function () {
             if (this.$target == null) {
                 return;
@@ -1422,14 +1450,17 @@
             this.Search.reloadGrid(this);
             //$Core.Common._Internal.reloadGrid(this);
         }
-        /**
-        *主键列对象，可对按钮进行操作
-        */
+        //主键列对象，可对按钮进行操作
         this.PKColumn = new $Core.Private.Grid.PKColumn(this);
+        //搜索区
         this.Search = new $Core.Private.Grid.Search();
+        //工具栏区
         this.ToolBar = new $Core.Private.Grid.ToolBar();
+        //系统默认的表格列的各种格式化函数
         this.Formatter = $Core.Common.Formatter;
+        //右键菜单：列头
         this.HeaderMenu = new $Core.Private.Grid.ContextMenu.Header();
+        //右键菜单：行数据
         this.RowMenu = new $Core.Private.Grid.ContextMenu.Row(this.isTreeGrid);
         //工具区（包含搜索区和按钮区）
         this.ToolArea = {
@@ -1440,7 +1471,8 @@
             isHidden: false
         }
     };
-    DataGrid.prototype.bind = function () {
+    //绑定（根据初始条件：请求列头=》请求数据=》呈现表格）
+    $Core.DataGrid.prototype.bind = function () {
         $Core.Global.DG.Items.set(this.id, this);
         $Core.Global.DG.operating = this;
         var dg = this;
@@ -1493,7 +1525,7 @@
             }
         }
 
-        $Core.Utility.Ajax.post("GetHeader", dg.objName + "," + dg.tableName, dg.options.queryParams,
+        $Core.Ajax.post("GetHeader", dg.objName + "," + dg.tableName, dg.options.queryParams,
             function (dg) {
                 return function (result) {
                     //拿到了Header，但GetKeyValuet Init，Combobox事件还没。
@@ -1539,9 +1571,9 @@
                 objName = objName.split('=>')[0];
             }
             obj_item['ObjName'] = objName;
-            if ($Core.Combobox.paras[objName] != undefined) {
-                obj_item['Para'] = $Core.Combobox.paras[objName];
-            }
+            //if ($Core.Combobox.paras[objName] != undefined) {
+            //    obj_item['Para'] = $Core.Combobox.paras[objName];
+            //}
             _postArray.push(obj_item);
         }
         //请求下拉框数据,子页面的下拉列表数据绑定

@@ -1,4 +1,4 @@
-﻿
+﻿/// <reference path="/Style/JS/Aries.Loader.js" />
 window.AR || (window.AR = {});
 
 //AR.Global 定义
@@ -26,7 +26,7 @@ window.AR || (window.AR = {});
     };
     //处理Config_KeyValue的数据。
     $Core.Config = {
-        data: {},
+        data: undefined,
         getText: function (configKey, value) {
             var items = this.data[configKey];
             var itemValue = [];
@@ -71,6 +71,31 @@ window.AR || (window.AR = {});
             }
         }
     },
+    //存档当前对话框的相关变量
+    $Core.Dialog = {
+        //目标的JQ对象
+        $target: undefined,
+        //Dialog初始化：传递的参数
+        options: {},
+        //返回值：选择的文本
+        text: undefined,
+        //返回值：选择的值
+        value: undefined,
+        //返回值：选择的完整数据
+        data: undefined,
+        //返回值：下拉绑定的参数
+        option: undefined,
+        //清空返回值。
+        clearReturnValue: function () {
+            this.text = undefined;
+            this.value = undefined;
+            this.data = undefined;
+            this.option = undefined;
+        },
+        //用户点击确定或取消后触发 $input，点击的input（JQ）对象，isOK（确定）按钮或取消按钮事件。
+        onAfterExecute: function ($input, isOK) { }
+
+    },
     //全局变量对象（用于存档全局使用的数据）
     $Core.Global = {
         DG: {
@@ -113,7 +138,11 @@ window.AR || (window.AR = {});
         *页面全局变量
         *ui(虚拟应用程序的路径)，actionkeys（页面对应的权限集）,mid（当前菜单id）
         */
-        Variable: {},
+        Variable: {
+            ui: undefined,
+            actionKeys: undefined,
+            mid: undefined
+        },
         ////存档用户信息
         //_User: undefined,
         /*
@@ -133,7 +162,7 @@ window.AR || (window.AR = {});
             }
             if (!this._User)//从远程获取。
             {
-                AR.Utility.Ajax.get("GetUserInfo", null, null, function (data) {
+                AR.Ajax.get("GetUserInfo", null, null, function (data) {
                     AR.Global._User = data;
                     callBack && callBack(data);
                 });
@@ -141,16 +170,8 @@ window.AR || (window.AR = {});
             else {
                 return this._User;
             }
-        },
-        //存档对话框的相关变量
-        Dialog: {
-            //目标的JQ对象
-            $target: undefined,
-            //传递的参数
-            options: {},
-            //返回值
-            returnValue: undefined
         }
+
     };
     //AR.BtnBase 基类的定义
     $Core.ExecuteEvent = ExecuteEvent;
@@ -230,6 +251,21 @@ window.AR || (window.AR = {});
             return true;
         }
     }
+    //根据id、name、class 找到第一个满足条件的元素（elTag的默认值为input）。
+    $.el = function (idOrNameOrClass, elTag) {
+        var $input = undefined;
+        if (idOrNameOrClass) {
+            var $input = $("#" + idOrNameOrClass);
+            if (!$input[0]) {
+                if (!elTag) { elTag = 'input'; }
+                $input = $($(elTag + "[name='" + idOrNameOrClass + "']")[0]);
+                if (!$input[0]) {
+                    $input = $($("." + idOrNameOrClass)[0]);
+                }
+            }
+        }
+        return $input;
+    }
 })(jQuery, window.AR);
 
 
@@ -248,6 +284,9 @@ window.AR || (window.AR = {});
     };
     //是否包含指定的值（值，Key）
     Array.prototype.contains = function (v, k) {
+        if (v == undefined) {
+            return false;
+        }
         if (this instanceof Array) {
             var value;
             for (var i = 0; i < this.length; i++) {

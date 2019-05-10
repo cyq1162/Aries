@@ -10,7 +10,7 @@ a { text-decoration: none; color: #333; cursor: pointer; }
 .fl { float: left; }
 .fr { float: right; }
 .cl { clear: both; }
-
+a.hover { cursor: pointer; }
 
 .page-body { width: 100%; }
 /*form 表单样式：AR.Form*/

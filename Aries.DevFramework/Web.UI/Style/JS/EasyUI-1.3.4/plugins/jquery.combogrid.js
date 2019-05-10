@@ -34,9 +34,9 @@ _4.onSelect.call(this,_b,_c);
 },onUnselect:function(_e,_f){
 _d();
 _4.onUnselect.call(this,_e,_f);
-},onSelectAll:function(_10){
+},onSelect:function(_10){
 _d();
-_4.onSelectAll.call(this,_10);
+_4.onSelect.call(this,_10);
 },onUnselectAll:function(_11){
 if(_4.multiple){
 _d();

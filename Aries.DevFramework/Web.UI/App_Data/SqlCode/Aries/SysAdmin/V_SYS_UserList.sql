@@ -6,6 +6,6 @@
  
 描述说明：用户视图 ------Demo所用。 
 使用 URL：/Web/SysAdmin/UserList.html
-where a.CompanyID=@CompanyID 
+where a.Companyid=@Companyid 
 */ 
 SELECT u.*,ui.* FROM Sys_User u left join Sys_UserInfo ui on u.UserID=ui.UserInfoID

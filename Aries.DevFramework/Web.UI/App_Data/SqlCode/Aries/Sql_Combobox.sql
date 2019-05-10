@@ -4,7 +4,7 @@
 --说明： 框架的，请勿修改，业务的，请将Sql_Yours.sql改名，并写在Sql_Yours.sql中
 ---- where RoleID<>'@SuperAdminRoleID'
 C_SYS_Role=	 SELECT RoleID AS value, RoleName AS text FROM Sys_Role
-C_SYS_Org = SELECT OrgID AS value, OrgName AS text,ParentOrg as parent FROM Sys_Organization
+C_SYS_Org = SELECT OrgID AS value, OrgName AS text,ParentOrgID as parent FROM Sys_Organization
 C_SYS_ObjName  =  SELECT distinct ObjName AS text FROM Config_Grid 
 C_SYS_ConfigKey  =  SELECT distinct ConfigKey AS text FROM Config_KeyValue
 --区域表

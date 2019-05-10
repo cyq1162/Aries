@@ -29,7 +29,7 @@ namespace Aries.Core.Auth
             using (MAction action = new MAction(U_AriesEnum.Sys_User))
             {
                 string where = string.Empty;
-                if (action.DalType == DalType.Txt || action.DalType == DalType.Xml)
+                if (action.DataBaseType == DataBaseType.Txt || action.DataBaseType == DataBaseType.Xml)
                 {
                     where = string.Format("Status=1 and UserName='{0}'", userName);
                 }
@@ -53,7 +53,7 @@ namespace Aries.Core.Auth
                             string userid = action.Get<string>(Sys_User.UserID);
                             userName = action.Get<string>(Sys_User.UserName);
                             string fullName = action.Get<string>(Sys_User.FullName, userName);
-                            if (action.DalType == DalType.Txt || action.DalType == DalType.Xml)
+                            if (action.DataBaseType == DataBaseType.Txt || action.DataBaseType == DataBaseType.Xml)
                             {
                                 action.Set(Sys_User.LoginCount, action.Get<int>(Sys_User.LoginCount, 0) + 1);
                             }
@@ -70,8 +70,9 @@ namespace Aries.Core.Auth
                             //action.SetPara("UserName", userName, System.Data.DbType.String);
                             action.Update(where);//更新信息。
                             //获取角色名称
-                            string roleids = action.Get<string>(Sys_User.RoleIDs);
-                            token = EncryptHelper.Encrypt(DateTime.Now.Day + "," + userid + "," + userName + "," + fullName + "," + roleids);
+                            string roleIDs = action.Get<string>(Sys_User.RoleIDs);
+                            string orgIDs = action.Get<string>(Sys_User.OrgIDs);
+                            token = EncryptHelper.Encrypt(DateTime.Now.Day + ";" + userid + ";" + userName + ";" + fullName + ";" + roleIDs + ";" + orgIDs);
                         }
                         else
                         {
@@ -252,7 +253,7 @@ namespace Aries.Core.Auth
                 string text = EncryptHelper.Decrypt(token);
                 if (!string.IsNullOrEmpty(text))
                 {
-                    string[] items = text.Split(',');
+                    string[] items = text.Split(';');
                     if (items.Length > index)
                     {
                         return items[index];
@@ -313,6 +314,16 @@ namespace Aries.Core.Auth
             get
             {
                 return GetTokenValue(4);
+            }
+        }
+        /// <summary>
+        /// 用户的组织ids
+        /// </summary>
+        public static string OrgIDs
+        {
+            get
+            {
+                return GetTokenValue(5);
             }
         }
         /// <summary>

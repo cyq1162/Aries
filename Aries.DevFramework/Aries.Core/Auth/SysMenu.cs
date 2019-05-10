@@ -4,6 +4,7 @@ using System.Text;
 using CYQ.Data;
 using CYQ.Data.Table;
 using Aries.Core.DB;
+using CYQ.Data.Aop;
 
 namespace Aries.Core.Auth
 {
@@ -24,6 +25,7 @@ namespace Aries.Core.Auth
                 //{
                 using (MAction action = new MAction(U_AriesEnum.Sys_Menu))
                 {
+                    action.SetAopState(AopOp.OpenAll);//强制开启自动缓存。
                     return action.Select("order by MenuLevel ASC,SortOrder ASC");
                 }
                 //}
@@ -47,6 +49,7 @@ namespace Aries.Core.Auth
                 //{
                 using (MAction action = new MAction(U_AriesEnum.Sys_Action))
                 {
+                    action.SetAopState(AopOp.OpenAll);//强制开启自动缓存。
                     return action.Select("order by SortOrder ASC");
                 }
                 //}
@@ -136,21 +139,22 @@ namespace Aries.Core.Auth
                 if (dt.Rows.Count > 0)
                 {
                     Dictionary<string, string> dic = RoleActionToDic(dt, onlyid);
-                    MDataTable menuDt = MenuTable;
+                    MDataTable allMenu = MenuTable;
+                    MDataTable userMenu = allMenu.Clone();
                     #region 组合有权限的菜单
                     if (!onlyid)
                     {
-                        menuDt.Columns.Add("ActionRefNames", System.Data.SqlDbType.NVarChar);
+                        userMenu.Columns.Add("ActionRefNames", System.Data.SqlDbType.NVarChar);
                     }
-                    for (int i = 0; i < menuDt.Rows.Count; i++)
+                    for (int i = 0; i < userMenu.Rows.Count; i++)
                     {
-                        MDataRow row = menuDt.Rows[i];
+                        MDataRow row = userMenu.Rows[i];
                         string menuid = row.Get<string>("MenuID");
                         if (!dic.ContainsKey(menuid))
                         {
-                            if (!HasChild(menuid, MenuTable, dic))
+                            if (!HasChild(menuid, allMenu, dic))
                             {
-                                menuDt.Rows.RemoveAt(i);
+                                userMenu.Rows.RemoveAt(i);
                                 i--;
                             }
                         }
@@ -167,7 +171,7 @@ namespace Aries.Core.Auth
                         }
                     }
                     #endregion
-                    return menuDt;
+                    return userMenu;
                 }
 
             }

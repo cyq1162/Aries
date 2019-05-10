@@ -1,13 +1,17 @@
 ﻿using Aries.Core.Auth;
+using Aries.Core.Config;
 using Aries.Core.Extend;
 using Aries.Core.Helper;
+using Aries.Core.Sql;
 using CYQ.Data;
 using CYQ.Data.Cache;
+using CYQ.Data.Table;
 using CYQ.Data.Tool;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Web;
@@ -25,21 +29,72 @@ namespace Aries.Core
 
         }
         static bool isFirstLoad = true, isFirstAuthCheck = true;
-        bool isAjax = false;
+        bool isStaticFile = false, isAjax = false;
+        bool IsStaticFile()
+        {
+            isStaticFile = false;
+            string contentType = "";
+            switch (context.Request.CurrentExecutionFilePathExtension)
+            {
+                case ".js":
+                    contentType = "text/javascript";
+                    break;
+                case ".css":
+                    contentType = "text/css";
+                    break;
+                case ".gif":
+                    contentType = "image/gif";
+                    break;
+                case ".jpg":
+                    contentType = "image/jpg";
+                    break;
+                case ".jpeg":
+                    contentType = "image/jpeg";
+                    break;
+                case ".bmp":
+                    contentType = "image/bmp";
+                    break;
+                case ".png":
+                    contentType = "image/png";
+                    break;
+            }
+            if (!string.IsNullOrEmpty(contentType))
+            {
+                isStaticFile = true;
+                string etag = Assembly.GetExecutingAssembly().GetName().Version.ToString() + 6;
+                if (context.Request.Headers["If-None-Match"] == etag)
+                {
+                    context.Response.StatusCode = 304;
+                }
+                else
+                {
+                    context.Response.ContentType = contentType;
+                    context.Response.Cache.SetCacheability(HttpCacheability.Public);//对所有用户都同样进行缓存。
+                    context.Response.Cache.SetExpires(DateTime.Now.AddDays(1));
+                    context.Response.AppendHeader("ETag", etag);
+                    context.Response.AppendHeader("Last-Modified", DateTime.Now.ToString());
+                    context.Response.WriteFile(context.Server.MapPath(context.Request.Url.LocalPath));
+                }
+                context.Response.End();
+            }
+
+            return false;
+        }
         public void Init(HttpApplication context)
         {
             if (isFirstLoad)
             {
 #if DEBUG
-                AppConfig.Cache.IsAutoCache=false;
-#endif 
-
+                AppConfig.Cache.IsAutoCache = false;
+#endif
+                string lic = AppConfig.GetApp(LangConst.AriesLic);
+                if (string.IsNullOrEmpty(lic) || !lic.EndsWith("=2"))
+                {
+                    throw new Exception("Aries Authorization Fail : http://lic.cyqdata.com");
+                }
                 isFirstLoad = false;
-                CrossDb.PreLoadAllDBSchemeToCache();
-
-
             }
-           
+
             context.BeginRequest += new EventHandler(context_BeginRequest);
             //支持Session （VS2013 以上的 IISExpress 浏览器默认会检测文件存在，因此需要做点小事情做兼容）
             context.PostMapRequestHandler += new EventHandler(context_PostMapRequestHandler);
@@ -62,6 +117,10 @@ namespace Aries.Core
         {
             HttpApplication app = (HttpApplication)sender;
             context = app.Context;
+            if (IsStaticFile())
+            {
+                return;
+            }
             if (context.Request.Url.LocalPath == "/")//设置默认首页
             {
                 string defaultUrl = WebHelper.GetDefaultUrl();
@@ -98,7 +157,7 @@ namespace Aries.Core
                 //VS2015和VS 2017 Microsoft-IIS/10.0
                 if (integralFlag == 1 && WebHelper.IsAriesSuffix())
                 {
-                    
+
                     if (isAjax)
                     {
                         string localPath = context.Request.Url.PathAndQuery;
@@ -113,6 +172,11 @@ namespace Aries.Core
 
         void context_AcquireRequestState(object sender, EventArgs e)
         {
+            
+            if (isStaticFile)
+            {
+                return;
+            }
             if (WebHelper.IsAriesSuffix())
             {
                 string localPath = context.Request.Url.LocalPath;

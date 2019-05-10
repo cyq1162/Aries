@@ -195,7 +195,8 @@ namespace Aries.Core.Auth
 
         private MDataRow GetMenu(Uri uri)
         {
-            if (UserMenu != null)
+            MDataTable userMenu = UserMenu;
+            if (userMenu != null)
             {
                 string url = uri.LocalPath;
                 string pathAndQuery = uri.PathAndQuery;
@@ -206,15 +207,15 @@ namespace Aries.Core.Auth
                     pathAndQuery = pathAndQuery.Remove(0, start);
                 }
                 string where = "MenuUrl='" + pathAndQuery + "' or MenuUrl='" + pathAndQuery.TrimStart('/') + "'";
-                MDataRow menu = UserMenu.FindRow(where);
+                MDataRow menu = userMenu.FindRow(where);
                 if (menu == null)
                 {
                     where = "MenuUrl='" + url + "' or MenuUrl='" + url.TrimStart('/') + "'";
-                    menu = UserMenu.FindRow(where);
+                    menu = userMenu.FindRow(where);
                     if (menu == null)//进一步检测是否补充了后续参数问题
                     {
                         where = "MenuUrl like '" + url + "%' or MenuUrl like '" + url.TrimStart('/') + "%'";
-                        menu = UserMenu.FindRow(where);
+                        menu = userMenu.FindRow(where);
                     }
                 }
                 //获取当前请求的Url
@@ -258,7 +259,10 @@ namespace Aries.Core.Auth
                             case "dialogview":
                                 break;
                             default:
-                                parentidList.Add(uri.LocalPath, mid);
+                                if (!parentidList.ContainsKey(uri.LocalPath))
+                                {
+                                    parentidList.Add(uri.LocalPath, mid);
+                                }
                                 break;
                         }
 

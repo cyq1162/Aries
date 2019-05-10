@@ -199,11 +199,11 @@ namespace Aries.Core.Sql
                         text = "(" + text + ") ";
                         folder = folder.Replace("/", "\\");//统一格式。
                         //如果文件夹名包含数据库名，则补充数据库前缀。
-                        foreach (string name in CrossDb.DbTables.Keys)
+                        foreach (var item in DBTool.DataBases)
                         {
-                            if (folder.IndexOf("\\" + name + "\\", StringComparison.OrdinalIgnoreCase) > -1)
+                            if (folder.IndexOf("\\" + item.Value.DataBaseName + "\\", StringComparison.OrdinalIgnoreCase) > -1)
                             {
-                                key = name + "." + key;//补充数据库前缀。
+                                key = item.Value.DataBaseName + "." + key;//补充数据库前缀。
                                 break;
                             }
                         }
@@ -328,6 +328,24 @@ namespace Aries.Core.Sql
                 }
             }
             return false;
+        }
+    }
+    public static partial class SqlCode
+    {
+        //文件变更
+        private static FileSystemWatcher fyw = new FileSystemWatcher(path, "*.sql");
+        static SqlCode()
+        {
+            if (!fyw.EnableRaisingEvents)
+            {
+                fyw.EnableRaisingEvents = true;
+                fyw.IncludeSubdirectories = true;
+                fyw.Changed += fyw_Changed;
+            }
+        }
+        static void fyw_Changed(object sender, FileSystemEventArgs e)
+        {
+            SqlCode.FileList = null;
         }
     }
 }

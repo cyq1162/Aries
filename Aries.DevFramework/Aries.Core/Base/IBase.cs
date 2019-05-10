@@ -6,12 +6,10 @@ namespace Aries.Core
         bool IsUseUISite { get; }
         string GetID { get; }
         string ObjCode { get; }
-        object CrossObjName { get; }
-        object CrossTableName { get; }
+        string TableName { get; }
         string ObjName { get; }
         void SetKeyValue(Enum key, string value);
         void SetKeyValue(string key, string value);
-        string TableName { get; }
         string GetWhere();
         string GetOrderBy(string defaultSort);
         string GetWhereIn(string primaryKey, string requestKey = null, string[] values = null);

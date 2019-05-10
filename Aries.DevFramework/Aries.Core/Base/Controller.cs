@@ -292,6 +292,23 @@ namespace Aries.Core
             }
             return where;
         }
+        public string GetWhereLikeOr(string columnName, string values)
+        {
+            string where = string.Empty;
+            if (!string.IsNullOrEmpty(values) && !string.IsNullOrEmpty(columnName))
+            {
+                string[] items = values.Split(',');
+                for (int i = 0; i < items.Length; i++)
+                {
+                    if (i > 0)
+                    {
+                        where += " or ";
+                    }
+                    where += columnName + " like '%" + items[0] + "%'";
+                }
+            }
+            return where;
+        }
 
         /// <summary>
         /// 构造Where条件
@@ -407,16 +424,6 @@ namespace Aries.Core
                 return SqlCode.GetCode(ObjName);
             }
         }
-        /// <summary>
-        /// 跨库对象名称
-        /// </summary>
-        public object CrossObjName
-        {
-            get
-            {
-                return CrossDb.GetEnum(ObjCode);
-            }
-        }
         private string _ObjName;
         /// <summary>
         /// 远程传过来的对象名称
@@ -439,16 +446,6 @@ namespace Aries.Core
             set
             {
                 _ObjName = value;
-            }
-        }
-        /// <summary>
-        /// 跨库对象表名称
-        /// </summary>
-        public object CrossTableName
-        {
-            get
-            {
-                return CrossDb.GetEnum(TableName);
             }
         }
         private string _TableName;
@@ -486,7 +483,7 @@ namespace Aries.Core
         protected virtual MDataTable Select(GridConfig.SelectType st)
         {
             MDataTable dt;
-            using (MAction action = new MAction(CrossObjName))
+            using (MAction action = new MAction(ObjCode))
             {
                 action.SetSelectColumns(GridConfig.GetSelectColumns(ObjName, st));//只查询要显示的列数据。
                 dt = action.Select(PageIndex, PageSize, GetWhere() + GetOrderBy(action.Data.JointPrimaryCell.Count > 1 ? null : action.Data.PrimaryCell.ColumnName));
@@ -506,7 +503,7 @@ namespace Aries.Core
         /// </summary>
         protected virtual MDataRow GetOne()
         {
-            using (MAction action = new MAction(CrossObjName))
+            using (MAction action = new MAction(ObjCode))
             {
                 string where = string.IsNullOrWhiteSpace(GetID) ? GetWhere() : GetID.ToString();
                 if (action.Fill(where))
@@ -525,7 +522,11 @@ namespace Aries.Core
             MDataRow row = GetOne();
             if (row != null)
             {
-                jsonResult = row.ToJson();
+                jsonResult = JsonHelper.OutResult(true, row.ToJson());
+            }
+            else
+            {
+                jsonResult = JsonHelper.OutResult(false, LangConst.NoMatchItem);
             }
         }
         /// <summary>
@@ -536,7 +537,7 @@ namespace Aries.Core
         {
             bool result = false;
             string msg = string.Empty;
-            using (MAction action = new MAction(CrossTableName))
+            using (MAction action = new MAction(TableName))
             {
                 SetKeyValue(action.Data);
                 result = action.Insert(true, InsertOp.ID);
@@ -577,13 +578,17 @@ namespace Aries.Core
         [ActionKey("Del,Delete")]
         public virtual void Delete()
         {
+            bool isIgnoreDeleteField = false;
+#if DEBUG
+            isIgnoreDeleteField = UserAuth.IsSuperAdmin;
+#endif
             string ids = GetID;
             string[] values = null;
             string where = string.Empty;
             string parentField = Query<string>("parentField");
             string idField = Query<string>("idField");
             MDataTable dt = null;
-            using (MAction action = new MAction(CrossTableName))
+            using (MAction action = new MAction(TableName))
             {
                 action.BeginTransation();
 
@@ -600,15 +605,15 @@ namespace Aries.Core
                         string[] kv = item.Split('.');
                         if (kv.Length == 2)
                         {
-                            action.ResetTable(CrossDb.GetEnum(kv[0]));
-                            result = action.Delete(GetWhereIn(kv[1], null, values));
+                            action.ResetTable(kv[0]);
+                            result = action.Delete(GetWhereIn(kv[1], null, values), isIgnoreDeleteField);
                             if (!result)
                             {
                                 break;
                             }
                         }
                     }
-                    if (result) { action.ResetTable(CrossTableName); }
+                    if (result) { action.ResetTable(TableName); }
                 }
                 if (result)
                 {
@@ -627,7 +632,7 @@ namespace Aries.Core
                         }
                     }
 
-                    result = action.Delete(where);
+                    result = action.Delete(where, isIgnoreDeleteField);
                 }
                 if (!result)
                 {
@@ -666,7 +671,7 @@ namespace Aries.Core
         [ActionKey("Edit,Update")]
         public virtual void Update()
         {
-            using (MAction action = new MAction(CrossTableName))
+            using (MAction action = new MAction(TableName))
             {
                 SetKeyValue(action.Data);
                 if (action.Update(true))
@@ -1008,9 +1013,9 @@ namespace Aries.Core
                     if (sb.Length > 0)
                     {
                         string sql = sb.ToString().TrimEnd(';', ' ');
-                        using (MProc proc = new MProc(null, CrossDb.GetConn(sql)))
+                        using (MProc proc = new MProc(null))
                         {
-                            if (proc.DalType == DalType.MsSql)
+                            if (proc.DataBaseType == DataBaseType.MsSql)
                             {
                                 proc.ResetProc(sql);
                                 dtList.AddRange(proc.ExeMDataTableList());
@@ -1057,7 +1062,7 @@ namespace Aries.Core
             string value3 = Query<string>("v3", "");//支持到三个，可以了
 
             bool result = false;
-            using (MAction action = new MAction(CrossObjName))
+            using (MAction action = new MAction(ObjCode))
             {
                 string id = GetID;
                 string where = string.Format("{0}='{1}'", name, value);

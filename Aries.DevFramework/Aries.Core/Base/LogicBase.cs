@@ -97,19 +97,9 @@ namespace Aries.Core
             return _IBase.GetWhereIn(primaryKey, requestKey, values);
         }
 
-        public object CrossTableName
-        {
-            get { return _IBase.CrossTableName; }
-        }
         public string TableName
         {
             get { return _IBase.TableName; }
-        }
-
-
-        public object CrossObjName
-        {
-            get { return _IBase.CrossObjName; }
         }
 
         public string ObjName

@@ -39,43 +39,43 @@ namespace Aries.Core.Config
             /// </summary>
             ImportUnique
         }
-        public const string field = @"select distinct s1.name,s4.value from syscolumns s1 left join  sys.extended_properties  s4 on s4.major_id=s1.id and s4.minor_id=s1.colid where s4.value is not null and len(s1.name)>0";
+        //public const string field = @"select distinct s1.name,s4.value from syscolumns s1 left join  sys.extended_properties  s4 on s4.major_id=s1.id and s4.minor_id=s1.colid where s4.value is not null and len(s1.name)>0";
 
-        private static Dictionary<string, string> _FieldTitle = new Dictionary<string, string>();
-        /// <summary>
-        /// 获取默认的翻译配置
-        /// </summary>
-        public static Dictionary<string, string> FieldTitle
-        {
-            get
-            {
-                if (_FieldTitle.Count == 0)
-                {
-                    if (AppConfig.DB.DefaultDalType == DalType.MsSql)
-                    {
-                        MDataTable dt;
-                        using (MProc proc = new MProc(field))
-                        {
-                            dt = proc.ExeMDataTable();
-                        }
-                        foreach (MDataRow row in dt.Rows)
-                        {
-                            string name = row.Get<string>(0);
-                            string value = row.Get<string>(1);
-                            if (value.Length > 1 && !_FieldTitle.ContainsKey(name))
-                            {
-                                _FieldTitle.Add(name, value.Split(new char[] { ' ', ',', '(' })[0]);
-                            }
-                        }
-                    }
-                }
-                return _FieldTitle;
-            }
-        }
+        //private static Dictionary<string, string> _FieldTitle = new Dictionary<string, string>();
+        ///// <summary>
+        ///// 获取默认的翻译配置
+        ///// </summary>
+        //public static Dictionary<string, string> FieldTitle
+        //{
+        //    get
+        //    {
+        //        if (_FieldTitle.Count == 0)
+        //        {
+        //            if (AppConfig.DB.DefaultDataBaseType == DataBaseType.MsSql)
+        //            {
+        //                MDataTable dt;
+        //                using (MProc proc = new MProc(field))
+        //                {
+        //                    dt = proc.ExeMDataTable();
+        //                }
+        //                foreach (MDataRow row in dt.Rows)
+        //                {
+        //                    string name = row.Get<string>(0);
+        //                    string value = row.Get<string>(1);
+        //                    if (value.Length > 1 && !_FieldTitle.ContainsKey(name))
+        //                    {
+        //                        _FieldTitle.Add(name, value.Split(new char[] { ' ', ',', '(' })[0]);
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        return _FieldTitle;
+        //    }
+        //}
         public static Dictionary<string, string> GetTitleField(string tableName)
         {
             Dictionary<string, string> dic = new Dictionary<string, string>();
-            MDataColumn mdc = DBTool.GetColumns(CrossDb.GetEnum(tableName));
+            MDataColumn mdc = DBTool.GetColumns(tableName);
             if (mdc.Count > 0)
             {
                 foreach (MCellStruct item in mdc)
@@ -130,9 +130,9 @@ namespace Aries.Core.Config
         }
         private static void FillTable(string objName, string objCode, MDataTable dt)
         {
-            Dictionary<string, string> fieldTitleDic = GridConfig.FieldTitle;
+            //Dictionary<string, string> fieldTitleDic = GridConfig.FieldTitle;
             string errInfo;
-            string tableName = Convert.ToString(CrossDb.GetEnum(objCode));
+            string tableName = objCode;
             MDataColumn mdc = DBTool.GetColumns(tableName, null, out errInfo);
             if (mdc == null || mdc.Count == 0)
             {
@@ -150,7 +150,7 @@ namespace Aries.Core.Config
                 MDataRow row = dt.NewRow();
                 row.Set(Config_Grid.ObjName, objName);
                 row.Set(Config_Grid.Field, cell.ColumnName);
-                row.Set(Config_Grid.Title, fieldTitleDic.ContainsKey(cell.ColumnName) ? fieldTitleDic[cell.ColumnName] : cell.ColumnName);
+                row.Set(Config_Grid.Title, string.IsNullOrEmpty(cell.Description) ? cell.ColumnName : cell.Description);
                 row.Set(Config_Grid.Hidden, (i == 0 && jointPrimaryCount < 2) || i > 25);//超过25个字段，后面的都先隐藏。
                 row.Set(Config_Grid.OrderNum, (i + 1) * 10);
                 row.Set(Config_Grid.Width, 100);
@@ -219,12 +219,11 @@ namespace Aries.Core.Config
         /// <returns></returns>
         public static bool Flesh(string objName, string objCode, MDataTable dt, out string msg)
         {
-
             bool result = false;
             msg = LangConst.NoNewColumn;
             MDataTable newDt = dt.GetSchema(false);
             //移除表结构缓存
-            string tableKey = CacheManage.GetKey(CacheKeyType.Schema, objName, CrossDb.GetConn(objName));
+            string tableKey = CacheManage.GetKey(CacheKeyType.Schema, objName);
             CacheManage.LocalInstance.Remove(tableKey);
             FillTable(objName, objCode, newDt);//重新获取。
 

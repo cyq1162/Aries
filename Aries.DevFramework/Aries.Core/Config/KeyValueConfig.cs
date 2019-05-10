@@ -8,6 +8,7 @@ using CYQ.Data.Tool;
 using Aries.Core.DB;
 using Aries.Core.Sql;
 using Aries.Core.Extend;
+using CYQ.Data.Aop;
 
 namespace Aries.Core.Config
 {
@@ -29,9 +30,7 @@ namespace Aries.Core.Config
                 MDataTable config;
                 using (MAction action = new MAction(U_AriesEnum.Config_KeyValue))
                 {
-                    //MDataTable dt = action.Select("order by orderno asc");//"ConfigKey='账号状态'"
-                    //dt.Rows.Sort("order by ConfigKey DESC");
-                    // MDataTable dt2=dt.Select("
+                    action.SetAopState(AopOp.OpenAll);//强制开启自动缓存
                     config = action.Select("order by ConfigKey ASC,OrderNo ASC");
                 }
                 MDataRow row = config.FindRow("ConfigKey='ExtendConfig'");
@@ -43,8 +42,9 @@ namespace Aries.Core.Config
                     if (!string.IsNullOrEmpty(tableName))
                     {
                         MDataTable config2;
-                        using (MAction action = new MAction(CrossDb.GetEnum(tableName)))
+                        using (MAction action = new MAction(tableName))
                         {
+                            action.SetAopState(AopOp.OpenAll);//强制开启自动缓存
                             if (!string.IsNullOrEmpty(select))
                             {
                                 action.SetSelectColumns(select.Split(','));
@@ -146,7 +146,7 @@ namespace Aries.Core.Config
         private static string GetInnerJson(List<MDataRow> groupList)
         {
             MDataTable group = groupList;
-            if (AppConfig.DB.DefaultDalType == DalType.Txt)
+            if (AppConfig.DB.DefaultDataBaseType == DataBaseType.Txt)
             {
                 group.Rows.Sort("OrderNo ASC");//文本需要再次排序（因为不支持查询的时候多重排序）
             }
@@ -170,7 +170,7 @@ namespace Aries.Core.Config
         public static string GetTableDescription(string objName, string tableName)
         {
 
-            string description = GetVallue(LangConst.TableDescription, objName);
+            string description = GetValue(LangConst.TableDescription, objName);
             if (string.IsNullOrEmpty(description))
             {
                 MDataRow row = ExcelConfig.GetExcelRow(objName);
@@ -180,11 +180,7 @@ namespace Aries.Core.Config
                 }
                 if (string.IsNullOrEmpty(description))
                 {
-                    description = GetVallue(LangConst.TableDescription, tableName);
-                    if (string.IsNullOrEmpty(description))
-                    {
-                        description = CrossDb.GetDescription(tableName);
-                    }
+                    description = GetValue(LangConst.TableDescription, tableName);
                 }
             }
             if (string.IsNullOrEmpty(description))
@@ -497,9 +493,9 @@ namespace Aries.Core.Config
                 }
                 List<MDataTable> objNameTables = new List<MDataTable>();
                 string sql = objSql.ToString().TrimEnd(';');
-                using (MProc proc = new MProc(sql, CrossDb.GetConn(sql)))
+                using (MProc proc = new MProc(sql))
                 {
-                    if (proc.DalType == DalType.MsSql)
+                    if (proc.DataBaseType == DataBaseType.MsSql)
                     {
                         objNameTables = proc.ExeMDataTableList();
                     }
@@ -620,7 +616,7 @@ namespace Aries.Core.Config
         /// <summary>
         /// 根据配置Key和Name获取对应的名称。
         /// </summary>
-        public static string GetVallue(string configKey, string configName)
+        public static string GetValue(string configKey, string configName)
         {
             MDataRow row = KeyValueTable.FindRow("ConfigKey='" + configKey + "' and ConfigName='" + configName + "'");
             if (row != null)
@@ -643,7 +639,7 @@ namespace Aries.Core.Config
         /// <summary>
         /// 根据配置Key和Name设置对应的名称。
         /// </summary>
-        public static bool SetVallue(string configKey, string configName, string configValue)
+        public static bool SetValue(string configKey, string configName, string configValue)
         {
             using (MAction action = new MAction(U_AriesEnum.Config_KeyValue))
             {

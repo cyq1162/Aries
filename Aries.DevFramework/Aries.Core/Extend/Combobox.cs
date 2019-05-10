@@ -26,22 +26,21 @@ namespace Aries.Core.Extend
                 case "C_SYS_Table":
                     if (!string.IsNullOrEmpty(filter)) // 有过滤条件
                     {
-                        
-                        string[] items = filter.Split(',');
-
-                        if (items.Length == 1 && items[0].EndsWith("Conn"))
+                        string[] items = filter.Split(',');//指定数据库链接条件
+                        foreach (string item in items)
                         {
-                            if (CrossDb.DbTables.ContainsKey(filter))
+                            if (item.EndsWith("Conn"))//当成链接处理
                             {
-                                foreach (var item in CrossDb.DbTables[filter])
+                                int dbHash = DBInfo.GetHashCode(item);
+                                if (DBTool.DataBases.ContainsKey(dbHash))
                                 {
-                                    newDic.Add(item.Key, item.Key);
+                                    foreach (var table in DBTool.DataBases[dbHash].Tables)
+                                    {
+                                        newDic.Add(table.Value.Name, table.Value.Name);
+                                    }
                                 }
                             }
-                        }
-                        else
-                        {
-                            foreach (string item in items)
+                            else//当成普通表名处理
                             {
                                 newDic.Add(item, item);
                             }
@@ -49,11 +48,11 @@ namespace Aries.Core.Extend
                     }
                     else
                     {
-                        foreach (var tableDic in CrossDb.DbTables)
+                        foreach (var db in DBTool.DataBases)
                         {
-                            foreach (var item in tableDic.Value)
+                            foreach (var table in db.Value.Tables)
                             {
-                                newDic.Add(item.Key, item.Key);
+                                newDic.Add(table.Value.Name, table.Value.Name);
                             }
                         }
                     }
@@ -68,13 +67,13 @@ namespace Aries.Core.Extend
                         string[] items = filter.Split(',');
                         foreach (string item in items)
                         {
-                            MDataColumn mdc = DBTool.GetColumns(CrossDb.GetEnum(item));
+                            MDataColumn mdc = DBTool.GetColumns(item);
                             foreach (MCellStruct ms in mdc)
                             {
                                 dt.NewRow(true).Set(0, ms.ColumnName).Set(1, ms.ColumnName).Set(2, item);
                             }
                         }
-                       
+
                     }
 
                     break;

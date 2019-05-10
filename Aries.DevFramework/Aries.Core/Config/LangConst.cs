@@ -61,8 +61,8 @@ namespace Aries.Core.Config
         //ExcelHelper.cs
         public static string ColumnNameIsEmpty = "该列头为空";
 
-        //WebHelper.cs
-        public static string KeyB = "Aries.lic.result";
+        internal static string AriesLic = "Aries.lic";
+        internal static string AriesLicResult = "Aries.lic.Result";
     }
 
     public static partial class LangConst
@@ -103,12 +103,12 @@ namespace Aries.Core.Config
             {
                 theme = "default";
                 //更新配置设置回Aries默认样式
-                KeyValueConfig.SetVallue("SysConfig", "Theme", theme);
+                KeyValueConfig.SetValue("SysConfig", "Theme", theme);
             }
             if (language != "zh_CN" && language != "en")
             {
                 language = "zh_CN";
-                KeyValueConfig.SetVallue("SysConfig", "Language", language);
+                KeyValueConfig.SetValue("SysConfig", "Language", language);
             }
             //SetCookie
             UserAuth.SetCookie("theme", theme, 48);

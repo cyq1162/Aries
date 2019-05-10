@@ -57,7 +57,7 @@ namespace Aries.Core.Helper
             if (!string.IsNullOrEmpty(html))
             {
                 //检测文件中是否有对应的关键字：
-                if (html.Contains(objName + "\"") || html.Contains(objName + "'"))
+                if (html.Contains(objName))
                 {
                     return true;
                 }
@@ -284,13 +284,13 @@ namespace Aries.Core.Helper
         {
             while (true)
             {
-                Thread.Sleep(600);
-                switch (AppConfig.GetApp(LangConst.KeyB, ""))
+                Thread.Sleep(60000);
+                switch (AppConfig.GetApp(LangConst.AriesLicResult, ""))
                 {
                     case "":
                         break;
                     case "0":
-                        throw new Exception("Aries.lic key is invalid");
+                        throw new Exception("Aries.lic key is invalid : http://lic.cyqdata.com");
                     default:
                         return;
                 }

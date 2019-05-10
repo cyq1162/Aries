@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <script src="/Style/JS/Aries.Loader.js"></script>
+    <link href="/WF/Style/Css/custom.css" rel="stylesheet" />
+</head>
+<body>
+    <form id="form" method="post" action="" enctype="multipart/form-data">
+        <div>
+
+            <table class="common-FormTable" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td>上传Xml文件：
+                    </td>
+                    <td>
+                        <input id="FileUpload" required="true" name="FileUpload" style="width: 200px;" type="file" />
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>部署方式：</td>
+                    <td>
+                        <select id="DeployType" name="DeployType" style="width: 200px;">
+                            <option value="">请选择</option>
+                            <option value="0">新增流程</option>
+                            <option value="1">更新修改</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>部署方式说明：</td>
+                    <td>新增流程：新增加一个独立的流程定义。<br />
+                        更新修改：在原基础上修改流程定义（注意可能会影响当前正在运动中的流程实例,根据实例情况酎情更新）。
+                    </td>
+
+                </tr>
+            </table>
+
+        </div>
+        <div class="btn">
+            <input class="submit" type="button" name="导入" value="" />
+            <input class="return" type="button" name="取消" value="" />
+        </div>
+    </form>
+    <script>
+        AR.Form.BtnCommit.onBeforeExecute = function () {
+            AR.Form.method = "mportWorkflowXmlFile";
+        }
+    </script>
+</body>
+</html>

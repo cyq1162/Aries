@@ -1,0 +1,18 @@
+﻿
+.ActorDiv { vertical-align: top; }
+.RejectActorDiv { vertical-align: top; }
+.ActorDiv ul li { margin-top: 3px; }
+.RejectActorDiv ul li { margin-top: 3px; }
+.ActorDiv li input { margin-right: 3px; }
+.RejectActorDiv li input { margin-right: 3px; }
+.ActorDiv .userli li { margin-top: 3px; margin-left: 15px; float: left; /* 向左漂移，将竖排变为横排 */ }
+.RejectActorDiv .userli li { margin-top: 3px; margin-left: 15px; float: left; /* 向左漂移，将竖排变为横排 */ }
+.ActorDiv .userli li input { margin-right: 3px; }
+.RejectActorDiv .userli li input { margin-right: 3px; }
+#ActivityDiv li { cursor: pointer; margin-bottom: 5px; }
+#RejectActivityDiv li { cursor: pointer; margin-bottom: 5px; }
+#ActivityDiv li:hover { background-color: #fce3e2; }
+#RejectActivityDiv li:hover { background-color: #e88e12; }
+.activityBackground { background-color: #BE1915; color: #fff; }
+.selectedCount { color: #be1915; font-weight: bold; }
+.wf-box-icon { cursor: pointer; }

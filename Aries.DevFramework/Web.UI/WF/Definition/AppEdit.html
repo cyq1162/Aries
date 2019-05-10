@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <script src="/Style/JS/Aries.Loader.js"></script>
+    <link href="/WF/Style/Css/custom.css" rel="stylesheet" />
+</head>
+<body>
+    <form>
+        <div id="tt" class="easyui-tabs" style="width: 625px; height: 360px;">
+            <div title="基本资料" style="overflow: hidden;">
+                <table class="common-FormTable" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td>应用名称：</td>
+                        <td colspan="3">
+                            <input type="text" class="easyui-validatebox textBoxLong" required="required" validtype="length[0,200]" id="AppName" name="AppName" value="AppName" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>应用别名：</td>
+                        <td colspan="3">
+                            <input type="text" class="easyui-validatebox textBoxShort" required="required" validtype="exists['AppID']" id="AppID" name="AppID" value="" />
+                            （填写2-3个大写字母）
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>是否启用：</td>
+                        <td colspan="3">
+                            <input type="checkbox" name="IsEnable" />
+                           
+                        </td>
+                        
+                    </tr>
+                    <tr>
+                        <td>流程定义：
+                        </td>
+                        <td colspan="3">
+
+                            <input name="WorkflowName" required="required" dialog="WF_Definition" valuefor="WorkflowID" onlytext="false" />
+                            <input name="WorkflowID" type="hidden"/>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>业务表单路径：</td>
+                        <td colspan="3">
+                            <input type="text" class="easyui-validatebox textBoxLong" required="required" validtype="length[0,200]" id="FormPath" name="FormPath" value="/WF/DemoForm/DemoForm2.html" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>循环周期：</td>
+                        <td colspan="3" style="padding-top: 2px; padding-bottom: 2px;">
+                            <input type="text" class="easyui-validatebox textBoxShort" required="required" validtype="length[0,100]" id="SheetNumberCycle" name="SheetNumberCycle"
+                                value="yyyyMM01" />
+                            <br />
+                            <span class="star">(工单号尾数循环周期 月周期：yyyy-MM-01 ，年周期：yyyy-01-01 日为周期：yyyy-MM-dd 建议使用自然月即从每月1日开始) </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>工单号格式化：</td>
+                        <td colspan="3">
+                            <input type="text" class="easyui-validatebox textBoxShort" required="required" validtype="length[0,100]" id="SheetNumberFormat" name="SheetNumberFormat"
+                                value="{0:0000}" />
+
+                            <span class="star">(工单号尾数format格式化表达式如：前缀{0:0000}) </span>
+                        </td>
+
+
+                    </tr>
+                </table>
+            </div>
+            <div title="权限说明" data-options="closable:true" style="overflow: hidden;">
+                <table class="common-FormTable" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td>允许角色：</td>
+                        <td>
+                            <input type="text" name="AllowRoleNames" dialog="Sys_Role" valuefor="AllowRoleIDs" onlytext="true" multiple="true" style="width:450px"/>
+                            <input type="hidden" name="AllowRoleIDs" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>应用说明：</td>
+                        <td>
+                            <textarea id="Description" name="Description" class="easyui-validatebox textBoxMultiLineLong" style="height: 120px" cols="20" rows="2"></textarea>
+
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+
+
+
+        <div class="btn">
+            <input class="submit" type="button" name="保存" value="" />
+            <input class="return" type="button" name="取消" value="" />
+        </div>
+    </form>
+</body>
+</html>

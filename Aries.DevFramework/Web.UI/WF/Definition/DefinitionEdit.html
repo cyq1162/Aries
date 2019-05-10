@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <script src="/Style/JS/Aries.Loader.js"></script>
+    <link href="/WF/Style/Css/custom.css" rel="stylesheet" />
+</head>
+<body>
+    <form>
+        <div>
+        <input id="WorkflowID" name="WorkflowID" type="hidden" />
+
+        <table class="common-FormTable" cellpadding="0" cellspacing="0">
+            <tr>
+                <td>流程名称：</td>
+                <td colspan="3">
+                    <input type="text" class="easyui-validatebox textBoxLong" required="required" validtype="length[0,200]" name="WorkflowName" />
+                </td>
+            </tr>
+            <tr>
+                <td>流程版本：</td>
+                <td>
+                    <input type="text" class="easyui-validatebox textBoxShort" required="required" validtype="length[0,50]"name="Version"
+                        value="1" />
+                </td>
+
+                <td>是否显示流程图：</td>
+                <td>
+                    <input  name="IsShowFlowMap" type="checkbox" value="true" />
+                </td>
+            </tr>
+
+            <tr>
+                <td>历史参与者优先：</td>
+                <td>
+                    <input name="IsHistoryActorPriority" type="checkbox"  />
+                </td>
+
+                <td>是否软删除：</td>
+                <td>
+                    <input  name="IsDeleted" type="checkbox"/>
+                </td>
+
+            </tr>
+
+
+            <tr>
+                <td>流程创建者：</td>
+                <td><span name="Creator"></span>
+                </td>
+                <td>最近更新者：</td>
+                <td><span name="Updator"></span>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td>创建时间：</td>
+                <td><span name="CreateTime"></span>
+                </td>
+
+                <td>最后更新时间：</td>
+                <td><span name="UpdateTime"></span>
+                </td>
+            </tr>
+
+            <tr>
+                <td>备注：</td>
+                <td colspan="3">
+                    <textarea class="easyui-validatebox textBoxMultiLineLong" validtype="length[0,200]" id="Remark" name="Remark" cols="20" rows="4"></textarea>
+
+                </td>
+            </tr>
+
+        </table>
+
+    </div>
+    <div class="btn">
+        <input class="submit" type="button" name="保存" value="" />
+        <input class="return" type="button" name="取消" value="" />
+    </div>
+        </form>
+</body>
+</html>

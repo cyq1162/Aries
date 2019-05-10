@@ -15,7 +15,7 @@
     <script>
         var ta = new AR.DataGrid('Demo_TestA');
        // ta.options.view = detailview;
-        ta.foreignKeys = "Demo_TestB.ID";//指定关联删除的外键
+        ta.foreignKeys = "Demo_TestB.id";//指定关联删除的外键
         var tb;
         ta.options.onClickRow = function (index, row) {
             var id = row.id.substring(0, 2)
@@ -23,12 +23,12 @@
             {
                 tb = new AR.DataGrid('Demo_TestB', 'Demo_TestB', "grid");
                 tb.ToolArea.isHidden = true;
-                tb.addWhere("ID", id, "like");
+                tb.addWhere("id", id, "like");
                 tb.bind();
             }
             else
             {
-                tb.addWhere("ID", id, "like");
+                tb.addWhere("id", id, "like");
                 tb.reload();
             }
                 

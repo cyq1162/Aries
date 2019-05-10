@@ -13,6 +13,7 @@
         <table id="grid"></table>
     <script type="text/javascript">
         var tg = new AR.DataGrid('Demo_Area', null, "grid", true);
+        tg.isEditor = true;
         tg.HeaderMenu.add("自定义配置", 'fn', 'config');
         function fn(el, dgid, value, index)
         {

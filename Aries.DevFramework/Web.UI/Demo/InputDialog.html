@@ -49,19 +49,24 @@
 
             <div title="Demo说明" style="clear: both">
                 <hr />
-                <p>1、dialog属性指向同一个（objName）表名，若需要不同配置时，可以利用"_"下标，如"A","_A","__A"会有3种配置，但都指向同一个表A</p>
+                <p>1、dialog属性指向同一个（objName）表名，若需要不同配置时，可以利用"_"下标，如"AA","A_A","A__A"会有3种配置，但都指向同一个表A</p>
                 <p>
                     2、通过指定Input属性，可以为dialog追加各种属性：<br />
                     multiple：是否多选。<br />
                     editable：是否可编辑。<br />
                     onlytext：文件的值和文本显示一致。<br />
                     textField、valueField：可以指定表格的返回的值字段（默认textField取第一个显示的字段，valueField取主键）。<br />
+                    for：(id or name)可以指定最终绑定到某个input中，不一定绑定自身。<br />
+                    valueFor：(id or name）可以同时将值设置到某个input中。
+                    textFor：(id or name）可以财时将文本设置到某个input中。
                     options：可以向表格追加属性<br />
 
                 </p>
-                <p> 3、需要回调参数时，通过：AR.Combobox.onAfterExecute = function (type, $input, backPara) {}<br />
+                <p>
+                    3、需要回调参数时，通过：AR.Combobox.onAfterExecute = function (type, $input, backPara) {}<br />
                     type的参数有“configkey","objname"和"dialog"<br />
                     backpara的参数为：{text:string,value,string,data:jsonOrArray}
+                    dialog类型时：返回的参数的获取也可以为：AR.Dialog.text或AR.Dialog.value全局获取。
                 </p>
             </div>
         </div>
@@ -69,18 +74,17 @@
             //追加固定的过滤条件。
             $("input[name = 'F6']").attr("options", "{defaultWhere: [{ name: 'F1', pattern: 'like', value: '1' }]}");
             //选择之后事件。
-            AR.Combobox.onAfterExecute = function (type, $input, backPara) {
-                if (type == "dialog") {
+            AR.Dialog.onAfterExecute = function ($input, isOK) {
+                if (isOK) {
                     if (!$input.attr("mutiple")) //单选时
                     {
-                        AR.Form.$target.form("load", backPara.data);
+                        AR.Form.$target.form("load", this.data);
                         $("input[name = 'F4']").toView();
-                        
+
                     }
-                    AR.Utility.Window.showMsg("text : " + backPara.text + "<br>value : " + backPara.value);
-                   
+                    AR.Window.showMsg("text : " + this.text + "<br>value : " + this.value);
                 }
-               
+
             }
 
         </script>

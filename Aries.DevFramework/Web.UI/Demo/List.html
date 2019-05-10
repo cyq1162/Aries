@@ -98,7 +98,7 @@
     }
     function upload(btn, dgid) {
         new AR.Upload(btn, opts);//为按钮增加上传事件
-        alert("表格ID：" + dgid + " 再点一次上传图片");
+        alert("表格id：" + dgid + " 再点一次上传图片");
 
     }
     //自定义按钮-图片上传示例---------------------------------结束-------------------------------------
@@ -106,7 +106,7 @@
     grid.PKColumn.add('edit', '编辑', null, 'edit.html', '编辑Test表');
     grid.PKColumn.add('del');
 
-    grid.PKColumn.add('abc', "hello", null, "aaa.html?uid={ID}", "hello world!");//{XXX}的值会被对应的字段值替换（注意大小写）。
+    grid.PKColumn.add('abc', "hello", null, "aaa.html?uid={id}", "hello world!");//{XXX}的值会被对应的字段值替换（注意大小写）。
 
     //表格内-图片上传示例--------------------------------开始--------------------------------------
     grid.PKColumn.add('detail', '表格内-图片上传示例', "fn", null, null, "edit");
@@ -160,7 +160,7 @@
     function fn() {
         alert('fn');
         return false;//return false 才能阻碍后续的窗口打开事件。
-        AR.Utility.Window.showMsg('TEST');
+        AR.Window.showMsg('TEST');
     }
     function styleFormatter() {
         return 'background-color:#ffee00;color:red;';

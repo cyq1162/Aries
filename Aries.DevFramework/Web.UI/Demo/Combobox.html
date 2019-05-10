@@ -30,10 +30,10 @@
         <label>省份(同一个配置，不引发级联)：</label><input type="text" objname="C_PB_Province3" multiple="true" cascade="false" onchange="multipleSelect" />
         <hr />
         <h3>树型下拉</h3>
-        <label>省份（自动选择子级：cascadeCheck=true)：</label><input type="text" objname="C_PB_ProvinceCity" tree="true" multiple="true" cascadecheck="true" width="200" onchange="multipleSelect" /><br />
+        <label>省份（自动选择子级：cascadeCheck=true)：</label><input name="treeName" type="text" objname="C_PB_ProvinceCity" tree="true" multiple="true" cascadecheck="true" width="200" onchange="multipleSelect" /><br />
         <label>省份（子父各自选：cascadeCheck=false)：</label><input type="text" objname="C_PB_ProvinceCity" tree="true" multiple="true" cascadecheck="false" width="200" onchange="multipleSelect" /><br />
         <label>省份（只能选择子节点：onlyleafcheck=true)：</label><input type="text" objname="C_PB_ProvinceCity" tree="true" multiple="true" cascadecheck="false" width="200" onlyleafcheck="true" onchange="multipleSelect" /><br />
-
+        <label>省份（单选、折叠默认：state='closed')：</label><input type="text" objname="C_PB_ProvinceCity" tree="true" cascadecheck="false" para="{'state':'closed'}" state="closed" width="200" onchange="singleSelect" /><br />
         <label>省份（单选)：</label><input type="text" objname="C_PB_ProvinceCity" tree="true" cascadecheck="false" width="200" onchange="singleSelect" />
 
         <hr />
@@ -45,14 +45,14 @@
     function singleSelect(record) {
 
         if (record.value) {
-            AR.Utility.Window.showMsg([record.value, record.text].join(','));
+            AR.Window.showMsg([record.value, record.text].join(','));
         }
         // else { alert("1");}
     }
 
     function multipleSelect(record, checked) {
         if (record.value) {
-            AR.Utility.Window.showMsg(record.text + "[" + record.value + "]" + " - check[" + checked + "] -- " + record.texts + "[" + record.values + "]");
+            AR.Window.showMsg(record.text + "[" + record.value + "]" + " - check[" + checked + "] -- " + record.texts + "[" + record.values + "]");
         }
 
     }
@@ -61,7 +61,7 @@
             AR.Combobox.setValues({ gender: 0 });
         }
         else {
-            AR.Combobox.setValues({ onlytext: "河东区" });
+            AR.Combobox.setValues({ onlytext: "河东区", treeName: "100000000,200100000" });
             AR.Combobox.setValues({ prov: "200000000", city: "200100000" });
         }
     }

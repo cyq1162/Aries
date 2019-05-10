@@ -57,16 +57,16 @@
                     onlytext：文件的值和文本显示一致。<br />
                     textField、valueField：可以指定表格的返回的值字段（默认textField取第一个显示的字段，valueField取主键）。<br />
                     for：(id or name)可以指定最终绑定到某个input中，不一定绑定自身。<br />
-                    valueFor：(id or name）可以同时将值设置到某个input中。
-                    textFor：(id or name）可以财时将文本设置到某个input中。
+                    valueFor：(id or name）可以同时将值设置到某个input中。<br />
+                    textFor：(id or name）可以财时将文本设置到某个input中。<br />
                     options：可以向表格追加属性<br />
 
                 </p>
                 <p>
-                    3、需要回调参数时，通过：AR.Combobox.onAfterExecute = function (type, $input, backPara) {}<br />
-                    type的参数有“configkey","objname"和"dialog"<br />
-                    backpara的参数为：{text:string,value,string,data:jsonOrArray}
-                    dialog类型时：返回的参数的获取也可以为：AR.Dialog.text或AR.Dialog.value全局获取。
+                    3、需要回调参数时，通过：AR.Dialog.onAfterExecute = function ($input, isOK) {}<br />
+                    $input：操作的input的JQ对象<br />
+                    isOK：点击的是确定、或取消按钮。<br />
+                    其它参数：AR.Dialog.text或AR.Dialog.value全局获取。
                 </p>
             </div>
         </div>

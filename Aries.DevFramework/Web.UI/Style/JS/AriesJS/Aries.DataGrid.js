@@ -1304,7 +1304,7 @@
             headerData: new Array(),
             //DataGrid是否已加载完成
             isLoadCompleted: false
-        }
+        };
         this.id = id || 'dg';
         this.isTreeGrid = isTreeGrid || isTreeGrid == "treegrid";
         //主表名
@@ -1319,9 +1319,9 @@
         this.isEditor = false;
         this.options = $Core.Global.DG.DefaultConfig;//事先设置是为了有提示。
         //Json：需要追求的请求数据(GetHeader也会追加）。
-        this.options.queryParams = {},
+        this.options.queryParams = {};
         //数组：可通过addWhere方法操作。
-        this.options.defaultWhere = [],
+        this.options.defaultWhere = [];
         /*可以事先构建，产生插时行时的默认值*/
         this.defaultInsertData = {};
         //对defaultWhere的操作
@@ -1336,17 +1336,17 @@
                 this.options.defaultWhere.push({ name: name, value: value, pattern: operator, OrAnd: isOr });
             }
             return this;
-        }
+        };
         this.removeWhere = function (name) {
             if (name && this.options.defaultWhere && this.options.defaultWhere.length > 0) {
                 this.options.defaultWhere.remove(name, "name");
             }
             return this;
-        }
+        };
         //增加排序条件，如："xx1 desc,xx2 asc"
         this.orderBy = function (orderBy) {
             this.options.sortName = orderBy;
-        }
+        };
         this.$target = null;
         //easyui 的原生 datagrid 操作。
         this.datagrid = function (v1, v2) {
@@ -1385,7 +1385,7 @@
                 }
                 return v2 != undefined ? this.$target.datagrid(v1, v2) : this.$target.datagrid(v1);
             }
-        }
+        };
         //数组：获取列表的选中项
         this.getChecked = function () {
             if (this.$target == null) {
@@ -1403,7 +1403,7 @@
                 ids.push(this.getPrimaryID(rows[i], key));
             }
             return ids;
-        },
+        };
         //string ：获得主键的id
         this.getPrimaryID = function (row, key) {
             var id = "";
@@ -1419,7 +1419,7 @@
                 id = row[key || this.Internal.primarykey];
             }
             return id;
-        }
+        };
         //数组：获取列表的选中项，返回ids
         this.getCheckIDs = function (key) {
             return this._GetIDs("getChecked", key);
@@ -1434,14 +1434,14 @@
                 return [];
             }
             return this.datagrid("getSelected");
-        }
+        };
         //数组：返回当前绑定的数据行
         this.getData = function () {
             if (this.$target == null) {
                 return [];
             }
             return this.datagrid("getData");
-        }
+        };
         //重新加载绑定项
         this.reload = function () {
             if (this.$target == null) {
@@ -1449,7 +1449,7 @@
             }
             this.Search.reloadGrid(this);
             //$Core.Common._Internal.reloadGrid(this);
-        }
+        };
         //主键列对象，可对按钮进行操作
         this.PKColumn = new $Core.Private.Grid.PKColumn(this);
         //搜索区
@@ -1469,7 +1469,7 @@
             Search: this.Search,
             ToolBar: this.ToolBar,
             isHidden: false
-        }
+        };
     };
     //绑定（根据初始条件：请求列头=》请求数据=》呈现表格）
     $Core.DataGrid.prototype.bind = function () {
@@ -1554,7 +1554,7 @@
                 }
             }(dg)
         );
-    }
+    };
     function _LoadComboxData(dg, headerData) {
         if (headerData == null || headerData.length == 0) {
             return null;

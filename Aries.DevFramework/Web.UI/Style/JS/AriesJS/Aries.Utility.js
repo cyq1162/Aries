@@ -291,9 +291,11 @@
         function dialog(title, html, opts, onClose) {
             var _container = $("#_div_dialog");
             _container[0] || (_container = $('<div>').attr('id', '_div_dialog'));
-            if (html.startWith("http://") || html.startWith("https://") || html.startWith("/") || html.startWith("../")
-                || (html.length < 255 && html.indexOf(".html") > -1 && html.indexOf(" ") == -1)) {
-                html = '<iframe scrolling="yes" frameborder="0"  src="' + html + '" style="width:100%;height:98%;"></iframe>';
+            if (typeof html == "string") {
+                if (html.startWith("http://") || html.startWith("https://") || html.startWith("/") || html.startWith("../")
+                    || (html.length < 255 && html.indexOf(".html") > -1 && html.indexOf(" ") == -1)) {
+                    html = '<iframe scrolling="yes" frameborder="0"  src="' + html + '" style="width:100%;height:98%;"></iframe>';
+                }
             }
             if (onClose) {
                 document.onClose = onClose;

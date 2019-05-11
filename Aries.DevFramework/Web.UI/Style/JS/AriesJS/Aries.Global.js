@@ -27,6 +27,7 @@ window.AR || (window.AR = {});
     //处理Config_KeyValue的数据。
     $Core.Config = {
         data: undefined,
+        //获取下拉翻译的文本
         getText: function (configKey, value) {
             var items = this.data[configKey];
             var itemValue = [];
@@ -54,6 +55,7 @@ window.AR || (window.AR = {});
                 return '';
             }
         },
+        //获取下拉翻译的值
         getValue: function (configKey, text) {
             var items = this.data[configKey];
             var itemValue = [];

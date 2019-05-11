@@ -73,7 +73,15 @@ namespace Aries.Core.Config
 
             fyw.Changed += fyw_Changed;
             fyw.NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite | NotifyFilters.Size;
-            InitKeyValue();
+            try
+            {
+                InitKeyValue();
+            }
+            catch (Exception err)
+            {
+                Log.Write(err, LogType.Aries);
+            }
+            
         }
 
         static void fyw_Changed(object sender, FileSystemEventArgs e)

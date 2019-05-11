@@ -112,6 +112,7 @@ window.WF || (window.WF = {});
                         WF.Context[i] = result.msg[i];//为了智能提示，我转了两个小时，才想到这个办法。
                     }
                 }
+                WF.Context.instanceStateName = AR.Config.getText("WF_InstanceState", WF.Context.instanceState);
                 if (WF.Context.onAfterExecute) { WF.Context.onAfterExecute(result); }
             });
         };

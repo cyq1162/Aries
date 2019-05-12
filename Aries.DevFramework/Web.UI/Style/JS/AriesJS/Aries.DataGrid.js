@@ -1133,8 +1133,7 @@
                             }
                             //判断是否必填：
                             var col = dg.Internal.headerData.get("field", field);
-                            if (col && col.datatype)
-                            {
+                            if (col && col.datatype) {
                                 var values = col.datatype.split(',');
                                 if (values.length >= 4 && values[3] == "1") {
                                     $input.attr("defaultItem", false);
@@ -1317,7 +1316,7 @@
         this.isShowCheckBox = true;
         //是否启用行内编辑
         this.isEditor = false;
-        this.options = $Core.Global.DG.DefaultConfig;//事先设置是为了有提示。
+        this.options = $.extend(true, {}, $Core.Global.DG.DefaultConfig);//事先设置是为了有提示。
         //Json：需要追求的请求数据(GetHeader也会追加）。
         this.options.queryParams = {};
         //数组：可通过addWhere方法操作。
@@ -1604,7 +1603,7 @@
         if (!objColumns) {
             return false;
         }
-        var cfg = $.extend({
+        var cfg = $.extend(true, {
             toolbar: "#" + dg.ToolArea.id,
             loadMsg: $Core.Lang.loadMsg,
             frozenColumns: objColumns.frozen,

@@ -164,7 +164,8 @@
         var param = $.extend(true, {}, paras);//复制一份，不改变原有数据。
         for (var i in param) {/*处理下拉绑定Boolean类型的数据还原。*/
             if (typeof (param[i]) == "boolean") {
-                param[i] = param[i] == true ? 1 : 0;
+                param[i] = (param[i] == true ? 1 : 0);
+                paras[i] = param[i];
             }
             param[i.toLowerCase()] = param[i];//追加一份小写的数据。
         }

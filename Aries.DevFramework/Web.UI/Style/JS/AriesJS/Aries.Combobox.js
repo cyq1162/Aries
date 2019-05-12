@@ -573,7 +573,7 @@
                 }
             }, 5);
         }
-        else if (!op.tree && op.data.length > 0) { setAttr($box, "select", op.data[0][op.valueField]); }
+        else if (!op.tree && op.data && op.data.length > 0) { setAttr($box, "select", op.data[0][op.valueField]); }
     }
     function setComboValue($box, value) {
 

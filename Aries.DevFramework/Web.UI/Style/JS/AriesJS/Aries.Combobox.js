@@ -356,9 +356,17 @@
                         var resultData = result[objName];
                         var boxData = comboxData[objName];
                         for (var i = 0; i < resultData.length; i++) {
-                            if (!boxData.contains(resultData[i].value, "value")) {
-                                comboxData[objName].push(resultData[i]);
+                            if (resultData[i].value != undefined) {
+                                if (!boxData.contains(resultData[i].value, "value")) {
+                                    comboxData[objName].push(resultData[i]);
+                                }
                             }
+                            else {
+                                if (!boxData.contains(resultData[i].text, "text")) {
+                                    comboxData[objName].push(resultData[i]);
+                                }
+                            }
+
                         }
                     }
                     else {

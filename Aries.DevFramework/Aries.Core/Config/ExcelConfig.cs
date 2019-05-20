@@ -202,7 +202,7 @@ namespace Aries.Core.Config
                             sb.AppendFormat("[{0}]{1}{2}。", columnName, LangConst.SizeOver, cell.Struct.MaxSize);
                             cell.State = -1;
                         }
-                        else if (!cell.FixValue())
+                        else if (!cell.IsNull && cell.Value == null)
                         {
                             sb.AppendFormat("[{0}]{1}。", columnName, LangConst.DataTypeError);
                             cell.State = -1;

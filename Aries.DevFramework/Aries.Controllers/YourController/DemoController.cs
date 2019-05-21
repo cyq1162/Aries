@@ -2,6 +2,7 @@
 using Aries.Core.Extend;
 using CYQ.Data;
 using CYQ.Data.Table;
+using CYQ.Data.Tool;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,6 +11,16 @@ namespace Aries.Controllers
 {
     public class DemoController : Aries.Core.Controller
     {
+        public string Upload() {
+            if (context.Request.Files.Count > 0)
+            {
+                return JsonHelper.OutResult(true, "文件成功上传");
+            }
+            else
+            {
+                return JsonHelper.OutResult(true, "文件上传失败");
+            }
+        }
         protected override MDataRow GetOne()
         {
             switch (ObjName)

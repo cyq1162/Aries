@@ -72,7 +72,6 @@
     </form>
     <script defer="defer">
         //控制分支条件
-        WF.Enum.ActivityType.OutSubWorkflow
         WF.Button.Submit.onBeforeExecute = function () {
             if (WF.Context.appID == "DC") {
                 if (parseInt($("#Amount").val()) > 50000) {

@@ -23,6 +23,7 @@
             {
                 tb = new AR.DataGrid('Demo_TestB', 'Demo_TestB', "grid");
                 tb.ToolArea.isHidden = true;
+                tb.isShowCheckBox = false;
                 tb.addWhere("id", id, "like");
                 tb.bind();
             }

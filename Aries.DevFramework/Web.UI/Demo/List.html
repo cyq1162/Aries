@@ -81,13 +81,12 @@
     grid.ToolBar.add('自定义按钮-图片上传', null, 10, 'btn-lg', "edit", "btnUpload");
     grid.ToolBar.add('自定义按钮-图片上传2', "upload", 10, 'btn-lg', "edit", "btnUpload2");
     var opts = {};
-    opts.action = '/ajax.html';//提交的地址
-    opts.data = { "test": "aaa" };//提交的参数
+    opts.data = { "sys_method": "Upload", "test": "aaa" };//提交的参数
     opts.onSubmit = function (file, ext) {
         alert("扩展名检测为：" + ext);
     }
     opts.onComplete = function (file, data) {
-        alert("返回的数据：" + data);
+        alert("返回的数据：" + data.msg);
     }
     grid.ToolBar.onAfterExecute = function () {
         if (customToolbar) { return; }

@@ -112,6 +112,10 @@ namespace Aries.Core.Extend
         }
         private static string ReplaceHtml(string html)
         {
+            if (html.IndexOf("<meta name=\"Referrer\"") == -1)//safari浏览器的引用不完整。
+            {
+                html = html.Replace("</head>", "    <meta name=\"Referrer\" content=\"always\" />\n</head>");
+            }
             if (WebHelper.IsUseUISite)
             {
                 string ui = AppConfig.GetApp("UI", string.Empty).ToLower();

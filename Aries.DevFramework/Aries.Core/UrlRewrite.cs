@@ -69,8 +69,11 @@ namespace Aries.Core
                 else
                 {
                     context.Response.ContentType = contentType;
-                    context.Response.Cache.SetCacheability(HttpCacheability.Public);//对所有用户都同样进行缓存。
-                    context.Response.Cache.SetExpires(DateTime.Now.AddDays(1));
+                    //context.Response.Cache.SetCacheability(HttpCacheability.Public);//对所有用户都同样进行缓存。
+                    //context.Response.Cache.SetExpires(DateTime.Now.AddDays(1));
+                    //context.Response.AppendHeader("Cache-Control", "public");
+                    //context.Response.AppendHeader("Date", DateTime.Now.ToString());
+                    //context.Response.AppendHeader("Expires", DateTime.Now.AddDays(1).ToString());
                     context.Response.AppendHeader("ETag", etag);
                     context.Response.AppendHeader("Last-Modified", DateTime.Now.ToString());
                     context.Response.WriteFile(context.Server.MapPath(context.Request.Url.LocalPath));

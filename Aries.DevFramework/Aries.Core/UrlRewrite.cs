@@ -126,7 +126,7 @@ namespace Aries.Core
                 string defaultUrl = WebHelper.GetDefaultUrl();
                 if (!string.IsNullOrEmpty(defaultUrl))
                 {
-                    context.RewritePath(defaultUrl, false);
+                    context.RewritePath(defaultUrl);
                 }
             }
             else
@@ -162,7 +162,7 @@ namespace Aries.Core
                     {
                         string localPath = context.Request.Url.PathAndQuery;
                         int i = localPath.LastIndexOf('/');
-                        context.RewritePath(localPath.Substring(i), false);//只有重定向到一个存在的文件，兼容微软造的孽
+                        context.RewritePath(localPath.Substring(i));//只有重定向到一个存在的文件，兼容微软造的孽
                     }
                 }
                 // }

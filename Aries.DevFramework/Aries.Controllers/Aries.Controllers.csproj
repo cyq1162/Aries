@@ -30,9 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CYQ.Data, Version=5.8.2.1, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="CYQ.Data, Version=5.8.2.3, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\CYQ.Data.dll</HintPath>
+      <HintPath>..\DLL\CYQ.Data.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

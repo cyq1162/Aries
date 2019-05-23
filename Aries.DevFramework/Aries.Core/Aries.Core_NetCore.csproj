@@ -23,7 +23,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\CYQ.Data-GitHub\trunk\CYQ.Data_NetCore.csproj" />
+    <Reference Include="CYQ.Data">
+      <HintPath>..\DLL\NetCore\CYQ.Data.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

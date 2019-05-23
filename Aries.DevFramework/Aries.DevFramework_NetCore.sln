@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aries.Logic_NetCore", "Arie
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aries.Controllers_NetCore", "Aries.Controllers\Aries.Controllers_NetCore.csproj", "{CFD7F0EA-6D58-4BC8-8F70-487EB5DDB8E9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CYQ.Data_NetCore", "..\..\..\CYQ.Data-GitHub\trunk\CYQ.Data_NetCore.csproj", "{8B5CDA34-D100-46CC-B490-224B68AED4C3}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web.UI_NetCore", "Web.UI_NetCore\Web.UI_NetCore.csproj", "{22F75EA9-886B-4C35-82EA-C515214888BD}"
 EndProject
 Global
@@ -31,10 +29,6 @@ Global
 		{CFD7F0EA-6D58-4BC8-8F70-487EB5DDB8E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CFD7F0EA-6D58-4BC8-8F70-487EB5DDB8E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CFD7F0EA-6D58-4BC8-8F70-487EB5DDB8E9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8B5CDA34-D100-46CC-B490-224B68AED4C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8B5CDA34-D100-46CC-B490-224B68AED4C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8B5CDA34-D100-46CC-B490-224B68AED4C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8B5CDA34-D100-46CC-B490-224B68AED4C3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{22F75EA9-886B-4C35-82EA-C515214888BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{22F75EA9-886B-4C35-82EA-C515214888BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22F75EA9-886B-4C35-82EA-C515214888BD}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -18,4 +18,10 @@
     <ProjectReference Include="..\Aries.Core\Aries.Core_NetCore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="CYQ.Data">
+      <HintPath>..\DLL\NetCore\CYQ.Data.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

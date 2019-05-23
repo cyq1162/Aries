@@ -34,10 +34,6 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CYQ.Data, Version=5.8.2.1, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\CYQ.Data.dll</HintPath>
-    </Reference>
     <Reference Include="NPOI, Version=2.1.1.0, Culture=neutral, PublicKeyToken=0df73ec7942b34e1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\DLL\NPOI.dll</HintPath>
@@ -97,6 +93,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="更新说明.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\CYQData\trunk\CYQ.Data.csproj">
+      <Project>{bd5ccc87-278f-4feb-ad23-157fcba9ffa1}</Project>
+      <Name>CYQ.Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

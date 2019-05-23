@@ -122,6 +122,9 @@ $(function (WF, AR) {
 (function (WF, AR) {
     //保存工作流和用户表单
     WF.Event.onSave = function () {
+        if (!AR.Form.$target.form("validate")) {
+            return false;
+        }
         if (WF.Context.formPath) {
             //先提交表单：
             var childWin = $("#formFrame")[0].contentWindow;

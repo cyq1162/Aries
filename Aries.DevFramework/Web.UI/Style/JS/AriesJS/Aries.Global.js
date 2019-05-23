@@ -29,6 +29,12 @@ window.AR || (window.AR = {});
         data: undefined,
         //获取下拉翻译的文本
         getText: function (configKey, value) {
+            var count = 10;
+            while (!this.data && count > 0) {
+                $.sleep(10);
+                count--;
+            }
+            if (!this.data || !configKey) { return ''; }
             var items = this.data[configKey];
             var itemValue = [];
             if (items != undefined && value != undefined && value != null && value.toString() != '') {
@@ -57,6 +63,12 @@ window.AR || (window.AR = {});
         },
         //获取下拉翻译的值
         getValue: function (configKey, text) {
+            var count = 10;
+            while (!this.data && count > 0) {
+                $.sleep(10);
+                count--;
+            }
+            if (!this.data || !configKey) { return ''; }
             var items = this.data[configKey];
             var itemValue = [];
             if (items != undefined && text != undefined && text != null && text.toString() != '') {
@@ -267,6 +279,14 @@ window.AR || (window.AR = {});
             }
         }
         return $input;
+    }
+    //休眠
+    $.sleep = function (n) {
+
+        var start = new Date().getTime();
+
+        while (true) if (new Date().getTime() - start > n) break;
+
     }
 })(jQuery, window.AR);
 

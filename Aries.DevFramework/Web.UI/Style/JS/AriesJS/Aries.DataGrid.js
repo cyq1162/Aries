@@ -1146,6 +1146,14 @@
                             items.push($input);
                         }
                     }
+                    else if (editor.type == 'validatebox') {
+                        var col = dg.Internal.headerData.get("field", field);
+                        if (col && col.importunique) {
+                            $input.validatebox({
+                                validType: "exists['" + field + "','" + row[dg.Internal.primarykey] + "']"
+                            });
+                        }
+                    }
                 }
                 if (items.length > 0) {
                     for (var i = 0; i < items.length; i++) {

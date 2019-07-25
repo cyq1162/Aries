@@ -319,6 +319,11 @@
             var removeItems = [];
             for (var i = 0; i < objNames.length; i++) {
                 var newObj = objNames[i];
+                if ($Core.Combobox.paras && $Core.Combobox.paras[newObj.ObjName])
+                {
+                    newObj.Para = $Core.Combobox.paras[newObj.ObjName];
+                    //delete $Core.Combobox.paras[newObj.ObjName];
+                }
                 var oldObj = objNameArray.get("ObjName", newObj.ObjName);
                 if (oldObj) {
                     if (((!oldObj.Parent && !newObj.Parent) || oldObj.Parent == newObj.Parent)
@@ -522,9 +527,9 @@
 
 
 
-    //function setParas(data) {
-    //    $Core.Combobox.paras = $.extend($Core.Combobox.paras, data);
-    //}
+    function setParas(data) {
+        $Core.Combobox.paras = data;
+    }
     /**
          * 基础节点数据 =》 Combox Tree 的格式数据。
          *将普通数组转成树形数组，根据数组内对象的id跟parent属性过滤
@@ -784,8 +789,8 @@
         },
         // 为下拉框设置属性事件等属性：参数：$box, key, value, isTree
         setAttr: setAttr,
-        //setParas({ "C_SYS_Table": tableNames, "C_SYS_Column": tableNames })
-        //setParas: setParas,
+        //setParas({ "C_SYS_Table": tableNames, "C_SYS_Column": tableNames }) 为下拉参数数据增加过滤条件
+        setParas: setParas,
 
         //为下拉框设置值：{name1:value1,name2:value2}
         setValues: function (data) {

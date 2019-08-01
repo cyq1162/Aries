@@ -75,7 +75,7 @@ namespace Aries.Core
                     //context.Response.AppendHeader("Date", DateTime.Now.ToString());
                     //context.Response.AppendHeader("Expires", DateTime.Now.AddDays(1).ToString());
                     context.Response.AppendHeader("ETag", etag);
-                    context.Response.AppendHeader("Last-Modified", DateTime.Now.ToString());
+                    context.Response.AppendHeader("Last-Modified", DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"));
                     //if (!AppConfig.IsAspNetCore)
                     //{
                     context.Response.WriteFile(context.Server.MapPath(context.Request.Url.LocalPath));

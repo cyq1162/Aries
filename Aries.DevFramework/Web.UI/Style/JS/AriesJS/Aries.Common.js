@@ -90,6 +90,7 @@
                     if (value.length >= 30) {
                         abValue = value.substring(0, 30) + "...";
                     }
+                    abValue = abValue.replace('<', '&lt;').replace('>', '&gt;');
                     return '<div title="' + value + '" class="note">' + abValue + '</div>';
                 }
                 return value;

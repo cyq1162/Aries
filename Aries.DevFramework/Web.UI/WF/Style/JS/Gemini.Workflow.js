@@ -318,12 +318,15 @@ window.WF || (window.WF = {});
         //加载工作流表单
         form: function () {
             document.title = WF.Context.title;
-            AR.Form.$target && AR.Form.$target.form("load", WF.Context);
-            if (WF.Context.Wiid) {
-                if (WF.Context.formAction != WF.Enum.FormAction.Todo || WF.Context.activityType != WF.Enum.ActivityType.Start) {
-                    $(".wf-form").toView();
+            setTimeout(function () {
+                AR.Form.$target && AR.Form.$target.form("load", WF.Context);
+                if (WF.Context.Wiid) {
+                    if (WF.Context.formAction != WF.Enum.FormAction.Todo || WF.Context.activityType != WF.Enum.ActivityType.Start) {
+                        $(".wf-form").toView();
+                    }
                 }
-            }
+            }, 10);
+           
         }
     };
 }(window.WF, window.AR));

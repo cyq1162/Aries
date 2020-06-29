@@ -602,7 +602,7 @@
                                     if ($input.attr("clone") != "false") {
                                         $input2 = $input.clone(true);
                                         $input2.attr("operator", ">=");
-                                        $lineItem.append($input2).append($("<span>").html("&nbsp;至&nbsp;"));
+                                        $lineItem.append($input2).append($("<span>").html("&nbsp;-&nbsp;"));
                                         //处理默认值
                                         var defalutValue = $input.val();
                                         if (defalutValue && defalutValue.indexOf(',') > -1) {

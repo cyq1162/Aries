@@ -105,6 +105,10 @@ namespace Aries.Core.Helper
         /// <returns></returns>
         public static bool IsAriesSuffix()
         {
+            if (HttpContext.Current == null) 
+            {
+                return false;
+            }
             return HttpContext.Current.Request.Url.LocalPath.EndsWith(AriesSuffix);
         }
         /// <summary>

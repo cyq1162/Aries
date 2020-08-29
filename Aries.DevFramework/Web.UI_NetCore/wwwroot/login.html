@@ -52,7 +52,7 @@
             var pwd = $("#password").val();
             var date = new Date();//避免浏览器私自缓存
             var data = { "uid": uid, "pwd": pwd, r: date.getSeconds() };
-            var result = AR.Utility.Ajax.post("Login", null, data);
+            var result = AR.Ajax.post("Login", null, data);
             if (result) {
                 if (result.success) {
                     location.href = "index.html";
@@ -69,7 +69,7 @@
                 }
             }
         }
-        var user = AR.Utility.Cookie.get('aries_user');
+        var user = AR.Cookie.get('aries_user');
         if (user) {
             $("#username").val(user);//记住用户名
         }

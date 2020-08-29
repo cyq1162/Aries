@@ -136,7 +136,7 @@ namespace Aries.Core
                     context.RewritePath(defaultUrl);
                 }
             }
-            else
+            else if(!AppConfig.IsAspNetCore)
             {
                 string uriPath = Path.GetFileNameWithoutExtension(context.Request.Url.LocalPath).ToLower();
                 isAjax = uriPath == "ajax";
@@ -359,7 +359,6 @@ namespace Aries.Core
                 }
             }
             #endregion
-
 
             try
             {

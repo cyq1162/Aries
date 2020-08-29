@@ -66,6 +66,7 @@ namespace Aries.Core
                         {
                             p = new Permission(UserAuth.UserName, false);
                         }
+                      
                         MethodInvoke(item);
                         if (items.Length > 1)
                         {

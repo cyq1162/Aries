@@ -1,0 +1,83 @@
+﻿@charset "utf-8";
+/* CSS Document */
+body { font-size: 12px; line-height: 22px; color: #333; font-family: 微软雅黑; text-align: left; background: #fff; }
+body, div, ul, ol, li, dl, dt, dd, span, p, h1, h2, h3, img, form, table, tr, td, th, label { margin: 0; padding: 0; }
+img { border: 0 none; }
+ul, ol, li { list-style-type: none; }
+a { text-decoration: none; color: #333; cursor: pointer; }
+    a:hover { text-decoration: none; color: #ba2636; }
+.ovh { overflow: hidden; zoom: 1; }
+.fl { float: left; }
+.fr { float: right; }
+.cl { clear: both; }
+
+
+
+/**end**/
+/*head*/
+.panel-top { background: url(images/index_top.png) repeat-x; height: 100%; width: 100%; position: relative; top: 0; left: 0; }
+.panel-logo a { display: block; background: url(images/indexlogo.png) no-repeat; position: absolute; top: 9%; left: 4%; width: 143px; height: 56px; background-size: 100% 100%; }
+.panel-login { position: absolute; right: 32px; top: 10px; height: 60px; line-height: 60px; }
+    .panel-login span.area { font-size: 12px; font-weight: bold; color: #fff; padding-right: 10px; height: auto; cursor: pointer; margin-left: 10px; }
+    .panel-login a { background: url(images/icon2.png) no-repeat; padding: 2px 0 0 22px; color: #fff; }
+        .panel-login a.ico1 { background-position: -40px -176px; margin-right: 10px; }
+        .panel-login a.ico2 { background-position: -41px -219px; margin-left: 12px; }
+        .panel-login a.ico3 { background-position: -37px -23px; }
+        .panel-login a:hover { color: #ba2636; }
+/*一级菜单样式*/
+.panel-nav { padding: 40px 0 0 311px; height: 40px; line-height: 40px; zoom: 1; }
+    .panel-nav ul { list-style-type: none; padding: 0; margin: 0; position: absolute; left: 21%; top: 37px; }
+        .panel-nav ul li { float: left; margin-right: 5px; padding-left: 3px; height: 40px; font-size: 1em; }
+            .panel-nav ul li a { background: #4797e9; cursor: pointer; display: block; float: left; height: 40px; line-height: 40px; padding: 0 14px; border-radius: 4px; -moz-border-radius: 4px; -webkit-border-radius: 4px; color: #fff; }
+                .panel-nav ul li a:hover { color: #c15d00; text-decoration: none; color: #fff; font-size: 1em; height: 40px; padding: 0 14px; border-radius: 4px; -moz-border-radius: 4px; -webkit-border-radius: 4px; }
+                .panel-nav ul li a span { background: url(images/panel-top-img.png) -182px -196px no-repeat; cursor: pointer; display: block; padding-left: 25px; }
+            .panel-nav ul li.hover a { color: #fff; font-weight: bold; font-size: 1em; }
+                .panel-nav ul li.hover a span { background: url(images/panel-top-img.png) -98px -196px no-repeat; }
+/*二级菜单样式*/
+.panel-sub-nav { margin-top: 2px; height: 34px; line-height: 34px; padding: 0 5%; color: #000; zoom: 1; }
+    .panel-sub-nav .dangan { width: 500px; height: 50px; background: pink; position: absolute; left: 0; top: 0; display: block; }
+    .panel-sub-nav a { display: block; padding: 0 6px; float: left; cursor: pointer; margin-top: 3px; }
+    .panel-sub-nav em { display: block; float: left; margin: 0 5px; font-style: normal; margin-top: 3px; }
+    .panel-sub-nav a:hover, .panel-sub-nav a.hover { background: #d4e7fa; cursor: pointer; color: #000; text-decoration: none; width: auto; height: 30px; -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px; margin-top: 6px; line-height: 30px; }
+        .panel-sub-nav a:hover, .panel-sub-nav a.hover:hover { cursor: pointer; color: #000; text-decoration: none; width: auto; height: 30px; background: #d4e7fa; -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px; margin-top: 6px; line-height: 30px; }
+
+
+
+/*四级树形菜单样式*/
+.tree { border-right: 1px solid #3d9cd0; border: 1px solid #ccc; background: rgba(161, 199, 239, 0.1); padding: 10px 6px 3px 6px; margin-top: 1%; }
+.tree-node-selected { background: #eaf2ff !important; }
+.tree-node { padding-bottom: 6px; }
+
+
+/*三级菜单样式*/
+.sidebar-nav { padding: 0; margin: 0; }
+    .sidebar-nav li { border-top: 1px solid #fff; border-bottom: solid 1px #e6e7e7; line-height: 40px; vertical-align: middle; cursor: pointer; padding-left: 33px; box-sizing: border-box; }
+        .sidebar-nav li a { padding-left: 20px; cursor: pointer; font-size: 14px; }
+        .sidebar-nav li.hover a, .sidebar-nav li:hover a { background: url(images/sidebar-icon01.png) 0 1px no-repeat; text-decoration: none; }
+
+/*修改 easy ui里面样式 */
+/*tongyong*/
+.tabs-panels iframe { border: 0 none; }
+    .tabs-panels iframe body { margin: 0; }
+.layout-split-west .panel-header { text-align: center !important; height: 30px; line-height: 30px; font-size: 16px !important; background: #286cd2 url(images/icon3.png) no-repeat -13px center !important; z-index: 999; filter: initial; }
+    .layout-split-west .panel-header .panel-title { font-size: 16px !important; line-height: 30px !important; color: #fff !important; }
+.tabs { height: 39px !important; }
+    .tabs li a.tabs-inner { height: 29px !important; line-height: 33px; }
+.panel-body-noheader { border-top-width: 0 !important; }
+.panel-header, .panel-body { border-style: 0 !important; border-color: none !important; }
+.tabs li a.tabs-inner { border-radius: 5px !important; }
+.tabs li { margin: 2px 4px -1px 0 !important; }
+    .tabs li.tabs-selected a.tabs-inner { background: !important; }
+    .tabs li.tabs-selected a.tabs-inner { border-bottom: 0 !important; }
+.layout-button-left { background: #fff url(images/tabs_icons.png) no-repeat!important; border-radius: 4px; -moz-border-radius: 4px; -webkit-border-radius: 4px; behavior: url(border-radius.htc); }
+.layout-button-right { background: #fff url(images/tabs_icons.png) no-repeat!important; border-radius: 4px; -moz-border-radius: 4px; -webkit-border-radius: 4px; behavior: url(border-radius.htc); }
+
+
+/*修改密码的样式*/
+.wrap a { text-decoration: none; }
+.wrap { width: auto; margin: 10px auto; text-align: center; }
+    .wrap label { text-align: right; display: inline-block; width: 160px; }
+    .wrap input { margin: 15px auto; display: inline-block; width: 200px; height: 30px; padding-left: 5px; color: #333; border: solid #bbb 1px; line-height: 30px; }
+.btn { display: inline-block; width: 80px; height: 30px; line-height: 30px; color: #fff; text-align: center; border-radius: 5px; font-size: 16px; }
+.red { background-color: #bc489b; margin: 10px 20px 0 100px; }
+.blue { background-color: #15a4fa; }

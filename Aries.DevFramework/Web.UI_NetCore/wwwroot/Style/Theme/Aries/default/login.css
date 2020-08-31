@@ -1,0 +1,39 @@
+﻿@charset "utf-8";
+body{margin:0;border:0;padding:0; text-align:left; font-family:arial; font-size:12px; color:#333; background:url(images/index_bg.jpg) no-repeat center 0;}
+ul,ol,li,dl,dt,dd,form,input,div,p,b,span,u,i,img{ margin:0; padding:0; border:0;}
+ul,li,dl{ list-style-type:none;}
+h1,h2,h3,h4,h5,h6{ font-weight:bold;}
+a{text-decoration:none; color:#333;}
+a:hover{text-decoration:underline;}
+
+
+/*login*/
+/* 图片自适应 */
+img,background{
+	max-width: 100%;
+	height: auto;
+	width:auto; /* ie8 */
+	-ms-interpolation-mode:bicubic;/*为了照顾ie图片缩放失真*/
+}
+
+
+html, body {width:100%; height:100%;overflow:hidden;}
+.all{ width:100%;height:100%;margin:0 auto;text-align:center;}
+.box_top{width:360px;height:36px;background: url(images/login_bg_top.png) no-repeat center 0;position:absolute; left:43%;top:-20px; margin:78px auto;}
+.box{width:725px ; height:445px;background:url(images/box_bg.png) no-repeat center 0;margin:0 auto; position:relative;top:88px;text-align:initial;}     
+.box h2{color:#2c70ca;font-size:32px;text-align: center;padding-top: 44px;}
+.login{width:226px; height:264px;background: url(images/logo.png) no-repeat left top;margin-left:70px;margin-top:10px;display:inline-block; }
+.login_r{width:200px; height:20%;display: block;position:absolute; left:326px;top:120px; }
+.login_r label{font-size: 16px;color:#666;font-weight: bold;}
+.login_r input{width:244px; height:40px;-webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px;border: 1px solid #ccc;margin-top:4px; margin-bottom:12px;padding-left: 5px;
+                    color:#6c7f8c;font-size: 16px;line-height:40px;}
+.login_r .code{width:130px !important; height:36px;}
+.login_r .code_bg{position:absolute;left:150px; top:178px; width:87px; height:36px;background:url(images/code_bg.png);display:block;font-size: 20px;line-height: 40px;text-align: center;
+                       color:#0207dd;cursor:pointer;}
+.login_r .noclear{position:absolute;left:246px; top:191px; width:87px; height:36px;display:block;font-size: 12px;line-height: 40px;text-align: center;cursor:pointer;
+                       background:url(images/anniu.png) no-repeat left top}
+.login_r .btn input{width:244px; height:46px;background:#2dcc3c;-webkit-border-radius: 4px; -moz-border-radius: 4px; border-radius: 4px;font-size: 24px;text-align: center;
+                         line-height: 46px;margin-top: 30px; color:#ffffff;cursor:pointer;}
+.login-foot{ background:#eee; border-top:1px solid #dedede; height:35px; line-height:35px; width:100%;position:absolute; left:0; bottom:0;}
+.login-foot span{ color:#666; padding-left:45%;}
+

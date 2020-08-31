@@ -1,0 +1,7 @@
+{"UserInfoID":"System.Guid","CompanyID":"System.String","Memo":"System.String","AreaID":"System.Guid"},
+{"UserInfoID":"6a8aaec9-7fe0-430d-919d-935ebb09af40","CompanyID":"","Memo":"000","AreaID":null},
+{"UserInfoID":"d8e1ae3b-8451-436a-a59b-c7516e711b9c","CompanyID":"","Memo":"xxxxeee","AreaID":null},
+{"UserInfoID":"9869162f-9a4f-43aa-aa63-5fc260871ca4","CompanyID":"","Memo":"这333","AreaID":null},
+{"UserInfoID":"cf26280b-12a4-4ae1-9778-4511a2bc73cb","CompanyID":"","Memo":"这是UserInfo表的信息","AreaID":null},
+{"UserInfoID":"b19bafcc-49e1-4a4b-948b-6e32b9e22ecd","CompanyID":"","Memo":"这是UserInfo表的信息","AreaID":null},
+{"UserInfoID":"bd34f8d8-ed4b-48a7-b64c-687f94c65ee9","CompanyID":"","Memo":"333bbb","AreaID":null}

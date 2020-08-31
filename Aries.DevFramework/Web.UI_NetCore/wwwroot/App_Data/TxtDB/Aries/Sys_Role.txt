@@ -1,0 +1,5 @@
+{"RoleID":"System.Guid","RoleName":"System.String","Notes":"System.String"},
+{"RoleID":"53536a66-0d99-4ee8-b4a6-5928129d0ab6","RoleName":"普通管理员","Notes":"运营级别的权限"},
+{"RoleID":"d8e1ae3b-8451-436a-a59b-c7516e711b9c","RoleName":"超级管理员","Notes":"开发级别的权限"},
+{"RoleID":"e35ae728-2dc7-494e-96ce-ea95a50c092c","RoleName":"功能演示查看","Notes":"只看功能演示"},
+{"RoleID":"7bd0ce76-20a6-4475-a70f-6691bb1af471","RoleName":"系统管理","Notes":"仅有系统管理权限"}

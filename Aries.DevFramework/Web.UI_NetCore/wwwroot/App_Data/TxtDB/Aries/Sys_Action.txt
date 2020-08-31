@@ -1,0 +1,11 @@
+,
+{"ActionID":"8bc4d68a-ec7d-48f7-97c4-03a09836f45c","ActionName":"分配权限","ActionRefName":"auth","IsEnabled":true,"IsSys":true,"SortOrder":19},
+{"ActionID":"71e39291-59d3-4ed6-9ae1-0d7df7da2f91","ActionName":"导入","ActionRefName":"import","IsEnabled":true,"IsSys":true,"SortOrder":9},
+{"ActionID":"630e0452-00d6-4452-8a5c-19b2c3115ee3","ActionName":"配置表头","ActionRefName":"config","IsEnabled":true,"IsSys":true,"SortOrder":13},
+{"ActionID":"cf8f418e-2468-4f6c-96cf-3302a2d9fa9b","ActionName":"删除","ActionRefName":"del","IsEnabled":true,"IsSys":true,"SortOrder":5},
+{"ActionID":"c97f8956-5c79-4393-8423-34451a1bcc95","ActionName":"查看SQL","ActionRefName":"viewsql","IsEnabled":true,"IsSys":true,"SortOrder":15},
+{"ActionID":"d0739946-99e0-4770-8d2a-6faf25a8457a","ActionName":"新增","ActionRefName":"add","IsEnabled":true,"IsSys":true,"SortOrder":1},
+{"ActionID":"8a59a358-5a8f-4cb4-b600-9313028b911b","ActionName":"导出","ActionRefName":"export","IsEnabled":true,"IsSys":true,"SortOrder":11},
+{"ActionID":"15b73068-6c0f-49c9-800c-a7216cb2d079","ActionName":"查看界面","ActionRefName":"view","IsEnabled":true,"IsSys":true,"SortOrder":7},
+{"ActionID":"a9ee0f5e-ff85-4f00-ac18-f6118286671d","ActionName":"保存SQL","ActionRefName":"savesql","IsEnabled":true,"IsSys":true,"SortOrder":17},
+{"ActionID":"1c613ade-6665-49fb-b298-faf1b82dd6d2","ActionName":"编辑","ActionRefName":"edit","IsEnabled":true,"IsSys":true,"SortOrder":3}

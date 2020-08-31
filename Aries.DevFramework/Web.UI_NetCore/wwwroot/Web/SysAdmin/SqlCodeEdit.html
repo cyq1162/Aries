@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <script src="/Style/JS/Aries.Loader.js"></script>
+</head>
+<body>
+    <div class="page-title">
+        <h3>${rightKey}${config}${menu}</h3>
+        <a class="arrows hover"></a>
+    </div>
+    <div class="page-content">
+        <div style="width: 100%; float: left">
+            <div style="width: 20%; float: left;">
+                <ul id="ul_menus"></ul>
+
+            </div>
+            <div style="width: 80%; float: left">
+                <div class="page-form">
+                    <form id="form1">
+                        <div class="line">
+                            <label><em>*</em>Sql：</label>
+                            <textarea name="sys_code" id="sys_code" data-option="required:true" class='easyui-validatebox'
+                                 style="width: 84%;height:400px" ></textarea>
+                        </div>
+                        
+                        <div class="btn">
+                            <a>
+                                <input  class="submit" type="button" name="${save}" value="" />
+                            </a>
+                        </div>
+                        <input type="hidden" name="objName" id="objName" value="" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="clear: both;">
+        <div id="mm" class="easyui-menu" style="width: 120px;">
+            <div data-options="iconCls:'icon-add'" id="cmbtn_add">${add}${node}</div>
+            <div data-options="iconCls:'icon-remove'" id="cmbtn_del">${delete}${node}</div>
+        </div>
+        <div id="win"></div>
+    </div>
+</body>
+</html>
+<script>
+    var currNode;
+    $(document).ready(function () {
+        initMenu();
+        $("#cmbtn_add").click(function () { addPage() });
+        $("#cmbtn_del").click(function () { delMenu() });
+
+    });
+
+    //新增页面
+    function addPage() {
+        var node = getTreeNode();
+        var name = prompt("${promptInputName}", "*.sql")
+        if (name!=null && name!="")
+        {
+            AR.Ajax.post("AddSql", name, { "sys_path": getFolderPath(node,"") },
+             function (data) {
+                 if (data.success) {
+                     $("#ul_menus").tree("append", {
+                         parent: node.target,
+                         data: [{
+                             id: node.id?node.id:"root"+'a',
+                             text: name,
+                             attributes: { "parentid": node.id?node.id:"root" }
+                         }]
+                     });
+                 }
+                 AR.Window.showMsg(data.msg);
+
+             });
+        }
+    }
+    function getTreeNode() {
+        var node = $("#ul_menus").tree("getSelected");
+        return node;
+    }
+    function getFolderPath(node, name)
+    {
+        if (node && node.text) {
+           
+            if (node.attributes) {
+                name = node.text + "\\" + name;//有parent 才加（忽略根目录）
+                var parentNode = $("#ul_menus").tree("getParent", node.target);
+                if (parentNode) {
+                    return getFolderPath(parentNode, name);
+                }
+            }
+        }
+        return name;
+    }
+    //删除菜单
+    function delMenu() {
+        var node = $("#ul_menus").tree("getSelected"); //alert(JSON.stringify(node));
+        if (node != undefined) {
+           var isLeaf=$("#ul_menus").tree('isLeaf', node.target);
+           if (!isLeaf) {
+               alert("${promptCantDelete}");
+                return;
+            }
+            AR.Window.confirm("${confirm}${delete}:（"+node.text+"）？", "${prompt}", function () {
+                AR.Ajax.post("DeleteSql", node.text, null,
+                function (data) {
+                    if (data.success) {
+                        $("#ul_menus").tree("remove", node.target);
+                    }
+                    AR.Window.showMsg(data.msg);
+
+                });
+            });
+        }
+    }
+
+    //初始化菜单
+    function initMenu() {
+        AR.Ajax.post("GetSQLCode", null, {},
+          function (data) {
+              $("#ul_menus").tree({
+                  idField: "id",
+                  textField: "filename",
+                  rootText: "SqlCode${root}",
+                  parentField: "parentid",
+                  data: data,
+                  onContextMenu: function (e, node) {
+                      e.preventDefault();
+                      $(this).tree('select', node.target);
+                      if (node.text.endWith(".sql")) {
+                          $("#cmbtn_add").hide();
+                      }
+                      else { $("#cmbtn_add").show(); }
+                      $('#mm').menu('show', {
+                          left: e.pageX,
+                          top: e.pageY
+                      });
+                  },
+                  onClick: treeNodeClick
+              });
+
+          });
+    }
+
+    //树节点单击
+    function treeNodeClick(node) {
+        var node = $("#ul_menus").tree("getSelected"); //alert(JSON.stringify( node));
+        //$("#objName").val();
+        if (node.text.endWith(".sql")) {
+            AR.Ajax.get("GetSQL", node.text.replace(".sql",""), null, function (result) {
+                if (result && result.success) {
+                    $("#sys_code").val(result.msg.replace(/<br\/>/g, "\r\n"));
+                    $("#sys_code").focus();
+                    $("#objName").val(node.text);
+                }
+                else { alert("get data fail!");}
+            });
+        }
+    }
+    AR.Form.BtnCommit.onBeforeExecute = function ()
+    {
+        AR.Form.method = "SaveSql";
+        AR.Form.objName = $("#objName").val();
+    }
+    AR.Form.onAfterExecute = function () {
+        //取消回车事件
+        window.onkeydown = function () { };
+    }
+</script>

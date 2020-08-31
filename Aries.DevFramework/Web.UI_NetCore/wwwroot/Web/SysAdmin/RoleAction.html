@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <script src="/Style/JS/Aries.Loader.js"></script>
+</head>
+<body>
+    <div class="content">
+        <a>
+            <input class="btn-lg" type="button" id="btn_save" value="${save}" />
+        </a>
+        <a>
+            <input class="btn-lg" type="button" id="btnReturn" value="${close}" />
+        </a>
+    </div>
+    <ul id="tree"></ul>
+</body>
+</html>
+
+<script type="text/javascript">
+    var roleid = AR.Utility.queryString("id");
+    $(function () {
+        $("#btn_save").click(function () {
+            $.messager.progress({ title: "${prompt}" });
+            var postData = { RoleID: roleid };
+            if ($('#tree').tree('getRoot').checked) {
+                postData.all = 1;
+            } else {
+                var arr = [], actions = {};
+                var nodes = $("#tree").tree("getChecked");
+                for (var i = 0; i < nodes.length; i++) {
+                    var parentNode = $("#tree").tree("getParent", nodes[i].target);
+                    //判读是否是子节点
+                    var isLeft = $("#tree").tree("isLeaf", nodes[i].target);
+                    if (isLeft) {
+                        if (nodes[i].id != null) {
+                            if (!actions[parentNode.id]) {
+                                actions[parentNode.id] = [];
+                            }
+                            actions[parentNode.id].push(nodes[i].id);
+
+                        } else {
+                            actions.menuid = parentNode.id;
+                            actions.actionid = 0;
+                        }
+                    }
+                }
+                for (var k in actions) {
+                    var item = { MenuID: k, ActionIDs: actions[k].join(',') };
+                    arr.push(item);
+                }
+                postData.data = JSON.stringify(arr);
+            }
+
+            AR.Ajax.post("AddPromission", "Sys_Menu", postData,
+                    function (data) {
+                        $.messager.progress('close');
+                        AR.Window.showMsg(data.msg);
+                    });
+
+        })
+
+
+        AR.Ajax.post("GetMenuAndAction", "Sys_Menu", { RoleID: roleid },
+         function (data) {
+             $("#tree").tree({
+                 idField: "menuid",
+                 textField: "menuname",
+                 rootText: "${menu}${root}",
+                 rootid: undefined,
+                 checkbox: true,
+                 parentField: "parentmenuid",
+                 iconCls: 'icon-mini-add',
+                 data: data,
+                 onLoadSuccess: function (data) {
+                     getActionIDs();
+                 }
+
+             });
+         }
+    );
+
+    })
+
+    function getActionIDs() {
+        AR.Ajax.post("GetMenuIDsandActionIDs", "", { RoleID: roleid },
+         function (data) {
+             for (var i in data) {
+                 var node = $("#tree").tree("find", i);
+                 if (node != null) {
+                     var action = data[i].toLocaleLowerCase().split(',');
+                     var parentid = node.id;
+                     var childen = $("#tree").tree("getChildren", node.target);
+                     for (var n = 0; n < action.length; n++) {
+                         for (var j = 0; j < childen.length; j++) {
+                             if (childen[j].attributes.parentmenuid.toString().toLocaleLowerCase() == parentid.toString()) {
+                                 if (childen[j].id.toString().toLocaleLowerCase() == action[n].toString())
+                                     $("#tree").tree("check", childen[j].target)
+                             }
+                         }
+                     }
+                 }
+             }
+         })
+    }
+
+</script>

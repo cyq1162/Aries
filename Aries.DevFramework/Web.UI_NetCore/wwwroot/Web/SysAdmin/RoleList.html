@@ -1,0 +1,21 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <script src="/Style/JS/Aries.Loader.js"></script>
+</head>
+<body>
+    <table id="dg"></table>
+</body>
+</html>
+<script type="text/javascript">
+    var dg = new AR.DataGrid("Sys_Role");
+    dg.isEditor = true;
+    dg.PKColumn.add("detail", "${permission}${setting}", 'roleAction', null, "${permission}${setting}", "auth");
+    dg.bind();
+    function roleAction(v, r, i) {
+        var rname = r.rolename;
+        AR.Window.open('RoleAction.html?id=' + v, '${current}${role}（' + rname + '）');
+    }
+</script>

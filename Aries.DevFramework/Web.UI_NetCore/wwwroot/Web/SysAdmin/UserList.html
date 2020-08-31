@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>${user}${manage}${list}</title>
+    <script src="/Style/JS/Aries.Loader.js"></script>
+</head>
+<body>
+    <table id="grid"></table>
+
+</body>
+</html>
+
+<script type="text/javascript">
+    var dg = new AR.DataGrid("V_SYS_UserList", "Sys_User", "grid");
+    dg.forkeys = "Sys_UserInfo.UserInfoID";//关联删除
+    //dg.ToolBar.isHidden = true;
+    //dg.options = { sortName: "CreateTime", sortOrder: "desc" };
+    //dg.Search.$target = '';
+    dg.PKColumn.add("edit", "${edit}", "dialog", "UserEdit.html", "${edit}${user}", "edit");
+    dg.PKColumn.add("del", "${del}", null, null, null, "del");
+    dg.bind();
+    //function dialog() { alert('di');}
+</script>

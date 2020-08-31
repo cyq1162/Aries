@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <script src="/Style/JS/Aries.Loader.js"></script>
+</head>
+<body>
+    <table id="dg"></table>
+</body>
+</html>
+<script>
+    var dg;
+    var ops = {
+        sortName: "CreateTime", sortOrder: "desc"
+    }
+    var excelName = AR.Utility.queryString('excelName');
+    if (excelName && excelName.length > 1) {
+        ops.defaultWhere = [{ name: 'ExcelName', pattern: 'equal', value: excelName }]//默认查询条件
+    }
+    dg = new AR.DataGrid('Config_Excel', 'Config_Excel');
+    dg.isEditor = true;
+    dg.defaultInsertData = {
+        excelid: AR.Utility.guid(), startindex: 0, headcrossrownum: 0, wheretype: 0, accepttype: 0, createtime: function () {
+            return new Date().format("yyyy-MM-dd");
+        }()
+    };
+    dg.options = ops;
+    dg.PKColumn.add('detail', '${columnMapping}', "eidtMaping", null, null, 'edit');
+    dg.ToolBar.add('${close}', 'AR.Window.close', 4);
+    dg.bind();
+    function eidtMaping(v, r, i) {
+        AR.Window.open('ConfigExcelInfo.html?id=' + v + "&tablenames=" + r.tablenames, '${columnMapping}');
+    }
+</script>

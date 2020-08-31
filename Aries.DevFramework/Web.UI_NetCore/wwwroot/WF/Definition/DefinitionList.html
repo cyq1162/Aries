@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>流程应用管理列表</title>
+    <script src="/Style/JS/Aries.Loader.js"></script>
+</head>
+<body>
+    <table id="dg"></table>
+
+</body>
+</html>
+
+<script type="text/javascript">
+    var dg = new AR.DataGrid("WF_Definition");
+    dg.foreignKeys = "WF_Activity.WorkflowID,WF_Transition.WorkflowID";
+    dg.PKColumn.add("edit", "编辑", null, "DefinitionEdit.html", "编辑流程定义", "edit", { width: 640, height: 320 });
+    dg.PKColumn.add("del", "删除", null, null, null, "del");
+    dg.PKColumn.add("detail", "流程设计", "openDesigner", null, null, "edit");
+    dg.PKColumn.add("save", "流程下载", "downloadWorkflow", null, null, "edit");
+
+    dg.ToolBar.BtnAdd.winUrl = "/WF/Designer/Designer.html";
+    dg.ToolBar.BtnAdd.winTitle = "_blank";
+    dg.ToolBar.add("流程导入", "uploadWorkflow", 3, null, "edit", "wfImport");
+    dg.bind();
+
+    function openDesigner(v, r, i) {
+        var url = "/WF/Designer/Designer.html?wid=" + v;
+        var target = "_blank";
+        AR.Window.open(url, target, true);
+    }
+    function downloadWorkflow(v, r, i) {
+        AR.Utility.download("DownloadWorkflowXmlFile", { wid: v, workflowName: r.workflowname });
+    }
+
+    function uploadWorkflow() {
+        AR.Window.open("DefinitionImport.html", "流程导入", false, { width: 500, height: 260 });
+    }
+</script>

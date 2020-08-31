@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <script src="/Style/JS/Aries.Loader.js"></script>
+</head>
+<body>
+    <table id="dg"></table>
+</body>
+</html>
+<script>
+    var dg = new AR.DataGrid("Config_KeyValue");
+    dg.isEditor = true;
+    var editor = {};
+    //为特殊行指定下拉框配置
+    //dg.options = {
+    //    onBeforeEdit: function (index, row) {
+    //        var columnOption = dg.datagrid("getColumnOption", "configvalue");
+    //        //存档原来的配置
+    //        if (!editor.type) {
+    //            editor = AR.Utility.cloneObject(columnOption.editor);
+    //            editor.old = true;
+    //        }
+    //        if (row.configkey == "SysConfig" && row.configname == "Language") {
+    //            columnOption.editor.type = "combobox";
+    //            columnOption.editor.options = AR.Common.Privite.getOptions("#语言选项");
+    //        }
+    //    },
+    //    onAfterEdit: function (index, row, changes) {
+    //        dg.datagrid("getColumnOption", "configvalue").editor = AR.Utility.cloneObject(editor);//其它还原
+    //    }
+
+    //}
+    dg.bind();
+</script>

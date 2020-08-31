@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <script src="/Style/JS/Aries.Loader.js"></script>
+    <style>
+        span > b {
+            cursor: pointer;
+            margin-left: 20px;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <table id="dg"></table>
+</body>
+</html>
+<script type="text/javascript">
+    var objName = AR.Utility.queryString('objName');
+    var dg = new AR.DataGrid("Config_Grid");
+    dg.ToolBar.BtnImport.isHidden = true;
+    dg.ToolBar.BtnExportTemplate.isHidden = true;
+    dg.options = {
+        pageSize: 20,
+        fitColumns: false,
+        sortName: 'Frozen desc,OrderNum',
+        sortOrder: 'asc',
+        defaultWhere: [{ name: 'ObjName', pattern: '=', value: objName }]
+    }
+    dg.isEditor = true;
+    dg.defaultInsertData = {
+        objname: objName, align: 'center', width: 100, ordernum: 100, rowspan: 1, colspan: 1, mergeIndex: 1, datatype: 'string,50,0,0'
+    };
+    dg.ToolBar.add('${close}', 'AR.Window.close', 4);
+    dg.ToolBar.addHtml("<span style='margin-left: 20px; color:gray;'><strong>" + objName + "</strong></span>", 5);
+    dg.ToolBar.addHtml("<span onclick = 'fleshHeader()'><b>${fleshHeader}</b></span>", 6);
+    dg.ToolBar.addHtml("<span onclick = 'showView()'><b>${edit}SqlCode</b></span>", 7);
+    dg.ToolBar.addHtml("<span onclick = 'openConfigExcel()'><b>${senior}${import}${config}</b></span>", 8);
+    dg.ToolBar.addHtml("<span onclick = 'showFormHtml()'><b>${form}Html</b></span>", 9);
+    dg.PKColumn.Editor.BtnSave.onAfterExecute = function () {
+        AR.Window.refresh = true;
+    }
+    dg.ToolArea.Search.onBeforeExecute = function ()
+    {
+        if(dg.Internal.headerData)
+        {
+            for (var i = 0; i < dg.Internal.headerData.length; i++) {
+                if(dg.Internal.headerData[i].field=="objname")
+                {
+                    dg.Internal.headerData[i].hidden = true;
+                    dg.Internal.headerData[i].search = false;
+                    break;
+                }
+            }
+        }
+      
+    }
+    dg.bind();
+    function showView() {
+        AR.Ajax.get("GetSQL", objName, null, function (result) {
+            if (result && result.success) {
+                var $arae = $('<textarea>').css({ width: '99%', height: '96%' });
+                $arae.html(result.msg.replace(/<br\/>/g, "\r\n"));
+                AR.Window.dialog(objName, $arae, {
+                    toolbar: [{
+                        text: '保存',
+                        iconCls: 'icon-save',
+                        handler: function () {
+                            result = AR.Ajax.post("SaveSQL", objName, { "sys_code": $arae.val() });
+                            if (result && result.msg) {
+                                AR.Window.showMsg(result.msg, "消息提示");
+                            }
+                        }
+                    }]
+                });
+            }
+        });
+    }
+
+    function openConfigExcel() {
+        AR.Window.open('ConfigExcel.html?ExcelName=' + objName, 'Excel${import}${config}');
+    }
+    function showFormHtml() {
+        var dg = parent.AR.Global.DG.operating;
+        var headData = dg.Internal.headerData;
+        var $form = $('<form>');
+        var $div_tip = $('<div class="page-body">')
+            .append(
+                $('<div class="page-title">')
+                .append($('<h3>').html(objName)
+                .append($('<a class="arrows hover">'))
+                )
+            );
+        var $div_content = $('<div class="page-content">');
+        var $div = $('<div class="page-form">');
+        AR.Common.Html.createInput($div, headData.slice(1), dg, false);
+        var $btn = $('<div class="btn">');
+        $btn.append($('<a>').append($('<input>').addClass('submit')));
+        $btn.append($('<a>').append($('<input>').addClass('return')));
+        $btn.append($('<input type="hidden">').attr('name', dg.Internal.primarykey));
+        $div.append($btn);
+        $form.append($div_tip);
+        $form.append($div_content.append($div));
+        AR.Window.dialog(objName + " Html", $form[0].outerHTML.replace(/</g, '&lt;').replace(/>/g, '&gt;'));
+    }
+
+    function fleshHeader()
+    {
+        AR.Ajax.get("GetHeader", objName + "," + dg.tableName, { "reflesh": 1 },
+            function (result) {
+                
+                if (result.success) {
+                    window.location.href = window.location.href;
+                }
+                else { alert(result.msg);}
+            });
+    }
+</script>

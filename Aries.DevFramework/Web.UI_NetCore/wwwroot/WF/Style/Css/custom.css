@@ -1,0 +1,222 @@
+﻿/**********************textbox 样式*****************************************/
+.inputbox { height: 16px;font-size: 12px;color: #0C4596;background-color: #FFFFFF;border-color: #BBD3EB; border-width: 1px; border-style: solid; width: 150px;}
+.textBoxShort { vertical-align: middle; width: 138px; height: 16px; font-size: 13px; color: #7D7D7D; background-color: #FFFFFF; border-color: #cccccc; border-width: 1px; border-style: solid;}
+.textBoxNoneShort {vertical-align: middle; width: 150px; height: 18px; font-size: 13px; color: #0C4596;background-color: #FFFFFF; border-width: 0px;}
+.textBoxMinShort {vertical-align: middle;width: 60px;height: 18px;font-size: 13px;color: #0C4596; background-color: #FFFFFF;border-color: #95B8E7;border-width: 1px; border-style: solid;}
+.textBoxNoBorder {border-width: 0px;width: 80%;}
+/*自动文本框样式*/
+.textBoxAutoShort {width: auto; height: 18px; font-size: 13px; color: #0C4596;background-color: #FFFFFF;border-color: #95B8E7;border-width: 1px;border-style: solid;}
+.textBoxSelect {width: 110px;height: 18px;font-size: 13px;color: #0C4596;background-color: #FFFFFF;border-color: #95B8E7;border-width: 1px;border-style: solid;}
+/*长文本框样式*/
+.textBoxLong {width: 315px;height: 18px;font-size: 13px;color: #0C4596;background-color: #FFFFFF;border-color: #95B8E7;border-width: 1px;border-style: solid;}
+/*长文本框样式*/
+.textAutoBoxLong {width: 95%; height: 18px;font-size: 13px;color: #0C4596;background-color: #FFFFFF; border-color: #95B8E7;border-width: 1px;border-style: solid;}
+/*短文本多行框样式*/
+.textBoxMultiLineShort {width: 150px;height: 32px;font-size: 13px;color: #0C4596;background-color: #FFFFFF;border-color: #95B8E7;border-width: 1px;border-style: solid;margin-top: 5px;margin-bottom: 5px;height: 40px;}
+/*长文本多行框样式*/
+.textBoxMultiLineLong {width: 95%;font-size: 13px;color: #0C4596;background-color: #FFFFFF;border-color: #cccccc;border-width: 1px;border-style: solid;margin-top: 5px;margin-bottom: 5px;height: 40px;}
+/*textbox 样式结束******************************/
+
+/**********************标识或图标开始*****************************************************************************/
+.require{color:Red;margin-left:2px;}
+/*ico*/
+.icon{ cursor:pointer;}
+em{color:Red; font-style: normal;}
+.icon_add2{ cursor:pointer;text-decoration:none; padding-bottom :3px;  padding-left:18px;  margin-right:5px;background:url('../icons/edit_add2.gif') no-repeat;}
+.icon_add {  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/edit_add2.gif) no-repeat left top;  }
+.icon_del { cursor:pointer;  text-decoration:none;  padding-bottom:4px; padding-left:18px; margin-right:5px; background:url(../icons/ico_del.png) no-repeat left top;}
+.icon_edit {  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/pencil.png) no-repeat left top;  }
+.icon_save {  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/filesave.png) no-repeat left top; }
+.icon_search {  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/search.png) no-repeat left top;  }
+.icon_miniEdit {  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:8px; margin-right:5px; background:url(../icons/mini_edit.png) no-repeat left top;  }
+.icon_reset{  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/reset.png) no-repeat left top; }
+
+
+.icon_excel {  cursor:pointer; text-decoration:none;   padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/excel.gif) no-repeat left top;  }
+.icon_sysremd {  cursor:pointer; text-decoration:none;  padding-bottom:10px;padding-left:36px; margin-right:5px; background:url(../icons/ico_sysremd.png) no-repeat left top;  }
+.icon_word {  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/word.gif) no-repeat left top;  }
+.icon_help {  cursor:pointer; text-decoration:none; padding-left:18px; padding-bottom:4px; background:url(../icons/help.png) no-repeat; }
+.icon_hrms {  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/hrms.gif) no-repeat left top;  }
+
+.icon_start {  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/Icons_Skip.gif) no-repeat left top;  }
+.icon_upload {  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/ico_upload.gif) no-repeat left top;  }
+.icon_list1 {  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/Icons_list1.gif) no-repeat left top;  }
+.icon_list3 {  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/Icons_list3.gif) no-repeat left top;  }
+.icon_hangup{  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/Icons_list5.gif) no-repeat left top;  }
+.icon_urge{  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/icon_tool_156.gif) no-repeat left top;  }
+
+.icon_todo {  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/edit.gif) no-repeat left top;  }
+.icon_important {  cursor:pointer; text-decoration:none; padding-left:8px; background:url(../icons/ico_important.gif) no-repeat 1px top; color:#1B6E00; }
+.icon_upload {  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/icon_upload.gif) no-repeat left top; }
+.icon_upload2 {  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/Upload.png) no-repeat left top; }
+.icon_export {  cursor:pointer; text-decoration:none; padding-left:12px; margin-right:12px; background:url(../icons/ico_export.gif) no-repeat; }
+.icon_flow{  cursor:pointer; text-decoration:none; padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/flow.png) no-repeat left top;  }
+.icon_down{  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/download.png) no-repeat left top;  }
+
+
+.icon_user2 { cursor:pointer;  text-decoration:none;padding-bottom:4px;  padding-left:18px; margin-right:5px;  background:url(../icons/ico_user2.gif) no-repeat; }
+.icon_assign{ cursor:pointer;  text-decoration:none;padding-bottom:4px;  padding-left:18px; margin-right:5px;  background:url(../icons/assign.gif) no-repeat; }
+.icon_no{ cursor:pointer;  text-decoration:none;padding-bottom:4px;  padding-left:18px; margin-right:5px;  background:url(../icons/no.png) no-repeat; }
+.folder_lock{ cursor:pointer;  text-decoration:none;padding-bottom:4px;  padding-left:18px; margin-right:5px;  background:url(../icons/folder_lock.gif) no-repeat; }
+.folder_new{ cursor:pointer;  text-decoration:none;padding-bottom:4px;  padding-left:18px; margin-right:5px;  background:url(../icons/folder_new.gif) no-repeat; }
+.icon_key{ line-height:17px; cursor:pointer;  text-decoration:none;padding-bottom:4px; margin-right:5px;  padding-left:18px; background:url(../icons/Ico-Key.gif) no-repeat; }
+.icon_userInfo{cursor:pointer;  text-decoration:none;padding-bottom:4px;  padding-left:18px; margin-right:5px;  background:url(../icons/user_info_bg.gif) no-repeat; }
+
+.icon_list_1{ cursor:pointer;  text-decoration:none;padding-bottom:4px;  padding-left:18px; margin-right:5px; background:url(../icons/icon_list_1.gif) no-repeat; }
+.icon_list_2{cursor:pointer;  text-decoration:none;padding-bottom:4px;  padding-left:18px; margin-right:5px;  background:url(../icons/icon_list_2.gif) no-repeat; }
+.icon_list_3{cursor:pointer;  text-decoration:none;padding-bottom:4px;  padding-left:18px; margin-right:5px;  background:url(../icons/icon_list_3.gif) no-repeat; }
+.icon_Forward{ cursor:pointer;  text-decoration:none;padding-bottom:4px;  padding-left:18px; margin-right:5px;  background:url(../icons/iconForward.gif) no-repeat; }
+.icon_print{ cursor:pointer;  text-decoration:none;padding-bottom:4px;  padding-left:18px; margin-right:5px; background:url(../icons/iconPrint.gif) no-repeat; }
+.icon_zy{ cursor:pointer;  text-decoration:none;padding-bottom:4px;  padding-left:18px; margin-right:5px; background:url(../icons/zy.gif) no-repeat; }
+
+.icon_undo2 {  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/ico_undo2.gif) no-repeat left top;   }
+.icon_undo {  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/ico_undo.png) no-repeat left top; }
+.icon_quit{position: relative; top: -2px; cursor:pointer;  text-decoration:none;padding-bottom:4px;  padding-left:18px;  background:url(../icons/quit.gif) no-repeat; }
+
+
+.icon_do{  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/redo.png) no-repeat left top; }
+.icon_checkout {  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/checkout_get.png) no-repeat left top; }
+.icon_book {  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../SmallImages/Ico-136.gif) no-repeat left top; }
+
+
+.icon_undo{  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/ico_undo2.gif) no-repeat left top;  }
+.icon_root{  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/Ico-142.gif) no-repeat left top;  }
+.icon_refresh{  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/Ico-161.gif) no-repeat left top;  }
+.icon-email{  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/ico-email.gif) no-repeat left top;  }
+.icon-emailsend{  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/ico-emailsend.gif) no-repeat left top;  }
+.icon_view {  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/search.png) no-repeat left top;  }
+.icon_tool {  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/icon_tool_136.gif) no-repeat left top;  }
+.icon_608 {  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/Icons_608.gif) no-repeat left top;  }
+.icon_goBack {  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/goBack.gif) no-repeat left top;  }
+.icon_mobile {  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/mobile.gif) no-repeat left top;  }
+
+
+
+.icon_menu1 {  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/ico_menu1.gif) no-repeat left top;  }
+.icon_menu2 {  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/ico_menu2.gif) no-repeat left top;  }
+.icon_menu3 {  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/ico_menu3.gif) no-repeat left top;  }
+.icon_006 {  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/ico_006.gif) no-repeat left top;  }
+.icon_dictionary{  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/icon_dictionary.gif) no-repeat left top;  }
+.icon_whtieFile{  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/WhtieFile.gif) no-repeat left top;  }
+.icon_element{  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/icon_element.gif) no-repeat left top;  }
+.icon_page{  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:22px; margin-right:5px; background:url(../icons/icon_page.gif) no-repeat left top;  }
+.icon_writePen{  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:22px; margin-right:5px; background:url(../icons/writePen.gif) no-repeat left top;  }
+.icon_Run{ cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px;  background:url(../icons/Run.png) no-repeat left top;  }
+.icon-605{ cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px;  background:url(../icons/Icons-605.gif) no-repeat left top;  }
+.icon_chart{  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px; margin-right:5px; background:url(../icons/char.gif) no-repeat left top;  }
+.icon_reportchar{height:32px;cursor:pointer; text-decoration:none;padding-left:19px; margin-right:5px; background:url(../icons/reportchar.png) no-repeat left top;  }
+/*上传*/
+.icon_sj{  cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px;padding-right:7px; background:url(../icons/ico_sj.gif) no-repeat left top;  }
+.icon_databaseSQL{ cursor:pointer; text-decoration:none;  padding-bottom:4px;padding-left:18px;padding-right:7px; background:url(../icons/dataBaseSQL.png) no-repeat left top; }
+.icon_assign{background:url('../icons/assign.gif') no-repeat;}
+.icon_user2{background:url('../icons/ico_user2.gif') no-repeat;}
+.icon_user1{background:url('../icons/ico_user1.gif') no-repeat;}
+.icon_user3{background:url('../icons/ico_user3.gif') no-repeat;}
+.icon_user4{background:url('../icons/ico_user4.gif') no-repeat;}
+.icon_user5{background:url('../icons/ico_user5.gif') no-repeat;}
+.icon_user6{background:url('../icons/ico_user6.gif') no-repeat;}
+ 
+ 
+.icon_user_info{background:url('../icons/user_info.gif') no-repeat;}
+.icon_undo2{background:url('../icons/ico_undo2.gif') no-repeat;}
+.icon_print2{background:url('../icons/print2.gif') no-repeat;}
+
+.icon_database{background:url('../icons/database.png') no-repeat;}
+.icon_reportchar{background:url('../icons/reportchar.png') no-repeat;}
+.icon_down{background:url('../icons/ico_down.gif') no-repeat;}
+.icon_attachment{background:url('../icons/attachment.gif') no-repeat;}
+.icon_word{background:url('../icons/ico_word.gif') no-repeat;}
+.icon_export{background:url('../icons/ico_export.gif') no-repeat;}
+.icon_list{background:url('../icons/ico_list.gif') no-repeat;}
+.icon_Upload{background:url('../icons/ico_sj.gif') no-repeat;}
+ 
+.icon_419{background:url('../icons/Icons_419.gif') no-repeat;}
+.icon_420{background:url('../icons/Icons_420.gif') no-repeat;}
+.icon_421{background:url('../icons/Icons_421.gif') no-repeat;}
+.icon_423{background:url('../icons/Icons_423.gif') no-repeat;}
+.icon_424{background:url('../icons/Icons_424.gif') no-repeat;}
+.icon_425{background:url('../icons/Icons_425.gif') no-repeat;}
+.icon_426{background:url('../icons/Icons_426.gif') no-repeat;}
+.icon_93{background:url('../icons/Icons_93.gif') no-repeat;}
+.icon_qq{background:url('../icons/Icons_qq.gif') no-repeat;}
+.icon_zz{background:url('../icons/Icons_zz.gif') no-repeat;}
+.icon_list5{background:url('../icons/Icons_list5.gif') no-repeat;}
+.icon_list4{background:url('../icons/Icons_list4.gif') no-repeat;}
+.icon_list1{background:url('../icons/Icons_list1.gif') no-repeat;}
+.icon_list3{background:url('../icons/Icons_list3.gif') no-repeat;}
+.icon_System{background:url('../icons/Icons_System.gif') no-repeat;}
+.icon_tools{background:url('../icons/Icons_tools.gif') no-repeat;}
+.icon_608{background:url('../icons/Icons_608.gif') no-repeat;}
+.icon_Skip{background:url('../icons/Icons_Skip.gif') no-repeat;}
+.icon_605{background:url('../icons/Icons_605.gif') no-repeat;}
+.icon_607{background:url('../icons/Icons_607.gif') no-repeat;}
+.work_plan { text-decoration:none; padding-left:18px; margin-right:5px; background:url(../icons/work_plan.gif) no-repeat; }
+.diary { text-decoration:none; padding-left:18px; margin-right:5px; background:url(../icons/diary.gif) no-repeat; }
+.notify { text-decoration:none; padding-left:18px; margin-right:5px; background:url(../icons/notify.gif) no-repeat; }
+
+/**********************标识或图标结束**********************************************************************************/
+
+ /*操作all_icons小图标样式*/
+.icons {margin: 0 ;}
+.icons span {background: url(../icons/all_icons.png) no-repeat; margin: 5px 0px;height: 15px;width: 15px;display: block;float: left;cursor: pointer;}
+.icons span.rightWhiteTri { background-position: 0px 0;}
+.icons span.leftWhiteTri { background-position: 0px -18px;}
+.icons span.rightBlackTri { background-position: -18px 0;}
+.icons span.leftBlackTri { background-position: -18px -18px;}
+.icons span.rightBlueTri { background-position: -36px 0;}
+.icons span.leftBlueTri { background-position: -36px -18px;}
+.icons span.rightBlueDownTri { background-position: -52px 0;}
+.icons span.leftBlueDownTri { background-position: -52px -18px;}
+
+.icons span.addRight { background-position: -66px 0;}
+.icons span.addLeft { background-position: -66px -18px;}
+.icons span.subRight {  background-position: -82px 0;}
+.icons span.subLeft { background-position: -82px -18px;}
+
+.icons span.addRight2 { background-position: -98px 0;}
+.icons span.addLeft2 { background-position: -98px -18px;}
+.icons span.subRight2 {  background-position: -114px 0;}
+.icons span.subLeft2 { background-position: -114px -18px;}
+
+ .icons span.addRight3 { background-position: -130px 0;}
+.icons span.addLeft3 { background-position: -130px -18px;}
+.icons span.subRight3{  background-position: -146px 0;}
+.icons span.subLeft3 { background-position: -146px -18px;}
+
+.icons span.floader { background-position: -209px 0;}
+.icons span.checkbox { background-position: -210px -18px;}
+.icons span.floader2{  background-position: -225px 0;}
+.icons span.checkedbox { background-position: -226px -18px;}
+.icons span.file{  background-position: -241px -1px;}
+.icons span.checkedbox2 { background-position: -242px -18px;}
+.icons span.yes{  background-position: -256px -1px;}
+.icons span.no { background-position: -256px -19px;}
+/****************ICO样式开始******************************/
+.common-FormTable {font-size: 12px;margin: 2px;padding: 0;border-top: 1px solid #cdcdcd; width: 99%;border-right: 1px solid #cdcdcd;}
+.common-FormTable td {border-bottom: 1px solid #cdcdcd;border-collapse: collapse;  border-left: 1px solid #cdcdcd;height: 28px;min-width: 120px;padding-left:4px;padding-right: 2px;}
+.common-SearchTable {border: 0 none;font-size: 12px;margin: 1px;padding: 0;width: 99%;}
+.common-SearchTable td {border: 0 none;border-collapse: collapse;height: 25px; min-width: 120px;padding-left: 1px;padding-right: 1px;}
+.common-SearchTable th {border: 0 none; border-collapse: collapse;  height: 25px; min-width: 90px;padding-left: 1px; padding-right: 1px;text-align: right; }
+
+.formItemTable { border: 1px solid #A8CFEB;border-collapse: collapse;width: 100%;}
+.formItemTable th { background: none repeat scroll 0 0 #F1F6FF; border-bottom: 1px solid #A8CFEB; padding-left: 3px; padding-right: 1px; text-align: left; width: 120px; }
+.formItemTable td { border: 1px solid #A8CFEB;border-collapse: collapse; height: 24px; min-width: 120px; padding-left: 2px; }
+.dialogfooter {position: absolute; bottom: 2px;padding-top:3px; height: 28px; width: 100%; text-align: center; padding: 0;}
+
+.leftTdbg{background:#efefef; padding-right:1px; text-align:right;width:120px;	padding-left: 3px;}
+ .highlight{font-weight: bold; color: Red;}
+/*遮罩层*/
+.MaskLayer{background-color: #ECECEA; text-align:left; border:solid 2px #D4F0FC; font-weight: bold; float: left; width: 100%;  height:100%;line-height: 100%;  position: absolute;  top: 1px; left: 1px; z-index: 1000; filter: alpha(opacity=30);}
+
+
+/*lp添加*/
+/*==function==*/
+.function-box {padding: 7px 5px;height: 26px;clear: both; overflow: hidden;zoom: 1;}
+.cont-list-form { padding: 10px 0 5px 10px;overflow: hidden;zoom: 1; background: none repeat scroll 0 0 #F4F4F4;}
+.cont-list-form .txtinput { width: 140px;}
+.cont-list-form td {padding-left: 20px; }
+
+.w2 {width: 44px;} 
+.w3 {width: 100px;}/*w2，w3样式使列表操作列内容居中，应放入orange和blue样式中*/
+/*********************/
+

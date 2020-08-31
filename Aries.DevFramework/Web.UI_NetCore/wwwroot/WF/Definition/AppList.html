@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>流程应用管理列表</title>
+    <script src="/Style/JS/Aries.Loader.js"></script>
+</head>
+<body>
+    <table id="dg"></table>
+
+</body>
+</html>
+
+<script type="text/javascript">
+    var dg = new AR.DataGrid("WF_App");
+    dg.PKColumn.add("edit", "编辑", null, "AppEdit.html", "编辑流程应用", "edit", { width: 640, height: 440 });
+    dg.PKColumn.add("del", "删除", null, null, null, "del");
+    dg.bind();
+    function editFlow(v, r, i) {
+        if (!v) { return "";}
+        return "<a href='/WF/Designer/Designer.html?wid=" + r.workflowid + "' target='_blank'>" + v + "</a>";
+    }
+</script>

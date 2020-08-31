@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>发起工单</title>
+    <script src="/Style/JS/Aries.Loader.js"></script>
+    <link href="/WF/Style/Css/custom.css" rel="stylesheet" />
+    <link href="/WF/Style/Css/blue.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="main">
+
+        <div class="wf-rg" style="float: left; width: 100%;">
+            <div class="wf-rg-in">
+                <div class="space"></div>
+                <div class="wf-box">
+
+                    <div class="wf-box-in">
+                        <div style="padding: 20px; overflow: hidden;">
+                            <ul class="wf-list">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        AR.Form.onBeforeExecute = function () {
+            this.method = "GetStartAppList";
+        }
+        AR.Form.onAfterExecute = function (items) {
+            var ul = $(".wf-list");
+            var tag = '<li><a href="/WF/WorkForm.html?appid={0}" target="_blank" title="{3}">' +
+                    '<img src="/WF/Style/Images/{1}.png" ><span><strong>【{2}】</strong>{3}</span></a></li>';
+
+            var innerhtml = "";
+            var id;
+            for (var i = 0; i < items.length; i++) {
+                if (items[i].appid.length > 0) {
+                    id = items[i].appid.substring(0, 1);
+                    innerhtml += AR.Utility.stringFormat(tag, items[i].appid, id, items[i].appid, items[i].appname);
+                }
+            }
+            ul.append(innerhtml);
+        }
+
+    </script>
+</body>
+</html>

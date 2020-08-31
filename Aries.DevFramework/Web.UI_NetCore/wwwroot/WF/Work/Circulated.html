@@ -1,0 +1,21 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>待办事项</title>
+    <script src="/Style/JS/Aries.Loader.js"></script>
+</head>
+<body>
+    <table id="dg"></table>
+</body>
+<script type="text/javascript">
+    var dg = new AR.DataGrid("V_WF_Task");
+    dg.addWhere("UserID", AR.Global.GetUser().userid);
+    dg.addWhere("IsValid ", 1).addWhere("IsCirculate ", 1);
+    dg.addWhere("TaskState", 2).addWhere("InstanceState", 99, "<>");
+    dg.bind();
+    function goto(v, r, i) {
+        return "<b><a href='/WF/WorkForm.html?appid=" + r.appid + "&formAction=3&wiid=" + r.instanceid + "&taskid=" + r.taskid + "' target='_blank' title='" + v + "'>" + v + "</a></b>";
+    }
+</script>
+</html>

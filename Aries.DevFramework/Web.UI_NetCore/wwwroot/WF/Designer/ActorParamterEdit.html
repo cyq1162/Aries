@@ -1,0 +1,166 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="/Style/JS/Aries.Loader.js"></script>
+    <link href="/WF/Style/Css/custom.css" rel="stylesheet" />
+</head>
+<body>
+    <form>
+        <div>
+            <table class="common-FormTable" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td>参与者：</td>
+                    <td>
+                        <select id="ActorParser" name="ActorParserType">
+                            <option value="RoleActor">角色参与者</option>
+                            <option value="ParentOrgRoleActor">上级部门角色参与者</option>
+                            <option value="SubOrgRoleActor">下级部门角色参与者</option>
+                            <option value="OrgActor">组织部门参与者</option>
+                            <option value="CurrentUserActor">当前用户参与者</option>
+                            <option value="HistoryActivityActor">历史审批步骤参与者</option>
+                            <option value="AssignActor">指定用户参与者</option>
+                            <option value="SqlActor">SQL参与者</option>
+                            <option value="AssemblyActor">自定义扩展类参与者</option>
+                        </select>
+
+                    </td>
+                </tr>
+                <tr id="ActorInputTr">
+                    <td><span id="ActorInputParamText">角色名称</span>：</td>
+                    <td>
+                        <input id="ActorInputParam" name="NameForActorParser" style="margin-top: 2px;" class="easyui-validatebox textBoxLong" title="多个之间使用英文逗号隔开" value="" type="text" />
+                        <br />
+                        <a href="#" id="selectRole" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-search'" title="选择角色" dialog="_Sys_Role" for="ActorInputParam" multiple="true" onlytext="true">选择角色</a>
+                        <a href="#" id="selectUser" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-search'" title="选择用户" dialog="_Sys_User" for="ActorInputParam" multiple="true" onlytext="true">选择用户</a>
+
+                        <a href="#" id="selectActivity2" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-search'" title="选择历史审批步骤" dialog="_WF_Activity" for="ActorInputParam" multiple="true" onlytext="true">选择历史审批步骤</a>
+                        <br />
+                    </td>
+                </tr>
+                <tr id="IsIncludeCurrentUserOrg">
+                    <td><span>包含当前用户所在组织部门：</span></td>
+                    <td>
+                        <select name="IsIncludeCurrentUserOrg">
+                            <option value="1">是</option>
+                            <option value="0">否</option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr class="BaseOrgTypeTr">
+                    <td><span>指定组织部门：</span></td>
+                    <td>
+                        <select id="BaseOrgType" name="BaseOnType">
+                            <option value="None">无</option>
+                            <option value="CurrentUser">当前用户部门</option>
+                            <option value="WorkflowInstanceCreator">流程提单人部门</option>
+                            <option value="BaseOrgName">指定部门</option>
+                            <option value="HistoryActivityName">指定历史步骤处理人部门</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr class="BaseOrgTypeTr">
+                    <td>部门基准参数：
+                    </td>
+                    <td>
+                        <input id="BaseOrgName" name="NameForBaseOn" style="margin-top: 2px;" class="easyui-validatebox textBoxLong" title="多个之间使用英文逗号隔开" value="" type="text" />
+                        <br />
+                        <a href="#" id="selectOrg" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-search'" title="选择部门" dialog="_Sys_Organization" for="BaseOrgName" multiple="true" onlytext="true" tree="true">选择部门</a>
+                        <a href="#" id="selectActivity" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-search'" title="选择历史审批步骤" dialog="_WF_Activity" for="BaseOrgName" multiple="true" onlytext="true">选择历史审批步骤</a>
+                        <br />
+                        当“基准部门”为“指定部门”时请填写或选择部门<br />
+                        当“基准部门”为“指定历史步骤处理人部门”请填写或选择历史步骤<br />
+                        多个之间使用英文逗号隔开。
+                    </td>
+                </tr>
+
+
+            </table>
+        </div>
+        <div class="btn">
+            <input class="submit" type="button" name="保存" value="" />
+            <input class="return" type="button" name="取消" value="" />
+        </div>
+
+    </form>
+    <script>
+        function setWhere(wid) {
+            //设置弹窗的参数。
+            var opts = { defaultWhere: [] };
+            opts.defaultWhere.push({ name: "WorkflowID", value: wid });
+            $("#selectActivity").attr("options", JSON.stringify(opts));
+            $("#selectActivity2").attr("options", JSON.stringify(opts));
+        }
+        var form = AR.Form;
+        form.onBeforeExecute = function () {
+            var obj =parent.AR.Dialog.options;
+            var wid = obj.otherParm;
+            setWhere(wid);
+            AR.Form.load(obj.value);
+            ActorParserParamLable($("#ActorParser").val());
+            $("#ActorParser").change(function () {
+                ActorParserParamLable($(this).val());
+                $("#ActorInputParam").val("");
+            });
+        }
+
+        form.BtnCommit.onBeforeExecute = function () {
+            AR.Dialog.returnValue = form.getSerializeJson();
+            AR.Window.closeDialog();
+        }
+
+        function ActorParserParamLable(value) {
+            var name = "";
+            $(".BaseOrgTypeTr").hide();
+            $("#selectActivity2").hide();
+            $('#ActorInputTr').hide();
+            $("#selectUser").hide();
+            $("#selectRole").hide();
+            $("#selectOrg").hide();
+            $("#IsIncludeCurrentUserOrg").hide();
+            switch (value) {
+                case "CurrentUserActor": name = "当前用户"; break;
+                case "AssignActor":
+                    name = "登录账号用户名";
+                    $('#ActorInputTr').show();
+                    $("#selectUser").show();
+                    break;
+                case "RoleActor":
+                case "SubOrgRoleActor":
+                case "ParentOrgRoleActor":
+                    name = "角色名";
+                    $('#ActorInputTr').show();
+                    $("#selectRole").show();
+                    $(".BaseOrgTypeTr").show();
+                    if (value != "RoleActor")
+                    {
+                        $("#IsIncludeCurrentUserOrg").show();
+                    }
+                    break;
+                case "HistoryActivityActor":
+                    name = "步骤名称";
+                    $('#ActorInputTr').show();
+                    $("#selectActivity2").show();
+                    break;
+                case "OrgActor":
+                    name = "部门名称";
+                    $('#ActorInputTr').hide();
+                    $(".BaseOrgTypeTr").show();
+                    $("#selectOrg").show();
+
+                    break;
+                case "AssemblyActor":
+                    name = "【自定类继承自：IActor】配置格式：类全名,程序集名";
+                    $('#ActorInputTr').show();
+                    break;
+                case "SqlActor":
+                    name = "Sql语句";
+                    $('#ActorInputTr').show();
+                    break;
+            }
+            $("#ActorInputParamText").html(name);
+        }
+    </script>
+</body>
+</html>

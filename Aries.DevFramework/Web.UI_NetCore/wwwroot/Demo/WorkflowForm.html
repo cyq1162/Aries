@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <script src="/Style/JS/Aries.Loader.js"></script>
+    <script src="/WF/Style/JS/Gemini.Workflow.js"></script>
+    <link href="/WF/Style/Css/custom.css" rel="stylesheet" />
+    <link href="/WF/Style/Css/blue.css" rel="stylesheet" />
+
+</head>
+<body>
+    <!--费用申请表单-->
+    <form>
+        <br />
+        <div style="text-align: center; font-size: 18px; font-weight: bold">这是示例表单：WorkflowForm</div>
+        <table class="common-FormTable" cellpadding="0" cellspacing="0" style="margin: 10px;">
+
+            <tr>
+                <td style="width: 120px;">费用事项：</td>
+                <td>
+                    <input type="text" class="easyui-validatebox textBoxShort" required="required" validtype="length[0,100]" id="Title" name="Title" value="购办公用品费用" />
+                </td>
+                <td>金额（元）：</td>
+                <td>
+                    <input type="text" class="easyui-numberbox textBoxShort" required="required" validtype="length[0,50]" id="Amount" name="Amount" value="5" />
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td>费用开始时间：</td>
+                <td>
+                    <input type="text" class="easyui-datebox textBoxShort" required="required" validtype="length[0,50]" id="StartTime" name="StartTime" value="2019-05-05" />
+                </td>
+
+                <td>费用结束时间：</td>
+                <td>
+                    <input type="text" class="easyui-datebox textBoxShort" required="required" validtype="length[0,50]" id="EndTime" name="EndTime" value="2019-10-01" />
+                </td>
+                <td>选项值：</td>
+                <td>
+                    <select name="ClientSelect">
+                        <option value="A">TextA</option>
+                        <option value="B">TextB</option>
+                        <option value="C">TextC</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>详细内容：</td>
+                <td colspan="5">
+                    <textarea id="Content" name="Content" class="easyui-validatebox textBoxMultiLineLong" cols="20" rows="2"></textarea>
+
+                </td>
+            </tr>
+            <tr>
+                <td>备注：</td>
+                <td colspan="5">
+                    <input id="Remark" name="Remark" type="text" class="easyui-validatebox textAutoBoxLong" validtype="length[0,200]"
+                        value="" />
+                </td>
+            </tr>
+        </table>
+        <div class="btn" style="display: none">
+            <a>
+                <input type="hidden" name="ID" />
+                <input class="submit" type="button" name="${save}" value="" />
+            </a>
+        </div>
+    </form>
+    <script defer="defer">
+        //控制分支条件
+        WF.Button.Submit.onBeforeExecute = function () {
+            if (WF.Context.appID == "DC") {
+                if (parseInt($("#Amount").val()) > 50000) {
+                    WF.Actor.hideActivity("可选：B");
+                }
+                else {
+                    //WF.Actor.Internal.
+                    WF.Actor.hideActivity("可选：A");
+                    //同时控件节点B的用户修改为指定的名称。
+                    WF.Actor.setActivityUser("可选：B", "admin");
+                }
+            }
+        }
+
+        AR.Form.onBeforeCommit = function () {
+            this.method = "SaveDemo";//保存的业务方法
+        }
+        AR.Form.onBeforeExecute = function () {
+            this.action = AR.Utility.queryString("id") ? "Update" : "Add";
+            this.objName = "WorkflowForm";//自动调用Get方法
+        }
+
+    </script>
+
+</body>
+</html>

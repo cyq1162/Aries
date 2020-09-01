@@ -112,7 +112,6 @@ window.WF || (window.WF = {});
                         WF.Context[i] = result.msg[i];//为了智能提示，我转了两个小时，才想到这个办法。
                     }
                 }
-                WF.Context.instanceStateName = AR.Config.getText("WF_InstanceState", WF.Context.instanceState);
                 if (WF.Context.onAfterExecute) { WF.Context.onAfterExecute(result); }
             });
         };
@@ -317,6 +316,11 @@ window.WF || (window.WF = {});
         },
         //加载工作流表单
         form: function () {
+            if (!AR.Global.Variable.isLoadCompleted) {
+                return;
+            }
+            clearInterval(AR.Global.Variable._interval);
+            WF.Context.instanceStateName = AR.Config.getText("WF_InstanceState", WF.Context.instanceState);
             document.title = WF.Context.title;
             setTimeout(function () {
                 AR.Form.$target && AR.Form.$target.form("load", WF.Context);
@@ -337,7 +341,7 @@ window.WF || (window.WF = {});
     WF.Context.onAfterExecute = function () {
 
         WF.Button.onInit();
-        WF.Init.form();
+        AR.Global.Variable._interval = setInterval(function () { WF.Init.form(); }, 5);
         WF.Init.opinionBox();
         WF.Init.flowBox();
         WF.Init.frameBox();

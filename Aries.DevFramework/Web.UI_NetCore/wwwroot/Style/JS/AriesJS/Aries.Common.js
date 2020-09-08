@@ -157,7 +157,7 @@
 
                             }
                             if (dg.PKColumn.Editor.BtnDel.hidden != true && actionKeys.indexOf(",del,") > -1) {
-                                len++; 
+                                len++;
                                 var $btn = $($Core.Utility.stringFormat(strTemplate, "del", $Core.Lang.del, "onDel", value, index));
                                 obj.set("del", { "isCustom": false, $target: $btn });
                                 $div.append($btn);
@@ -237,7 +237,7 @@
 
                     if ((row.formatter && row.formatter.indexOf('#') > -1) ||
                         (row.rules && (row.rules.indexOf('configkey') > -1 || row.rules.indexOf('objname') > -1))
-                        ) {
+                    ) {
                         type = 'combobox';
                         settings.options = $Core.Common.Privite.getOptions(row.formatter, row.rules);
 
@@ -570,6 +570,7 @@
                     $lineItem.append($label);
                     var $input = $("<input type=\"text\"/>");
                     var $input2;//日期时的第二个框
+                    var $span = $("<span>").html("&nbsp;-&nbsp;");
                     //如果是下拉框模式执行以下代码
                     var opt = $Core.Common.Privite.getOptions(dataArray[i].formatter, dataArray[i].rules).attrs;
                     if (opt.configKey || opt.objName || opt.configkey || opt.objname)//绑定下拉
@@ -602,7 +603,7 @@
                                     if ($input.attr("clone") != "false") {
                                         $input2 = $input.clone(true);
                                         $input2.attr("operator", ">=");
-                                        $lineItem.append($input2).append($("<span>").html("&nbsp;-&nbsp;"));
+                                        $lineItem.append($input2).append($span);
                                         //处理默认值
                                         var defalutValue = $input.val();
                                         if (defalutValue && defalutValue.indexOf(',') > -1) {
@@ -685,10 +686,10 @@
 
                     if (dg && dg.Search) {
                         if ($input2) {
-                            dg.Search.Items.set(dataArray[i].field, { $target: $input, $target2: $input2 });
+                            dg.Search.Items.set(dataArray[i].field, { $itemTarget: $lineItem, $target: $input, $target2: $input2, $label: $label, $span: $span });
                         }
                         else {
-                            dg.Search.Items.set(dataArray[i].field, { $target: $input });
+                            dg.Search.Items.set(dataArray[i].field, { $itemTarget: $lineItem, $target: $input, $label: $label });
                         }
                     }
                     $lineItem.append($input);
@@ -765,7 +766,7 @@
                         case "pattern":
                             $input.attr("operator", value);//pattern在某些浏览器上是关键字，所以变更为opeator
                             break;
-                            //case "multiple2"://用于控制行内编辑的多选
+                        //case "multiple2"://用于控制行内编辑的多选
                         case "multiple":
                             $input.attr(name, value);//多选，没有指定操作符时(对于$:只对查询的多选、$1对于行内也多选时，不能用in，用默认的like)
                             if (!opts["pattern"]) {

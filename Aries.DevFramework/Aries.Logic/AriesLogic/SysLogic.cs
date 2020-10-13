@@ -214,6 +214,7 @@ namespace Aries.Logic
             string id = Query<string>("id");
             using (MAction action = new MAction(U_AriesEnum.Sys_Menu))
             {
+                action.SetAopState(AopOp.OpenAll);
                 action.SetSelectColumns("MenuID", "ParentMenuID");
                 MDataTable dt = action.Select();
                 StringBuilder sb = new StringBuilder();
@@ -349,6 +350,7 @@ namespace Aries.Logic
             string msg = string.Empty;
             using (MAction action = new MAction(U_AriesEnum.Sys_Menu))
             {
+                action.SetAopState(AopOp.OpenAll);
                 if (Query<int>("MenuLevel") == 1)
                 {
                     action.Set("ParentMenuID", DBNull.Value);

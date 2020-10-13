@@ -134,6 +134,11 @@
                     var that = this;
                     var node = Menu.Tree.getSelected();
                     if (node != undefined) {
+                        if (node.id == undefined)
+                        {
+                            AR.Window.showMsg("${root}${notAllow}${delete}！");
+                            return false;
+                        }
                         var msg = "${confirm}${delete}?";
                         var isLeaf = Menu.Tree.$target.tree("isLeaf", node.target);
                         if (!isLeaf) {
@@ -143,7 +148,11 @@
                             AR.Ajax.post("DeleteMenu", "Sys_Menu", { id: node.id },
                             function (data) {
                                 if (data.success) {
+                                    var parentNode = Menu.Tree.$target.tree("getParent", node.target);
                                     Menu.Tree.$target.tree("remove", node.target);
+                                    Menu.Tree.$target.tree("select", parentNode.target);
+                                    Menu.Tree.clickNode = parentNode;
+                                    AR.Global.DG.action = "Add";
                                 }
                                 AR.Window.showMsg(data.msg);
 
@@ -205,6 +214,7 @@
                      });
                 }
                 else {
+                    $("#menuid").val("");
                     var node = Menu.Tree.getSelected();;
                     if (node) {
                         //帮隐藏表单菜单id赋值
@@ -214,28 +224,31 @@
                     Menu.Tree.clickNode = node;
                     //初始一些默认值
                     $("#menuname").val("");
-                    $("#menuurl").val("/Web/SysAdmin/CustomView.html?objname=");
+                    $("#menuurl").val("#");
                     $('#sortorder').numberbox('setValue', '100');
                     $(':radio[name="isShow"]').eq(0).attr("checked", true);
-                    var defaultActionIDs = "";
-                    for (var i = 0; i < this.actionData.length; i++) {
-                        switch (this.actionData[i].actionrefname) {
-                            case "add":
-                            case "edit":
-                            case "del":
-                            case "view":
-                            case "import":
-                            case "export":
-                            case "config":
-                                if (defaultActionIDs == "") { defaultActionIDs = this.actionData[i].actionid; }
-                                else
-                                {
-                                    defaultActionIDs = defaultActionIDs + "," + this.actionData[i].actionid;
-                                }
-                                break;
+                    if (node.id != undefined) {
+                        $("#menuurl").val("/Web/SysAdmin/CustomView.html?objname=");
+                        var defaultActionIDs = "";
+                        for (var i = 0; i < this.actionData.length; i++) {
+                            switch (this.actionData[i].actionrefname) {
+                                case "add":
+                                case "edit":
+                                case "del":
+                                case "view":
+                                case "import":
+                                case "export":
+                                case "config":
+                                    if (defaultActionIDs == "") { defaultActionIDs = this.actionData[i].actionid; }
+                                    else
+                                    {
+                                        defaultActionIDs = defaultActionIDs + "," + this.actionData[i].actionid;
+                                    }
+                                    break;
+                            }
                         }
+                        that.setAction(defaultActionIDs);
                     }
-                    that.setAction(defaultActionIDs);
                 }
 
             },
@@ -265,7 +278,9 @@
                     var node = Menu.Tree.getSelected();;
                     Menu.Tree.level = 0;
                     if (action == "Add") {
-                        $("#menuid").val("");
+                        if (para.menuid) {
+                            delete para.menuid;
+                        }
                         if (Menu.Tree.clickNode.attributes == null) {
                             Menu.Tree.level = 1;
                             para.menulevel = 1;
@@ -279,7 +294,7 @@
                         }
                     }
                     else {
-                        if (node == null || node.id == null) {
+                        if (!para.menuid && (node == null || node.id == null)) {
                             AR.Window.showMsg("${root}${notAllow}${update}！");
                             return false;
                         }
@@ -305,7 +320,7 @@
                         });
                         $("#menuid").val(result.msg);
                         AR.Global.DG.action = "Update";//避免重复添加
-
+                        AR.Window.showMsg("${add}${success}");
                     }
                     else {
                         var node = Menu.Tree.$target.tree('find', $("#menuid").val());
@@ -313,8 +328,9 @@
                             target: node.target,
                             text: $("[name='menuname']").val()
                         });
+                        AR.Window.showMsg(result.msg);
                     }
-                    AR.Window.showMsg(result.msg);
+                   
                     return false;
                 }
 

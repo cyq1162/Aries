@@ -181,7 +181,17 @@ namespace Aries.Core.Sql
                     if (text.Contains(":\\") || text.StartsWith("/"))
                     {
                         folder = text;
-                        text = IOHelper.ReadAllText(text);
+                        string[] lines = IOHelper.ReadAllLines(text);
+                        StringBuilder sb = new StringBuilder();
+                        foreach (string line in lines)
+                        {
+                            if (line.StartsWith("//") || line.StartsWith("--") || line.StartsWith("#"))
+                            {
+                                continue;
+                            }
+                            sb.AppendLine(line);
+                        }
+                        text = sb.ToString();
                         int index = text.LastIndexOf("/*");
                         if (index > -1)//去掉注释
                         {

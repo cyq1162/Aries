@@ -16,6 +16,7 @@ using Aries.Core.Extend;
 using Aries.Core.DB;
 using System.Collections.Specialized;
 using System.Threading;
+using CYQ.Data.Aop;
 
 
 namespace Aries.Core
@@ -540,6 +541,7 @@ namespace Aries.Core
             string msg = string.Empty;
             using (MAction action = new MAction(TableName))
             {
+                action.SetAopState(AopOp.OpenAll);//【清除强制缓存的数据】
                 SetKeyValue(action.Data);
                 result = action.Insert(true, InsertOp.ID);
                 if (result)
@@ -591,6 +593,7 @@ namespace Aries.Core
             MDataTable dt = null;
             using (MAction action = new MAction(TableName))
             {
+                action.SetAopState(AopOp.OpenAll);//【清除强制缓存的数据】
                 action.BeginTransation();
 
             delChild://删除子节点循环处。
@@ -674,6 +677,7 @@ namespace Aries.Core
         {
             using (MAction action = new MAction(TableName))
             {
+                action.SetAopState(AopOp.OpenAll);//【清除强制缓存的数据】
                 SetKeyValue(action.Data);
                 if (action.Update(true))
                 {

@@ -435,14 +435,14 @@
                         opts.action = url;
                         opts.onSubmit = function (dg) {
                             return function (file, ext) {
-                                if (ext == "xls" || ext == "xlsx") {
+                                if (ext == "xls" || ext == "xlsx" || ext == "zip" || ext == "rar") {
                                     $.messager.progress({
                                         title: $Core.Lang.msg,
                                         msg: $Core.Lang.importTip
                                     });
                                 }
                                 else {
-                                    $Core.Window.showMsg($Core.Lang.uploadExtendName + exts);
+                                    $Core.Window.showMsg($Core.Lang.uploadExtendName + ext);
                                     return false;
                                 }
                                 var param = {};

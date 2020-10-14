@@ -1153,6 +1153,10 @@
                                 validType: "exists['" + field + "','" + row[dg.Internal.primarykey] + "']"
                             });
                         }
+                        if (row[col.field] && row[col.field].toString().startWith("[object Object]"))
+                        {
+                            $input.val(JSON.stringify(row[col.field]));
+                        }
                     }
                 }
                 if (items.length > 0) {

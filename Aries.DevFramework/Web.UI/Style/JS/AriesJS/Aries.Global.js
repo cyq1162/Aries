@@ -402,10 +402,9 @@ window.AR || (window.AR = {});
         return this.trimStart(str).trimEnd(str);
     };
     String.prototype.trimStart = function (str) {
-        if (str == null || str == "") { str = " ";}
+        if (str == null || str == "") { str = " "; }
         var text = this;
-        while (text.startWith(str))
-        {
+        while (text.startWith(str)) {
             text = text.substr(str.length);
         }
         return text.toString();
@@ -415,6 +414,13 @@ window.AR || (window.AR = {});
         var text = this;
         while (text.endWith(str)) {
             text = text.substr(0, text.length - str.length);
+        }
+        return text.toString();
+    };
+    String.prototype.replaceAll = function (a, b) {
+        var text = this;
+        while (text.indexOf(a) > -1) {
+            text = text.replace(a, b);
         }
         return text.toString();
     };

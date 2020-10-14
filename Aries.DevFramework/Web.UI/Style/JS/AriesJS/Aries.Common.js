@@ -87,11 +87,16 @@
             stringFormatter: function (value, row, index) {
                 if (value) {
                     var abValue = value.toString();
-                    if (value.length >= 30) {
-                        abValue = value.substring(0, 30) + "...";
+                    if (abValue.startWith("[object Object]"))
+                    {
+                        abValue = JSON.stringify(value);
                     }
-                    abValue = abValue.replace('<', '&lt;').replace('>', '&gt;');
-                    return '<div title="' + value + '" class="note">' + abValue + '</div>';
+                    var subValue = abValue;
+                    if (subValue.length >= 30) {
+                        subValue = subValue.substring(0, 30) + "...";
+                    }
+                    subValue = subValue.replace('<', '&lt;').replace('>', '&gt;');
+                    return '<div title="' + abValue.replaceAll("\"","'") + '" class="note">' + subValue + '</div>';
                 }
                 return value;
             },

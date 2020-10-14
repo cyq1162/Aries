@@ -105,7 +105,7 @@
         };
         Index.Tab = {
             //允许打开最多的窗口数
-            max:8,
+            max: 8,
             //是否直接打开一个tab
             open: function (url, text, isAddBackUrl) {
                 if (typeof (url) == 'string') {
@@ -245,7 +245,7 @@
                 }
             },
             //初始化当前根节点下所有子菜单
-            createMenu: function (json, $ul, templateType) {
+            createMenu: function (json, $ul, templateType, autoClick) {
                 var innnerhtml = "";
                 var template = {
                     1: "<li><a linkurl='{2}'  selfid='{0}'>{1}</a></li>",
@@ -261,11 +261,12 @@
                     }
                 }
                 $ul.html(innnerhtml);
-                //先注册完事件，再触发
-                setTimeout(function () {
-                    $ul.children().eq(0).addClass("hover").click();
-                }, 100);
-
+                if (autoClick) {
+                    //先注册完事件，再触发
+                    setTimeout(function () {
+                        $ul.children().eq(0).addClass("hover").click();
+                    }, 100);
+                }
             },
 
             //将数据格式化成easyui的格式
@@ -324,7 +325,7 @@
                             $('#layout_container').layout("resize");
                         }
                         $("#menu3").html("").removeClass("easyui-tree").addClass("sidebar-nav"); //获取到菜单容器,并清空HTML
-                        that.createMenu(jsonData, $("#menu3"), 1);
+                        that.createMenu(jsonData, $("#menu3"), 1, true);
                     }
                     else {
                         if (that.hidenLevel2DivWhenLevelLess3) {
@@ -332,7 +333,7 @@
                             $('#layout_container').layout('panel', 'north').panel("resize", { height: 125 });
                             $('#layout_container').layout("resize");
                         }
-                        that.createMenu(jsonData, $("#menu2"), 2);
+                        that.createMenu(jsonData, $("#menu2"), 2, true);
                     }
 
                 });
@@ -347,7 +348,14 @@
                     if (JSON.stringify(jsonData).indexOf('"menulevel":4') == -1) {
                         //不存在四级菜单
                         menu3.removeClass("easyui-tree").addClass("sidebar-nav");
-                        that.createMenu(jsonData, menu3, 1);
+                        var autoClick = true;
+                        var text = $(this).html();
+                        var url = $(this).attr("linkurl");
+                        if (url != '#') {
+                            Index.Tab.open(url, text);
+                            autoClick = false;
+                        }
+                        that.createMenu(jsonData, menu3, 1, autoClick);
                     }
                     else {
                         menu3.tree({
@@ -376,6 +384,7 @@
 
                         }
                     }
+
                 });
                 //绑定三级菜单栏单击事件处理
                 $(document).on("click", "#menu3 > li", function () {
@@ -395,7 +404,7 @@
                     var menu2 = $("#menu2");
                     var menu3 = $("#menu3");
                     var ul = $("#menu1");
-                    that.createMenu(json, ul, 1);//创建一级菜单，并延时触发点击一级菜单事件
+                    that.createMenu(json, ul, 1, true);//创建一级菜单，并延时触发点击一级菜单事件
                     that.regEvent(result);//绑定一级菜单的点击事件
                 });
             }

@@ -86,7 +86,7 @@
             },
             stringFormatter: function (value, row, index) {
                 if (value) {
-                    var abValue = value;
+                    var abValue = value.toString();
                     if (value.length >= 30) {
                         abValue = value.substring(0, 30) + "...";
                     }

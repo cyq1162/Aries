@@ -398,15 +398,24 @@ window.AR || (window.AR = {});
             return false;
         return true;
     };
-    String.prototype.trim = function (char, type) {
-        if (char) {
-            if (type == 'left') {
-                return this.replace(new RegExp('^\\' + char + '+', 'g'), '');
-            } else if (type == 'right') {
-                return this.replace(new RegExp('\\' + char + '+$', 'g'), '');
-            }
-            return this.replace(new RegExp('^\\' + char + '+|\\' + char + '+$', 'g'), '');
+    String.prototype.trim = function (str) {
+        return this.trimStart(str).trimEnd(str);
+    };
+    String.prototype.trimStart = function (str) {
+        if (str == null || str == "") { str = " ";}
+        var text = this;
+        while (text.startWith(str))
+        {
+            text = text.substr(str.length);
         }
-        return this.replace(/^\s+|\s+$/g, '');
+        return text.toString();
+    };
+    String.prototype.trimEnd = function (str) {
+        if (str == null || str == "") { str = " "; }
+        var text = this;
+        while (text.endWith(str)) {
+            text = text.substr(0, text.length - str.length);
+        }
+        return text.toString();
     };
 })();

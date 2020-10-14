@@ -260,6 +260,10 @@
                         innnerhtml = innnerhtml + AR.Utility.stringFormat(formatTemplate, menuid, menuName, menuUrl);
                     }
                 }
+                if (templateType == 2 && innnerhtml)
+                {
+                    innnerhtml = innnerhtml.trimEnd("<em>|</em>");
+                }
                 $ul.html(innnerhtml);
                 if (autoClick) {
                     //先注册完事件，再触发

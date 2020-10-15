@@ -84,6 +84,21 @@
             boolFormatter: function (value, row, index) {
                 return "<input type='checkbox' " + (value ? "checked='checked'" : "") + " disabled='disabled' />";
             },
+            imageFormatter: function (rules) {
+                return function (value, row, index) {
+                    if (!value || (!value.startWith("/") && !value.startWith("http"))) { return value; }
+                    if (rules) {
+                        rules = rules.trimStart("$:").trimStart("$1:")//支持$:{} 只对查询的多选 $1:{}
+                        rules = eval("(" + rules + ")");
+                    }
+                    var width = (rules && rules.width) || 100;
+                    var height = (rules && rules.height) || 50;
+                    var bigImg = value.replace("_m.",".");
+                    var imgHost = (rules && rules.host) || AR.Config.getValue("SysConfig", "ImageHost");
+                    if (!imgHost.startWith("http")) { imgHost = "";}
+                    return "<a href=\"" + imgHost + bigImg + "\" target=\"_blank\" ><img src=\"" + imgHost + value + "\" width=\"" + width + "\" height=\"" + height + "\" /></a>";
+                }
+            },
             stringFormatter: function (value, row, index) {
                 if (value) {
                     var abValue = value.toString();
@@ -359,17 +374,23 @@
                     }
                     if (json_data[i].formatter && typeof (json_data[i].formatter) != 'function') {
                         //格式化config表的数据结构
-                        if (json_data[i].formatter && json_data[i].formatter.length > 2 && json_data[i].formatter.indexOf('#') != -1 && !/C_+/.test(json_data[i].formatter)) {
-                            configKey = json_data[i].formatter.split('#')[1];
-                            json_data[i].formatter = $Core.Common.Formatter.configFormatter;
-                        }
-
-                        if (json_data[i].formatter && json_data[i].formatter.length > 2 && json_data[i].formatter.indexOf('#') != -1 && /C_+/.test(json_data[i].formatter)) {
-                            objName = json_data[i].formatter.split('#')[1];
-                            if (objName.indexOf('=>') != -1) {
-                                objName = objName.split('=>')[0];
+                        if (json_data[i].formatter.length > 2 && json_data[i].formatter.indexOf('#') != -1)
+                        {
+                            if (/C_+/.test(json_data[i].formatter)) {
+                                objName = json_data[i].formatter.split('#')[1];
+                                if (objName.indexOf('=>') != -1) {
+                                    objName = objName.split('=>')[0];
+                                }
+                                json_data[i].formatter = $Core.Common.Formatter.objFormatter;
                             }
-                            json_data[i].formatter = $Core.Common.Formatter.objFormatter;
+                            else {
+                                configKey = json_data[i].formatter.split('#')[1];
+                                json_data[i].formatter = $Core.Common.Formatter.configFormatter;
+                            }
+                        }
+                        else if (json_data[i].formatter == "imageFormatter")
+                        {
+                            json_data[i].formatter = this.imageFormatter(json_data[i].rules);
                         }
                     }
                     try {
@@ -801,8 +822,8 @@
                 var attrs = {};
                 if (rules) {
                     try {
-                        var sp = rules.split("{")//支持$:{} 只对查询的多选 $1:{}
-                        var rulesOpts = eval("({" + sp[sp.length - 1] + ")");
+                        var sp = rules.trimStart("$:").trimStart("$1:")//支持$:{} 只对查询的多选 $1:{}
+                        var rulesOpts = eval("(" + sp + ")");
                         attrs = $.extend(attrs, rulesOpts);
                     } catch (e) { console.info($Core.Lang.configRulesError + " :" + rules); }
                 }

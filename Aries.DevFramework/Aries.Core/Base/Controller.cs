@@ -16,7 +16,6 @@ using Aries.Core.Extend;
 using Aries.Core.DB;
 using System.Collections.Specialized;
 using System.Threading;
-using CYQ.Data.Aop;
 
 
 namespace Aries.Core
@@ -541,7 +540,7 @@ namespace Aries.Core
             string msg = string.Empty;
             using (MAction action = new MAction(TableName))
             {
-                action.SetAopState(AopOp.OpenAll);//【清除强制缓存的数据】
+                action.SetAopState(CYQ.Data.Aop.AopOp.OpenAll);//用于清除缓存【外部有强制开启时】
                 SetKeyValue(action.Data);
                 result = action.Insert(true, InsertOp.ID);
                 if (result)
@@ -593,7 +592,7 @@ namespace Aries.Core
             MDataTable dt = null;
             using (MAction action = new MAction(TableName))
             {
-                action.SetAopState(AopOp.OpenAll);//【清除强制缓存的数据】
+                action.SetAopState(CYQ.Data.Aop.AopOp.OpenAll);//用于清除缓存【外部有强制开启时】
                 action.BeginTransation();
 
             delChild://删除子节点循环处。
@@ -677,7 +676,7 @@ namespace Aries.Core
         {
             using (MAction action = new MAction(TableName))
             {
-                action.SetAopState(AopOp.OpenAll);//【清除强制缓存的数据】
+                action.SetAopState(CYQ.Data.Aop.AopOp.OpenAll);//用于清除缓存【外部有强制开启时】
                 SetKeyValue(action.Data);
                 if (action.Update(true))
                 {
@@ -703,7 +702,7 @@ namespace Aries.Core
         /// 导出数据
         /// </summary>
         [ActionKey("Export")]
-        public void Export()
+        public virtual void Export()
         {
             MDataTable dt = Select(GridConfig.SelectType.Export);
             dt.TableName = ObjName;
@@ -717,7 +716,7 @@ namespace Aries.Core
         /// <summary>
         /// 获取导入数据的模板（支持2007以上）
         /// </summary>
-        public void ExcelTemplate()
+        public virtual void ExcelTemplate()
         {
             string path = HttpContext.Current.Server.MapPath("~/Resource/Excel/" + ObjName + ".xls");
             if (!File.Exists(path))
@@ -778,7 +777,7 @@ namespace Aries.Core
         /// 导入数据
         /// </summary>
         [ActionKey("Import")]
-        public void Import()
+        public virtual void Import()
         {
             //根据视图名读取ExcelConfig信息。
 
@@ -813,6 +812,7 @@ namespace Aries.Core
                 result = FormatExcel(dt, excelInfo);
                 if (result)
                 {
+                    dt.Columns.Remove(LangConst.ErrorInfo);
                     result = ExcelConfig.AcceptChanges(dt, excelInfo, ObjName);// dt.AcceptChanges(AcceptOp.Auto);
                 }
             }

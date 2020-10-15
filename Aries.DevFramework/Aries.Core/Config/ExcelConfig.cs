@@ -238,7 +238,12 @@ namespace Aries.Core.Config
                         names[i] = dtImportUnique.Rows[i].Get<string>(Config_Grid.Field);
                     }
                 }
-                return dt.AcceptChanges(AcceptOp.Auto, null, names);
+                dt.Conn = DBTool.GetTableInfo(dt.TableName).DBInfo.ConnName;
+                if (names != null || dt.Columns.FirstPrimary.IsAutoIncrement || dt.Columns.FirstPrimary.IsPrimaryKey)
+                {
+                    return dt.AcceptChanges(AcceptOp.Auto, null, names);
+                }
+                return dt.AcceptChanges(AcceptOp.Insert, null, null);
             }
             bool result = true;
             //获取相关配置

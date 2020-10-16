@@ -313,7 +313,7 @@ window.AR || (window.AR = {});
             var value;
             for (var i = 0; i < this.length; i++) {
                 value = k ? this[i][k] : this[i];
-                if (value.toString() == v.toString()) {
+                if (value && value.toString() == v.toString()) {
                     return true;
                 }
             }

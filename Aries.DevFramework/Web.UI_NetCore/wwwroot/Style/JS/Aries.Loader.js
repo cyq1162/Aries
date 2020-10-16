@@ -9,7 +9,7 @@
 /// <reference path="/Style/JS/AriesJS/Aries.DataGrid.js" />
 /// <reference path="/Style/JS/AriesJS/Aries.Form.js" />
 
-var sys_vs = "v5.4.1.6";//系统版本号
+var sys_vs = "v5.4.2.0";//系统版本号
 
 function sys_getCookie(name) {
     var c = document.cookie;

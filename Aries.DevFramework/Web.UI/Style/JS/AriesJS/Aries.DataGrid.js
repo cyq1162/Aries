@@ -137,7 +137,10 @@
                         }
                     }
                 }
-
+                var isdeleted = AR.Global.Variable.isdeleted;
+                if (isdeleted && dg.Internal.headerData.contains(isdeleted, "field") && !searchJson.contains(isdeleted, "name")) {
+                    searchJson.push({ "name": isdeleted, "value": 0 });
+                }
                 if (onBeforeEvent && onBeforeEvent(searchJson) == false) {
                     return;
                 }
@@ -393,7 +396,11 @@
                         }
 
                         $Core.Window.confirm($Core.Lang.isDel, null, function () {
-                            $Core.Ajax.post("Delete", dg.tableName, { "id": ids.join(','), "foreignKeys": dg.foreignKeys, "idField": dg.options.idField, "parentField": dg.options.parentField }, function (result) {
+                            var isIgnoreDeleteField = 1;
+                            if (AR.Global.Variable.isdeleted && dg.Internal.headerData.contains(AR.Global.Variable.isdeleted, "field")) {
+                                isIgnoreDeleteField = 0;
+                            }
+                            $Core.Ajax.post("Delete", dg.tableName, { "id": ids.join(','), "foreignKeys": dg.foreignKeys, "idField": dg.options.idField, "parentField": dg.options.parentField, "isIgnoreDeleteField": isIgnoreDeleteField }, function (result) {
                                 if (onAfterEvent) {
                                     if (onAfterEvent(ids, result) == false) { return false; }
                                 }
@@ -1153,8 +1160,7 @@
                                 validType: "exists['" + field + "','" + row[dg.Internal.primarykey] + "']"
                             });
                         }
-                        if (row[col.field] && row[col.field].toString().startWith("[object Object]"))
-                        {
+                        if (row[col.field] && row[col.field].toString().startWith("[object Object]")) {
                             $input.val(JSON.stringify(row[col.field]));
                         }
                     }
@@ -1701,7 +1707,12 @@
         if (opts.defaultWhere && opts.defaultWhere.length > 0) {
             searchJson = searchJson.concat(opts.defaultWhere);
         }
+        var isdeleted = AR.Global.Variable.isdeleted;
+        if (isdeleted && hd.contains(isdeleted, "field") && !searchJson.contains(isdeleted, "name")) {
+            searchJson.push({ "name": isdeleted, "value": 0 });
+        }
         if (searchJson.length > 0) {
+
             options.queryParams['sys_search'] = JSON.stringify(searchJson);
         }
 

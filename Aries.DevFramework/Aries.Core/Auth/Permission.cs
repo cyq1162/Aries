@@ -353,7 +353,15 @@ namespace Aries.Core.Auth
                 MDataRow row = UserMenu.FindRow("MenuID='" + menuid + "'");
                 if (row != null)
                 {
-                    return row.Get<string>("ActionRefNames", "").ToLower();
+                    string keys = row.Get<string>("ActionRefNames", "").ToLower();
+                    if(!string.IsNullOrEmpty(keys))
+                    {
+                        if (Path.GetFileNameWithoutExtension(HttpContext.Current.Request.UrlReferrer.LocalPath).ToLower() == "configgrid")
+                        {
+                            keys="export,config,view,add,del,viewsql,edit,savesql";
+                        }
+                    }
+                    return keys;
                 }
             }
             return string.Empty;

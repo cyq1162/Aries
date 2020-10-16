@@ -26,7 +26,8 @@ namespace Aries.Core.Auth
                 using (MAction action = new MAction(U_AriesEnum.Sys_Menu))
                 {
                     action.SetAopState(AopOp.OpenAll);//强制开启自动缓存。
-                    return action.Select("order by MenuLevel ASC,SortOrder ASC");
+                    MDataTable dt= action.Select("order by MenuLevel ASC,SortOrder ASC");
+                    return dt;
                 }
                 //}
                 //return _MenuTable;

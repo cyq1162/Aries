@@ -580,10 +580,7 @@ namespace Aries.Core
         [ActionKey("Del,Delete")]
         public virtual void Delete()
         {
-            bool isIgnoreDeleteField = false;
-#if DEBUG
-            isIgnoreDeleteField = UserAuth.IsSuperAdmin;
-#endif
+            bool isIgnoreDeleteField = Query<bool>("isIgnoreDeleteField");
             string ids = GetID;
             string[] values = null;
             string where = string.Empty;
@@ -914,6 +911,7 @@ namespace Aries.Core
             js.Add("ui", ui);
             js.Add("actionKeys", actionKeys);
             js.Add("mid", menuid);
+            js.Add("isdeleted", AppConfig.DB.DeleteField.ToLower());
             jsonResult = js.ToString();
         }
         /// <summary>

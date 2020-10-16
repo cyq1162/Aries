@@ -133,5 +133,8 @@ AR.Utiltity.Ajax => AR.Ajax
 3、内部细节和性能优化（其它大体调用方式没变）
 
 V5.4.2 （2020-10-16）
-1、增加对ConfigGrid的权限处理。
-2、增加对IsDeleted软删除的处理。
+1、增加imageFormatter格式化图片功能。
+2、增加对ConfigGrid的权限处理。
+3、增加对IsDeleted软删除的处理。
+4、优化批量导入功能。
+5、文件上传格式增加：.zip,.rar

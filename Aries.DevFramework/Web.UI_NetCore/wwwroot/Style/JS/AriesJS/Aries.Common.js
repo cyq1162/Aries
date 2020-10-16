@@ -87,8 +87,8 @@
             imageFormatter: function (rules) {
                 return function (value, row, index) {
                     if (!value || (!value.startWith("/") && !value.startWith("http"))) { return value; }
-                    if (rules) {
-                        rules = rules.trimStart("$:").trimStart("$1:")//支持$:{} 只对查询的多选 $1:{}
+                    if (rules && typeof rules == 'string') {
+                        rules = rules.trimStart("$:").trimStart("$1:");//支持$:{} 只对查询的多选 $1:{}
                         rules = eval("(" + rules + ")");
                     }
                     var width = (rules && rules.width) || 100;
@@ -822,9 +822,12 @@
                 var attrs = {};
                 if (rules) {
                     try {
-                        var sp = rules.trimStart("$:").trimStart("$1:")//支持$:{} 只对查询的多选 $1:{}
-                        var rulesOpts = eval("(" + sp + ")");
-                        attrs = $.extend(attrs, rulesOpts);
+                        if(typeof rules == 'string')
+                        {
+                            rules = rules.toString().trimStart("$:").trimStart("$1:")//支持$:{} 只对查询的多选 $1:{}
+                            rules = eval("(" + rules + ")");
+                        }
+                        attrs = $.extend(attrs, rules);
                     } catch (e) { console.info($Core.Lang.configRulesError + " :" + rules); }
                 }
                 if (formatter) {

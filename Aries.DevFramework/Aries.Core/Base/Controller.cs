@@ -1077,7 +1077,7 @@ namespace Aries.Core
                 {
                     where += string.Format(" and {0}='{1}'", name3, value3);
                 }
-                if (!string.IsNullOrEmpty(id))
+                if (!string.IsNullOrEmpty(id) && id != "undefined")
                 {
                     where += string.Format(" and {0}<>'{1}'", action.Data.PrimaryCell.ColumnName, id);
                 }

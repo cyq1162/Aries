@@ -354,6 +354,17 @@
                     this.message = $Core.Lang.ruleError;
                     return false;
                 }
+                if (param && param.length > 2) {
+                    var array = param[2].trimEnd(']').split('[');
+                    var vType = $.fn.validatebox.defaults.rules[array[0]];
+                    var pm = [];
+                    if (array.length > 1) { pm = array[1].split(',');}
+                    if (vType && !vType.validator(value, pm)) {
+                        this.message = vType.message;
+                        return false;
+                    }
+
+                }
                 var data = {};
                 data.n = param[0].name || param[0];
                 data.v = value;

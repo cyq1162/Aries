@@ -93,25 +93,24 @@
                     }
                     var width = (rules && rules.width) || 100;
                     var height = (rules && rules.height) || 50;
-                    var bigImg = value.replace("_m.",".");
+                    var bigImg = value.replace("_m.", ".");
                     var imgHost = (rules && rules.host) || AR.Config.getValue("SysConfig", "ImageHost");
-                    if (!imgHost.startWith("http")) { imgHost = "";}
+                    if (!imgHost.startWith("http")) { imgHost = ""; }
                     return "<a href=\"" + imgHost + bigImg + "\" target=\"_blank\" ><img src=\"" + imgHost + value + "\" width=\"" + width + "\" height=\"" + height + "\" /></a>";
                 }
             },
             stringFormatter: function (value, row, index) {
                 if (value) {
-                    var abValue = value.toString();
-                    if (abValue.startWith("[object Object]"))
-                    {
+                    var abValue = value;
+                    if (typeof abValue=="object") {
                         abValue = JSON.stringify(value);
                     }
-                    var subValue = abValue;
+                    var subValue = abValue.toString();
                     if (subValue.length >= 30) {
                         subValue = subValue.substring(0, 30) + "...";
                     }
                     subValue = subValue.replace('<', '&lt;').replace('>', '&gt;');
-                    return '<div title="' + abValue.replaceAll("\"","'") + '" class="note">' + subValue + '</div>';
+                    return '<div title="' + abValue.replaceAll("\"", "'") + '" class="note">' + subValue + '</div>';
                 }
                 return value;
             },
@@ -254,10 +253,11 @@
                     }
                 } else {
                     var type = 'validatebox', settings = {};
-
-                    if ((row.formatter && row.formatter.indexOf('#') > -1) ||
-                        (row.rules && (row.rules.indexOf('configkey') > -1 || row.rules.indexOf('objname') > -1))
-                    ) {
+                    var isBox = row.formatter && row.formatter.indexOf('#') > -1;
+                    if (!isBox && row.rules && typeof row.rules == "object" && (row.rules["configkey"] || row.rules["objname"])) {
+                        isBox = true;
+                    }
+                    if (isBox) {
                         type = 'combobox';
                         settings.options = $Core.Common.Privite.getOptions(row.formatter, row.rules);
 
@@ -374,8 +374,7 @@
                     }
                     if (json_data[i].formatter && typeof (json_data[i].formatter) != 'function') {
                         //格式化config表的数据结构
-                        if (json_data[i].formatter.length > 2 && json_data[i].formatter.indexOf('#') != -1)
-                        {
+                        if (json_data[i].formatter.length > 2 && json_data[i].formatter.indexOf('#') != -1) {
                             if (/C_+/.test(json_data[i].formatter)) {
                                 objName = json_data[i].formatter.split('#')[1];
                                 if (objName.indexOf('=>') != -1) {
@@ -388,8 +387,7 @@
                                 json_data[i].formatter = $Core.Common.Formatter.configFormatter;
                             }
                         }
-                        else if (json_data[i].formatter == "imageFormatter")
-                        {
+                        else if (json_data[i].formatter == "imageFormatter") {
                             json_data[i].formatter = this.imageFormatter(json_data[i].rules);
                         }
                     }
@@ -792,7 +790,7 @@
                         case "pattern":
                             $input.attr("operator", value);//pattern在某些浏览器上是关键字，所以变更为opeator
                             break;
-                        //case "multiple2"://用于控制行内编辑的多选
+                            //case "multiple2"://用于控制行内编辑的多选
                         case "multiple":
                             $input.attr(name, value);//多选，没有指定操作符时(对于$:只对查询的多选、$1对于行内也多选时，不能用in，用默认的like)
                             if (!opts["pattern"]) {
@@ -822,8 +820,7 @@
                 var attrs = {};
                 if (rules) {
                     try {
-                        if(typeof rules == 'string')
-                        {
+                        if (typeof rules == 'string') {
                             rules = rules.toString().trimStart("$:").trimStart("$1:")//支持$:{} 只对查询的多选 $1:{}
                             rules = eval("(" + rules + ")");
                         }

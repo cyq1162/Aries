@@ -1156,9 +1156,18 @@
                     else if (editor.type == 'validatebox') {
                         var col = dg.Internal.headerData.get("field", field);
                         if (col && col.importunique) {
-                            $input.validatebox({
-                                validType: "exists['" + field + "','" + row[dg.Internal.primarykey] + "']"
-                            });
+                            var vType = "";
+                            if (col.rules && typeof col.rules == "object" && col.rules["validtype"]) {
+                                vType = col.rules["validtype"];
+                            }
+                            if (col.importunique) {
+                                vType = "exists['" + field + "','" + row[dg.Internal.primarykey] + "'" + (vType ? ",'" + vType + "'" : "") + "]";
+                            }
+                            if (vType) {
+                                $input.validatebox({
+                                    validType: vType
+                                });
+                            }
                         }
                         if (row[col.field] && row[col.field].toString().startWith("[object Object]")) {
                             $input.val(JSON.stringify(row[col.field]));

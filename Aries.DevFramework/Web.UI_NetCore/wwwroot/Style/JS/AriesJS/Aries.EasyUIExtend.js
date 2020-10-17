@@ -377,7 +377,9 @@
                     }
                 }
                 var id = param[1] || AR.Utility.queryString('id');
-                if (id) data.id = id;
+                if (id && id != "undefined") {
+                    data.id = id;
+                }
                 //method, objName, data, async, url, callback, isShowProgress
                 var result = AR.Ajax.get("Exists", AR.Form.tableName || AR.Global.DG.operating.tableName, data);
                 if (result) {

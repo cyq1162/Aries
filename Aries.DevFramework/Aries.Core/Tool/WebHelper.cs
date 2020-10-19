@@ -168,7 +168,7 @@ namespace Aries.Core.Helper
             {
                 try
                 {
-                    result = ChangeType(value, t);
+                    result =ConvertTool.ChangeType(value, t);
                 }
                 catch
                 {
@@ -194,42 +194,6 @@ namespace Aries.Core.Helper
                 returnValue = returnValue.Replace(filterChar[i], "");
             }
             return returnValue.Trim(' ');
-        }
-        private static object ChangeType(object value, Type t)
-        {
-            if (t == null)
-            {
-                return null;
-            }
-            string strValue = Convert.ToString(value);
-            if (t.IsGenericType && t.Name.StartsWith("Nullable"))
-            {
-                t = Nullable.GetUnderlyingType(t);
-                if (strValue == "")
-                {
-                    return null;
-                }
-            }
-            if (t.Name == "String")
-            {
-                return strValue;
-            }
-            if (strValue == "")
-            {
-                return Activator.CreateInstance(t);
-            }
-            else if (t.IsValueType)
-            {
-                if (t.Name == "Guid")
-                {
-                    return new Guid(strValue);
-                }
-                return Convert.ChangeType(strValue, t);
-            }
-            else
-            {
-                return Convert.ChangeType(value, t);
-            }
         }
 
         #region 下载文件

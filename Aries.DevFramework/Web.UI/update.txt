@@ -138,3 +138,5 @@ V5.4.2 （2020-10-16）
 3、增加对IsDeleted软删除的处理。
 4、优化批量导入功能。
 5、文件上传格式增加：.zip,.rar
+6、配置规则增加：{multipleforsearch:true}{multipleforedit:true}，
+允许分开配置【查询框、行内编辑框】下拉时的多选（2020-10-19）

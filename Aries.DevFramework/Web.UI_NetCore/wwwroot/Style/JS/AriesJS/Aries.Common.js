@@ -775,7 +775,7 @@
 
                 for (var name in opts) {
                     var value = opts[name];
-                    switch (name) {
+                    switch (name.toLowerCase()) {
                         case "width":
                             $input.width(value);
                             break;
@@ -792,12 +792,13 @@
                             break;
                             //case "multiple2"://用于控制行内编辑的多选
                         case "multiple":
-                            $input.attr(name, value);//多选，没有指定操作符时(对于$:只对查询的多选、$1对于行内也多选时，不能用in，用默认的like)
+                        case "multipleforsearch":
+                            $input.attr("multiple", value);//多选，没有指定操作符时(对于$:只对查询的多选、$1对于行内也多选时，不能用in，用默认的like)
                             if (!opts["pattern"]) {
                                 $input.attr("operator", "likeor");//如果有行内编辑，应该将操作符设置为like
                             }
                             break;
-                        case "defaultValue":
+                        case "defaultvalue":
                             if (!(opts.configKey || opts.objName)) {
                                 $input.val(value);
                                 $input.removeAttr("defaultValue");

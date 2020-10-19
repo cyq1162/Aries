@@ -108,7 +108,7 @@ namespace Aries.Core.Config
             switch (st)
             {
                 case SelectType.Show:
-                    where = "Hidden=0 or Formatter='#'";
+                    where = "Hidden=0 or Search=1 or Formatter='#'";
                     break;
                 case SelectType.Export:
                     where = "Export=1";

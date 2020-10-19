@@ -386,6 +386,7 @@
                                 $Core.Window.showMsg($Core.Lang.selectDelData);
                                 return false;
                             }
+
                             ids = selRows;
                         }
                         if (onBeforeEvent) {
@@ -397,8 +398,22 @@
 
                         $Core.Window.confirm($Core.Lang.isDel, null, function () {
                             var isIgnoreDeleteField = 1;
-                            if (AR.Global.Variable.isdeleted && dg.Internal.headerData.contains(AR.Global.Variable.isdeleted, "field")) {
+                            var isdeleted = AR.Global.Variable.isdeleted
+                            if (isdeleted && dg.Internal.headerData.contains(isdeleted, "field")) {
                                 isIgnoreDeleteField = 0;
+                                var valueHasNoDeletedFlag = false;
+                                var delArray = value ? dg.getSelectIDs(isdeleted) : dg.getCheckIDs(isdeleted);//遍历选中的
+                                if (delArray) {
+                                    for (var i = 0; i < delArray.length; i++) {
+                                        if (!delArray[i]) {
+                                            valueHasNoDeletedFlag = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                                if (!valueHasNoDeletedFlag) {
+                                    isIgnoreDeleteField = 1;
+                                }
                             }
                             $Core.Ajax.post("Delete", dg.tableName, { "id": ids.join(','), "foreignKeys": dg.foreignKeys, "idField": dg.options.idField, "parentField": dg.options.parentField, "isIgnoreDeleteField": isIgnoreDeleteField }, function (result) {
                                 if (onAfterEvent) {
@@ -1136,7 +1151,11 @@
                             var attrs = options.attrs;
                             //alert(JSON.stringify(attrs));
                             for (var key in attrs) {
-                                $input.attr(key, attrs[key]);
+                                if (key.toLowerCase() == "multipleforedit") {
+                                    $input.attr("multiple", attrs[key]);
+                                } else {
+                                    $input.attr(key, attrs[key]);
+                                }
                             }
                             //判断是否必填：
                             var col = dg.Internal.headerData.get("field", field);
@@ -1169,7 +1188,7 @@
                                 });
                             }
                         }
-                        if (row[col.field] && row[col.field].toString().startWith("[object Object]")) {
+                        if (row[col.field] && typeof row[col.field]=="object") {
                             $input.val(JSON.stringify(row[col.field]));
                         }
                     }

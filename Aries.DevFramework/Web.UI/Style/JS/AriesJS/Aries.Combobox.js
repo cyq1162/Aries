@@ -656,6 +656,13 @@
 
                 }
                 else {
+                    if (key == "select" && value=="true" || value=="false")
+                    {
+                        var data = $box.combobox("getData")
+                        if (!data.contains(value, "value")) {
+                            value = value == "true" ? "1" : "0";
+                        }
+                    }
                     return $box.combobox(key, value);
                 }
             } catch (e) {

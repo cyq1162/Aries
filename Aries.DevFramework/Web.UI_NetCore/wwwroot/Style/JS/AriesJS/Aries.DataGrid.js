@@ -1174,7 +1174,7 @@
                     }
                     else if (editor.type == 'validatebox') {
                         var col = dg.Internal.headerData.get("field", field);
-                        if (col && col.importunique) {
+                        if (col) {
                             var vType = "";
                             if (col.rules && typeof col.rules == "object" && col.rules["validtype"]) {
                                 vType = col.rules["validtype"];
@@ -1607,10 +1607,15 @@
         //combobox的查询条件
         var _postArray = new Array();
         each: for (var i = 0, len = headerData.length; i < len; i++) {
-            if (headerData[i].formatter == undefined || headerData[i].formatter == "" || headerData[i].formatter.indexOf('#') == -1 || !/^#C_+/.test(headerData[i].formatter)) {
+            var row=headerData[i];
+            if (row.rules && typeof row.rules == "object" && row.rules["objname"])
+            {
+                _postArray.push(row.rules["objname"]);
+            }
+            if (row.formatter == undefined || row.formatter == "" || row.formatter.indexOf('#') == -1 || !/^#C_+/.test(row.formatter)) {
                 continue each;
             }
-            objName = headerData[i].formatter.split('#')[1];
+            objName = row.formatter.split('#')[1];
             var obj_item = {};
             if (objName.indexOf('=>') != -1) {
                 objName = objName.split('=>')[0];

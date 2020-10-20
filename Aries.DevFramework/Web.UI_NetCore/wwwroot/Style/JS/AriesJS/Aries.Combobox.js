@@ -62,7 +62,7 @@
             if (comboxData[op.key]) {
                 op.data = $Core.Utility.cloneArray(comboxData[op.key], true);//克隆，避免后续追加的请选择影响原有数据。
             }
-            if (!op.tree && op.defaultItem && (op.data.length == 0 || op.data[0][op.textField] != defaultItem.text)) {
+            if (!op.tree && op.defaultItem && op.data && (op.data.length == 0 || op.data[0][op.textField] != defaultItem.text)) {
                 op.data.unshift(defaultItem);
             }
             _cascadeBindCombo($input, op);

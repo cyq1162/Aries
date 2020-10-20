@@ -1132,6 +1132,12 @@
                     var editor = rowEditors[i];
                     var $input = editor.target;
                     var field = editor.field;
+                    var col = dg.Internal.headerData.get("field", field);
+                    if (dg.PKColumn.Editor.action == "Update" && !col.edit)
+                    {
+                        $input.attr('disabled', 'disabled');
+                        continue;
+                    }
                     $input.attr("field", field);
                     $input.focus(function () {
                         dg.PKColumn.Editor.editField = $(this).attr("field");
@@ -1158,7 +1164,7 @@
                                 }
                             }
                             //判断是否必填：
-                            var col = dg.Internal.headerData.get("field", field);
+                           
                             if (col && col.datatype) {
                                 var values = col.datatype.split(',');
                                 if (values.length >= 4 && values[3] == "1") {
@@ -1610,7 +1616,11 @@
             var row=headerData[i];
             if (row.rules && typeof row.rules == "object" && row.rules["objname"])
             {
-                _postArray.push(row.rules["objname"]);
+                var objItem = {};
+                objItem['ObjName'] = row.rules["objname"];
+                if (!_postArray.contains(row.rules["objname"], "ObjName")) {
+                    _postArray.push(objItem);
+                }
             }
             if (row.formatter == undefined || row.formatter == "" || row.formatter.indexOf('#') == -1 || !/^#C_+/.test(row.formatter)) {
                 continue each;
@@ -1624,7 +1634,9 @@
             //if ($Core.Combobox.paras[objName] != undefined) {
             //    obj_item['Para'] = $Core.Combobox.paras[objName];
             //}
-            _postArray.push(obj_item);
+            if (!_postArray.contains(objName, "ObjName")) {
+                _postArray.push(obj_item);
+            }
         }
         //请求下拉框数据,子页面的下拉列表数据绑定
         if (_postArray.length > 0) {

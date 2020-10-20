@@ -228,7 +228,12 @@
                 }
             },
             formatEditor: function (row, dg) {
-                if (!row.edit) { return; }
+                if (!row.edit)
+                {
+                    if (!(row.rules && typeof row.rules == "object" && (row.rules["add"] || row.rules["edit"]))) {
+                        return;
+                    }
+                }
                 var editor = function () {
                     try {
                         return eval(row.editor);
@@ -322,9 +327,10 @@
                 var json_data = $Core.Utility.cloneArray(dg.Internal.headerData, true);
                 var frozen = Array(), cols = Array();
                 for (var i = 0; i < json_data.length; i++) {
+                    var row = json_data[i];
                     var format, style, configKey, objName;
                     //格式化第一列为主键
-                    if (i == 0 && (json_data[i].formatter == undefined || json_data[i].formatter == "#" || json_data[i].formatter == "")) {
+                    if (i == 0 && (row.formatter == undefined || row.formatter == "#" || row.formatter == "")) {
                         frozen.push({ align: 'center', checkbox: dg.isShowCheckBox, hidden: !dg.isShowCheckBox, field: 'ckb', rowspan: 1, colspan: 1 });
 
                         //dg.Internal.primarykey = json_data[i].field;
@@ -358,79 +364,80 @@
                             }
                         }
                     }
-                    if (json_data[i].datatype) {
+                    if (row.datatype) {
                         //收集主键
-                        var items = json_data[i].datatype.split(',');
+                        var items = row.datatype.split(',');
                         if (items.length > 4 && items[4] == "1") {
-                            dg.Internal.jointPrimary.push(json_data[i].field);
+                            dg.Internal.jointPrimary.push(row.field);
                         }
                     }
-                    if (json_data[i].hidden) {
+                    if (row.hidden) {
                         continue;
                     }
                     //是否编辑模式
-                    if ((dg.isEditor && json_data[i].edit) || dg.isTreeGrid) {
-                        this.formatEditor(json_data[i], dg);
+
+                    if (dg.isEditor || dg.isTreeGrid) {
+                        this.formatEditor(row, dg);
                     }
-                    if (json_data[i].formatter && typeof (json_data[i].formatter) != 'function') {
+                    if (row.formatter && typeof (row.formatter) != 'function') {
                         //格式化config表的数据结构
-                        if (json_data[i].formatter.length > 2 && json_data[i].formatter.indexOf('#') != -1) {
-                            if (/C_+/.test(json_data[i].formatter)) {
-                                objName = json_data[i].formatter.split('#')[1];
+                        if (row.formatter.length > 2 && row.formatter.indexOf('#') != -1) {
+                            if (/C_+/.test(row.formatter)) {
+                                objName = row.formatter.split('#')[1];
                                 if (objName.indexOf('=>') != -1) {
                                     objName = objName.split('=>')[0];
                                 }
-                                json_data[i].formatter = $Core.Common.Formatter.objFormatter;
+                                row.formatter = $Core.Common.Formatter.objFormatter;
                             }
                             else {
-                                configKey = json_data[i].formatter.split('#')[1];
-                                json_data[i].formatter = $Core.Common.Formatter.configFormatter;
+                                configKey = row.formatter.split('#')[1];
+                                row.formatter = $Core.Common.Formatter.configFormatter;
                             }
                         }
-                        else if (json_data[i].formatter == "imageFormatter") {
-                            json_data[i].formatter = this.imageFormatter(json_data[i].rules);
+                        else if (row.formatter == "imageFormatter") {
+                            row.formatter = this.imageFormatter(row.rules);
                         }
                     }
                     try {
-                        format = $Core.Common.Formatter[json_data[i].formatter] || eval(json_data[i].formatter);
+                        format = $Core.Common.Formatter[row.formatter] || eval(row.formatter);
                         if (format == undefined) {
-                            delete json_data[i].formatter;
-                            delete json_data[i].styler;
+                            delete row.formatter;
+                            delete row.styler;
                         }
-                        style = eval(json_data[i].styler);
+                        style = eval(row.styler);
                         if (typeof (format) == "function") {
-                            if (json_data[i].formatter == $Core.Common.Formatter.configFormatter) {
-                                json_data[i].formatter = format(configKey);
-                            } else if (json_data[i].formatter == $Core.Common.Formatter.objFormatter) {
-                                json_data[i].formatter = format(objName);
+                            if (row.formatter == $Core.Common.Formatter.configFormatter) {
+                                row.formatter = format(configKey);
+                            } else if (row.formatter == $Core.Common.Formatter.objFormatter) {
+                                row.formatter = format(objName);
                             } else {
                                 if (i == 0) {
-                                    json_data[i].formatter = format(dg);
+                                    row.formatter = format(dg);
                                 } else {
-                                    json_data[i].formatter = format;
+                                    row.formatter = format;
                                 }
                             }
                         }
                         if (typeof (style) == "function") {
-                            json_data[i].styler = style;
+                            row.styler = style;
                         }
                         //处理跨行跨列
-                        var rowspan = parseInt(json_data[i].rowspan) || 1;
-                        var colspan = parseInt(json_data[i].colspan) || 1;
-                        json_data[i].rowspan = rowspan == 0 ? 1 : rowspan;
-                        json_data[i].colspan = colspan == 0 ? 1 : colspan;
+                        var rowspan = parseInt(row.rowspan) || 1;
+                        var colspan = parseInt(row.colspan) || 1;
+                        row.rowspan = rowspan == 0 ? 1 : rowspan;
+                        row.colspan = colspan == 0 ? 1 : colspan;
                     } catch (e) {
-                        delete json_data[i].formatter;
-                        delete json_data[i].styler;
+                        delete row.formatter;
+                        delete row.styler;
                     }
 
-                    json_data[i].sortable = eval(json_data[i].sortable);
-                    json_data[i].hidden = eval(json_data[i].hidden);
-                    if (i == 0 || json_data[i].frozen) {
-                        frozen.push(json_data[i]);
+                    row.sortable = eval(row.sortable);
+                    row.hidden = eval(row.hidden);
+                    if (i == 0 || row.frozen) {
+                        frozen.push(row);
                     }
                     else {
-                        cols.push(json_data[i]);
+                        cols.push(row);
                     }
                 }//循环结束
                 if (dg.Internal.jointPrimary.length == 0) { dg.Internal.jointPrimary.push(json_data[0].field); }

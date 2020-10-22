@@ -110,7 +110,7 @@
                         subValue = subValue.substring(0, 30) + "...";
                     }
                     subValue = subValue.replace('<', '&lt;').replace('>', '&gt;');
-                    return '<div title="' + abValue.replaceAll("\"", "'") + '" class="note">' + subValue + '</div>';
+                    return '<div title="' + abValue.replaceAll("\"", "&quot;") + '" class="note">' + subValue + '</div>';
                 }
                 return value;
             },

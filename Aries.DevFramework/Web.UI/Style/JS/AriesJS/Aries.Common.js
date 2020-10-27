@@ -260,7 +260,7 @@
                     }
                 } else {
                     var type = 'validatebox', settings = {};
-                    var isBox = row.formatter && row.formatter.indexOf('#') > -1;
+                    var isBox = row.formatter && row.formatter!="#" && row.formatter.indexOf('#') > -1;
                     if (!isBox && row.rules && typeof row.rules == "object" &&
                         (row.rules["configkey"] || row.rules["configkeyforadd"] || row.rules["configkeyforedit"]
                         || row.rules["objname"] || row.rules["objnamforadde"] || row.rules["objnameforedit"])) {

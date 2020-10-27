@@ -1117,6 +1117,7 @@
                 dg.datagrid('selectRow', index);
                 dg.datagrid('beginEdit', index);
 
+                var isAdd = dg.PKColumn.Editor.action == "Add";
                 for (var i = 0; i < dg.Internal.jointPrimary.length; i++) {
                     var primary = dg.datagrid("getEditor", { index: index, field: dg.Internal.jointPrimary[i] });
                     primary && primary.target.attr('disabled', 'disabled');
@@ -1133,11 +1134,26 @@
                     var $input = editor.target;
                     var field = editor.field;
                     var col = dg.Internal.headerData.get("field", field);
-                    if (dg.PKColumn.Editor.action == "Update" && !col.edit)
-                    {
+                    if (!isAdd && !col.edit) {
                         $input.attr('disabled', 'disabled');
                         continue;
                     }
+                    if (col.rules && typeof col.rules == "object") {
+                        // //处理弹窗绑定 dialogforadd ,dialogforedit
+                        if (isAdd && col.rules["nameforadd"]) {
+                            var lowerName=col.rules["nameforadd"].toLowerCase();
+                            $input.attr("name", lowerName);
+                            editor.field = lowerName;
+                            $Core.Combobox.bind($input);
+                        }
+                        else if (col.rules["nameforedit"]) {
+                            var lowerName=col.rules["nameforedit"].toLowerCase();
+                            $input.attr("name",lowerName);
+                            editor.field = lowerName;
+                            $Core.Combobox.bind($input);
+                        }
+                    }
+
                     $input.attr("field", field);
                     $input.focus(function () {
                         dg.PKColumn.Editor.editField = $(this).attr("field");
@@ -1157,6 +1173,35 @@
                             var attrs = options.attrs;
                             //alert(JSON.stringify(attrs));
                             for (var key in attrs) {
+                                switch (key.toLowerCase()) {
+                                    case "multipleforadd":
+                                        if (isAdd) {
+                                            $input.attr("multiple", attrs[key]);
+                                        }
+                                        break;
+                                    case "multipleforedit":
+                                        $input.attr("multiple", attrs[key]);
+                                        break;
+                                    case "configkeyeforadd":
+                                        if (isAdd) {
+                                            $input.attr("configkey", attrs[key]);
+                                        }
+                                        break;
+                                    case "configkeyforedit":
+                                        $input.attr("configkey", attrs[key]);
+                                        break;
+                                    case "objnameforadd":
+                                        if (isAdd) {
+                                            $input.attr("objname", attrs[key]);
+                                        }
+                                        break;
+                                    case "objnameforedit":
+                                        $input.attr("objname", attrs[key]);
+                                        break;
+                                    default:
+                                        $input.attr(key, attrs[key]);
+                                        break;
+                                }
                                 if (key.toLowerCase() == "multipleforedit") {
                                     $input.attr("multiple", attrs[key]);
                                 } else {
@@ -1164,7 +1209,7 @@
                                 }
                             }
                             //判断是否必填：
-                           
+
                             if (col && col.datatype) {
                                 var values = col.datatype.split(',');
                                 if (values.length >= 4 && values[3] == "1") {
@@ -1182,8 +1227,19 @@
                         var col = dg.Internal.headerData.get("field", field);
                         if (col) {
                             var vType = "";
-                            if (col.rules && typeof col.rules == "object" && col.rules["validtype"]) {
-                                vType = col.rules["validtype"];
+                            if (col.rules && typeof col.rules == "object") {
+                                if (col.rules["validtype"]) {
+                                    vType = col.rules["validtype"];
+                                }
+                                // //处理弹窗绑定 dialogforadd ,dialogforedit
+                                if (isAdd && col.rules["dialogforadd"]) {
+                                    $input.attr("dialog", col.rules["dialogforadd"]);
+                                    $Core.Combobox.bind($input);
+                                }
+                                else if (col.rules["dialogforedit"]) {
+                                    $input.attr("dialog", col.rules["dialogforedit"]);
+                                    $Core.Combobox.bind($input);
+                                }
                             }
                             if (col.importunique) {
                                 vType = "exists['" + field + "','" + row[dg.Internal.primarykey] + "'" + (vType ? ",'" + vType + "'" : "") + "]";
@@ -1193,8 +1249,9 @@
                                     validType: vType
                                 });
                             }
+
                         }
-                        if (row[col.field] && typeof row[col.field]=="object") {
+                        if (row[col.field] && typeof row[col.field] == "object") {
                             $input.val(JSON.stringify(row[col.field]));
                         }
                     }
@@ -1216,8 +1273,8 @@
             exeSave: function (dg, index, callBack) {
                 var that = this;
                 var editResult = false;
-                var editor = dg.datagrid("getEditors", index);
-                if (editor.length > 0 && dg.datagrid('validateRow', index)) {
+                var editors = dg.datagrid("getEditors", index);
+                if (editors.length > 0 && dg.datagrid('validateRow', index)) {
                     var isTreeTrid = dg.isTreeGrid;
                     var row = null;
                     if (isTreeTrid) {
@@ -1227,23 +1284,47 @@
                         //data只存档1级的数据，不适合treegrid
                         row = $.extend(true, {}, $.data(dg.$target[0], "datagrid").data.rows[index]);
                     }
+                    //结束之前要取值。
+                    var editValues = {};
+                    //追加不存在的字段
+                    //遍历编辑器，再取一遍值。【支持更多行内的配置项】
+                    for (var i in editors) {
+                        var editor = editors[i];
+                        if (editor.type) {
+                            if (editor.type == "combobox" || editor.target.attr("dialog")) {
+                                editValues[editor.field] = $Core.Combobox.getValue(editor.field);
+                            }
+                            else {
+                                editValues[editor.field] = editor.target.val();
+                            }
+                        }
+                    }
                     if (row) {
-                        var _type = (dg.PKColumn.Editor.action == "Update") ? 'updated' : 'inserted';
+                        var isAdd = dg.PKColumn.Editor.action == "Add";
                         try {
                             dg.datagrid("endEdit", index); //结束编辑行，如果TreeGrid改变idField，会有异步。
                         } catch (e) { }
                         var changes = dg.datagrid("getChanges");//_type 结束编辑后，才有Changes的数据。
-                        var _change_data = changes[changes.length - 1]; //获取行数据
+                        var _change_data =  changes[changes.length - 1]; //获取行数据
                         if (_change_data) {
                             if (dg.PKColumn.Editor.isSaveToBehind == false) {
                                 dg.datagrid("acceptChanges");
                             }
                             else {
                                 var post_data = {};
-                                if (_type == 'inserted' && dg.defaultInsertData) {
-                                    post_data = _change_data;
+                                if (isAdd && dg.defaultInsertData) {
+                                    post_data = $.extend(true, _change_data, row);
                                 } else {
                                     post_data = that.getChangeJson(_change_data, row, dg);
+                                }
+                                //追加不存在的字段
+                                //遍历编辑器，再取一遍值。【支持更多行内的配置项】
+                                var isNeedReload = false;
+                                for (var key in editValues) {
+                                    if (post_data[key] == undefined && row[key]==undefined) {
+                                        post_data[key] = editValues[key];
+                                        isNeedReload = true;
+                                    }
                                 }
                                 if (!$.isEmptyObject(post_data)) //{ dg.datagrid('cancelEdit', index); }
                                     //else
@@ -1258,7 +1339,7 @@
                                         $Core.Ajax.post(dg.PKColumn.Editor.action, dg.tableName, post_data, function (result) {
                                             if (result) {
                                                 if (result.success) {
-                                                    if (dg.PKColumn.Editor.action == "Add") {
+                                                    if (isAdd) {
                                                         _change_data[dg.Internal.primarykey] = result.msg;//这里才是将id写回去的地方。
                                                         result.msg = $Core.Lang.addSuccess;
                                                     }
@@ -1275,6 +1356,10 @@
                                                 dg.PKColumn.Editor.action = undefined;
                                                 callBack && callBack(result.success);//异步的回调处理
                                                 $Core.Window.showMsg(result.msg);
+                                                if (isNeedReload)
+                                                {
+                                                    dg.reload();
+                                                }
                                             }
                                         });
                                     }
@@ -1613,9 +1698,8 @@
         //combobox的查询条件
         var _postArray = new Array();
         each: for (var i = 0, len = headerData.length; i < len; i++) {
-            var row=headerData[i];
-            if (row.rules && typeof row.rules == "object" && row.rules["objname"])
-            {
+            var row = headerData[i];
+            if (row.rules && typeof row.rules == "object" && row.rules["objname"]) {
                 var objItem = {};
                 objItem['ObjName'] = row.rules["objname"];
                 if (!_postArray.contains(row.rules["objname"], "ObjName")) {

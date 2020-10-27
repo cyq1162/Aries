@@ -151,7 +151,7 @@ namespace Aries.Core.Config
                 row.Set(Config_Grid.ObjName, objName);
                 row.Set(Config_Grid.Field, cell.ColumnName);
                 row.Set(Config_Grid.Title, string.IsNullOrEmpty(cell.Description) ? cell.ColumnName : cell.Description);
-                row.Set(Config_Grid.Hidden, (i == 0 && jointPrimaryCount < 2) || i > 25);//超过25个字段，后面的都先隐藏。
+                row.Set(Config_Grid.Hidden, (i == 0 && jointPrimaryCount < 2) || i > 25 || (i > 4 && objName[0] == '_'));//超过25个字段，后面的都先隐藏。
                 row.Set(Config_Grid.OrderNum, (i + 1) * 10);
                 row.Set(Config_Grid.Width, 100);
                 row.Set(Config_Grid.Sortable, i > 0);
@@ -330,6 +330,21 @@ namespace Aries.Core.Config
             }
             dic = null;
             return formatDic;
+        }
+
+        /// <summary>
+        /// 配置列表中的规则字段【Rules】是否配置了相关的objName属性。
+        /// </summary>
+        /// <param name="objName"></param>
+        /// <param name="whereObjName"></param>
+        /// <returns></returns>
+        public static bool HasObjNameInRule(string objName, string whereObjName)
+        {
+            using (MAction action = new MAction(U_AriesEnum.Config_Grid))
+            {
+                string where = string.Format("ObjName='{0}' and Rules like '%{1}%'", whereObjName, objName);
+                return action.Exists(where);
+            }
         }
 
     }

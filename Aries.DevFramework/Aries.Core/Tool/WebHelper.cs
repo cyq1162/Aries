@@ -40,7 +40,7 @@ namespace Aries.Core.Helper
             if (string.IsNullOrEmpty(objName))
             {
                 return false;
-            } 
+            }
             objName = objName.Trim('_', ' ');
             CacheManage cache = CacheManage.LocalInstance;
             string has = path.GetHashCode().ToString();
@@ -105,7 +105,7 @@ namespace Aries.Core.Helper
         /// <returns></returns>
         public static bool IsAriesSuffix()
         {
-            if (HttpContext.Current == null) 
+            if (HttpContext.Current == null)
             {
                 return false;
             }
@@ -144,6 +144,29 @@ namespace Aries.Core.Helper
         {
             return Query<T>(key, default(T), false);
         }
+        public static T Query<T>(string key, T defaultValue, string fromUrlQuery)
+        {
+            if (!string.IsNullOrEmpty(fromUrlQuery))
+            {
+                int startIndex = Math.Max(fromUrlQuery.IndexOf("&" + key + "=", StringComparison.OrdinalIgnoreCase), fromUrlQuery.IndexOf("?" + key + "=", StringComparison.OrdinalIgnoreCase));
+                if (startIndex > -1)
+                {
+                    string result = string.Empty;
+                    int end = fromUrlQuery.IndexOf("&", startIndex + key.Length + 2);
+                    if (end == -1)
+                    {
+                        result = fromUrlQuery.Substring(startIndex + key.Length + 2);
+                    }
+                    else
+                    {
+                        result = fromUrlQuery.Substring(startIndex + key.Length + 2, end - (startIndex + key.Length + 2));
+                    }
+                    return ConvertTool.ChangeType<T>(result);
+                }
+            }
+
+            return defaultValue;
+        }
         public static T Query<T>(string key, T defaultValue, bool filter)
         {
             string value = HttpContext.Current.Request[key];
@@ -168,7 +191,7 @@ namespace Aries.Core.Helper
             {
                 try
                 {
-                    result =ConvertTool.ChangeType(value, t);
+                    result = ConvertTool.ChangeType(value, t);
                 }
                 catch
                 {

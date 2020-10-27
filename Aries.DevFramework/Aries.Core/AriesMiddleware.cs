@@ -35,7 +35,9 @@ namespace Microsoft.AspNetCore.Http
                 {
                     System.Web.HttpApplication.Instance.ExecuteEventHandler();
                     if(context.Response.StatusCode.ToString().StartsWith("30"))
-                    { }
+                    {
+                        
+                    }
                     else if (context.Response.HasStarted )  // || Body是只写流  (context.Response.Body != null && context.Response.Body.CanRead
                     {
                         await context.Response.WriteAsync("");

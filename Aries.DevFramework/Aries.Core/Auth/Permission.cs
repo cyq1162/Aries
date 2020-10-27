@@ -9,6 +9,7 @@ using Aries.Core.Helper;
 using CYQ.Data.Tool;
 using System.IO;
 using CYQ.Data.Cache;
+using Aries.Core.Config;
 
 namespace Aries.Core.Auth
 {
@@ -188,6 +189,14 @@ namespace Aries.Core.Auth
                 string objName = WebHelper.Query<string>("objName", "", false);//去掉前置的_
                 if (objName == "" || !WebHelper.IsKeyInHtml(objName.Trim('_', ' ')))
                 {
+                    string refObjName = WebHelper.Query<string>("objName", "", refUri.Query);
+                    if (!string.IsNullOrEmpty(refObjName))
+                    {
+                        if (GridConfig.HasObjNameInRule(objName, refObjName))
+                        {
+                            return;
+                        }
+                    }
                     throw new Exception("No permission on this objName！");
                 }
             }
@@ -354,11 +363,11 @@ namespace Aries.Core.Auth
                 if (row != null)
                 {
                     string keys = row.Get<string>("ActionRefNames", "").ToLower();
-                    if(!string.IsNullOrEmpty(keys))
+                    if (!string.IsNullOrEmpty(keys))
                     {
                         if (Path.GetFileNameWithoutExtension(HttpContext.Current.Request.UrlReferrer.LocalPath).ToLower() == "configgrid")
                         {
-                            keys="export,config,view,add,del,viewsql,edit,savesql";
+                            keys = "export,config,view,add,del,viewsql,edit,savesql";
                         }
                     }
                     return keys;
@@ -374,7 +383,7 @@ namespace Aries.Core.Auth
         {
             get
             {
-                if (_UserMenu == null)
+                if (_UserMenu == null || _UserMenu.Rows.Count == 0)
                 {
                     _UserMenu = SysMenu.UserMenu;
                 }

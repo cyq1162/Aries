@@ -789,7 +789,11 @@
                     return $input.val()
                 }
                 else {
-                    return setAttr($input, "getValues").join(',');
+                    var values=setAttr($input, "getValues");
+                    if(values)
+                    {
+                        return values.join(',');
+                    }
                 }
             }
             return "";

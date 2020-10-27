@@ -102,8 +102,11 @@
             stringFormatter: function (value, row, index) {
                 if (value) {
                     var abValue = value;
-                    if (typeof abValue=="object") {
+                    if (typeof abValue == "object") {
                         abValue = JSON.stringify(value);
+                    }
+                    else {
+                        abValue = abValue.toString();
                     }
                     var subValue = abValue.toString();
                     if (subValue.length >= 30) {
@@ -228,9 +231,8 @@
                 }
             },
             formatEditor: function (row, dg) {
-                if (!row.edit)
-                {
-                    if (!(row.rules && typeof row.rules == "object" && (row.rules["add"] || row.rules["edit"]))) {
+                if (!row.edit) {
+                    if (!(row.rules && typeof row.rules == "object" && (row.rules["nameforadd"] || row.rules["nameforedit"]))) {
                         return;
                     }
                 }
@@ -259,12 +261,14 @@
                 } else {
                     var type = 'validatebox', settings = {};
                     var isBox = row.formatter && row.formatter.indexOf('#') > -1;
-                    if (!isBox && row.rules && typeof row.rules == "object" && (row.rules["configkey"] || row.rules["objname"])) {
+                    if (!isBox && row.rules && typeof row.rules == "object" &&
+                        (row.rules["configkey"] || row.rules["configkeyforadd"] || row.rules["configkeyforedit"]
+                        || row.rules["objname"] || row.rules["objnamforadde"] || row.rules["objnameforedit"])) {
                         isBox = true;
                     }
                     if (isBox) {
                         type = 'combobox';
-                        settings.options = $Core.Common.Privite.getOptions(row.formatter, row.rules);
+                        settings.options = $Core.Common.Privite.getOptions(row.formatter, row.rules, 1);
 
                     }
                     else {
@@ -603,7 +607,7 @@
                     var $input2;//日期时的第二个框
                     var $span = $("<span>").html("&nbsp;-&nbsp;");
                     //如果是下拉框模式执行以下代码
-                    var opt = $Core.Common.Privite.getOptions(dataArray[i].formatter, dataArray[i].rules).attrs;
+                    var opt = $Core.Common.Privite.getOptions(dataArray[i].formatter, dataArray[i].rules, 0).attrs;
                     if (opt.configKey || opt.objName || opt.configkey || opt.objname)//绑定下拉
                     {
                         $input.attr("name", dataArray[i].field);
@@ -782,7 +786,10 @@
 
                 for (var name in opts) {
                     var value = opts[name];
-                    switch (name.toLowerCase()) {
+                    var nameLower = name.toLowerCase();
+                    //忽略专属于于行内添加或编辑或删除的条件。
+                    if (nameLower.endWith("foradd") || nameLower.startWith("foredit")) { continue; }
+                    switch (nameLower) {
                         case "width":
                             $input.width(value);
                             break;
@@ -818,8 +825,8 @@
                     }
                 }
             },
-
-            getOptions: function (formatter, rules) {
+            //fromType:0 生成表单Html 1，行内编辑
+            getOptions: function (formatter, rules, fromType) {
                 var options = {
                     valueField: 'value',
                     textField: 'text',
@@ -832,6 +839,7 @@
                             rules = rules.toString().trimStart("$:").trimStart("$1:")//支持$:{} 只对查询的多选 $1:{}
                             rules = eval("(" + rules + ")");
                         }
+                        //if(rules["
                         attrs = $.extend(attrs, rules);
                     } catch (e) { console.info($Core.Lang.configRulesError + " :" + rules); }
                 }

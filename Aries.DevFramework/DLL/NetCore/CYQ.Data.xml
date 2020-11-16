@@ -4736,7 +4736,7 @@
         <member name="M:CYQ.Data.Table.MDataColumn.Add(System.String,System.Data.SqlDbType,System.Boolean)">
             <param name="isAutoIncrement">是否自增id列</param>
         </member>
-        <member name="M:CYQ.Data.Table.MDataColumn.Add(System.String,System.Data.SqlDbType,System.Boolean,System.Boolean,System.Int32,System.Boolean,System.Object)">
+        <member name="M:CYQ.Data.Table.MDataColumn.Add(System.String,System.Data.SqlDbType,System.Boolean,System.Boolean,System.Int32,System.Boolean,System.Object,System.Int16)">
             <param name="defaultValue">默认值[日期类型请传入SqlValue.GetDate]</param>
         </member>
         <member name="P:CYQ.Data.Table.MDataColumn.Item(System.Int32)">
@@ -5387,6 +5387,20 @@
             删除文件
             </summary>
         </member>
+        <member name="M:CYQ.Data.Tool.IOHelper.DetectEncode(System.String)">
+            <summary>
+            检测并返回文件编码。
+            </summary>
+            <param name="fileName">文件路径。</param>
+            <returns></returns>
+        </member>
+        <member name="M:CYQ.Data.Tool.IOHelper.DetectEncode(System.Byte[])">
+            <summary>
+            检测并返回文件编码。
+            </summary>
+            <param name="bytes">检测字节</param>
+            <returns></returns>
+        </member>
         <member name="T:CYQ.Data.Tool.TextEncodingDetect">
             <summary>
             字节文本编码检测
@@ -5741,39 +5755,9 @@
             <param name="op">除了NO，其它项都会消掉转义符，默认是：YES</param>
             <returns></returns>
         </member>
-        <member name="M:CYQ.Data.Tool.JsonSplit.GetValueLength(System.String,System.Boolean,System.Int32@)">
+        <member name="M:CYQ.Data.Tool.JsonSplit.GetValueLength(System.Boolean,System.String,System.Boolean,System.Int32@)">
             <summary>
             获取值的长度（当Json值嵌套以"{"或"["开头时）
-            </summary>
-        </member>
-        <member name="T:CYQ.Data.Tool.JsonSplit.CharState">
-            <summary>
-            字符状态
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Tool.JsonSplit.CharState.arrayStart">
-            <summary>
-            数组开始【仅第一开头才算】，值嵌套的以【childrenStart】来标识。
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Tool.JsonSplit.CharState.state">
-            <summary>
-            【-1 未初始化】【0 取名称中】；【1 取值中】
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Tool.JsonSplit.CharState.keyStart">
-            <summary>
-            【-2 已结束】【-1 未初始化】【0 未开始】【1 无引号开始】【2 单引号开始】【3 双引号开始】
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Tool.JsonSplit.CharState.valueStart">
-            <summary>
-            【-2 已结束】【-1 未初始化】【0 未开始】【1 无引号开始】【2 单引号开始】【3 双引号开始】
-            </summary>
-        </member>
-        <member name="M:CYQ.Data.Tool.JsonSplit.SetCharState(System.Char,CYQ.Data.Tool.JsonSplit.CharState@)">
-            <summary>
-            设置字符状态(返回true则为关键词，返回false则当为普通字符处理）
             </summary>
         </member>
         <member name="M:CYQ.Data.Tool.JsonSplit.SplitEscapeArray(System.String)">
@@ -5789,6 +5773,41 @@
             </summary>
             <param name="c"></param>
             <returns></returns>
+        </member>
+        <member name="T:CYQ.Data.Tool.CharState">
+            <summary>
+            字符状态
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Tool.CharState.isStrictMode">
+            <summary>
+            是否格式格式【true属性必须双引号，false属性可以单引号和无引号。】
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Tool.CharState.arrayStart">
+            <summary>
+            数组开始【仅第一开头才算】，值嵌套的以【childrenStart】来标识。
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Tool.CharState.keyValueState">
+            <summary>
+            【-1 未初始化】【0取名阶段】【1 取值阶段】
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Tool.CharState.keyStart">
+            <summary>
+            【-2 已结束】【-1 未初始化】【0 未开始】【1 无引号开始】【2 单引号开始】【3 双引号开始】
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.Tool.CharState.valueStart">
+            <summary>
+            【-2 已结束】【-1 未初始化】【0 未开始】【1 无引号开始】【2 单引号开始】【3 双引号开始】
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Tool.CharState.IsKeyword(System.Char)">
+            <summary>
+            设置字符状态(返回true则为关键词，返回false则当为普通字符处理）
+            </summary>
         </member>
         <member name="T:CYQ.Data.Tool.MDictionary`2">
             <summary>

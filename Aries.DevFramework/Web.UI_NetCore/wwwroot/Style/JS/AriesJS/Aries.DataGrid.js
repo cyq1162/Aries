@@ -1795,7 +1795,7 @@
             for (var i = 0, len = hd.length; i < len; i++) {
                 field = hd[i].field;
                 if (!hd[i].hidden) { showColumnCount++; }
-                if (!opts.sortName && (field.endWith("date") || field.endWith("time"))) {
+                if (!opts.sortName && (field.endWith("date") || field.endWith("time") || field.startWith("sortn"))) {
                     //检测是否带排序，若无，智能检测带time, date字母的时间为默认排序
                     opts.sortName = field;
                     opts.sortOrder = "desc";

@@ -2,14 +2,27 @@
 using System.Collections.Generic;
 using System.Text;
 using CYQ.Data.Tool;
-
+using Aries.Core.Helper;
+using System.Web;
 namespace Aries.Core.Sql
 {
     /// <summary>
     /// 搜索条件格式化。(从Json格式化成sql语句）
     /// </summary>
-    internal static class SqlFormat
+    public static class SqlFormat
     {
+        public static List<SearchPara> SearchParaList
+        {
+            get
+            {
+                string search =WebHelper.Query<string>("sys_search");
+                if (string.IsNullOrEmpty(search))
+                {
+                    return null;
+                }
+                return JsonHelper.ToList<SearchPara>(HttpContext.Current.Server.HtmlDecode(search));
+            }
+        }
         #region Build SQL Contents
         private static Dictionary<string, string> sqlDic = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
@@ -29,22 +42,26 @@ namespace Aries.Core.Sql
             {"and","and"},
             {"or","or"}
         };
-        public static string Format(string searchList)
+        //internal static string Format(string searchList)
+        //{
+        //    string sql = string.Empty;
+        //    if (JsonHelper.IsJson(searchList))
+        //    {
+        //        List<SearchPara> sos = JsonHelper.ToList<SearchPara>(searchList);
+        //        if (sos != null && sos.Count > 0)
+        //        {
+        //            sql = BuildSQL(sos);
+        //        }
+        //        return sql;
+        //    }
+        //    return searchList;
+        //}
+        public static string BuildSQL(List<SearchPara> sos)
         {
-            string sql = string.Empty;
-            if (JsonHelper.IsJson(searchList))
+            if (sos == null || sos.Count == 0)
             {
-                List<SearchPara> sos = JsonHelper.ToList<SearchPara>(searchList);
-                if (sos != null && sos.Count > 0)
-                {
-                    sql = BuildSQL(sos);
-                }
-                return sql;
+                return "";
             }
-            return searchList;
-        }
-        private static string BuildSQL(List<SearchPara> sos)
-        {
             StringBuilder sql = new StringBuilder();
             string key1 = " {0} {1}", key2 = " {0} {1} {2} {3}";
             if (sos.Count > 1)//条件加括号。
@@ -160,7 +177,7 @@ namespace Aries.Core.Sql
         }
         #endregion
     }
-    internal class SearchPara
+    public class SearchPara
     {
         public string Name
         {

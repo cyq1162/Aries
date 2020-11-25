@@ -317,12 +317,7 @@ namespace Aries.Core
         /// </summary>
         public virtual string GetWhere()
         {
-            string search = Query<string>("sys_search");
-            if (string.IsNullOrEmpty(search))
-            {
-                return search;
-            }
-            return SqlFormat.Format(HttpContext.Current.Server.HtmlDecode(search));
+            return SqlFormat.BuildSQL(SqlFormat.SearchParaList);
         }
         public string GetOrderBy(string defaultSort)
         {

@@ -43,6 +43,7 @@ namespace Aries.Core
             this.context = context;
             try
             {
+               
                 if (string.IsNullOrEmpty(context.Response.Charset))
                 {
                     context.Response.Charset = "utf-8";
@@ -417,7 +418,7 @@ namespace Aries.Core
         /// <summary>
         /// 对名对称对应的SQL语句
         /// </summary>
-        public string ObjCode
+        public virtual string ObjCode
         {
             get
             {
@@ -429,7 +430,7 @@ namespace Aries.Core
         /// <summary>
         /// 远程传过来的对象名称
         /// </summary>
-        public string ObjName
+        public virtual string ObjName
         {
             get
             {
@@ -453,7 +454,7 @@ namespace Aries.Core
         /// <summary>
         /// 对象视图名称的主表名
         /// </summary>
-        public string TableName
+        public virtual string TableName
         {
             get
             {
@@ -1178,7 +1179,7 @@ namespace Aries.Core
 
     public abstract partial class Controller
     {
-        //私有方法，参数替换
+        //私有方法，参数替换 selet *
         private static string ReplacePara(string sql, string key, string value)
         {
             if (!string.IsNullOrEmpty(sql) && !string.IsNullOrEmpty(key))

@@ -3199,7 +3199,7 @@
             处理跨库访问
             </summary>
         </member>
-        <member name="M:CYQ.Data.SQL.CrossDB.GetConn(System.String,System.String@,System.String)">
+        <member name="M:CYQ.Data.SQL.CrossDB.GetConn(System.String,System.String@,System.String,System.String@)">
             <summary>
             获得链接的配置或语句。
             </summary>

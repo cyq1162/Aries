@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>Aries.Controllers</AssemblyName>
     <RootNamespace>Aries.Controllers</RootNamespace>
   </PropertyGroup>
@@ -15,11 +15,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Aries.Core\Aries.Core_NetCore.csproj" />
     <ProjectReference Include="..\Aries.Logic\Aries.Logic_NetCore.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="Aries.Core">
+      <HintPath>..\DLL\NetCore\Aries.Core.dll</HintPath>
+    </Reference>
     <Reference Include="CYQ.Data">
       <HintPath>..\DLL\NetCore\CYQ.Data.dll</HintPath>
     </Reference>

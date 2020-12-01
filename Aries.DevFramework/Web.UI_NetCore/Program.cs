@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using CYQ.Data;
 
-namespace Web.UI_Core_VS2017
+namespace Web.UI_NetCore
 {
     public class Program
     {
@@ -21,7 +21,7 @@ namespace Web.UI_Core_VS2017
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .UseUrls(GetUrl())
+               // .UseUrls(GetUrl())
                 .Build();
         public static string GetUrl()
         {

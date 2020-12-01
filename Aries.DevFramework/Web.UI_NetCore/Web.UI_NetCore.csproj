@@ -1,9 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>Web.UI</AssemblyName>
     <RootNamespace>Web.UI</RootNamespace>
+    <AssemblyVersion>5.4.0.0</AssemblyVersion>
+    <Version>5.4.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,13 +13,27 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Aries.Controllers\Aries.Controllers_NetCore.csproj" />
-    <ProjectReference Include="..\Aries.Core\Aries.Core_NetCore.csproj" />
     <ProjectReference Include="..\Aries.Logic\Aries.Logic_NetCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Aries.Core">
+      <HintPath>..\DLL\NetCore\Aries.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="CYQ.Data">
+      <HintPath>..\DLL\NetCore\CYQ.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Gemini.Controllers">
+      <HintPath>..\DLL\NetCore\Gemini.Controllers.dll</HintPath>
+    </Reference>
+    <Reference Include="Gemini.Workflow">
+      <HintPath>..\DLL\NetCore\Gemini.Workflow.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

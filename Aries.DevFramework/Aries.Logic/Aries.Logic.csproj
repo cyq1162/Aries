@@ -34,7 +34,11 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CYQ.Data, Version=5.8.2.3, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Aries.Core, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DLL\Aries.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="CYQ.Data, Version=5.8.3.7, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\DLL\CYQ.Data.dll</HintPath>
     </Reference>
@@ -53,12 +57,6 @@
     <Compile Include="AriesLogic\Aop.cs" />
     <Compile Include="AriesLogic\ExcelConfigExtend.cs" />
     <Compile Include="AriesLogic\SysLogic.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Aries.Core\Aries.Core.csproj">
-      <Project>{33a07ea9-350f-4a9c-925c-3a773d942748}</Project>
-      <Name>Aries.Core</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

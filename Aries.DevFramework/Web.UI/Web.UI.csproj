@@ -514,10 +514,6 @@
       <Project>{b9a50b28-c8e1-421c-83d8-050a489f24bf}</Project>
       <Name>Aries.Controllers</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Aries.Core\Aries.Core.csproj">
-      <Project>{33a07ea9-350f-4a9c-925c-3a773d942748}</Project>
-      <Name>Aries.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Aries.Logic\Aries.Logic.csproj">
       <Project>{947b169e-24dd-4c32-9e82-54fe446a853f}</Project>
       <Name>Aries.Logic</Name>

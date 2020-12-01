@@ -9,6 +9,15 @@
             为支持Asp.net core 存在的文件
             </summary>
         </member>
+        <member name="M:Microsoft.AspNetCore.Http.AriesExtensions.UseAries(Microsoft.AspNetCore.Builder.IApplicationBuilder,System.Object)">
+            <summary>
+            Net Core 3.1 把IHostingEnvironment 拆分成了：IWebHostEnvironment和IHostEnvironment 
+            所以增加重载方法适应。
+            </summary>
+            <param name="builder"></param>
+            <param name="env"></param>
+            <returns></returns>
+        </member>
         <member name="P:Aries.Core.Auth.ActionKeyAttribute.Key">
             <summary>
             多个用字符串分隔，如:"add,edit"

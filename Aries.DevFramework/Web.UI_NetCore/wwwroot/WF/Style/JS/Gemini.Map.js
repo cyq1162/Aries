@@ -908,7 +908,7 @@
                 case "SubAssembly":
                     return "子流程实现类";
                 case "RespondType":
-                    return "响应方式";
+                    return "参与人数";
                 case "CirculateType":
                     return "传阅方式";
                 case "Updator":
@@ -1006,10 +1006,10 @@
                 }
                 else if (row.name == "RespondType") {
                     switch (row.value) {
-                        //响应方式
+                        //参与人数
                         case "One": return "单人";
-                        case "Anyone": return "任何人";
-                        case "All": return "全部人";
+                        case "Anyone": return "多人";
+                        case "All": return "所有人";
                     }
                 }
                 else if (row.name == "RejectType") {
@@ -1122,8 +1122,8 @@
                             value: "anyone",
                             data: [
                                 { "name": "单人", "value": 'One' },
-                                { "name": "任何人", "value": 'Anyone' },
-                                { "name": "全部人", "value": 'All' },
+                                { "name": "多人", "value": 'Anyone' },
+                                { "name": "所有人", "value": 'All' },
                             ]
                         }
                     };

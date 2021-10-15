@@ -31,7 +31,7 @@
         }
         AR.Form.onAfterExecute = function (items) {
             var ul = $(".wf-list");
-            var tag = '<li><a href="/WF/WorkForm.html?appid={0}" target="_blank" title="{3}">' +
+            var tag = '<li><a href="javascript:;" onclick="window.open(\'/WF/WorkForm.html?appid={0}\',\'_blank\')" title="{3}">' +
                     '<img src="/WF/Style/Images/{1}.png" ><span><strong>【{2}】</strong>{3}</span></a></li>';
 
             var innerhtml = "";

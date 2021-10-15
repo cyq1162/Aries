@@ -3,7 +3,18 @@
 
 //*****************提交窗口，退回窗口定义**********************************
 $(function (WF, AR) {
-
+    WF.closeWindow = function ()
+    {
+        try
+        {
+            window.close();
+            window.open("about:blank", "_top").close();
+        }
+        catch(e)
+        {
+            window.open("about:blank", "_top").close();
+        }
+    }
     WF.Dialog.btnType = "";
     WF.Dialog.Send_OK = function () {
         //手动发出
@@ -231,7 +242,7 @@ $(function (WF, AR) {
         AR.Ajax.post("SendWorkflow", null, postParas, function (result) {
             AR.Window.alert(result.msg, null, function () {
                 if (result.success) {
-                    window.close();
+                    WF.closeWindow();
                 }
             });
         });
@@ -244,7 +255,7 @@ $(function (WF, AR) {
         AR.Ajax.post("RejectWorkflow", null, postParas, function (result) {
             AR.Window.alert(result.msg, null, function () {
                 if (result.success) {
-                    window.close();
+                    WF.closeWindow();
                 }
             });
         });
@@ -274,7 +285,7 @@ $(function (WF, AR) {
                     AR.Ajax.post("SetCirculated", null, postParas, function (result) {
                         AR.Window.alert(result.msg, null, function () {
                             if (result.success) {
-                                window.close();
+                                WF.closeWindow();
                             }
                         });
                     });
@@ -293,7 +304,7 @@ $(function (WF, AR) {
         AR.Ajax.post("TransmitWorkflow", null, postParas, function (result) {
             AR.Window.alert(result.msg, null, function () {
                 if (result.success) {
-                    window.close();
+                    WF.closeWindow();
                 }
             });
         });
@@ -309,7 +320,7 @@ $(function (WF, AR) {
                 AR.Ajax.post("WithdrawWorkflow", null, postParas, function (result) {
                     AR.Window.alert(result.msg, null, function () {
                         if (result.success) {
-                            window.close();
+                            WF.closeWindow();
                         }
                     });
                 });
@@ -333,7 +344,7 @@ $(function (WF, AR) {
                 AR.Ajax.post("InvalidWorkflow", null, postParas, function (result) {
                     AR.Window.alert(result.msg, null, function () {
                         if (result.success) {
-                            window.close();
+                            WF.closeWindow();
                         }
                     });
                 });
@@ -344,7 +355,7 @@ $(function (WF, AR) {
     }
     WF.Event.onViewFlowMap = function () {
         var url = "/WF/Designer/Designer.html?dm=0&wid=" + WF.Context.workflowID + "&wiid=" + WF.Context.instanceID;
-        AR.Window.dialog(WF.Context.name, url, { width: 980, height: 560 });
+        AR.Window.dialog(WF.Context.name, url, { width: 980+100, height: 660+100 });
     }
     WF.Event.onGetActor = function () {
         if (WF.Context.formAction == WF.Enum.FormAction.Todo) {

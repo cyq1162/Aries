@@ -5,7 +5,7 @@
 .textBoxMinShort {vertical-align: middle;width: 60px;height: 18px;font-size: 13px;color: #0C4596; background-color: #FFFFFF;border-color: #95B8E7;border-width: 1px; border-style: solid;}
 .textBoxNoBorder {border-width: 0px;width: 80%;}
 /*自动文本框样式*/
-.textBoxAutoShort {width: auto; height: 18px; font-size: 13px; color: #0C4596;background-color: #FFFFFF;border-color: #95B8E7;border-width: 1px;border-style: solid;}
+.textBoxAutoShort {width: auto; height: 18px; font-size: 13px; color: #0C4596;background-color: #FFFFFF;border-color: #95B8E7;border-width: 1px;border-style: solid;margin-left:3px;}
 .textBoxSelect {width: 110px;height: 18px;font-size: 13px;color: #0C4596;background-color: #FFFFFF;border-color: #95B8E7;border-width: 1px;border-style: solid;}
 /*长文本框样式*/
 .textBoxLong {width: 315px;height: 18px;font-size: 13px;color: #0C4596;background-color: #FFFFFF;border-color: #95B8E7;border-width: 1px;border-style: solid;}

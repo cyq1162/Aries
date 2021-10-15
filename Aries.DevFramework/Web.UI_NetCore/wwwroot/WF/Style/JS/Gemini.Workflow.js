@@ -319,9 +319,9 @@ window.WF || (window.WF = {});
             if (!AR.Global.Variable.isLoadCompleted) {
                 return;
             }
-            clearInterval(AR.Global.Variable._interval);
+            clearInterval(WF.Event._interval);
             WF.Context.instanceStateName = AR.Config.getText("WF_InstanceState", WF.Context.instanceState);
-            document.title = WF.Context.title;
+            document.title = WF.Context.name;
             setTimeout(function () {
                 AR.Form.$target && AR.Form.$target.form("load", WF.Context);
                 if (WF.Context.Wiid) {
@@ -341,7 +341,7 @@ window.WF || (window.WF = {});
     WF.Context.onAfterExecute = function () {
 
         WF.Button.onInit();
-        AR.Global.Variable._interval = setInterval(function () { WF.Init.form(); }, 5);
+        WF.Event._interval = setInterval(function () { WF.Init.form(); }, 5);
         WF.Init.opinionBox();
         WF.Init.flowBox();
         WF.Init.frameBox();

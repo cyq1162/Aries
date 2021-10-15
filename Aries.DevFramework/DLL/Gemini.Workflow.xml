@@ -103,17 +103,25 @@
              手自一体
             </summary>
         </member>
+        <member name="T:Gemini.Workflow.LangConst">
+            <summary>
+            中英文语言常量
+            </summary>
+        </member>
+        <member name="T:Gemini.Workflow.TableConst">
+            <summary>
+            用户、角色、组织 表 映射常量
+            </summary>
+        </member>
         <member name="P:Gemini.Workflow.Interface.IUserInfo.RoleID">
             <summary>
             第一个角色ID
             </summary>
         </member>
-        <member name="M:Gemini.Workflow.Enums.EnumExtensions.GetDescription(System.Enum)">
+        <member name="T:Gemini.Workflow.OrgHelper">
             <summary>
-             获取枚举的描述无扫描而返回英文名称
+            组织部门相关类
             </summary>
-            <param name="o"></param>
-            <returns></returns>
         </member>
         <member name="T:Gemini.Workflow.Models.OrgInfo">
             <summary>
@@ -274,11 +282,6 @@
         <member name="T:Gemini.Workflow.UndoExecutor">
             <summary>
             活动撤消事件执行器
-            </summary>
-        </member>
-        <member name="F:Gemini.Workflow.UndoExecutor.onJoinCancleMessage">
-            <summary>
-            聚合时取消
             </summary>
         </member>
         <member name="F:Gemini.Workflow.UndoExecutor.RejectMessage">
@@ -461,11 +464,6 @@
             接拉系统的当前登录用户
             </summary>
         </member>
-        <member name="P:Gemini.Workflow.Entity.UserInfo.AnonymousUser">
-            <summary>
-            接入系统的匿名用户,他的部门id与部门名称与当前登录者相同
-            </summary>
-        </member>
         <member name="T:Gemini.Workflow.Entity.WorkflowContext">
             <summary>
             工作流实例上下文实体
@@ -526,11 +524,6 @@
             当前活动定义
             </summary>
         </member>
-        <member name="P:Gemini.Workflow.Entity.WorkflowContext.InstanceStateName">
-            <summary>
-            当前流程实例的状态中文名称
-            </summary>
-        </member>
         <member name="P:Gemini.Workflow.Entity.WorkflowContext.User">
             <summary>
             当前登录者信息
@@ -558,7 +551,7 @@
         </member>
         <member name="F:Gemini.Workflow.Enums.ActivityState.Doing">
             <summary>
-            XOR进行中
+            进行中
             </summary>
         </member>
         <member name="F:Gemini.Workflow.Enums.ActivityState.JoinWaiting">
@@ -579,6 +572,11 @@
         <member name="F:Gemini.Workflow.Enums.ActivityState.Invalid">
             <summary>
             无效活动，已取消
+            </summary>
+        </member>
+        <member name="T:Gemini.Workflow.Enums.TransitionState">
+            <summary>
+            迁移线的状态
             </summary>
         </member>
         <member name="F:Gemini.Workflow.Enums.TransitionState.Normal">
@@ -608,41 +606,6 @@
             获取指定活动的所有后继ActivityID定义
             </summary>
             <param name="activityInfo"></param>
-        </member>
-        <member name="M:Gemini.Workflow.HistoryHelper.GetAfterTransition(System.Guid,System.Collections.Generic.IList{Gemini.Workflow.Models.TransitionInstance})">
-            <summary>
-            获取指定活动的活动实例的所有后继迁移实例
-            </summary>
-            <param name="onActivityInstanceID">开始活动实例</param>
-            <param name="listTransitionInstance">所有有效迁移线实例</param>
-            <returns></returns>
-        </member>
-        <member name="M:Gemini.Workflow.HistoryHelper.GetAfterTransition(System.Guid,System.Guid,System.Collections.Generic.IList{Gemini.Workflow.Models.TransitionInstance})">
-            <summary>
-            获取指定活动的活动实例到指定活动定义之间的迁移
-            </summary>
-            <param name="onActivityInstanceID">开始活动实例</param>
-            <param name="endActivityID">直到活动定义或者找到提单再没有前继</param>
-            <param name="listTransitionInstance">所有有效迁移线实例</param>
-            <returns></returns>
-        </member>
-        <member name="M:Gemini.Workflow.HistoryHelper.GetBeforeTransition(System.Guid,System.Collections.Generic.IList{Gemini.Workflow.Models.TransitionInstance})">
-            <summary>
-            获取指定活动的活动实例的所有前继迁移实例
-            </summary>
-            <param name="fromActivityInstanceID">开始活动实例</param>
-            <param name="endActivityID">直到活动定义，或者找到提单再没有前继</param>
-            <param name="listTransitionInstance">所有有效迁移线实例</param>
-            <returns></returns>
-        </member>
-        <member name="M:Gemini.Workflow.HistoryHelper.GetBeforeTransitions(System.Guid,System.Guid,System.Collections.Generic.IList{Gemini.Workflow.Models.TransitionInstance})">
-            <summary>
-            获取指定活动的活动实例到指定步骤的迁移实例
-            </summary>
-            <param name="fromActivityInstanceID">开始活动实例</param>
-            <param name="toActivityID">直到活动定义，或者找到提单再没有前继</param>
-            <param name="allList">所有有效迁移线实例</param>
-            <returns></returns>
         </member>
         <member name="T:Gemini.Workflow.UserHelper">
             <summary>
@@ -766,14 +729,24 @@
             更新方式部署，即只作Update动作
             </summary>
         </member>
-        <member name="F:Gemini.Workflow.Enums.DeployType.Upgrade">
-            <summary>
-            升级版本方式部署,版本号加1，自动更新应用对应流程为此升级版本后的流程，新增操作+应用挂接流程更新
-            </summary>
-        </member>
         <member name="T:Gemini.Workflow.Enums.SplitType">
             <summary>
             转出转入模式
+            </summary>
+        </member>
+        <member name="F:Gemini.Workflow.Enums.SplitType.SplitOne">
+            <summary>
+            只能选一条分支
+            </summary>
+        </member>
+        <member name="F:Gemini.Workflow.Enums.SplitType.SplitAll">
+            <summary>
+            必须全选所有分支
+            </summary>
+        </member>
+        <member name="F:Gemini.Workflow.Enums.SplitType.SplitAny">
+            <summary>
+            可选分支
             </summary>
         </member>
         <member name="T:Gemini.Workflow.AssignActor">
@@ -833,7 +806,7 @@
         </member>
         <member name="F:Gemini.Workflow.Enums.ActivityType.Start">
             <summary>
-            开始步骤
+            提单步骤
             </summary>
         </member>
         <member name="F:Gemini.Workflow.Enums.ActivityType.End">
@@ -1016,11 +989,6 @@
             作废
             </summary>
         </member>
-        <member name="F:Gemini.Workflow.Enums.Command.AutoTransmit">
-            <summary>
-            自动转交（未实现）
-            </summary>
-        </member>
         <member name="F:Gemini.Workflow.Enums.Command.Transmit">
             <summary>
             转交
@@ -1076,14 +1044,29 @@
             转入模式
             </summary>
         </member>
-        <member name="F:Gemini.Workflow.Enums.JoinType.JoinDynamic">
+        <member name="F:Gemini.Workflow.Enums.JoinType.JoinOne">
             <summary>
-            根据上一步来决定是并还是或的聚合，即当前步骤的前继存在当前活动实例，而需要聚合。[发散步骤或并行分发步骤处和聚合步骤之间只能有一步间距离A=》B=>C]
+            一个就聚合
+            </summary>
+        </member>
+        <member name="F:Gemini.Workflow.Enums.JoinType.JoinAll">
+            <summary>
+            全到才聚合
+            </summary>
+        </member>
+        <member name="F:Gemini.Workflow.Enums.JoinType.JoinAny">
+            <summary>
+            条件聚合
             </summary>
         </member>
         <member name="T:Gemini.Workflow.Enums.RespondType">
             <summary>
             响应方式
+            </summary>
+        </member>
+        <member name="F:Gemini.Workflow.Enums.RespondType.One">
+            <summary>
+            单个处理人
             </summary>
         </member>
         <member name="F:Gemini.Workflow.Enums.RespondType.Anyone">
@@ -1279,7 +1262,7 @@
         </member>
         <member name="P:Gemini.Workflow.Models.Activity.RespondType">
             <summary>
-            one单人,anyone任一人，all全部人
+            one单人,anyone可多人，all全部人
             </summary>
         </member>
         <member name="P:Gemini.Workflow.Models.Activity.RejectType">

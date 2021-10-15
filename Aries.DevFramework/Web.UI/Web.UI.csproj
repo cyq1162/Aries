@@ -50,11 +50,11 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Gemini.Controllers, Version=5.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="CYQ.Data, Version=5.8.4.8, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DLL\Gemini.Controllers.dll</HintPath>
+      <HintPath>..\DLL\CYQ.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Gemini.Workflow, Version=5.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Gemini.Workflow, Version=5.5.1.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\DLL\Gemini.Workflow.dll</HintPath>
     </Reference>
@@ -514,9 +514,17 @@
       <Project>{b9a50b28-c8e1-421c-83d8-050a489f24bf}</Project>
       <Name>Aries.Controllers</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Aries.Core\Aries.Core.csproj">
+      <Project>{33a07ea9-350f-4a9c-925c-3a773d942748}</Project>
+      <Name>Aries.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Aries.Logic\Aries.Logic.csproj">
       <Project>{947b169e-24dd-4c32-9e82-54fe446a853f}</Project>
       <Name>Aries.Logic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Gemini.Controllers\Gemini.Controllers.csproj">
+      <Project>{e136e912-a34d-49c2-a5a8-3407c57c0f0f}</Project>
+      <Name>Gemini.Controllers</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

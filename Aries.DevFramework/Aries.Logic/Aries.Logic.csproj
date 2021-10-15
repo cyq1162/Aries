@@ -34,10 +34,6 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Aries.Core, Version=5.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DLL\Aries.Core.dll</HintPath>
-    </Reference>
     <Reference Include="CYQ.Data, Version=5.8.3.7, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\DLL\CYQ.Data.dll</HintPath>
@@ -58,7 +54,12 @@
     <Compile Include="AriesLogic\ExcelConfigExtend.cs" />
     <Compile Include="AriesLogic\SysLogic.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Aries.Core\Aries.Core.csproj">
+      <Project>{33a07ea9-350f-4a9c-925c-3a773d942748}</Project>
+      <Name>Aries.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

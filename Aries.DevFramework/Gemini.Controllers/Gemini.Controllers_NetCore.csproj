@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>Gemini.Controllers</AssemblyName>
+    <RootNamespace>Gemini.Controllers</RootNamespace>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <Version>1.1.0</Version>
+    <Product>Gemini.Controllers  NetCore 版本</Product>
+    <Company>路过秋天 （2020-12-01）</Company>
+    <Authors>路过秋天</Authors>
+    <Copyright>版权所有 (C) 路过秋天 2010-2030</Copyright>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>D:\Code\Other\cyqdata\Gemini\trunk\Gemini\Gemini.Controllers\Gemini.Controllers.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Aries.Core">
+      <HintPath>..\..\..\..\Aries\trunk\Aries.DevFramework\DLL\NetCore\Aries.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="CYQ.Data">
+      <HintPath>..\..\..\..\Aries\trunk\Aries.DevFramework\DLL\NetCore\CYQ.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Gemini.Workflow">
+      <HintPath>..\..\..\..\Aries\trunk\Aries.DevFramework\DLL\NetCore\Gemini.Workflow.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gemini.Controllers</name>
+    </assembly>
+    <members>
+        <member name="T:Gemini.Workflow.Entity.CurrentUser">
+            <summary>
+            登录者登录信息接口适配器 
+            修改接入系统当前登录者返回相关信息
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.CurrentUser.UserID">
+            <summary>
+            用户id
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.CurrentUser.UserName">
+            <summary>
+            登录账号
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.CurrentUser.FullName">
+            <summary>
+            真实姓名
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.CurrentUser.OrgID">
+            <summary>
+            部门id
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.CurrentUser.OrgName">
+            <summary>
+            部门名称
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.CurrentUser.OrgFullName">
+            <summary>
+            部门全名称
+            </summary>
+        </member>
+        <member name="M:Gemini.Controllers.WorkController.GetStartAppList">
+            <summary>
+            获取发起工单列表
+            </summary>
+        </member>
+        <member name="T:Gemini.Controllers.WorkFormController">
+            <summary>
+            提供额外的调用接口
+            </summary>
+        </member>
+        <member name="M:Gemini.Controllers.WorkFormController.GetWorkflowContext">
+            <summary>
+            获得当前工作流程的上下文0
+            </summary>
+        </member>
+        <member name="M:Gemini.Controllers.WorkFormController.SaveWorkflow">
+            <summary>
+            保存工单事件
+            </summary>
+        </member>
+        <member name="M:Gemini.Controllers.WorkFormController.GetNextActorHtml">
+            <summary>
+            获取下一个步骤的相关内容
+            </summary>
+        </member>
+        <member name="M:Gemini.Controllers.WorkFormController.GetNextListRadioActivityHtml(CYQ.Data.Tool.JsonHelper)">
+            <summary>
+            显示 单选/多选 下一步
+            </summary>
+            <param name="nextActivitySetid"></param>
+        </member>
+        <member name="M:Gemini.Controllers.WorkFormController.GetRejectListRadioActivity(CYQ.Data.Tool.JsonHelper)">
+            <summary>
+            显示历史性退回步骤列表
+            </summary>
+            <param name="nextActivitySetid"></param>
+        </member>
+        <member name="T:Workflow.Controllers.DefinitionController">
+            <summary>
+            流程导入导出
+            </summary>
+        </member>
+        <member name="M:Workflow.Controllers.DesignerController.GetDesignerConfig">
+            <summary>
+            获取流程设计器初始化信息
+            </summary>
+        </member>
+    </members>
+</doc>

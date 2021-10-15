@@ -4,641 +4,6 @@
         <name>Gemini.Workflow</name>
     </assembly>
     <members>
-        <member name="T:Gemini.Workflow.ActorHelper">
-            <summary>
-            步骤处理人解析器帮助类
-            </summary>
-        </member>
-        <member name="M:Gemini.Workflow.ActorHelper.GetActorParser(System.String,System.String)">
-            <summary>
-            获取参与者解析器对象
-            </summary>
-            <param name="actorName"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Gemini.Workflow.ActorHelper.GetActorHtml(System.String,Gemini.Workflow.Models.Activity)">
-            <summary>
-            [当前流程最新版本]根据参与用户名（账号）获取供选择参与者的Html格式:userNames用户账号号，多个使用英文逗号隔开，activityName步骤名,isRadio：处理人是否为单选
-            </summary>
-            <param name="userNames"></param>
-            <param name="appID">应用名</param>
-            <param name="activityName">步骤名</param>
-            <param name="workflowID">指定流程</param>
-            <returns></returns>
-        </member>
-        <member name="M:Gemini.Workflow.ActorHelper.GetActorHtml(System.Collections.Generic.IList{Gemini.Workflow.Entity.UserInfo},Gemini.Workflow.Models.Activity)">
-            <summary>
-            
-            </summary>
-            <param name="listUser">用户列表</param>
-            <param name="appID">应用名</param>
-            <param name="activity">当前步骤</param>
-            <param name="isUserRadio">是否单选</param>
-            <returns></returns>
-        </member>
-        <member name="M:Gemini.Workflow.ActorHelper.GetUsers(Gemini.Workflow.Models.Activity,Gemini.Workflow.Entity.WorkflowContext)">
-            <summary>
-            获取节点下的所有用户列表
-            </summary>
-            <param name="activity"></param>
-            <param name="context"></param>
-            <returns></returns>
-        </member>
-        <member name="T:Gemini.Workflow.Entity.ActorParamter">
-            <summary>
-            解析器参考XML对应的实体基类
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.ActorParamter.NameForActorParser">
-            <summary>
-            解析者类型对应的参数名。
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.ActorParamter.NameForBaseOn">
-            <summary>
-            基准类型对应的参数名。
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.ActorParamter.IsIncludeCurrentUserOrg">
-            <summary>
-            是否包含当前用户所在的部门
-            </summary>
-        </member>
-        <member name="T:Gemini.Workflow.Entity.ActorItem">
-            <summary>
-            已选择处理人项实体 用转与json格式转换
-            </summary>
-        </member>
-        <member name="F:Gemini.Workflow.Entity.ActorItem.UserInfo">
-            <summary>
-            存储用户信息
-            </summary>
-        </member>
-        <member name="T:Gemini.Workflow.Entity.Choice">
-            <summary>
-            选择处理的下一步信息上下文。
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.Choice.Command">
-            <summary>
-            执行命令
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.Choice.ChoiceActivityList">
-            <summary>
-            设置：选择的下行步骤
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.Choice.TransmitUserList">
-            <summary>
-            选择被转交、或传阅者
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.Choice.Context">
-            <summary>
-            流程上下文
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.Choice.Current">
-            <summary>
-            当前待处理的节点
-            </summary>
-        </member>
-        <member name="F:Gemini.Workflow.Entity.Choice.IsJoined">
-            <summary>
-            是否强制聚合
-            </summary>
-        </member>
-        <member name="M:Gemini.Workflow.Entity.Choice.GetChoice(System.Guid)">
-            <summary>
-            根据ID获取选择的下行步骤
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.Choice.EndActivity">
-            <summary>
-            获取选择的下行步骤中的结束节点
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.Choice.FirstActivity">
-            <summary>
-            获取选择的下行步骤中的第一个节点
-            </summary>
-        </member>
-        <member name="T:Gemini.Workflow.Entity.ChoiceActivity">
-            <summary>
-            活动运转时选择步骤实体
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.ChoiceActivity.Activity">
-            <summary>
-            设置、获取：活动实体
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.ChoiceActivity.ActivityInfo">
-            <summary>
-            获取：根据 Activity，返回节点信息
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.ChoiceActivity.ActivityInstance">
-            <summary>
-            获取：当前节点实例
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.ChoiceActivity.UserList">
-            <summary>
-            设置、获取：选择的用户
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.ChoiceActivity.IsJoined">
-            <summary>
-            是否聚合完毕
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.ChoiceActivity.FromActivityID">
-            <summary>
-            上级来源节点ID
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.ChoiceActivity.FromActivityInstance">
-            <summary>
-            来源节点实例
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.ChoiceActivity.UserNames">
-            <summary>
-            获取参与者用户名
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.ChoiceActivity.FullNames">
-            <summary>
-            获取参与者真实名
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.WFActionResult.ActivityIsJoined">
-            <summary>
-            活动是否(Finish 完成、或者 StartNext 可聚合）
-            </summary>
-        </member>
-        <member name="T:Gemini.Workflow.Entity.WorkflowContext">
-            <summary>
-            工作流实例上下文实体
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.WorkflowContext.FormAction">
-            <summary>
-            当前页面状态
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.WorkflowContext.InstanceTitle">
-            <summary>
-             标题
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.WorkflowContext.AppID">
-            <summary>
-            当前途流程应用ID
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.WorkflowContext.TaskID">
-            <summary>
-            当前任务id
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.WorkflowContext.FormID">
-            <summary>
-            当前表单ID
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.WorkflowContext.DefinitionInfo">
-            <summary>
-            当前流程定义
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.WorkflowContext.Instance">
-            <summary>
-            当前流程实例
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.WorkflowContext.ActivityInstanceList">
-            <summary>
-            当前流程活动实例列表，即当前流程正在运行中的活动实例
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.WorkflowContext.ActivityInstance">
-            <summary>
-            当前活动实例
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.WorkflowContext.TaskInstance">
-            <summary>
-            当前任务实例
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.WorkflowContext.Activity">
-            <summary>
-            当前活动定义
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.WorkflowContext.User">
-            <summary>
-            当前登录者信息
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.WorkflowContext.IsCanWithdraw">
-            <summary>
-            是否可撤回
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.WorkflowContext.IsJoined">
-            <summary>
-            用于控制流程强制聚合
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.WorkflowContext.ErrMsg">
-            <summary>
-            执行失败时的错误信息
-            </summary>
-        </member>
-        <member name="T:Gemini.Workflow.Entity.UserInfo">
-            <summary>
-            用户基础类.
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.UserInfo.UserName">
-            <summary>
-            用户名.
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.UserInfo.FullName">
-            <summary>
-            真实名称.
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.UserInfo.OrgID">
-            <summary>
-            第一个组织ID
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.UserInfo.RoleID">
-            <summary>
-            第一个角色ID
-            </summary>
-        </member>
-        <member name="P:Gemini.Workflow.Entity.UserInfo.CurrentUser">
-            <summary>
-            接拉系统的当前登录用户
-            </summary>
-        </member>
-        <member name="T:Gemini.Workflow.AssignActor">
-            <summary>
-            指定部门用户参与者 用户名称,多个用户名之间使用英文逗号隔开，当用户为空，而获取基准部门下的所有用户，当用户不为空且基准部门类别不为空，而使用用户加部门交集
-            </summary>
-        </member>
-        <member name="M:Gemini.Workflow.AssignActor.Resolve(Gemini.Workflow.Entity.WorkflowContext)">
-            <summary>
-            根据登录帐号来求解参与者
-            </summary>
-        </member>
-        <member name="T:Gemini.Workflow.HistoryActivityActor">
-            <summary>
-            历史审批步骤处理人
-            </summary>
-        </member>
-        <member name="M:Gemini.Workflow.HistoryActivityActor.Resolve(Gemini.Workflow.Entity.WorkflowContext)">
-            <summary>
-            执行求解参与者
-            </summary>
-            <param name="args"></param>
-            <returns></returns>
-        </member>
-        <member name="T:Gemini.Workflow.OrgActor">
-            <summary>
-            部门参与者控制
-            </summary>
-        </member>
-        <member name="T:Gemini.Workflow.ParentOrgRoleActor">
-            <summary>
-            上级部门角色参与解析器
-             </summary>
-        </member>
-        <member name="T:Gemini.Workflow.RoleActor">
-            <summary>
-            【角色参与者解析器求解】
-            </summary>
-        </member>
-        <member name="M:Gemini.Workflow.RoleActor.Resolve(Gemini.Workflow.Entity.WorkflowContext)">
-            <summary>
-            根据登录帐号来求解参与者
-            </summary>
-            <param name="args"></param>
-            <returns></returns>
-        </member>
-        <member name="T:Gemini.Workflow.SubOrgRoleActor">
-            <summary>
-            子级部门角色参与者
-            </summary>
-        </member>
-        <member name="T:Gemini.Workflow.Interface.IActorParser">
-            <summary>
-            描述流程参与者的求解的基类。
-            </summary>
-        </member>
-        <member name="M:Gemini.Workflow.Interface.IActorParser.Resolve(Gemini.Workflow.Entity.WorkflowContext)">
-            <summary>
-            求解参与者信息
-            </summary>
-        </member>
-        <member name="T:Gemini.Workflow.Interface.IActivityBehaviour">
-            <summary>
-            通用插入
-            </summary>
-            <summary>
-            转交、传阅
-            
-            </summary>
-        </member>
-        <member name="M:Gemini.Workflow.Interface.IActivityBehaviour.StartNext(Gemini.Workflow.Entity.Choice)">
-            <summary>
-            开启新节点任务
-            </summary>
-        </member>
-        <member name="M:Gemini.Workflow.Interface.IActivityBehaviour.Finish(Gemini.Workflow.Entity.Choice)">
-            <summary>
-            Finish 结束当前节点，然后StartNext开启新节点节任务
-            </summary>
-        </member>
-        <member name="M:Gemini.Workflow.Interface.IActivityBehaviour.ContinueParentFlow(Gemini.Workflow.Entity.Choice)">
-            <summary>
-            子流程结束时，回调父流程，让其运行下一节点（流程作废、流程结束，都会引发父流程）。
-            </summary>
-        </member>
-        <member name="M:Gemini.Workflow.Interface.IActivityBehaviour.EndActivityInstance(Gemini.Workflow.Entity.Choice)">
-            <summary>
-            插入节点：完成实例：单个节点实例、单个任务实例、单个迁移实例，并触发 自动传阅事件
-            直接完成一个活动步骤时调用，返回插入后的活动实例
-            </summary>
-            <param name="choice"></param>
-        </member>
-        <member name="M:Gemini.Workflow.Interface.IActivityBehaviour.StartActivityInstance(Gemini.Workflow.Entity.Choice,System.Boolean)">
-            <summary>
-            插入节点：新活动实例：单个迁移实例、多个任务，单日个迁移实例，并触发 自动传阅事件、消息通知事件
-            </summary>
-        </member>
-        <member name="M:Gemini.Workflow.Interface.IActivityBehaviour.InsertTransitionInstance(Gemini.Workflow.Entity.Choice)">
-            <summary>
-            插入迁移实例
-            </summary>
-            <param name="activityInstance"></param>
-            <param name="fromTaskInstance"></param>
-        </member>
-        <member name="M:Gemini.Workflow.Interface.IActivityBehaviour.InsertTaskInstance(Gemini.Workflow.Entity.Choice,System.Boolean)">
-            <summary>
-            插入任务实例,并插入消息通知
-            </summary>
-        </member>
-        <member name="T:Gemini.Workflow.Interface.IActor">
-            <summary>
-            定义扩展类参与者扩展接口
-            </summary>
-        </member>
-        <member name="M:Gemini.Workflow.Interface.IActor.Resolve(Gemini.Workflow.Entity.WorkflowContext)">
-            <summary>
-            工作流API
-            </summary>
-        </member>
-        <member name="T:Gemini.Workflow.Interface.ISubWorkflow">
-            <summary>
-            自定义外嵌式子流程
-            </summary>
-        </member>
-        <member name="M:Gemini.Workflow.Interface.ISubWorkflow.Start(Gemini.Workflow.Entity.Choice)">
-            <summary>
-            启动并返回新的实例ID。
-            </summary>
-            <param name="parentChoice">父流程最后的选择步骤</param>
-            <returns></returns>
-        </member>
-        <member name="M:Gemini.Workflow.Interface.ISubWorkflow.Invalid(Gemini.Workflow.Models.ActivityInstance)">
-            <summary>
-            父流程作废（或退回、撤回）时，回收子流程。
-            </summary>
-            <param name="parentActivityInstance">父流程所在的节点实例</param>
-            <returns></returns>
-        </member>
-        <member name="P:Gemini.Workflow.Interface.IUserInfo.RoleID">
-            <summary>
-            第一个角色ID
-            </summary>
-        </member>
-        <member name="T:Gemini.Workflow.JoinBehaviour">
-            <summary>
-            聚合活动
-            </summary>
-        </member>
-        <member name="T:Gemini.Workflow.OuterSubWorkflowBehaviour">
-            <summary>
-            外嵌式子流程行为器
-            </summary>
-        </member>
-        <member name="T:Gemini.Workflow.StartBehaviour">
-            <summary>
-            提单：实例行为器
-            </summary>
-        </member>
-        <member name="T:Gemini.Workflow.CirculateBehaviour">
-            <summary>
-            传阅行为器
-            </summary>
-        </member>
-        <member name="T:Gemini.Workflow.InvalidBehaviour">
-            <summary>
-            作废工作流实例行为器
-            </summary>
-        </member>
-        <member name="T:Gemini.Workflow.RejectBehaviour">
-            <summary>
-            退回行为器
-            </summary>
-        </member>
-        <member name="T:Gemini.Workflow.SaveBehaviour">
-            <summary>
-            新流程实例保存
-            </summary>
-        </member>
-        <member name="T:Gemini.Workflow.TransmitBehaviour">
-            <summary>
-            传交行为器
-            </summary>
-        </member>
-        <member name="T:Gemini.Workflow.WithdrawBehaviour">
-            <summary>
-            撤回行为器
-            </summary>
-        </member>
-        <member name="T:Gemini.Workflow.EngineRunner">
-            <summary>
-            流程机
-            </summary>
-        </member>
-        <member name="M:Gemini.Workflow.EngineRunner.Execute(Gemini.Workflow.Entity.Choice)">
-            <summary>
-            执行流程运转命令
-            </summary>
-        </member>
-        <member name="M:Gemini.Workflow.EngineRunner.InnerExecute(Gemini.Workflow.Entity.Choice)">
-            <summary>
-            内部执行（避免循环调用，引发事务嵌套）
-            </summary>
-            <param name="choice"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Gemini.Workflow.EngineRunner.ExecuteToNext(Gemini.Workflow.Entity.Choice)">
-            <summary>
-            执行到下一步
-            </summary>
-        </member>
-        <member name="M:Gemini.Workflow.EngineRunner.ExecuteCommand(Gemini.Workflow.Entity.Choice)">
-            <summary>
-            通用命令执行
-            保存实例、启动实例、撤回提单、转交、传阅、已阅、作废、退回
-            </summary>
-        </member>
-        <member name="T:Gemini.Workflow.HistoryHelper">
-            <summary>
-            历史轨迹工具类
-            </summary>
-        </member>
-        <member name="M:Gemini.Workflow.HistoryHelper.GetBeforeActivtiyIDs(Gemini.Workflow.Models.Activity)">
-            <summary>
-            获取指定活动的所有前继ActivityID定义
-            </summary>
-            <param name="activityInfo">活动定义</param>
-            <returns></returns>
-        </member>
-        <member name="M:Gemini.Workflow.HistoryHelper.GetAfterActivtiyIDs(Gemini.Workflow.Models.Activity)">
-            <summary>
-            获取指定活动的所有后继ActivityID定义
-            </summary>
-            <param name="activityInfo"></param>
-        </member>
-        <member name="T:Gemini.Workflow.JoinRule">
-            <summary>
-            聚合规则器：对转入模式的规则操作及检查，聚合规则与任务待办的产生有决定性作用
-            第N次进来都要检查是否聚合完毕，返回true时表示可聚合完毕则修改活动实例ActivityState字段
-            </summary>
-        </member>
-        <member name="T:Gemini.Workflow.RespondRule">
-            <summary>
-            响应规则
-            </summary>
-        </member>
-        <member name="T:Gemini.Workflow.UndoExecutor">
-            <summary>
-            活动撤消事件执行器
-            </summary>
-        </member>
-        <member name="F:Gemini.Workflow.UndoExecutor.RejectMessage">
-            <summary>
-            退回时、撤回时
-            </summary>
-        </member>
-        <member name="F:Gemini.Workflow.UndoExecutor.EndMessage">
-            <summary>
-            流程结束时
-            </summary>
-        </member>
-        <member name="F:Gemini.Workflow.UndoExecutor.InvalidMessage">
-            <summary>
-            流程结束时
-            </summary>
-        </member>
-        <member name="M:Gemini.Workflow.UndoExecutor.InValid(Gemini.Workflow.Entity.WorkflowContext)">
-            <summary>
-            流程作废(更新流程状态=》作废任务实例=》插入任务说明实例)
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Gemini.Workflow.UndoExecutor.Withdraw(Gemini.Workflow.Entity.Choice)">
-            <summary>
-            主动撤回上一步(逻辑和退回上一步一样，只是上下文的信息不一样)
-            </summary>
-            <param name="choice"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Gemini.Workflow.UndoExecutor.Reject(Gemini.Workflow.Models.Activity,System.Guid)">
-            <summary>
-            退回指定节点。
-            </summary>
-            <param name="to"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Gemini.Workflow.UndoExecutor.Cancel(Gemini.Workflow.Models.ActivityInstance)">
-            <summary>
-            收回（从指定点，向前回收，忽略已完成的节点）
-            </summary>
-        </member>
-        <member name="M:Gemini.Workflow.Error.Throw(System.String)">
-            <summary>
-            抛出异常
-            </summary>
-            <param name="msg"></param>
-        </member>
-        <member name="P:Gemini.Workflow.Error.Version">
-            <summary>
-            获取当前Dll的版本号
-            </summary>
-        </member>
-        <member name="T:Gemini.Workflow.DeployerHelper">
-            <summary>
-            流程部署器
-            </summary>
-        </member>
-        <member name="M:Gemini.Workflow.DeployerHelper.Deploy(System.String,Gemini.Workflow.Enums.DeployType,System.String@)">
-            <summary>
-            流程部署
-            </summary>
-            <param name="xpdl"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Gemini.Workflow.DeployerHelper.Deploy(Gemini.Workflow.Models.Definition,Gemini.Workflow.Enums.DeployType,System.String@)">
-            <summary>
-            流程部署
-            </summary>
-            <param name="definition"></param>
-            <returns></returns>
-        </member>
-        <member name="T:Gemini.Workflow.XpdlHelper">
-            <summary>
-            流程定义过程过程描述语言XML解析器
-            </summary>
-        </member>
-        <member name="M:Gemini.Workflow.XpdlHelper.GetWorkflowTemplateJson">
-            <summary>
-            包含提单步骤
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Gemini.Workflow.XpdlHelper.GetFlowMapJson(System.Guid)">
-            <summary>
-            获取运行时流程图JSON描述
-            </summary>
-            <param name="idOrWiid"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Gemini.Workflow.XpdlHelper.GetFlowMapJsonByWorkflowID(System.Guid)">
-            <summary>
-            获取流程图JSON描述
-            </summary>
-            <param name="workflowID"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Gemini.Workflow.XpdlHelper.GetFlowMapJson(Gemini.Workflow.Models.Definition)">
-            <summary>
-            获取流程图JSON描述
-            </summary>
-            <param name="workflowInfo"></param>
-            <returns></returns>
-        </member>
         <member name="T:Gemini.Workflow.Enums.ActivityState">
             <summary>
             活动实例状态
@@ -1079,126 +444,6 @@
             取消（回收）
             </summary>
         </member>
-        <member name="M:Gemini.Workflow.AssemblyHelper.GetObjectByAssembly(System.String,System.String)">
-            <summary>
-            根据Assembly创建类的实例 ,指定程序集
-            </summary>
-            <param name="assembly">程序集</param>
-            <param name="classFullName">类的完全限定名，包括命名空间</param>
-        </member>
-        <member name="M:Gemini.Workflow.AssemblyHelper.GetObjectByClassFullName(System.String)">
-            <summary>
-            根据classFullName创建类的实例 同一程序集
-            </summary>
-            <param name="classFullName">类的完全限定名，包括命名空间</param>
-        </member>
-        <member name="T:Gemini.Workflow.AppConst">
-            <summary>
-            内部常量类
-            </summary>
-        </member>
-        <member name="T:Gemini.Workflow.WebHelper">
-            <summary>
-            通用WebHelper
-            </summary>
-        </member>
-        <member name="M:Gemini.Workflow.WebHelper.Query``1(System.String)">
-            <summary>
-            获取HttpContext.Current.Request指定Key的值
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="key"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Gemini.Workflow.WebHelper.Query``1(System.String,``0,System.Boolean)">
-            <summary>
-            获取HttpContext.Current.Request指定Key的值
-            </summary>
-            <typeparam name="T"></typeparam>
-            <param name="key"></param>
-            <returns></returns>
-        </member>
-        <member name="T:Gemini.Workflow.WorkflowHelper">
-            <summary>
-            工作流辅助工具类
-            </summary>
-        </member>
-        <member name="M:Gemini.Workflow.WorkflowHelper.GetSheetID(System.String)">
-            <summary>
-            获取工单号
-            </summary>
-            <param name="wfcontext"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Gemini.Workflow.WorkflowHelper.GetSheetIndexNumberInMonth(System.DateTime,System.DateTime,System.String,System.String)">
-            <summary>
-            根据流程别名 周期规则 获取发启的次数序列号
-            </summary>
-            <param name="monthFirstDay">工单号尾数的周期起始点 yyyy-MM-20 00:00:00  月为周期， yyyy-01-20 00:00:00 年为周期  yyyy-MM-dd 00:00:00日为周期 ，即发启时间的周期间隔</param>
-            <param name="appID">应用别名</param>
-            <param name="formatExpression">format格式化表达式如：{0:0000}</param>
-            <returns></returns>
-        </member>
-        <member name="M:Gemini.Workflow.WorkflowHelper.GetChoiceActivityList(System.Guid,System.Collections.Generic.IList{Gemini.Workflow.Entity.ActorItem})">
-            <summary>
-            根据IList《SelectedActorItem>  获取IList《ChoiceActivity>
-            </summary>
-            <param name="workflowID"></param>
-            <param name="listActorItem"></param>
-            <param name="command"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Gemini.Workflow.WorkflowHelper.GetWorkflowContext">
-            设置流程上下文
-        </member>
-        <member name="M:Gemini.Workflow.WorkflowHelper.GetContextOnNoInstance(System.String)">
-            <summary>
-            撰稿状态下获取上下文
-            </summary>
-            <param name="loginUser"></param>
-            <param name="appID"></param>
-            <param name="defaultTitle"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Gemini.Workflow.WorkflowHelper.GetContextOnView(System.Guid)">
-            <summary>
-            查看状态下获取上下文
-            </summary>
-            <param name="loginUser"></param>
-            <param name="InstanceID"></param>
-        </member>
-        <member name="M:Gemini.Workflow.WorkflowHelper.GetContextOnTodo(System.Guid)">
-            <summary>
-            待办状态下获取上下文
-            </summary>
-        </member>
-        <member name="M:Gemini.Workflow.WorkflowHelper.GetContextOnCirculate(System.Guid)">
-            <summary>
-            待阅状态下获取上下文
-            </summary>
-        </member>
-        <member name="M:Gemini.Workflow.WorkflowHelper.GetWorkflowContext(Gemini.Workflow.Enums.FormAction,System.Guid,System.Guid,System.String)">
-            <summary>
-            获取流程上下文总方法
-            </summary>
-        </member>
-        <member name="M:Gemini.Workflow.WorkflowHelper.NewStartActivityInstance(Gemini.Workflow.Entity.WorkflowContext)">
-            <summary>
-            构建提单活动实例
-            </summary>
-            <param name="activity"></param>
-        </member>
-        <member name="M:Gemini.Workflow.WorkflowHelper.NewStartTaskInstance(Gemini.Workflow.Entity.WorkflowContext)">
-            <summary>
-            构建拟稿任务实例
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="T:Gemini.Workflow.LangConst">
-            <summary>
-            中英文语言常量
-            </summary>
-        </member>
         <member name="T:Gemini.Workflow.Models.Activity">
             <summary>
             实体类.[流程活动定义] 表 [wf_Activity]
@@ -1244,7 +489,7 @@
         </member>
         <member name="P:Gemini.Workflow.Models.Activity.RespondType">
             <summary>
-            one单人,anyone任一人，all全部人
+            one单人,anyone可多人，all全部人
             </summary>
         </member>
         <member name="P:Gemini.Workflow.Models.Activity.RejectType">
@@ -2125,6 +1370,761 @@
         <member name="P:Gemini.Workflow.Models.OrgInfo.OrgLevel">
             <summary>
             组织级别
+            </summary>
+        </member>
+        <member name="T:Gemini.Workflow.Entity.ActorParamter">
+            <summary>
+            解析器参考XML对应的实体基类
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.ActorParamter.NameForActorParser">
+            <summary>
+            解析者类型对应的参数名。
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.ActorParamter.NameForBaseOn">
+            <summary>
+            基准类型对应的参数名。
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.ActorParamter.IsIncludeCurrentUserOrg">
+            <summary>
+            是否包含当前用户所在的部门
+            </summary>
+        </member>
+        <member name="T:Gemini.Workflow.Entity.ActorItem">
+            <summary>
+            已选择处理人项实体 用转与json格式转换
+            </summary>
+        </member>
+        <member name="F:Gemini.Workflow.Entity.ActorItem.UserInfo">
+            <summary>
+            存储用户信息
+            </summary>
+        </member>
+        <member name="T:Gemini.Workflow.Entity.Choice">
+            <summary>
+            选择处理的下一步信息上下文。
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.Choice.Command">
+            <summary>
+            执行命令
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.Choice.ChoiceActivityList">
+            <summary>
+            设置：选择的下行步骤
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.Choice.TransmitUserList">
+            <summary>
+            选择被转交、或传阅者
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.Choice.Context">
+            <summary>
+            流程上下文
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.Choice.Current">
+            <summary>
+            当前待处理的节点
+            </summary>
+        </member>
+        <member name="F:Gemini.Workflow.Entity.Choice.IsJoined">
+            <summary>
+            是否强制聚合
+            </summary>
+        </member>
+        <member name="M:Gemini.Workflow.Entity.Choice.GetChoice(System.Guid)">
+            <summary>
+            根据ID获取选择的下行步骤
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.Choice.EndActivity">
+            <summary>
+            获取选择的下行步骤中的结束节点
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.Choice.FirstActivity">
+            <summary>
+            获取选择的下行步骤中的第一个节点
+            </summary>
+        </member>
+        <member name="T:Gemini.Workflow.Entity.ChoiceActivity">
+            <summary>
+            活动运转时选择步骤实体
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.ChoiceActivity.Activity">
+            <summary>
+            设置、获取：活动实体
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.ChoiceActivity.ActivityInfo">
+            <summary>
+            获取：根据 Activity，返回节点信息
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.ChoiceActivity.ActivityInstance">
+            <summary>
+            获取：当前节点实例
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.ChoiceActivity.UserList">
+            <summary>
+            设置、获取：选择的用户
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.ChoiceActivity.IsJoined">
+            <summary>
+            是否聚合完毕
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.ChoiceActivity.FromActivityID">
+            <summary>
+            上级来源节点ID
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.ChoiceActivity.FromActivityInstance">
+            <summary>
+            来源节点实例
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.ChoiceActivity.UserNames">
+            <summary>
+            获取参与者用户名
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.ChoiceActivity.FullNames">
+            <summary>
+            获取参与者真实名
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.WFActionResult.ActivityIsJoined">
+            <summary>
+            活动是否(Finish 完成、或者 StartNext 可聚合）
+            </summary>
+        </member>
+        <member name="T:Gemini.Workflow.Entity.WorkflowContext">
+            <summary>
+            工作流实例上下文实体
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.WorkflowContext.FormAction">
+            <summary>
+            当前页面状态
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.WorkflowContext.InstanceTitle">
+            <summary>
+             标题
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.WorkflowContext.AppID">
+            <summary>
+            当前途流程应用ID
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.WorkflowContext.TaskID">
+            <summary>
+            当前任务id
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.WorkflowContext.FormID">
+            <summary>
+            当前表单ID
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.WorkflowContext.DefinitionInfo">
+            <summary>
+            当前流程定义
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.WorkflowContext.Instance">
+            <summary>
+            当前流程实例
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.WorkflowContext.ActivityInstanceList">
+            <summary>
+            当前流程活动实例列表，即当前流程正在运行中的活动实例
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.WorkflowContext.ActivityInstance">
+            <summary>
+            当前活动实例
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.WorkflowContext.TaskInstance">
+            <summary>
+            当前任务实例
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.WorkflowContext.Activity">
+            <summary>
+            当前活动定义
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.WorkflowContext.User">
+            <summary>
+            当前登录者信息
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.WorkflowContext.IsCanWithdraw">
+            <summary>
+            是否可撤回
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.WorkflowContext.IsJoined">
+            <summary>
+            用于控制流程强制聚合
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.WorkflowContext.ErrMsg">
+            <summary>
+            执行失败时的错误信息
+            </summary>
+        </member>
+        <member name="T:Gemini.Workflow.Entity.UserInfo">
+            <summary>
+            用户基础类.
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.UserInfo.UserName">
+            <summary>
+            用户名.
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.UserInfo.FullName">
+            <summary>
+            真实名称.
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.UserInfo.OrgID">
+            <summary>
+            第一个组织ID
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.UserInfo.RoleID">
+            <summary>
+            第一个角色ID
+            </summary>
+        </member>
+        <member name="P:Gemini.Workflow.Entity.UserInfo.CurrentUser">
+            <summary>
+            接拉系统的当前登录用户
+            </summary>
+        </member>
+        <member name="T:Gemini.Workflow.ActorHelper">
+            <summary>
+            步骤处理人解析器帮助类
+            </summary>
+        </member>
+        <member name="M:Gemini.Workflow.ActorHelper.GetActorParser(System.String,System.String)">
+            <summary>
+            获取参与者解析器对象
+            </summary>
+            <param name="actorName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gemini.Workflow.ActorHelper.GetActorHtml(System.String,Gemini.Workflow.Models.Activity)">
+            <summary>
+            [当前流程最新版本]根据参与用户名（账号）获取供选择参与者的Html格式:userNames用户账号号，多个使用英文逗号隔开，activityName步骤名,isRadio：处理人是否为单选
+            </summary>
+            <param name="userNames"></param>
+            <param name="appID">应用名</param>
+            <param name="activityName">步骤名</param>
+            <param name="workflowID">指定流程</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gemini.Workflow.ActorHelper.GetActorHtml(System.Collections.Generic.IList{Gemini.Workflow.Entity.UserInfo},Gemini.Workflow.Models.Activity)">
+            <summary>
+            
+            </summary>
+            <param name="listUser">用户列表</param>
+            <param name="appID">应用名</param>
+            <param name="activity">当前步骤</param>
+            <param name="isUserRadio">是否单选</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gemini.Workflow.ActorHelper.GetUsers(Gemini.Workflow.Models.Activity,Gemini.Workflow.Entity.WorkflowContext)">
+            <summary>
+            获取节点下的所有用户列表
+            </summary>
+            <param name="activity"></param>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gemini.Workflow.AssignActor">
+            <summary>
+            指定部门用户参与者 用户名称,多个用户名之间使用英文逗号隔开，当用户为空，而获取基准部门下的所有用户，当用户不为空且基准部门类别不为空，而使用用户加部门交集
+            </summary>
+        </member>
+        <member name="M:Gemini.Workflow.AssignActor.Resolve(Gemini.Workflow.Entity.WorkflowContext)">
+            <summary>
+            根据登录帐号来求解参与者
+            </summary>
+        </member>
+        <member name="T:Gemini.Workflow.HistoryActivityActor">
+            <summary>
+            历史审批步骤处理人
+            </summary>
+        </member>
+        <member name="M:Gemini.Workflow.HistoryActivityActor.Resolve(Gemini.Workflow.Entity.WorkflowContext)">
+            <summary>
+            执行求解参与者
+            </summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gemini.Workflow.OrgActor">
+            <summary>
+            部门参与者控制
+            </summary>
+        </member>
+        <member name="T:Gemini.Workflow.ParentOrgRoleActor">
+            <summary>
+            上级部门角色参与解析器
+             </summary>
+        </member>
+        <member name="T:Gemini.Workflow.RoleActor">
+            <summary>
+            【角色参与者解析器求解】
+            </summary>
+        </member>
+        <member name="M:Gemini.Workflow.RoleActor.Resolve(Gemini.Workflow.Entity.WorkflowContext)">
+            <summary>
+            根据登录帐号来求解参与者
+            </summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gemini.Workflow.SubOrgRoleActor">
+            <summary>
+            子级部门角色参与者
+            </summary>
+        </member>
+        <member name="T:Gemini.Workflow.Interface.IActorParser">
+            <summary>
+            描述流程参与者的求解的基类。
+            </summary>
+        </member>
+        <member name="M:Gemini.Workflow.Interface.IActorParser.Resolve(Gemini.Workflow.Entity.WorkflowContext)">
+            <summary>
+            求解参与者信息
+            </summary>
+        </member>
+        <member name="T:Gemini.Workflow.Interface.IActivityBehaviour">
+            <summary>
+            通用插入
+            </summary>
+            <summary>
+            转交、传阅
+            
+            </summary>
+        </member>
+        <member name="M:Gemini.Workflow.Interface.IActivityBehaviour.StartNext(Gemini.Workflow.Entity.Choice)">
+            <summary>
+            开启新节点任务
+            </summary>
+        </member>
+        <member name="M:Gemini.Workflow.Interface.IActivityBehaviour.Finish(Gemini.Workflow.Entity.Choice)">
+            <summary>
+            Finish 结束当前节点，然后StartNext开启新节点节任务
+            </summary>
+        </member>
+        <member name="M:Gemini.Workflow.Interface.IActivityBehaviour.ContinueParentFlow(Gemini.Workflow.Entity.Choice)">
+            <summary>
+            子流程结束时，回调父流程，让其运行下一节点（流程作废、流程结束，都会引发父流程）。
+            </summary>
+        </member>
+        <member name="M:Gemini.Workflow.Interface.IActivityBehaviour.EndActivityInstance(Gemini.Workflow.Entity.Choice)">
+            <summary>
+            插入节点：完成实例：单个节点实例、单个任务实例、单个迁移实例，并触发 自动传阅事件
+            直接完成一个活动步骤时调用，返回插入后的活动实例
+            </summary>
+            <param name="choice"></param>
+        </member>
+        <member name="M:Gemini.Workflow.Interface.IActivityBehaviour.StartActivityInstance(Gemini.Workflow.Entity.Choice,System.Boolean)">
+            <summary>
+            插入节点：新活动实例：单个迁移实例、多个任务，单日个迁移实例，并触发 自动传阅事件、消息通知事件
+            </summary>
+        </member>
+        <member name="M:Gemini.Workflow.Interface.IActivityBehaviour.InsertTransitionInstance(Gemini.Workflow.Entity.Choice)">
+            <summary>
+            插入迁移实例
+            </summary>
+            <param name="activityInstance"></param>
+            <param name="fromTaskInstance"></param>
+        </member>
+        <member name="M:Gemini.Workflow.Interface.IActivityBehaviour.InsertTaskInstance(Gemini.Workflow.Entity.Choice,System.Boolean)">
+            <summary>
+            插入任务实例,并插入消息通知
+            </summary>
+        </member>
+        <member name="T:Gemini.Workflow.Interface.IActor">
+            <summary>
+            定义扩展类参与者扩展接口
+            </summary>
+        </member>
+        <member name="M:Gemini.Workflow.Interface.IActor.Resolve(Gemini.Workflow.Entity.WorkflowContext)">
+            <summary>
+            工作流API
+            </summary>
+        </member>
+        <member name="T:Gemini.Workflow.Interface.ISubWorkflow">
+            <summary>
+            自定义外嵌式子流程
+            </summary>
+        </member>
+        <member name="M:Gemini.Workflow.Interface.ISubWorkflow.Start(Gemini.Workflow.Entity.Choice)">
+            <summary>
+            启动并返回新的实例ID。
+            </summary>
+            <param name="parentChoice">父流程最后的选择步骤</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gemini.Workflow.Interface.ISubWorkflow.Invalid(Gemini.Workflow.Models.ActivityInstance)">
+            <summary>
+            父流程作废（或退回、撤回）时，回收子流程。
+            </summary>
+            <param name="parentActivityInstance">父流程所在的节点实例</param>
+            <returns></returns>
+        </member>
+        <member name="P:Gemini.Workflow.Interface.IUserInfo.RoleID">
+            <summary>
+            第一个角色ID
+            </summary>
+        </member>
+        <member name="T:Gemini.Workflow.JoinBehaviour">
+            <summary>
+            聚合活动
+            </summary>
+        </member>
+        <member name="T:Gemini.Workflow.OuterSubWorkflowBehaviour">
+            <summary>
+            外嵌式子流程行为器
+            </summary>
+        </member>
+        <member name="T:Gemini.Workflow.StartBehaviour">
+            <summary>
+            提单：实例行为器
+            </summary>
+        </member>
+        <member name="T:Gemini.Workflow.CirculateBehaviour">
+            <summary>
+            传阅行为器
+            </summary>
+        </member>
+        <member name="T:Gemini.Workflow.InvalidBehaviour">
+            <summary>
+            作废工作流实例行为器
+            </summary>
+        </member>
+        <member name="T:Gemini.Workflow.RejectBehaviour">
+            <summary>
+            退回行为器
+            </summary>
+        </member>
+        <member name="T:Gemini.Workflow.SaveBehaviour">
+            <summary>
+            新流程实例保存
+            </summary>
+        </member>
+        <member name="T:Gemini.Workflow.TransmitBehaviour">
+            <summary>
+            传交行为器
+            </summary>
+        </member>
+        <member name="T:Gemini.Workflow.WithdrawBehaviour">
+            <summary>
+            撤回行为器
+            </summary>
+        </member>
+        <member name="T:Gemini.Workflow.EngineRunner">
+            <summary>
+            流程机
+            </summary>
+        </member>
+        <member name="M:Gemini.Workflow.EngineRunner.Execute(Gemini.Workflow.Entity.Choice)">
+            <summary>
+            执行流程运转命令
+            </summary>
+        </member>
+        <member name="M:Gemini.Workflow.EngineRunner.InnerExecute(Gemini.Workflow.Entity.Choice)">
+            <summary>
+            内部执行（避免循环调用，引发事务嵌套）
+            </summary>
+            <param name="choice"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gemini.Workflow.EngineRunner.ExecuteToNext(Gemini.Workflow.Entity.Choice)">
+            <summary>
+            执行到下一步
+            </summary>
+        </member>
+        <member name="M:Gemini.Workflow.EngineRunner.ExecuteCommand(Gemini.Workflow.Entity.Choice)">
+            <summary>
+            通用命令执行
+            保存实例、启动实例、撤回提单、转交、传阅、已阅、作废、退回
+            </summary>
+        </member>
+        <member name="T:Gemini.Workflow.HistoryHelper">
+            <summary>
+            历史轨迹工具类
+            </summary>
+        </member>
+        <member name="M:Gemini.Workflow.HistoryHelper.GetBeforeActivtiyIDs(Gemini.Workflow.Models.Activity)">
+            <summary>
+            获取指定活动的所有前继ActivityID定义
+            </summary>
+            <param name="activityInfo">活动定义</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gemini.Workflow.HistoryHelper.GetAfterActivtiyIDs(Gemini.Workflow.Models.Activity)">
+            <summary>
+            获取指定活动的所有后继ActivityID定义
+            </summary>
+            <param name="activityInfo"></param>
+        </member>
+        <member name="T:Gemini.Workflow.JoinRule">
+            <summary>
+            聚合规则器：对转入模式的规则操作及检查，聚合规则与任务待办的产生有决定性作用
+            第N次进来都要检查是否聚合完毕，返回true时表示可聚合完毕则修改活动实例ActivityState字段
+            </summary>
+        </member>
+        <member name="T:Gemini.Workflow.RespondRule">
+            <summary>
+            响应规则
+            </summary>
+        </member>
+        <member name="T:Gemini.Workflow.UndoExecutor">
+            <summary>
+            活动撤消事件执行器
+            </summary>
+        </member>
+        <member name="F:Gemini.Workflow.UndoExecutor.RejectMessage">
+            <summary>
+            退回时、撤回时
+            </summary>
+        </member>
+        <member name="F:Gemini.Workflow.UndoExecutor.EndMessage">
+            <summary>
+            流程结束时
+            </summary>
+        </member>
+        <member name="F:Gemini.Workflow.UndoExecutor.InvalidMessage">
+            <summary>
+            流程结束时
+            </summary>
+        </member>
+        <member name="M:Gemini.Workflow.UndoExecutor.InValid(Gemini.Workflow.Entity.WorkflowContext)">
+            <summary>
+            流程作废(更新流程状态=》作废任务实例=》插入任务说明实例)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gemini.Workflow.UndoExecutor.Withdraw(Gemini.Workflow.Entity.Choice)">
+            <summary>
+            主动撤回上一步(逻辑和退回上一步一样，只是上下文的信息不一样)
+            </summary>
+            <param name="choice"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gemini.Workflow.UndoExecutor.Reject(Gemini.Workflow.Models.Activity,System.Guid)">
+            <summary>
+            退回指定节点。
+            </summary>
+            <param name="to"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gemini.Workflow.UndoExecutor.Cancel(Gemini.Workflow.Models.ActivityInstance)">
+            <summary>
+            收回（从指定点，向前回收，忽略已完成的节点）
+            </summary>
+        </member>
+        <member name="M:Gemini.Workflow.Error.Throw(System.String)">
+            <summary>
+            抛出异常
+            </summary>
+            <param name="msg"></param>
+        </member>
+        <member name="P:Gemini.Workflow.Error.Version">
+            <summary>
+            获取当前Dll的版本号
+            </summary>
+        </member>
+        <member name="T:Gemini.Workflow.DeployerHelper">
+            <summary>
+            流程部署器
+            </summary>
+        </member>
+        <member name="M:Gemini.Workflow.DeployerHelper.Deploy(System.String,Gemini.Workflow.Enums.DeployType,System.String@)">
+            <summary>
+            流程部署
+            </summary>
+            <param name="xpdl"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gemini.Workflow.DeployerHelper.Deploy(Gemini.Workflow.Models.Definition,Gemini.Workflow.Enums.DeployType,System.String@)">
+            <summary>
+            流程部署
+            </summary>
+            <param name="definition"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gemini.Workflow.XpdlHelper">
+            <summary>
+            流程定义过程过程描述语言XML解析器
+            </summary>
+        </member>
+        <member name="M:Gemini.Workflow.XpdlHelper.GetWorkflowTemplateJson">
+            <summary>
+            包含提单步骤
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gemini.Workflow.XpdlHelper.GetFlowMapJson(System.Guid)">
+            <summary>
+            获取运行时流程图JSON描述
+            </summary>
+            <param name="idOrWiid"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gemini.Workflow.XpdlHelper.GetFlowMapJsonByWorkflowID(System.Guid)">
+            <summary>
+            获取流程图JSON描述
+            </summary>
+            <param name="workflowID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gemini.Workflow.XpdlHelper.GetFlowMapJson(Gemini.Workflow.Models.Definition)">
+            <summary>
+            获取流程图JSON描述
+            </summary>
+            <param name="workflowInfo"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gemini.Workflow.AssemblyHelper.GetObjectByAssembly(System.String,System.String)">
+            <summary>
+            根据Assembly创建类的实例 ,指定程序集
+            </summary>
+            <param name="assembly">程序集</param>
+            <param name="classFullName">类的完全限定名，包括命名空间</param>
+        </member>
+        <member name="M:Gemini.Workflow.AssemblyHelper.GetObjectByClassFullName(System.String)">
+            <summary>
+            根据classFullName创建类的实例 同一程序集
+            </summary>
+            <param name="classFullName">类的完全限定名，包括命名空间</param>
+        </member>
+        <member name="T:Gemini.Workflow.AppConst">
+            <summary>
+            内部常量类
+            </summary>
+        </member>
+        <member name="T:Gemini.Workflow.WebHelper">
+            <summary>
+            通用WebHelper
+            </summary>
+        </member>
+        <member name="M:Gemini.Workflow.WebHelper.Query``1(System.String)">
+            <summary>
+            获取HttpContext.Current.Request指定Key的值
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gemini.Workflow.WebHelper.Query``1(System.String,``0,System.Boolean)">
+            <summary>
+            获取HttpContext.Current.Request指定Key的值
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gemini.Workflow.WorkflowHelper">
+            <summary>
+            工作流辅助工具类
+            </summary>
+        </member>
+        <member name="M:Gemini.Workflow.WorkflowHelper.GetSheetID(System.String)">
+            <summary>
+            获取工单号
+            </summary>
+            <param name="wfcontext"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gemini.Workflow.WorkflowHelper.GetSheetIndexNumberInMonth(System.DateTime,System.DateTime,System.String,System.String)">
+            <summary>
+            根据流程别名 周期规则 获取发启的次数序列号
+            </summary>
+            <param name="monthFirstDay">工单号尾数的周期起始点 yyyy-MM-20 00:00:00  月为周期， yyyy-01-20 00:00:00 年为周期  yyyy-MM-dd 00:00:00日为周期 ，即发启时间的周期间隔</param>
+            <param name="appID">应用别名</param>
+            <param name="formatExpression">format格式化表达式如：{0:0000}</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gemini.Workflow.WorkflowHelper.GetChoiceActivityList(System.Guid,System.Collections.Generic.IList{Gemini.Workflow.Entity.ActorItem})">
+            <summary>
+            根据IList《SelectedActorItem>  获取IList《ChoiceActivity>
+            </summary>
+            <param name="workflowID"></param>
+            <param name="listActorItem"></param>
+            <param name="command"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gemini.Workflow.WorkflowHelper.GetWorkflowContext">
+            设置流程上下文
+        </member>
+        <member name="M:Gemini.Workflow.WorkflowHelper.GetContextOnNoInstance(System.String)">
+            <summary>
+            撰稿状态下获取上下文
+            </summary>
+            <param name="loginUser"></param>
+            <param name="appID"></param>
+            <param name="defaultTitle"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gemini.Workflow.WorkflowHelper.GetContextOnView(System.Guid)">
+            <summary>
+            查看状态下获取上下文
+            </summary>
+            <param name="loginUser"></param>
+            <param name="InstanceID"></param>
+        </member>
+        <member name="M:Gemini.Workflow.WorkflowHelper.GetContextOnTodo(System.Guid)">
+            <summary>
+            待办状态下获取上下文
+            </summary>
+        </member>
+        <member name="M:Gemini.Workflow.WorkflowHelper.GetContextOnCirculate(System.Guid)">
+            <summary>
+            待阅状态下获取上下文
+            </summary>
+        </member>
+        <member name="M:Gemini.Workflow.WorkflowHelper.GetWorkflowContext(Gemini.Workflow.Enums.FormAction,System.Guid,System.Guid,System.String)">
+            <summary>
+            获取流程上下文总方法
+            </summary>
+        </member>
+        <member name="M:Gemini.Workflow.WorkflowHelper.NewStartActivityInstance(Gemini.Workflow.Entity.WorkflowContext)">
+            <summary>
+            构建提单活动实例
+            </summary>
+            <param name="activity"></param>
+        </member>
+        <member name="M:Gemini.Workflow.WorkflowHelper.NewStartTaskInstance(Gemini.Workflow.Entity.WorkflowContext)">
+            <summary>
+            构建拟稿任务实例
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gemini.Workflow.LangConst">
+            <summary>
+            中英文语言常量
             </summary>
         </member>
         <member name="T:Gemini.Workflow.TableConst">

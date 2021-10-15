@@ -16,7 +16,8 @@
     dg.addWhere("InstanceState", "2,4,5", "in");
     dg.bind();
     function goto(v, r, i) {
-        return "<b><a href='/WF/WorkForm.html?appid=" + r.appid + "&formAction=2&wiid=" + r.instanceid + "&taskid=" + r.taskid + "' target='_blank' title='" + v + "'>" + v + "</a></b>";
+        return "<b><a href='javascript:;' onclick=\"window.open('/WF/WorkForm.html?appid=" + r.appid + "&formAction=2&wiid=" + r.instanceid + "&taskid=" + r.taskid + "','_blank')\" title='" + v + "'>" + v + "</a></b>";
+        //return "<b><a href='/WF/WorkForm.html?appid=" + r.appid + "&formAction=2&wiid=" + r.instanceid + "&taskid=" + r.taskid + "' target='_blank' title='" + v + "'>" + v + "</a></b>";
     }
 </script>
 </html>

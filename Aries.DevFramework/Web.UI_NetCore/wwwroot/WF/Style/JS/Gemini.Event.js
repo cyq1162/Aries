@@ -3,15 +3,12 @@
 
 //*****************提交窗口，退回窗口定义**********************************
 $(function (WF, AR) {
-    WF.closeWindow = function ()
-    {
-        try
-        {
+    WF.closeWindow = function () {
+        try {
             window.close();
             window.open("about:blank", "_top").close();
         }
-        catch(e)
-        {
+        catch (e) {
             window.open("about:blank", "_top").close();
         }
     }
@@ -22,7 +19,7 @@ $(function (WF, AR) {
             return false;
 
         var aNames = $("#hidActivityNames").val();
-        $.messager.confirm('提交确认', "您确定提交到【" + aNames + "】吗？", function (r) {
+        var win = $.messager.confirm('提交确认', "您确定提交到【" + aNames + "】吗？", function (r) {
             if (r) {
                 //审批意见
                 $("#hidOpinion").val($("#txtOpinion").val());
@@ -313,6 +310,7 @@ $(function (WF, AR) {
     //撤回流程
     WF.Event.onWithdraw = function () {
         $.messager.prompt('确认窗口', '您确定要撤回此工单吗,请输入撤回原因？', function (r) {
+            if (r == undefined) { return; }//取消。
             if (r) {
                 var opinion = r;
                 var postParas = WF.Context.getJson();
@@ -337,6 +335,7 @@ $(function (WF, AR) {
     //作废流程
     WF.Event.onInvalid = function () {
         $.messager.prompt('确认窗口', '您确定要作废此工单吗,请输入作废原因？', function (r) {
+            if (r == undefined) { return;}//取消。
             if (r) {
                 var opinion = r;
                 var postParas = WF.Context.getJson();
@@ -355,7 +354,7 @@ $(function (WF, AR) {
     }
     WF.Event.onViewFlowMap = function () {
         var url = "/WF/Designer/Designer.html?dm=0&wid=" + WF.Context.workflowID + "&wiid=" + WF.Context.instanceID;
-        AR.Window.dialog(WF.Context.name, url, { width: 980+100, height: 660+100 });
+        AR.Window.dialog(WF.Context.name, url, { width: 980 + 100, height: 660 + 100 });
     }
     WF.Event.onGetActor = function () {
         if (WF.Context.formAction == WF.Enum.FormAction.Todo) {

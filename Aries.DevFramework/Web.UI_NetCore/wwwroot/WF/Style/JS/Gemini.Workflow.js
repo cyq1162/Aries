@@ -309,7 +309,7 @@ window.WF || (window.WF = {});
             var height = $frame.contents().find("body").height();
             // alert($("body").height() + "," + height);
             if (height > $frame.height()) {
-                $frame.height(height + 10);
+                $frame.height(height + 20);
                 //$("body").height($("body").height() + height);
             }
 

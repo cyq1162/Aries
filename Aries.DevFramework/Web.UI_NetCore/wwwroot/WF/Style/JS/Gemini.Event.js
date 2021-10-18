@@ -148,7 +148,10 @@ $(function (WF, AR) {
                         AR.Window.alert(result.msg);
                     }
                 }
-                childWin.AR.Form.BtnCommit.onExecute();//提交事件。
+                if (childWin.AR.Form.BtnCommit.onExecute() == false)//提交事件。
+                {
+                    AR.Window.closeLoading();
+                }
             }
         }
         else {

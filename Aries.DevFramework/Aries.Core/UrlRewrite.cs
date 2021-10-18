@@ -94,6 +94,10 @@ namespace Aries.Core
 #if DEBUG
                 AppConfig.Cache.IsAutoCache = false;
 #endif
+
+                #region 特别说明：本段授权检测代码，请勿私自修改或删除，因私自调整授权相关代码引发的后果，本作者概不负责。
+
+                #endregion
                 string lic = AppConfig.GetApp(LangConst.AriesLic);
                 if (string.IsNullOrEmpty(lic) || !lic.EndsWith("=2"))
                 {

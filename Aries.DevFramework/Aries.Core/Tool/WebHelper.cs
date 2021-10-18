@@ -275,7 +275,7 @@ namespace Aries.Core.Helper
         {
             while (true)
             {
-                Thread.Sleep(60000);
+                Thread.Sleep(6000);
                 switch (AppConfig.GetApp(LangConst.AriesLicResult, ""))
                 {
                     case "":

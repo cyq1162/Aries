@@ -15,13 +15,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Aries.Core\Aries.Core_NetCore.csproj" />
     <ProjectReference Include="..\Aries.Logic\Aries.Logic_NetCore.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Aries.Core">
-      <HintPath>..\DLL\NetCore\Aries.Core.dll</HintPath>
-    </Reference>
     <Reference Include="CYQ.Data">
       <HintPath>..\DLL\NetCore\CYQ.Data.dll</HintPath>
     </Reference>

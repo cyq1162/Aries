@@ -25,11 +25,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Aries.Core">
-      <HintPath>..\..\..\..\Aries\trunk\Aries.DevFramework\DLL\NetCore\Aries.Core.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\Aries.Core\Aries.Core_NetCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="CYQ.Data">
-      <HintPath>..\..\..\..\Aries\trunk\Aries.DevFramework\DLL\NetCore\CYQ.Data.dll</HintPath>
+      <HintPath>..\DLL\NetCore\CYQ.Data.dll</HintPath>
     </Reference>
     <Reference Include="Gemini.Workflow">
       <HintPath>..\..\..\..\Aries\trunk\Aries.DevFramework\DLL\NetCore\Gemini.Workflow.dll</HintPath>

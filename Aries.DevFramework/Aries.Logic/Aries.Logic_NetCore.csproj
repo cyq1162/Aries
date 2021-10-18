@@ -15,9 +15,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Aries.Core">
-      <HintPath>..\DLL\NetCore\Aries.Core.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\Aries.Core\Aries.Core_NetCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="CYQ.Data">
       <HintPath>..\DLL\NetCore\CYQ.Data.dll</HintPath>
     </Reference>

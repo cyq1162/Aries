@@ -319,8 +319,7 @@
             var removeItems = [];
             for (var i = 0; i < objNames.length; i++) {
                 var newObj = objNames[i];
-                if ($Core.Combobox.paras && $Core.Combobox.paras[newObj.ObjName])
-                {
+                if ($Core.Combobox.paras && $Core.Combobox.paras[newObj.ObjName]) {
                     newObj.Para = $Core.Combobox.paras[newObj.ObjName];
                     //delete $Core.Combobox.paras[newObj.ObjName];
                 }
@@ -432,7 +431,8 @@
         });
     }
     function bindDialog($input) {
-        $input.on("click", function () {
+        var click = $input.attr("editable") == "true" ? "dblclick" : "click";
+        $input.on(click, function () {
             showDialog($input);
         });
     }
@@ -446,7 +446,7 @@
                 iconCls: 'icon-ok',
                 handler: function () {
                     var options = $Core.Dialog;
-                    if (!options || options.option.data.length == 0) {
+                    if (!options || !options.option || options.option.data.length == 0) {
                         alert($Core.Lang.selectFirst);
                         return;
                     }
@@ -461,22 +461,23 @@
                         if (tID) {
                             $tInput && $tInput.val(options.text);
                         }
-
-                        if ($input.attr("multiple")) {
-                            options.option.onUnselect = function (record) {
-                                if (setAttr($(this), "getValues").length == 0) {
-                                    if (!$input.attr("for")) {
-                                        showDialog($input);//对多选生效
+                        if (options.option) {
+                            if ($input.attr("multiple")) {
+                                options.option.onUnselect = function (record) {
+                                    if (setAttr($(this), "getValues").length == 0) {
+                                        if (!$input.attr("for")) {
+                                            showDialog($input);//对多选生效
+                                        }
                                     }
-                                }
-                            };
-                        }
-                        else {
-                            options.option.onSelect = function (record) {
-                                if (!$input.attr("for")) {
-                                    showDialog($input);//对单选生效
-                                }
-                            };
+                                };
+                            }
+                            else {
+                                options.option.onSelect = function (record) {
+                                    if (!$input.attr("for")) {
+                                        showDialog($input);//对单选生效
+                                    }
+                                };
+                            }
                         }
                         //按钮点击，结果绑定到指到的文本框。
                         var id = $input.attr("for");
@@ -485,11 +486,13 @@
                             $targetInput = $.el(id);
                         }
                         if (!$targetInput) $targetInput = $input;
-                        if ($targetInput.attr("width")) {
-                            options.option.width = $targetInput.attr("width");
-                        }
-                        else if ($targetInput.css("width")) {
-                            options.option.width = $targetInput.css("width");
+                        if (options.option) {
+                            if ($targetInput.attr("width")) {
+                                options.option.width = $targetInput.attr("width");
+                            }
+                            else if ($targetInput.css("width")) {
+                                options.option.width = $targetInput.css("width");
+                            }
                         }
                         setAttr($targetInput, options.option);//生成下拉框架
                         var value = $input.attr("onlytext") ? options.text : options.value;
@@ -656,8 +659,7 @@
 
                 }
                 else {
-                    if (key == "select" && value=="true" || value=="false")
-                    {
+                    if (key == "select" && value == "true" || value == "false") {
                         var data = $box.combobox("getData")
                         if (!data.contains(value, "value")) {
                             value = value == "true" ? "1" : "0";
@@ -789,9 +791,8 @@
                     return $input.val()
                 }
                 else {
-                    var values=setAttr($input, "getValues");
-                    if(values)
-                    {
+                    var values = setAttr($input, "getValues");
+                    if (values) {
                         return values.join(',');
                     }
                 }

@@ -1131,7 +1131,15 @@
                     var $input = editor.target;
                     var field = editor.field;
                     var col = dg.Internal.headerData.get("field", field);
-                    var isEdit=col.rules && typeof col.rules == "object" && col.rules["nameforedit"];
+                    var hasRules = col.rules;
+                    var nameFor = hasRules && col.rules["namefor"];
+                    var nameForEdit = hasRules && col.rules["nameforedit"];
+                    var nameForAdd = hasRules && col.rules["nameforadd"];
+                    var dialogFor = hasRules && col.rules["dialogfor"];
+                    var dialogForEdit = hasRules && col.rules["dialogforedit"];
+                    var dialogForAdd = hasRules && col.rules["dialogforadd"];
+
+                    var isEdit = col.rules && typeof col.rules == "object" && (nameForEdit || nameFor);
                     if (!isAdd && !col.edit && !isEdit) {
                         if (editor.type == "combobox") {
                             $input.combobox('disable');
@@ -1143,31 +1151,44 @@
                     }
                     if (col.rules && typeof col.rules == "object") {
                         // //处理弹窗绑定 dialogforadd ,dialogforedit
-                        if (isAdd && col.rules["nameforadd"]) {
-                            var lowerName = col.rules["nameforadd"].toLowerCase();
-                            $input.attr("name", lowerName);
-                            if (lowerName != editor.field) {
-                                editor.field = lowerName;
-                                editor.isrename = true;
+                        if (isAdd) {
+                            if (nameForAdd || nameFor) {
+                                var lowerName = nameForAdd ? nameForAdd.toLowerCase() : nameFor.toLowerCase();
+                                // $input.attr("name", lowerName);
+                                if (lowerName != editor.field) {
+                                    //editor.field = lowerName;
+                                    editor.fleshValue = true;
+                                    editor.nameFor = lowerName;
+                                }
                             }
-                            if (col.rules["dialogforadd"]) {
+                            if (dialogForAdd || dialogFor) {
+                                this.setInputAttr($input, col.rules, isAdd);
+                                $input.attr("dialog", dialogForAdd || dialogFor);
+                                editor.fleshValue = true;
                                 $Core.Combobox.bind($input);
                             }
                         }
-                        else if (col.rules["nameforedit"]) {
-                            var lowerName = col.rules["nameforedit"].toLowerCase();
-                            $input.attr("name", lowerName);
-                            if (lowerName != editor.field) {
-                                editor.field = lowerName;
-                                editor.isrename = true;
+                        else {
+                            if (nameForEdit || nameFor) {
+                                var lowerName = nameForEdit ? nameForEdit.toLowerCase() : nameFor.toLowerCase();
+                                //  $input.attr("name", lowerName);
+                                if (lowerName != editor.field) {
+                                    // editor.field = lowerName;
+                                    editor.fleshValue = true;
+                                    editor.nameFor = lowerName;
+                                }
                             }
-                            if (col.rules["dialogforedit"]) {
+                            if (dialogForEdit || dialogFor) {
+                                this.setInputAttr($input, col.rules, isAdd);
+                                $input.attr("dialog", dialogForEdit || dialogFor);
+                                editor.fleshValue = true;
                                 $Core.Combobox.bind($input);
                             }
                         }
                     }
 
                     $input.attr("field", field);
+                    $input.attr("name", editor.nameFor || editor.field);//可能指定for为其它字段
                     $input.focus(function () {
                         dg.PKColumn.Editor.editField = $(this).attr("field");
 
@@ -1184,43 +1205,7 @@
                         var options = $Core.Combobox.setAttr($input, "options");
                         if (options) {
                             var attrs = options.attrs;
-                            //alert(JSON.stringify(attrs));
-                            for (var key in attrs) {
-                                switch (key.toLowerCase()) {
-                                    case "multipleforadd":
-                                        if (isAdd) {
-                                            $input.attr("multiple", attrs[key]);
-                                        }
-                                        break;
-                                    case "multipleforedit":
-                                        $input.attr("multiple", attrs[key]);
-                                        break;
-                                    case "configkeyeforadd":
-                                        if (isAdd) {
-                                            $input.attr("configkey", attrs[key]);
-                                        }
-                                        break;
-                                    case "configkeyforedit":
-                                        $input.attr("configkey", attrs[key]);
-                                        break;
-                                    case "objnameforadd":
-                                        if (isAdd) {
-                                            $input.attr("objname", attrs[key]);
-                                        }
-                                        break;
-                                    case "objnameforedit":
-                                        $input.attr("objname", attrs[key]);
-                                        break;
-                                    default:
-                                        $input.attr(key, attrs[key]);
-                                        break;
-                                }
-                                if (key.toLowerCase() == "multipleforedit") {
-                                    $input.attr("multiple", attrs[key]);
-                                } else {
-                                    $input.attr(key, attrs[key]);
-                                }
-                            }
+                            this.setInputAttr($input, attrs, isAdd);
                             //判断是否必填：
 
                             if (col && col.datatype) {
@@ -1236,22 +1221,13 @@
                             items.push($input);
                         }
                     }
-                    else if (editor.type == 'validatebox') {
+                    else if (editor.type == 'validatebox' || editor.type == 'numberbox') {
                         var col = dg.Internal.headerData.get("field", field);
                         if (col) {
                             var vType = "";
                             if (col.rules && typeof col.rules == "object") {
                                 if (col.rules["validtype"]) {
                                     vType = col.rules["validtype"];
-                                }
-                                // //处理弹窗绑定 dialogforadd ,dialogforedit
-                                if (isAdd && col.rules["dialogforadd"]) {
-                                    $input.attr("dialog", col.rules["dialogforadd"]);
-                                    $Core.Combobox.bind($input);
-                                }
-                                else if (col.rules["dialogforedit"]) {
-                                    $input.attr("dialog", col.rules["dialogforedit"]);
-                                    $Core.Combobox.bind($input);
                                 }
                             }
                             if (col.importunique) {
@@ -1289,6 +1265,7 @@
                 var editors = dg.datagrid("getEditors", index);
                 if (editors.length > 0 && dg.datagrid('validateRow', index)) {
                     var isTreeTrid = dg.isTreeGrid;
+                    var isNeedReload = false;
                     var row = null;
                     if (isTreeTrid) {
                         row = $.extend(true, {}, dg.datagrid("find", index));
@@ -1299,17 +1276,30 @@
                     }
                     //结束之前要取值。
                     var editValues = {};
+                    var nameFors = {};
                     //追加不存在的字段
                     //遍历编辑器，再取一遍值。【支持更多行内的配置项】
                     for (var i in editors) {
                         var editor = editors[i];
-                        if (editor.type && editor.isrename) {
-                            if (editor.type == "combobox" || editor.target.attr("dialog")) {
-                                editValues[editor.field] = $Core.Combobox.getValue(editor.field);
+                        if (editor.type && editor.fleshValue) {
+                            var name = editor.nameFor || editor.field;
+                            var value;
+                            if (editor.type == "combobox" || editor.target.attr("dialog"))
+                            {
+                                value = $Core.Combobox.getValue(name) || editor.target.val();
                             }
-                            else {
-                                editValues[editor.field] = editor.target.val();
+                            else
+                            {
+                                value = editor.target.val();
                             }
+                            if (value != row[editor.field])
+                            {
+                                editValues[name]=value;
+                            }
+                            if (editor.nameFor) {
+                                nameFors[editor.field] = true;
+                            }
+                            isNeedReload = true;
                         }
                     }
                     if (row) {
@@ -1321,6 +1311,7 @@
                         var _change_data = changes[changes.length - 1]; //获取行数据
                         var post_data = $.extend(true, {}, editValues);
                         if (_change_data) {
+                            _change_data = $.extend(true, _change_data, editValues);//追加新增属性：namefor
                             if (isAdd && dg.defaultInsertData) {
                                 post_data = $.extend(true, _change_data, row);
                             } else {
@@ -1329,11 +1320,17 @@
                         }
                         //追加不存在的字段
                         //遍历编辑器，再取一遍值。【支持更多行内的配置项】
-                        var isNeedReload = false;
+
                         for (var key in editValues) {
                             if (post_data[key] == undefined && row[key] == undefined) {
                                 post_data[key] = editValues[key];
                                 isNeedReload = true;
+                            }
+                        }
+                        //移除namefor字段。
+                        for (var key in nameFors) {
+                            if (post_data[key] != undefined) {
+                                delete post_data[key];
                             }
                         }
                         if (!$.isEmptyObject(post_data)) //{ dg.datagrid('cancelEdit', index); }
@@ -1399,6 +1396,64 @@
                     }
                 }
                 return changeJson;
+            },
+            setInputAttr: function ($input, opts, isAdd) {
+                if (!opts) { return; }
+                var attrs = opts;
+                for (var key in attrs) {
+                    switch (key.toLowerCase()) {
+                        case "namefor":
+                        case "nameforadd":
+                        case "nameforedit":
+                        case "dialogfor":
+                        case "dialogforadd":
+                        case "dialogforedit":
+                            break;
+                        case "multiplefor":
+                            $input.attr("multiple", attrs[key]);
+                            break;
+                        case "multipleforadd":
+                            if (isAdd) {
+                                $input.attr("multiple", attrs[key]);
+                            }
+                            break;
+                        case "multipleforedit":
+                            if (!isAdd) {
+                                $input.attr("multiple", attrs[key]);
+                            }
+                            break;
+                        case "configkeyfor":
+                            $input.attr("configkey", attrs[key]);
+                            break;
+                        case "configkeyeforadd":
+                            if (isAdd) {
+                                $input.attr("configkey", attrs[key]);
+                            }
+                            break;
+                        case "configkeyforedit":
+                            if (!isAdd) {
+                                $input.attr("configkey", attrs[key]);
+                            }
+                            break;
+                        case "objnamefor":
+                            $input.attr("objname", attrs[key]);
+                            break;
+                        case "objnameforadd":
+                            if (isAdd) {
+                                $input.attr("objname", attrs[key]);
+                            }
+                            break;
+                        case "objnameforedit":
+                            if (!isAdd) {
+                                $input.attr("objname", attrs[key]);
+                            }
+                            break;
+
+                        default:
+                            $input.attr(key, attrs[key]);
+                            break;
+                    }
+                }
             }
         }
     }

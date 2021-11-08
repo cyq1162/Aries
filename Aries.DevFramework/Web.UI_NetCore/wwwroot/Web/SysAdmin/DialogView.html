@@ -41,9 +41,9 @@
                 //fit: false,
                 onLoadSuccess: function () {
                     if (!title) {
-                        //如果没有设置，则从第二个字段开始，取第一个类型为字符串的字段。
-                        for (var i = 1; i < dg.Internal.headerData.length; i++) {
-                            if (!dg.Internal.headerData[i].hidden && dg.Internal.headerData[i].datatype.startWith("string")) {
+                        //第1个显示的则为文本。
+                        for (var i = 0; i < dg.Internal.headerData.length; i++) {
+                            if (!dg.Internal.headerData[i].hidden) {
                                 title = dg.Internal.headerData[i].field;
                                 break;
                             }

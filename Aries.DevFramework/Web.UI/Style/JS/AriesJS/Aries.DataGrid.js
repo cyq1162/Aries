@@ -1282,6 +1282,9 @@
                     for (var i in editors) {
                         var editor = editors[i];
                         if (editor.type && editor.fleshValue) {
+                            if (editor.nameFor) {
+                                nameFors[editor.field] = true;
+                            }
                             var name = editor.nameFor || editor.field;
                             var value;
                             if (editor.type == "combobox" || editor.target.attr("dialog"))
@@ -1292,14 +1295,17 @@
                             {
                                 value = editor.target.val();
                             }
+                            if (value == "" && !row[editor.field])
+                            {
+                                continue;//空值。
+                            }
                             if (value != row[editor.field])
                             {
-                                editValues[name]=value;
+                                editValues[name] = value;
+                                isNeedReload = true;
                             }
-                            if (editor.nameFor) {
-                                nameFors[editor.field] = true;
-                            }
-                            isNeedReload = true;
+                           
+                           
                         }
                     }
                     if (row) {

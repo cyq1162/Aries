@@ -126,7 +126,7 @@ namespace Aries.Core.Config
                 dt = action.Select(string.Format("ObjName='{0}' order by frozen desc,OrderNum asc", objName));
             }
             MDataTable dt2 = dt.FindAll(where);
-            return dt2 != null ? dt2 : dt.GetSchema(false);//自动缓存只存档一份，同时兼容文本数据库
+            return (dt2 != null && dt2.Columns.Count > 0) ? dt2 : dt.GetSchema(false);//自动缓存只存档一份，同时兼容文本数据库
         }
         private static void FillTable(string objName, string objCode, MDataTable dt)
         {

@@ -7209,6 +7209,11 @@
             <param name="location"></param>
             <param name="permanent">true 301跳转，默认false 是302跳转</param>
         </member>
+        <member name="M:System.Web.HttpSessionState.Add(System.String,System.Object)">
+            <summary>
+            向会话状态集合添加一个新项。
+            </summary>
+        </member>
         <member name="T:System.Web.IHttpModule">
             <summary>
             兼容MVC（Taurus、Aries）而存在，以下都是。

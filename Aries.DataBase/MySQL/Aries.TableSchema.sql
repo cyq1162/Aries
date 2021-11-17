@@ -12,6 +12,8 @@
     PRIMARY KEY (`ExcelID`) 
 );
 
+comment = '';
+
 CREATE TABLE `Config_ExcelInfo` 
 (
     `ExceInfoID` char(36) NOT NULL COMMENT '主键',
@@ -27,6 +29,8 @@ CREATE TABLE `Config_ExcelInfo`
     `CreateTime` datetime NULL COMMENT '创建日期',
     PRIMARY KEY (`ExceInfoID`) 
 );
+
+comment = '';
 
 CREATE TABLE `Config_Grid` 
 (
@@ -57,6 +61,8 @@ CREATE TABLE `Config_Grid`
     PRIMARY KEY (`GridID`) 
 );
 
+comment = '';
+
 CREATE TABLE `Config_KeyValue` 
 (
     `KeyValueID` char(36) NOT NULL COMMENT '配置表标识',
@@ -70,47 +76,7 @@ CREATE TABLE `Config_KeyValue`
     PRIMARY KEY (`KeyValueID`) 
 );
 
-CREATE TABLE `Demo_Area` 
-(
-    `ID` int AUTO_INCREMENT NOT NULL,
-    `Code` varchar(50) NULL,
-    `Name` varchar(100) NULL,
-    `PCode` varchar(50) NULL,
-    `Sort` int NULL,
-    `Lvl` int NULL,
-    `Description` varchar(100) NULL,
-    PRIMARY KEY (`ID`) 
-);
-
-CREATE TABLE `Demo_TestA` 
-(
-    `ID` varchar(50) NOT NULL,
-    `F1` varchar(50) NULL,
-    `F2` bit NULL,
-    `F3` decimal(8,2) NULL,
-    `F4` int NULL,
-    PRIMARY KEY (`ID`) 
-);
-
-CREATE TABLE `Demo_TestB` 
-(
-    `ID` varchar(50) NOT NULL,
-    `F5` int NULL,
-    `F6` varchar(100) NULL,
-    `F7` varchar(100) NULL,
-    `F8` varchar(100) NULL,
-    `FK` varchar(1000) NULL,
-    PRIMARY KEY (`ID`) 
-);
-
-CREATE TABLE `Demo_Tree` 
-(
-    `ID` int AUTO_INCREMENT NOT NULL,
-    `Name` varchar(50) NULL,
-    `ParentID` int NULL,
-    `CreateTime` datetime NULL,
-    PRIMARY KEY (`ID`) 
-);
+comment = '';
 
 CREATE TABLE `Sys_Action` 
 (
@@ -122,6 +88,8 @@ CREATE TABLE `Sys_Action`
     `SortOrder` int Default 999 NULL,
     PRIMARY KEY (`ActionID`) 
 );
+
+comment = '';
 
 CREATE TABLE `Sys_Menu` 
 (
@@ -139,6 +107,22 @@ CREATE TABLE `Sys_Menu`
     PRIMARY KEY (`MenuID`) 
 );
 
+comment = '';
+
+CREATE TABLE `Sys_Organization` 
+(
+    `OrgID` char(36) NOT NULL COMMENT '主键',
+    `OrgName` varchar(100) NOT NULL COMMENT '组织名称',
+    `OrgFullName` varchar(100) NOT NULL COMMENT '组织全称',
+    `OrgCode` varchar(300) NOT NULL COMMENT '组织代码',
+    `OrgLevel` int NULL COMMENT '组织层级',
+    `ParentOrgID` varchar(50) NULL COMMENT '上级组织',
+    `CreateTime` datetime NULL COMMENT '创建日期',
+    PRIMARY KEY (`OrgID`) 
+);
+
+comment = '';
+
 CREATE TABLE `Sys_Role` 
 (
     `RoleID` char(36) NOT NULL COMMENT '主键',
@@ -146,6 +130,8 @@ CREATE TABLE `Sys_Role`
     `Notes` varchar(150) NULL COMMENT '描述',
     PRIMARY KEY (`RoleID`) 
 );
+
+comment = '';
 
 CREATE TABLE `Sys_RoleAction` 
 (
@@ -155,6 +141,8 @@ CREATE TABLE `Sys_RoleAction`
     `ActionID` varchar(36) NULL COMMENT '权限功能ID',
     PRIMARY KEY (`RoleActionID`) 
 );
+
+comment = '';
 
 CREATE TABLE `Sys_User` 
 (
@@ -171,10 +159,12 @@ CREATE TABLE `Sys_User`
     `LastLoginTime` datetime NULL COMMENT '最后登录时间',
     `LastLoginIP` varchar(50) NULL COMMENT '公司ID',
     `RoleIDs` varchar(500) NULL COMMENT '角色ID（可以多个）',
-    `OrgIDs` varchar(500) NULL COMMENT '组织部门ID（可以多个）',
+    `OrgIDs` varchar(500) NULL COMMENT '组织ID（可以多个）',
     `CreateTime` datetime NULL COMMENT '创建日期',
     PRIMARY KEY (`UserID`) 
 );
+
+comment = '用户表';
 
 CREATE TABLE `Sys_UserInfo` 
 (
@@ -185,14 +175,5 @@ CREATE TABLE `Sys_UserInfo`
     PRIMARY KEY (`UserInfoID`) 
 );
 
-CREATE TABLE `Sys_Organization` 
-(
-    `OrgID` char(36) NOT NULL,
-    `OrgName` varchar(100) NOT NULL,
-    `OrgFullName` varchar(100) NOT NULL,
-    `OrgCode` varchar(300) NOT NULL,
-    `OrgLevel` int NULL,
-    `ParentOrg` varchar(50) NULL,
-    `CreateTime` datetime NULL,
-    PRIMARY KEY (`OrgID`) 
-);
+comment = '';
+

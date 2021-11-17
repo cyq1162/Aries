@@ -1,13 +1,13 @@
 ﻿CREATE TABLE [Config_Excel] 
 (
     [ExcelID] uniqueidentifier Default (newid()) NOT NULL,
-    [ExcelName] varchar(50) NULL,
+    [ExcelName] nvarchar(50) NULL,
     [Description] nvarchar(100) NULL,
     [TableNames] nvarchar(400) NULL,
-    [StartIndex] int Default (0) NULL,
-    [HeadCrossRowNum] int Default (1) NULL,
-    [WhereType] tinyint Default (0) NULL,
-    [AcceptType] tinyint Default (0) NULL,
+    [StartIndex] int Default 0 NULL,
+    [HeadCrossRowNum] int Default 1 NULL,
+    [WhereType] tinyint Default 0 NULL,
+    [AcceptType] tinyint Default 0 NULL,
     [CreateTime] datetime Default getdate() NULL,
     PRIMARY KEY ([ExcelID]) 
 )
@@ -31,10 +31,10 @@ CREATE TABLE [Config_ExcelInfo]
     [TableName] nvarchar(100) NULL,
     [Field] nvarchar(100) NULL,
     [Formatter] nvarchar(100) NULL,
-    [IsUnique] bit Default (0) NOT NULL,
+    [IsUnique] bit Default 0 NOT NULL,
     [IsForeignkey] bit NULL,
     [ForeignTable] nvarchar(100) NULL,
-    [IsRequired] bit Default (0) NULL,
+    [IsRequired] bit Default 0 NULL,
     [CreateTime] datetime Default getdate() NULL,
     PRIMARY KEY ([ExceInfoID]) 
 )
@@ -55,28 +55,28 @@ exec sp_addextendedproperty N'MS_Description', N'', N'user', N'dbo', N'table', N
 CREATE TABLE [Config_Grid] 
 (
     [GridID] uniqueidentifier Default (newid()) NOT NULL,
-    [ObjName] varchar(50) NOT NULL,
+    [ObjName] nvarchar(50) NOT NULL,
     [Rules] nvarchar(250) NULL,
-    [Field] varchar(40) NOT NULL,
+    [Field] nvarchar(40) NOT NULL,
     [Title] nvarchar(50) NOT NULL,
-    [Hidden] bit Default (0) NULL,
-    [OrderNum] int Default (0) NULL,
-    [Width] int Default (100) NULL,
-    [Align] varchar(10) Default (N'center') NULL,
+    [Hidden] bit Default 0 NULL,
+    [OrderNum] int Default 0 NULL,
+    [Width] int Default 100 NULL,
+    [Align] nvarchar(10) Default (N'center') NULL,
     [Sortable] bit NULL,
     [Formatter] nvarchar(50) NULL,
-    [Styler] varchar(50) NULL,
-    [Editor] varchar(50) NULL,
-    [Rowspan] tinyint Default (1) NULL,
-    [Colspan] tinyint Default (1) NULL,
-    [Search] bit Default (0) NULL,
-    [DataType] varchar(50) NULL,
+    [Styler] nvarchar(50) NULL,
+    [Editor] nvarchar(50) NULL,
+    [Rowspan] tinyint Default 1 NULL,
+    [Colspan] tinyint Default 1 NULL,
+    [Search] bit Default 0 NULL,
+    [DataType] nvarchar(50) NULL,
     [Import] bit NULL,
     [Export] bit NULL,
     [Frozen] bit NULL,
     [Edit] bit NULL,
-    [MergeIndex] tinyint Default (1) NULL,
-    [ImportUnique] bit Default (0) NULL,
+    [MergeIndex] tinyint Default 1 NULL,
+    [ImportUnique] bit Default 0 NULL,
     [LastEditTime] datetime Default getdate() NULL,
     PRIMARY KEY ([GridID]) 
 )
@@ -115,7 +115,7 @@ CREATE TABLE [Config_KeyValue]
     [ConfigValue] nvarchar(300) NOT NULL,
     [Flag] nvarchar(100) NULL,
     [Notes] nvarchar(1000) NULL,
-    [OrderNo] int Default (999) NULL,
+    [OrderNo] int Default 999 NULL,
     [CreateTime] datetime Default getdate() NULL,
     PRIMARY KEY ([KeyValueID]) 
 )
@@ -130,64 +130,14 @@ exec sp_addextendedproperty N'MS_Description', N'排序号', N'user', N'dbo', N'
 exec sp_addextendedproperty N'MS_Description', N'创建日期', N'user', N'dbo', N'table', N'Config_KeyValue', N'column', N'CreateTime';
 exec sp_addextendedproperty N'MS_Description', N'', N'user', N'dbo', N'table', N'Config_KeyValue';
 
-CREATE TABLE [Demo_Area] 
-(
-    [ID] int IDENTITY(1,1) NOT NULL,
-    [Code] varchar(50) NULL,
-    [Name] nvarchar(100) NULL,
-    [PCode] varchar(50) NULL,
-    [Sort] int NULL,
-    [Lvl] int NULL,
-    [Description] nvarchar(100) NULL,
-    PRIMARY KEY ([ID]) 
-)
-
-exec sp_addextendedproperty N'MS_Description', N'', N'user', N'dbo', N'table', N'Demo_Area';
-
-CREATE TABLE [Demo_TestA] 
-(
-    [ID] varchar(50) NOT NULL,
-    [F1] varchar(50) NULL,
-    [F2] bit NULL,
-    [F3] decimal(8,2) NULL,
-    [F4] int NULL,
-    PRIMARY KEY ([ID]) 
-)
-
-exec sp_addextendedproperty N'MS_Description', N'', N'user', N'dbo', N'table', N'Demo_TestA';
-
-CREATE TABLE [Demo_TestB] 
-(
-    [ID] varchar(50) NOT NULL,
-    [F5] int NULL,
-    [F6] varchar(100) NULL,
-    [F7] varchar(100) NULL,
-    [F8] varchar(100) NULL,
-    [FK] varchar(1000) NULL,
-    PRIMARY KEY ([ID]) 
-)
-
-exec sp_addextendedproperty N'MS_Description', N'', N'user', N'dbo', N'table', N'Demo_TestB';
-
-CREATE TABLE [Demo_Tree] 
-(
-    [ID] int IDENTITY(1,1) NOT NULL,
-    [Name] nvarchar(50) NULL,
-    [ParentID] int NULL,
-    [CreateTime] datetime NULL,
-    PRIMARY KEY ([ID]) 
-)
-
-exec sp_addextendedproperty N'MS_Description', N'', N'user', N'dbo', N'table', N'Demo_Tree';
-
 CREATE TABLE [Sys_Action] 
 (
     [ActionID] uniqueidentifier Default (newid()) NOT NULL,
     [ActionName] nvarchar(100) NOT NULL,
     [ActionRefName] nvarchar(100) NOT NULL,
-    [IsEnabled] bit Default (1) NULL,
-    [IsSys] bit Default (0) NULL,
-    [SortOrder] int Default (999) NULL,
+    [IsEnabled] bit Default 1 NULL,
+    [IsSys] bit Default 0 NULL,
+    [SortOrder] int Default 999 NULL,
     PRIMARY KEY ([ActionID]) 
 )
 
@@ -208,7 +158,7 @@ CREATE TABLE [Sys_Menu]
     [MenuIcon] nvarchar(500) NULL,
     [BigMenuIcon] nvarchar(500) NULL,
     [IsShortcut] bit NULL,
-    [IsShow] int Default (1) NULL,
+    [IsShow] int Default 1 NULL,
     [ActionIDs] nvarchar(500) NULL,
     PRIMARY KEY ([MenuID]) 
 )
@@ -225,6 +175,27 @@ exec sp_addextendedproperty N'MS_Description', N'快捷键（未用到）', N'us
 exec sp_addextendedproperty N'MS_Description', N'是否显示', N'user', N'dbo', N'table', N'Sys_Menu', N'column', N'IsShow';
 exec sp_addextendedproperty N'MS_Description', N'菜果的功能ID（以逗号分隔）', N'user', N'dbo', N'table', N'Sys_Menu', N'column', N'ActionIDs';
 exec sp_addextendedproperty N'MS_Description', N'', N'user', N'dbo', N'table', N'Sys_Menu';
+
+CREATE TABLE [Sys_Organization] 
+(
+    [OrgID] uniqueidentifier Default (newid()) NOT NULL,
+    [OrgName] nvarchar(100) NOT NULL,
+    [OrgFullName] nvarchar(100) NOT NULL,
+    [OrgCode] nvarchar(300) NOT NULL,
+    [OrgLevel] int NULL,
+    [ParentOrgID] nvarchar(50) NULL,
+    [CreateTime] datetime Default getdate() NULL,
+    PRIMARY KEY ([OrgID]) 
+)
+
+exec sp_addextendedproperty N'MS_Description', N'主键', N'user', N'dbo', N'table', N'Sys_Organization', N'column', N'OrgID';
+exec sp_addextendedproperty N'MS_Description', N'组织名称', N'user', N'dbo', N'table', N'Sys_Organization', N'column', N'OrgName';
+exec sp_addextendedproperty N'MS_Description', N'组织全称', N'user', N'dbo', N'table', N'Sys_Organization', N'column', N'OrgFullName';
+exec sp_addextendedproperty N'MS_Description', N'组织代码', N'user', N'dbo', N'table', N'Sys_Organization', N'column', N'OrgCode';
+exec sp_addextendedproperty N'MS_Description', N'组织层级', N'user', N'dbo', N'table', N'Sys_Organization', N'column', N'OrgLevel';
+exec sp_addextendedproperty N'MS_Description', N'上级组织', N'user', N'dbo', N'table', N'Sys_Organization', N'column', N'ParentOrgID';
+exec sp_addextendedproperty N'MS_Description', N'创建日期', N'user', N'dbo', N'table', N'Sys_Organization', N'column', N'CreateTime';
+exec sp_addextendedproperty N'MS_Description', N'', N'user', N'dbo', N'table', N'Sys_Organization';
 
 CREATE TABLE [Sys_Role] 
 (
@@ -261,15 +232,15 @@ CREATE TABLE [Sys_User]
     [FullName] nvarchar(100) NOT NULL,
     [Password] nvarchar(300) NOT NULL,
     [PwdExpiredTime] datetime NULL,
-    [Sex] bit Default (1) NULL,
+    [Sex] bit Default 1 NULL,
     [Phone] nvarchar(100) NULL,
     [Email] nvarchar(100) NULL,
     [Status] int NULL,
-    [LoginCount] int Default (0) NULL,
+    [LoginCount] int Default 0 NULL,
     [LastLoginTime] datetime NULL,
     [LastLoginIP] nvarchar(50) NULL,
     [RoleIDs] nvarchar(500) NULL,
-	[OrgIDs] nvarchar(500) NULL,
+    [OrgIDs] nvarchar(500) NULL,
     [CreateTime] datetime Default getdate() NULL,
     PRIMARY KEY ([UserID]) 
 )
@@ -286,9 +257,10 @@ exec sp_addextendedproperty N'MS_Description', N'状态 1 启用 2禁用 3已删
 exec sp_addextendedproperty N'MS_Description', N'登录次数', N'user', N'dbo', N'table', N'Sys_User', N'column', N'LoginCount';
 exec sp_addextendedproperty N'MS_Description', N'最后登录时间', N'user', N'dbo', N'table', N'Sys_User', N'column', N'LastLoginTime';
 exec sp_addextendedproperty N'MS_Description', N'公司ID', N'user', N'dbo', N'table', N'Sys_User', N'column', N'LastLoginIP';
-exec sp_addextendedproperty N'MS_Description', N'角色ID（可以多个）', N'user', N'dbo', N'table', N'Sys_User', N'column', N'RoleIDs';exec sp_addextendedproperty N'MS_Description', N'组织部门ID（可以多个）', N'user', N'dbo', N'table', N'Sys_User', N'column', N'OrgIDs';
+exec sp_addextendedproperty N'MS_Description', N'角色ID（可以多个）', N'user', N'dbo', N'table', N'Sys_User', N'column', N'RoleIDs';
+exec sp_addextendedproperty N'MS_Description', N'组织ID（可以多个）', N'user', N'dbo', N'table', N'Sys_User', N'column', N'OrgIDs';
 exec sp_addextendedproperty N'MS_Description', N'创建日期', N'user', N'dbo', N'table', N'Sys_User', N'column', N'CreateTime';
-exec sp_addextendedproperty N'MS_Description', N'', N'user', N'dbo', N'table', N'Sys_User';
+exec sp_addextendedproperty N'MS_Description', N'用户表', N'user', N'dbo', N'table', N'Sys_User';
 
 CREATE TABLE [Sys_UserInfo] 
 (
@@ -303,15 +275,5 @@ exec sp_addextendedproperty N'MS_Description', N'用户ID', N'user', N'dbo', N't
 exec sp_addextendedproperty N'MS_Description', N'公司ID（未用到）', N'user', N'dbo', N'table', N'Sys_UserInfo', N'column', N'CompanyID';
 exec sp_addextendedproperty N'MS_Description', N'用户备注', N'user', N'dbo', N'table', N'Sys_UserInfo', N'column', N'Memo';
 exec sp_addextendedproperty N'MS_Description', N'区域ID（未用到）', N'user', N'dbo', N'table', N'Sys_UserInfo', N'column', N'AreaID';
-exec sp_addextendedproperty N'MS_Description', N'', N'user', N'dbo', N'table', N'Sys_UserInfo';CREATE TABLE [Sys_Organization] 
-(
-    [OrgID] uniqueidentifier Default (newid()) NOT NULL,
-    [OrgName] nvarchar(100) NOT NULL,
-    [OrgFullName] nvarchar(100) NOT NULL,
-    [OrgCode] nvarchar(300) NOT NULL,
-    [OrgLevel] int NULL,
-    [ParentOrg] nvarchar(50) NULL,
-    [CreateTime] datetime Default getdate() NULL,
-    PRIMARY KEY ([OrgID]) 
-)
+exec sp_addextendedproperty N'MS_Description', N'', N'user', N'dbo', N'table', N'Sys_UserInfo';
 

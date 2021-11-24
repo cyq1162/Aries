@@ -328,6 +328,15 @@
             },
             //对默认表头进行处理分组。
             formatHeader: function (dg) {
+                if (dg.Internal.headerData.success!=undefined)
+                {
+                    try
+                    {
+                        console.error("GetHeader fail : "+JSON.stringify(dg.Internal.headerData));
+                    }
+                    catch(error){}
+                    return;
+                }
                 var json_data = $Core.Utility.cloneArray(dg.Internal.headerData, true);
                 var frozen = Array(), cols = Array();
                 for (var i = 0; i < json_data.length; i++) {

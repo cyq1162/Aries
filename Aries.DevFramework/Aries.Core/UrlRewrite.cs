@@ -140,7 +140,7 @@ namespace Aries.Core
                     context.RewritePath(defaultUrl);
                 }
             }
-            else if(!AppConfig.IsAspNetCore)
+            else if(!AppConfig.IsNetCore)
             {
                 string uriPath = Path.GetFileNameWithoutExtension(context.Request.Url.LocalPath).ToLower();
                 isAjax = uriPath == "ajax";
@@ -304,7 +304,7 @@ namespace Aries.Core
             //要处理自定义语言标签
             if (WebHelper.IsAriesSuffix())
             {
-                if (AppConfig.IsAspNetCore)
+                if (AppConfig.IsNetCore)
                 {
                     string path = AppConfig.WebRootPath + HttpContext.Current.Request.Url.LocalPath;
                     if (File.Exists(path))

@@ -126,9 +126,14 @@
             Web根目录(ASP.NET Core 项目时，由于机制不同，指向的路径需要调整，所以该值可以修改)
             </summary>
         </member>
-        <member name="P:CYQ.Data.AppConfig.IsAspNetCore">
+        <member name="P:CYQ.Data.AppConfig.IsWeb">
             <summary>
-            当前是否ASP.NET Core环境。
+            当前运行环境是否Web应用。
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.AppConfig.IsNetCore">
+            <summary>
+            当前是否.NET Core环境。
             </summary>
         </member>
         <member name="T:CYQ.Data.AppConfig.XHtml">
@@ -2511,6 +2516,11 @@
             创建时间
             </summary>
         </member>
+        <member name="M:CYQ.Data.SysLogs.Write">
+            <summary>
+            将日志写入到队列中待线程执行。
+            </summary>
+        </member>
         <member name="F:CYQ.Data.SysLogs.IsWriteToTxt">
             <summary>
             是否写到文本中
@@ -3966,6 +3976,14 @@
             </summary>
             <param name="entity">实体对象</param>
         </member>
+        <member name="M:CYQ.Data.Table.MDataRow.LoadFrom(System.Object,CYQ.Data.Table.BreakOp,System.Int32)">
+            <summary>
+            将实体转成数据行。
+            </summary>
+            <param name="entity">实体对象</param>
+            <param name="op">跳过设置的选项</param>
+            <param name="initState">初始值：0无法插入和更新；1可插入；2可插入可更新(默认值)</param>
+        </member>
         <member name="M:CYQ.Data.Table.MDataRow.SetToEntity(System.Object)">
             <summary>
             将行中的数据值赋给实体对象
@@ -4782,6 +4800,13 @@
             </summary>
             <param name="columnName">列名</param>
             <param name="ordinal">序号</param>
+        </member>
+        <member name="M:CYQ.Data.Table.MDataColumn.SetValue(System.String,System.Object)">
+            <summary>
+            给列批量赋相同的值。
+            </summary>
+            <param name="columnName">列名</param>
+            <param name="value">值</param>
         </member>
         <member name="M:CYQ.Data.Table.MDataColumn.ToJson(System.Boolean)">
             <summary>
@@ -5792,6 +5817,13 @@
             <para>键值(有层级时用：XXX.YYY.ZZZ)</para></param>
             <returns></returns>
         </member>
+        <member name="M:CYQ.Data.Tool.JsonHelper.IsSuccess(System.String)">
+            <summary>
+            Json 返回值是否为true（包含"success":true）
+            </summary>
+            <param name="json"></param>
+            <returns></returns>
+        </member>
         <member name="M:CYQ.Data.Tool.JsonHelper.OutResult(System.Boolean,System.String)">
             <summary>
             a easy method for you to return a json
@@ -5872,6 +5904,7 @@
             <typeparam name="T">集合类型</typeparam>
             <param name="json">json数据</param>
             <returns></returns>
+            
         </member>
         <member name="M:CYQ.Data.Tool.JsonHelper.ToEntity``1(System.String,CYQ.Data.Tool.EscapeOp)">
             <summary>
@@ -5935,6 +5968,11 @@
         <member name="M:CYQ.Data.Tool.JsonSplit.GetValueLength(System.Boolean,System.String,System.Int32,System.Boolean,System.Int32@)">
             <summary>
             获取值的长度（当Json值嵌套以"{"或"["开头时），【优化后】
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Tool.JsonSplit.ToEntityOrList(System.Type,System.String,CYQ.Data.Tool.EscapeOp)">
+            <summary>
+            支持转换：实体或实体列表二合一
             </summary>
         </member>
         <member name="M:CYQ.Data.Tool.JsonSplit.SplitEscapeArray(System.String)">
@@ -6135,6 +6173,11 @@
         <member name="T:CYQ.Data.Tool.ThreadBreak">
             <summary>
             在ASP.NET中使用多线程时，为了避开升级dll时产生多个线程互相影响，使用此类可以通过外置文件进行跳出。
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.Tool.ThreadBreak.ClearGlobalThread">
+            <summary>
+            应用程序退出时，可调用此方法，用于退出全局线程【while循环】。
             </summary>
         </member>
         <member name="M:CYQ.Data.Tool.ThreadBreak.#ctor(System.String,System.Object)">
@@ -7158,12 +7201,27 @@
             一周时间
             </summary>
         </member>
+        <member name="T:System.Collections.Generic.IDictionaryExtent">
+            <summary>
+            For HttpContext.Items
+            </summary>
+        </member>
         <member name="M:System.Configuration.ConfigurationManager.GetSection(System.String)">
             <summary>
             获得其它节点的值(字符串)。
             </summary>
             <param name="key"></param>
             <returns></returns>
+        </member>
+        <member name="T:System.Web.HttpApplication">
+            <summary>
+            兼容MVC（Taurus、Aries）
+            </summary>
+        </member>
+        <member name="P:System.Web.HttpApplication.Instance">
+            <summary>
+            单例处理（不需要延时）
+            </summary>
         </member>
         <member name="F:System.Web.HttpContext.contextAccessor">
             <summary>
@@ -7217,16 +7275,6 @@
         <member name="T:System.Web.IHttpModule">
             <summary>
             兼容MVC（Taurus、Aries）而存在，以下都是。
-            </summary>
-        </member>
-        <member name="T:System.Web.HttpApplication">
-            <summary>
-            兼容MVC（Taurus、Aries）
-            </summary>
-        </member>
-        <member name="P:System.Web.HttpApplication.Instance">
-            <summary>
-            单例处理（不需要延时）
             </summary>
         </member>
     </members>

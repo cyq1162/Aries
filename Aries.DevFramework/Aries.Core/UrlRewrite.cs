@@ -99,7 +99,7 @@ namespace Aries.Core
 
                 #endregion
                 string lic = AppConfig.GetApp(LangConst.AriesLic);
-                if (string.IsNullOrEmpty(lic) || !lic.EndsWith("=2"))
+                if (string.IsNullOrEmpty(lic) || !lic.EndsWith("2"))
                 {
                     throw new Exception("Aries Authorization Fail : http://lic.cyqdata.com");
                 }

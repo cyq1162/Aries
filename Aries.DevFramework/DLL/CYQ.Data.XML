@@ -517,12 +517,45 @@
             <param name="pageSize">pageSize<para>每页数量[为0时默认选择所有]</para></param>
         </member>
         <member name="M:CYQ.Data.MAction.Select(System.Int32,System.Int32,System.Object,System.Int32@)">
-            <param name="rowCount">The total number of records returned
+            <param name="count">The total number of records returned
             <para>返回的记录总数</para></param>
         </member>
-        <member name="M:CYQ.Data.MAction.Select``1(System.Int32,System.Int32,System.Object,System.Int32@)">
+        <member name="M:CYQ.Data.MAction.SelectList``1">
+             <summary>
+             select all data
+            <para>选择所有数据</para>
+             </summary>
+        </member>
+        <member name="M:CYQ.Data.MAction.SelectList``1(System.Object)">
+            <param name="where">Sql statement where the conditions: 88, "id = 88"
+            <para>sql语句的where条件：88、"id=88"</para></param>
+        </member>
+        <member name="M:CYQ.Data.MAction.SelectList``1(System.Int32,System.Int32)">
+            <param name="pageIndex">pageIndex<para>第几页</para></param>
+            <param name="pageSize">pageSize<para>每页数量[为0时默认选择所有]</para></param>
+        </member>
+        <member name="M:CYQ.Data.MAction.SelectList``1(System.Int32,System.Int32,System.Object,System.Int32@)">
             <summary>
-            ORM 实体查询（DBFast、OrmBase、SimpleOrmBase 节省一次转实体的时间），未公开选项。
+            查询后直接返回泛型列表（节省一次转换时间）。
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.MAction.SelectJson">
+             <summary>
+             select all data
+            <para>选择所有数据</para>
+             </summary>
+        </member>
+        <member name="M:CYQ.Data.MAction.SelectJson(System.Object)">
+            <param name="where">Sql statement where the conditions: 88, "id = 88"
+            <para>sql语句的where条件：88、"id=88"</para></param>
+        </member>
+        <member name="M:CYQ.Data.MAction.SelectJson(System.Int32,System.Int32)">
+            <param name="pageIndex">pageIndex<para>第几页</para></param>
+            <param name="pageSize">pageSize<para>每页数量[为0时默认选择所有]</para></param>
+        </member>
+        <member name="M:CYQ.Data.MAction.SelectJson(System.Int32,System.Int32,System.Object,System.Int32@,System.Boolean,System.String)">
+            <summary>
+            查询后直接返回Json字符串（节省一次转换时间）。
             </summary>
         </member>
         <member name="M:CYQ.Data.MAction.Fill">
@@ -751,6 +784,11 @@
             <para>自增主键标识的，是否允许手动插入id</para> 
              </summary>
         </member>
+        <member name="P:CYQ.Data.MAction.IsUseAutoCache">
+            <summary>
+            获取或设置当前操作是否使用自动缓存
+            </summary>
+        </member>
         <member name="P:CYQ.Data.MAction.UI">
             <summary>
             Manipulate UI
@@ -804,8 +842,21 @@
         </member>
         <member name="M:CYQ.Data.MProc.ExeList``1">
             <summary>
-            Get List T 预先实现，后续再考虑是否开放。
+            执行并返回泛型列表类型。
             </summary>
+        </member>
+        <member name="M:CYQ.Data.MProc.ExeJson">
+            <summary>
+            执行列表数据并返回Json格式字符串。
+            </summary>
+        </member>
+        <member name="M:CYQ.Data.MProc.ExeJson(System.Boolean,System.String)">
+            <summary>
+            执行列表数据并返回Json格式字符串。
+            </summary>
+            <param name="isConvertNameToLower">字段是否返回小写</param>
+            <param name="dateTimeFormatter">是否需要格式化时间，默认：yyyy-MM-dd HH:mm:ss</param>
+            <returns></returns>
         </member>
         <member name="M:CYQ.Data.MProc.ExeMDataTableList">
             <summary>
@@ -956,6 +1007,11 @@
             <summary>
             The OutPut value for the stored procedure: Dictionary for multiple values
             <para>存储过程的OutPut值：多个值时为Dictionary</para>
+            </summary>
+        </member>
+        <member name="P:CYQ.Data.MProc.IsUseAutoCache">
+            <summary>
+            获取或设置当前操作是否使用自动缓存
             </summary>
         </member>
         <member name="T:CYQ.Data.DalBase">
@@ -1244,9 +1300,14 @@
             Begin方法是否调用成功[在End中使用]
             </summary>
         </member>
+        <member name="P:CYQ.Data.Aop.AopInfo.TotalCount">
+            <summary>
+            查询时返回的记录总数（分页总数）
+            </summary>
+        </member>
         <member name="P:CYQ.Data.Aop.AopInfo.RowCount">
             <summary>
-            查询时返回的记录总数或ExeNonQuery的返回值
+            查询时返回的显示数量
             </summary>
         </member>
         <member name="P:CYQ.Data.Aop.AopInfo.CustomDbPara">
@@ -1461,11 +1522,6 @@
         <member name="F:CYQ.Data.Aop.AopEnum.SelectList">
             <summary>
             Orm (DBFast、SimpleOrmBase等查询返回实体列表）
-            </summary>
-        </member>
-        <member name="F:CYQ.Data.Aop.AopEnum.ExeList">
-            <summary>
-            未公开选项。
             </summary>
         </member>
         <member name="T:CYQ.Data.Aop.AopResult">
@@ -2348,6 +2404,11 @@
         <member name="F:CYQ.Data.LogType.Gemini">
             <summary>
             Gemini Workflow Dev Framework
+            </summary>
+        </member>
+        <member name="F:CYQ.Data.LogType.MicroService">
+            <summary>
+            Taurus.MicroService
             </summary>
         </member>
         <member name="T:CYQ.Data.LogWorker">
@@ -4577,6 +4638,11 @@
             DbDataReader To List
             </summary>
         </member>
+        <member name="M:CYQ.Data.Tool.ConvertTool.ChangeReaderToJson(System.Data.Common.DbDataReader,CYQ.Data.Tool.JsonHelper,System.Boolean)">
+            <summary>
+            DbDataReader To Json
+            </summary>
+        </member>
         <member name="T:CYQ.Data.Tool.TableInfo">
             <summary>
             （表、视图、存储过程）相关信息
@@ -6145,6 +6211,11 @@
             <typeparam name="K">key</typeparam>
             <typeparam name="V">value</typeparam>
         </member>
+        <member name="M:CYQ.Data.Tool.MDictionary`2.Add(`0,`1)">
+            <summary>
+            添加值【不存则，则添加；存在，则忽略】
+            </summary>
+        </member>
         <member name="M:CYQ.Data.Tool.MDictionary`2.Get(`0)">
             <summary>
             当Key为int时，通过此方法取值
@@ -6154,7 +6225,7 @@
         </member>
         <member name="M:CYQ.Data.Tool.MDictionary`2.Set(`0,`1)">
             <summary>
-            当Key为int时，通过此方法取值
+            检查值存在【则更新】，不存在则添加
             </summary>
         </member>
         <member name="P:CYQ.Data.Tool.MDictionary`2.Item(`0)">

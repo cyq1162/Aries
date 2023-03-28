@@ -128,6 +128,8 @@ namespace Aries.Core
         {
             HttpApplication app = (HttpApplication)sender;
             context = app.Context;
+            string uriPath = Path.GetFileNameWithoutExtension(context.Request.Url.LocalPath).ToLower();
+            isAjax = uriPath == "ajax";
             if (IsStaticFile())
             {
                 return;
@@ -142,9 +144,6 @@ namespace Aries.Core
             }
             else if(!AppConfig.IsNetCore)
             {
-                string uriPath = Path.GetFileNameWithoutExtension(context.Request.Url.LocalPath).ToLower();
-                isAjax = uriPath == "ajax";
-
                 //VS2013（以上）IISExpress 默认会检测文件存在，导致后续事件无法触发，因此需要做点小事情做兼容）
                 //正常IIS部署，是不需要以前兼容性代码的，（该代码将路径重写到一个已存在的文件，同时在目录下新建了一个ajax.html文件）
                 //简单的地说：以上这段代码，和根目录下的ajax.html文件，是为了兼容VS IISExpress的bug存在的（微软造的孽）。

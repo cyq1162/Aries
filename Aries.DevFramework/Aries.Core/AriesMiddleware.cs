@@ -36,9 +36,9 @@ namespace Microsoft.AspNetCore.Http
                     System.Web.HttpApplication.Instance.ExecuteEventHandler();
                     if(context.Response.StatusCode.ToString().StartsWith("30"))
                     {
-                        
+                        await context.Response.WriteAsync("");
                     }
-                    else if (context.Response.HasStarted )  // || Body是只写流  (context.Response.Body != null && context.Response.Body.CanRead
+                    else if (System.Web.HttpContext.Current.Response.HasStarted)  // || Body是只写流  (context.Response.Body != null && context.Response.Body.CanRead
                     {
                         await context.Response.WriteAsync("");
                     }
@@ -74,7 +74,8 @@ namespace Microsoft.AspNetCore.Http
         }
         public static IApplicationBuilder UseAries(this IApplicationBuilder builder, IHostingEnvironment env)
         {
-            return UseAries(builder, env.WebRootPath);
+            //Net6新建的项目，WebRootPath竟然是空。
+            return UseAries(builder, env.WebRootPath ?? env.ContentRootPath.TrimEnd('/', '\\') + "/wwwroot");
         }
         public static IApplicationBuilder UseAries(this IApplicationBuilder builder, string webRootPath)
         {

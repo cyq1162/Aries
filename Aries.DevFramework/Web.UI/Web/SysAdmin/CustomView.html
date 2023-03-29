@@ -26,7 +26,7 @@
         }
         if (options) {
             try {
-                var opt = JSON.parse(options);
+                var opt = JSON.parse(decodeURIComponent(options));
                 dg.options = opt;
             }
             catch (e) { }

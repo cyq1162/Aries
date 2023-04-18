@@ -438,7 +438,7 @@
     }
     function showDialog($input) {
         if (!$input || !$input.attr("dialog")) { alert("dialog setting error!"); return; }
-        var href = ($Core.Global.Variable.ui || "") + "/Web/SysAdmin/DialogView.html?objName=" + $input.attr("dialog");
+        var href = ($Core.Global.Variable.ui || "") +$Core.Global.dialogViewPath+ "DialogView.html?objName=" + $input.attr("dialog");
         var html = '<iframe scrolling="yes" frameborder="0"  src="' + href + '" style="width:100%;height:98%;"></iframe>'
         var opts = {
             toolbar: [{

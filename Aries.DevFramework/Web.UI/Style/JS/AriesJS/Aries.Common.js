@@ -31,7 +31,7 @@
             onConfigClick: function (el, gridid, value, index) {
                 var dg = $Core.Global.DG.Items[gridid];
                 if (dg) {
-                    var url = $Core.Utility.stringFormat("{0}?objName={1}", $Core.Global.Variable.ui + '/Web/SysAdmin/ConfigGrid.html', dg.objName);
+                    var url = $Core.Utility.stringFormat("{0}?objName={1}", $Core.Global.Variable.ui + $Core.Global.configGridPath+'ConfigGrid.html', dg.objName);
                     $Core.Global.DG.operating = dg;
                     $Core.Window.open(url, "", false);
                 }

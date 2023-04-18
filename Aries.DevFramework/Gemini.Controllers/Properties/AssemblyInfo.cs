@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Gemini.Controllers V5 版本")]
 [assembly: AssemblyDescription("双子工作流 V5 版本 控制器")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("路过秋天 （2019-05-08）")]
+[assembly: AssemblyCompany("路过秋天 （2023-04-18）")]
 [assembly: AssemblyProduct("Gemini.Workflow.Controllers")]
 [assembly: AssemblyCopyright("版权所有 (C) 路过秋天 2010-2110")]
 [assembly: AssemblyTrademark("Gemini.Controllers")]
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // 可以指定所有这些值，也可以使用“生成号”和“修订号”的默认值，
 // 方法是按如下所示使用“*”:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("5.1.0.0")]
-[assembly: AssemblyFileVersion("5.1.0.0")]
+[assembly: AssemblyVersion("5.1.1.0")]
+[assembly: AssemblyFileVersion("5.1.1.0")]

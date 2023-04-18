@@ -2,17 +2,12 @@
 using Aries.Core.Config;
 using Aries.Core.Extend;
 using Aries.Core.Helper;
-using Aries.Core.Sql;
 using CYQ.Data;
-using CYQ.Data.Cache;
-using CYQ.Data.Table;
 using CYQ.Data.Tool;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Reflection;
-using System.Text;
 using System.Threading;
 using System.Web;
 using System.Web.Configuration;
@@ -20,19 +15,39 @@ using System.Web.Configuration;
 namespace Aries.Core
 {
     /// <summary>
-    /// 权限检测模块
+    /// 权限检测模块（NetCore 下 成为单例，不能使用中间全局变量）
     /// </summary>
     public class UrlRewrite : IHttpModule
     {
+
         public void Dispose()
         {
 
         }
-        static bool isFirstLoad = true, isFirstAuthCheck = true;
-        bool isStaticFile = false, isAjax = false;
-        bool IsStaticFile()
+        static string _Version;
+        static string Version
         {
-            isStaticFile = false;
+            get
+            {
+                if (string.IsNullOrEmpty(_Version))
+                {
+                    _Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                }
+                return _Version;
+            }
+        }
+        private bool IsAjax(Uri uri)
+        {
+            string uriPath = Path.GetFileNameWithoutExtension(uri.LocalPath).ToLower();
+            return uriPath == "ajax";
+        }
+        private bool IsStaticFile(HttpContext context)
+        {
+            return context.Items["IsStaticFile"] != null;
+        }
+        static bool isFirstLoad = true, isFirstAuthCheck = true;
+        bool CheckIsStaticFile(HttpContext context)
+        {
             string contentType = "";
             switch (context.Request.CurrentExecutionFilePathExtension)
             {
@@ -60,8 +75,8 @@ namespace Aries.Core
             }
             if (!string.IsNullOrEmpty(contentType))
             {
-                isStaticFile = true;
-                string etag = Assembly.GetExecutingAssembly().GetName().Version.ToString() + 6;
+                context.Items.Add("IsStaticFile", true);
+                string etag = Version + 6;
                 if (context.Request.Headers["If-None-Match"] == etag)
                 {
                     context.Response.StatusCode = 304;
@@ -117,20 +132,17 @@ namespace Aries.Core
 
         void context_PostMapRequestHandler(object sender, EventArgs e)
         {
-            if (isAjax)
+            HttpContext context = ((HttpApplication)sender).Context;
+            if (context != null && IsAjax(context.Request.Url))
             {
                 context.Handler = SessionHandler.Instance;//注册Session
             }
         }
-        HttpContext context;
         static int integralFlag = -1;//集成模式
         void context_BeginRequest(object sender, EventArgs e)
         {
-            HttpApplication app = (HttpApplication)sender;
-            context = app.Context;
-            string uriPath = Path.GetFileNameWithoutExtension(context.Request.Url.LocalPath).ToLower();
-            isAjax = uriPath == "ajax";
-            if (IsStaticFile())
+            HttpContext context = ((HttpApplication)sender).Context;
+            if (CheckIsStaticFile(context))
             {
                 return;
             }
@@ -142,7 +154,7 @@ namespace Aries.Core
                     context.RewritePath(defaultUrl);
                 }
             }
-            else if(!AppConfig.IsNetCore)
+            else if (!AppConfig.IsNetCore)
             {
                 //VS2013（以上）IISExpress 默认会检测文件存在，导致后续事件无法触发，因此需要做点小事情做兼容）
                 //正常IIS部署，是不需要以前兼容性代码的，（该代码将路径重写到一个已存在的文件，同时在目录下新建了一个ajax.html文件）
@@ -168,7 +180,7 @@ namespace Aries.Core
                 if (integralFlag == 1 && WebHelper.IsAriesSuffix())
                 {
 
-                    if (isAjax)
+                    if (IsAjax(context.Request.Url))
                     {
                         string localPath = context.Request.Url.PathAndQuery;
                         int i = localPath.LastIndexOf('/');
@@ -182,8 +194,8 @@ namespace Aries.Core
 
         void context_AcquireRequestState(object sender, EventArgs e)
         {
-
-            if (isStaticFile)
+            HttpContext context = ((HttpApplication)sender).Context;
+            if (context == null || IsStaticFile(context))
             {
                 return;
             }
@@ -197,31 +209,36 @@ namespace Aries.Core
                         UserAuth.Logout();
                         break;
                     case "login":
-                        LoginView();
-                        ReplaceOutput();
+                        LoginView(context);
+                        ReplaceOutput(context);
                         break;
                     case "ajax":
-                        InvokeClass();
+                        InvokeClass(context);
                         break;
                     default://普通页面
-                        AuthCheck(uriPath == "index");
-                        ReplaceOutput();
+                        AuthCheck(context, uriPath == "index");
+                        ReplaceOutput(context);
                         break;
                 }
             }
         }
         void context_Error(object sender, EventArgs e)
         {
+            HttpContext context = ((HttpApplication)sender).Context;
+            if (context == null)
+            {
+                return;
+            }
             if (WebHelper.IsAriesSuffix())
             {
-                Log.WriteLogToTxt(HttpContext.Current.Error);
+                Log.WriteLogToTxt(context.Error);
             }
         }
 
         #region LoginView 页处理
-        private void LoginView()
+        private void LoginView(HttpContext context)
         {
-            SetSafeKey();
+            SetSafeKey(context);
             if (WebHelper.IsUseUISite)
             {
                 HttpCookie cookie = context.Request.Cookies["aries_ui"];
@@ -241,9 +258,9 @@ namespace Aries.Core
         /// <summary>
         /// 默认仅对Web目录和首页index.html进行登陆权限检测。
         /// </summary>
-        private void AuthCheck(bool isIndex)
+        private void AuthCheck(HttpContext context, bool isIndex)
         {
-            SetNoCacheAndSafeKey();//.html不缓存，才能实时检测权限问题。（否则客户端缓存了，后台修改权限，客户端很为难）
+            SetNoCacheAndSafeKey(context);//.html不缓存，才能实时检测权限问题。（否则客户端缓存了，后台修改权限，客户端很为难）
             if (WebHelper.IsCheckToken())
             {
                 UserAuth.IsExistsToken(true);//检测登陆状态。
@@ -260,15 +277,15 @@ namespace Aries.Core
             }
         }
 
-        private void SetNoCacheAndSafeKey()
+        private void SetNoCacheAndSafeKey(HttpContext context)
         {
             //context.Response.Expires = 0;
             //context.Response.Buffer = true;
             //context.Response.ExpiresAbsolute = DateTime.Now.AddYears(-1);
             context.Response.CacheControl = "no-cache";
-            SetSafeKey();
+            SetSafeKey(context);
         }
-        private void SetSafeKey()
+        private void SetSafeKey(HttpContext context)
         {
             HttpCookie cookie = context.Request.Cookies["aries_safekey"];
             if (cookie == null)
@@ -281,7 +298,7 @@ namespace Aries.Core
             cookie.Expires = DateTime.Now.AddHours(23);
             context.Response.Cookies.Add(cookie);
         }
-        private bool IsExistsSafeKey()
+        private bool IsExistsSafeKey(HttpContext context)
         {
             HttpCookie cookie = context.Request.Cookies["aries_safekey"];
             if (cookie != null)
@@ -297,7 +314,7 @@ namespace Aries.Core
         #endregion
 
         #region ReplaceOutput 替换输出，仅对子目录部署时有效
-        void ReplaceOutput()
+        void ReplaceOutput(HttpContext context)
         {
             //如果项目需要部署成子应用程序，则开启，否则不需要开启（可注释掉下面一行代码）
             //要处理自定义语言标签
@@ -305,7 +322,7 @@ namespace Aries.Core
             {
                 if (AppConfig.IsNetCore)
                 {
-                    string path = AppConfig.WebRootPath + HttpContext.Current.Request.Url.LocalPath;
+                    string path = AppConfig.WebRootPath + context.Request.Url.LocalPath;
                     if (File.Exists(path))
                     {
                         byte[] data = File.ReadAllBytes(path);
@@ -327,21 +344,21 @@ namespace Aries.Core
         #endregion
 
         #region InvokeClass 逻辑反射调用Controlls的方法
-        private void InvokeClass()
+        private void InvokeClass(HttpContext context)
         {
             Type t = null;
             #region 处理Ajax请求
             //从Url来源页找
             if (context.Request.UrlReferrer == null)
             {
-                WriteError("Illegal request!");
+                WriteError(context, "Illegal request!");
                 return;
             }
-            else if (!IsExistsSafeKey() && WebHelper.IsCheckToken())// 仅检测需要登陆的页面
+            else if (!IsExistsSafeKey(context) && WebHelper.IsCheckToken())// 仅检测需要登陆的页面
             {
                 string path = context.Request.UrlReferrer.PathAndQuery;
                 if (path == "/") { path = "/index.html"; }
-                WriteError(path);//"Page timeout,please reflesh page!"
+                WriteError(context, path);//"Page timeout,please reflesh page!"
                 return;
             }
             //AjaxController是由页面的后两个路径决定了。
@@ -357,7 +374,7 @@ namespace Aries.Core
                 t = InvokeLogic.GetDefaultType();
                 if (t == null)
                 {
-                    WriteError("You need to create a controller for coding !");
+                    WriteError(context, "You need to create a controller for coding !");
                     return;
                 }
             }
@@ -374,11 +391,11 @@ namespace Aries.Core
             }
             catch (Exception err)
             {
-                WriteError(err.Message);
+                WriteError(context, err.Message);
             }
 
         }
-        private void WriteError(string tip)
+        private void WriteError(HttpContext context, string tip)
         {
             context.Response.Write(JsonHelper.OutResult(false, tip));
             context.Response.End();

@@ -4,11 +4,11 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>Aries.Core</AssemblyName>
     <RootNamespace>Aries.Core</RootNamespace>
-    <AssemblyVersion>5.4.0.0</AssemblyVersion>
-    <FileVersion>5.4.0.0</FileVersion>
+    <AssemblyVersion>5.5.2.0</AssemblyVersion>
+    <FileVersion>5.5.2.0</FileVersion>
     <Version>5.4.0.0</Version>
     <Product>Aries.Core NetCore 版本</Product>
-    <Company>路过秋天 （2020-12-01）</Company>
+    <Company>路过秋天 （2023-04-18）</Company>
     <Authors>路过秋天</Authors>
     <Copyright>版权所有 (C) 路过秋天 2010-2030</Copyright>
   </PropertyGroup>
@@ -34,9 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="CYQ.Data">
-      <HintPath>..\DLL\NetCore\CYQ.Data.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\..\..\..\cyqdata\trunk\src\CYQ.Data_NetCore.csproj" />
   </ItemGroup>
 
 </Project>

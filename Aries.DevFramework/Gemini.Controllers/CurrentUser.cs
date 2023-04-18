@@ -133,7 +133,12 @@ namespace Gemini.Workflow.Entity
         {
             get
             {
-                return GetOrg().Get<string>(Sys_Organization.OrgName);
+                MDataRow row = GetOrg();
+                if (row != null)
+                {
+                    return row.Get<string>(Sys_Organization.OrgName);
+                }
+                return "";
             }
 
         }
@@ -144,19 +149,40 @@ namespace Gemini.Workflow.Entity
         {
             get
             {
-                return GetOrg().Get<string>(Sys_Organization.OrgFullName);
+                MDataRow row = GetOrg();
+                if (row != null)
+                {
+                    return row.Get<string>(Sys_Organization.OrgFullName);
+                }
+                return "";
             }
 
         }
 
         public string Email
         {
-            get { return GetUser().Get<string>(Sys_User.Email); }
+            get 
+            {
+                MDataRow row = GetUser();
+                if (row != null)
+                {
+                    return row.Get<string>(Sys_User.Email);
+                }
+                return "";
+            }
         }
 
         public string Mobile
         {
-            get { return GetUser().Get<string>(Sys_User.Phone); }
+            get 
+            {
+                MDataRow row = GetUser();
+                if (row != null)
+                {
+                    return row.Get<string>(Sys_User.Phone);
+                }
+                return "";
+            }
         }
 
 
@@ -175,7 +201,15 @@ namespace Gemini.Workflow.Entity
 
         public string RoleName
         {
-            get { return GetRole().Get<string>(Sys_Role.RoleName); }
+            get 
+            {
+                MDataRow row = GetRole();
+                if (row != null)
+                {
+                    return row.Get<string>(Sys_Role.RoleName);
+                }
+                return "";
+            }
         }
 
         public string RoleIDs

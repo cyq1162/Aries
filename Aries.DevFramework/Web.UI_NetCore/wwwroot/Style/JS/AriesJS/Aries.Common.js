@@ -31,7 +31,7 @@
             onConfigClick: function (el, gridid, value, index) {
                 var dg = $Core.Global.DG.Items[gridid];
                 if (dg) {
-                    var url = $Core.Utility.stringFormat("{0}?objName={1}", $Core.Global.Variable.ui + '/Web/SysAdmin/ConfigGrid.html', dg.objName);
+                    var url = $Core.Utility.stringFormat("{0}?objName={1}", $Core.Global.Variable.ui + $Core.Global.configGridPath+'ConfigGrid.html', dg.objName);
                     $Core.Global.DG.operating = dg;
                     $Core.Window.open(url, "", false);
                 }
@@ -328,6 +328,15 @@
             },
             //对默认表头进行处理分组。
             formatHeader: function (dg) {
+                if (dg.Internal.headerData.success!=undefined)
+                {
+                    try
+                    {
+                        console.error("GetHeader fail : "+JSON.stringify(dg.Internal.headerData));
+                    }
+                    catch(error){}
+                    return;
+                }
                 var json_data = $Core.Utility.cloneArray(dg.Internal.headerData, true);
                 var frozen = Array(), cols = Array();
                 for (var i = 0; i < json_data.length; i++) {

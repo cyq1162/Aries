@@ -4,12 +4,13 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>Gemini.Controllers</AssemblyName>
     <RootNamespace>Gemini.Controllers</RootNamespace>
-    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <AssemblyVersion>5.1.1.0</AssemblyVersion>
     <Version>1.1.0</Version>
     <Product>Gemini.Controllers  NetCore 版本</Product>
-    <Company>路过秋天 （2020-12-01）</Company>
+    <Company>路过秋天 （2023-04-18）</Company>
     <Authors>路过秋天</Authors>
     <Copyright>版权所有 (C) 路过秋天 2010-2030</Copyright>
+    <FileVersion>5.1.1.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -29,9 +30,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="CYQ.Data">
-      <HintPath>..\DLL\NetCore\CYQ.Data.dll</HintPath>
-    </Reference>
     <Reference Include="Gemini.Workflow">
       <HintPath>..\..\..\..\Aries\trunk\Aries.DevFramework\DLL\NetCore\Gemini.Workflow.dll</HintPath>
     </Reference>

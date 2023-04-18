@@ -50,10 +50,6 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CYQ.Data, Version=5.8.4.8, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DLL\CYQ.Data.dll</HintPath>
-    </Reference>
     <Reference Include="Gemini.Workflow, Version=5.5.1.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\DLL\Gemini.Workflow.dll</HintPath>
@@ -411,6 +407,8 @@
     <Content Include="Web\SysAdmin\UserEdit.html" />
     <Content Include="Web\SysAdmin\UserList.html" />
     <Content Include="Web\SysAdmin\DialogView.html" />
+    <Content Include="WF\Common\ConfigGrid.html" />
+    <Content Include="WF\Common\DialogView.html" />
     <Content Include="WF\Designer\ActorParamterEdit.html" />
     <Content Include="WF\Definition\DefinitionEdit.html" />
     <Content Include="WF\Definition\DefinitionImport.html" />
@@ -510,6 +508,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\cyqdata\trunk\src\CYQ.Data.csproj">
+      <Project>{bd5ccc87-278f-4feb-ad23-157fcba9ffa1}</Project>
+      <Name>CYQ.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Aries.Controllers\Aries.Controllers.csproj">
       <Project>{b9a50b28-c8e1-421c-83d8-050a489f24bf}</Project>
       <Name>Aries.Controllers</Name>

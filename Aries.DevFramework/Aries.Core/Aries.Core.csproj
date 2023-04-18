@@ -35,9 +35,6 @@
     <DocumentationFile>bin\Release\Aries.Core.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CYQ.Data">
-      <HintPath>..\DLL\CYQ.Data.dll</HintPath>
-    </Reference>
     <Reference Include="NPOI">
       <HintPath>..\DLL\NPOI.dll</HintPath>
     </Reference>
@@ -96,6 +93,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="更新说明.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\cyqdata\trunk\src\CYQ.Data.csproj">
+      <Project>{bd5ccc87-278f-4feb-ad23-157fcba9ffa1}</Project>
+      <Name>CYQ.Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

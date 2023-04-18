@@ -1,10 +1,7 @@
 ﻿using CYQ.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Aries.Core;
 
@@ -34,9 +31,9 @@ namespace Microsoft.AspNetCore.Http
                 else
                 {
                     System.Web.HttpApplication.Instance.ExecuteEventHandler();
-                    if(context.Response.StatusCode.ToString().StartsWith("30"))
+                    if (context.Response.StatusCode.ToString().StartsWith("30"))
                     {
-                        await context.Response.WriteAsync("");
+                        // await context.Response.WriteAsync("");
                     }
                     else if (System.Web.HttpContext.Current.Response.HasStarted)  // || Body是只写流  (context.Response.Body != null && context.Response.Body.CanRead
                     {

@@ -1287,25 +1287,21 @@
                             }
                             var name = editor.nameFor || editor.field;
                             var value;
-                            if (editor.type == "combobox" || editor.target.attr("dialog"))
-                            {
+                            if (editor.type == "combobox" || editor.target.attr("dialog")) {
                                 value = $Core.Combobox.getValue(name) || editor.target.val();
                             }
-                            else
-                            {
+                            else {
                                 value = editor.target.val();
                             }
-                            if (value == "" && !row[editor.field])
-                            {
+                            if (value == "" && !row[editor.field]) {
                                 continue;//空值。
                             }
-                            if (value != row[editor.field])
-                            {
+                            if (value != row[editor.field]) {
                                 editValues[name] = value;
                                 isNeedReload = true;
                             }
-                           
-                           
+
+
                         }
                     }
                     if (row) {
@@ -1480,11 +1476,11 @@
     $Core.Ajax.post(method, null, null, function (result) {
         if (result) {
             if (result.GetKeyValueConfig) {
-                $Core.Global.Variable = result.GetInitConfig;
-                $Core.Config.data = result.GetKeyValueConfig;
+                $Core.Global.Variable = $.extend(result.GetInitConfig, $Core.Global.Variable);
+                $Core.Config.data = $.extend(result.GetKeyValueConfig, $Core.Config.data);
             }
             else {
-                $Core.Global.Variable = result;
+                $Core.Global.Variable = $.extend(result, $Core.Global.Variable);
             }
             if ($Core.Global.Variable.mid == "" && $Core.Global.Variable.actionKeys == "" && parent.AR) {
                 $Core.Global.Variable = parent.AR.Global.Variable;

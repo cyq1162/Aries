@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <script src="/Style/JS/Aries.Loader.js"></script>
+</head>
+<body style="margin-top: -4px; padding: 0">
+    <div style="height: 375px">
+        <table id="dg"></table>
+    </div>
+    <script>
+        var $input = parent.AR.Dialog.$target;
+        var comboboxOption = {
+            valueField: 'value',
+            textField: 'text',
+            data: [],
+            width: 150,
+            multiple: false,
+            editable: false
+        }
+        var returnValue = { option: comboboxOption };
+        var oName = AR.Utility.queryString("objName").trim('_');
+        var isTree = AR.Utility.queryString("tree") || $input.attr("tree");
+        isTree = isTree == "true" || isTree == "1";
+
+        if (oName) {
+            var dg = new AR.DataGrid("_" + oName, oName, "dg", isTree);
+            dg.isEditor = false;
+            dg.ToolBar.isHidden = true;
+            dg.Search.BtnReset.isHidden = true;
+            var multiple = $input.attr("multiple");//这个字段是JQ字段，特殊，赋值后会被变更为相同的文本
+            var onlytext = $input.attr("onlytext") == "true";
+            comboboxOption.editable = $input.attr("editable") == "true";
+            dg.isShowCheckBox = multiple == "true" || multiple == "multiple";
+            comboboxOption.multiple = dg.isShowCheckBox;
+            var id = $input.attr("valueField");
+            var title = $input.attr("textField");
+            var options = {
+                pageSize: 10,
+                //fit: false,
+                onLoadSuccess: function () {
+                    if (!title) {
+                        //第1个显示的则为文本。
+                        for (var i = 0; i < dg.Internal.headerData.length; i++) {
+                            if (!dg.Internal.headerData[i].hidden) {
+                                title = dg.Internal.headerData[i].field;
+                                break;
+                            }
+                        }
+                    }
+                    title || (title = dg.Internal.headerData[1].field);
+                    id || (id = dg.Internal.primarykey);
+                },
+                onSelect: function (rowIndex, rowData) {
+                    if (!dg.isShowCheckBox) {
+                        var d = {};
+                        d.text = rowData[title];
+                        d.value = onlytext ? d.text : rowData[id];
+                        comboboxOption.data[0] = d;
+                        returnValue.text = d.text;
+                        returnValue.value = rowData[id];
+                        returnValue.data = rowData;
+                        parent.AR.Dialog = $.extend(true, parent.AR.Dialog, returnValue);
+                    }
+                },
+                onDblClickRow: function (rowIndex, rowData) {
+                    if (!dg.isShowCheckBox) {
+                        var opts = parent.AR.Dialog.options;
+                        opts.toolbar[0].handler();//自动触发确定按钮事件
+                    }
+                    else {
+                        if (dg.isTreeGrid) {
+                            rowIndex = rowIndex[dg.Internal.primarykey];
+                        }
+                        dg.datagrid("checkRow", rowIndex);
+                    }
+                },
+                onCheck: function (rowIndex, rowData) {
+                    onCheck();
+                },
+                onCheckAll: function (rows) {
+                    if (isTree) {
+                        rows = treeRows(rows, []);
+                    }
+                    onCheck(rows);
+                },
+                onUncheckAll: function (rows) {
+                    // dg.datagrid("uncheckAll");
+                    onCheck();
+                }
+            }
+            options.queryParams = { "refUrl": parent.document.location.href };
+            if (isTree) {
+                options = $.extend(options, { cascadeCheck: false, onlyLeafCheck: true });
+
+            }
+            try {
+                var op = $input.attr("options") || $input.attr("opts");
+                if (op) { op = eval("(" + op + ")"); }
+                if (op) {
+                    options = $.extend(options, op);
+                }
+            } catch (e) {
+
+            }
+
+            dg.options = options;
+            dg.bind();
+        }
+        else { alert("dialog ： 'this objName' can't be empty!"); }
+        function onCheck(checkAllRows) {
+            var rows = checkAllRows || dg.getChecked();
+            if (rows && rows.length > 0) {
+                comboboxOption.data = [];
+                var texts = [];
+                var values = [];
+                for (var i = 0; i < rows.length; i++) {
+                    var d = {};
+                    d.text = rows[i][title];
+                    d.value = onlytext ? d.text : rows[i][id];
+                    comboboxOption.data.push(d);
+                    texts.push(d.text);
+                    values.push(rows[i][id]);
+
+                }
+                returnValue.text = texts.join(',');// dg.getCheckIDs(title);
+                returnValue.value = values.join(',');// dg.getCheckIDs(id);
+                returnValue.data = rows;
+                parent.AR.Dialog = $.extend(true, parent.AR.Dialog, returnValue);
+            }
+            else {
+                parent.AR.Dialog.clearReturnValue();
+            }
+        }
+        function treeRows(rows, newRows) {
+            if (rows && rows.length > 0) {
+                for (var i = 0; i < rows.length; i++) {
+                    newRows.push(rows[i]);
+                    if (rows[i]['children'] && rows[i]['children'].length > 0) {
+                        treeRows(rows[i]['children'], newRows);
+                    }
+                }
+            }
+            return newRows;
+        }
+    </script>
+</body>
+</html>

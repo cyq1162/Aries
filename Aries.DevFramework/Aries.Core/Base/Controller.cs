@@ -38,12 +38,14 @@ namespace Aries.Core
         protected Permission p;
         protected HttpContext context;
         protected string functionName;
+        protected bool isNeedCheckAuth = false;
         public void ProcessRequest(HttpContext context)
         {
             this.context = context;
+            this.isNeedCheckAuth = WebHelper.IsCheckToken();
             try
             {
-               
+
                 if (string.IsNullOrEmpty(context.Response.Charset))
                 {
                     context.Response.Charset = "utf-8";
@@ -60,14 +62,14 @@ namespace Aries.Core
                 foreach (string item in items)
                 {
                     string lowerItem = item.ToLower();
-                    bool isAllow = !WebHelper.IsCheckToken() || UserAuth.IsExistsToken(false);
+                    bool isAllow = !isNeedCheckAuth || UserAuth.IsExistsToken(false);
                     if (isAllow)
                     {
                         if (p == null)
                         {
                             p = new Permission(UserAuth.UserName, false);
                         }
-                      
+
                         MethodInvoke(item);
                         if (items.Length > 1)
                         {
@@ -119,7 +121,7 @@ namespace Aries.Core
             {
                 string msg;
                 //权限检测
-                if (p.IsCanInvokeMethod(method, out msg) && PreBeforeInvoke(method.Name, out msg))//同时检测菜单对应的操作方式。
+                if (!isNeedCheckAuth || (p.IsCanInvokeMethod(method, out msg) && PreBeforeInvoke(method.Name, out msg)))//同时检测菜单对应的操作方式。
                 {
                     try
                     {
@@ -891,7 +893,7 @@ namespace Aries.Core
         /// </summary>
         public virtual void GetInitConfig()
         {
-            string ui = string.Empty, actionKeys = string.Empty, menuid = string.Empty;
+            string ui = string.Empty, actionKeys = string.Empty, menuID = string.Empty;
             if (IsUseUISite)
             {
                 ui = "/" + AppConfig.GetApp("UI").Trim('/');
@@ -902,11 +904,11 @@ namespace Aries.Core
                 actionKeys = "," + actionKeys.ToLower() + ",";
             }
 
-            menuid = p.UrlMenuID;
+            menuID = p.UrlMenuID;
             JsonHelper js = new JsonHelper(false, false);
             js.Add("ui", ui);
             js.Add("actionKeys", actionKeys);
-            js.Add("mid", menuid);
+            js.Add("mid", menuID);
             js.Add("isdeleted", AppConfig.DB.DeleteField.ToLower());
             jsonResult = js.ToString();
         }

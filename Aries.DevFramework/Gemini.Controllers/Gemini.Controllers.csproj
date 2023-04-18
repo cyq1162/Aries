@@ -31,9 +31,6 @@
     <DocumentationFile>bin\Release\Gemini.Controllers.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CYQ.Data">
-      <HintPath>..\DLL\CYQ.Data.dll</HintPath>
-    </Reference>
     <Reference Include="Gemini.Workflow">
       <HintPath>..\DLL\Gemini.Workflow.dll</HintPath>
     </Reference>
@@ -47,6 +44,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommonController.cs" />
     <Compile Include="Demo\ISubWorkflowDemo.cs" />
     <Compile Include="DesignerController.cs" />
     <Compile Include="CurrentUser.cs" />
@@ -57,6 +55,10 @@
     <Compile Include="WorkFormController.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\cyqdata\trunk\src\CYQ.Data.csproj">
+      <Project>{bd5ccc87-278f-4feb-ad23-157fcba9ffa1}</Project>
+      <Name>CYQ.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Aries.Core\Aries.Core.csproj">
       <Project>{33a07ea9-350f-4a9c-925c-3a773d942748}</Project>
       <Name>Aries.Core</Name>

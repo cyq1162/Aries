@@ -147,6 +147,10 @@ window.AR || (window.AR = {});
             }
         },
         route: 'ajax.html',
+        //DialogView.html 路径，全局可改，是为了可以切换路径不需要权限验证（如WF引用）。
+        dialogViewPath: '/Web/SysAdmin/',
+        //ConfigGridPath.html 路径，全局可改，是为了可以切换路径不需要权限验证（如WF引用）。
+        configGridPath: '/Web/SysAdmin/',
         //themes: ['default', 'black', 'gray', 'metro'],
         /*
         *页面全局变量

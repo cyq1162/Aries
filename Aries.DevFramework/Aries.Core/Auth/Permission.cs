@@ -114,8 +114,8 @@ namespace Aries.Core.Auth
         /// 记录内面的上级id（降低安全问题）（Url,mid）
         /// </summary>
         private static Dictionary<string, string> parentidList = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-        private string loginid;
-        private string _menuid;
+        private string loginID;
+        private string _menuID;
         /// <summary>
         /// 菜单id（可能是上级菜单id，不一定针对当前请求页面)
         /// </summary>
@@ -123,11 +123,11 @@ namespace Aries.Core.Auth
         {
             get
             {
-                if (string.IsNullOrEmpty(_menuid))
+                if (string.IsNullOrEmpty(_menuID))
                 {
                     HasMenu(ReuqestUri);
                 }
-                return _menuid ?? string.Empty;
+                return _menuID ?? string.Empty;
             }
         }
         private string _UrlMenuID;
@@ -164,9 +164,9 @@ namespace Aries.Core.Auth
         /// 当前页面的菜单名称
         /// </summary>
         internal string MenuName { get; set; }
-        public Permission(string loginid, bool checkMenu)
+        public Permission(string loginID, bool checkMenu)
         {
-            this.loginid = loginid;
+            this.loginID = loginID;
             if (checkMenu)
             {
                 CheckMenu(ReuqestUri);
@@ -281,7 +281,7 @@ namespace Aries.Core.Auth
             if (menu != null)
             {
                 CacheManage.LocalInstance.Set(key, menu, 0.5);//存档30秒。
-                _menuid = menu.Get<string>("MenuID");
+                _menuID = menu.Get<string>("MenuID");
                 MenuName = menu.Get<string>("MenuName");
             }
             return menu != null;
@@ -311,7 +311,7 @@ namespace Aries.Core.Auth
                 //获取当前请求的Url
                 if (menu != null)
                 {
-                    this._menuid = menuid;
+                    this._menuID = menuid;
                     MenuName = menu.Get<string>("MenuName");
                     return true;
                 }
@@ -326,9 +326,9 @@ namespace Aries.Core.Auth
         {
             return HasFunc(key, MenuID);
         }
-        public bool HasFunc(string key, string menuid)
+        public bool HasFunc(string key, string menuID)
         {
-            string actionKeys = GetFuncKeys(menuid);
+            string actionKeys = GetFuncKeys(menuID);
             if (!string.IsNullOrEmpty(actionKeys))
             {
                 actionKeys = "," + actionKeys + ",";
@@ -355,11 +355,11 @@ namespace Aries.Core.Auth
         /// 获取指定菜单下的FuncKeys
         /// </summary>
         /// <returns></returns>
-        public string GetFuncKeys(string menuid)
+        public string GetFuncKeys(string menuID)
         {
-            if (!string.IsNullOrEmpty(menuid) && menuid.IndexOfAny(new char[] { ' ', '%', ',' }) == -1)
+            if (!string.IsNullOrEmpty(menuID) && menuID.IndexOfAny(new char[] { ' ', '%', ',' }) == -1)
             {
-                MDataRow row = UserMenu.FindRow("MenuID='" + menuid + "'");
+                MDataRow row = UserMenu.FindRow("MenuID='" + menuID + "'");
                 if (row != null)
                 {
                     string keys = row.Get<string>("ActionRefNames", "").ToLower();

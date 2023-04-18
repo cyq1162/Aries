@@ -3215,7 +3215,7 @@
             <summary>
             获得数据库名称。
             </summary>
-            <param name="formatName"></param>
+            <param name="name"></param>
             <returns></returns>
         </member>
         <member name="M:CYQ.Data.SQL.CrossDB.GetTableInfoByName(System.String,System.String)">

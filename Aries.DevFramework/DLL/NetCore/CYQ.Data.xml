@@ -3367,7 +3367,7 @@
             <summary>
             获得数据库名称。
             </summary>
-            <param name="formatName"></param>
+            <param name="name"></param>
             <returns></returns>
         </member>
         <member name="M:CYQ.Data.SQL.CrossDB.GetTableInfoByName(System.String,System.String)">
@@ -7314,6 +7314,11 @@
             转换后，还得补上name,value
             </summary>
             <param name="op"></param>
+        </member>
+        <member name="F:System.Web.HttpCookieCollection.IsForResponse">
+            <summary>
+            是否来源Response.Cookie，反之Request.Cookie
+            </summary>
         </member>
         <member name="T:System.Web.FormFile">
             <summary>

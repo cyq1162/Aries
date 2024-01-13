@@ -42,7 +42,7 @@ namespace Aries.Core.Helper
                 return false;
             }
             objName = objName.Trim('_', ' ');
-            CacheManage cache = CacheManage.LocalInstance;
+            DistributedCache cache = DistributedCache.Local;
             string has = path.GetHashCode().ToString();
             string html = string.Empty;
             if (cache.Contains(has))

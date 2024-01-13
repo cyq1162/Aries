@@ -2132,6 +2132,21 @@
             用户、角色、组织 表 映射常量
             </summary>
         </member>
+        <member name="F:Gemini.Workflow.TableConst.OrgTableName">
+            <summary>
+            组织表名
+            </summary>
+        </member>
+        <member name="F:Gemini.Workflow.TableConst.UserTableName">
+            <summary>
+            用户表名
+            </summary>
+        </member>
+        <member name="F:Gemini.Workflow.TableConst.RoleTableName">
+            <summary>
+            角色表名
+            </summary>
+        </member>
         <member name="T:Gemini.Workflow.OrgHelper">
             <summary>
             组织部门相关类

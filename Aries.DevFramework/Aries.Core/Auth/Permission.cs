@@ -243,7 +243,7 @@ namespace Aries.Core.Auth
         public bool HasMenu(Uri uri)
         {
             string key = UserAuth.UserID + ":" + uri.PathAndQuery;
-            MDataRow menu = CacheManage.LocalInstance.Get(key) as MDataRow;
+            MDataRow menu = DistributedCache.Local.Get(key) as MDataRow;
             if (menu == null)
             {
                 menu = GetMenu(uri);
@@ -280,7 +280,7 @@ namespace Aries.Core.Auth
             }
             if (menu != null)
             {
-                CacheManage.LocalInstance.Set(key, menu, 0.5);//存档30秒。
+                DistributedCache.Local.Set(key, menu, 0.5);//存档30秒。
                 _menuID = menu.Get<string>("MenuID");
                 MenuName = menu.Get<string>("MenuName");
             }

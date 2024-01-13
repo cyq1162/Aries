@@ -3,6 +3,7 @@ using Aries.Core.Config;
 using Aries.Core.Extend;
 using Aries.Core.Helper;
 using CYQ.Data;
+using CYQ.Data.Json;
 using CYQ.Data.Tool;
 using System;
 using System.Configuration;
@@ -107,7 +108,7 @@ namespace Aries.Core
             if (isFirstLoad)
             {
 #if DEBUG
-                AppConfig.Cache.IsAutoCache = false;
+                AppConfig.AutoCache.IsEnable = false;
 #endif
 
                 #region 特别说明：本段授权检测代码，请勿私自修改或删除，因私自调整授权相关代码引发的后果，本作者概不负责。
@@ -322,7 +323,7 @@ namespace Aries.Core
             {
                 if (AppConfig.IsNetCore)
                 {
-                    string path = AppConfig.WebRootPath + context.Request.Url.LocalPath;
+                    string path = AppConfig.WebRootPath + context.Request.Url.LocalPath.TrimStart(new char[] { '/', '\\' });
                     if (File.Exists(path))
                     {
                         byte[] data = File.ReadAllBytes(path);

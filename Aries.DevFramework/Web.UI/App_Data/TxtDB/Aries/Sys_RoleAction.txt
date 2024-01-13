@@ -487,4 +487,11 @@
 {"RoleActionID":"fdafd1d6-cb14-42dd-b6d6-9de1c5ddd776","RoleID":"d8e1ae3b-8451-436a-a59b-c7516e711b9c","MenuID":"813318ba-b3a7-437c-9405-016dcf48f224","ActionID":"15b73068-6c0f-49c9-800c-a7216cb2d079"},
 {"RoleActionID":"365fbb95-49c9-4cc9-8db0-57abd93a01d5","RoleID":"d8e1ae3b-8451-436a-a59b-c7516e711b9c","MenuID":"177b5c8e-465e-4bc1-80aa-45ddbb65c911","ActionID":"15b73068-6c0f-49c9-800c-a7216cb2d079"},
 {"RoleActionID":"71979940-e82f-4333-9f83-9fdd4f6885d1","RoleID":"d8e1ae3b-8451-436a-a59b-c7516e711b9c","MenuID":"177b5c8e-465e-4bc1-80aa-45ddbb65c911","ActionID":"71e39291-59d3-4ed6-9ae1-0d7df7da2f91"},
-{"RoleActionID":"978133ce-d81c-4cf5-b347-ee28035cc0f7","RoleID":"d8e1ae3b-8451-436a-a59b-c7516e711b9c","MenuID":"f053ff70-f070-4dba-afa1-0412c27d4a24","ActionID":"15b73068-6c0f-49c9-800c-a7216cb2d079"}
+{"RoleActionID":"978133ce-d81c-4cf5-b347-ee28035cc0f7","RoleID":"d8e1ae3b-8451-436a-a59b-c7516e711b9c","MenuID":"f053ff70-f070-4dba-afa1-0412c27d4a24","ActionID":"15b73068-6c0f-49c9-800c-a7216cb2d079"},
+{"RoleActionID":"107a6a51-abf9-408a-9d5c-c7c81feb6f13","RoleID":"d8e1ae3b-8451-436a-a59b-c7516e711b9c","MenuID":"61e6afcf-f82f-4292-be8f-93f562fef9b4","ActionID":"d0739946-99e0-4770-8d2a-6faf25a8457a"},
+{"RoleActionID":"a47b101f-e738-4f7d-aed5-704292c1fc27","RoleID":"d8e1ae3b-8451-436a-a59b-c7516e711b9c","MenuID":"61e6afcf-f82f-4292-be8f-93f562fef9b4","ActionID":"1c613ade-6665-49fb-b298-faf1b82dd6d2"},
+{"RoleActionID":"97ece7d2-321a-439a-a3bc-044aa56f8400","RoleID":"d8e1ae3b-8451-436a-a59b-c7516e711b9c","MenuID":"61e6afcf-f82f-4292-be8f-93f562fef9b4","ActionID":"cf8f418e-2468-4f6c-96cf-3302a2d9fa9b"},
+{"RoleActionID":"a3d23cf2-4296-4c49-a2c9-5b0c9d6b6de2","RoleID":"d8e1ae3b-8451-436a-a59b-c7516e711b9c","MenuID":"61e6afcf-f82f-4292-be8f-93f562fef9b4","ActionID":"15b73068-6c0f-49c9-800c-a7216cb2d079"},
+{"RoleActionID":"8136cfb8-b3eb-492a-aac7-a9012f0ae48c","RoleID":"d8e1ae3b-8451-436a-a59b-c7516e711b9c","MenuID":"61e6afcf-f82f-4292-be8f-93f562fef9b4","ActionID":"71e39291-59d3-4ed6-9ae1-0d7df7da2f91"},
+{"RoleActionID":"500d70ff-4066-45de-ab13-9ec527582e1b","RoleID":"d8e1ae3b-8451-436a-a59b-c7516e711b9c","MenuID":"61e6afcf-f82f-4292-be8f-93f562fef9b4","ActionID":"8a59a358-5a8f-4cb4-b600-9313028b911b"},
+{"RoleActionID":"8db216e0-6213-4a70-b83b-228b064c4cc4","RoleID":"d8e1ae3b-8451-436a-a59b-c7516e711b9c","MenuID":"61e6afcf-f82f-4292-be8f-93f562fef9b4","ActionID":"630e0452-00d6-4452-8a5c-19b2c3115ee3"}

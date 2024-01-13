@@ -16,6 +16,7 @@ using Aries.Core.Extend;
 using Aries.Core.DB;
 using System.Collections.Specialized;
 using System.Threading;
+using CYQ.Data.Json;
 
 
 namespace Aries.Core
@@ -548,7 +549,7 @@ namespace Aries.Core
                 }
                 else
                 {
-                    if (AppConfig.Debug.OpenDebugInfo)
+                    if (AppConfig.Debug.IsEnable)
                     {
                         Log.WriteLogToTxt("Add(): " + action.DebugInfo);
                     }
@@ -653,7 +654,7 @@ namespace Aries.Core
                 }
                 else
                 {
-                    if (AppConfig.Debug.OpenDebugInfo)
+                    if (AppConfig.Debug.IsEnable)
                     {
                         Log.WriteLogToTxt("Delete(): " + action.DebugInfo);
                     }
@@ -679,7 +680,7 @@ namespace Aries.Core
                 }
                 else
                 {
-                    if (AppConfig.Debug.OpenDebugInfo)
+                    if (AppConfig.Debug.IsEnable)
                     {
                         Log.WriteLogToTxt("Update(): " + action.DebugInfo);
                     }

@@ -15,6 +15,7 @@ using Aries.Core.Auth;
 using Aries.Core.Extend;
 using Aries.Core.Sql;
 using CYQ.Data.Aop;
+using CYQ.Data.Json;
 
 namespace Aries.Logic
 {
@@ -361,7 +362,7 @@ namespace Aries.Logic
                     msg = action.Get<string>(action.Data.PrimaryCell.ColumnName);
                     AddSuperAdminPromission(msg, action.Get<string>("ActionIDs"));
                 }
-                else if (AppConfig.Debug.OpenDebugInfo)
+                else if (AppConfig.Debug.IsEnable)
                 {
                     Log.WriteLogToTxt(action.DebugInfo);
                 }

@@ -9,6 +9,7 @@ using Aries.Core.DB;
 using Aries.Core.Sql;
 using Aries.Core.Extend;
 using CYQ.Data.Aop;
+using CYQ.Data.Json;
 
 namespace Aries.Core.Config
 {

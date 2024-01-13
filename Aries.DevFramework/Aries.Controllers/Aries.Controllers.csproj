@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CYQ.Data">
+      <HintPath>..\DLL\CYQ.Data.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -43,10 +46,6 @@
     <Compile Include="YourController\DemoController.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\cyqdata\trunk\src\CYQ.Data.csproj">
-      <Project>{bd5ccc87-278f-4feb-ad23-157fcba9ffa1}</Project>
-      <Name>CYQ.Data</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Aries.Core\Aries.Core.csproj">
       <Project>{33a07ea9-350f-4a9c-925c-3a773d942748}</Project>
       <Name>Aries.Core</Name>

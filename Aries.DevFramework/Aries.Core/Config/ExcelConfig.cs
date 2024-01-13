@@ -257,7 +257,7 @@ namespace Aries.Core.Config
             {
                 action.SetAopState(AopOp.CloseAll);
                 action.BeginTransation();
-                AppConfig.Debug.OpenDebugInfo = false;
+                AppConfig.Debug.IsEnable = false;
                 IExcelConfig excelConfigExtend = ExcelConfigFactory.GetExcelConfigExtend();
                 foreach (var table in tables)
                 {

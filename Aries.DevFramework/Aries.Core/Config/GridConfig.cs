@@ -224,10 +224,10 @@ namespace Aries.Core.Config
             msg = LangConst.NoNewColumn;
             MDataTable newDt = dt.GetSchema(false);
             //移除表结构缓存
-            string tableKey = CacheManage.GetKey(CacheKeyType.Schema, objName);
-            string codeKey = CacheManage.GetKey(CacheKeyType.Schema, objCode);
-            CacheManage.LocalInstance.Remove(tableKey);
-            CacheManage.LocalInstance.Remove(codeKey);
+            string tableKey = DistributedCache.GetKey(CacheKeyType.Schema, objName);
+            string codeKey = DistributedCache.GetKey(CacheKeyType.Schema, objCode);
+            DistributedCache.Local.Remove(tableKey);
+            DistributedCache.Local.Remove(codeKey);
             if (!string.IsNullOrEmpty(AppConfig.DB.SchemaMapPath))
             {
                 IOHelper.Delete(AppConfig.RunPath + AppConfig.DB.SchemaMapPath + tableKey + ".ts");

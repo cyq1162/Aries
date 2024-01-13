@@ -16,7 +16,7 @@ namespace Gemini.Workflow.Entity
     /// </summary>
     public class CurrentUser : IUserInfo
     {
-        CacheManage cache = CacheManage.LocalInstance;
+        DistributedCache cache = DistributedCache.Local;
         MDataRow GetUser()
         {
             string key = "WF_User_" + UserID;

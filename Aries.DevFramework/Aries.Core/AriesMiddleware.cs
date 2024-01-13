@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using System;
 using System.Threading.Tasks;
 using Aries.Core;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Microsoft.AspNetCore.Http
 {
@@ -23,65 +24,71 @@ namespace Microsoft.AspNetCore.Http
         {
             try
             {
+                // 遍历 HttpContext.Features
+                //foreach (var feature in context.Features)
+                //{
+                //    // 输出特性类型和实例信息
+                //    Console.WriteLine($"Feature type: {feature.Key}, instance: {feature.Value}");
+                //}
+
+                if (!context.Request.Host.HasValue)
+                {
+                    context.Response.StatusCode = 400;
+                    await context.Response.WriteAsync("400 Invalid hostname.");
+                    return;
+                }
                 if (context.Request.Path.Value.IndexOf("/App_Data/", StringComparison.OrdinalIgnoreCase) > -1)//兼容受保护的目录
                 {
                     context.Response.StatusCode = 403;
                     await context.Response.WriteAsync("403 Forbidden");
+                    return;
                 }
-                else
+
+                if ((context.Request.Method == "POST" || context.Request.Method == "PUT") && context.Request.ContentLength.HasValue && context.Request.ContentLength.Value > 0)
                 {
-                    System.Web.HttpApplication.Instance.ExecuteEventHandler();
-                    if (context.Response.StatusCode.ToString().StartsWith("30"))
+                    // 使用处：对应Rpc.Gateway.cs 代码：Proxy 方法 149行上下。
+                    //Controller.cs GetJson 方法 1098行上下
+                    context.Request.EnableBuffering();
+                }
+                System.Web.HttpApplication.GetInstance("Aries").ExecuteEventHandler();
+                if (System.Web.HttpContext.Current.Response.HasStarted)  // || Body是只写流  (context.Response.Body != null && context.Response.Body.CanRead
+                {
+                    if (context.Response.StatusCode == 204 || context.Response.StatusCode.ToString().StartsWith("30"))
                     {
-                        // await context.Response.WriteAsync("");
+                        await context.Response.Body.FlushAsync();
                     }
-                    else if (System.Web.HttpContext.Current.Response.HasStarted)  // || Body是只写流  (context.Response.Body != null && context.Response.Body.CanRead
+                    else
                     {
                         await context.Response.WriteAsync("");
                     }
-                    //处理信息
-                    else
-                    {
-                        await next(context);
-                    }
                 }
+                //处理信息
+                else
+                {
+                    await next(context);
+                }
+
             }
             catch (Exception ex)
             {
-                Log.WriteLogToTxt(ex);
+                CYQ.Data.Log.WriteLogToTxt(ex, LogType.Taurus);
             }
         }
     }
     public static class AriesExtensions
     {
-        /// <summary>
-        /// Net Core 3.1 把IHostingEnvironment 拆分成了：IWebHostEnvironment和IHostEnvironment 
-        /// 所以增加重载方法适应。
-        /// </summary>
-        /// <param name="builder"></param>
-        /// <param name="env"></param>
-        /// <returns></returns>
-        public static IApplicationBuilder UseAries(this IApplicationBuilder builder, object env)
+        public static void AddAries(this IServiceCollection services)
         {
-            if (env is IHostingEnvironment)
-            {
-                return UseAries(builder, env as IHostingEnvironment);
-            }
-            throw new Exception("env must be IWebHostEnvironment or IHostingEnvironment or String");
+            services.AddHttpContext();
         }
-        public static IApplicationBuilder UseAries(this IApplicationBuilder builder, IHostingEnvironment env)
-        {
-            //Net6新建的项目，WebRootPath竟然是空。
-            return UseAries(builder, env.WebRootPath ?? env.ContentRootPath.TrimEnd('/', '\\') + "/wwwroot");
-        }
-        public static IApplicationBuilder UseAries(this IApplicationBuilder builder, string webRootPath)
-        {
-            // builder.
 
-            AppConfig.WebRootPath = webRootPath;//设置根目录地址，ASPNETCore的根目录和其它应用不一样。
+
+        public static IApplicationBuilder UseAries(this IApplicationBuilder builder)
+        {
+            builder.UseHttpContext();
             //执行一次，用于注册事件
             UrlRewrite url = new UrlRewrite();
-            url.Init(System.Web.HttpApplication.Instance);
+            url.Init(System.Web.HttpApplication.GetInstance("Aries"));
             return builder.UseMiddleware<AriesMiddleware>();
         }
     }

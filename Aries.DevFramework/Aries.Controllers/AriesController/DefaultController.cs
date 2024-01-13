@@ -3,6 +3,7 @@ using Aries.Core.Auth;
 using Aries.Core.Config;
 using Aries.Core.DB;
 using CYQ.Data;
+using CYQ.Data.Json;
 using CYQ.Data.Table;
 using CYQ.Data.Tool;
 using System;

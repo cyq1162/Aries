@@ -31,7 +31,7 @@
 
   <ItemGroup>
     <Reference Include="Gemini.Workflow">
-      <HintPath>..\..\..\..\Aries\trunk\Aries.DevFramework\DLL\NetCore\Gemini.Workflow.dll</HintPath>
+      <HintPath>..\DLL\NetCore\Gemini.Workflow.dll</HintPath>
     </Reference>
   </ItemGroup>
 

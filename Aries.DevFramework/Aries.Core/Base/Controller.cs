@@ -958,11 +958,15 @@ namespace Aries.Core
         /// <summary>
         /// 下拉框统一处理参数对象
         /// </summary>
-        internal class ComboItem
+        public class ComboItem
         {
             public string ObjName { get; set; }
             public string Parent { get; set; }
             public string Para { get; set; }
+        }
+        public virtual ComboItem GetComboItem(ComboItem item)
+        {
+            return item;
         }
         //[ActionKey("View")]
         /// <summary>
@@ -982,7 +986,8 @@ namespace Aries.Core
                     StringBuilder sb = new StringBuilder();
                     for (int i = 0; i < boxes.Count; i++)
                     {
-                        ComboItem item = boxes[i];
+                        ComboItem item = GetComboItem(boxes[i]);
+
                         string code = SqlCode.GetCode(item.ObjName);
                         if (code != item.ObjName)
                         {
@@ -1047,6 +1052,8 @@ namespace Aries.Core
                 jsonResult = json.ToString();
             }
         }
+
+
 
         [ActionKey("View,Get")]
         /// <summary>

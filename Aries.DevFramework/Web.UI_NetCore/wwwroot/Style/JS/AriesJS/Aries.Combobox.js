@@ -568,6 +568,24 @@
     }
     function parseToCombo($box, op) {
         if (op.tree) {
+            //移除无父的数据
+            if (op.data && op.data.length > 0)
+            {
+                for (var i = 0; i < op.data.length; i++) {
+                    var n = op.data[i];
+                    if (n.parent) {
+                        var hasParent = false;
+                        for (var j = 0; j < op.data.length; j++) {
+                            var v = op.data[j];
+                            if (n.parent == v.value) {
+                                hasParent = true;
+                                break;
+                            }
+                        }
+                        if (!hasParent) { n.parent = ''; }
+                    }
+                }
+            }
             op.data = getTree(op.data);
             $box.combotree(op);
         }
